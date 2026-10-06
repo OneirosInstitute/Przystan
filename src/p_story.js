@@ -84,10 +84,10 @@ function storyTick(){if(evOpen||placing||!S.people.length)return;if(S.evT===unde
  const ctx=ev.ctx?ev.ctx():{};if(ev.ctx&&!ctx)return;
  S.evCd[ev.id]=S.day+ev.cd/K;if(ev.once)S.seen['ev'+ev.id]=1;openEvent(ev,ctx)}
 function openEvent(ev,ctx){evOpen={ev,ctx,prev:S.speed};setSpeed(0);const el=$('ev');
- el.innerHTML=`<div class="box"><div class="eyebrow">Wydarzenie</div><h2>${ev.t}</h2><p>${ev.text(ctx).replace(/\n\n/g,'</p><p>')}</p><div class="opts">${ev.opts.map((o,i)=>`<button data-o="${i}"><b>${o.n}</b>${o.d?`<small>${o.d}</small>`:''}</button>`).join('')}</div></div>`;el.hidden=false;sfx('bell')}
+ el.innerHTML=`<div class="box"><div class="eyebrow">${ev.ey||'Wydarzenie'}</div><h2>${ev.t}</h2><p>${ev.text(ctx).replace(/\n\n/g,'</p><p>')}</p><div class="opts">${ev.opts.map((o,i)=>`<button data-o="${i}"><b>${o.n}</b>${o.d?`<small>${o.d}</small>`:''}</button>`).join('')}</div></div>`;el.hidden=false;sfx('bell')}
 $('ev').addEventListener('click',e=>{const b=e.target.closest('button');if(!b||!evOpen)return;
  if(b.dataset.o!==undefined){const o=evOpen.ev.opts[+b.dataset.o];const r=o.f(evOpen.ctx)||'';log(evOpen.ev.t+': '+o.n.toLowerCase()+'. '+r);
-  $('ev').querySelector('.box').innerHTML=`<div class="eyebrow">Wydarzenie</div><h2>${evOpen.ev.t}</h2><p>${r}</p><div class="opts"><button data-close="1" class="pri"><b>Dalej</b></button></div>`}
+  $('ev').querySelector('.box').innerHTML=`<div class="eyebrow">${evOpen.ev.ey||'Wydarzenie'}</div><h2>${evOpen.ev.t}</h2><p>${r}</p><div class="opts"><button data-close="1" class="pri"><b>Dalej</b></button></div>`}
  else if(b.dataset.close){$('ev').hidden=true;setSpeed(evOpen.prev||1);evOpen=null;renderPanel()}});
 
 /* ================= cele osady ================= */

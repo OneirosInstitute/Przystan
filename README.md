@@ -30,7 +30,7 @@ Każdy `git push` na gałąź `main` wdraża nową wersję. Zainstalowana gra po
   - `p_map.js` – regiony i minimapa,
   - `p_tech.js` – drzewka postępu,
   - `p_exp.js` – atlas natury i wyprawy,
-  - `p_v8.js` – woda, pożary, rozbudowa, rada osady, urzędy, prośby, dymki,
+  - `p_v8.js` – woda, pożary, rozbudowa, obyczaje i wiec, prośby, dymki,
   - `p_story.js` – wydarzenia, cele, dźwięk,
   - `p_end.js` – atmosfera, pętla gry, start, pełny ekran.
 - `assets/` – ikony, zrzuty ekranu do okna instalacji, Three.js r149.

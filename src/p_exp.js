@@ -77,7 +77,7 @@ function finishExp(e,out){const r=REGIONS[e.r];S.exps=S.exps.filter(x=>x!==e);co
  if(e.type==='zwiad'){for(let j=0;j<N;j+=4)for(let i=0;i<N;i+=4)if(REGION[j*N+i]===e.r)reveal(i,j,4);regionScan(true);S.regs[e.r]=1;r.known=true;techXp('nauka',20);
   lines.push('Poznano teren: '+r.name+' ('+RTYPE[r.type]+').');S.hope=clamp(S.hope+.02,0,1)}
  else{const got=[];LOOT[r.type].forEach(([k,v])=>{if(k==='miod'&&!tech('u_bart'))return;const q=Math.round(v*alive.length*(e.days-1)*(.7+Math.random()*.6)*(law('lup')?1.25:1));if(q>0){S.res[k]=(S.res[k]||0)+q;got.push(RN[k].toLowerCase()+' '+q)}});
-  techXp(r.type==='coast'?'hodowla':'uprawa',15);techXp('nauka',8);lines.push(got.length?'Przynieśli: '+got.join(', ')+'.':'Wrócili z pustymi rękami.')}
+  techXp(r.type==='coast'?'hodowla':'uprawa',15);S.seen.zbior1=1;techXp('nauka',8);lines.push(got.length?'Przynieśli: '+got.join(', ')+'.':'Wrócili z pustymi rękami.')}
  alive.forEach(p=>{p.job='rob';p.exp=null;p.state='idle';const st=e.exit;p.x=tcx(st[0]);p.z=tcx(st[1]);p.wait=.2});
  S.expLog=S.expLog||[];S.expLog.unshift({d:Math.floor(S.day)+1,r:r.name,t:lines.join(' ')});if(S.expLog.length>8)S.expLog.pop();
  log('Wyprawa wraca: '+r.name+'. '+lines.join(' '));toast('Wyprawa wróciła: '+r.name);assign();renderPanel()}

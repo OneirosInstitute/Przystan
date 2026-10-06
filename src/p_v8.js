@@ -27,9 +27,9 @@ function removeBuilding(b,why){S.bld=S.bld.filter(x=>x!==b);const d=BD[b.kind];
 
 /* ---- pożary ---- */
 const FLAM={szalas:1.4,chata:1,dom:.6,zbieracz:1,mysliwy:1,drwal:1.2,lesnik:1,kamien:.5,glinianka:.6,drewutnia:1.6,pracownia:1.4,mielerz:3,kuznia:2,warsztat:1.2,szwalnia:1.2,sklad:1.3,spizarnia:1,pomost:.6,ruda:.6,zagroda:.5,cmentarz:0,studnia:0,piec:.3,cegielnia:.4,pole:0};
-function fireRoll(){if(S.day<6||S.bld.some(b=>b.fire))return;const s=seasonIdx();const sea=(law('warta')?.7:1)*[1.8,1,.5,.8][s]*(S.weather.k==='drought'?3:S.weather.k==='rain'||S.weather.k==='snow'?.25:1)*(law('straz')?.45:1);
+function fireRoll(){if(S.day<6||S.bld.some(b=>b.fire))return;const s=seasonIdx();const sea=(law('straz')?.7:1)*[1.8,1,.5,.8][s]*(S.weather.k==='drought'?3:S.weather.k==='rain'||S.weather.k==='snow'?.25:1)*(law('straz')?.45:1);
  for(const b of S.bld){if(!bDone(b))continue;const f=FLAM[b.kind]||0;if(f&&Math.random()<.0022*K*f*sea){startFire(b);break}}}
-function startFire(b){b.fire={s:1,hp:1};log('Pożar! Pali się '+BD[b.kind].n.toLowerCase()+'. Ludzie biegną z wiadrami.'+(wellCount()?'':' Bez studni wodę trzeba nosić z daleka.'));toast('Pożar: '+BD[b.kind].n);sfx('bell');
+function startFire(b){b.fire={s:1,hp:1};S.seen.fire1=1;log('Pożar! Pali się '+BD[b.kind].n.toLowerCase()+'. Ludzie biegną z wiadrami.'+(wellCount()?'':' Bez studni wodę trzeba nosić z daleka.'));toast('Pożar: '+BD[b.kind].n);sfx('bell');
  const c=bCenter(b);const ppl=S.people.filter(p=>p.age>=13&&p.job!=='wyp'&&p.state!=='away').sort((x,y)=>Math.hypot(x.x-c.x,x.z-c.z)-Math.hypot(y.x-c.x,y.z-c.z)).slice(0,law('straz')?6:4);
  ppl.forEach(p=>{release(p);if(p.workKind==='build'&&p.tgt&&p.tgt.workers)p.tgt.workers--;p.path=null;p.state='idle';p.wait=0;p.fireB=b.id});b.fire.crew=ppl.map(p=>p.id);fireFx(b)}
 function fireStep(dt){for(const b of S.bld){if(!b.fire)continue;const f=b.fire;f.hp-=dt*.0055*(law('straz')?.6:1);
@@ -51,77 +51,98 @@ function fireFxTick(rdt){for(const id in fireFxs){const f=fireFxs[id],b=bById(+i
   f.fl.forEach((m,i)=>{m.scale.set(k,k*(.8+.4*Math.sin(clock*10+i*1.7)),k)});f.gl.material.opacity=.5+.3*Math.sin(clock*7);
   f.sm.forEach(s=>{s.userData.t=(s.userData.t+rdt*.25)%1;const t=s.userData.t;s.position.set(Math.sin(t*5+s.id)*.4+t*1.5,2.6+t*5,Math.cos(t*4+s.id)*.4);const sc=.8+t*3;s.scale.set(sc,sc,1);s.material.opacity=(1-t)*.55*k})}}
 
-/* ---- rada osady: prawa w stylu edyktów (autorytet, miejsca, utrzymanie, uchylanie) ---- */
-const LCAT=[['gosp','Gospodarka'],['porz','Porządek'],['lud','Ludzie'],['rozw','Rozwój']];
-const LAWS=[
- {id:'oszczedne',c:'gosp',g:'racje',n:'Racjonowanie',cost:15,d:'Każdy je o 20% mniej. Zapasy starczą dłużej, ale ludzie słabną, a niezgoda rośnie.'},
- {id:'wspolne',c:'gosp',g:'racje',n:'Wspólne posiłki',cost:20,up:{opal:.4},d:'Wszyscy jedzą razem przy ognisku. Rośnie nadzieja, spada niezgoda.'},
- {id:'zapasy',c:'gosp',n:'Zapasy na zimę',cost:15,up:{auth:.3},d:'Suszenie, solenie i szczelne skrzynie. Żywność psuje się o 20% wolniej.'},
- {id:'dlugi',c:'gosp',n:'Praca do zmroku',cost:20,d:'Dzień pracy dłuższy o ponad godzinę. Więcej zrobione, ale ludzie się męczą, a niezgoda rośnie.'},
- {id:'lup',c:'gosp',n:'Podział łupów z wypraw',cost:10,d:'Kto idzie na wyprawę, zatrzymuje część zdobyczy. Wyprawy przynoszą o 25% więcej, ale reszta osady szemrze.'},
- {id:'straz',c:'porz',n:'Straż ogniowa',cost:15,up:{auth:.2},d:'Pożary wybuchają rzadziej, ogień niszczy wolniej, a do gaszenia biegnie więcej osób.'},
- {id:'warta',c:'porz',n:'Nocna warta',cost:15,up:{opal:.3},d:'Ognie przy zagrodach i obozie. Wilki rzadko atakują kozy, mniej pożarów.'},
- {id:'sad',c:'porz',g:'dyscyplina',n:'Sąd starszych',cost:25,up:{auth:.5},d:'Spory rozstrzygają starsi. Niezgoda wyraźnie spada.'},
- {id:'kary',c:'porz',g:'dyscyplina',n:'Kary za lenistwo',cost:20,d:'Kto się leni, traci przydział. Praca idzie o 8% szybciej, ale nadzieja spada, a niezgoda rośnie.'},
- {id:'pomoc',c:'lud',g:'dzieci',n:'Dzieci pomagają',cost:15,d:'Dzieci od 10 lat pracują jako pomocnicy, o połowę słabiej od dorosłych. Nadzieja spada.'},
- {id:'nauka',c:'lud',g:'dzieci',n:'Dzieci się uczą',cost:15,d:'Dzieci podpatrują fach półtora raza szybciej. Rośnie nadzieja.'},
- {id:'odpoczynek',c:'lud',g:'chorzy',n:'Chorzy odpoczywają',cost:10,d:'Ranni i chorzy nie pracują, za to zdrowieją dwa razy szybciej.'},
- {id:'kazdy',c:'lud',g:'chorzy',n:'Każdy pracuje',cost:10,d:'Ranni pracują dalej. Więcej rąk do pracy, wolniejsze zdrowienie, większa niezgoda.'},
- {id:'cmentarz',c:'lud',g:'pochowek',n:'Godny pochówek',cost:10,d:'Zmarłych chowa się w miejscu pamięci. Każda śmierć mniej rani osadę.',need:()=>hasB('cmentarz'),nt:'Najpierw trzeba postawić miejsce pamięci.'},
- {id:'morze',c:'lud',g:'pochowek',n:'Pochówek w morzu',cost:5,d:'Zmarłych oddaje się morzu. Nie trzeba miejsca pamięci, ale każda śmierć zostawia większy żal.'},
- {id:'opowiesci',c:'lud',n:'Wieczory przy ognisku',cost:15,up:{opal:.6},d:'Starsi opowiadają o dawnym świecie. Rośnie nadzieja i nauka, spada niezgoda.'},
- {id:'swieto',c:'lud',n:'Święto plonów',cost:20,d:'Na początku każdej jesieni osada ucztuje. Zjada zapas na dwa dni, ale nadzieja rośnie, a niezgoda spada.'},
- {id:'npracy',c:'rozw',n:'Nauka przy pracy',cost:20,d:'Mistrzowie tłumaczą, zamiast robić sami. Fachu uczy się o 20% szybciej, praca idzie o 5% wolniej.'},
- {id:'wymiana',c:'rozw',n:'Wymiana wiedzy',cost:25,up:{auth:.5},d:'Wieczorne narady rzemieślników. Postęp we wszystkich dziedzinach o 15% szybszy.'}];
-const LAW_BY={};LAWS.forEach(l=>LAW_BY[l.id]=l);
-const lawSlots=()=>[2,3,4,5][S.tier||0]+(offHolder('starszy')?1:0);
-const lawCount=()=>Object.keys(S.laws).filter(k=>S.laws[k]).length;
-function lawRival(l){return l.g?LAWS.find(x=>x.g===l.g&&x!==l&&S.laws[x.id]):null}
-function lawState(l){if(S.laws[l.id])return'on';const cd=(S.lawCD||{})[l.id];if(cd&&cd>S.day)return'cd';if(l.need&&!l.need())return'need';
- const riv=lawRival(l);if(!riv&&lawCount()>=lawSlots())return'slots';if((S.auth||0)<l.cost)return'auth';return riv?'swap':'ok'}
-const upTxt=up=>up?Object.entries(up).map(([k,v])=>(k==='auth'?'autorytet':RN[k].toLowerCase())+' '+v+'/d').join(', '):'';
-function passLaw(id){const l=LAW_BY[id];if(!l)return;const st=lawState(l);if(st!=='ok'&&st!=='swap'){toast({cd:'Tego prawa nie da się teraz uchwalić ponownie.',need:l.nt,slots:'Brak miejsca na kolejne prawo. Uchyl inne albo rozwiń osadę.',auth:'Za mało autorytetu rady.'}[st]||'Nie teraz');return}
- const riv=lawRival(l);if(riv)repealLaw(riv.id,'swap');S.auth-=l.cost;S.laws[id]=1;
- const fx={pomoc:()=>{S.hope=clamp(S.hope-.05,0,1);S.dis=clamp(S.dis+.04,0,1)},nauka:()=>{S.hope=clamp(S.hope+.02,0,1)},oszczedne:()=>{S.dis=clamp(S.dis+.04,0,1)},kary:()=>{S.dis=clamp(S.dis+.03,0,1)}};
- if(fx[id])fx[id]();log('Rada uchwala: „'+l.n+'”. '+l.d);toast('Nowe prawo: '+l.n);assign();renderPanel()}
-function repealLaw(id,why){const l=LAW_BY[id];if(!l||!S.laws[id])return;delete S.laws[id];S.lawCD=S.lawCD||{};S.lawCD[id]=Math.floor(S.day)+3;
- if(why==='upkeep')log('Brakuje środków na „'+l.n+'”. Prawo przestaje obowiązywać.');
- else{S.dis=clamp((S.dis||0)+(why==='swap'?.02:.03),0,1);log('Rada uchyla prawo: „'+l.n+'”.'+(why==='swap'?'':' Część ludzi narzeka na zmianę zdania.'))}
- if(why!=='swap'&&why!=='upkeep')toast('Uchylono: '+l.n);assign();renderPanel()}
-function lawDaily(){S.auth=S.auth===undefined?30:S.auth;S.lawCD=S.lawCD||{};
- for(const id of Object.keys(S.laws)){const l=LAW_BY[id];if(!l||!S.laws[id]){delete S.laws[id];continue}if(!l.up)continue;
-  const ok=Object.entries(l.up).every(([k,v])=>k==='auth'?S.auth>=v*K:(S.res[k]||0)>=v*K);
-  if(!ok){repealLaw(id,'upkeep');continue}Object.entries(l.up).forEach(([k,v])=>{if(k==='auth')S.auth-=v*K;else S.res[k]-=v*K})}
- const st=offHolder('starszy');const gain=(1+1.5*S.hope+.5*S.tier+(st?.6+.15*(st.trait==='Nauczyciel'||st.trait==='Pogodny'?3:Math.min(3,st.age/20)):0))*(1-.6*(S.dis||0));
- S.auth=clamp(S.auth+gain*K,0,100);
- if(law('swieto')&&Math.floor(rday())===SD&&!S.seen['swieto'+Math.floor(S.day/YEAR)]){S.seen['swieto'+Math.floor(S.day/YEAR)]=1;const need=K*S.people.length*2;const tot=foodTotal();if(tot>need*4){FOOD.forEach(k=>S.res[k]-=need*(S.res[k]/tot));S.hope=clamp(S.hope+.1,0,1);S.dis=clamp(S.dis-.15,0,1);log('Święto plonów. Cała osada ucztuje do późnej nocy. Ktoś gra na flecie z kości.');toast('Święto plonów')}else log('Na święto plonów nie starczy jedzenia. Ludzie są rozczarowani.')}}
-
-/* ---- urzędy: ludzie z rady ---- */
-const OFFICES=[{id:'starszy',n:'Starszy osady',sk:null,d:'Prowadzi radę: więcej autorytetu, łagodniejsze spory i jedno prawo więcej.'},
- {id:'spizarnia',n:'Strażnik spiżarni',sk:'zbieracz',d:'Pilnuje zapasów: żywność psuje się wolniej.'},
- {id:'budowa',n:'Mistrz budowy',sk:'ciesla',d:'Prowadzi budowy: idą szybciej.'},
- {id:'zielarz',n:'Zielarz',sk:'zbieracz',d:'Dogląda chorych i rannych: zdrowieją szybciej.'},
- {id:'lowczy',n:'Łowczy',sk:'mysliwy',d:'Prowadzi polowania i wyprawy: mniej ran.'}];
+/* ---- obyczaje osady: ustalenia, które rodzą się z wydarzeń ---- */
+const CUSTOMS=[
+ {k:'umowa',n:'Umowa z brzegu',trig:()=>true,why:'Pierwszej nocy na wyspie, przy ognisku na plaży.',
+  t:'Pierwsza noc przy ognisku',x:()=>S.day<2?'Osiemnaście osób, mokre ubrania, płonący stos desek z wraku. Nikt tu nie rządzi. Zanim ktoś zaśnie, trzeba ustalić, jak będziemy żyć.':'Osada żyje już kilka dni bez żadnych ustaleń. Wieczorem przy ognisku ktoś mówi, że tak dalej nie można. Trzeba się umówić, jak będziemy żyć.',
+  o:[{id:'u_wspolne',n:'Wszystko wspólne',d:'Jedzenie i narzędzia należą do wszystkich. Więcej nadziei, mniej sporów, praca idzie trochę wolniej.',r:'Postanowiono: nikt nic nie ma na własność. Co wyniesione z wraku, należy do wszystkich.'},
+   {id:'u_swoje',n:'Każdy na swoim',d:'Kto więcej pracuje, ten więcej ma. Praca idzie szybciej, ale łatwiej o kłótnie.',r:'Postanowiono: każdy odpowiada za siebie i swoją rodzinę. Kto pracuje, ten je.'},
+   {id:'u_starsi',n:'Słuchamy starszych',d:'Decydują najstarsi. Spory szybko gasną, ale młodzi z czasem zaczną się buntować.',r:'Postanowiono: ostatnie słowo należy do najstarszych. Stefan i Helena kiwają głowami.'}]},
+ {k:'glod',n:'Podział jedzenia',trig:()=>S.hungerDays>=1,why:'Gdy pierwszy raz zabrakło jedzenia dla wszystkich.',
+  t:'Pusta spiżarnia',x:()=>'Wieczorem garnek jest pusty, zanim wszyscy dostaną swoją porcję. Ktoś musi zdecydować, kto je pierwszy, gdy jedzenia jest za mało.',
+  o:[{id:'g_rowno',n:'Po równo dla wszystkich',d:'Każdy dostaje tyle samo. Głód mniej skłóca ludzi.',r:'Każdy dostaje tyle samo, nawet jeśli to tylko kilka łyżek.'},
+   {id:'g_praca',n:'Więcej dla pracujących',d:'Pracujący słabną wolniej, dzieci i starsi szybciej.',r:'Kto dźwiga kłody i łowi ryby, dostaje więcej. Dzieci patrzą w milczeniu.'},
+   {id:'g_dzieci',n:'Najpierw dzieci i starzy',d:'Dzieci i starsi są chronieni, dorośli słabną szybciej.',r:'Dorośli oddają część swoich porcji najmłodszym i najstarszym.'}]},
+ {k:'smierc',n:'Pochówek',trig:()=>S.died>=1,why:'Po pierwszej śmierci na wyspie.',
+  t:'Pierwszy grób',x:()=>'Ktoś z nas odszedł. Nikt nie wie, jak tu żegnać zmarłych. Trzeba zdecydować, co robimy z ciałem i z pamięcią.',
+  o:[{id:'cmentarz',n:'Miejsce pamięci',d:'Zmarłych chowa się w ziemi, przy osadzie. Każda śmierć mniej rani osadę, ale trzeba postawić miejsce pamięci.',r:'Grób wykopano na wzgórzu za obozem. Z kamieni ułożono znak.'},
+   {id:'morze',n:'Pochówek w morzu',d:'Zmarłych oddaje się morzu. Nie trzeba nic budować, ale każda śmierć zostawia większy żal.',r:'Ciało owinięte płótnem żaglowym popłynęło na łodzi, którą fale zabrały w mgłę.'}]},
+ {k:'ogien',n:'Ogień',trig:()=>!!S.seen.fire1||S.bld.some(b=>b.fire),why:'Po pierwszym pożarze w osadzie.',
+  t:'Po pożarze',x:()=>'Dym jeszcze unosi się nad zgliszczami. Wszyscy wiedzą, że to może się powtórzyć. Drewniane domy, strzecha i suche lato.',
+  o:[{id:'straz',n:'Nocna straż',d:'Ktoś zawsze czuwa przy ogniu. Pożary wybuchają rzadziej i są szybciej gaszone, wilki rzadziej podchodzą do zagród.',r:'Od tej nocy ktoś zawsze czuwa. Na zmianę, po kolei.'},
+   {id:'o_swoj',n:'Każdy pilnuje swojego ognia',d:'Nic się nie zmienia. Nikt nie traci snu.',r:'Ustalono, że każda rodzina pilnuje swojego paleniska. I tyle.'}]},
+ {k:'dzieci',n:'Dzieci',trig:()=>S.people.some(p=>p.age>=10&&p.age<12),why:'Gdy pierwsze dziecko skończyło dziesięć lat.',
+  t:'Dziecko chce pomagać',x:()=>{const c=S.people.find(p=>p.age>=10&&p.age<12);return(c?c.name:'Jedno z dzieci')+' kręci się przy dorosłych i chce nosić drewno jak oni. Czy dzieci mają pracować, czy się uczyć?'},
+  o:[{id:'pomoc',n:'Dzieci pomagają',d:'Od 10 lat pracują jako pomocnicy, o połowę słabiej. Nadzieja spada.',r:'Dzieci od dziesięciu lat pomagają przy pracy. Rąk jest więcej.'},
+   {id:'nauka',n:'Dzieci się uczą',d:'Uczą się fachu półtora raza szybciej. Rośnie nadzieja.',r:'Dzieci mają się uczyć. Na pracę przyjdzie jeszcze czas.'}]},
+ {k:'chorzy',n:'Chorzy i ranni',trig:()=>S.people.some(p=>p.hp<.5),why:'Gdy ktoś pierwszy raz ciężko zachorował albo został ranny.',
+  t:'Ranny przy ognisku',x:()=>{const p=S.people.find(q=>q.hp<.5);return(p?p.name:'Ktoś')+' leży przy ognisku i ledwo wstaje. Pracy jest dużo, rąk mało.'},
+  o:[{id:'odpoczynek',n:'Chorzy odpoczywają',d:'Nie pracują, ale zdrowieją dwa razy szybciej.',r:'Chorzy leżą, dopóki nie wyzdrowieją. Inni przejmują ich pracę.'},
+   {id:'kazdy',n:'Każdy pracuje',d:'Ranni pracują dalej, wolniej zdrowieją, rośnie niezgoda.',r:'Kto może stać, ten pracuje. Wyspa nie poczeka.'}]},
+ {k:'spory',n:'Spory',trig:()=>(S.dis||0)>.35,why:'Po pierwszej poważnej kłótni w osadzie.',
+  t:'Kłótnia',x:()=>{const a=S.people.filter(isAdult);const x=a[0],y=a[a.length-1];return`${x?x.name:'Ktoś'} i ${y?y.name:'ktoś inny'} krzyczą na siebie przy całej osadzie. Poszło o drewno, a naprawdę o wszystko. Kto ma rozstrzygać takie spory?`},
+  o:[{id:'sad',n:'Sąd starszych',d:'Spory rozstrzygają najstarsi. Niezgoda wyraźnie spada.',r:'Spór rozstrzygną najstarsi. Ich słowo jest ostatnie.'},
+   {id:'s_wiec',n:'Rozstrzyga wiec',d:'Decyduje cała osada. Niezgoda spada wolniej, ale zmiany na wiecu przychodzą łatwiej.',r:'Spory będzie rozstrzygać cała osada, na wiecu, przy ognisku.'}]},
+ {k:'lup',n:'Zdobycz z wypraw',trig:()=>!!S.seen.zbior1,why:'Po powrocie pierwszej wyprawy z łupem.',
+  t:'Czyje to?',x:()=>'Wyprawa wróciła objuczona. Ci, którzy szli, mówią, że ryzykowali życiem. Ci, którzy zostali, mówią, że pilnowali ich dzieci.',
+  o:[{id:'l_wspolny',n:'Wszystko do wspólnego zapasu',d:'Nikt nie zazdrości, nic się nie zmienia.',r:'Wszystko trafia do wspólnego zapasu. Wyprawa dostaje podziękowanie.'},
+   {id:'lup',n:'Część dla tych, co szli',d:'Wyprawy przynoszą o 25% więcej, ale reszta osady trochę szemrze.',r:'Kto idzie na wyprawę, zatrzymuje część zdobyczy.'}]},
+ {k:'zniwa',n:'Jesień',trig:()=>S.day>12&&Math.floor(rday()/SD)===1,why:'Na pierwszą jesień na wyspie.',
+  t:'Pierwsza jesień',x:()=>'Liście żółkną, jagody się kończą. Ktoś proponuje, żeby uczcić to, że przeżyliśmy lato. Ktoś inny, że trzeba oszczędzać na zimę.',
+  o:[{id:'swieto',n:'Święto plonów co roku',d:'Na początku jesieni uczta: zapas na dwa dni, ale dużo nadziei i mniej sporów.',r:'Każdej jesieni będziemy świętować. Wszyscy razem, przy jednym ogniu.'},
+   {id:'zapasy',n:'Zapasy ważniejsze niż uczta',d:'Żywność psuje się o 20% wolniej. Bez świąt.',r:'Żadnych uczt. Jedzenie suszy się i odkłada na zimę.'}]},
+ {k:'zima',n:'Zimowe wieczory',trig:()=>S.day>12&&Math.floor(rday()/SD)===2,why:'Na pierwszą zimę na wyspie.',
+  t:'Długie noce',x:()=>'Noce są coraz dłuższe. Ludzie siedzą w ciemnych domach i milczą. Można palić wspólne ognisko, ale opału jest mało.',
+  o:[{id:'opowiesci',n:'Wieczory przy ognisku',d:'Starsi opowiadają o dawnym świecie. Nadzieja i nauka rosną, niezgoda spada. Ognisko pali opał.',r:'Co wieczór wszyscy siadają przy ognisku. Stefan opowiada o mieście, którego już nie ma.'},
+   {id:'z_oszcz',n:'Każdy w swoim domu',d:'Domy palą o 15% mniej opału, ale nadzieja spada.',r:'Opału jest za mało na wspólne ognisko. Każdy siedzi u siebie.'}]}];
+const CUST_BY={};CUSTOMS.forEach(c=>CUST_BY[c.k]=c);
+function custRebuild(){S.laws={};Object.values(S.cust).forEach(id=>{if(id)S.laws[id]=1})}
+function custInit(){if(!S.cust){S.cust={};const old=S.laws||{};CUSTOMS.forEach(c=>{const o=c.o.find(x=>old[x.id]);if(o)S.cust[c.k]=o.id})}
+ S.custQ=S.custQ||[];S.custLog=S.custLog||{};S.offices=S.offices||{};custRebuild()}
+function custDay(){const d=Math.floor(S.day)+1,y=Math.floor(S.day/YEAR)+1;return`doba ${d}, rok ${y}`}
+function custTick(){if(!S||!S.cust)return;CUSTOMS.forEach(c=>{if(!S.cust[c.k]&&!S.custQ.includes(c.k)&&c.trig())S.custQ.push(c.k)});
+ if(!S.custQ.length||evOpen||placing||!S.people.length)return;if(S.custQ[0]!=='umowa'&&!isWork())return;
+ const c=CUST_BY[S.custQ.shift()];if(!c||S.cust[c.k])return;
+ openEvent({ey:'Ustalenie',t:c.t,text:c.x,opts:c.o.map(o=>({n:o.n,d:o.d,f:()=>{S.cust[c.k]=o.id;custRebuild();S.custLog[c.k]={d:custDay(),why:c.why,hist:[]};
+  if(o.id==='pomoc'){S.hope=clamp(S.hope-.04,0,1)}if(o.id==='nauka'){S.hope=clamp(S.hope+.02,0,1)}assign();return o.r+' Od teraz to obyczaj osady.'}}))},{})}
+// wiec: raz na porę roku można zmienić jeden obyczaj
+const seasonKey=()=>Math.floor(S.day/SD);
+function founders(){return S.people.filter(p=>!p.born).length}
+function youngVoice(){return founders()<9&&S.people.filter(p=>p.born&&isAdult(p)).length>=2}
+function wiecOpen(){return S.day>3&&S.wiecUsed!==seasonKey()}
+function changeCost(){const st=offHolder('starszy');return .04*(law('s_wiec')?.5:1)*(st?(st.trait==='Pogodny'?.6:st.trait==='Uparty'?1.5:1):1)}
+function custChange(k,id){const c=CUST_BY[k];if(!c||!S.cust[k]||S.cust[k]===id)return;if(!wiecOpen()){toast('Obyczaj można zmienić tylko na wiecu, raz na porę roku.');return}
+ if(k==='umowa'&&!youngVoice()){toast('Umowy z brzegu nikt nie odważy się zmienić, dopóki żyje większość rozbitków.');return}
+ const from=c.o.find(o=>o.id===S.cust[k]),to=c.o.find(o=>o.id===id);S.cust[k]=id;custRebuild();S.wiecUsed=seasonKey();S.dis=clamp((S.dis||0)+changeCost(),0,1);
+ (S.custLog[k]=S.custLog[k]||{d:custDay(),why:c.why,hist:[]}).hist.push(`${custDay()}: wiec zmienił „${from.n}” na „${to.n}”`+(k==='umowa'?' głosami młodych':''));
+ log('Wiec przy ognisku: „'+from.n+'” zastąpiono obyczajem „'+to.n+'”. '+to.r);toast('Wiec: '+to.n);assign();renderPanel()}
+function custDaily(){custInit();
+ if(law('opowiesci'))S.res.opal=Math.max(0,S.res.opal-.6*K);
+ const d=Math.floor(rday());if(d%SD===0&&S.day>3){log('Nowa pora roku. Wieczorem zbiera się wiec: można zmienić jeden obyczaj osady.');toast('Wiec przy ognisku');}
+ if(youngVoice()&&!S.seen.young){S.seen.young=1;log('Na wiecu odzywają się młodzi urodzeni na wyspie: „To były wasze zasady, nie nasze.” Od teraz można zmienić nawet umowę z brzegu.');toast('Głos młodych')}
+ if(law('swieto')&&d===SD&&!S.seen['swieto'+Math.floor(S.day/YEAR)]){S.seen['swieto'+Math.floor(S.day/YEAR)]=1;const need=K*S.people.length*2;const tot=foodTotal();if(tot>need*4){FOOD.forEach(k=>S.res[k]-=need*(S.res[k]/tot));S.hope=clamp(S.hope+.1,0,1);S.dis=clamp(S.dis-.15,0,1);log('Święto plonów. Cała osada ucztuje do późnej nocy. Ktoś gra na flecie z kości.');toast('Święto plonów')}else log('Na święto plonów nie starczy jedzenia. Ludzie są rozczarowani.')}}
+const lawDaily=custDaily;
+function hungerMul(p){if(law('g_praca'))return isWorker(p)?.6:1.5;if(law('g_dzieci'))return(p.age<12||p.age>55)?.4:1.3;return 1}
+// starszy osady
 function offHolder(id){const pid=S&&S.offices&&S.offices[id];if(pid===undefined||pid===null)return null;const p=pById(pid);if(!p||!isAdult(p)){S.offices[id]=null;return null}return p.state==='away'?null:p}
-function offLv(id){const p=offHolder(id);if(!p)return 0;const o=OFFICES.find(x=>x.id===id);return o.sk?1+(p.sk[o.sk]||0):2+(p.trait==='Nauczyciel'||p.trait==='Pogodny'?2:0)}
-function offScore(o,p){return o.sk?(p.sk[o.sk]||0)*10-Math.abs(p.age-40)/10:(p.trait==='Nauczyciel'?30:p.trait==='Pogodny'?25:0)+p.age/2}
-function setOffice(id,pid){S.offices=S.offices||{};Object.keys(S.offices).forEach(k=>{if(S.offices[k]===pid&&k!==id)S.offices[k]=null});S.offices[id]=pid===''||pid===null?null:+pid;const p=pById(+pid);const o=OFFICES.find(x=>x.id===id);
- if(p)log(p.name+' obejmuje urząd: '+o.n.toLowerCase()+'.');renderPanel()}
-function offEffTxt(o){const lv=offLv(o.id);if(!lv)return'Urząd pusty.';return{starszy:`+${(.6+.15*Math.min(3,lv)).toFixed(1)} autorytetu dziennie, jedno miejsce na prawo więcej`,spizarnia:`żywność psuje się o ${Math.round(Math.min(.3,.05*lv)*100)}% wolniej`,budowa:`budowa szybsza o ${Math.round(.04*lv*100)}%`,zielarz:`chorzy zdrowieją szybciej (poziom ${lv})`,lowczy:`rany na polowaniach i wyprawach rzadsze o ${Math.round(Math.min(.5,.08*lv)*100)}%`}[o.id]}
-function councilHTML(){S.offices=S.offices||{};let h=`<h3>Rada osady</h3><div class="card"><div class="authbox"><div><b>${Math.floor(S.auth||0)}</b><span>autorytet</span></div><div><b>${lawCount()}/${lawSlots()}</b><span>prawa</span></div><div><b>${Math.round((S.dis||0)*100)}%</b><span>niezgoda</span></div></div>
- <p class="mut">Autorytet rośnie z nadzieją i rozwojem osady, maleje przy niezgodzie. Uchwalenie prawa kosztuje autorytet. Prawo można uchylić w każdej chwili, ale ludzie nie lubią zmian zdania, a do tego samego prawa wraca się najwcześniej po 3 dniach.</p></div>`;
- h+='<h3>Urzędy</h3>';const adults=S.people.filter(p=>isAdult(p));
- OFFICES.forEach(o=>{const cur=S.offices[o.id];const opts=adults.slice().sort((a,b)=>offScore(o,b)-offScore(o,a)).map(p=>`<option value="${p.id}"${cur===p.id?' selected':''}>${p.name}${o.sk?' · '+CN[o.sk]+' '+p.sk[o.sk]:' · '+Math.floor(p.age)+' l. · '+traitN(p).toLowerCase()}${Object.entries(S.offices).some(([k,v])=>v===p.id&&k!==o.id)?' (inny urząd)':''}</option>`).join('');
-  h+=`<div class="card off"><h4>${o.n}</h4><p>${o.d}</p><select data-off="${o.id}"><option value="">nikt</option>${opts}</select><p class="mut" style="margin-top:5px">${offEffTxt(o)}</p></div>`});
- LCAT.forEach(([c,cn])=>{h+=`<h3>Prawa: ${cn.toLowerCase()}</h3>`;LAWS.filter(l=>l.c===c).forEach(l=>{const st=lawState(l);const riv=lawRival(l);
-  h+=`<div class="card law ${st}"><h4>${l.n}${st==='on'?' <span class="ok" style="font-size:13px">· obowiązuje</span>':''}</h4><p>${l.d}</p><p class="mut">Koszt: ${l.cost} autorytetu${l.up?' · utrzymanie: '+upTxt(l.up):''}${l.g?' · wyklucza: '+LAWS.filter(x=>x.g===l.g&&x!==l).map(x=>x.n.toLowerCase()).join(', '):''}</p>`+
-  (st==='on'?`<button data-repeal="${l.id}">Uchyl</button>`:st==='ok'?`<button class="pri" data-law="${l.id}">Uchwal</button>`:st==='swap'?`<button class="pri" data-law="${l.id}">Zamień z „${riv.n}”</button>`:
-   `<p class="mut">${{cd:'Niedawno uchylone. Wróci pod obrady za '+Math.ceil(S.lawCD[l.id]-S.day)+' d.',need:l.nt,slots:'Brak miejsca. Uchyl inne prawo albo rozwiń osadę.',auth:'Za mało autorytetu.'}[st]}</p>`)+'</div>'})});
+function offLv(id){if(id!=='starszy')return 0;const p=offHolder(id);return p?2+(p.trait==='Nauczyciel'||p.trait==='Pogodny'?2:0):0}
+function setOffice(id,pid){S.offices=S.offices||{};if(S.offices[id]!==undefined&&S.offices[id]!==null&&!wiecOpen()){toast('Starszego wybiera wiec, raz na porę roku.');renderPanel();return}
+ S.offices[id]=pid===''?null:+pid;const p=pById(+pid);if(p){log('Wiec wybiera starszego osady: '+p.name+'.');if(S.day>3)S.wiecUsedSt=seasonKey()}renderPanel()}
+function custHTML(){custInit();let h='<h3>Obyczaje osady</h3>';
+ const w=wiecOpen();const next=SD-Math.floor(rday())%SD;
+ h+=`<p class="lead">Na wyspie nikt nie rządzi. Ustalenia rodzą się z tego, co się wydarza, i z czasem stają się obyczajem. ${w?'<b style="color:var(--hi)">Wiec trwa:</b> do końca tej pory roku można zmienić jeden obyczaj.':(S.wiecUsed===seasonKey()?'Wiec w tej porze roku już zdecydował. ':'')+'Następny wiec za '+next+' d., na początku nowej pory roku.'}</p>`;
+ const st=offHolder('starszy'),stp=S.offices.starszy!=null?pById(S.offices.starszy):null,adults=S.people.filter(isAdult).sort((a,b)=>b.age-a.age);
+ h+=`<div class="card"><h4>Starszy osady</h4><p>Prowadzi wiec i łagodzi spory.${stp?'':' Wiec jeszcze nikogo nie wybrał.'}</p><select data-off="starszy"${stp&&!w?' disabled':''}><option value="">nikt</option>${adults.map(p=>`<option value="${p.id}"${stp&&stp.id===p.id?' selected':''}>${p.name} · ${Math.floor(p.age)} l. · ${traitN(p).toLowerCase()}</option>`).join('')}</select>${st?`<p class="mut" style="margin-top:5px">${st.trait==='Pogodny'?'Zmiany na wiecu przechodzą łagodniej.':st.trait==='Uparty'?'Trudno go przekonać do zmian: wiec kosztuje więcej niezgody.':'Spory gasną trochę szybciej.'}</p>`:''}</div>`;
+ const set=CUSTOMS.filter(c=>S.cust[c.k]);
+ set.forEach(c=>{const cur=c.o.find(o=>o.id===S.cust[c.k]);const lg=S.custLog[c.k];const canU=c.k!=='umowa'||youngVoice();
+  h+=`<div class="card law on"><div class="eyebrow">${c.n}</div><h4>${cur.n}</h4><p>${cur.d}</p>${lg?`<p class="mut">Od kiedy: ${lg.why.toLowerCase()} (${lg.d}).${(lg.hist||[]).length?'<br>'+lg.hist.join('<br>'):''}</p>`:''}`+
+  (w&&canU?c.o.filter(o=>o.id!==cur.id).map(o=>`<button data-cust="${c.k}" data-co="${o.id}" style="margin:4px 6px 0 0">Zmień na: ${o.n}</button>`).join(''):c.k==='umowa'&&!canU?'<p class="mut">Umowy z brzegu nie zmienia się, dopóki żyje większość rozbitków.</p>':'')+'</div>'});
+ const left=CUSTOMS.length-set.length;if(left)h+=`<p class="lead">Jeszcze ${left} ${left===1?'sprawa czeka':left<5?'sprawy czekają':'spraw czeka'} na ustalenie. Wyspa sama je przyniesie.</p>`;
  return h}
 
 /* ---- niezgoda ---- */
 function disDaily(){let d=0;if(S.hungerDays>0)d+=.03;if(S.warm<.75)d+=.025*(1-S.warm);if(law('oszczedne'))d+=.01;if(law('dlugi'))d+=.008;if(law('pomoc'))d+=.004;
- if(law('kazdy')&&S.people.some(p=>p.hp<.5&&isWorker(p)))d+=.006;if(S.thirst>0)d+=.02*S.thirst;if(law('opowiesci'))d-=.012;if(law('sad'))d-=.01;if(law('kary'))d+=.006;if(law('lup'))d+=.002;d-=.002*offLv('starszy');if(law('wspolne'))d-=.008;d-=.01*(S.hope-.5);
+ if(law('kazdy')&&S.people.some(p=>p.hp<.5&&isWorker(p)))d+=.006;if(S.thirst>0)d+=.02*S.thirst;if(law('opowiesci'))d-=.012;if(law('sad'))d-=.01;if(law('s_wiec'))d-=.004;if(law('lup'))d+=.002;if(law('u_wspolne'))d-=.004;if(law('u_swoje'))d+=.005;if(law('u_starsi'))d+=S.people.filter(p=>p.born&&isAdult(p)).length>=3?.008:-.006;if(S.hungerDays>0&&law('g_rowno'))d-=.012;d-=.002*offLv('starszy');if(law('wspolne'))d-=.008;d-=.01*(S.hope-.5);
  S.dis=clamp((S.dis||0)+K*d+(.08-(S.dis||0))*.03*K,0,1);
  if(S.dis>.8&&Math.random()<.25*K){const a=S.people.filter(isAdult);if(a.length>1){const x=a[(Math.random()*a.length)|0],y=a[(Math.random()*a.length)|0];if(x!==y)log(['Kłótnia przy ognisku: '+x.name+' i '+y.name+' oskarżają się o lenistwo.',x.name+' mówi głośno, że rada prowadzi wszystkich na zgubę.','Ktoś podzielił zapasy po swojemu. Nikt się nie przyznaje.'][(Math.random()*3)|0])}}
  if(S.dis>=.97){const fams=Object.values(S.fams).map(f=>famMembers(f.id)).filter(m=>m.length&&m.length<=4&&!m.some(p=>p.id===selId));if(fams.length){const m=fams[(Math.random()*fams.length)|0];const nm=famName(m[0].fam);
@@ -142,7 +163,6 @@ const REQS={
   t:(r,p)=>`${p.name} chce się uczyć fachu: ${CN[r.c]}`,d:'Przydziel tę osobę do budynku, w którym pracuje mistrz tego fachu.',done:(r,p)=>p.sk[r.c]>=2},
  slodkie:{w:1,make:()=>S.people.some(isChild)&&(tech('u_bart')||S.res.miod>0)?{pid:(pickAdult(p=>famMembers(p.fam).some(isChild))||{}).id}:null,t:()=>'Dzieci proszą o coś słodkiego',d:'Zgromadź 4 porcje miodu.',done:()=>S.res.miod>=4,take:()=>{S.res.miod-=4}},
  pamiec:{w:3,make:()=>S.died>0&&!hasB('cmentarz')?{pid:(S.people.filter(isAdult).sort((a,b)=>b.age-a.age)[0]||{}).id}:null,t:(r,p)=>`${p.name} prosi o miejsce pamięci dla zmarłych`,d:'Postaw miejsce pamięci (zakładka Budowa).',done:()=>hasB('cmentarz')},
- opowiesci:{w:1,make:()=>S.day>8&&!law('opowiesci')?{pid:(S.people.filter(isAdult).sort((a,b)=>b.age-a.age)[0]||{}).id}:null,t:(r,p)=>`${p.name} chce opowiadać dzieciom o dawnym świecie`,d:'Uchwal prawo „Wieczory przy ognisku” (zakładka Ludzie, rada osady).',done:()=>law('opowiesci')},
  ubrania:{w:2,make:()=>seasonIdx()===1&&S.res.odziez<8?{pid:(pickAdult(p=>famMembers(p.fam).some(isChild))||{}).id}:null,t:()=>'Matki proszą o ciepłe ubrania na zimę',d:'Zgromadź 8 sztuk odzieży (szwalnia szyje ją ze skór).',done:()=>S.res.odziez>=8},
  studnia:{w:3,make:()=>(seasonIdx()===0||seasonIdx()===3)&&!hasB('studnia')?{pid:(pickAdult()||{}).id}:null,t:(r,p)=>`${p.name} mówi, że woda w strumieniu jest mętna`,d:'Postaw studnię, zanim przyjdzie upał.',done:()=>hasB('studnia')},
  gory:{w:1,make:()=>REGIONS.some(r=>r&&r.type==='high'&&!r.known)?{pid:(pickAdult(p=>p.age<40)||{}).id}:null,t:(r,p)=>`${p.name} chce zobaczyć, co jest za górami`,d:'Wyślij zwiad w hale albo skały.',done:()=>REGIONS.some(r=>r&&r.type==='high'&&r.known)},

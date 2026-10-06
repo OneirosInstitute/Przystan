@@ -389,7 +389,7 @@ function freshState(){
   wreck:{parts:JSON.parse(JSON.stringify(WRECK0)),target:-1,gone:0},books:{ciesla:2,zdun:2,dziennik:2,kowal:0,siew:0},readP:{},weather:{k:'clear',left:2},zbozeTot:0,people:[],pid:0,fams:{},fid:7,
   alloc:{zwiad:1,zdun:0,czyt:0},bld:[],nid:1,know:{cegla:'nie',piec:'nie',kuznia:'nie',pole:'nie',cegla_p:0,piec_p:0,kuznia_p:0,cegla_f:0,piec_f:0,kuznia_f:0,active:null},
   bonus:{},hope:.55,health:1,warm:1,hungerDays:0,log:[],nodeAmt:nodes.map(n=>n.amt),grow:{},speed:1,seen:{},found:[],rev:'',tier:0,
-  laws:{},lawCD:{},auth:30,offices:{},dis:.08,reqs:[],reqNext:4,toolQ:{},thirst:0,tech:{},tp:{},focus:{},bank:{},dxp:{},atlas:{},exps:[],expSize:2,herds:herdsDef.map(h=>({type:h.type,i:h.i,j:h.j,x:tcx(h.i),z:tcx(h.j),tx:tcx(h.i),tz:tcx(h.j),n:Math.max(2,ANIMAL[h.type][1]-1-((h.i+h.j)%2)),max:ANIMAL[h.type][1],tame:0})),born:0,died:0,variety:1,fedR:1};
+  laws:{},cust:{},custQ:[],custLog:{},offices:{},dis:.08,reqs:[],reqNext:4,toolQ:{},thirst:0,tech:{},tp:{},focus:{},bank:{},dxp:{},atlas:{},exps:[],expSize:2,herds:herdsDef.map(h=>({type:h.type,i:h.i,j:h.j,x:tcx(h.i),z:tcx(h.j),tx:tcx(h.i),tz:tcx(h.j),n:Math.max(2,ANIMAL[h.type][1]-1-((h.i+h.j)%2)),max:ANIMAL[h.type][1],tame:0})),born:0,died:0,variety:1,fedR:1};
  PEOPLE0.forEach((d,i)=>{const p=newPerson(st.pid++,d[0],d[1],d[2],d[3],d[4],d[5]);const a=i/18*6.28;p.x=tcx(camp.i)+Math.cos(a)*1.9;p.z=tcx(camp.j)+Math.sin(a)*1.9;st.people.push(p)});
  for(let f=1;f<=6;f++)st.fams[f]={id:f,home:null};
  PAIRS.forEach(([a,b])=>{st.people[a].pair=st.people[b].id;st.people[b].pair=st.people[a].id});
@@ -462,7 +462,7 @@ function foodCap(){let c=600;S.bld.forEach(b=>{if(bDone(b)&&BD[b.kind].store)c+=
 const hasB=k=>S.bld.some(b=>b.kind===k&&bDone(b));
 function homeOf(p){const f=S.fams[p.fam];return f&&f.home?bById(f.home):null}
 const traitN=(p)=>p.sex==='k'?TRAITS[p.trait][0]:p.trait;
-function eff(p){const tool=p.tool.t===2?1:p.tool.t===1?.8:.55;const w=WEATHER[S.weather.k][1]*(S.buff&&S.buff.until>S.day?(S.buff.k==='praca'?1.1:.93):1);return(0.65+0.35*S.hope)*(p.age>=55?.75:p.age<16?.85:1)*(0.6+0.4*p.hp)*tool*w*(p.trait==='Wytrwały'?1.1:1)*(p.trait==='Silny'&&p.job==='wb'?1.06:1)*(p.age<12?.5:1)*(1-Math.max(0,(S.dis||0)-.5)*.5)*(p.hp<.5&&law('kazdy')?.8:1)*(law('kary')?1.08:1)*(law('npracy')?.95:1)}
+function eff(p){const tool=p.tool.t===2?1:p.tool.t===1?.8:.55;const w=WEATHER[S.weather.k][1]*(S.buff&&S.buff.until>S.day?(S.buff.k==='praca'?1.1:.93):1);return(0.65+0.35*S.hope)*(p.age>=55?.75:p.age<16?.85:1)*(0.6+0.4*p.hp)*tool*w*(p.trait==='Wytrwały'?1.1:1)*(p.trait==='Silny'&&p.job==='wb'?1.06:1)*(p.age<12?.5:1)*(1-Math.max(0,(S.dis||0)-.5)*.5)*(p.hp<.5&&law('kazdy')?.8:1)*(law('u_swoje')?1.06:law('u_wspolne')?.96:1)}
 function craftEff(p,c){return 1+0.18*(p.sk[c]||0)+(S.bonus[c]||0)}
 function seasonYield(kind){const s=seasonIdx();if(kind==='bush')return[1,.6,0,.7][s];if(kind==='grzyb')return[.8,1.3,0,.4][s];if(kind==='zboze')return[.7,1,0,0][s];if(kind==='len')return[1,.8,0,.4][s];if(kind==='ziola')return[1,.7,0,.6][s];if(kind==='ul')return[1,.8,0,.3][s];if(kind==='fish')return[1,.9,.7,.9][s];return 1}
 function gainXp(p,c,dt){let m=1;p.mentor=null;p.worked=1;
@@ -668,7 +668,7 @@ function dailyPeople(cold,fuelHeated){
   if(cold&&w<1&&p.coat>0)w=Math.min(1,w+.25);p.warm=w;
   if(p.hp<.9&&S.res.ziola>=.05){S.res.ziola-=.05;p.hp=Math.min(1,p.hp+K*(tech('u_ziel')?.03:.012))}
   if(p.hurt){p.hp=Math.min(1,p.hp+K*(tech('n_opat')?.03:.0));if(p.hp>.9)p.hurt=0}
-  const pat=p.trait==='Cierpliwy'?.75:1;p.hp=clamp(p.hp+K*((S.fedR>=.999?.03:-(1-S.fedR)*.04*pat)+(w<.6?-(0.6-w)*.08*pat:.008)+(S.variety-2)*.006),0,1);
+  const pat=p.trait==='Cierpliwy'?.75:1;p.hp=clamp(p.hp+K*((S.fedR>=.999?.03:-(1-S.fedR)*.04*pat*hungerMul(p))+(w<.6?-(0.6-w)*.08*pat:.008)+(S.variety-2)*.006),0,1);
   if(p.worked){p.tool.d-=K;if(p.tool.t&&p.tool.d<=0){p.tool.t=0;toastOnce('tool','Narzędzia się zużywają. Warsztat zrobi kamienne.')}p.worked=0}
   if(isAdult(p)&&p.tool.t===0&&p.job!=='rob'){const TQ=S.toolQ||{};if(S.res.narz>=1){S.res.narz--;p.tool={t:2,d:(tech('r_stal')?225:150)*(TQ.narz||1)}}else if(S.res.narzk>=1){S.res.narzk--;p.tool={t:1,d:(tech('r_narz')?85:50)*(TQ.narzk||1)}}}
   p.coat-=(cold?(sea===2?1.4:.9):.3)*K;if(p.coat<=0&&S.res.odziez>=1){S.res.odziez--;p.coat=(tech('r_tkac')?230:170)*((S.toolQ||{}).odziez||1)}
@@ -698,7 +698,7 @@ function newDay(){
   if((nx==='frost'||nx==='storm')&&tech('n_kal'))toast('Znaki na niebie: za '+S.weather.left+' d. '+WEATHER[nx][0]);if(k==='storm'){S.lastStorm=S.day;log('Nadciąga sztorm. Praca idzie wolno, morze bije o brzeg.')}}
  const tmp=WEATHER[S.weather.k][2];const fac=K*([0,1,1.6,.7][sea]*(1+Math.max(0,-tmp)*.06)+(sea===0&&tmp<0?.3:0)),cold=fac>0;const heated=new Set();
  if(cold){const homes=Object.values(S.fams).map(f=>f.home?bById(f.home):null).filter(h=>h&&bDone(h));
-  homes.forEach(h=>{const use=BD[h.kind].fuel*fac*(hasB('piec')?.6:1);if(S.res.opal>=use){S.res.opal-=use;heated.add(h.id)}else if(S.res.drewno>=use*2){S.res.drewno-=use*2;heated.add(h.id);toastOnce('logs'+Math.floor(S.day/24),'Brak opału: ludzie palą całe kłody. Postaw drewutnię.')}});
+  homes.forEach(h=>{const use=BD[h.kind].fuel*fac*(hasB('piec')?.6:1)*(law('z_oszcz')?.85:1);if(S.res.opal>=use){S.res.opal-=use;heated.add(h.id)}else if(S.res.drewno>=use*2){S.res.drewno-=use*2;heated.add(h.id);toastOnce('logs'+Math.floor(S.day/24),'Brak opału: ludzie palą całe kłody. Postaw drewutnię.')}});
  const homeless=S.people.filter(p=>!homeOf(p)).length;S.campFire=false;if(homeless){const use=1.2*fac;if(S.res.opal>=use){S.res.opal-=use;S.campFire=true}else if(S.res.drewno>=use*2){S.res.drewno-=use*2;S.campFire=true}}
   if(homes.length>heated.size&&!S.seen['fuel'+Math.floor(S.day/YEAR)+sea]){S.seen['fuel'+Math.floor(S.day/YEAR)+sea]=1;log('Nie starcza opału dla wszystkich domów. Ludzie marzną.')}}
  waterDaily();
@@ -711,7 +711,7 @@ function newDay(){
  techXp('nauka',K*S.people.filter(p=>isAdult(p)&&(p.trait==='Nauczyciel'||p.age>55)).reduce((a,p)=>a+(p.trait==='Nauczyciel'?.7:.25),0));techTick();
  const t=tierOf();if(t>S.tier){S.tier=t;log('Osada rośnie: teraz to '+TIERS[t][0].toLowerCase()+'.');toast('Nowy poziom: '+TIERS[t][0])}
  const housed=S.people.length?S.people.filter(p=>homeOf(p)).length/S.people.length:0;
- const tgt=.22+.25*Math.min(1,S.fedR)+.18*S.warm+.13*housed+.07*Math.min(1,(S.variety-1)/2)+.05*S.tier+.006*S.people.filter(p=>p.trait==='Pogodny').length-.2*(S.dis||0)+(law('wspolne')?.04:0)+(law('opowiesci')?.04:0)+(law('nauka')?.02:0)-(law('pomoc')?.04:0)-(law('kary')?.05:0)+(hasB('cmentarz')?.02:0);S.hope=clamp(S.hope+(tgt-S.hope)*.3,.05,1);
+ const tgt=.22+.25*Math.min(1,S.fedR)+.18*S.warm+.13*housed+.07*Math.min(1,(S.variety-1)/2)+.05*S.tier+.006*S.people.filter(p=>p.trait==='Pogodny').length-.2*(S.dis||0)+(law('wspolne')?.04:0)+(law('opowiesci')?.04:0)+(law('nauka')?.02:0)-(law('pomoc')?.04:0)+(law('u_wspolne')?.04:0)-(law('z_oszcz')?.03:0)+(hasB('cmentarz')?.02:0);S.hope=clamp(S.hope+(tgt-S.hope)*.3,.05,1);
  // przyroda
  for(let k=0;k<N*N;k++)if(tread[k]>0)tread[k]*=.985;treadDirty=true;
  nodes.forEach((n,k)=>{if(n.type==='bush'&&n.amt<n.max&&sea!==2){n.amt=Math.min(n.max,n.amt+.35*K*(tech('u_sad')?1.5:1)*(.6+.8*Math.random()));S.nodeAmt[k]=n.amt}
@@ -724,7 +724,7 @@ function newDay(){
  S.bld.forEach(b=>{if(b.kind!=='zagroda'||!bDone(b))return;const a=b.animals||0;const cared=(b.care||0)>20;b.care=0;
   if(a){S.res.mleko+=K*a*(sea===2?.4:.9)*(cared?1:.4)*(tech('h_doj')?1.4:1);if(tech('h_siersc'))S.res.wlokna+=K*a*.12;if((sea===3||(tech('h_rozr')&&sea!==2))&&a>=2&&a<10&&Math.random()<K*.06*a/2*(tech('h_rozr')?2:1)){b.animals++;log('W zagrodzie urodziło się koźlę.')}
    if(!cared&&(sea===2||Math.random()<.02)&&Math.random()<.08*K){b.animals--;log('Koza uciekła z zaniedbanej zagrody.')}}
-  const c=bCenter(b);S.herds.forEach(h=>{if(h.type!=='wilk'||h.n<2||!b.animals)return;if(Math.hypot(h.x-c.x,h.z-c.z)<26&&Math.random()<K*(cared?.02:.07)*(tech('h_ostr')?.3:1)*(law('warta')?.3:1)){b.animals--;log('Wilki w nocy zagryzły kozę w zagrodzie.');toast('Wilki napadły na zagrodę')}})});
+  const c=bCenter(b);S.herds.forEach(h=>{if(h.type!=='wilk'||h.n<2||!b.animals)return;if(Math.hypot(h.x-c.x,h.z-c.z)<26&&Math.random()<K*(cared?.02:.07)*(tech('h_ostr')?.3:1)*(law('straz')?.3:1)){b.animals--;log('Wilki w nocy zagryzły kozę w zagrodzie.');toast('Wilki napadły na zagrodę')}})});
  // pola
  S.bld.forEach(b=>{if(!b.field)return;const f=b.field;if(f.st==='rosnie'&&sea!==2){f.g+=K/30*(tech('u_selek')?1.15:1);if(f.g>=1){f.st='dojrzale';const best=Math.max(0,...S.people.filter(p=>p.wb===b.id).map(p=>p.sk.rolnik));f.left=Math.round(70*f.fert*(.6+.4*f.q)*(1+.1*best)*(tech('u_selek')?1.2:1)*(tech('u_nawoz')&&S.bld.some(z=>z.kind==='zagroda'&&(z.animals||0)>0)?1.25:1));log('Zboże na polu dojrzało: około '+f.left+' ziarna do zebrania.');toast('Zboże dojrzało')}fieldVis(b)}
   else if(f.st==='dojrzale'&&sea===2){f.left=Math.floor(f.left/2);if(f.left<=0){f.st='puste';fieldVis(b)}}
@@ -877,7 +877,7 @@ function renderPanel(){
  [...$('tabbar').children].forEach(b=>b.classList.toggle('on',b.dataset.tab===tab));
  $('stitle').textContent=TABS.find(t=>t[0]===tab)[1];
  const el=$('body'),st=el.scrollTop;let h='';
- if(tab==='osada'){h+=reqHTML();h+=`<div class="card"><h4>Niezgoda ${Math.round((S.dis||0)*100)}%</h4><p>${(S.dis||0)<.35?'Ludzie trzymają się razem.':(S.dis||0)<.6?'Słychać szemranie. Ludzie pracują trochę wolniej.':(S.dis||0)<.85?'Kłótnie co wieczór. Praca idzie wyraźnie wolniej.':'Osada się rozpada. Ktoś może odejść w głąb wyspy.'}</p><p class="mut">Rośnie przez głód, zimno, brak wody, śmierć, pożary, surowe prawa i niespełnione prośby. Spada, gdy prośby są spełniane, przy wieczorach przy ognisku i wspólnych posiłkach.</p></div>`+councilHTML();h+='<h3>Osada</h3>';const pop=S.people.length,kids=S.people.filter(isChild).length,old=S.people.filter(p=>p.age>55).length;
+ if(tab==='osada'){h+=reqHTML();h+=`<div class="card"><h4>Niezgoda ${Math.round((S.dis||0)*100)}%</h4><p>${(S.dis||0)<.35?'Ludzie trzymają się razem.':(S.dis||0)<.6?'Słychać szemranie. Ludzie pracują trochę wolniej.':(S.dis||0)<.85?'Kłótnie co wieczór. Praca idzie wyraźnie wolniej.':'Osada się rozpada. Ktoś może odejść w głąb wyspy.'}</p><p class="mut">Rośnie przez głód, zimno, brak wody, śmierć, pożary, surowe prawa i niespełnione prośby. Spada, gdy prośby są spełniane, przy wieczorach przy ognisku i wspólnych posiłkach.</p></div>`+custHTML();h+='<h3>Osada</h3>';const pop=S.people.length,kids=S.people.filter(isChild).length,old=S.people.filter(p=>p.age>55).length;
   const houses=S.bld.filter(b=>bDone(b)&&BD[b.kind].house).length;const homeless=S.people.filter(p=>!homeOf(p)).length;const nt=TIERS[S.tier+1];
   h+=`<div class="card"><h4>${TIERS[S.tier][0]}</h4><p>${pop} osób: ${pop-kids-old} dorosłych, ${kids} dzieci, ${old} starszych. Domów: ${houses}, bez dachu: ${homeless}.</p><p class="mut">Urodzeni: ${S.born} · zmarli: ${S.died}${nt?` · następny poziom (${nt[0].toLowerCase()}): ${nt[1]} domów i ${nt[2]} osób`:''}</p></div>`;
   h+=`<h3>Zapasy</h3><div class="card"><p><b>Żywność ${fmt(foodTotal())}/${foodCap()}</b> · rodzajów: ${S.variety}</p><p>${FOOD.map(k=>`${RN[k].toLowerCase()} ${fmt(S.res[k])}`).join(' · ')}</p>`+
@@ -936,8 +936,7 @@ function onPanelClick(e){const t=e.target.closest('button,[data-p],[data-rg]');i
   if(!S.people.some(p=>p.job==='zdun')){if(freeCount()>0){S.alloc.zdun=Math.max(1,S.alloc.zdun);assign();toast('Przydzieliłem zduna (zakładka Praca)')}else{toast('Przydziel zduna w zakładce Praca');return}}
   Object.entries(cost).forEach(([a,b])=>S.res[a]-=b);k.active=id;k[id+'_p']=0;log('Zaczyna się próba: '+TRIAL[id].n.toLowerCase()+'.');assign();renderPanel()}
  else if(t.dataset.up){upgradeB(+t.dataset.up)}
- else if(t.dataset.law){passLaw(t.dataset.law)}
- else if(t.dataset.repeal){repealLaw(t.dataset.repeal)}
+ else if(t.dataset.cust){custChange(t.dataset.cust,t.dataset.co)}
  else if(t.dataset.ex){sendExp(+t.dataset.ex,t.dataset.et)}
  else if(t.dataset.xs){S.expSize=clamp(S.expSize+(+t.dataset.xs),1,6);renderPanel()}
  else if(t.dataset.rg){const r=REGIONS[+t.dataset.rg];if(innerWidth<=760)closeSheet();lookAt(tcx(r.i),tcx(r.j),.9)}

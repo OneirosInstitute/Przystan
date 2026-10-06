@@ -89,7 +89,7 @@ function frame(now){requestAnimationFrame(frame);const rdt=Math.min(.1,(now-last
  rangeRing.material.opacity=.4+.2*Math.sin(clock*3);
  mapTick(rdt);
  soundTick(rdt,Lt);
- uiT+=rdt;if(uiT>.4){uiT=0;renderTop();renderSel();goalsTick();techTick()}
+ uiT+=rdt;if(uiT>.4){uiT=0;renderTop();renderSel();goalsTick();techTick();custTick()}
  placeLabel();
  panT+=rdt;if(panT>1.5){panT=0;if(tab&&tab!=='praca'&&tab!=='budowa')renderPanel()}
  renderer.render(scene,cam);
@@ -101,7 +101,7 @@ if(LOWQ){renderer.shadowMap.enabled=false;sun.castShadow=false}
 
 /* ================= start ================= */
 function boot(fresh){
- S=fresh?freshState():(load()||freshState());
+ S=fresh?freshState():(load()||freshState());custInit();
  if(!S.log.length){log('Wyszliśmy na brzeg. Wrak leży na płyciźnie, w obozie płonie ognisko. Wyspa sięga dalej, niż widać.');
   log('Suchary z wraku wystarczą na mniej więcej jedną porę roku. Postaw chatę zbieracza i chatę drwala (zakładka Budowa), potem przydziel do nich ludzi.');
   log('Wrak zniszczy wiosenny sztorm. Wolni robotnicy wynoszą z niego, co się da. W zakładce Praca wskaż, którą część rozpoznać: w kajucie kapitana podobno są księgi.');
@@ -138,7 +138,7 @@ try{const w0=innerWidth,h0=innerHeight;renderer.setSize(640,640,false);const asp
  introLight();sun.position.set(camT.x-40,38,camT.z+30);renderer.render(scene,cam);$('introPic').style.backgroundImage=`url(${cv.toDataURL('image/jpeg',.86)})`;
  yaw=yawT=yy;camT.x=cx;camT.z=cz;resize()}catch(e){}
 requestAnimationFrame(frame);
-window.__g={get S(){return S},repealLaw,setOffice,lawDaily,lawState,LAW_BY,passLaw,startFire,upgradeB,reqTick,disDaily,REGIONS,sendExp,tech,regionScan,toggleOverview,step,newDay,assign,nodes,startGame,setAlloc,setWant,startPlace,tryPlace,moveGhost,checkPlace,camp,wreck,tribe,rev,fogPass,openSheet,closeSheet,setCam,select,selectB,reveal,deco,BD,bById,countInRange,
+window.__g={get S(){return S},custChange,custTick,custInit,setOffice,lawDaily,startFire,upgradeB,reqTick,disDaily,REGIONS,sendExp,tech,regionScan,toggleOverview,step,newDay,assign,nodes,startGame,setAlloc,setWant,startPlace,tryPlace,moveGhost,checkPlace,camp,wreck,tribe,rev,fogPass,openSheet,closeSheet,setCam,select,selectB,reveal,deco,BD,bById,countInRange,
  get ghostTile(){return ghostTile},get placing(){return placing},get zoom(){return zoom},setZoom(z){zoom=zoomT=z;setCam()},get qLevel(){return qLevel},setTime(t){S.day=Math.floor(S.day)+t},look(x,z){camT.x=x;camT.z=z;setCam()},
  build(kind,i,j){startPlace(kind);moveGhost(i,j);const gt=ghostTile;const ok=checkPlace(kind,gt[0],gt[1]);if(ok)tryPlace();else cancelPlace();return ok},
  scene,Hy,tcx,pGroup,bGroup,nodeBy,pickNodeB,inRange,TRIAL,herdsDef,planJob,astar,tileOf,nearestWalk,finishAll(){S.bld.forEach(b=>{if(!bDone(b)){b.prog=b.work;completeSite(b)}})}};
