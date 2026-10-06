@@ -1,6 +1,6 @@
 ---
 title: "Przystań — Księga gry"
-subtitle: "Wersja 0.17 · 6 października 2026 · z planem do wersji 1.0"
+subtitle: "Wersja 0.18 · 6 października 2026 · z planem do wersji 1.0"
 ---
 
 # 1. Czym jest Przystań
@@ -236,15 +236,28 @@ W finale epoki pamięć zdecyduje, z czym młodzi wejdą w epokę II.
 
 # 12. Epoki
 
-## Epoka I: Rozbitkowie (6–8 lat na wyspie)
+## Epoka I: Rozbitkowie (6–8 lat na wyspie, od wersji 0.18 grywalna do końca)
 
-| Akt | Czas | Koniec aktu |
+Epoka dzieli się na pięć aktów. Karta celu w lewym górnym rogu pokazuje akt i najbliższy cel, na przykład „Akt I · Brzeg”. Gdy wszystkie cele aktu są spełnione, otwiera się krótka scena z zapowiedzią następnego aktu.
+
+| Akt | Czas | Cele aktu |
 |---|---|---|
-| 1. Brzeg | dni 1–10 | każda rodzina pod dachem, kajuta kapitana rozpoznana |
-| 2. Pierwsza zima | jesień roku 1 – wiosna | zima przetrwana, wrak zabrany przez sztorm |
-| 3. Zakorzenienie | rok 2 | poziom Osada (4 domy, 20 osób) i pierwsze dożynki z własnego pola |
-| 4. Wyspa | lata 3–4 | 70% wyspy poznane, krainy nazwane przez osadę |
-| 5. Pierwsze pokolenie | lata 5–8 | Wieś, głos młodych, trzech mistrzów urodzonych na wyspie |
+| I. Brzeg | dni 1–10 | chata zbieracza, chata drwala, kajuta kapitana rozpoznana, każda rodzina pod własnym dachem |
+| II. Pierwsza zima | jesień roku 1 – wiosna | drewutnia i 80 opału, wrak rozebrany przed sztormem, pierwsza zima przetrwana |
+| III. Zakorzenienie | rok 2 | księga z wraku przeczytana, pierwsza koza, pierwsze plony z pola, poziom Osada (4 domy, 20 osób) |
+| IV. Wyspa | lata 3–4 | 70% krain poznanych, żelazo z własnego pieca, trzy ślady dawnego ludu |
+| V. Pierwsze pokolenie | lata 5–8 | Wieś (8 domów, 32 osoby), głos młodych na wiecu, trzech mistrzów urodzonych na wyspie, pamięć osady co najmniej żywa |
+
+**Sceny fabularne:**
+
+- **Nikt nas nie szuka:** po przeczytaniu ostatniej strony dziennika kapitana. Osada może złożyć przysięgę przy ogniu (nadzieja, zgoda, pieśń) albo każdy przeżywa to po swojemu.
+- **Za pięć dni sztorm:** zapowiedź wiosennego sztormu. „Wszyscy do wraku” podwaja tempo rozbiórki, ale ludzie jedzą więcej. „Zostawić go morzu” daje spokój i odrobinę nadziei.
+- **Ostatnia zima mistrza:** stary mistrz przekazuje fach przed śmiercią.
+- **Ostatni:** gdy zostaje mniej niż czworo dorosłych.
+
+**Dorastanie:** dziecko w dwunastym roku życia samo wybiera fach, najczęściej ten, w którym już ma wprawę, i często „jak ojciec” albo „jak matka”. Kronika to zapisuje.
+
+**Rok na wyspie:** w każdą noc Kupały, czyli w rocznicę rozbicia, gra pokazuje podsumowanie roku: narodziny, zmarłych z imienia, wesela, nowe budowle, nowe pieśni, pierwsze razy i przysiółki. Potem gra zapisuje stan i podpowiada, że to dobry moment na przerwę.
 
 **Finał:** wiec pokoleń. Najstarszy żyjący rozbitek opowiada przy ognisku o statku, którego młodzi nigdy nie widzieli. Potem osada wybiera drogę na epokę II:
 
@@ -252,7 +265,7 @@ W finale epoki pamięć zdecyduje, z czym młodzi wejdą w epokę II.
 - **Dom:** „To nasza wyspa”. Gospodarze, gród, pełny rok obrzędów, prawo zwyczajowe.
 - **Głąb:** „Pójdziemy w puszczę”. Kolonizacja wnętrza wyspy, przysiółki i druga osada za bagnami, góry i jaskinie.
 
-Po wyborze gra pokazuje Księgę rozbitków: kto się urodził, kto odszedł, jakie obyczaje się ustaliły i kto przekazał fach. Gra toczy się dalej.
+Wybór jest ostateczny. Po wyborze gra pokazuje Księgę rozbitków: ilu wyszło na brzeg i ilu jest dziś, założycieli żyjących i zmarłych, rody ze znakami, obyczaje z ich wiekiem, urzędy, wszystkie pieśni i pierwsze razy. Księgę można pobrać jako plik tekstowy od razu albo później z karty „Pamięć osady”. Gra toczy się dalej w epoce II, a karta celu pokazuje wybraną drogę.
 
 **Porażka:** osada wymiera albo rozpada się na przysiółki. Gdy zostaje mniej niż czworo dorosłych, pojawia się scena „Ostatni”, a gra toczy się dalej, tylko trudniej.
 
@@ -278,7 +291,7 @@ Po wyborze gra pokazuje Księgę rozbitków: kto się urodził, kto odszedł, ja
 
 # 15. Technika
 
-- **Plik gry:** jeden plik HTML (około 370 kB) składany z części: p_head.html, p_const.js, p_mid.js, p_rest.js, p_map.js, p_tech.js, p_exp.js, p_v8.js, p_bld.js, p_story.js, p_slav.js, p_wild.js, p_ludzie.js, p_urz.js, p_pamiec.js, p_gfx.js, p_end.js.
+- **Plik gry:** jeden plik HTML (około 400 kB) składany z części: p_head.html, p_const.js, p_mid.js, p_rest.js, p_map.js, p_tech.js, p_exp.js, p_v8.js, p_bld.js, p_story.js, p_slav.js, p_wild.js, p_ludzie.js, p_urz.js, p_pamiec.js, p_akt.js, p_gfx.js, p_end.js.
 - **Grafika:** Three.js r149 (WebGL2), własna obróbka obrazu (bloom, cienie kontaktowe, cienie chmur, tilt-shift).
 - **Zapis:** w pamięci przeglądarki (klucz przystan-v7), do pobrania jako plik JSON i do wczytania z pliku.
 - **Instalacja:** PWA z manifestem i service workerem, działa bez sieci.
@@ -301,6 +314,7 @@ Po wyborze gra pokazuje Księgę rozbitków: kto się urodził, kto odszedł, ja
 | 0.15 | rody, więzi, swaty i wesela, nowe gospodarstwa, sieroty, nastrój i mir ludzi, przysiółki |
 | 0.16 | urzędy rodzące się z potrzeb, spory rodów i waśnie, sąd pod dębem, dojrzewanie obyczajów |
 | 0.17 | pamięć osady: pieśni, pierwsze razy, groby z imionami na Dziady, imię osady, znaki rodów; czas gry nie zwalnia przy słabszej płynności |
+| 0.18 | finał epoki I: pięć aktów z celami, sceny fabularne, dziecko w 12. roku wybiera fach, „Rok na wyspie”, wiec pokoleń z wyborem drogi, Księga rozbitków do pobrania, trzy poziomy trudności |
 
 # 17. Immersja i powroty
 
@@ -351,7 +365,7 @@ Kolejność dalszej pracy. Każda wersja kończy się czymś, w co da się zagra
 
 | Wersja | Zakres |
 |---|---|
-| 0.18 Finał epoki I | akty jako rozdziały z warunkami końca, sceny fabularne (Nikt nas nie szuka, Za pięć dni sztorm, Ostatnia zima mistrza, Ostatni), dziecko w 12. roku samo wybiera fach, wiec pokoleń z wyborem drogi, Księga rozbitków do pobrania, trzy poziomy trudności, „Rok na wyspie” w noc Kupały |
+| 0.18 Finał epoki I (gotowe) | akty jako rozdziały z warunkami końca, sceny fabularne (Nikt nas nie szuka, Za pięć dni sztorm, Ostatnia zima mistrza, Ostatni), dziecko w 12. roku samo wybiera fach, wiec pokoleń z wyborem drogi, Księga rozbitków do pobrania, trzy poziomy trudności, „Rok na wyspie” w noc Kupały |
 | 0.19 Kolonizacja | przysiółki zakładane z własnej woli, ścieżki między osadą a przysiółkami, przysiółki jako małe żywe osady, zagrożenia w głębi wyspy, mapa wspólnoty |
 | 0.20 Ład wsi | wytyczanie ścieżek, płoty, ławy, drzewa owocowe, ogródki, słupy rodowe, ład wsi wpływający na nastrój, tryb zdjęć |
 | 0.21 Gospodarstwa | spiżarki rodzin, wieczorne prace przy kądzieli, dowóz materiałów, jakość wyrobów |
@@ -361,7 +375,7 @@ Kolejność dalszej pracy. Każda wersja kończy się czymś, w co da się zagra
 
 **Epoka II** (po 1.0): trzy drogi z rozdrożami opisanymi wyżej. Przez cały czas obowiązuje: klimat słowiański bez magii, brak przybyszów, decyzje gracza w scenach i na wiecu, a życie ludzi toczy się samo.
 
-**Trudność:** trzy poziomy wybierane na początku gry. Łagodny: jedzenie i budynki zużywają się o 30% wolniej, złe wydarzenia rzadziej, krótsze mrozy. Zwykły: jak teraz. Surowy: wszystko o 30% szybciej, częstsze złe wydarzenia, dłuższe mrozy i więcej sztormów.
+**Trudność (od wersji 0.18):** trzy poziomy wybierane na ekranie startowym, zapamiętywane dla następnych gier. Łagodny: psucie się jedzenia, zużycie budynków, pożary i wilki o 30% rzadziej, część mrozów i sztormów łagodnieje do śniegu i deszczu. Zwykły: tak, jak gra była pomyślana. Surowy: wszystko to o 30% częściej, zimą częstsze mrozy, wiosną i jesienią więcej sztormów. Poziom trafia do Księgi rozbitków.
 
 **Długość epoki I:** 6–8 lat na wyspie, czyli 8–10 godzin gry przy tempie 1×.
 

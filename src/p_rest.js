@@ -390,7 +390,7 @@ function freshState(){
   wreck:{parts:JSON.parse(JSON.stringify(WRECK0)),target:-1,gone:0},books:{ciesla:2,zdun:2,dziennik:2,kowal:0,siew:0},readP:{},weather:{k:'clear',left:2},zbozeTot:0,people:[],pid:0,fams:{},fid:7,
   alloc:{zwiad:1,zdun:0,czyt:0},bld:[],nid:1,know:{cegla:'nie',piec:'nie',kuznia:'nie',pole:'nie',cegla_p:0,piec_p:0,kuznia_p:0,cegla_f:0,piec_f:0,kuznia_f:0,active:null},
   bonus:{},hope:.55,health:1,warm:1,hungerDays:0,log:[],nodeAmt:nodes.map(n=>n.amt),grow:{},speed:1,seen:{},found:[],rev:'',tier:0,
-  laws:{},cust:{},custQ:[],custLog:{},offices:{},dis:.08,reqs:[],reqNext:4,toolQ:{},thirst:0,tech:{},tp:{},focus:{},bank:{},dxp:{},atlas:{},exps:[],expSize:2,herds:herdsDef.map(h=>({type:h.type,i:h.i,j:h.j,x:tcx(h.i),z:tcx(h.j),tx:tcx(h.i),tz:tcx(h.j),n:Math.max(2,ANIMAL[h.type][1]-1-((h.i+h.j)%2)),max:ANIMAL[h.type][1],tame:0})),born:0,died:0,variety:1,fedR:1};
+  laws:{},cust:{},custQ:[],custLog:{},offices:{},dis:.08,reqs:[],reqNext:4,toolQ:{},thirst:0,tech:{},tp:{},focus:{},bank:{},dxp:{},atlas:{},exps:[],expSize:2,herds:herdsDef.map(h=>({type:h.type,i:h.i,j:h.j,x:tcx(h.i),z:tcx(h.j),tx:tcx(h.i),tz:tcx(h.j),n:Math.max(2,ANIMAL[h.type][1]-1-((h.i+h.j)%2)),max:ANIMAL[h.type][1],tame:0})),born:0,died:0,variety:1,fedR:1,diff:DIFF_SEL};
  PEOPLE0.forEach((d,i)=>{const p=newPerson(st.pid++,d[0],d[1],d[2],d[3],d[4],d[5]);const a=i/18*6.28;p.x=tcx(camp.i)+Math.cos(a)*1.9;p.z=tcx(camp.j)+Math.sin(a)*1.9;st.people.push(p)});
  for(let f=1;f<=6;f++)st.fams[f]={id:f,home:null};
  PAIRS.forEach(([a,b])=>{st.people[a].pair=st.people[b].id;st.people[b].pair=st.people[a].id});
@@ -597,7 +597,7 @@ function stepPerson(p,dt){
   if(k==='wreck'){const W=S.wreck;if(W.gone){p.state='idle';return}gainXp(p,'ciesla',dt);
    const tg=W.target>=0?W.parts[W.target]:null;
    if(tg&&!tg.open){tg.prog=(tg.prog||0)+dt*e*craftEff(p,'ciesla')*WEATHER[S.weather.k][1];p.act='rozpoznaje: '+tg.n.toLowerCase();if(tg.prog>=tg.need){tg.open=1;W.target=-1;const it=Object.entries(tg.items).filter(([k,v])=>v>0).map(([k,v])=>k.startsWith('ks_')?'księga „'+BOOKS[k.slice(3)]+'”':RN[k].toLowerCase()+' '+v);log('Rozpoznano: '+tg.n.toLowerCase()+'. W środku: '+it.join(', ')+'.');toast('Dostęp do części wraku: '+tg.n);p.state='idle'}return}
-   p.wt+=dt*e*craftEff(p,'ciesla');if(p.wt>=6){p.wt=0;const part=(tg&&tg.open&&Object.values(tg.items).some(v=>v>0))?tg:W.parts.find(x=>x.open&&Object.values(x.items).some(v=>v>0));if(!part){p.state='idle';return}
+   p.wt+=dt*e*craftEff(p,'ciesla')*(S.wreckRush&&S.day<S.wreckRush?2:1);if(p.wt>=6){p.wt=0;const part=(tg&&tg.open&&Object.values(tg.items).some(v=>v>0))?tg:W.parts.find(x=>x.open&&Object.values(x.items).some(v=>v>0));if(!part){p.state='idle';return}
     const keys=Object.keys(part.items).filter(k=>part.items[k]>0);const x=keys[(Math.random()*keys.length)|0];
     if(x.startsWith('ks_')){part.items[x]=0;const bk=x.slice(3);S.books[bk]=1;log(p.name+' wynosi z wraku księgę: „'+BOOKS[bk]+'”. Trzeba ją przeczytać (zakładka Praca, czytelnicy).');toast('Znaleziono księgę: '+BOOKS[bk]);p.state='idle';return}
     const q=Math.min({narz:2,gwozdzie:8,deski:3,plotno:1,wlokna:3,ziarno:5,odziez:2,skory:2,suchary:8}[x]||2,part.items[x]);part.items[x]-=q;
@@ -686,7 +686,7 @@ function newDay(){
  if(tot>0){const take=Math.min(tot,need);FOOD.forEach(k=>{S.res[k]-=take*(Math.max(0,avail(k))/tot)})}
  S.fedR=need>0?Math.min(1,tot/need):1;
  if(S.fedR<1){S.hungerDays++;if(S.hungerDays===1)log('Zabrakło jedzenia dla wszystkich. Ludzie słabną.')}else S.hungerDays=0;
- const sp=hasB('piec')?.5:1,spz=(hasB('spizarnia')?.5:1)*(anyExt('lodownia')?.8:1),garn=(tech('r_garn')?.75:1)*(1-Math.min(.3,(S.res.naczynia||0)*.01))*(law('zapasy')?.8:1)*(1-Math.min(.3,.05*offLv('spizarnia')));FOOD.forEach(k=>{const tm=((k==='jagody'||k==='grzyby')&&tech('u_susz')?.6:1)*((k==='jagody'||k==='grzyby')&&anyExt('suszarnia')?.7:1)*((k==='mieso'||k==='ryby')&&tech('h_wedz')?.5:1)*((k==='mieso'||k==='ryby')&&anyExt('wedzarnia')?.6:1)*(k==='mleko'&&tech('h_doj')?.4:1);S.res[k]=Math.max(0,(S.res[k]||0)*Math.pow(1-SPOIL[k]*sp*spz*garn*tm,K))});
+ const sp=hasB('piec')?.5:1,spz=(hasB('spizarnia')?.5:1)*(anyExt('lodownia')?.8:1),garn=dM()*(tech('r_garn')?.75:1)*(1-Math.min(.3,(S.res.naczynia||0)*.01))*(law('zapasy')?.8:1)*(1-Math.min(.3,.05*offLv('spizarnia')));FOOD.forEach(k=>{const tm=((k==='jagody'||k==='grzyby')&&tech('u_susz')?.6:1)*((k==='jagody'||k==='grzyby')&&anyExt('suszarnia')?.7:1)*((k==='mieso'||k==='ryby')&&tech('h_wedz')?.5:1)*((k==='mieso'||k==='ryby')&&anyExt('wedzarnia')?.6:1)*(k==='mleko'&&tech('h_doj')?.4:1);S.res[k]=Math.max(0,(S.res[k]||0)*Math.pow(1-SPOIL[k]*sp*spz*garn*tm,K))});
  // opał
  const sea=seasonIdx();S.weather.left--;if(S.weather.left<=0){const rollW=s=>{const roll=WROLL[s];let x=Math.random(),k='clear';for(const[w,pr]of roll){if(x<pr){k=w;break}x-=pr}return k};const k=S.weather.next&&WROLL[sea].some(w=>w[0]===S.weather.next)?S.weather.next:rollW(sea);
   const nx=rollW(Math.floor(((S.day+3)%YEAR)*96/YEAR/24)%4);S.weather={k,left:1+((Math.random()*3)|0),next:nx};if(k==='frost')log('Siarczysty mróz. Domy palą dwa razy więcej opału, a kto nie ma ciepłej odzieży, marznie.');
@@ -702,7 +702,7 @@ function newDay(){
  if(law('oszczedne'))S.people.forEach(p=>{p.hp=Math.max(.2,p.hp-.006*K)});if(law('dlugi'))S.people.forEach(p=>{if(isWorker(p)&&p.job!=='wyp')p.hp=Math.max(.25,p.hp-.004*K)});
  bldDaily();wearDaily();lawDaily();slavDaily();disDaily();reqTick();fireRoll();
  {const lv=offLv('zielarz');if(lv)S.people.forEach(p=>{if(p.hp<.9)p.hp=Math.min(1,p.hp+.004*lv*K*(tech('u_ziel')?1.5:1))})}
- familyLife();ludDaily();urzDaily();pamDaily();
+ familyLife();ludDaily();urzDaily();pamDaily();actDaily();
  techXp('nauka',K*S.people.filter(p=>isAdult(p)&&(p.trait==='Nauczyciel'||p.age>55)).reduce((a,p)=>a+(p.trait==='Nauczyciel'?.7:.25),0));techTick();
  const t=tierOf();if(t>S.tier){S.tier=t;log('Osada rośnie: teraz to '+TIERS[t][0].toLowerCase()+'.');toast('Nowy poziom: '+TIERS[t][0])}
  const housed=S.people.length?S.people.filter(p=>homeOf(p)).length/S.people.length:0;
@@ -719,7 +719,7 @@ function newDay(){
  S.bld.forEach(b=>{if(b.kind!=='zagroda'||!bDone(b))return;const a=b.animals||0;const cared=(b.care||0)>20;b.care=0;
   if(a){S.res.mleko+=K*a*(sea===2&&!hasExt(b,'obora')?.4:.9)*(cared?1:.4)*(tech('h_doj')?1.4:1);if(tech('h_siersc'))S.res.wlokna+=K*a*.12;if((sea===3||(tech('h_rozr')&&sea!==2))&&a>=2&&a<penCap(b)&&Math.random()<K*.06*a/2*(tech('h_rozr')?2:1)){b.animals++;log('W zagrodzie urodziło się koźlę.')}
    if(!cared&&(sea===2||Math.random()<.02)&&Math.random()<.08*K){b.animals--;log('Koza uciekła z zaniedbanej zagrody.')}}
-  const c=bCenter(b);S.herds.forEach(h=>{if(h.type!=='wilk'||h.n<2||!b.animals)return;if(Math.hypot(h.x-c.x,h.z-c.z)<26&&Math.random()<K*(cared?.02:.07)*(tech('h_ostr')?.3:1)*(law('straz')?.3:1)*(hasExt(b,'obora')?.5:1)*(hasB('wieza')?.8:1)){b.animals--;log('Wilki w nocy zagryzły kozę w zagrodzie.');toast('Wilki napadły na zagrodę')}})});
+  const c=bCenter(b);S.herds.forEach(h=>{if(h.type!=='wilk'||h.n<2||!b.animals)return;if(Math.hypot(h.x-c.x,h.z-c.z)<26&&Math.random()<dM()*K*(cared?.02:.07)*(tech('h_ostr')?.3:1)*(law('straz')?.3:1)*(hasExt(b,'obora')?.5:1)*(hasB('wieza')?.8:1)){b.animals--;log('Wilki w nocy zagryzły kozę w zagrodzie.');toast('Wilki napadły na zagrodę')}})});
  // pola
  S.bld.forEach(b=>{if(!b.field)return;const f=b.field;if(f.st==='rosnie'&&sea!==2){f.g+=K/30*(tech('u_selek')?1.15:1)*(hasExt(b,'rowy')?1.15:1);if(f.g>=1){f.st='dojrzale';const best=Math.max(0,...S.people.filter(p=>p.wb===b.id).map(p=>p.sk.rolnik));f.left=Math.round(70*f.fert*(.6+.4*f.q)*(1+.1*best)*(tech('u_selek')?1.2:1)*(tech('u_nawoz')&&S.bld.some(z=>z.kind==='zagroda'&&(z.animals||0)>0)?1.25:1)*(hasExt(b,'strach')?1.1:1)*(1+.1*(lvOf(b)-1))*(1+.3*(S.adapt||0)));log('Zboże na polu dojrzało: około '+f.left+' ziarna do zebrania.');toast('Zboże dojrzało')}fieldVis(b)}
   else if(f.st==='dojrzale'&&sea===2){f.left=Math.floor(f.left/2);if(f.left<=0){f.st='puste';fieldVis(b)}}
