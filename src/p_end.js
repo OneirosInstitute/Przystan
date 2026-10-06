@@ -68,9 +68,9 @@ function weatherFx(rdt){const k=S.weather.k;const isRain=k==='rain'||k==='storm'
  if(isSnow){for(let q=0;q<PN;q++){let y=sPos[q*3+1]-2.2*rdt;sPos[q*3]+=Math.sin(clock*.8+q)*rdt*.7;if(y<0){y+=26;sPos[q*3]=(Math.random()-.5)*60;sPos[q*3+2]=(Math.random()-.5)*60}sPos[q*3+1]=y}sGeo.attributes.position.needsUpdate=true;snowP.position.set(camT.x,base,camT.z)}
  const fogK=k==='fog'?1:k==='storm'||k==='rain'?.5:k==='snow'?.4:0;{const sz=34/zoom,ov=sstep(.5,.25,zoom);scene.fog.near=160+lerp(.05,-.45,fogK)*sz+ov*sz*.25;scene.fog.far=160+lerp(1.7,.95,fogK)*sz+ov*sz*.6;}wUni.uFogN.value=scene.fog.near;wUni.uFogF.value=scene.fog.far;
  return fogK}
-function frame(now){requestAnimationFrame(frame);const rdt=Math.min(.1,(now-last)/1000);last=now;clock+=rdt;
+function frame(now){requestAnimationFrame(frame);if(gfxSkip(now))return;const rdt=Math.min(.1,(now-last)/1000);last=now;clock+=rdt;
  wUni.uT.value=clock;
- if(!S){yaw+=rdt*.04;yawT=yaw;setCam();introLight();renderer.render(scene,cam);return}
+ GFXU.t.value=clock;if(!S){yaw+=rdt*.04;yawT=yaw;setCam();introLight();gfxRender();return}
  if(S.speed>0&&S.people.length){let dt=rdt*S.speed;while(dt>0){const s=Math.min(.1,dt);step(s);dt-=s}storyTick()}
  fogT+=rdt;if(fogT>.8){fogT=0;fogPass(false)}
  treadT+=rdt;if(treadT>3&&treadDirty){treadT=0;treadDirty=false;applyTread();applyFog();for(const t of['tuft','fern','heath','reed'])for(let k=0;k<deco[t].length;k++){const it=deco[t][k];const ti=tileOf(it[0],it[1]);if(tread[ti[1]*N+ti[0]]>.3)setDeco(t,k)}decoMeshes.forEach(m=>m.instanceMatrix.needsUpdate=true)}
@@ -85,19 +85,20 @@ function frame(now){requestAnimationFrame(frame);const rdt=Math.min(.1,(now-last
   u.carry.visible=!!p.carry;if(p.carry)u.carry.material.color.set({drewno:0x8a6a40,kamien:0x8c8a80,glina:0xa9683c,jagody:0x8a3a55,grzyby:0xb07a4a,ryby:0x8fa4ac,mieso:0x9a4a3a,deski:0xb08a55,gwozdzie:0x555555,plotno:0xc9bda0,narz:0x666a70}[p.carry[0].res]||0x888888)}
  drawAnimals();drawBirds(rdt);fireFxTick(rdt);bubbleTick(rdt);const wf=weatherFx(rdt);
  ripples.forEach((m,k)=>{const s=1+.3*Math.sin(clock*1.6+k);m.scale.set(s,s,s);m.material.opacity=.3+.22*Math.sin(clock*1.6+k)});
- const Lt=lighting();firelight.position.set(tcx(camp.i),Hy(tcx(camp.i),tcx(camp.j))+1.8,tcx(camp.j));atmosphere(rdt,Lt);
+ const Lt=lighting();firelight.position.set(tcx(camp.i),Hy(tcx(camp.i),tcx(camp.j))+1.8,tcx(camp.j));atmosphere(rdt,Lt);gfxTick(rdt,Lt);
  rangeRing.material.opacity=.4+.2*Math.sin(clock*3);
  mapTick(rdt);
  soundTick(rdt,Lt);
  uiT+=rdt;if(uiT>.4){uiT=0;renderTop();renderSel();goalsTick();techTick();custTick()}
  placeLabel();
  panT+=rdt;if(panT>1.5){panT=0;if(tab&&tab!=='praca'&&tab!=='budowa')renderPanel()}
- renderer.render(scene,cam);
- fpsAcc+=rdt;fpsN++;if(fpsN===45){const avg=fpsAcc/fpsN;if(avg>.04&&qLevel<2){qLevel++;
+ gfxRender();
+ fpsAcc+=rdt;fpsN++;if(fpsN===45){const avg=fpsAcc/fpsN;if(!gfxSlow(avg)&&avg>.04&&qLevel<2&&!GFX.forced){qLevel++;
    if(qLevel===1){renderer.shadowMap.enabled=false;sun.castShadow=false;scene.traverse(o=>{if(o.material)[].concat(o.material).forEach(mm=>mm.needsUpdate=true)})}
    if(qLevel===2){renderer.setPixelRatio(1);tufts.visible=false;resize()}}fpsAcc=0;fpsN=0}}
 function introLight(){scene.background=skyDay;scene.fog.color.copy(skyDay);wUni.uFog.value.copy(skyDay);sun.position.set(camT.x+30,45,camT.z+25);sun.intensity=1.4;hemi.intensity=.9;wUni.uDay.value=1}
 if(LOWQ){renderer.shadowMap.enabled=false;sun.castShadow=false}
+gfxSetLevel(GFX.level,true);
 
 /* ================= start ================= */
 function boot(fresh){
@@ -138,7 +139,7 @@ try{const w0=innerWidth,h0=innerHeight;renderer.setSize(640,640,false);const asp
  introLight();sun.position.set(camT.x-40,38,camT.z+30);renderer.render(scene,cam);$('introPic').style.backgroundImage=`url(${cv.toDataURL('image/jpeg',.86)})`;
  yaw=yawT=yy;camT.x=cx;camT.z=cz;resize()}catch(e){}
 requestAnimationFrame(frame);
-window.__g={get S(){return S},setYaw(v){yaw=yawT=v},get yaw(){return yaw},slavDaily,slavHTML,custHTML,get evOpen(){return evOpen},startProj,finishProj,rebuildMesh,custChange,custTick,custInit,setOffice,lawDaily,startFire,upgradeB,reqTick,disDaily,REGIONS,sendExp,tech,regionScan,toggleOverview,step,newDay,assign,nodes,startGame,setAlloc,setWant,startPlace,tryPlace,moveGhost,checkPlace,camp,wreck,tribe,rev,fogPass,openSheet,closeSheet,setCam,select,selectB,reveal,deco,BD,bById,countInRange,
+window.__g={get S(){return S},slowHTML,troubleHTML,kronText,FOOD,foodTotal,gfxSetLevel,get GFX(){return GFX},setYaw(v){yaw=yawT=v},get yaw(){return yaw},slavDaily,slavHTML,custHTML,get evOpen(){return evOpen},startProj,finishProj,rebuildMesh,custChange,custTick,custInit,setOffice,lawDaily,startFire,upgradeB,reqTick,disDaily,REGIONS,sendExp,tech,regionScan,toggleOverview,step,newDay,assign,nodes,startGame,setAlloc,setWant,startPlace,tryPlace,moveGhost,checkPlace,camp,wreck,tribe,rev,fogPass,openSheet,closeSheet,setCam,select,selectB,reveal,deco,BD,bById,countInRange,
  get ghostTile(){return ghostTile},get placing(){return placing},get zoom(){return zoom},setZoom(z){zoom=zoomT=z;setCam()},get qLevel(){return qLevel},setTime(t){S.day=Math.floor(S.day)+t},look(x,z){camT.x=x;camT.z=z;setCam()},
  build(kind,i,j){startPlace(kind);moveGhost(i,j);const gt=ghostTile;const ok=checkPlace(kind,gt[0],gt[1]);if(ok)tryPlace();else cancelPlace();return ok},
  scene,Hy,tcx,pGroup,bGroup,nodeBy,pickNodeB,inRange,TRIAL,herdsDef,planJob,astar,tileOf,nearestWalk,finishAll(){S.bld.forEach(b=>{if(!bDone(b)){b.prog=b.work;completeSite(b)}})}};

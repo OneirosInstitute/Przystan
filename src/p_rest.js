@@ -79,7 +79,7 @@ const SSPR=[[.16,.27,.24],[.17,.27,.23],[.38,.45,.45],[.17,.29,.25]];
 const SBIR=[[.56,.62,.36],[.84,.68,.26],[.6,.56,.5],[.6,.7,.38]];
 const crownM={},trunkM={};
 for(const sp in TSP){const list=nodeBy.tree.filter(n=>n.sp===sp);list.forEach((n,k)=>n.k=k);
- crownM[sp]=new THREE.InstancedMesh(TSP[sp].g,new THREE.MeshStandardMaterial({vertexColors:true,roughness:.95}),Math.max(1,list.length));
+ crownM[sp]=new THREE.InstancedMesh(TSP[sp].g,windify(new THREE.MeshStandardMaterial({vertexColors:true,roughness:.95}),sp==='birch'?.009:.0065),Math.max(1,list.length));
  crownM[sp].instanceColor=new THREE.InstancedBufferAttribute(new Float32Array(Math.max(1,list.length)*3),3);
  trunkM[sp]=new THREE.InstancedMesh(TSP[sp].tg,sp==='birch'?new THREE.MeshStandardMaterial({vertexColors:true,roughness:.9}):new THREE.MeshStandardMaterial({color:sp==='oak'?0x4e3c2c:0x5c4632,roughness:1,flatShading:true,vertexColors:sp==='oak'}),Math.max(1,list.length));
  [crownM[sp],trunkM[sp]].forEach(m=>{m.castShadow=true;m.receiveShadow=true;scene.add(m)})}
@@ -161,7 +161,7 @@ const deco={tuft:[],flower:[],pebble:[],drift:[],fern:[],reed:[],heath:[],log:[]
   else if(tileHH(i,j)<.06&&RD()<.25)put('reed',k,P());
   const nT=f<.46?2:1;for(let q=0;q<nT;q++)if(RD()<.7)put('tuft',k,[tcx(i)+(RD()-.5),tcx(j)+(RD()-.5),RD(),f>.52?1:0]);
   if(f<.42&&RD()<.3)put('flower',k,[tcx(i)+(RD()-.5),tcx(j)+(RD()-.5),RD()])}}
-const tufts=new THREE.InstancedMesh(tuftG,new THREE.MeshStandardMaterial({vertexColors:true,roughness:1}),Math.max(1,deco.tuft.length));
+const tufts=new THREE.InstancedMesh(tuftG,windify(new THREE.MeshStandardMaterial({vertexColors:true,roughness:1}),.35),Math.max(1,deco.tuft.length));
 tufts.instanceColor=new THREE.InstancedBufferAttribute(new Float32Array(Math.max(1,deco.tuft.length)*3),3);tufts.receiveShadow=true;scene.add(tufts);
 const flowerG=mergeGeos([{g:new THREE.IcosahedronGeometry(.06,0),y:.2,c:W1},{g:new THREE.IcosahedronGeometry(.055,0),y:.16,x:.12,z:.05,c:W1},{g:new THREE.IcosahedronGeometry(.055,0),y:.14,x:-.08,z:.1,c:W1}]);
 const flowers=new THREE.InstancedMesh(flowerG,new THREE.MeshStandardMaterial({roughness:.8}),Math.max(1,deco.flower.length));
@@ -186,7 +186,7 @@ const logG=mergeGeos([{g:new THREE.CylinderGeometry(.11,.13,1.3,7),y:.1,c:[.42,.
 const snagG=mergeGeos([{g:new THREE.CylinderGeometry(.05,.11,2.4,6),y:1.2,c:[.55,.52,.47]},{g:new THREE.CylinderGeometry(.025,.04,.7,4),y:1.6,x:.22,c:[.5,.47,.42],rz:-.9},{g:new THREE.CylinderGeometry(.02,.035,.5,4),y:1.9,x:-.16,c:[.5,.47,.42],rz:.8},{g:new THREE.CylinderGeometry(.11,.14,.1,6),y:.04,c:[.4,.36,.3]}]);
 const mkI=(g,n,o)=>{const m=new THREE.InstancedMesh(g,new THREE.MeshStandardMaterial(Object.assign({vertexColors:true,roughness:1},o||{})),Math.max(1,n));m.instanceColor=new THREE.InstancedBufferAttribute(new Float32Array(Math.max(1,n)*3),3);scene.add(m);return m};
 const ferns=mkI(fernG,deco.fern.length,{side:THREE.DoubleSide}),reeds=mkI(reedG,deco.reed.length),heaths=mkI(heathG,deco.heath.length),logsD=mkI(logG,deco.log.length),snags=mkI(snagG,deco.snag.length);
-logsD.castShadow=snags.castShadow=true;
+logsD.castShadow=snags.castShadow=true;windify(ferns.material,.5);windify(reeds.material,.09);windify(flowers.material,.4);
 const DM={fern:ferns,reed:reeds,heath:heaths,log:logsD,snag:snags};
 const SFERN=[[.32,.46,.24],[.62,.46,.22],[.4,.34,.26],[.36,.52,.26]],SREED=[[.5,.56,.32],[.66,.58,.36],[.66,.6,.48],[.46,.56,.3]],SHEATH=[[.56,.36,.56],[.48,.34,.42],[.4,.36,.34],[.34,.4,.28]];
 function setDeco2(type,k){const[x,z,r]=deco[type][k];const ti=tileOf(x,z),tk=ti[1]*N+ti[0];const seen=revAt(ti[0],ti[1])&&!decoHidden.has(tk)&&!(tread&&tread[tk]>.45);const m=DM[type];let s=seen?(.75+r*.5):0,c=[.5,.5,.5];
@@ -386,7 +386,7 @@ const isAdult=p=>p.age>=12;
 function packRev(){let s='';for(let k=0;k<N*N;k+=8){let b=0;for(let q=0;q<8;q++)if(rev[k+q])b|=1<<q;s+=String.fromCharCode(b)}return btoa(s)}
 function unpackRev(str){const s=atob(str);for(let k=0;k<s.length;k++){const b=s.charCodeAt(k);for(let q=0;q<8;q++)rev[k*8+q]=(b>>q)&1}revDirty=true}
 function freshState(){
- const st={t:0,day:.27,res:{miod:0,ziola:0,warzywa:0,suchary:420,jagody:0,grzyby:0,ryby:0,mieso:0,ziarno:0,mleko:0,drewno:22,opal:45,kamien:0,glina:0,deski:0,gwozdzie:0,plotno:0,skory:0,odziez:4,narz:8,narzk:0,cegla:0,ruda:0,wegiel:0,wlokna:0},
+ const st={t:0,day:.27,res:{miod:0,ziola:0,warzywa:0,maka:0,chleb:0,ser:0,kiszonki:0,naczynia:0,suchary:420,jagody:0,grzyby:0,ryby:0,mieso:0,ziarno:0,mleko:0,drewno:22,opal:45,kamien:0,glina:0,deski:0,gwozdzie:0,plotno:0,skory:0,odziez:4,narz:8,narzk:0,cegla:0,ruda:0,wegiel:0,wlokna:0},
   wreck:{parts:JSON.parse(JSON.stringify(WRECK0)),target:-1,gone:0},books:{ciesla:2,zdun:2,dziennik:2,kowal:0,siew:0},readP:{},weather:{k:'clear',left:2},zbozeTot:0,people:[],pid:0,fams:{},fid:7,
   alloc:{zwiad:1,zdun:0,czyt:0},bld:[],nid:1,know:{cegla:'nie',piec:'nie',kuznia:'nie',pole:'nie',cegla_p:0,piec_p:0,kuznia_p:0,cegla_f:0,piec_f:0,kuznia_f:0,active:null},
   bonus:{},hope:.55,health:1,warm:1,hungerDays:0,log:[],nodeAmt:nodes.map(n=>n.amt),grow:{},speed:1,seen:{},found:[],rev:'',tier:0,
@@ -399,7 +399,7 @@ function packTread(){let s='';for(let k=0;k<N*N;k++)s+=String.fromCharCode(Math.
 function unpackTread(str){const s=str.replace(/~(\d+)~/g,(m,n)=>'A'.repeat(+n));for(let k=0;k<N*N&&k<s.length;k++)tread[k]=(s.charCodeAt(k)-65)/15}
 function save(){try{S.rev=packRev();S.tread=packTread();localStorage.setItem(SAVEKEY,JSON.stringify(S,(k,v)=>(k==='mentor'||k==='tgt'||k==='path'||k==='after')?undefined:v))}catch(e){}}
 function load(){try{const s=localStorage.getItem(SAVEKEY);if(!s)return null;const o=JSON.parse(s);if(!o||!o.people||!o.nodeAmt||o.nodeAmt.length!==nodes.length)return null;
- o.people.forEach(p=>{p.path=null;p.tgt=null;p.after=null;p.state='idle';p.carry=null});o.bld.forEach(b=>{b.workers=0});return o}catch(e){return null}}
+ wildFixRes(o);o.people.forEach(p=>{p.path=null;p.tgt=null;p.after=null;p.state='idle';p.carry=null});o.bld.forEach(b=>{b.workers=0});return o}catch(e){return null}}
 function log(t){S.log.unshift({d:Math.floor(S.day)+1,t});if(S.log.length>120)S.log.pop()}
 const adultsPool=()=>S.people.filter(isWorker);
 const pById=id=>S.people.find(p=>p.id===id);
@@ -522,7 +522,7 @@ function planJob(p){
    if(e&&go(p,e,'field',b)){p.act={puste:'sieje',rosnie:'pieli',dojrzale:'żnie zboże'}[f.st];return true}return false}
   if(b.kind==='lesnik'){const c=bCenter(b);let best=null,bd=1e9;for(const n of nodeBy.tree){if(n.gone||n.amt>0||n.grow>0||n.claim>0||!revAt(n.i,n.j))continue;const dd=Math.hypot(n.x-c.x,n.z-c.z);if(dd<=rOf(b)&&dd<bd){bd=dd;best=n}}
    if(!best){p.act='nie ma gdzie sadzić';return false}const st=nearestWalk(best.i,best.j);if(st&&go(p,st,'plant',best)){best.claim++;p.act='sadzi drzewo';return true}return false}
-  if(d.prod){const e=entryOf(b.kind,b.i,b.j);if(e&&go(p,e,'prod',b)){p.act={drewutnia:'rąbie opał',warsztat:'robi narzędzia',szwalnia:'szyje i tka',cegielnia:'wypala cegły',pracownia:'piłuje deski',mielerz:'pilnuje mielerza',kuznia:'kuje żelazo'}[b.kind];return true}return false}
+  if(d.prod){const e=entryOf(b.kind,b.i,b.j);if(e&&go(p,e,'prod',b)){p.act={drewutnia:'rąbie opał',warsztat:'robi narzędzia',szwalnia:'szyje i tka',cegielnia:'wypala cegły',pracownia:'piłuje deski',mielerz:'pilnuje mielerza',kuznia:'kuje żelazo',zarna:'miele ziarno',piekarnia:'piecze chleb',serownia:'robi ser',garncarnia:'lepi garnki',kiszarnia:'kisi kapustę i grzyby'}[b.kind];return true}return false}
   return false}
  if(p.job==='wyp'){const e=S.exps.find(x=>x.id===p.exp);if(!e){p.job='rob';p.exp=null;return false}if(go(p,e.exit,'away',null)){p.act='wyrusza na wyprawę';return true}p.state='away';return true}
  if(p.job==='zwiad'){const t=scoutTarget(p);if(!t){p.act='cała okolica odkryta';return false}if(go(p,t,'scout',null)){p.act='idzie w nieznane';return true}return false}
@@ -584,7 +584,7 @@ function stepPerson(p,dt){
   if(k==='field'){const b=p.tgt;if(!b||!bById(b.id)){p.state='idle';return}const f=b.field;gainXp(p,'rolnik',dt);p.wt+=dt*e*craftEff(p,'rolnik');
    if(f.st==='puste'){if(p.wt>=10){p.wt=0;if(S.res.ziarno>=10&&inSow()){S.res.ziarno-=10;f.st='rosnie';f.g=0;f.q=0;log('Zasiano pole. Teraz pielenie i czekanie.');fieldVis(b)}p.state='idle'}}
    else if(f.st==='rosnie'){f.q=Math.min(1,f.q+dt*e*.004);if(p.wt>=12){p.state='idle';p.wait=.5}}
-   else if(f.st==='dojrzale'){if(p.wt>=6){p.wt=0;const q=Math.min(6,f.left);f.left-=q;if(f.left<=0){f.st='puste';S.seen.harvest=1;f.fert=Math.max(.3,f.fert-(tech('u_odlog')?.06:.12));f.g=0;log('Żniwa skończone. Gleba na tym polu jest trochę bardziej zmęczona.');fieldVis(b)}if(q>0)finishTrip(p,[{res:'ziarno',q}]);else p.state='idle'}}
+   else if(f.st==='dojrzale'){if(p.wt>=6){p.wt=0;const q=Math.min(6,f.left);f.left-=q;if(f.left<=0){f.st='puste';S.seen.harvest=1;adaptHarvest();f.fert=Math.max(.3,f.fert-(tech('u_odlog')?.06:.12));f.g=0;log('Żniwa skończone. Gleba na tym polu jest trochę bardziej zmęczona.');fieldVis(b)}if(q>0)finishTrip(p,[{res:'ziarno',q}]);else p.state='idle'}}
    return}
   if(k==='read'){const bk=p.book;if(!bk||S.books[bk]!==1){p.state='idle';return}S.readP[bk]=(S.readP[bk]||0)+dt*e*(p.trait==='Dociekliwy'?1.3:1)*(p.age<20?1.1:1);techXp('nauka',dt*.08);p.act='czyta: '+BOOKS[bk];
    if(S.readP[bk]>=200){S.books[bk]=2;log(p.name+' kończy czytać „'+BOOKS[bk]+'”.'+(bk==='kowal'?' Można spróbować postawić kuźnię (zakładka Wiedza).':bk==='siew'?' Wiemy, jak założyć pole.':''));toast('Przeczytano: '+BOOKS[bk]);if(bk==='siew')S.know.pole='tak';p.state='idle'}return}
@@ -693,7 +693,7 @@ function newDay(){
  if(tot>0){const take=Math.min(tot,need);FOOD.forEach(k=>{S.res[k]-=take*(Math.max(0,avail(k))/tot)})}
  S.fedR=need>0?Math.min(1,tot/need):1;
  if(S.fedR<1){S.hungerDays++;if(S.hungerDays===1)log('Zabrakło jedzenia dla wszystkich. Ludzie słabną.')}else S.hungerDays=0;
- const sp=hasB('piec')?.5:1,spz=(hasB('spizarnia')?.5:1)*(anyExt('lodownia')?.8:1),garn=(tech('r_garn')?.75:1)*(law('zapasy')?.8:1)*(1-Math.min(.3,.05*offLv('spizarnia')));FOOD.forEach(k=>{const tm=((k==='jagody'||k==='grzyby')&&tech('u_susz')?.6:1)*((k==='jagody'||k==='grzyby')&&anyExt('suszarnia')?.7:1)*((k==='mieso'||k==='ryby')&&tech('h_wedz')?.5:1)*((k==='mieso'||k==='ryby')&&anyExt('wedzarnia')?.6:1)*(k==='mleko'&&tech('h_doj')?.4:1);S.res[k]=Math.max(0,(S.res[k]||0)*Math.pow(1-SPOIL[k]*sp*spz*garn*tm,K))});
+ const sp=hasB('piec')?.5:1,spz=(hasB('spizarnia')?.5:1)*(anyExt('lodownia')?.8:1),garn=(tech('r_garn')?.75:1)*(1-Math.min(.3,(S.res.naczynia||0)*.01))*(law('zapasy')?.8:1)*(1-Math.min(.3,.05*offLv('spizarnia')));FOOD.forEach(k=>{const tm=((k==='jagody'||k==='grzyby')&&tech('u_susz')?.6:1)*((k==='jagody'||k==='grzyby')&&anyExt('suszarnia')?.7:1)*((k==='mieso'||k==='ryby')&&tech('h_wedz')?.5:1)*((k==='mieso'||k==='ryby')&&anyExt('wedzarnia')?.6:1)*(k==='mleko'&&tech('h_doj')?.4:1);S.res[k]=Math.max(0,(S.res[k]||0)*Math.pow(1-SPOIL[k]*sp*spz*garn*tm,K))});
  // opał
  const sea=seasonIdx();S.weather.left--;if(S.weather.left<=0){const rollW=s=>{const roll=WROLL[s];let x=Math.random(),k='clear';for(const[w,pr]of roll){if(x<pr){k=w;break}x-=pr}return k};const k=S.weather.next&&WROLL[sea].some(w=>w[0]===S.weather.next)?S.weather.next:rollW(sea);
   const nx=rollW(Math.floor(((S.day+3)%YEAR)*96/YEAR/24)%4);S.weather={k,left:1+((Math.random()*3)|0),next:nx};if(k==='frost')log('Siarczysty mróz. Domy palą dwa razy więcej opału, a kto nie ma ciepłej odzieży, marznie.');
@@ -713,7 +713,7 @@ function newDay(){
  techXp('nauka',K*S.people.filter(p=>isAdult(p)&&(p.trait==='Nauczyciel'||p.age>55)).reduce((a,p)=>a+(p.trait==='Nauczyciel'?.7:.25),0));techTick();
  const t=tierOf();if(t>S.tier){S.tier=t;log('Osada rośnie: teraz to '+TIERS[t][0].toLowerCase()+'.');toast('Nowy poziom: '+TIERS[t][0])}
  const housed=S.people.length?S.people.filter(p=>homeOf(p)).length/S.people.length:0;
- const tgt=.22+.25*Math.min(1,S.fedR)+.18*S.warm+.13*housed+.07*Math.min(1,(S.variety-1)/2)+.05*S.tier+.006*S.people.filter(p=>p.trait==='Pogodny').length-.2*(S.dis||0)+(law('wspolne')?.04:0)+(law('opowiesci')?.04:0)+(law('nauka')?.02:0)-(law('pomoc')?.04:0)+(law('u_wspolne')?.04:0)-(law('z_oszcz')?.03:0)+(hasB('cmentarz')?.02:0)+Math.min(.05,.01*anyExt('ganek'))+(hasB('laznia')&&S.bathOk?.03:0)+(hasB('domwsp')?.03:0)+slavHope();S.hope=clamp(S.hope+(tgt-S.hope)*.3,.05,1);
+ const tgt=.22+.25*Math.min(1,S.fedR)+.18*S.warm+.13*housed+.09*Math.min(1,(S.variety-1)/4)+.05*S.tier+.006*S.people.filter(p=>p.trait==='Pogodny').length-.2*(S.dis||0)+(law('wspolne')?.04:0)+(law('opowiesci')?.04:0)+(law('nauka')?.02:0)-(law('pomoc')?.04:0)+(law('u_wspolne')?.04:0)-(law('z_oszcz')?.03:0)+(hasB('cmentarz')?.02:0)+Math.min(.05,.01*anyExt('ganek'))+(hasB('laznia')&&S.bathOk?.03:0)+(hasB('domwsp')?.03:0)+slavHope();S.hope=clamp(S.hope+(tgt-S.hope)*.3,.05,1);
  // przyroda
  for(let k=0;k<N*N;k++)if(tread[k]>0)tread[k]*=.985;treadDirty=true;
  nodes.forEach((n,k)=>{if(n.type==='bush'&&n.amt<n.max&&sea!==2){n.amt=Math.min(n.max,n.amt+.35*K*(tech('u_sad')?1.5:1)*(.6+.8*Math.random()));S.nodeAmt[k]=n.amt}
@@ -728,7 +728,7 @@ function newDay(){
    if(!cared&&(sea===2||Math.random()<.02)&&Math.random()<.08*K){b.animals--;log('Koza uciekła z zaniedbanej zagrody.')}}
   const c=bCenter(b);S.herds.forEach(h=>{if(h.type!=='wilk'||h.n<2||!b.animals)return;if(Math.hypot(h.x-c.x,h.z-c.z)<26&&Math.random()<K*(cared?.02:.07)*(tech('h_ostr')?.3:1)*(law('straz')?.3:1)*(hasExt(b,'obora')?.5:1)*(hasB('wieza')?.8:1)){b.animals--;log('Wilki w nocy zagryzły kozę w zagrodzie.');toast('Wilki napadły na zagrodę')}})});
  // pola
- S.bld.forEach(b=>{if(!b.field)return;const f=b.field;if(f.st==='rosnie'&&sea!==2){f.g+=K/30*(tech('u_selek')?1.15:1)*(hasExt(b,'rowy')?1.15:1);if(f.g>=1){f.st='dojrzale';const best=Math.max(0,...S.people.filter(p=>p.wb===b.id).map(p=>p.sk.rolnik));f.left=Math.round(70*f.fert*(.6+.4*f.q)*(1+.1*best)*(tech('u_selek')?1.2:1)*(tech('u_nawoz')&&S.bld.some(z=>z.kind==='zagroda'&&(z.animals||0)>0)?1.25:1)*(hasExt(b,'strach')?1.1:1)*(1+.1*(lvOf(b)-1)));log('Zboże na polu dojrzało: około '+f.left+' ziarna do zebrania.');toast('Zboże dojrzało')}fieldVis(b)}
+ S.bld.forEach(b=>{if(!b.field)return;const f=b.field;if(f.st==='rosnie'&&sea!==2){f.g+=K/30*(tech('u_selek')?1.15:1)*(hasExt(b,'rowy')?1.15:1);if(f.g>=1){f.st='dojrzale';const best=Math.max(0,...S.people.filter(p=>p.wb===b.id).map(p=>p.sk.rolnik));f.left=Math.round(70*f.fert*(.6+.4*f.q)*(1+.1*best)*(tech('u_selek')?1.2:1)*(tech('u_nawoz')&&S.bld.some(z=>z.kind==='zagroda'&&(z.animals||0)>0)?1.25:1)*(hasExt(b,'strach')?1.1:1)*(1+.1*(lvOf(b)-1))*(1+.3*(S.adapt||0)));log('Zboże na polu dojrzało: około '+f.left+' ziarna do zebrania.');toast('Zboże dojrzało')}fieldVis(b)}
   else if(f.st==='dojrzale'&&sea===2){f.left=Math.floor(f.left/2);if(f.left<=0){f.st='puste';fieldVis(b)}}
   else if(f.st==='puste'&&sea!==2)f.fert=Math.min(1,f.fert+.003*K*(tech('u_odlog')?3:1)*(hasExt(b,'rowy')?1.5:1))});
  // wrak: rozpad i sztorm
@@ -799,7 +799,7 @@ const ZMIN=.22,ZMAX=3.2;
 function setCam(){const size=34/zoom,asp=innerWidth/innerHeight;cam.left=-size*asp/2;cam.right=size*asp/2;cam.top=size/2;cam.bottom=-size/2;cam.updateProjectionMatrix();
  const h=Hy(camT.x,camT.z);const r=160;cam.position.set(camT.x+Math.sin(yaw)*Math.cos(pitch)*r,h+Math.sin(pitch)*r,camT.z+Math.cos(yaw)*Math.cos(pitch)*r);cam.lookAt(camT.x,h,camT.z);
  sun.target.position.set(camT.x,0,camT.z);sun.target.updateMatrixWorld()}
-function resize(){renderer.setSize(innerWidth,innerHeight,false);setCam()}
+function resize(){renderer.setSize(innerWidth,innerHeight,false);setCam();gfxResize()}
 addEventListener('resize',resize);
 const ray=new THREE.Raycaster(),mv=new THREE.Vector2();
 function pick(cx,cy,objs){const r=cv.getBoundingClientRect();mv.set((cx-r.left)/r.width*2-1,-((cy-r.top)/r.height)*2+1);ray.setFromCamera(mv,cam);return ray.intersectObjects(objs,true)}
@@ -836,8 +836,8 @@ function $(id){return document.getElementById(id)}
 let tab=null;
 const TABS=[['budowa','Budowa'],['praca','Praca'],['osada','Ludzie'],['wyprawy','Wyprawy'],['wiedza','Wiedza'],['natura','Natura'],['kronika','Kronika']];
 $('tabbar').innerHTML=TABS.map(([k,n])=>`<button data-tab="${k}">${ico(k)}<span>${n}</span></button>`).join('');
-$('speed').innerHTML=[[0,ico('pause')],[1,'1×'],[2,'2×'],[4,'4×'],[8,'8×']].map(([v,l])=>`<button data-sp="${v}" aria-label="Tempo ${v}">${l}</button>`).join('')+`<i></i><button data-snd="1" aria-label="Dźwięk"></button><button data-fs="1" aria-label="Pełny ekran"></button>`;
-function renderCtl(){const sb=$('speed').querySelector('[data-snd]');if(sb)sb.innerHTML=ico(muted?'mute':'snd');const fb=$('speed').querySelector('[data-fs]');if(fb){fb.innerHTML=ico(isFull()?'fsx':'fs');fb.style.display=fsAvail()?'':'none'}
+$('speed').innerHTML=[[0,ico('pause')],[1,'1×'],[2,'2×'],[4,'4×'],[8,'8×']].map(([v,l])=>`<button data-sp="${v}" aria-label="Tempo ${v}">${l}</button>`).join('')+`<i></i><button data-snd="1" aria-label="Dźwięk"></button><button data-fs="1" aria-label="Pełny ekran"></button><button data-gfx="1" aria-label="Jakość grafiki" style="font-size:11px;letter-spacing:.06em"></button>`;
+function renderCtl(){{const gb=$('speed').querySelector('[data-gfx]');if(gb)gb.textContent=['NISKA','WYS.','ULTRA'][GFX.level];}const sb=$('speed').querySelector('[data-snd]');if(sb)sb.innerHTML=ico(muted?'mute':'snd');const fb=$('speed').querySelector('[data-fs]');if(fb){fb.innerHTML=ico(isFull()?'fsx':'fs');fb.style.display=fsAvail()?'':'none'}
  $('ctl').innerHTML=`<button class="txt${overview?' on':''}" data-c="isl" aria-label="Cała wyspa">Wyspa</button><button data-c="eye" class="${document.body.classList.contains('clean')?'on':''}" aria-label="Czysty widok">${ico('eye')}</button><button data-c="rl" aria-label="Obróć w lewo">${ico('rotl')}</button><button data-c="rr" aria-label="Obróć w prawo">${ico('rotr')}</button><button data-c="zin" aria-label="Przybliż">${ico('plus')}</button><button data-c="zout" aria-label="Oddal">${ico('minus')}</button><button data-c="home" aria-label="Wróć do obozu">${ico('dom')}</button>`}
 setTimeout(renderCtl,0);
 let overview=null;
@@ -853,7 +853,7 @@ $('ctl').addEventListener('click',e=>{const b=e.target.closest('button');if(!b||
  if(c==='zin'){zoomT=clamp(zoomT*1.3,ZMIN,ZMAX);if(overview&&zoomT>.6){overview=null;renderCtl()}}
  if(c==='zout')zoomT=clamp(zoomT/1.3,overview?.1:ZMIN,ZMAX);if(c==='rl')yawT+=Math.PI/2;if(c==='rr')yawT-=Math.PI/2;
  if(c==='home'){lookAt(tcx(camp.i),tcx(camp.j),Math.max(zoomT,1.4));if(placing)moveGhost(camp.i+2,camp.j+2)}});
-$('speed').addEventListener('click',e=>{const b=e.target.closest('button');if(!b||!S)return;if(b.dataset.snd){toggleMute();renderCtl();return}if(b.dataset.fs){toggleFull();return}setSpeed(+b.dataset.sp)});
+$('speed').addEventListener('click',e=>{const b=e.target.closest('button');if(!b||!S)return;if(b.dataset.snd){toggleMute();renderCtl();return}if(b.dataset.fs){toggleFull();return}if(b.dataset.gfx){gfxSetLevel((GFX.level+2)%3);return}setSpeed(+b.dataset.sp)});
 function setSpeed(v){S.speed=v;[...$('speed').querySelectorAll('[data-sp]')].forEach(b=>b.classList.toggle('on',+b.dataset.sp===v))}
 $('stats').addEventListener('click',()=>{$('res').classList.toggle('on')});
 $('res').addEventListener('click',()=>$('res').classList.remove('on'));
@@ -879,7 +879,7 @@ function renderPanel(){
  [...$('tabbar').children].forEach(b=>b.classList.toggle('on',b.dataset.tab===tab));
  $('stitle').textContent=TABS.find(t=>t[0]===tab)[1];
  const el=$('body'),st=el.scrollTop;let h='';
- if(tab==='osada'){h+=reqHTML();h+=`<div class="card"><h4>Niezgoda ${Math.round((S.dis||0)*100)}%</h4><p>${(S.dis||0)<.35?'Ludzie trzymają się razem.':(S.dis||0)<.6?'Słychać szemranie. Ludzie pracują trochę wolniej.':(S.dis||0)<.85?'Kłótnie co wieczór. Praca idzie wyraźnie wolniej.':'Osada się rozpada. Ktoś może odejść w głąb wyspy.'}</p><p class="mut">Rośnie przez głód, zimno, brak wody, śmierć, pożary, surowe prawa i niespełnione prośby. Spada, gdy prośby są spełniane, przy wieczorach przy ognisku i wspólnych posiłkach.</p></div>`+custHTML();h+='<h3>Osada</h3>';const pop=S.people.length,kids=S.people.filter(isChild).length,old=S.people.filter(p=>p.age>55).length;
+ if(tab==='osada'){h+=troubleHTML()+reqHTML();h+=`<div class="card"><h4>Niezgoda ${Math.round((S.dis||0)*100)}%</h4><p>${(S.dis||0)<.35?'Ludzie trzymają się razem.':(S.dis||0)<.6?'Słychać szemranie. Ludzie pracują trochę wolniej.':(S.dis||0)<.85?'Kłótnie co wieczór. Praca idzie wyraźnie wolniej.':'Osada się rozpada. Ktoś może odejść w głąb wyspy.'}</p><p class="mut">Rośnie przez głód, zimno, brak wody, śmierć, pożary, surowe prawa i niespełnione prośby. Spada, gdy prośby są spełniane, przy wieczorach przy ognisku i wspólnych posiłkach.</p></div>`+custHTML();h+='<h3>Osada</h3>';const pop=S.people.length,kids=S.people.filter(isChild).length,old=S.people.filter(p=>p.age>55).length;
   const houses=S.bld.filter(b=>bDone(b)&&BD[b.kind].house).length;const homeless=S.people.filter(p=>!homeOf(p)).length;const nt=TIERS[S.tier+1];
   h+=`<div class="card"><h4>${TIERS[S.tier][0]}</h4><p>${pop} osób: ${pop-kids-old} dorosłych, ${kids} dzieci, ${old} starszych. Domów: ${houses}, bez dachu: ${homeless}.</p><p class="mut">Urodzeni: ${S.born} · zmarli: ${S.died}${nt?` · następny poziom (${nt[0].toLowerCase()}): ${nt[1]} domów i ${nt[2]} osób`:''}</p></div>`;
   h+=`<h3>Zapasy</h3><div class="card"><p><b>Żywność ${fmt(foodTotal())}/${foodCap()}</b> · rodzajów: ${S.variety}</p><p>${FOOD.map(k=>`${RN[k].toLowerCase()} ${fmt(S.res[k])}`).join(' · ')}</p>`+
@@ -926,7 +926,7 @@ function renderPanel(){
   h+=`<div class="card"><h4>Księgi</h4>${Object.keys(BOOKS).map(b=>`<p>„${BOOKS[b]}”: ${S.books[b]===2?'<span class="ok">przeczytana</span>':S.books[b]===1?'do przeczytania':'<span class="mut">na wraku</span>'}</p>`).join('')}</div>`;
   h+=`<h3>Ślady dawnego ludu (${S.found.length} z ${tribe.length})</h3>`;
   h+=S.found.length?S.found.map(i=>`<div class="card"><h4>${TRIBE[i][0]}</h4><p>${TRIBE[i][1]}</p></div>`).join(''):'<p class="lead">Nic jeszcze nie znaleziono. Zwiadowcy odsłaniają wyspę.</p>'}
- else{h+='<div class="log">'+S.log.map(l=>`<p><small>doba ${l.d}</small>${l.t}</p>`).join('')+'</div>'}
+ else{h+=kronTools()+'<div class="log">'+S.log.map(l=>`<p><small>doba ${l.d}</small>${l.t}</p>`).join('')+'</div>'}
  if(h!==el._h){el._h=h;el.innerHTML=h;el.scrollTop=st}}
 function onPanelClick(e){const t=e.target.closest('button,[data-p],[data-rg]');if(!t)return;
  if(t.dataset.w){const b=bById(+t.dataset.w);if(b)setWant(b,+t.dataset.d)}
@@ -958,11 +958,11 @@ function renderSel(){const el=$('sel');
  if(selB!==null){const b=bById(selB);if(!b){selB=null;el.style.display='none';return}const d=BD[b.kind];el.style.display='block';let h=`<h4>${d.n}</h4>`;
   if(!bDone(b))h+=`<p>W budowie: ${Math.round(100*b.prog/b.work)}% · przy pracy: ${b.workers||0}</p>`;
   else if(d.wk){const ws=S.people.filter(p=>p.job==='wb'&&p.wb===b.id);const n=countInRange(b.kind,b.i,b.j);
-   h+=`<p>${ws.length?ws.map(p=>p.name+' ('+p.act+')').join(', '):'Nikt tu nie pracuje.'}</p>${n!==null?`<p class="mut">${rangeLabel(b.kind,n)}</p>`:''}${d.prod?`<p class="mut">${Object.entries(d.prod.in).map(([r,v])=>RN[r].toLowerCase()+' '+v).join(' + ')} → ${Object.entries(d.prod.out).map(([r,v])=>RN[r].toLowerCase()+' '+v).join(', ')}</p>`:''}
-   <div class="row" style="border:0;padding:4px 0 0"><div class="n">Pracownicy</div><button class="mini" data-w="${b.id}" data-d="-1">−</button><span class="cnt">${b.want||0}/${wkOf(b)}</span><button class="mini" data-w="${b.id}" data-d="1">+</button></div>`}
+   h+=`<p>${ws.length?ws.map(p=>p.name+' ('+p.act+')').join(', '):'Nikt tu nie pracuje.'}</p>${n!==null?`<p class="mut">${rangeLabel(b.kind,n)}</p>`:''}${d.prod?`<p class="mut">${[].concat(d.prod).map(pr=>Object.entries(pr.in).map(([r,v])=>RN[r].toLowerCase()+' '+v).join(' + ')+' → '+Object.entries(pr.out).map(([r,v])=>RN[r].toLowerCase()+' '+v).join(', ')).join('<br>')}</p>`:''}
+   <div class="row" style="border:0;padding:4px 0 0"><div class="n">Pracownicy</div><button class="mini" data-w="${b.id}" data-d="-1">−</button><span class="cnt">${b.want||0}/${wkOf(b)}</span><button class="mini" data-w="${b.id}" data-d="1">+</button></div>${slowHTML(b)}`}
   else if(d.pen||d.field){}
-  if(bDone(b)&&d.pen)h+=`<p>Kozy w zagrodzie: ${b.animals||0}/10${(b.tame||0)?' · oswajanie w toku':''}</p>`;
-  if(bDone(b)&&d.field){const f=b.field||{st:'puste',g:0,fert:1};h+=`<p>${{puste:'Pole czeka na siew',rosnie:'Rośnie: '+Math.round(f.g*100)+'%, plewienie '+Math.round((f.q||0)*100)+'%',dojrzale:'Dojrzałe, do zebrania: '+f.left}[f.st]} · żyzność ${Math.round(f.fert*100)}%</p>`}
+  if(bDone(b)&&d.pen)h+=`<p>Kozy w zagrodzie: ${b.animals||0}/10 · ${goatStage(b)}</p>`;
+  if(bDone(b)&&d.field){const f=b.field||{st:'puste',g:0,fert:1};h+=`<p>${{puste:'Pole czeka na siew',rosnie:'Rośnie: '+Math.round(f.g*100)+'%, plewienie '+Math.round((f.q||0)*100)+'%',dojrzale:'Dojrzałe, do zebrania: '+f.left}[f.st]} · żyzność ${Math.round(f.fert*100)}% · odmiana wyspowa ${Math.round((S.adapt||0)*100)}%</p>`}
   h+=bldPanelHTML(b);
   if(b.fire)h+=`<p class="no">Pali się! Zostało ${Math.round(b.fire.hp*100)}%. Gaszenie: ${Math.round((1-b.fire.s)*100)}%.</p>`;
   if(bDone(b)&&UPG[b.kind]){const to=UPG[b.kind],av=bAvail(to);h+=av?`<p class="mut">Rozbudowa: ${BD[to].n.toLowerCase()} · ${costHTML(upCost(b.kind,to))}</p><button class="pri" data-up="${b.id}" style="margin:2px 0 6px">Rozbuduj</button>`:`<p class="mut">Rozbudowa w ${BD[to].n.toLowerCase()}: najpierw ${to==='dom'?'piec zduński (Wiedza)':'wiedza'}.</p>`}
@@ -984,7 +984,7 @@ function renderTop(){
  const fc=days<2?' bad':days<5?' warn':'',oc=seasonIdx()>=1&&S.res.opal<20?' warn':'';
  setH($('stats'),`<div class="st${fc}">${ico('zywnosc')}<div><b>${fmt(foodTotal())}<small> / ${days>=99?'99+':Math.floor(days)} d</small></b><span>Żywność</span></div></div><div class="st">${ico('drewno')}<div><b>${fmt(S.res.drewno)}</b><span>Drewno</span></div></div><div class="st${oc}">${ico('opal')}<div><b>${fmt(S.res.opal)}</b><span>Opał</span></div></div><div class="st">${ico('ludzie')}<div><b>${S.people.length}</b><span>Ludzie</span></div></div><div class="more">${ico('chev')}</div>`);
  const items=[['zywnosc','Żywność',foodTotal(),'/'+foodCap()],['opal','Opał',S.res.opal],['drewno','Kłody',S.res.drewno],['kamien','Kamień',S.res.kamien],['glina','Glina',S.res.glina],['narz','Narzędzia',S.res.narz+S.res.narzk],['odziez','Odzież',S.res.odziez],['skory','Skóry',S.res.skory],['deski','Deski',S.res.deski],['gwozdzie','Gwoździe',S.res.gwozdzie],['plotno','Płótno',S.res.plotno]];
- if(S.res.cegla>0||S.know.cegla==='tak')items.push(['cegla','Cegły',S.res.cegla]);['ruda','wegiel','wlokna'].forEach(k=>{if(S.res[k]>0)items.push([k,RN[k],S.res[k]])});
+ if(S.res.cegla>0||S.know.cegla==='tak')items.push(['cegla','Cegły',S.res.cegla]);['ruda','wegiel','wlokna','maka','naczynia'].forEach(k=>{if(S.res[k]>0)items.push([k,RN[k],S.res[k]])});
  setH($('res'),items.map(([k,n,v,ex])=>`<span title="${n}">${ico(k)}<em>${n}</em>${fmt(v)}${ex?`<small>${ex}</small>`:''}</span>`).join(''));
  const col=v=>v<.35?'var(--bad)':v<.65?'var(--ember)':'var(--moss)';
  const nd=[['Żywność',Math.min(1,days/10),Math.round(Math.min(1,days/10)*100)+'%',days<2?'var(--bad)':days<5?'var(--ember)':'var(--moss)'],

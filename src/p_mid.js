@@ -101,12 +101,12 @@ const wGeo=new THREE.PlaneGeometry(WW,WW,WW,WW);wGeo.rotateX(-Math.PI/2);
 {const p=wGeo.attributes.position,dep=new Float32Array(p.count);for(let k=0;k<p.count;k++){const x=p.getX(k),z=p.getZ(k);
   const cx=clamp(x,-N/2,N/2),cz=clamp(z,-N/2,N/2);dep[k]=-Hy(cx,cz)+Math.hypot(x-cx,z-cz)*.07}
  wGeo.setAttribute('depth',new THREE.BufferAttribute(dep,1))}
-const wUni={uT:{value:0},uDay:{value:1},uFog:{value:new THREE.Color(0xa9bcbf)},uFogN:{value:170},uFogF:{value:300},uSun:{value:new THREE.Color(1,1,1)}};
+const wUni={uT:{value:0},uDay:{value:1},uFog:{value:new THREE.Color(0xa9bcbf)},uFogN:{value:170},uFogF:{value:300},uSun:{value:new THREE.Color(1,1,1)},uGlint:{value:0}};
 const wMat=new THREE.ShaderMaterial({uniforms:wUni,transparent:true,depthWrite:false,
  vertexShader:`attribute float depth;varying float vD;varying vec3 vW;varying float vFd;uniform float uT;
  void main(){vD=depth;vec3 p=position;float w=sin(p.x*.6+uT*1.3)*.5+sin(p.z*.5+uT*1.1)*.5;p.y+=w*.035*clamp(depth,0.,1.);
  vec4 wp=modelMatrix*vec4(p,1.);vW=wp.xyz;vec4 mv=viewMatrix*wp;vFd=-mv.z;gl_Position=projectionMatrix*mv;}`,
- fragmentShader:`varying float vD;varying vec3 vW;varying float vFd;uniform float uT;uniform float uDay;uniform vec3 uFog;uniform float uFogN;uniform float uFogF;uniform vec3 uSun;
+ fragmentShader:`varying float vD;varying vec3 vW;varying float vFd;uniform float uT;uniform float uDay;uniform vec3 uFog;uniform float uFogN;uniform float uFogF;uniform vec3 uSun;uniform float uGlint;
  float hs(vec2 p){return fract(sin(dot(p,vec2(12.9898,78.233)))*43758.5453);}
  float vn(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(hs(i),hs(i+vec2(1,0)),f.x),mix(hs(i+vec2(0,1)),hs(i+vec2(1,1)),f.x),f.y);}
  void main(){if(vD<-.05)discard;float d=max(vD,0.);
@@ -118,6 +118,7 @@ const wMat=new THREE.ShaderMaterial({uniforms:wUni,transparent:true,depthWrite:f
   float foam=band*smoothstep(.4,.95,wave*.7+n*.5)+smoothstep(.1,0.,d)*.8;
   c=mix(c,vec3(.74,.8,.79),clamp(foam,0.,1.)*.75);
   c*=uSun*(.3+.7*uDay);
+  if(uGlint>0.){float g1=vn(vW.xz*5.+vec2(uT*.7,-uT*.5)),g2=vn(vW.xz*7.3+vec2(-uT*.6,uT*.8));float sp=pow(max(g1*g2-.6,0.)/.4,5.)*5.;c+=uSun*vec3(1.,.93,.8)*sp*uGlint*uDay*uDay*(1.-band)*smoothstep(.2,1.5,d);}
   float a=mix(.5,1.,smoothstep(0.,2.2,d));a=max(a,clamp(foam,0.,1.)*.85);
   float fg=smoothstep(uFogN,uFogF,vFd);c=mix(c,uFog,fg);
   gl_FragColor=vec4(c,a);

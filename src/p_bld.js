@@ -66,6 +66,7 @@ function bldPanelHTML(b){const d=BD[b.kind];let h='';if(!bDone(b))return h;
 let VR=Math.random;
 function skep(g,x,z){g.add(tbox(.36,.3,.3,mPlankD,x,.15,z));const s=mesh(new THREE.SphereGeometry(.2,9,6,0,6.283,0,1.7),mThatch,x,.3,z);s.scale.y=1.25;g.add(s);g.add(mesh(new THREE.BoxGeometry(.06,.05,.02),matDark,x,.36,z+.2))}
 function newModel(kind,g){
+ if(wildModel(kind,g))return 1;
  if(kind==='gaj'){const tr=new THREE.Mesh(oakTrunkG,new THREE.MeshStandardMaterial({color:0x4e3c2c,roughness:1,flatShading:true,vertexColors:true}));tr.scale.set(1.9,1.7,1.9);
   const cr=new THREE.Mesh(oakG,new THREE.MeshStandardMaterial({color:0x5f7d45,roughness:.95,flatShading:true,vertexColors:true}));cr.scale.setScalar(1.75);cr.rotation.y=VR()*6;tr.castShadow=cr.castShadow=true;cr.receiveShadow=true;g.add(tr,cr);
   for(let q=0;q<11;q++){const a=q/11*6.28;g.add(mesh(new THREE.DodecahedronGeometry(.13+(q%3)*.03,0),matStone,Math.cos(a)*1.2,.06,Math.sin(a)*1.2,q,q))}

@@ -38,7 +38,7 @@ const TECH=[
  {id:'r_kuznia',d:'rzemioslo',r:2,c:1,n:'Wytop żelaza',xp:0,req:['r_narz'],sync:()=>S.know.kuznia==='tak',gt:()=>S.books.kowal===2?'Próba w zakładce Wiedza, poniżej schematu.':'Najpierw trzeba przeczytać „'+BOOKS.kowal+'” z wraku.',desc:'Ruda darniowa, węgiel drzewny i mieszek.',eff:'Kuźnia: żelazne narzędzia i gwoździe.'},
  {id:'r_piec',d:'rzemioslo',r:2,c:2,n:'Piec zduński',xp:0,req:['r_cegla'],sync:()=>S.know.piec==='tak',gt:()=>'Próba w zakładce Wiedza, poniżej schematu.',desc:'Sklepienie, które trzyma ciąg.',eff:'Domy palą mniej, nadmiar żywności się suszy.'},
  {id:'r_stal',d:'rzemioslo',r:3,c:1,n:'Hartowanie',xp:220,req:['r_kuznia'],desc:'Ostrze rozgrzane do wiśniowego koloru i zanurzone w wodzie.',eff:'Żelazne narzędzia służą o połowę dłużej.'},
- {id:'r_garn',d:'rzemioslo',r:3,c:2,n:'Garncarstwo',xp:130,req:['r_cegla'],desc:'Szczelne gliniane naczynia z pokrywą.',eff:'Cała żywność psuje się o 25% wolniej.'},
+ {id:'r_garn',d:'rzemioslo',r:3,c:2,n:'Garncarstwo',xp:130,req:['r_cegla'],desc:'Szczelne gliniane naczynia z pokrywą.',eff:'Cała żywność psuje się o 25% wolniej. Można postawić garncarnię i komorę kiszonek.'},
  // NAUKA
  {id:'n_kron',d:'nauka',r:0,c:1,n:'Kronika osady',xp:50,req:[],desc:'Ktoś zaczyna zapisywać, co się udało, a co nie.',eff:'Uczniowie uczą się fachu o 25% szybciej.'},
  {id:'n_kal',d:'nauka',r:1,c:0,n:'Kalendarz nieba',xp:90,req:['n_kron'],desc:'Wschody słońca liczone na nacięciach kija.',eff:'Dłuższe okno siewu. Wiadomo, ile potrwa pogoda.'},
