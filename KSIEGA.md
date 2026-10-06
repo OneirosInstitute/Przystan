@@ -1,6 +1,6 @@
 ---
 title: "Przystań — Księga gry"
-subtitle: "Wersja 0.17 · 6 października 2026"
+subtitle: "Wersja 0.17 · 6 października 2026 · z planem do wersji 1.0"
 ---
 
 # 1. Czym jest Przystań
@@ -302,29 +302,69 @@ Po wyborze gra pokazuje Księgę rozbitków: kto się urodził, kto odszedł, ja
 | 0.16 | urzędy rodzące się z potrzeb, spory rodów i waśnie, sąd pod dębem, dojrzewanie obyczajów |
 | 0.17 | pamięć osady: pieśni, pierwsze razy, groby z imionami na Dziady, imię osady, znaki rodów; czas gry nie zwalnia przy słabszej płynności |
 
-# 17. Droga do końca
+# 17. Immersja i powroty
+
+Przystań ma wciągać spokojnie: przez ludzi, na których zaczyna zależeć, przez świat, który żyje sam, i przez wieś, którą gracz buduje jak z własnej wyobraźni. Bez sztuczek, które zmuszają do powrotu.
+
+## Świat, który żyje
+
+- **Obrzędy widać, a nie tylko czyta się o nich:** ogniska i wianki na wodzie w noc Kupały, wieniec niesiony na dożynki, małe ognie na grobach i na rozstajach w Dziady, słomiana Marzanna niesiona do strumienia, wesele z tańcem przy ogniu.
+- **Pogoda i światło:** burze z piorunami nad morzem, śnieg osiadający na dachach, sople, mróz na szybach, rzadka zorza w najzimniejsze noce, mgła snująca się po mokradłach o świcie.
+- **Ślady życia:** ścieżki wydeptane przez ludzi, dzieci bawiące się między chatami, pranie na sznurach, słupy ze znakami rodów przy domach, groby z imionami, zwierzęta idące za stadem.
+- **Dźwięk w przestrzeni:** inny w borze, inny nad morzem; stukot siekier, kucie w kuźni, gwar przy ognisku, kołysanki, melodie pieśni osady na fujarce, zimą wycie wilków.
+
+## Ludzie, na których zależy
+
+- **Opowieść życia:** każdy człowiek ma krótką biografię pisaną z wydarzeń: urodzenie, fach, wesele, dzieci, czyny, pieśni o nim. Gdy umiera, jego opowieść trafia do Księgi rozbitków.
+- **Pokolenia:** gracz poznaje dziadka, potem wnuka przy tym samym warsztacie. Drzewo rodów rośnie na oczach.
+- **Bliskie ujęcia:** tryb „idź za kimś”, wieczorne ujęcie przy ognisku, kamera, która sama pokazuje wesele, narodziny albo pożar.
+
+## Wieś jak z własnej wyobraźni
+
+- **Ład wsi:** ścieżki do wytyczania, płoty z wikliny, ławy, studnie, drzewa owocowe, ogródki, słupy rodowe, kamienne kręgi. Dobrze ułożona wieś (domy przy ścieżkach, ogródki przy domach, miejsce pamięci na uboczu, święty gaj na wzgórzu) poprawia nastrój i zgodę.
+- **Tryb zdjęć:** chowa przyciski, pozwala ustawić porę dnia i kadr, zapisuje obraz do pliku. Zrzut z własnej wsi to najlepsza zachęta, żeby budować dalej.
+
+## Powody, żeby wracać
+
+- **Otwarte wątki:** po powrocie gra pokazuje kartę „Od ostatniego razu” i „Na co czekamy”: wesele za dwa dni, dziecko kończy siedem lat, mistrz słabnie i szuka ucznia, zima za pięć dni.
+- **Rok na wyspie:** w każdą noc Kupały, w rocznicę rozbicia, gra pokazuje podsumowanie roku: kto się urodził, kto odszedł, co zbudowano, jakie powstały pieśni. To naturalny rytuał i dobry moment na przerwę.
+- **Rytm sesji:** pora roku trwa około 20 minut. Na jej końcu gra sama się zapisuje i krótko zapowiada, co przyniesie następna.
+- **Zbiory:** atlas gatunków, ślady dawnego ludu, pieśni, pierwsze razy, nazwane krainy, przysiółki na mapie.
+- **Nowe wyspy:** każda gra może zacząć się na innej wyspie, a gotowe wyzwania zmieniają warunki: „Zima stulecia”, „Bez wraku”, „Tylko dziesięcioro”.
+- **Pamięć dawnych osad:** Księgi rozbitków z poprzednich gier zostają na półce, a ich pieśni mogą wrócić w nowej grze jako opowieści starszych.
+
+# 18. Rozdroża
+
+Wybór drogi na wiecu pokoleń jest ostateczny. W epoce II każda droga rozwidla się jeszcze w trzech rozdrożach. Każde rozdroże to wiec przy ogniu na rozstajach, z wyborem, który zmienia osadę na zawsze.
+
+| Droga | Pierwsze rozdroże | Drugie rozdroże | Trzecie rozdroże |
+|---|---|---|---|
+| Dom | gród z wałem i ostrokołem albo otwarta wieś z siecią przysiółków | prawo: rada starszych, wiec wszystkich albo najstarszy ród | rzemiosło: cechy mistrzów albo każdy dom samowystarczalny |
+| Głąb | przez bagna (torf, ruda, gorączka) albo przez góry (kamień, jaskinie, mróz) | jedna silna druga osada albo łańcuch przysiółków | puszcza: karczować pod pola albo żyć z lasu (barcie, łowy, święte gaje) |
+| Morze | wielka łódź na dalekie wyprawy albo flotylla łodzi rybackich | sąsiednie bezludne wyspy albo zatoki i ptasie skały wokół własnej wyspy | statek odbudowany jak tamten albo łodzie zbudowane po swojemu |
+
+Daje to dwadzieścia siedem różnych zakończeń epoki II. Każde ma swoją nazwę w Księdze rozbitków, na przykład „Gród nad Zatoką” albo „Ludzie Puszczy”.
+
+# 19. Droga do końca
 
 Kolejność dalszej pracy. Każda wersja kończy się czymś, w co da się zagrać, i aktualizacją tej księgi.
 
-| Wersja | Zakres | Dlaczego teraz |
-|---|---|---|
-| 0.18 Finał epoki I | akty jako rozdziały z warunkami końca, sceny fabularne (Nikt nas nie szuka, Za pięć dni sztorm, Ostatnia zima mistrza, Ostatni), dziecko w 12. roku samo wybiera fach po rodzicach i mistrzach, wiec pokoleń z wyborem drogi, Księga rozbitków do pobrania | wszystkie systemy epoki I już są; brakuje łuku opowieści i zakończenia |
-| 0.19 Kolonizacja | zakładanie przysiółków z własnej woli (rodzina, zapasy, narzędzia), ścieżki między osadą a przysiółkami, przysiółki widoczne jako małe żywe osady, zagrożenia w głębi wyspy (wilki, zima, choroby), mapa wspólnoty | cel gry to skolonizować wyspę; to także wejście do drogi Głąb |
-| 0.20 Gospodarstwa | spiżarki rodzin i wieczorne prace domowe (kądziel, przędza, naprawa odzieży), dowóz materiałów na budowę, jakość narzędzi i wyrobów | najgłębsza część gospodarki Wilderness, dobrze pasuje do wiejskiego rytmu dnia |
-| 0.21 Szlif | trzy poziomy trudności, równowaga z długich symulacji (8 lat), pierwsze 30 minut jako łagodny samouczek, więcej dźwięku (melodie pieśni na fujarce, kołysanki), testy i dopracowanie na Nordzie 6 | żeby epoka I była pełną, dopracowaną grą |
-| 1.0 Epoka I | wydanie: GitHub, Railway, paczka do instalacji, zapis odporny na zmiany wersji | pierwsza skończona wersja |
+| Wersja | Zakres |
+|---|---|
+| 0.18 Finał epoki I | akty jako rozdziały z warunkami końca, sceny fabularne (Nikt nas nie szuka, Za pięć dni sztorm, Ostatnia zima mistrza, Ostatni), dziecko w 12. roku samo wybiera fach, wiec pokoleń z wyborem drogi, Księga rozbitków do pobrania, trzy poziomy trudności, „Rok na wyspie” w noc Kupały |
+| 0.19 Kolonizacja | przysiółki zakładane z własnej woli, ścieżki między osadą a przysiółkami, przysiółki jako małe żywe osady, zagrożenia w głębi wyspy, mapa wspólnoty |
+| 0.20 Ład wsi | wytyczanie ścieżek, płoty, ławy, drzewa owocowe, ogródki, słupy rodowe, ład wsi wpływający na nastrój, tryb zdjęć |
+| 0.21 Gospodarstwa | spiżarki rodzin, wieczorne prace przy kądzieli, dowóz materiałów, jakość wyrobów |
+| 0.22 Żywy świat | obrzędy i wesela w 3D, burze, śnieg na dachach, zorza, dźwięk w przestrzeni, opowieści życia, kamera przy ważnych chwilach |
+| 0.23 Szlif | „Od ostatniego razu” i „Na co czekamy”, rytm sesji, nowe wyspy i wyzwania, równowaga z ośmioletnich symulacji, łagodny początek, testy na Nordzie 6 |
+| 1.0 Epoka I | wydanie: GitHub, Railway, paczka do instalacji, zapis odporny na zmiany wersji |
 
-**Epoka II** (po 1.0), trzy drogi wybierane na wiecu pokoleń:
+**Epoka II** (po 1.0): trzy drogi z rozdrożami opisanymi wyżej. Przez cały czas obowiązuje: klimat słowiański bez magii, brak przybyszów, decyzje gracza w scenach i na wiecu, a życie ludzi toczy się samo.
 
-- **Dom:** gród z wałem i ostrokołem, dawne obyczaje zamieniają się w prawo zwyczajowe, rzemiosło z cechami mistrzów, targi między przysiółkami.
-- **Głąb:** kolonizacja wnętrza wyspy, druga osada za bagnami, góry, jaskinie i kopalnie, drogi i mosty, przysiółki łączone w opole.
-- **Morze:** szkutnictwo, łodzie i żagle, dalekie łowiska, wyprawy na sąsiednie, bezludne wyspy. Zasada zostaje: nigdy nie spotkamy obcych.
+**Trudność:** trzy poziomy wybierane na początku gry. Łagodny: jedzenie i budynki zużywają się o 30% wolniej, złe wydarzenia rzadziej, krótsze mrozy. Zwykły: jak teraz. Surowy: wszystko o 30% szybciej, częstsze złe wydarzenia, dłuższe mrozy i więcej sztormów.
 
-Przez cały czas obowiązuje: klimat słowiański bez magii, brak przybyszów, decyzje gracza w scenach i na wiecu, a życie ludzi (swaty, wesela, więzi) toczy się samo.
+**Długość epoki I:** 6–8 lat na wyspie, czyli 8–10 godzin gry przy tempie 1×.
 
-# 18. Otwarte sprawy
+# 20. Otwarte sprawy
 
-- Czy wybór drogi na wiecu pokoleń jest ostateczny, czy w epoce II można później sięgnąć po drugą drogę?
-- Trzy poziomy trudności czy jeden?
-- Długość epoki I: 6–8 lat na wyspie (8–10 godzin przy tempie 1×) jest w sam raz?
 - Wysłanie repozytorium na GitHub i uruchomienie na Railway (czeka na utworzenie repozytorium „przystan”).
