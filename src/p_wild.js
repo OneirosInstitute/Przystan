@@ -54,6 +54,7 @@ function troubles(){const T=[],n=S.people.length||1,sea=seasonIdx();
  T.push({n:'Brak nadziei',sev:S.hope<.3?.8:S.hope<.45?.4:0,tip:'Obrzędy, wspólne posiłki, różnorodne jedzenie i ciepłe domy.'});
  T.push({n:'Niezgoda',sev:(S.dis||0)>.7?.9:(S.dis||0)>.45?.5:0,tip:'Wiec, starszy osady, spełnione prośby i święty gaj.'});
  const rep=S.bld.filter(b=>bDone(b)&&condOf(b)<.5).length;T.push({n:'Budynki do remontu',sev:rep?Math.min(.8,.25+rep*.12):0,tip:`${rep} budynków pracuje słabiej. Remonty w zakładce Budowa.`});
+ const wp=S.people.filter(p=>p.waitHome&&p.sex==='k').length;T.push({n:'Młode pary bez domu',sev:wp?Math.min(.7,.3+wp*.15):0,tip:`${wp} ${wp===1?'para czeka':'pary czekają'} na własny dom. Dopóki mieszkają u rodziców, nie będzie dzieci. Postaw szałas albo chatę.`});
  return T.sort((a,b)=>b.sev-a.sev)}
 function troubleHTML(){const t=troubles().filter(x=>x.sev>.15);
  if(!t.length)return`<div class="card"><div class="eyebrow">Stan osady</div><h4>Nic pilnego</h4><p class="mut">Dobry czas na rozbudowę, naukę i zapasy na zimę.</p></div>`;

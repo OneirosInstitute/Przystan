@@ -651,16 +651,9 @@ function killPerson(p,why){S.people=S.people.filter(q=>q!==p);release(p);if(p.pa
 function familyLife(){
  // narodziny
  Object.values(S.fams).forEach(f=>{const h=f.home?bById(f.home):null;if(!h||!bDone(h))return;const mem=famMembers(f.id);if(mem.length>=BD[h.kind].house)return;
-  const w=mem.find(p=>p.sex==='k'&&p.age>=18&&p.age<=44&&p.pair!==null&&pById(p.pair)&&pById(p.pair).fam===f.id);if(!w)return;
-  if(Math.random()<.014*K*(.5+S.hope)*(S.fedR>.9?1:.3)){const sex=Math.random()<.5?'k':'m';const c=newPerson(S.pid++,newName(sex),0,sex,f.id,{},TKEYS[(Math.random()*TKEYS.length)|0]);c.born=1;const hc=bCenter(h);c.x=hc.x+.6;c.z=hc.z+.8;S.people.push(c);addPersonMesh(c);S.born++;
+  const w=mem.find(p=>p.sex==='k'&&p.age>=18&&p.age<=44&&p.pair!==null&&!p.waitHome&&pById(p.pair)&&pById(p.pair).fam===f.id);if(!w)return;
+  if(Math.random()<.014*K*(.5+S.hope)*(S.fedR>.9?1:.3)){const sex=Math.random()<.5?'k':'m';const c=newPerson(S.pid++,newName(sex),0,sex,f.id,{},TKEYS[(Math.random()*TKEYS.length)|0]);c.born=1;c.rod=(pById(w.pair)||w).rod;c.par=[w.id,w.pair];c.mirX=0;const hc=bCenter(h);c.x=hc.x+.6;c.z=hc.z+.8;S.people.push(c);addPersonMesh(c);S.born++;
    log('Rodzi się '+c.name+' w rodzinie '+famName(f.id)+'.');toast('Narodziny: '+c.name)}});
- // nowe rodziny: młodzi wyprowadzają się do wolnego domu
- const free=S.bld.filter(b=>bDone(b)&&BD[b.kind].house&&!Object.values(S.fams).some(f=>f.home===b.id));
- if(free.length){const singles=S.people.filter(p=>p.age>=17&&p.age<=45&&p.pair===null&&(famMembers(p.fam).length>1||!S.fams[p.fam]||!S.fams[p.fam].home));
-  const k=singles.find(p=>p.sex==='k'),m=singles.find(p=>p.sex==='m'&&(!k||p.fam!==k.fam));
-  if(k&&m){const fid=S.fid++;S.fams[fid]={id:fid,home:free[0].id};const oldK=k.fam,oldM=m.fam;k.fam=fid;m.fam=fid;k.pair=m.id;m.pair=k.id;
-   [oldK,oldM].forEach(o=>{if(S.fams[o]&&!famMembers(o).length)delete S.fams[o]});
-   log(k.name+' i '+m.name+' zakładają rodzinę i wprowadzają się do własnego domu.');toast('Nowa rodzina: '+k.name+' i '+m.name)}}
  assignHomes()}
 function dailyPeople(cold,fuelHeated){
  const sea=seasonIdx();S.diedToday=0;
@@ -709,7 +702,7 @@ function newDay(){
  if(law('oszczedne'))S.people.forEach(p=>{p.hp=Math.max(.2,p.hp-.006*K)});if(law('dlugi'))S.people.forEach(p=>{if(isWorker(p)&&p.job!=='wyp')p.hp=Math.max(.25,p.hp-.004*K)});
  bldDaily();wearDaily();lawDaily();slavDaily();disDaily();reqTick();fireRoll();
  {const lv=offLv('zielarz');if(lv)S.people.forEach(p=>{if(p.hp<.9)p.hp=Math.min(1,p.hp+.004*lv*K*(tech('u_ziel')?1.5:1))})}
- familyLife();
+ familyLife();ludDaily();
  techXp('nauka',K*S.people.filter(p=>isAdult(p)&&(p.trait==='Nauczyciel'||p.age>55)).reduce((a,p)=>a+(p.trait==='Nauczyciel'?.7:.25),0));techTick();
  const t=tierOf();if(t>S.tier){S.tier=t;log('Osada rośnie: teraz to '+TIERS[t][0].toLowerCase()+'.');toast('Nowy poziom: '+TIERS[t][0])}
  const housed=S.people.length?S.people.filter(p=>homeOf(p)).length/S.people.length:0;
@@ -885,7 +878,7 @@ function renderPanel(){
   h+=`<h3>Zapasy</h3><div class="card"><p><b>Żywność ${fmt(foodTotal())}/${foodCap()}</b> · rodzajów: ${S.variety}</p><p>${FOOD.map(k=>`${RN[k].toLowerCase()} ${fmt(S.res[k])}`).join(' · ')}</p>`+
    `<p>opał ${fmt(S.res.opal)} · kłody ${fmt(S.res.drewno)} · kamień ${fmt(S.res.kamien)} · glina ${fmt(S.res.glina)}</p><p>narzędzia: żelazne ${fmt(S.res.narz)}, kamienne ${fmt(S.res.narzk)} · odzież ${fmt(S.res.odziez)} · skóry ${fmt(S.res.skory)}</p><p>ruda ${fmt(S.res.ruda)} · węgiel ${fmt(S.res.wegiel)} · włókna ${fmt(S.res.wlokna)}</p><p>deski ${fmt(S.res.deski)} · gwoździe ${fmt(S.res.gwozdzie)} · płótno ${fmt(S.res.plotno)}${S.res.cegla?` · cegły ${fmt(S.res.cegla)}`:''}</p></div>`;
   S.goals=S.goals||{};h+='<h3>Cele</h3><div class="card">'+GOALS.map((g,i)=>`<p>${S.goals[i]?'<span class="ok">✓</span>':'<span class="mut">○</span>'} ${g[0]}</p>`).join('')+'</div>';
-  h+='<h3>Rodziny</h3>';
+  h+=rodyHTML()+hamletHTML();h+='<h3>Rodziny</h3>';
   Object.values(S.fams).forEach(f=>{const mem=famMembers(f.id);if(!mem.length)return;const hm=f.home?bById(f.home):null;
    h+=`<div class="card"><h4>Rodzina ${famName(f.id)}</h4><p class="mut">${hm?BD[hm.kind].n:'bez domu, śpi w obozie'}</p>`+mem.sort((a,b)=>b.age-a.age).map(p=>`<div class="row" data-p="${p.id}" style="cursor:pointer;padding:5px 0"><div class="n"><b style="color:var(--hi)">${p.name}</b> <span class="mut">${Math.floor(p.age)} l. · ${traitN(p).toLowerCase()}</span><small>${jobLabel(p)} · ${p.act}${p.mentor?' · uczy się od: '+p.mentor.name:''}</small><div>${skillTags(p,3)}</div></div></div>`).join('')+`</div>`})}
  else if(tab==='praca'){const wbs=workBuildings();
@@ -977,7 +970,7 @@ function renderSel(){const el=$('sel');
   h+=`<p class="mut">${d.d}</p>`;if(el._h!==h){el._h=h;el.innerHTML=h}return}
  if(selId===null){el.style.display='none';return}const p=pById(selId);if(!p){selId=null;el.style.display='none';return}el.style.display='block';
  const tl=['bez narzędzi','narzędzia kamienne','narzędzia żelazne'][p.tool.t];
- const hh=`<h4>${p.name} <span class="mut" style="font-size:13px">${Math.floor(p.age)} l.</span></h4><p>${jobLabel(p)} · ${p.act}</p><p class="mut">${traitN(p)}: ${TRAITS[p.trait][1]}</p><div>${skillTags(p,6)||'<span class="tag">bez fachu</span>'}</div><p class="mut">rodzina ${famName(p.fam)} · zdrowie ${Math.round(p.hp*100)}%${isAdult(p)?' · '+tl:''}${p.coat<=0?' · bez ciepłej odzieży':''}</p>${p.mentor?`<p class="mut">uczy się od: ${p.mentor.name}</p>`:''}`;if(el._h!==hh){el._h=hh;el.innerHTML=hh}}
+ const hh=`<h4>${p.name} <span class="mut" style="font-size:13px">${Math.floor(p.age)} l.</span></h4><p>${jobLabel(p)} · ${p.act}</p><p class="mut">${traitN(p)}: ${TRAITS[p.trait][1]}</p><div>${skillTags(p,6)||'<span class="tag">bez fachu</span>'}</div><p class="mut">rodzina ${famName(p.fam)} · zdrowie ${Math.round(p.hp*100)}%${isAdult(p)?' · '+tl:''}${p.coat<=0?' · bez ciepłej odzieży':''}</p>${p.mentor?`<p class="mut">uczy się od: ${p.mentor.name}</p>`:''}`+ludCard(p);if(el._h!==hh){el._h=hh;el.innerHTML=hh}}
 const v3=new THREE.Vector3();
 function placeLabel(){const el=$('lbl');if(selId===null||!S){el.style.display='none';return}const p=pById(selId);if(!p){el.style.display='none';return}v3.set(p.x,Hy(p.x,p.z)+2.1,p.z).project(cam);
  if(Math.abs(v3.x)>1||Math.abs(v3.y)>1){el.style.display='none';return}el.style.display='block';el.textContent=p.name;el.style.left=((v3.x+1)/2*innerWidth)+'px';el.style.top=((1-v3.y)/2*innerHeight)+'px'}
