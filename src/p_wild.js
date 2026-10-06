@@ -68,7 +68,9 @@ function goatStage(b){const a=b.animals||0;return a===0?((b.tame||0)?'Dokarmiani
 function dayName(d){const y=Math.floor((d-1)/YEAR)+1,r=(d-1)%YEAR;return`rok ${y}, ${SEAS[Math.floor(r/SD)].toLowerCase()}, dzień ${r%SD+1}`}
 function kronTools(){const n=(S.kron||S.log).length;return`<div class="card"><h4>Kronika i zapis</h4><p class="mut">Pełna kronika osady (${n} wpisów) do pobrania jako plik tekstowy. Zapis gry przeniesiesz na inne urządzenie.</p>
  <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px"><button data-kron="txt">Pobierz kronikę</button><button data-kron="save">Zapisz grę do pliku</button><button data-kron="load">Wczytaj z pliku</button></div></div>`}
-function dlFile(name,text,type){try{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500)}catch(e){toast('Ta przeglądarka nie pozwala pobrać pliku')}}
+async function dlFile(name,text,type){if(window.claude&&typeof claude.use==='function'){let d=null;try{d=await Promise.race([claude.use('downloads'),new Promise(r=>setTimeout(()=>r(null),4000))])}catch(e){}
+ if(d){try{await d.save({filename:name,data:text});toast('Plik zapisany')}catch(e){if(!e||e.code!=='declined')toast('Nie udało się zapisać pliku')}return}}
+ try{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500)}catch(e){toast('Ta przeglądarka nie pozwala pobrać pliku')}}
 function kronText(){const L=S.kron&&S.kron.length?S.kron:S.log.slice().reverse().map(l=>[l.d,l.t]);let out='KRONIKA PRZYSTANI\n'+'='.repeat(17)+'\n\n';let last='';
  L.forEach(([d,t])=>{const h=dayName(d);const y=h.split(',')[0];if(y!==last){out+='\n'+y.toUpperCase()+'\n\n';last=y}out+='· '+h+': '+t+'\n'});
  out+='\n\nOsada: '+S.people.length+' osób, urodzeni na wyspie: '+(S.born||0)+', zmarli: '+(S.died||0)+'.\n';return out}
