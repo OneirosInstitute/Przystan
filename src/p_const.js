@@ -61,9 +61,9 @@ const ico=(k,cls)=>`<svg class="i${cls?' '+cls:''}" viewBox="0 0 24 24" aria-hid
 /* ================= stałe ================= */
 const N=192, VW=N+1, DAY=120, SD=10, YEAR=40, K=YEAR?96/40:1, SEAS=['Lato','Jesień','Zima','Wiosna'];
 const T0=0.22, T1=0.80, SAVEKEY='przystan-v7';
-const FOOD=['suchary','jagody','grzyby','ryby','mieso','ziarno','mleko','miod'];
-const RN={suchary:'Suchary',jagody:'Jagody',grzyby:'Grzyby',ryby:'Ryby',mieso:'Mięso',drewno:'Kłody',opal:'Opał',kamien:'Kamień',glina:'Glina',deski:'Deski',gwozdzie:'Gwoździe',plotno:'Płótno',skory:'Skóry',odziez:'Odzież',narz:'Narzędzia żelazne',narzk:'Narzędzia kamienne',cegla:'Cegły',ziarno:'Ziarno',mleko:'Mleko',ruda:'Ruda darniowa',wegiel:'Węgiel drzewny',wlokna:'Włókna lnu',miod:'Miód',ziola:'Zioła'};
-const SPOIL={suchary:.004,jagody:.025,grzyby:.02,ryby:.035,mieso:.03,ziarno:.002,mleko:.09,miod:.0005};
+const FOOD=['suchary','jagody','grzyby','ryby','mieso','ziarno','mleko','miod','warzywa'];
+const RN={suchary:'Suchary',jagody:'Jagody',grzyby:'Grzyby',ryby:'Ryby',mieso:'Mięso',drewno:'Kłody',opal:'Opał',kamien:'Kamień',glina:'Glina',deski:'Deski',gwozdzie:'Gwoździe',plotno:'Płótno',skory:'Skóry',odziez:'Odzież',narz:'Narzędzia żelazne',narzk:'Narzędzia kamienne',cegla:'Cegły',ziarno:'Ziarno',mleko:'Mleko',ruda:'Ruda darniowa',wegiel:'Węgiel drzewny',wlokna:'Włókna lnu',miod:'Miód',ziola:'Zioła',warzywa:'Warzywa'};
+const SPOIL={suchary:.004,jagody:.025,grzyby:.02,ryby:.035,mieso:.03,ziarno:.002,mleko:.09,miod:.0005,warzywa:.02};
 const CN={drwal:'drwal',kamieniarz:'kamieniarz',zbieracz:'zbieracz',rybak:'rybak',mysliwy:'myśliwy',ciesla:'cieśla',murarz:'murarz',krawiec:'krawiec',kowal:'kowal',rolnik:'rolnik',hodowca:'hodowca'};
 const LVL=[90,300,750,1500,2800];
 const BD={
@@ -89,12 +89,19 @@ const BD={
  sklad:{cat:'magazyn',n:'Skład',w:2,h:2,cost:{drewno:6},work:3,store:'all',cap:250,d:'Miejsce na wszystko. Ludzie odnoszą tu urobek zamiast iść do obozu.'},
  spizarnia:{cat:'magazyn',n:'Spiżarnia',w:2,h:2,cost:{drewno:12,deski:10,gwozdzie:20},work:8,store:'food',cap:700,d:'Chłodny magazyn żywności. Zapasy psują się o połowę wolniej.'},
  dom:{cat:'dom',n:'Dom z piecem',w:3,h:2,cost:{drewno:20,cegla:20,deski:16,gwozdzie:24,kamien:10},work:18,house:8,fuel:.45,need:'piec',d:'Dom z murowanym piecem i gontem. Mieści 8 osób, pali najmniej opału i rzadko się zapala. Najtaniej przez rozbudowę chaty.'},
- studnia:{cat:'dom',n:'Studnia',w:1,h:1,cost:{kamien:12,drewno:4},work:6,d:'Czysta woda dla 14 osób. Bez niej latem pije się wodę ze strumienia i ludzie chorują. Przy pożarze to stąd noszą wiadra.'},
- cmentarz:{cat:'dom',n:'Miejsce pamięci',w:2,h:2,cost:{kamien:6,drewno:6},work:5,d:'Groby otoczone płotem z wikliny. Daje osadzie spokój i pozwala uchwalić godny pochówek.'},
+ studnia:{cat:'wsp',n:'Studnia',w:1,h:1,cost:{kamien:12,drewno:4},work:6,d:'Czysta woda dla 14 osób. Bez niej latem pije się wodę ze strumienia i ludzie chorują. Przy pożarze to stąd noszą wiadra.'},
+ cmentarz:{cat:'wsp',n:'Miejsce pamięci',w:2,h:2,cost:{kamien:6,drewno:6},work:5,d:'Groby otoczone płotem z wikliny. Daje osadzie spokój i pozwala uchwalić godny pochówek.'},
+ laznia:{cat:'wsp',n:'Łaźnia',w:2,h:2,cost:{drewno:20,kamien:12},work:8,d:'Parowa łaźnia z kamiennym piecem. Ludzie zdrowieją, rośnie nadzieja. Pali opał.'},
+ wieza:{cat:'wsp',n:'Wieża obserwacyjna',w:1,h:1,cost:{drewno:16,deski:6},work:7,d:'Z góry widać daleko: odsłania okolicę, wcześniej widać dym pożaru i wilki przy zagrodach.'},
+ domwsp:{cat:'wsp',n:'Dom wspólny',w:4,h:2,cost:{drewno:40,deski:16,kamien:10,gwozdzie:20},work:20,d:'Długa hala na wiece, święta i zimowe wieczory. Mniej sporów, więcej nadziei, wiec zmienia obyczaje łagodniej.'},
+ izbanauki:{cat:'wsp',n:'Izba nauki',w:2,h:2,cost:{drewno:16,deski:10,gwozdzie:8},work:10,need:'n_szk',d:'Tu starsi uczą dzieci. Dzieci podpatrują fach szybciej, osada szybciej się rozwija.'},
+ izbachorych:{cat:'wsp',n:'Izba chorych',w:2,h:2,cost:{drewno:14,deski:8,plotno:4},work:9,need:'n_opat',d:'Posłania, czyste płótno i zioła. Ciężko chorzy i ranni zdrowieją dużo szybciej.'},
+ pasieka:{cat:'jedzenie',n:'Pasieka',w:2,h:2,cost:{drewno:10,deski:4},work:5,wk:1,c:'zbieracz',need:'u_bart',prod:{in:{},out:{miod:2},t:30,when:()=>S.res.miod<60&&seasonIdx()!==2},d:'Ule z kłód i słomy przy osadzie. Miód bez szukania barci po lesie, oprócz zimy.'},
+ ogrodziol:{cat:'jedzenie',n:'Ogród ziołowy',w:2,h:2,cost:{drewno:8},work:4,wk:1,c:'zbieracz',need:'u_ziel',prod:{in:{},out:{ziola:2},t:25,when:()=>S.res.ziola<40&&seasonIdx()!==2},d:'Grządki krwawnika, dziurawca i mięty. Zioła rosną pod ręką, oprócz zimy.'},
  piec:{cat:'dom',n:'Piec zduński',w:2,h:2,cost:{cegla:24,glina:12},work:10,need:'piec',d:'Lepszy piec: domy palą mniej opału, a nadmiar żywności się suszy.'}
 };
 const BKEYS=Object.keys(BD);
-const CATS=[['dom','Domy'],['jedzenie','Żywność'],['surowce','Surowce'],['rzemioslo','Rzemiosło'],['magazyn','Magazyny']];
+const CATS=[['dom','Domy'],['wsp','Wspólnota'],['jedzenie','Żywność'],['surowce','Surowce'],['rzemioslo','Rzemiosło'],['magazyn','Magazyny']];
 const TIERS=[['Obóz',0,0],['Osada',4,20],['Wieś',8,32],['Przystań',14,50]];
 const TRIBE=[
  ['Kamienny krąg','Dziewięć głazów ustawionych w krąg. Mech pokrył je do połowy. Ktoś musiał je tu przetaczać przez wiele dni.'],

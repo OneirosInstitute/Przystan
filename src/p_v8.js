@@ -3,7 +3,7 @@
 const law=id=>!!(S&&S.laws&&S.laws[id]);
 const isWorker=p=>p.age>=12||(law('pomoc')&&p.age>=10);
 const wellCount=()=>S.bld.filter(b=>b.kind==='studnia'&&bDone(b)).length;
-const waterCap=()=>18+14*wellCount();
+const waterCap=()=>18+14*wellCount()+8*S.bld.filter(b=>bDone(b)&&hasExt(b,'zuraw')).length;
 function waterNeedOn(){return seasonIdx()===0||S.weather.k==='drought'}
 
 /* ---- rozbudowa domów w miejscu ---- */
@@ -32,7 +32,7 @@ function fireRoll(){if(S.day<6||S.bld.some(b=>b.fire))return;const s=seasonIdx()
 function startFire(b){b.fire={s:1,hp:1};S.seen.fire1=1;log('Pożar! Pali się '+BD[b.kind].n.toLowerCase()+'. Ludzie biegną z wiadrami.'+(wellCount()?'':' Bez studni wodę trzeba nosić z daleka.'));toast('Pożar: '+BD[b.kind].n);sfx('bell');
  const c=bCenter(b);const ppl=S.people.filter(p=>p.age>=13&&p.job!=='wyp'&&p.state!=='away').sort((x,y)=>Math.hypot(x.x-c.x,x.z-c.z)-Math.hypot(y.x-c.x,y.z-c.z)).slice(0,law('straz')?6:4);
  ppl.forEach(p=>{release(p);if(p.workKind==='build'&&p.tgt&&p.tgt.workers)p.tgt.workers--;p.path=null;p.state='idle';p.wait=0;p.fireB=b.id});b.fire.crew=ppl.map(p=>p.id);fireFx(b)}
-function fireStep(dt){for(const b of S.bld){if(!b.fire)continue;const f=b.fire;f.hp-=dt*.0055*(law('straz')?.6:1);
+function fireStep(dt){for(const b of S.bld){if(!b.fire)continue;const f=b.fire;f.hp-=dt*.0055*(law('straz')?.6:1)*(hasB('wieza')?.8:1);
   if(f.hp<.55&&seasonIdx()===0&&Math.random()<dt*.0015){const c=bCenter(b);const nb=S.bld.find(x=>x!==b&&!x.fire&&bDone(x)&&(FLAM[x.kind]||0)>0&&Math.hypot(bCenter(x).x-c.x,bCenter(x).z-c.z)<3.6);if(nb){startFire(nb);log('Ogień przeskakuje na '+BD[nb.kind].n.toLowerCase()+'.')}}
   if(f.s<=0||f.hp<=0)endFire(b)}}
 function endFire(b){const f=b.fire;b.fire=null;fireFxRemove(b.id);S.people.forEach(p=>{if(p.fireB===b.id){p.fireB=null;if(p.state==='work'){p.state='idle';p.wait=.5}}});
@@ -110,14 +110,14 @@ const seasonKey=()=>Math.floor(S.day/SD);
 function founders(){return S.people.filter(p=>!p.born).length}
 function youngVoice(){return founders()<9&&S.people.filter(p=>p.born&&isAdult(p)).length>=2}
 function wiecOpen(){return S.day>3&&S.wiecUsed!==seasonKey()}
-function changeCost(){const st=offHolder('starszy');return .04*(law('s_wiec')?.5:1)*(st?(st.trait==='Pogodny'?.6:st.trait==='Uparty'?1.5:1):1)}
+function changeCost(){const st=offHolder('starszy');return .04*(law('s_wiec')?.5:1)*(hasB('domwsp')?.5:1)*(st?(st.trait==='Pogodny'?.6:st.trait==='Uparty'?1.5:1):1)}
 function custChange(k,id){const c=CUST_BY[k];if(!c||!S.cust[k]||S.cust[k]===id)return;if(!wiecOpen()){toast('Obyczaj można zmienić tylko na wiecu, raz na porę roku.');return}
  if(k==='umowa'&&!youngVoice()){toast('Umowy z brzegu nikt nie odważy się zmienić, dopóki żyje większość rozbitków.');return}
  const from=c.o.find(o=>o.id===S.cust[k]),to=c.o.find(o=>o.id===id);S.cust[k]=id;custRebuild();S.wiecUsed=seasonKey();S.dis=clamp((S.dis||0)+changeCost(),0,1);
  (S.custLog[k]=S.custLog[k]||{d:custDay(),why:c.why,hist:[]}).hist.push(`${custDay()}: wiec zmienił „${from.n}” na „${to.n}”`+(k==='umowa'?' głosami młodych':''));
  log('Wiec przy ognisku: „'+from.n+'” zastąpiono obyczajem „'+to.n+'”. '+to.r);toast('Wiec: '+to.n);assign();renderPanel()}
 function custDaily(){custInit();
- if(law('opowiesci'))S.res.opal=Math.max(0,S.res.opal-.6*K);
+ if(law('opowiesci')&&!hasB('domwsp'))S.res.opal=Math.max(0,S.res.opal-.6*K);
  const d=Math.floor(rday());if(d%SD===0&&S.day>3){log('Nowa pora roku. Wieczorem zbiera się wiec: można zmienić jeden obyczaj osady.');toast('Wiec przy ognisku');}
  if(youngVoice()&&!S.seen.young){S.seen.young=1;log('Na wiecu odzywają się młodzi urodzeni na wyspie: „To były wasze zasady, nie nasze.” Od teraz można zmienić nawet umowę z brzegu.');toast('Głos młodych')}
  if(law('swieto')&&d===SD&&!S.seen['swieto'+Math.floor(S.day/YEAR)]){S.seen['swieto'+Math.floor(S.day/YEAR)]=1;const need=K*S.people.length*2;const tot=foodTotal();if(tot>need*4){FOOD.forEach(k=>S.res[k]-=need*(S.res[k]/tot));S.hope=clamp(S.hope+.1,0,1);S.dis=clamp(S.dis-.15,0,1);log('Święto plonów. Cała osada ucztuje do późnej nocy. Ktoś gra na flecie z kości.');toast('Święto plonów')}else log('Na święto plonów nie starczy jedzenia. Ludzie są rozczarowani.')}}
@@ -142,7 +142,7 @@ function custHTML(){custInit();let h='<h3>Obyczaje osady</h3>';
 
 /* ---- niezgoda ---- */
 function disDaily(){let d=0;if(S.hungerDays>0)d+=.03;if(S.warm<.75)d+=.025*(1-S.warm);if(law('oszczedne'))d+=.01;if(law('dlugi'))d+=.008;if(law('pomoc'))d+=.004;
- if(law('kazdy')&&S.people.some(p=>p.hp<.5&&isWorker(p)))d+=.006;if(S.thirst>0)d+=.02*S.thirst;if(law('opowiesci'))d-=.012;if(law('sad'))d-=.01;if(law('s_wiec'))d-=.004;if(law('lup'))d+=.002;if(law('u_wspolne'))d-=.004;if(law('u_swoje'))d+=.005;if(law('u_starsi'))d+=S.people.filter(p=>p.born&&isAdult(p)).length>=3?.008:-.006;if(S.hungerDays>0&&law('g_rowno'))d-=.012;d-=.002*offLv('starszy');if(law('wspolne'))d-=.008;d-=.01*(S.hope-.5);
+ if(law('kazdy')&&S.people.some(p=>p.hp<.5&&isWorker(p)))d+=.006;if(S.thirst>0)d+=.02*S.thirst;if(law('opowiesci'))d-=.012;if(hasB('domwsp'))d-=.006;if(law('sad'))d-=.01;if(law('s_wiec'))d-=.004;if(law('lup'))d+=.002;if(law('u_wspolne'))d-=.004;if(law('u_swoje'))d+=.005;if(law('u_starsi'))d+=S.people.filter(p=>p.born&&isAdult(p)).length>=3?.008:-.006;if(S.hungerDays>0&&law('g_rowno'))d-=.012;d-=.002*offLv('starszy');if(law('wspolne'))d-=.008;d-=.01*(S.hope-.5);
  S.dis=clamp((S.dis||0)+K*d+(.08-(S.dis||0))*.03*K,0,1);
  if(S.dis>.8&&Math.random()<.25*K){const a=S.people.filter(isAdult);if(a.length>1){const x=a[(Math.random()*a.length)|0],y=a[(Math.random()*a.length)|0];if(x!==y)log(['Kłótnia przy ognisku: '+x.name+' i '+y.name+' oskarżają się o lenistwo.',x.name+' mówi głośno, że rada prowadzi wszystkich na zgubę.','Ktoś podzielił zapasy po swojemu. Nikt się nie przyznaje.'][(Math.random()*3)|0])}}
  if(S.dis>=.97){const fams=Object.values(S.fams).map(f=>famMembers(f.id)).filter(m=>m.length&&m.length<=4&&!m.some(p=>p.id===selId));if(fams.length){const m=fams[(Math.random()*fams.length)|0];const nm=famName(m[0].fam);
