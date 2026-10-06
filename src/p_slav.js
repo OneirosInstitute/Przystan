@@ -22,21 +22,21 @@ function slavDaily(){if(!S.slav){S.slav=1;S.people.forEach(p=>{if(p.age>=7)S.see
  if(rd===0&&yr>=1&&once('kupala')){const krag=S.found.includes(0);if(ob&&S.res.opal>=6)S.res.opal-=6;
   S.wh+=.07*f*g*(krag?1.25:1);S.wd-=.03*f*g;if(krag)techXp('nauka',10);
   log(ob?`Noc Kupały. ${yr===1?'Rok':yr+' '+lata(yr)} temu morze wyrzuciło nas na ten brzeg. Płoną ogniska${krag?' w kupalnym kręgu':''}, młodzi skaczą przez ogień, dziewczęta puszczają wianki na wodę zatoki.`:`Najkrótsza noc w roku. ${yr===1?'Rok':yr+' '+lata(yr)} temu rozbiliśmy się o ten brzeg. Ktoś pali małe ognisko na plaży i długo patrzy w morze.`);
-  toast('Noc Kupały');if(ob)fujarka()}
+  toast('Noc Kupały');pamAdd(2,'obrzed');if(ob)fujarka()}
  // Dziady
  if(rd===18&&S.died>=1&&once('dziady')){if(ob)eat(K*n*.25);S.wh+=.04*f*g;S.wd-=.03*f*g;
   const lud=S.seen.dziadyLud==='tak';
-  log((law('morze')?'Dziady. Kaszę i chleb puszcza się na wodę zatoki, dla tych, których oddaliśmy morzu.':'Dziady. Na grobach stoją miski z kaszą i miodem, przy mogiłach płoną małe ognie. Nikt nie mówi głośno: tej nocy zmarli wracają do swoich.')+(lud?' Na mogile dziadów za wzgórzem też płonie ogień.':''));
-  toast('Dziady');if(lud)S.wh+=.01;
+  log((law('morze')?'Dziady. Kaszę i chleb puszcza się na wodę zatoki, dla tych, których oddaliśmy morzu.':'Dziady. Na grobach stoją miski z kaszą i miodem, przy mogiłach płoną małe ognie. Nikt nie mówi głośno: tej nocy zmarli wracają do swoich.')+(lud?' Na mogile dziadów za wzgórzem też płonie ogień.':'')+(S.deadNames&&S.deadNames.length?' Wspomina się imiona: '+S.deadNames.slice(-10).join(', ')+'.':''));
+  toast('Dziady');pamAdd(2,'obrzed');if(lud)S.wh+=.01;
   if(ob&&S.found.includes(1)&&!S.seen.dziadyLud)S.slavQ='dziadyLud'}
  // Szczodre Gody
  if(rd===25&&once('gody')){
-  if(ob&&eat(K*n*.8)){S.wh+=.07*g;S.wd-=.05*g;log('Szczodre Gody. Najdłuższa noc. Cała osada siada do jednej wieczerzy, jedno miejsce zostaje puste dla tych, których zabrakło. Dzieci chodzą od chaty do chaty i śpiewają.');toast('Szczodre Gody');fujarka()}
+  if(ob&&eat(K*n*.8)){S.wh+=.07*g;S.wd-=.05*g;log('Szczodre Gody. Najdłuższa noc. Cała osada siada do jednej wieczerzy, jedno miejsce zostaje puste dla tych, których zabrakło. Dzieci chodzą od chaty do chaty i śpiewają.');toast('Szczodre Gody');pamAdd(2,'obrzed');fujarka()}
   else if(ob){S.wh+=.02*g;S.wd-=.02;log('Szczodre Gody. Wieczerza skromna, bo zapasów mało, ale wszyscy siedzą razem.')}
   else{S.wh+=.02;log('Najdłuższa noc w roku. Ktoś cicho śpiewa kolędę z dawnych stron.')}}
  // Topienie Marzanny
  if(rd===30&&once('marzanna')){S.wh+=.06*f*g;S.wd-=.02*f;
-  log(ob?'Topienie Marzanny. Dzieci niosą słomianą kukłę do strumienia i wrzucają ją do wody. Zima odchodzi razem z nią. Wracają z zieloną gałązką.':'Pierwszy ciepły dzień. Ktoś mówi, że w domu topiono by dziś Marzannę.');toast('Koniec zimy');if(ob)fujarka()}
+  log(ob?'Topienie Marzanny. Dzieci niosą słomianą kukłę do strumienia i wrzucają ją do wody. Zima odchodzi razem z nią. Wracają z zieloną gałązką.':'Pierwszy ciepły dzień. Ktoś mówi, że w domu topiono by dziś Marzannę.');toast('Koniec zimy');pamAdd(2,'obrzed');if(ob)fujarka()}
  // Postrzyżyny
  S.people.forEach(p=>{if(p.age<7||p.age>=12||S.seen['postr'+p.id])return;S.seen['postr'+p.id]=1;
   const par=S.people.filter(q=>q.fam===p.fam&&isAdult(q)&&q!==p).sort((a,b)=>b.age-a.age)[0];

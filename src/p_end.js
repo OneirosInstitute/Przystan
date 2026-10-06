@@ -68,7 +68,7 @@ function weatherFx(rdt){const k=S.weather.k;const isRain=k==='rain'||k==='storm'
  if(isSnow){for(let q=0;q<PN;q++){let y=sPos[q*3+1]-2.2*rdt;sPos[q*3]+=Math.sin(clock*.8+q)*rdt*.7;if(y<0){y+=26;sPos[q*3]=(Math.random()-.5)*60;sPos[q*3+2]=(Math.random()-.5)*60}sPos[q*3+1]=y}sGeo.attributes.position.needsUpdate=true;snowP.position.set(camT.x,base,camT.z)}
  const fogK=k==='fog'?1:k==='storm'||k==='rain'?.5:k==='snow'?.4:0;{const sz=34/zoom,ov=sstep(.5,.25,zoom);scene.fog.near=160+lerp(.05,-.45,fogK)*sz+ov*sz*.25;scene.fog.far=160+lerp(1.7,.95,fogK)*sz+ov*sz*.6;}wUni.uFogN.value=scene.fog.near;wUni.uFogF.value=scene.fog.far;
  return fogK}
-function frame(now){requestAnimationFrame(frame);if(gfxSkip(now))return;const rdt=Math.min(.1,(now-last)/1000);last=now;clock+=rdt;
+function frame(now){requestAnimationFrame(frame);if(gfxSkip(now))return;const rdt=Math.min(.25,(now-last)/1000);last=now;clock+=rdt;
  wUni.uT.value=clock;
  GFXU.t.value=clock;if(!S){yaw+=rdt*.04;yawT=yaw;setCam();introLight();gfxRender();return}
  if(S.speed>0&&S.people.length){let dt=rdt*S.speed;while(dt>0){const s=Math.min(.1,dt);step(s);dt-=s}storyTick()}
@@ -139,7 +139,7 @@ try{const w0=innerWidth,h0=innerHeight;renderer.setSize(640,640,false);const asp
  introLight();sun.position.set(camT.x-40,38,camT.z+30);renderer.render(scene,cam);$('introPic').style.backgroundImage=`url(${cv.toDataURL('image/jpeg',.86)})`;
  yaw=yawT=yy;camT.x=cx;camT.z=cz;resize()}catch(e){}
 requestAnimationFrame(frame);
-window.__g={get S(){return S},urzDaily,officesHTML,openSpor,obyStage,custHTML2:()=>custHTML(),ludDaily,foundHamlet,zadOf,relAdd,relGet,wedding,rodyHTML,hamletHTML,ludCard,mirWord,slowHTML,troubleHTML,kronText,FOOD,foodTotal,gfxSetLevel,get GFX(){return GFX},setYaw(v){yaw=yawT=v},get yaw(){return yaw},slavDaily,slavHTML,custHTML,get evOpen(){return evOpen},startProj,finishProj,rebuildMesh,custChange,custTick,custInit,setOffice,lawDaily,startFire,upgradeB,reqTick,disDaily,REGIONS,sendExp,tech,regionScan,toggleOverview,step,newDay,assign,nodes,startGame,setAlloc,setWant,startPlace,tryPlace,moveGhost,checkPlace,camp,wreck,tribe,rev,fogPass,openSheet,closeSheet,setCam,select,selectB,reveal,deco,BD,bById,countInRange,
+window.__g={get S(){return S},pamDaily,song,askVName,pamHTML,urzDaily,officesHTML,openSpor,obyStage,custHTML2:()=>custHTML(),ludDaily,foundHamlet,zadOf,relAdd,relGet,wedding,rodyHTML,hamletHTML,ludCard,mirWord,slowHTML,troubleHTML,kronText,FOOD,foodTotal,gfxSetLevel,get GFX(){return GFX},setYaw(v){yaw=yawT=v},get yaw(){return yaw},slavDaily,slavHTML,custHTML,get evOpen(){return evOpen},startProj,finishProj,rebuildMesh,custChange,custTick,custInit,setOffice,lawDaily,startFire,upgradeB,reqTick,disDaily,REGIONS,sendExp,tech,regionScan,toggleOverview,step,newDay,assign,nodes,startGame,setAlloc,setWant,startPlace,tryPlace,moveGhost,checkPlace,camp,wreck,tribe,rev,fogPass,openSheet,closeSheet,setCam,select,selectB,reveal,deco,BD,bById,countInRange,
  get ghostTile(){return ghostTile},get placing(){return placing},get zoom(){return zoom},setZoom(z){zoom=zoomT=z;setCam()},get qLevel(){return qLevel},setTime(t){S.day=Math.floor(S.day)+t},look(x,z){camT.x=x;camT.z=z;setCam()},
  build(kind,i,j){startPlace(kind);moveGhost(i,j);const gt=ghostTile;const ok=checkPlace(kind,gt[0],gt[1]);if(ok)tryPlace();else cancelPlace();return ok},
  scene,Hy,tcx,pGroup,bGroup,nodeBy,pickNodeB,inRange,TRIAL,herdsDef,planJob,astar,tileOf,nearestWalk,finishAll(){S.bld.forEach(b=>{if(!bDone(b)){b.prog=b.work;completeSite(b)}})}};

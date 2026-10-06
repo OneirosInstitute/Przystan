@@ -67,9 +67,9 @@ function rodyHTML(){const ids=Object.keys(S.rody||{});if(!ids.length)return'';le
    lines.push(`<b>${p.name}</b> ⚭ <b>${q.name}</b>${kids.length?'<br><span class="mut">dzieci: '+kids.map(c=>c.name+' '+Math.floor(c.age)).join(', ')+'</span>':''}${p.waitHome?'<br><span class="mut">czekają na własny dom</span>':''}`)});
   const rest=mem.filter(p=>!shown.has(p.id));if(rest.length)lines.push('<span class="mut">'+rest.map(p=>p.name+(p.widowT&&S.day<p.widowT+YEAR?(p.sex==='k'?' (wdowa)':' (wdowiec)'):'')).join(', ')+'</span>');
   hm.forEach(x=>lines.push(`<span class="mut">przysiółek ${x.name}: ${x.pop} osób</span>`));
-  h+=`<div class="card"><h4>${rodName(id).replace(/^r/,'R')}</h4>${lines.map(l=>`<p style="margin:4px 0">${l}</p>`).join('')}</div>`});return h}
+  h+=`<div class="card"><h4>${S.rody[id]&&S.rody[id].znak?S.rody[id].znak+' ':''}${rodName(id).replace(/^r/,'R')}</h4>${lines.map(l=>`<p style="margin:4px 0">${l}</p>`).join('')}</div>`});return h}
 function ludCard(p){const q=p.pair!==null?pById(p.pair):null;const fr=friendsOf(p),rv=rivalsOf(p);
- return`<p class="mut">${rodName(p.rod)}${q?` · ${p.sex==='k'?'mąż':'żona'}: ${q.name}`:''}${p.waitHome?' · czekają na własny dom':''}</p>`+
+ return`<p class="mut">${S.rody&&S.rody[p.rod]&&S.rody[p.rod].znak?S.rody[p.rod].znak+' ':''}${rodName(p.rod)}${q?` · ${p.sex==='k'?'mąż':'żona'}: ${q.name}`:''}${p.waitHome?' · czekają na własny dom':''}</p>`+
   (p.age>=14?`<p>Nastrój: <b>${zadWord(p)}</b>${p.zr&&p.zr.length?' · '+p.zr.join(', '):''}</p><p class="mut">Mir: ${mirWord(p)}${fr.length?' · przyjaciele: '+fr.map(x=>x.name).join(', '):' · bez bliskich przyjaciół'}${rv.length?' · zatarg: '+rv[0].name:''}</p>`:'')}
 // ---- rytm dnia ----
 function single(p){return p.pair===null&&p.age>=17&&p.age<=46&&!p.waitHome&&!(p.widowT&&S.day<p.widowT)}

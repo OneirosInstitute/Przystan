@@ -702,7 +702,7 @@ function newDay(){
  if(law('oszczedne'))S.people.forEach(p=>{p.hp=Math.max(.2,p.hp-.006*K)});if(law('dlugi'))S.people.forEach(p=>{if(isWorker(p)&&p.job!=='wyp')p.hp=Math.max(.25,p.hp-.004*K)});
  bldDaily();wearDaily();lawDaily();slavDaily();disDaily();reqTick();fireRoll();
  {const lv=offLv('zielarz');if(lv)S.people.forEach(p=>{if(p.hp<.9)p.hp=Math.min(1,p.hp+.004*lv*K*(tech('u_ziel')?1.5:1))})}
- familyLife();ludDaily();urzDaily();
+ familyLife();ludDaily();urzDaily();pamDaily();
  techXp('nauka',K*S.people.filter(p=>isAdult(p)&&(p.trait==='Nauczyciel'||p.age>55)).reduce((a,p)=>a+(p.trait==='Nauczyciel'?.7:.25),0));techTick();
  const t=tierOf();if(t>S.tier){S.tier=t;log('Osada rośnie: teraz to '+TIERS[t][0].toLowerCase()+'.');toast('Nowy poziom: '+TIERS[t][0])}
  const housed=S.people.length?S.people.filter(p=>homeOf(p)).length/S.people.length:0;
@@ -878,7 +878,7 @@ function renderPanel(){
   h+=`<h3>Zapasy</h3><div class="card"><p><b>Żywność ${fmt(foodTotal())}/${foodCap()}</b> · rodzajów: ${S.variety}</p><p>${FOOD.map(k=>`${RN[k].toLowerCase()} ${fmt(S.res[k])}`).join(' · ')}</p>`+
    `<p>opał ${fmt(S.res.opal)} · kłody ${fmt(S.res.drewno)} · kamień ${fmt(S.res.kamien)} · glina ${fmt(S.res.glina)}</p><p>narzędzia: żelazne ${fmt(S.res.narz)}, kamienne ${fmt(S.res.narzk)} · odzież ${fmt(S.res.odziez)} · skóry ${fmt(S.res.skory)}</p><p>ruda ${fmt(S.res.ruda)} · węgiel ${fmt(S.res.wegiel)} · włókna ${fmt(S.res.wlokna)}</p><p>deski ${fmt(S.res.deski)} · gwoździe ${fmt(S.res.gwozdzie)} · płótno ${fmt(S.res.plotno)}${S.res.cegla?` · cegły ${fmt(S.res.cegla)}`:''}</p></div>`;
   S.goals=S.goals||{};h+='<h3>Cele</h3><div class="card">'+GOALS.map((g,i)=>`<p>${S.goals[i]?'<span class="ok">✓</span>':'<span class="mut">○</span>'} ${g[0]}</p>`).join('')+'</div>';
-  h+=rodyHTML()+hamletHTML();h+='<h3>Rodziny</h3>';
+  h+=pamHTML()+rodyHTML()+hamletHTML();h+='<h3>Rodziny</h3>';
   Object.values(S.fams).forEach(f=>{const mem=famMembers(f.id);if(!mem.length)return;const hm=f.home?bById(f.home):null;
    h+=`<div class="card"><h4>Rodzina ${famName(f.id)}</h4><p class="mut">${hm?BD[hm.kind].n:'bez domu, śpi w obozie'}</p>`+mem.sort((a,b)=>b.age-a.age).map(p=>`<div class="row" data-p="${p.id}" style="cursor:pointer;padding:5px 0"><div class="n"><b style="color:var(--hi)">${p.name}</b> <span class="mut">${Math.floor(p.age)} l. · ${traitN(p).toLowerCase()}</span><small>${jobLabel(p)} · ${p.act}${p.mentor?' · uczy się od: '+p.mentor.name:''}</small><div>${skillTags(p,3)}</div></div></div>`).join('')+`</div>`})}
  else if(tab==='praca'){const wbs=workBuildings();

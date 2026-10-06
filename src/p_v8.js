@@ -124,7 +124,7 @@ function custDaily(){custInit();
  if(law('opowiesci')&&!hasB('domwsp'))S.res.opal=Math.max(0,S.res.opal-.6*K);
  const d=Math.floor(rday());if(d%SD===0&&S.day>3){log('Nowa pora roku. Wieczorem zbiera się wiec: można zmienić jeden obyczaj osady.');toast('Wiec przy ognisku');}
  if(youngVoice()&&!S.seen.young){S.seen.young=1;log('Na wiecu odzywają się młodzi urodzeni na wyspie: „To były wasze zasady, nie nasze.” Od teraz można zmienić nawet umowę z brzegu.');toast('Głos młodych')}
- if(law('swieto')&&d===SD&&!S.seen['swieto'+Math.floor(S.day/YEAR)]){S.seen['swieto'+Math.floor(S.day/YEAR)]=1;const need=K*S.people.length*2;const tot=foodTotal();if(tot>need*4){FOOD.forEach(k=>S.res[k]-=need*(S.res[k]/tot));S.hope=clamp(S.hope+.1,0,1);S.dis=clamp(S.dis-.15,0,1);log('Dożynki. Dziewczęta niosą wieniec z ostatniego snopa, cała osada ucztuje do późnej nocy. Ktoś gra na fujarce.');toast('Dożynki');if(typeof fujarka==='function')fujarka()}else log('Na dożynki nie starczy jedzenia. Wieniec wisi nad pustym stołem.')}}
+ if(law('swieto')&&d===SD&&!S.seen['swieto'+Math.floor(S.day/YEAR)]){S.seen['swieto'+Math.floor(S.day/YEAR)]=1;const need=K*S.people.length*2;const tot=foodTotal();if(tot>need*4){FOOD.forEach(k=>S.res[k]-=need*(S.res[k]/tot));S.hope=clamp(S.hope+.1,0,1);S.dis=clamp(S.dis-.15,0,1);log('Dożynki. Dziewczęta niosą wieniec z ostatniego snopa, cała osada ucztuje do późnej nocy. Ktoś gra na fujarce.');toast('Dożynki');pamAdd(2,'obrzed');if(typeof fujarka==='function')fujarka()}else log('Na dożynki nie starczy jedzenia. Wieniec wisi nad pustym stołem.')}}
 const lawDaily=custDaily;
 function hungerMul(p){if(law('g_praca'))return isWorker(p)?.6:1.5;if(law('g_dzieci'))return(p.age<12||p.age>55)?.4:1.3;return 1}
 // starszy osady

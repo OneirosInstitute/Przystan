@@ -1,6 +1,6 @@
 ---
 title: "Przystań — Księga gry"
-subtitle: "Wersja 0.16 · 6 października 2026"
+subtitle: "Wersja 0.17 · 6 października 2026"
 ---
 
 # 1. Czym jest Przystań
@@ -220,9 +220,19 @@ Wszystko dzieje się samo, jak w dawnej wsi. Gracz nie dobiera par, tylko widzi 
 
 **Dojrzewanie obyczajów:** każde ustalenie po dwóch latach bez zmian staje się obyczajem, a po czterech latach dawnym obyczajem. Zmiana obyczaju kosztuje na wiecu półtora raza więcej niezgody, a zmiana dawnego obyczaju dwa i pół raza więcej i jest możliwa dopiero wtedy, gdy przemówi głos młodych. Dojrzałe obyczaje same z siebie uspokajają osadę.
 
-## Plan dalszy
+## Pamięć osady (od wersji 0.17)
 
-- **0.17 Pamięć osady:** pieśni o wielkich wydarzeniach, nazwa osady nadana przez wiec, znaki rodów, Dziady z imionami zmarłych, pamięć jako warunek końca epoki.
+Pamięć to wspólny dorobek osady, opisany słowami: krótka, żywa, głęboka albo wielka. Rośnie z:
+
+- **obrzędów:** każda Noc Kupały, dożynki, Dziady, Szczodre Gody i topienie Marzanny;
+- **pieśni:** po wielkich chwilach ktoś układa pieśń, na przykład „Pieśń o statku, który zabrało morze”, „Kołysanka o pierwszym dziecku wyspy”, „Pieśń o ugaszonym ogniu”, „Pieśń o głodnej zimie”, „Pieśń o odejściu” przy nowym przysiółku albo pieśń pamięci po mistrzu fachu. Zimą pieśni śpiewa się przy ogniu i rośnie nadzieja;
+- **pierwszych razy:** pierwszy dom z bali, pierwsze żniwa, pierwsze dziecko wyspy, pierwsze wesele, pierwsza przetrwana zima, pierwsze żelazo, pierwszy mistrz, pierwszy przysiółek, utrata wraku;
+- **grobów z imionami:** gdy osada chowa zmarłych w miejscu pamięci. Na Dziady wspomina się ich imiona;
+- **nazwanych krain.**
+
+**Imię osady:** gdy osada osiągnie poziom Osada, wiec nadaje jej imię. Do wyboru: Przystań, Ostoja, Zatocze albo nazwa od starszego, na przykład Lubomirowice. Imię pojawia się na mapie i w kronice. Tego samego dnia każdy ród wyrzyna swój znak na słupie przy domu, a znak widać przy rodzie i na karcie osoby.
+
+W finale epoki pamięć zdecyduje, z czym młodzi wejdą w epokę II.
 
 # 12. Epoki
 
@@ -261,14 +271,14 @@ Po wyborze gra pokazuje Księgę rozbitków: kto się urodził, kto odszedł, ja
 # 14. Interfejs
 
 - **Górny pasek:** pora roku i dzień, tempo, dźwięk, pełny ekran, jakość grafiki, zapasy (żywność z liczbą dni, drewno, opał, ludzie).
-- **Zakładki:** Budowa (kategorie), Praca, Ludzie (największy kłopot, prośby, niezgoda, obyczaje z ich wiekiem, urzędy, rok obrzędów, rody, przysiółki, rodziny), Wyprawy, Wiedza (drzewa odkryć), Natura (atlas), Kronika (pełna kronika do pobrania, zapis i wczytanie z pliku).
+- **Zakładki:** Budowa (kategorie), Praca, Ludzie (największy kłopot, prośby, niezgoda, obyczaje z ich wiekiem, urzędy, rok obrzędów, pamięć osady, rody, przysiółki, rodziny), Wyprawy, Wiedza (drzewa odkryć), Natura (atlas), Kronika (pełna kronika do pobrania, zapis i wczytanie z pliku).
 - **Okno budynku:** pracownicy, przepisy, co spowalnia, stan i remont, poziomy i rozbudowy.
 - **Karta osoby:** fach, cecha, zdrowie, narzędzia, ród, małżonek, nastrój z powodami, mir i przyjaciele.
 - **Telefon w pionie:** wąski pasek wskaźników, ukryta minimapa (widok wyspy pod przyciskiem „Wyspa”).
 
 # 15. Technika
 
-- **Plik gry:** jeden plik HTML (około 370 kB) składany z części: p_head.html, p_const.js, p_mid.js, p_rest.js, p_map.js, p_tech.js, p_exp.js, p_v8.js, p_bld.js, p_story.js, p_slav.js, p_wild.js, p_ludzie.js, p_urz.js, p_gfx.js, p_end.js.
+- **Plik gry:** jeden plik HTML (około 370 kB) składany z części: p_head.html, p_const.js, p_mid.js, p_rest.js, p_map.js, p_tech.js, p_exp.js, p_v8.js, p_bld.js, p_story.js, p_slav.js, p_wild.js, p_ludzie.js, p_urz.js, p_pamiec.js, p_gfx.js, p_end.js.
 - **Grafika:** Three.js r149 (WebGL2), własna obróbka obrazu (bloom, cienie kontaktowe, cienie chmur, tilt-shift).
 - **Zapis:** w pamięci przeglądarki (klucz przystan-v7), do pobrania jako plik JSON i do wczytania z pliku.
 - **Instalacja:** PWA z manifestem i service workerem, działa bez sieci.
@@ -290,10 +300,31 @@ Po wyborze gra pokazuje Księgę rozbitków: kto się urodził, kto odszedł, ja
 | 0.14 | grafika Ultra, przetwórstwo, „co spowalnia”, największy kłopot, odmiana wyspowa, kronika i zapis w pliku, kategorie budowy |
 | 0.15 | rody, więzi, swaty i wesela, nowe gospodarstwa, sieroty, nastrój i mir ludzi, przysiółki |
 | 0.16 | urzędy rodzące się z potrzeb, spory rodów i waśnie, sąd pod dębem, dojrzewanie obyczajów |
+| 0.17 | pamięć osady: pieśni, pierwsze razy, groby z imionami na Dziady, imię osady, znaki rodów; czas gry nie zwalnia przy słabszej płynności |
 
-# 17. Otwarte sprawy
+# 17. Droga do końca
 
-- Warunki końca aktów i finał epoki I w samej grze (sceny, wiec pokoleń, Księga rozbitków).
-- Pamięć osady (0.17).
-- Zakładanie przysiółków z własnej woli jako część drogi Głąb w epoce II.
+Kolejność dalszej pracy. Każda wersja kończy się czymś, w co da się zagrać, i aktualizacją tej księgi.
+
+| Wersja | Zakres | Dlaczego teraz |
+|---|---|---|
+| 0.18 Finał epoki I | akty jako rozdziały z warunkami końca, sceny fabularne (Nikt nas nie szuka, Za pięć dni sztorm, Ostatnia zima mistrza, Ostatni), dziecko w 12. roku samo wybiera fach po rodzicach i mistrzach, wiec pokoleń z wyborem drogi, Księga rozbitków do pobrania | wszystkie systemy epoki I już są; brakuje łuku opowieści i zakończenia |
+| 0.19 Kolonizacja | zakładanie przysiółków z własnej woli (rodzina, zapasy, narzędzia), ścieżki między osadą a przysiółkami, przysiółki widoczne jako małe żywe osady, zagrożenia w głębi wyspy (wilki, zima, choroby), mapa wspólnoty | cel gry to skolonizować wyspę; to także wejście do drogi Głąb |
+| 0.20 Gospodarstwa | spiżarki rodzin i wieczorne prace domowe (kądziel, przędza, naprawa odzieży), dowóz materiałów na budowę, jakość narzędzi i wyrobów | najgłębsza część gospodarki Wilderness, dobrze pasuje do wiejskiego rytmu dnia |
+| 0.21 Szlif | trzy poziomy trudności, równowaga z długich symulacji (8 lat), pierwsze 30 minut jako łagodny samouczek, więcej dźwięku (melodie pieśni na fujarce, kołysanki), testy i dopracowanie na Nordzie 6 | żeby epoka I była pełną, dopracowaną grą |
+| 1.0 Epoka I | wydanie: GitHub, Railway, paczka do instalacji, zapis odporny na zmiany wersji | pierwsza skończona wersja |
+
+**Epoka II** (po 1.0), trzy drogi wybierane na wiecu pokoleń:
+
+- **Dom:** gród z wałem i ostrokołem, dawne obyczaje zamieniają się w prawo zwyczajowe, rzemiosło z cechami mistrzów, targi między przysiółkami.
+- **Głąb:** kolonizacja wnętrza wyspy, druga osada za bagnami, góry, jaskinie i kopalnie, drogi i mosty, przysiółki łączone w opole.
+- **Morze:** szkutnictwo, łodzie i żagle, dalekie łowiska, wyprawy na sąsiednie, bezludne wyspy. Zasada zostaje: nigdy nie spotkamy obcych.
+
+Przez cały czas obowiązuje: klimat słowiański bez magii, brak przybyszów, decyzje gracza w scenach i na wiecu, a życie ludzi (swaty, wesela, więzi) toczy się samo.
+
+# 18. Otwarte sprawy
+
+- Czy wybór drogi na wiecu pokoleń jest ostateczny, czy w epoce II można później sięgnąć po drugą drogę?
+- Trzy poziomy trudności czy jeden?
+- Długość epoki I: 6–8 lat na wyspie (8–10 godzin przy tempie 1×) jest w sam raz?
 - Wysłanie repozytorium na GitHub i uruchomienie na Railway (czeka na utworzenie repozytorium „przystan”).
