@@ -54,10 +54,10 @@ function fireFxTick(rdt){for(const id in fireFxs){const f=fireFxs[id],b=bById(+i
 /* ---- obyczaje osady: ustalenia, które rodzą się z wydarzeń ---- */
 const CUSTOMS=[
  {k:'umowa',n:'Umowa z brzegu',trig:()=>true,why:'Pierwszej nocy na wyspie, przy ognisku na plaży.',
-  t:'Pierwsza noc przy ognisku',x:()=>S.day<2?'Osiemnaście osób, mokre ubrania, płonący stos desek z wraku. Nikt tu nie rządzi. Zanim ktoś zaśnie, trzeba ustalić, jak będziemy żyć.':'Osada żyje już kilka dni bez żadnych ustaleń. Wieczorem przy ognisku ktoś mówi, że tak dalej nie można. Trzeba się umówić, jak będziemy żyć.',
+  t:'Pierwsza noc przy ognisku',x:()=>S.day<2?'Najkrótsza noc w roku. W domu palono by teraz kupalne ognie nad rzeką. Tu jest osiemnaście osób, mokre ubrania i płonący stos desek z wraku. Nikt tu nie rządzi. Zanim ktoś zaśnie, trzeba ustalić, jak będziemy żyć.':'Osada żyje już kilka dni bez żadnych ustaleń. Wieczorem przy ognisku ktoś mówi, że tak dalej nie można. Trzeba się umówić, jak będziemy żyć.',
   o:[{id:'u_wspolne',n:'Wszystko wspólne',d:'Jedzenie i narzędzia należą do wszystkich. Więcej nadziei, mniej sporów, praca idzie trochę wolniej.',r:'Postanowiono: nikt nic nie ma na własność. Co wyniesione z wraku, należy do wszystkich.'},
    {id:'u_swoje',n:'Każdy na swoim',d:'Kto więcej pracuje, ten więcej ma. Praca idzie szybciej, ale łatwiej o kłótnie.',r:'Postanowiono: każdy odpowiada za siebie i swoją rodzinę. Kto pracuje, ten je.'},
-   {id:'u_starsi',n:'Słuchamy starszych',d:'Decydują najstarsi. Spory szybko gasną, ale młodzi z czasem zaczną się buntować.',r:'Postanowiono: ostatnie słowo należy do najstarszych. Stefan i Helena kiwają głowami.'}]},
+   {id:'u_starsi',n:'Słuchamy starszych',d:'Decydują najstarsi. Spory szybko gasną, ale młodzi z czasem zaczną się buntować.',r:'Postanowiono: ostatnie słowo należy do najstarszych. Lubomir i Wszebora kiwają głowami.'}]},
  {k:'glod',n:'Podział jedzenia',trig:()=>S.hungerDays>=1,why:'Gdy pierwszy raz zabrakło jedzenia dla wszystkich.',
   t:'Pusta spiżarnia',x:()=>'Wieczorem garnek jest pusty, zanim wszyscy dostaną swoją porcję. Ktoś musi zdecydować, kto je pierwszy, gdy jedzenia jest za mało.',
   o:[{id:'g_rowno',n:'Po równo dla wszystkich',d:'Każdy dostaje tyle samo. Głód mniej skłóca ludzi.',r:'Każdy dostaje tyle samo, nawet jeśli to tylko kilka łyżek.'},
@@ -89,12 +89,16 @@ const CUSTOMS=[
    {id:'lup',n:'Część dla tych, co szli',d:'Wyprawy przynoszą o 25% więcej, ale reszta osady trochę szemrze.',r:'Kto idzie na wyprawę, zatrzymuje część zdobyczy.'}]},
  {k:'zniwa',n:'Jesień',trig:()=>S.day>12&&Math.floor(rday()/SD)===1,why:'Na pierwszą jesień na wyspie.',
   t:'Pierwsza jesień',x:()=>'Liście żółkną, jagody się kończą. Ktoś proponuje, żeby uczcić to, że przeżyliśmy lato. Ktoś inny, że trzeba oszczędzać na zimę.',
-  o:[{id:'swieto',n:'Święto plonów co roku',d:'Na początku jesieni uczta: zapas na dwa dni, ale dużo nadziei i mniej sporów.',r:'Każdej jesieni będziemy świętować. Wszyscy razem, przy jednym ogniu.'},
+  o:[{id:'swieto',n:'Dożynki co roku',d:'Na początku jesieni wieniec z ostatniego snopa i uczta: zapas na dwa dni, ale dużo nadziei i mniej sporów.',r:'Każdej jesieni będą dożynki: wieniec, uczta, wszyscy przy jednym ogniu.'},
    {id:'zapasy',n:'Zapasy ważniejsze niż uczta',d:'Żywność psuje się o 20% wolniej. Bez świąt.',r:'Żadnych uczt. Jedzenie suszy się i odkłada na zimę.'}]},
  {k:'zima',n:'Zimowe wieczory',trig:()=>S.day>12&&Math.floor(rday()/SD)===2,why:'Na pierwszą zimę na wyspie.',
   t:'Długie noce',x:()=>'Noce są coraz dłuższe. Ludzie siedzą w ciemnych domach i milczą. Można palić wspólne ognisko, ale opału jest mało.',
-  o:[{id:'opowiesci',n:'Wieczory przy ognisku',d:'Starsi opowiadają o dawnym świecie. Nadzieja i nauka rosną, niezgoda spada. Ognisko pali opał.',r:'Co wieczór wszyscy siadają przy ognisku. Stefan opowiada o mieście, którego już nie ma.'},
-   {id:'z_oszcz',n:'Każdy w swoim domu',d:'Domy palą o 15% mniej opału, ale nadzieja spada.',r:'Opału jest za mało na wspólne ognisko. Każdy siedzi u siebie.'}]}];
+  o:[{id:'opowiesci',n:'Wieczory przy ognisku',d:'Starsi opowiadają o dawnym świecie. Nadzieja i nauka rosną, niezgoda spada. Ognisko pali opał.',r:'Co wieczór wszyscy siadają przy ognisku. Lubomir opowiada o dawnej wsi, o rzece i o kupalnych ogniach.'},
+   {id:'z_oszcz',n:'Każdy w swoim domu',d:'Domy palą o 15% mniej opału, ale nadzieja spada.',r:'Opału jest za mało na wspólne ognisko. Każdy siedzi u siebie.'}]},
+ {k:'wiara',n:'Dawne obyczaje',trig:()=>S.day>=6||S.bld.some(b=>b.kind==='chata'&&bDone(b)),why:'Gdy ktoś pierwszy raz postawił miskę dla domowika.',
+  t:'Miska dla domowika',x:()=>{const w=S.people.filter(p=>isAdult(p)&&p.sex==='k').sort((a,b)=>b.age-a.age)[0];return(w?w.name:'Ktoś')+' stawia wieczorem przy palenisku miskę z resztką kaszy. „Dla domowika, żeby z nami został.” Jedni kiwają głowami, inni się krzywią. Czy na wyspie trzymamy się dawnych obrzędów?'},
+  o:[{id:'obrzedy',n:'Trzymamy się dawnych obrzędów',d:'Kupała, Dziady, Szczodre Gody, Marzanna i postrzyżyny dzieci w rytmie roku. Dają nadzieję i zgodę, kosztują trochę jedzenia i opału. Wierzenia mocniej działają na ludzi.',r:'Będziemy żyć jak w domu: z ogniem na Kupałę, z jadłem dla dziadów, z wieczerzą w Szczodre Gody.'},
+   {id:'skromnie',n:'Nie czas na obrzędy',d:'Każdy wierzy po swojemu. Święta tylko się wspomina: nic nie kosztują, ale dają mniej, a niezgoda rośnie odrobinę szybciej.',r:'Na obrzędy przyjdzie czas, gdy będzie co jeść. Kto chce, niech wierzy po cichu.'}]}];
 const CUST_BY={};CUSTOMS.forEach(c=>CUST_BY[c.k]=c);
 function custRebuild(){S.laws={};Object.values(S.cust).forEach(id=>{if(id)S.laws[id]=1})}
 function custInit(){if(!S.cust){S.cust={};const old=S.laws||{};CUSTOMS.forEach(c=>{const o=c.o.find(x=>old[x.id]);if(o)S.cust[c.k]=o.id})}
@@ -110,7 +114,7 @@ const seasonKey=()=>Math.floor(S.day/SD);
 function founders(){return S.people.filter(p=>!p.born).length}
 function youngVoice(){return founders()<9&&S.people.filter(p=>p.born&&isAdult(p)).length>=2}
 function wiecOpen(){return S.day>3&&S.wiecUsed!==seasonKey()}
-function changeCost(){const st=offHolder('starszy');return .04*(law('s_wiec')?.5:1)*(hasB('domwsp')?.5:1)*(st?(st.trait==='Pogodny'?.6:st.trait==='Uparty'?1.5:1):1)}
+function changeCost(){const st=offHolder('starszy');return .04*(law('s_wiec')?.5:1)*(hasB('domwsp')?.5:1)*(hasB('gaj')?.7:1)*(st?(st.trait==='Pogodny'?.6:st.trait==='Uparty'?1.5:1):1)}
 function custChange(k,id){const c=CUST_BY[k];if(!c||!S.cust[k]||S.cust[k]===id)return;if(!wiecOpen()){toast('Obyczaj można zmienić tylko na wiecu, raz na porę roku.');return}
  if(k==='umowa'&&!youngVoice()){toast('Umowy z brzegu nikt nie odważy się zmienić, dopóki żyje większość rozbitków.');return}
  const from=c.o.find(o=>o.id===S.cust[k]),to=c.o.find(o=>o.id===id);S.cust[k]=id;custRebuild();S.wiecUsed=seasonKey();S.dis=clamp((S.dis||0)+changeCost(),0,1);
@@ -120,7 +124,7 @@ function custDaily(){custInit();
  if(law('opowiesci')&&!hasB('domwsp'))S.res.opal=Math.max(0,S.res.opal-.6*K);
  const d=Math.floor(rday());if(d%SD===0&&S.day>3){log('Nowa pora roku. Wieczorem zbiera się wiec: można zmienić jeden obyczaj osady.');toast('Wiec przy ognisku');}
  if(youngVoice()&&!S.seen.young){S.seen.young=1;log('Na wiecu odzywają się młodzi urodzeni na wyspie: „To były wasze zasady, nie nasze.” Od teraz można zmienić nawet umowę z brzegu.');toast('Głos młodych')}
- if(law('swieto')&&d===SD&&!S.seen['swieto'+Math.floor(S.day/YEAR)]){S.seen['swieto'+Math.floor(S.day/YEAR)]=1;const need=K*S.people.length*2;const tot=foodTotal();if(tot>need*4){FOOD.forEach(k=>S.res[k]-=need*(S.res[k]/tot));S.hope=clamp(S.hope+.1,0,1);S.dis=clamp(S.dis-.15,0,1);log('Święto plonów. Cała osada ucztuje do późnej nocy. Ktoś gra na flecie z kości.');toast('Święto plonów')}else log('Na święto plonów nie starczy jedzenia. Ludzie są rozczarowani.')}}
+ if(law('swieto')&&d===SD&&!S.seen['swieto'+Math.floor(S.day/YEAR)]){S.seen['swieto'+Math.floor(S.day/YEAR)]=1;const need=K*S.people.length*2;const tot=foodTotal();if(tot>need*4){FOOD.forEach(k=>S.res[k]-=need*(S.res[k]/tot));S.hope=clamp(S.hope+.1,0,1);S.dis=clamp(S.dis-.15,0,1);log('Dożynki. Dziewczęta niosą wieniec z ostatniego snopa, cała osada ucztuje do późnej nocy. Ktoś gra na fujarce.');toast('Dożynki');if(typeof fujarka==='function')fujarka()}else log('Na dożynki nie starczy jedzenia. Wieniec wisi nad pustym stołem.')}}
 const lawDaily=custDaily;
 function hungerMul(p){if(law('g_praca'))return isWorker(p)?.6:1.5;if(law('g_dzieci'))return(p.age<12||p.age>55)?.4:1.3;return 1}
 // starszy osady
@@ -142,7 +146,7 @@ function custHTML(){custInit();let h='<h3>Obyczaje osady</h3>';
 
 /* ---- niezgoda ---- */
 function disDaily(){let d=0;if(S.hungerDays>0)d+=.03;if(S.warm<.75)d+=.025*(1-S.warm);if(law('oszczedne'))d+=.01;if(law('dlugi'))d+=.008;if(law('pomoc'))d+=.004;
- if(law('kazdy')&&S.people.some(p=>p.hp<.5&&isWorker(p)))d+=.006;if(S.thirst>0)d+=.02*S.thirst;if(law('opowiesci'))d-=.012;if(hasB('domwsp'))d-=.006;if(law('sad'))d-=.01;if(law('s_wiec'))d-=.004;if(law('lup'))d+=.002;if(law('u_wspolne'))d-=.004;if(law('u_swoje'))d+=.005;if(law('u_starsi'))d+=S.people.filter(p=>p.born&&isAdult(p)).length>=3?.008:-.006;if(S.hungerDays>0&&law('g_rowno'))d-=.012;d-=.002*offLv('starszy');if(law('wspolne'))d-=.008;d-=.01*(S.hope-.5);
+ if(law('kazdy')&&S.people.some(p=>p.hp<.5&&isWorker(p)))d+=.006;if(S.thirst>0)d+=.02*S.thirst;if(law('opowiesci'))d-=.012;if(hasB('domwsp'))d-=.006;if(law('sad'))d-=.01;if(law('s_wiec'))d-=.004;if(law('lup'))d+=.002;if(law('u_wspolne'))d-=.004;if(law('u_swoje'))d+=.005;if(law('u_starsi'))d+=S.people.filter(p=>p.born&&isAdult(p)).length>=3?.008:-.006;if(S.hungerDays>0&&law('g_rowno'))d-=.012;d-=.002*offLv('starszy');d+=slavDis();if(law('wspolne'))d-=.008;d-=.01*(S.hope-.5);
  S.dis=clamp((S.dis||0)+K*d+(.08-(S.dis||0))*.03*K,0,1);
  if(S.dis>.8&&Math.random()<.25*K){const a=S.people.filter(isAdult);if(a.length>1){const x=a[(Math.random()*a.length)|0],y=a[(Math.random()*a.length)|0];if(x!==y)log(['Kłótnia przy ognisku: '+x.name+' i '+y.name+' oskarżają się o lenistwo.',x.name+' mówi głośno, że rada prowadzi wszystkich na zgubę.','Ktoś podzielił zapasy po swojemu. Nikt się nie przyznaje.'][(Math.random()*3)|0])}}
  if(S.dis>=.97){const fams=Object.values(S.fams).map(f=>famMembers(f.id)).filter(m=>m.length&&m.length<=4&&!m.some(p=>p.id===selId));if(fams.length){const m=fams[(Math.random()*fams.length)|0];const nm=famName(m[0].fam);

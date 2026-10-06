@@ -370,12 +370,12 @@ function buildStatic(){wreckG.clear();campG.clear();tribeG.clear();
 const CLOTH=[0x8a6a4c,0x587a62,0x9a6250,0x586c8e,0x8a805a,0x765676,0x7a9862,0xa07040,0x668888];
 // [imię, wiek, płeć, rodzina, umiejętności]
 const PEOPLE0=[
- ['Jan',38,'m',1,{drwal:3,ciesla:1},'Wytrwały'],['Marta',31,'k',1,{zbieracz:3,rybak:1},'Cierpliwy'],['Basia',9,'k',1,{},'Dociekliwy'],['Jaś',8,'m',1,{},'Pogodny'],
- ['Piotr',42,'m',2,{kamieniarz:3,mysliwy:1},'Ostrożny'],['Anna',39,'k',2,{rolnik:2,zbieracz:2},'Dociekliwy'],['Ola',15,'k',2,{zbieracz:1,krawiec:1},'Dociekliwy'],['Mila',6,'k',2,{},'Pogodny'],
- ['Tadeusz',45,'m',3,{kowal:2,murarz:1},'Uparty'],['Ewa',34,'k',3,{ciesla:3,krawiec:1},'Wytrwały'],['Staś',14,'m',3,{drwal:1},'Pogodny'],['Franek',5,'m',3,{},'Wytrwały'],['Zuzia',4,'k',3,{},'Cierpliwy'],
- ['Marek',36,'m',4,{ciesla:2,mysliwy:2},'Silny'],['Zofia',29,'k',4,{rybak:3,mysliwy:1},'Ostrożny'],
- ['Stefan',63,'m',5,{murarz:4,kamieniarz:2},'Nauczyciel'],['Helena',58,'k',5,{zbieracz:3,hodowca:2,krawiec:2},'Cierpliwy'],
- ['Kasia',23,'k',6,{krawiec:2,hodowca:1},'Pogodny']];
+ ['Bożydar',38,'m',1,{drwal:3,ciesla:1},'Wytrwały'],['Dobrawa',31,'k',1,{zbieracz:3,rybak:1},'Cierpliwy'],['Wiesia',9,'k',1,{},'Dociekliwy'],['Mirek',8,'m',1,{},'Pogodny'],
+ ['Radosław',42,'m',2,{kamieniarz:3,mysliwy:1},'Ostrożny'],['Bogumiła',39,'k',2,{rolnik:2,zbieracz:2},'Dociekliwy'],['Sława',15,'k',2,{zbieracz:1,krawiec:1},'Dociekliwy'],['Mila',6,'k',2,{},'Pogodny'],
+ ['Wojsław',45,'m',3,{kowal:2,murarz:1},'Uparty'],['Ludmiła',34,'k',3,{ciesla:3,krawiec:1},'Wytrwały'],['Staś',14,'m',3,{drwal:1},'Pogodny'],['Bolko',5,'m',3,{},'Wytrwały'],['Mira',4,'k',3,{},'Cierpliwy'],
+ ['Dobromir',36,'m',4,{ciesla:2,mysliwy:2},'Silny'],['Radomira',29,'k',4,{rybak:3,mysliwy:1},'Ostrożny'],
+ ['Lubomir',63,'m',5,{murarz:4,kamieniarz:2},'Nauczyciel'],['Wszebora',58,'k',5,{zbieracz:3,hodowca:2,krawiec:2},'Cierpliwy'],
+ ['Jagna',23,'k',6,{krawiec:2,hodowca:1},'Pogodny']];
 const PAIRS=[[0,1],[4,5],[8,9],[13,14],[15,16]];
 const lvXp=l=>l<=0?0:LVL[l-1];
 function newPerson(id,name,age,sex,fam,skills,trait){const sk={},xp={};Object.keys(CN).forEach(c=>{const l=(skills&&skills[c])||0;sk[c]=l;xp[c]=lvXp(l)+(l?10:0)});
@@ -612,7 +612,7 @@ function stepPerson(p,dt){
 function fieldVis(b){const m=bMesh[b.id];if(!m||!m.userData.crops)return;const f=b.field||{st:'puste',g:0};const g=f.st==='puste'?0:f.st==='dojrzale'?1:f.g;const col=new THREE.Color().setRGB(L(lerp(.42,.86,g)),L(lerp(.6,.7,g)),L(lerp(.25,.3,g)));
  m.userData.crops.children.forEach((c,i)=>{const s=g<=0?0:.25+.75*g;c.scale.set(s,s*(.85+((i*7)%5)*.06),s);c.material.color.copy(col)})}
 function completeSite(s){{const old=bMesh[s.id];if(old){old.scale.y=1;if(old.userData.scaf){bGroup.remove(old.userData.scaf);old.userData.scaf=null}}}log('Ukończono: '+BD[s.kind].n.toLowerCase()+'.');toast('Ukończono: '+BD[s.kind].n);
- if(s.kind==='wieza'){reveal(s.i,s.j,26);log('Z wieży widać daleko w głąb wyspy.')}if(BD[s.kind].house)assignHomes();if(BD[s.kind].wk){s.want=Math.min(BD[s.kind].wk,Math.max(1,Math.min(2,freeCount())));assign()}renderPanel()}
+ if(s.kind==='wieza'){reveal(s.i,s.j,26);log('Ze strażnicy widać daleko w głąb wyspy.')}if(BD[s.kind].house)assignHomes();if(BD[s.kind].wk){s.want=Math.min(BD[s.kind].wk,Math.max(1,Math.min(2,freeCount())));assign()}renderPanel()}
 const TRIAL={cegla:{n:'Wypał cegły',c:'murarz',need:150,base:.3,cost:{glina:8,drewno:6},ok:'Próba udała się: znamy wypał cegły. Można postawić piec do cegły.',bad:'cegły popękały w ogniu'},piec:{n:'Piec zduński',c:'murarz',need:240,base:.22,cost:{cegla:6},ok:'Próba udała się: sklepienie pieca trzyma ciąg.',bad:'sklepienie się zawaliło'},kuznia:{n:'Kuźnia',c:'kowal',need:240,base:.25,cost:{ruda:6,wegiel:4},ok:'Próba udała się: z rudy wytopiono pierwsze żelazo. Można postawić kuźnię.',bad:'wytop zostawił tylko żużel'}};
 function finishTrial(p){const kn=S.know,t=kn.active,T=TRIAL[t];kn.active=null;kn[t+'_p']=0;
  const chance=clamp(T.base+.16*(p.sk[T.c]||0)+.12*kn[t+'_f']+(p.trait==='Uparty'?.08:0),.05,.95);
@@ -707,13 +707,13 @@ function newDay(){
  dailyPeople(cold,heated);
  if(law('odpoczynek'))S.people.forEach(p=>{if(p.hp<.5)p.hp=Math.min(1,p.hp+.02*K)});
  if(law('oszczedne'))S.people.forEach(p=>{p.hp=Math.max(.2,p.hp-.006*K)});if(law('dlugi'))S.people.forEach(p=>{if(isWorker(p)&&p.job!=='wyp')p.hp=Math.max(.25,p.hp-.004*K)});
- bldDaily();wearDaily();lawDaily();disDaily();reqTick();fireRoll();
+ bldDaily();wearDaily();lawDaily();slavDaily();disDaily();reqTick();fireRoll();
  {const lv=offLv('zielarz');if(lv)S.people.forEach(p=>{if(p.hp<.9)p.hp=Math.min(1,p.hp+.004*lv*K*(tech('u_ziel')?1.5:1))})}
  familyLife();
  techXp('nauka',K*S.people.filter(p=>isAdult(p)&&(p.trait==='Nauczyciel'||p.age>55)).reduce((a,p)=>a+(p.trait==='Nauczyciel'?.7:.25),0));techTick();
  const t=tierOf();if(t>S.tier){S.tier=t;log('Osada rośnie: teraz to '+TIERS[t][0].toLowerCase()+'.');toast('Nowy poziom: '+TIERS[t][0])}
  const housed=S.people.length?S.people.filter(p=>homeOf(p)).length/S.people.length:0;
- const tgt=.22+.25*Math.min(1,S.fedR)+.18*S.warm+.13*housed+.07*Math.min(1,(S.variety-1)/2)+.05*S.tier+.006*S.people.filter(p=>p.trait==='Pogodny').length-.2*(S.dis||0)+(law('wspolne')?.04:0)+(law('opowiesci')?.04:0)+(law('nauka')?.02:0)-(law('pomoc')?.04:0)+(law('u_wspolne')?.04:0)-(law('z_oszcz')?.03:0)+(hasB('cmentarz')?.02:0)+Math.min(.05,.01*anyExt('ganek'))+(hasB('laznia')&&S.bathOk?.03:0)+(hasB('domwsp')?.03:0);S.hope=clamp(S.hope+(tgt-S.hope)*.3,.05,1);
+ const tgt=.22+.25*Math.min(1,S.fedR)+.18*S.warm+.13*housed+.07*Math.min(1,(S.variety-1)/2)+.05*S.tier+.006*S.people.filter(p=>p.trait==='Pogodny').length-.2*(S.dis||0)+(law('wspolne')?.04:0)+(law('opowiesci')?.04:0)+(law('nauka')?.02:0)-(law('pomoc')?.04:0)+(law('u_wspolne')?.04:0)-(law('z_oszcz')?.03:0)+(hasB('cmentarz')?.02:0)+Math.min(.05,.01*anyExt('ganek'))+(hasB('laznia')&&S.bathOk?.03:0)+(hasB('domwsp')?.03:0)+slavHope();S.hope=clamp(S.hope+(tgt-S.hope)*.3,.05,1);
  // przyroda
  for(let k=0;k<N*N;k++)if(tread[k]>0)tread[k]*=.985;treadDirty=true;
  nodes.forEach((n,k)=>{if(n.type==='bush'&&n.amt<n.max&&sea!==2){n.amt=Math.min(n.max,n.amt+.35*K*(tech('u_sad')?1.5:1)*(.6+.8*Math.random()));S.nodeAmt[k]=n.amt}
@@ -759,7 +759,7 @@ function fogPass(force){
  else{if(!revDirty)return;revDirty=false;applyFog();const list=revNew.splice(0);decoSeason();
   for(const k of list){const ns=tileNodes.get(k);if(ns)ns.forEach(nodeSet);const ds=tileDeco.get(k);if(ds)ds.forEach(([t,i])=>setDeco(t,i))}
   nodeMeshes.concat(decoMeshes).forEach(m=>{m.instanceMatrix.needsUpdate=true;if(m.instanceColor)m.instanceColor.needsUpdate=true})}
- if(S)tribe.forEach(t=>{const seen=revAt(t.i,t.j);if(t.m)t.m.visible=seen;if(seen&&!S.found.includes(t.k)){S.found.push(t.k);techXp('nauka',25);log('Ślad plemienia: '+TRIBE[t.k][0].toLowerCase()+'. '+TRIBE[t.k][1]);toast('Odkryto: '+TRIBE[t.k][0])}})}
+ if(S)tribe.forEach(t=>{const seen=revAt(t.i,t.j);if(t.m)t.m.visible=seen;if(seen&&!S.found.includes(t.k)){S.found.push(t.k);techXp('nauka',25);log('Ślad dawnego ludu: '+TRIBE[t.k][0].toLowerCase()+'. '+TRIBE[t.k][1]);toast('Odkryto: '+TRIBE[t.k][0])}})}
 
 /* ================= budowanie ================= */
 let placing=null,ghost=null,ghostTile=null;
@@ -924,7 +924,7 @@ function renderPanel(){
   h+=`<div class="card"><h4>Pole</h4><p>Źródło: obserwacja dzikiego zboża albo księga „${BOOKS.siew}”.</p>${k.pole==='tak'?'<p class="ok">Poznane. Pola są w zakładce Budowa.</p>':`<p class="mut">Zbieracze zebrali ${Math.floor(S.zbozeTot)} z 25 ziarna potrzebnych do odkrycia.</p>`}</div>`;
   h+=`<div class="card"><h4>Uczniowie i dzieci</h4><p>Kto pracuje obok mistrza swojego fachu, uczy się dwa razy szybciej. Dzieci od szóstego roku podpatrują rodziców. Gdy mistrz umiera bez następcy, jego wiedza ginie.</p><p>${Object.keys(S.bonus).length?'Ulepszenia uczniów: '+Object.entries(S.bonus).map(([c,v])=>`${CN[c]} +${Math.round(v*100)}%`).join(', '):'Ulepszeń uczniów jeszcze nie ma.'}</p></div>`;
   h+=`<div class="card"><h4>Księgi</h4>${Object.keys(BOOKS).map(b=>`<p>„${BOOKS[b]}”: ${S.books[b]===2?'<span class="ok">przeczytana</span>':S.books[b]===1?'do przeczytania':'<span class="mut">na wraku</span>'}</p>`).join('')}</div>`;
-  h+=`<h3>Ślady plemienia (${S.found.length} z ${tribe.length})</h3>`;
+  h+=`<h3>Ślady dawnego ludu (${S.found.length} z ${tribe.length})</h3>`;
   h+=S.found.length?S.found.map(i=>`<div class="card"><h4>${TRIBE[i][0]}</h4><p>${TRIBE[i][1]}</p></div>`).join(''):'<p class="lead">Nic jeszcze nie znaleziono. Zwiadowcy odsłaniają wyspę.</p>'}
  else{h+='<div class="log">'+S.log.map(l=>`<p><small>doba ${l.d}</small>${l.t}</p>`).join('')+'</div>'}
  if(h!==el._h){el._h=h;el.innerHTML=h;el.scrollTop=st}}

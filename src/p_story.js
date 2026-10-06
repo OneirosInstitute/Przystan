@@ -10,7 +10,7 @@ function spawnGroup(n,txt){const fid=S.fid++;S.fams[fid]={id:fid,home:null};cons
 const LOGBOOK=[
  'Dzień czwarty po wypłynięciu. Za rufą wciąż widać łunę nad miastem. Nikt nie pyta, czy wrócimy.',
  'Kapitan każe trzymać kurs na zachód, choć mapa kończy się dwa dni drogi stąd. Mówi, że starzy wiedzą, dokąd płyniemy.',
- 'Stefan i Helena rozmawiali w nocy z kapitanem. Słyszałem nazwę wyspy, której nie ma na żadnej mapie.',
+ 'Lubomir i Wszebora rozmawiali w nocy z kapitanem. Słyszałem nazwę wyspy, której nie ma na żadnej mapie.',
  'Ostatni wpis, pisany drżącą ręką: „Jeśli ktoś to czyta, to dopłynęliśmy. Nie szukajcie drogi powrotnej.”'];
 const EVENTS=[
  {id:'klotnia',w:3,cd:30,cond:()=>adultsN().length>=8,t:'Kłótnia o racje',
@@ -69,9 +69,9 @@ const EVENTS=[
   ctx:()=>masterCtx(),
   opts:[{n:'Przydzielić mu ucznia na stałe',d:'wiedza przetrwa',f:c=>{const u=S.people.filter(p=>p!==c.m&&p.age>=12&&p.age<35).sort((a,b)=>b.sk[c.c]-a.sk[c.c])[0];if(!u)return'Nie ma nikogo młodego, kto mógłby się uczyć.';u.xp[c.c]+=300;while(u.sk[c.c]<5&&u.xp[c.c]>=LVL[u.sk[c.c]])u.sk[c.c]++;log(c.m.name+' przekazuje fach ('+CN[c.c]+') uczniowi: '+u.name+'.');return`${u.name} przez wiele dni pracuje ramię w ramię z mistrzem. Teraz ${CN[c.c]} ${u.sk[c.c]}.`}},
    {n:'Spisać jego wiedzę w Księdze osady',d:'trwałe ulepszenie fachu',f:c=>{S.bonus[c.c]=(S.bonus[c.c]||0)+.05;log('Księga osady: spisano wiedzę '+c.m.name+' o fachu '+CN[c.c]+'.');return'Wieczorami ktoś zapisuje to, co mówi mistrz. Wiedza zostanie, nawet gdy jego zabraknie.'}}]},
- {id:'swiatla',w:1,cd:999,once:1,cond:()=>S.day>14,t:'Światła nad bagnem',
-  text:()=>'W nocy nad mokradłem pojawiają się blade, chwiejne światełka. Kilka osób przysięga, że ktoś tam chodzi z latarnią.',
-  opts:[{n:'Iść i sprawdzić',d:'odwaga albo wstyd',f:()=>{S.hope=clamp(S.hope+.03,0,1);log('Światła nad bagnem okazały się gazem z gnijących liści. Stefan mówi, że widywał takie w dzieciństwie.');return'To gaz z gnijących liści. Płonie sam z siebie. Wracają, śmiejąc się z własnego strachu.'}},
+ {id:'swiatla',w:1,cd:999,once:1,cond:()=>S.day>14,t:'Błędne ogniki',
+  text:()=>'W nocy nad mokradłem pojawiają się blade, chwiejne światełka. Starsze kobiety mówią, że to błędne ogniki: dusze, które wodzą ludzi w topiel.',
+  opts:[{n:'Iść i sprawdzić',d:'odwaga albo wstyd',f:()=>{S.hope=clamp(S.hope+.03,0,1);log('Światła nad bagnem okazały się gazem z gnijących liści. Lubomir mówi, że widywał takie w dzieciństwie, nad bagnami za wsią.');return'To gaz z gnijących liści. Płonie sam z siebie. Wracają, śmiejąc się z własnego strachu.'}},
    {n:'Trzymać się z daleka',d:'',f:()=>{S.hope=clamp(S.hope-.02,0,1);return'Nikt nie zbliża się do bagna. Dzieci wymyślają o nim historie.'}}]}
 ];
 function termCtx(){const k=S.people.find(p=>p.age>=9&&p.age<15&&!S.seen['term'+p.id]);if(!k)return null;const m=S.people.filter(p=>isAdult(p)&&p.age>25).map(p=>{const c=Object.keys(CN).sort((a,b)=>p.sk[b]-p.sk[a])[0];return{m:p,c,l:p.sk[c]}}).filter(x=>x.l>=3).sort((a,b)=>b.l-a.l)[0];if(!m)return null;S.seen['term'+k.id]=1;return{k,m:m.m,c:m.c}}
@@ -102,7 +102,7 @@ const GOALS=[
  ['Oswój pierwszą kozę',()=>S.bld.some(b=>(b.animals||0)>0)],
  ['Zbierz pierwsze plony z pola',()=>!!S.seen.harvest],
  ['Wytop żelazo',()=>S.know.kuznia==='tak'],
- ['Odkryj trzy ślady plemienia',()=>S.found.length>=3],
+ ['Odkryj trzy ślady dawnego ludu',()=>S.found.length>=3],
  ['Osada: 4 domy i 20 osób',()=>S.tier>=1],
  ['Wieś: 8 domów i 32 osoby',()=>S.tier>=2],
  ['Pierwsze dziecko urodzone na wyspie dorasta do pracy',()=>S.people.some(p=>p.born&&p.age>=12)]];
@@ -125,7 +125,7 @@ function sfx(k){if(!AUD||muted)return;const t=AUD.currentTime;
  else if(k==='crack'){const o=AUD.createBufferSource();const b=AUD.createBuffer(1,800,AUD.sampleRate),d=b.getChannelData(0);for(let i=0;i<800;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/800,3);o.buffer=b;const g=AUD.createGain();g.gain.value=.05;o.connect(g);g.connect(AUD.destination);o.start(t)}
  else if(k==='cricket'){const o=AUD.createOscillator(),g=AUD.createGain();o.type='square';o.frequency.value=4300;for(let i=0;i<3;i++){g.gain.setValueAtTime(.006,t+i*.07);g.gain.setValueAtTime(0,t+i*.07+.035)}o.connect(g);g.connect(AUD.destination);o.start(t);o.stop(t+.25)}}
 let sndT=0;
-function soundTick(rdt,Lt){if(!AUD||muted||!amb)return;const k=S.weather.k;const near=1/Math.max(.6,zoom);
+function soundTick(rdt,Lt){if(!AUD||muted||!amb)return;slavSound(rdt,Lt);const k=S.weather.k;const near=1/Math.max(.6,zoom);
  const sea=(.05+.04*Math.sin(clock*.35)+.02*Math.sin(clock*.9))*(k==='storm'?2.2:1);amb.sea.gn.gain.setTargetAtTime(sea*(.6+.4*near),AUD.currentTime,.3);
  const wind=k==='storm'?.12:k==='rain'?.05:k==='snow'?.04:.015+.01*Math.sin(clock*.2);amb.wind.gn.gain.setTargetAtTime(wind,AUD.currentTime,.5);amb.wind.fl.frequency.setTargetAtTime(700+500*Math.sin(clock*.3),AUD.currentTime,.5);
  sndT-=rdt;if(sndT<=0){sndT=.4+Math.random()*1.4;if(Lt.day>.5&&k!=='storm'&&k!=='rain'&&Math.random()<.45)sfx('bird');else if(Lt.night>.6&&seasonIdx()!==2&&Math.random()<.5)sfx('cricket');else if(Lt.night>.4&&Math.random()<.4)sfx('crack')}}

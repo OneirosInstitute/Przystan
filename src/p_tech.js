@@ -45,7 +45,7 @@ const TECH=[
  {id:'n_mapa',d:'nauka',r:1,c:1,n:'Mapa wyspy',xp:100,req:['n_kron'],desc:'Rysunek na korze brzozy, poprawiany po każdej wyprawie.',eff:'Wyprawy są krótsze o 30% i bezpieczniejsze.'},
  {id:'n_szk',d:'nauka',r:1,c:2,n:'Nauka dzieci',xp:120,req:['n_kron'],desc:'Wieczorami przy ogniu starsi uczą młodszych.',eff:'Dzieci uczą się fachu dwa razy szybciej.'},
  {id:'n_opat',d:'nauka',r:2,c:0,n:'Opatrywanie ran',xp:150,req:['n_kal','u_ziel'],desc:'Czysta woda, płótno i zioła z ogrodu zielarki.',eff:'Ranni i chorzy wracają do zdrowia dwa razy szybciej.'},
- {id:'n_znaki',d:'nauka',r:2,c:1,n:'Znaki plemienia',xp:140,req:['n_mapa'],gate:()=>S.found.length>=3,gt:()=>`Trzeba najpierw znaleźć trzy ślady plemienia (${S.found.length}/3).`,desc:'Te same znaki powtarzają się na skałach i słupach. Wskazują miejsca.',eff:'Na mapie pojawiają się miejsca pozostałych śladów.'},
+ {id:'n_znaki',d:'nauka',r:2,c:1,n:'Znaki dawnego ludu',xp:140,req:['n_mapa'],gate:()=>S.found.length>=3,gt:()=>`Trzeba najpierw znaleźć trzy ślady dawnego ludu (${S.found.length}/3).`,desc:'Te same znaki powtarzają się na skałach i słupach. Wskazują miejsca.',eff:'Na mapie pojawiają się miejsca pozostałych śladów.'},
  {id:'n_gwiazd',d:'nauka',r:2,c:2,n:'Nawigacja po gwiazdach',xp:200,req:['n_mapa'],desc:'Łodzie wypływają dalej i wracają przed nocą.',eff:'Rybacy łowią o 20% więcej, wyprawy wzdłuż brzegu są bezpieczniejsze.'},
  {id:'n_pamiec',d:'nauka',r:3,c:1,n:'Księga osady',xp:220,req:['n_szk'],desc:'Wszystko, co umieją mistrzowie, zapisane dla następnych.',eff:'Gdy mistrz umiera, najlepszy uczeń przejmuje jego wiedzę.'}];
 const TECH_BY={};TECH.forEach(t=>TECH_BY[t.id]=t);
@@ -56,7 +56,7 @@ function techXp(d,v){if(!S||!d||!S.tech)return;if(S.laws&&S.laws.wymiana)v*=1.15
  const add=v+(S.bank[d]||0);S.bank[d]=0;S.tp[t.id]=(S.tp[t.id]||0)+add;if(S.tp[t.id]>=t.xp)techDone(t)}
 function techDone(t,quiet){if(S.tech[t.id])return;S.tech[t.id]=1;if(S.focus[t.d]===t.id)S.focus[t.d]=null;
  if(!quiet){log('Postęp ('+DOMS.find(d=>d[0]===t.d)[1].toLowerCase()+'): '+t.n+'. '+t.eff);toast('Postęp: '+t.n);sfx('bell')}
- if(t.id==='n_znaki'){tribe.forEach(s=>reveal(s.i,s.j,4));log('Znaki prowadzą do miejsc, gdzie plemię zostawiło swoje ślady. Zaznaczono je na mapie.')}
+ if(t.id==='n_znaki'){tribe.forEach(s=>reveal(s.i,s.j,4));log('Znaki prowadzą do miejsc, gdzie dawny lud zostawił swoje ślady. Zaznaczono je na mapie.')}
  if(tab==='wiedza'||tab==='budowa')renderPanel()}
 function techTick(){if(!S||!S.tech)return;TECH.forEach(t=>{if(t.sync&&!S.tech[t.id]&&t.sync())techDone(t,t.id==='r_ciesla')})}
 function techState(t){if(S.tech[t.id])return'done';if(t.sync)return'sync';if(t.req.every(r=>S.tech[r]))return(!t.gate||t.gate())?'avail':'gate';return'lock'}

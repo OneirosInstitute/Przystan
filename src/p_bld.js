@@ -66,6 +66,11 @@ function bldPanelHTML(b){const d=BD[b.kind];let h='';if(!bDone(b))return h;
 let VR=Math.random;
 function skep(g,x,z){g.add(tbox(.36,.3,.3,mPlankD,x,.15,z));const s=mesh(new THREE.SphereGeometry(.2,9,6,0,6.283,0,1.7),mThatch,x,.3,z);s.scale.y=1.25;g.add(s);g.add(mesh(new THREE.BoxGeometry(.06,.05,.02),matDark,x,.36,z+.2))}
 function newModel(kind,g){
+ if(kind==='gaj'){const tr=new THREE.Mesh(oakTrunkG,new THREE.MeshStandardMaterial({color:0x4e3c2c,roughness:1,flatShading:true,vertexColors:true}));tr.scale.set(1.9,1.7,1.9);
+  const cr=new THREE.Mesh(oakG,new THREE.MeshStandardMaterial({color:0x5f7d45,roughness:.95,flatShading:true,vertexColors:true}));cr.scale.setScalar(1.75);cr.rotation.y=VR()*6;tr.castShadow=cr.castShadow=true;cr.receiveShadow=true;g.add(tr,cr);
+  for(let q=0;q<11;q++){const a=q/11*6.28;g.add(mesh(new THREE.DodecahedronGeometry(.13+(q%3)*.03,0),matStone,Math.cos(a)*1.2,.06,Math.sin(a)*1.2,q,q))}
+  for(const[x,z,c,y]of[[.62,.25,0xa83a2a,2.0],[-.55,-.2,0xe8e0cc,2.1],[.2,-.62,0xa83a2a,1.95],[-.25,.6,0xe8e0cc,2.05],[.5,-.4,0xe8e0cc,2.15]]){const rb=new THREE.Mesh(new THREE.PlaneGeometry(.07,.5),M(c,{side:THREE.DoubleSide}));rb.position.set(x,y-.25,z);rb.rotation.y=x*3+z;g.add(rb)}
+  g.add(mesh(new THREE.BoxGeometry(.55,.3,.38),matStone,0,.15,.98));return 1}
  if(kind==='laznia'){logHouse(g,1.6,1.3,.85,{chim:-.45,win:false,rh:.55,lamp:false});barrel(g,1.05,.55,.9);woodpile(g,1.1,-.3,8,Math.PI/2);g.add(cyl(.18,.5,mPlank,-1.05,.25,.5,0,0,0,9));return 1}
  if(kind==='wieza'){for(const sx of[-1,1])for(const sz of[-1,1]){g.add(cyl(.07,3.4,matLog2,sx*.42,1.7,sz*.42,sz*.08,0,-sx*.08,6))}
   for(const y of[.9,1.9])g.add(tbox(.95,.05,.05,mPlank,0,y,.45),tbox(.95,.05,.05,mPlank,0,y,-.45),tbox(.05,.05,.95,mPlank,.45,y,0),tbox(.05,.05,.95,mPlank,-.45,y,0));
@@ -124,7 +129,7 @@ function addBldVisuals(g,b){const d=BD[b.kind];const W=d.w*.5,H=d.h*.5;if(lvOf(b
  if(b.proj){const sc=new THREE.Group();const w=.9,h=.9,Hh=1.2;for(const sx of[-1,1])for(const sz of[-1,1])sc.add(cyl(.035,Hh,matDark,sx*w/2,Hh/2,sz*h/2,0,0,0,5));sc.add(tbox(w,.05,.06,mPlank,0,.7,h/2),tbox(w,.05,.06,mPlank,0,.7,-h/2));sc.position.set(W+.55,0,H+.45);g.add(sc)}}
 
 /* ---- zużycie i remonty ---- */
-const WEAR={szalas:2.2,cmentarz:.3,studnia:.5,piec:.6,cegielnia:.8,kuznia:.8,dom:.7,laznia:1.2,pomost:1.4,wieza:1.1,pole:.4,zagroda:1.1};
+const WEAR={gaj:.15,szalas:2.2,cmentarz:.3,studnia:.5,piec:.6,cegielnia:.8,kuznia:.8,dom:.7,laznia:1.2,pomost:1.4,wieza:1.1,pole:.4,zagroda:1.1};
 const condOf=b=>b.cond===undefined?1:b.cond;
 function locWear(b){if(b._lf)return b._lf;const c=bCenter(b);const ci=Math.round(c.x+N/2),cj=Math.round(c.z+N/2);let sea=0;
  for(let dj=-3;dj<=3;dj++)for(let di=-3;di<=3;di++){const i=ci+di,j=cj+dj;if(i>=0&&j>=0&&i<N&&j<N&&!land[j*N+i])sea=1}

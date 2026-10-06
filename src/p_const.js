@@ -92,26 +92,27 @@ const BD={
  studnia:{cat:'wsp',n:'Studnia',w:1,h:1,cost:{kamien:12,drewno:4},work:6,d:'Czysta woda dla 14 osób. Bez niej latem pije się wodę ze strumienia i ludzie chorują. Przy pożarze to stąd noszą wiadra.'},
  cmentarz:{cat:'wsp',n:'Miejsce pamięci',w:2,h:2,cost:{kamien:6,drewno:6},work:5,d:'Groby otoczone płotem z wikliny. Daje osadzie spokój i pozwala uchwalić godny pochówek.'},
  laznia:{cat:'wsp',n:'Łaźnia',w:2,h:2,cost:{drewno:20,kamien:12},work:8,d:'Parowa łaźnia z kamiennym piecem. Ludzie zdrowieją, rośnie nadzieja. Pali opał.'},
- wieza:{cat:'wsp',n:'Wieża obserwacyjna',w:1,h:1,cost:{drewno:16,deski:6},work:7,d:'Z góry widać daleko: odsłania okolicę, wcześniej widać dym pożaru i wilki przy zagrodach.'},
- domwsp:{cat:'wsp',n:'Dom wspólny',w:4,h:2,cost:{drewno:40,deski:16,kamien:10,gwozdzie:20},work:20,d:'Długa hala na wiece, święta i zimowe wieczory. Mniej sporów, więcej nadziei, wiec zmienia obyczaje łagodniej.'},
+ wieza:{cat:'wsp',n:'Strażnica',w:1,h:1,cost:{drewno:16,deski:6},work:7,d:'Z góry widać daleko: odsłania okolicę, wcześniej widać dym pożaru i wilki przy zagrodach.'},
+ domwsp:{cat:'wsp',n:'Chata wiecowa',w:4,h:2,cost:{drewno:40,deski:16,kamien:10,gwozdzie:20},work:20,d:'Długa chata na wiece, obrzędy i zimowe wieczory. Mniej sporów, więcej nadziei, wiec zmienia obyczaje łagodniej.'},
  izbanauki:{cat:'wsp',n:'Izba nauki',w:2,h:2,cost:{drewno:16,deski:10,gwozdzie:8},work:10,need:'n_szk',d:'Tu starsi uczą dzieci. Dzieci podpatrują fach szybciej, osada szybciej się rozwija.'},
- izbachorych:{cat:'wsp',n:'Izba chorych',w:2,h:2,cost:{drewno:14,deski:8,plotno:4},work:9,need:'n_opat',d:'Posłania, czyste płótno i zioła. Ciężko chorzy i ranni zdrowieją dużo szybciej.'},
- pasieka:{cat:'jedzenie',n:'Pasieka',w:2,h:2,cost:{drewno:10,deski:4},work:5,wk:1,c:'zbieracz',need:'u_bart',prod:{in:{},out:{miod:2},t:30,when:()=>S.res.miod<60&&seasonIdx()!==2},d:'Ule z kłód i słomy przy osadzie. Miód bez szukania barci po lesie, oprócz zimy.'},
+ izbachorych:{cat:'wsp',n:'Chata zielarki',w:2,h:2,cost:{drewno:14,deski:8,plotno:4},work:9,need:'n_opat',d:'Posłania, czyste płótno, zioła pod strzechą. Ciężko chorzy i ranni zdrowieją dużo szybciej.'},
+ pasieka:{cat:'jedzenie',n:'Barć',w:2,h:2,cost:{drewno:10,deski:4},work:5,wk:1,c:'zbieracz',need:'u_bart',prod:{in:{},out:{miod:2},t:30,when:()=>S.res.miod<60&&seasonIdx()!==2},d:'Wydrążone kłody zawieszone wysoko na drzewach przy osadzie. Miód bez szukania dzikich rojów po lesie, oprócz zimy.'},
  ogrodziol:{cat:'jedzenie',n:'Ogród ziołowy',w:2,h:2,cost:{drewno:8},work:4,wk:1,c:'zbieracz',need:'u_ziel',prod:{in:{},out:{ziola:2},t:25,when:()=>S.res.ziola<40&&seasonIdx()!==2},d:'Grządki krwawnika, dziurawca i mięty. Zioła rosną pod ręką, oprócz zimy.'},
+ gaj:{cat:'wsp',n:'Święty gaj',w:2,h:2,cost:{kamien:8,plotno:1},work:4,d:'Stary dąb za osadą, krąg kamieni i wstążki na gałęziach. Nie ma w nim mocy, ale ludzie w niego wierzą: obrzędy dają więcej, wiec zmienia obyczaje łagodniej, mniej sporów.'},
  piec:{cat:'dom',n:'Piec zduński',w:2,h:2,cost:{cegla:24,glina:12},work:10,need:'piec',d:'Lepszy piec: domy palą mniej opału, a nadmiar żywności się suszy.'}
 };
 const BKEYS=Object.keys(BD);
 const CATS=[['dom','Domy'],['wsp','Wspólnota'],['jedzenie','Żywność'],['surowce','Surowce'],['rzemioslo','Rzemiosło'],['magazyn','Magazyny']];
 const TIERS=[['Obóz',0,0],['Osada',4,20],['Wieś',8,32],['Przystań',14,50]];
 const TRIBE=[
- ['Kamienny krąg','Dziewięć głazów ustawionych w krąg. Mech pokrył je do połowy. Ktoś musiał je tu przetaczać przez wiele dni.'],
- ['Kopiec','Porośnięty kopiec z płaskim kamieniem na szczycie. Grób albo znak granicy.'],
- ['Malowidła na skale','Ochrowe dłonie i postacie z długimi kijami. Jedna z postaci leży, nad nią krąg kropek.'],
- ['Stare palenisko','Krąg osmalonych kamieni i warstwa muszli. Obozowano tu przez wiele pokoleń.'],
- ['Rzeźbiony słup','Spróchniały słup z wyrytymi twarzami. Wszystkie patrzą w stronę morza.'],
- ['Ułożone kości','Kości zwierząt ułożone starannie w rzędy. Żadnych ludzkich.'],
- ['Porzucone narzędzia','Odłupki krzemienia i kamienne siekierki. Leżą tak, jakby ktoś odszedł w pośpiechu.'],
- ['Opuszczone obozowisko','Koliste zagłębienia po szałasach. Nic nie zostało oprócz kształtu w ziemi.']];
+ ['Kupalny krąg','Dziewięć głazów w kręgu, otwartym na wschód słońca w najdłuższy dzień. Starsi mówią, że to dobre miejsce na kupalny ogień.'],
+ ['Mogiła dziadów','Porośnięty kopiec z płaskim kamieniem na szczycie. Ktoś tu leży od wieków. Odtąd mówią na to miejsce: mogiła dziadów.'],
+ ['Malowana skała','Ochrowe dłonie, zwierzęta i łodzie na skale. Nikt nie wie, co znaczą. Ktoś tu żył przed nami.'],
+ ['Dziadowe ognisko','Krąg osmalonych kamieni i gruba warstwa muszli. Palono tu ogień przez wiele pokoleń.'],
+ ['Stary bałwan','Spróchniały słup z wyrytymi twarzami. Wszystkie patrzą w morze. Starzy nazywają go bałwanem i nie każą go ruszać.'],
+ ['Kościsko','Kości zwierząt ułożone w krąg. Może po uczcie, może po obrzędzie. Żadnych ludzkich.'],
+ ['Piorunowe kamienie','Odłupki krzemienia i kamienne siekierki. Starzy mówią na nie piorunowe kamienie: tam, gdzie uderzy piorun, zostaje taki kamień.'],
+ ['Puste siedlisko','Koliste zagłębienia po szałasach w głębi wyspy. Nic więcej. Nie wiadomo, kiedy ani dokąd odeszli.']];
 const TRAITS={Wytrwały:['Wytrwała','pracuje o 10% wydajniej'],Silny:['Silna','szybciej przy ciężkiej pracy'],Dociekliwy:['Dociekliwa','uczy się o 25% szybciej'],Ostrożny:['Ostrożna','rzadziej odnosi rany'],Uparty:['Uparta','próby udają się częściej'],Nauczyciel:['Nauczycielka','uczniowie przy nim uczą się szybciej'],Pogodny:['Pogodna','podnosi nadzieję osady'],Cierpliwy:['Cierpliwa','lepiej znosi głód i zimno']};
 const TKEYS=Object.keys(TRAITS);
 const WEATHER={frost:['siarczysty mróz',.8,-12],clear:['pogodnie',1,0],rain:['deszcz',.75,-2],fog:['mgła',.88,-1],storm:['sztorm',.5,-5],drought:['upał',.92,4],snow:['śnieg',.7,-5]};
@@ -119,5 +120,5 @@ const WROLL=[[['clear',.55],['rain',.2],['fog',.15],['drought',.1]],[['clear',.3
 const BOOKS={ciesla:'Podręcznik ciesielki',zdun:'Fragmenty podręcznika zduńskiego',dziennik:'Dziennik okrętowy',kowal:'Mistrzowska księga kowalska',siew:'O siewie i gospodarstwie'};
 const WRECK0=[{n:'Pokład',open:1,need:0,items:{deski:50,plotno:6,wlokna:12,narz:2}},{n:'Ładownia rufowa',open:0,need:40,items:{narz:8,gwozdzie:160,ziarno:30,odziez:8}},{n:'Kajuta kapitana',open:0,need:30,items:{ks_kowal:1,ks_siew:1,narz:2}},{n:'Zalana ładownia dziobowa',open:0,need:80,items:{deski:60,gwozdzie:80,skory:6,suchary:40}}];
 const ANIMAL={sarna:['sarny',6,7,1],koza:['kozy',7,5,1],dzik:['dziki',5,10,2],wilk:['wilki',4,0,0],zajac:['zające',6,2,1],lis:['lisy',3,1,2],foka:['foki',5,12,2],niedzwiedz:['niedźwiedź',2,30,4]};
-const NAMES={k:['Agata','Bogna','Celina','Dorota','Elżbieta','Grażyna','Hanna','Irena','Jadwiga','Krystyna','Lena','Magda','Natalia','Olga','Renata','Teresa','Wanda','Zosia','Iga','Ula'],m:['Adam','Bartek','Cezary','Damian','Emil','Feliks','Gustaw','Henryk','Igor','Jacek','Karol','Leon','Michał','Norbert','Olek','Paweł','Roman','Szymon','Tomek','Witek']};
+const NAMES={k:['Dobrawa','Radomira','Mila','Wiesława','Bogumiła','Ludmiła','Jarosława','Zdzisława','Sławomira','Bożena','Dobromiła','Wszebora','Świętosława','Jagna','Mira','Lubomira','Wanda','Bogna','Danuta','Mścisława'],m:['Bożydar','Dobromir','Radosław','Wojsław','Mirosław','Lubomir','Sławomir','Bogdan','Zbysław','Przemysł','Racibor','Ziemowit','Siemowit','Mieszko','Bolko','Mirek','Wit','Ostoja','Dobrosław','Gniewko']};
 

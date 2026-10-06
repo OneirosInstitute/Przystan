@@ -11,10 +11,10 @@ const REGIONS=[];
  for(let j=0;j<N;j++)for(let i=0;i<N;i++){const k=j*N+i;if(!land[k])continue;let best=0,bd=1e9;
   for(let q=0;q<seeds.length;q++){const w=(n2(i*.09,j*.09)-.5)*14;const d=Math.hypot(seeds[q][0]-i,seeds[q][1]-j)+w*(q%2?1:-1);if(d<bd){bd=d;best=q}}
   REGION[k]=best;const s=st[best];s.n++;s.h+=tileH(i,j);s.f+=forestF(i+.5,j+.5)>.5?1:0;s.b+=beach[k];s.x+=i;s.z+=j}
- const POOL={high:['Kamienne Wzgórza','Siwy Grzbiet','Wronie Turnie','Grań Wiatrów','Skalne Progi'],
-  forest:['Bór Ciszy','Czarny Las','Mszysty Gąszcz','Puszcza Szeptów','Jodłowy Jar','Stary Bór','Wilcze Ostępy'],
-  coast:['Zatoka Mgieł','Słony Cypel','Plaża Kości','Foczy Brzeg','Kamienista Zatoka','Cypel Mew'],
-  meadow:['Łąka Szeptów','Wrzosowisko','Dolina Trzmieli','Jasna Polana','Paprociowe Pole','Zielony Stok']};
+ const POOL={high:['Łysa Góra','Siwy Grzbiet','Kruczy Kamień','Wietrzna Grań','Kamienne Progi'],
+  forest:['Czarny Bór','Głuchy Las','Wilcze Ostępy','Mszary','Stary Bór','Jodłowy Jar','Leszy Kąt'],
+  coast:['Zatoka Mgieł','Słony Cypel','Foczy Brzeg','Siwa Plaża','Kamienista Zatoka','Mewi Cypel'],
+  meadow:['Wrzosowisko','Siwa Łąka','Wilcze Błota','Jasna Polana','Paprociowe Pole','Dzwonkowy Stok']};
  const used={high:0,forest:0,coast:0,meadow:0};
  st.forEach((s,q)=>{if(s.n<40)return;const h=s.h/s.n,f=s.f/s.n,b=s.b/s.n;
   const type=h>6.2?'high':b>.12?'coast':f>.62?'forest':'meadow';
