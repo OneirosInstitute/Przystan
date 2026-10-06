@@ -28,7 +28,7 @@ function removeBuilding(b,why){S.bld=S.bld.filter(x=>x!==b);const d=BD[b.kind];
 /* ---- pożary ---- */
 const FLAM={szalas:1.4,chata:1,dom:.6,zbieracz:1,mysliwy:1,drwal:1.2,lesnik:1,kamien:.5,glinianka:.6,drewutnia:1.6,pracownia:1.4,mielerz:3,kuznia:2,warsztat:1.2,szwalnia:1.2,sklad:1.3,spizarnia:1,pomost:.6,ruda:.6,zagroda:.5,cmentarz:0,studnia:0,piec:.3,cegielnia:.4,pole:0};
 function fireRoll(){if(S.day<6||S.bld.some(b=>b.fire))return;const s=seasonIdx();const sea=(law('straz')?.7:1)*[1.8,1,.5,.8][s]*(S.weather.k==='drought'?3:S.weather.k==='rain'||S.weather.k==='snow'?.25:1)*(law('straz')?.45:1);
- for(const b of S.bld){if(!bDone(b))continue;const f=FLAM[b.kind]||0;if(f&&Math.random()<.0022*K*f*sea){startFire(b);break}}}
+ for(const b of S.bld){if(!bDone(b))continue;const f=(FLAM[b.kind]||0)*(condOf(b)<.5?1.5:1);if(f&&Math.random()<.0022*K*f*sea){startFire(b);break}}}
 function startFire(b){b.fire={s:1,hp:1};S.seen.fire1=1;log('Pożar! Pali się '+BD[b.kind].n.toLowerCase()+'. Ludzie biegną z wiadrami.'+(wellCount()?'':' Bez studni wodę trzeba nosić z daleka.'));toast('Pożar: '+BD[b.kind].n);sfx('bell');
  const c=bCenter(b);const ppl=S.people.filter(p=>p.age>=13&&p.job!=='wyp'&&p.state!=='away').sort((x,y)=>Math.hypot(x.x-c.x,x.z-c.z)-Math.hypot(y.x-c.x,y.z-c.z)).slice(0,law('straz')?6:4);
  ppl.forEach(p=>{release(p);if(p.workKind==='build'&&p.tgt&&p.tgt.workers)p.tgt.workers--;p.path=null;p.state='idle';p.wait=0;p.fireB=b.id});b.fire.crew=ppl.map(p=>p.id);fireFx(b)}

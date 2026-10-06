@@ -27,19 +27,20 @@ const anyExt=id=>S.bld.filter(b=>bDone(b)&&hasExt(b,id)).length;
 const extSlots=b=>b.kind==='szalas'?0:b.kind==='chata'?2:b.kind==='dom'?3:lvOf(b);
 const wkOf=b=>BD[b.kind].wk?BD[b.kind].wk+lvOf(b)-1:0;
 const rOf=b=>(BD[b.kind].r||0)+2*(lvOf(b)-1)+(hasExt(b,'lodz')?6:0);
-function bMul(b){if(!b)return 1;let m=1+.15*(lvOf(b)-1);(b.ext||[]).forEach(id=>{const e=(EXT[b.kind]||[]).find(x=>x.id===id);if(e&&e.sp)m*=e.sp});return m}
+function bMul(b){if(!b)return 1;let m=(1+.15*(lvOf(b)-1))*condMul(b);(b.ext||[]).forEach(id=>{const e=(EXT[b.kind]||[]).find(x=>x.id===id);if(e&&e.sp)m*=e.sp});return m}
 const penCap=b=>hasExt(b,'wybieg')?16:10;
 function lvCost(b,to){const base=BD[b.kind].cost,c={};Object.entries(base).forEach(([k,v])=>c[k]=Math.ceil(v*(to===2?.6:.8)));
  const add=to===2?{deski:6,gwozdzie:10}:{deski:10,kamien:12,gwozdzie:16};Object.entries(add).forEach(([k,v])=>c[k]=(c[k]||0)+v);return c}
 const lvWork=(b,to)=>Math.ceil(BD[b.kind].work*(to===2?.6:.8));
-function startProj(b,t,id){if(!bDone(b)){toast('Najpierw trzeba skończyć budowę.');return}if(b.proj){toast('Tu już trwają prace.');return}
- let cost,work,n;if(t==='lv'){const to=lvOf(b)+1;if(to>3)return;if(to===3&&!tech('r_zrab')){toast('Trzeci poziom wymaga wiedzy: Zrąb na jaskółczy ogon (Wiedza → Rzemiosło).');return}cost=lvCost(b,to);work=lvWork(b,to);n='poziom '+to}
+function startProj(b,t,id,quiet){if(!b)return;if(!bDone(b)){toast('Najpierw trzeba skończyć budowę.');return}if(b.proj){if(!quiet)toast('Tu już trwają prace.');return}
+ let cost,work,n;if(t==='rep'){cost=repCost(b);work=repWork(b);n='remont'}else if(t==='lv'){const to=lvOf(b)+1;if(to>3)return;if(to===3&&!tech('r_zrab')){toast('Trzeci poziom wymaga wiedzy: Zrąb na jaskółczy ogon (Wiedza → Rzemiosło).');return}cost=lvCost(b,to);work=lvWork(b,to);n='poziom '+to}
  else{const e=(EXT[b.kind]||[]).find(x=>x.id===id);if(!e)return;if((b.ext||[]).length>=extSlots(b)){toast('Brak miejsca na kolejną rozbudowę. Najpierw podnieś poziom budynku.');return}cost=e.cost;work=e.work;n=e.n.toLowerCase()}
  if(!canAfford(cost)){toast('Brakuje: '+Object.entries(cost).filter(([k,v])=>(S.res[k]||0)<v).map(([k,v])=>RN[k].toLowerCase()+' '+Math.ceil(v-(S.res[k]||0))).join(', '));return}
  Object.entries(cost).forEach(([k,v])=>S.res[k]-=v);b.proj={t,id,prog:0,work};log('Rozpoczęto prace: '+BD[b.kind].n.toLowerCase()+', '+n+'.');rebuildMesh(b);
  if(freeCount()===0)toast('Nikt nie buduje: wszyscy mają pracę. Zwolnij kogoś w zakładce Praca.');renderSel();renderPanel()}
 function finishProj(b){const pr=b.proj;b.proj=null;b.workers=0;
- if(pr.t==='lv'){b.lv=lvOf(b)+1;log(BD[b.kind].n+' rozbudowane do poziomu '+b.lv+'. '+(BD[b.kind].wk?'Mieści więcej ludzi i pracuje sprawniej.':'Mieści więcej.'));toast(BD[b.kind].n+': poziom '+b.lv)}
+ if(pr.t==='rep'){b.cond=1;log('Remont skończony: '+BD[b.kind].n.toLowerCase()+' znów jak nowe.')}
+ else if(pr.t==='lv'){b.lv=lvOf(b)+1;b.cond=1;log(BD[b.kind].n+' rozbudowane do poziomu '+b.lv+'. '+(BD[b.kind].wk?'Mieści więcej ludzi i pracuje sprawniej.':'Mieści więcej.'));toast(BD[b.kind].n+': poziom '+b.lv)}
  else{b.ext=(b.ext||[]).concat(pr.id);const e=EXT[b.kind].find(x=>x.id===pr.id);log('Gotowe: '+e.n.toLowerCase()+' przy budynku: '+BD[b.kind].n.toLowerCase()+'. '+e.d);toast('Gotowe: '+e.n)}
  rebuildMesh(b);assign();renderSel();renderPanel()}
 function rebuildMesh(b){const m=bMesh[b.id];if(m){bGroup.remove(m);if(m.userData.scaf)bGroup.remove(m.userData.scaf)}addBuildingMesh(b)}
@@ -52,7 +53,9 @@ function bldDaily(){const sea=seasonIdx();
  if(hasB('izbachorych'))S.people.forEach(p=>{if(p.hp<.6)p.hp=Math.min(1,p.hp+.025*K)});
  if(hasB('izbanauki'))techXp('nauka',1.5*K)}
 function bldPanelHTML(b){const d=BD[b.kind];let h='';if(!bDone(b))return h;
- if(b.proj){const pr=b.proj;const e=pr.t==='ext'?EXT[b.kind].find(x=>x.id===pr.id):null;h+=`<p>Trwają prace: ${pr.t==='lv'?'poziom '+(lvOf(b)+1):e.n.toLowerCase()} · ${Math.round(100*pr.prog/pr.work)}% · przy pracy: ${b.workers||0}</p><div class="pbar"><div style="width:${Math.round(100*pr.prog/pr.work)}%"></div></div>`;return h}
+ {const c=condOf(b),col=c<.15?'var(--bad)':c<.5?'var(--ember)':'var(--moss)';h+=`<p class="mut">Stan: <b style="color:${col}">${Math.round(c*100)}%</b>${c<.15?' · w ruinie':c<.5?' · wymaga remontu':' · remont za ok. '+yearsLeft(b).toFixed(1)+' roku'} · miejsce: ${(locWear(b),b._lt)}</p><div class="pbar"><div style="width:${Math.round(c*100)}%;background:${col}"></div></div>`;
+  if(c<.8&&!b.proj)h+=`<button data-rep="${b.id}" style="margin:2px 6px 6px 0">Remontuj</button><span class="cost">${costHTML(repCost(b))}</span>`}
+ if(b.proj){const pr=b.proj;const e=pr.t==='ext'?EXT[b.kind].find(x=>x.id===pr.id):null;h+=`<p>Trwają prace: ${pr.t==='rep'?'remont':pr.t==='lv'?'poziom '+(lvOf(b)+1):e.n.toLowerCase()} · ${Math.round(100*pr.prog/pr.work)}% · przy pracy: ${b.workers||0}</p><div class="pbar"><div style="width:${Math.round(100*pr.prog/pr.work)}%"></div></div>`;return h}
  const canLv=(d.wk||d.store)&&lvOf(b)<3;const exts=EXT[b.kind]||[];
  if(d.wk||d.store||exts.length)h+=`<p class="mut">Poziom ${lvOf(b)}${d.wk?` · ${wkOf(b)} prac.`:''}${d.r?` · zasięg ${rOf(b)}`:''}${exts.length?` · rozbudowy ${(b.ext||[]).length}/${extSlots(b)}`:''}</p>`;
  if(canLv){const to=lvOf(b)+1;h+=`<button class="pri" data-lv="${b.id}" style="margin:2px 6px 4px 0">Ulepsz do poziomu ${to}</button><span class="cost">${costHTML(lvCost(b,to))}${to===3&&!tech('r_zrab')?' · <span class="no">wymaga zrębu na jaskółczy ogon</span>':''}</span>`}
@@ -117,4 +120,24 @@ const EXTV={
  zuraw:(g,W,H)=>{g.add(cyl(.05,1.6,matLog2,.5,.8,.3,0,0,0,6));const arm=cyl(.035,2.4,matLog,.5,1.55,.3,0,0,1.2,5);g.add(arm)}};
 function addBldVisuals(g,b){const d=BD[b.kind];const W=d.w*.5,H=d.h*.5;if(lvOf(b)>1)levelDeco(g,b.kind,lvOf(b));
  (b.ext||[]).forEach(id=>{const f=EXTV[id];if(f)f(g,W,H)});
+ if(condOf(b)<.5){const r0=rng(b.id*31);for(let k=0;k<(condOf(b)<.15?6:3);k++){const pl=tbox(.5+r0()*.4,.04,.12,mPlankG,(r0()-.5)*d.w*.9,.05,H+.2+r0()*.4,r0()*3,2);pl.rotation.z=(r0()-.5)*.5;g.add(pl)}if(condOf(b)<.15)g.traverse(o=>{if(o.isMesh&&o.position.y>1.2)o.rotation.z+=(r0()-.5)*.08})}
  if(b.proj){const sc=new THREE.Group();const w=.9,h=.9,Hh=1.2;for(const sx of[-1,1])for(const sz of[-1,1])sc.add(cyl(.035,Hh,matDark,sx*w/2,Hh/2,sz*h/2,0,0,0,5));sc.add(tbox(w,.05,.06,mPlank,0,.7,h/2),tbox(w,.05,.06,mPlank,0,.7,-h/2));sc.position.set(W+.55,0,H+.45);g.add(sc)}}
+
+/* ---- zużycie i remonty ---- */
+const WEAR={szalas:2.2,cmentarz:.3,studnia:.5,piec:.6,cegielnia:.8,kuznia:.8,dom:.7,laznia:1.2,pomost:1.4,wieza:1.1,pole:.4,zagroda:1.1};
+const condOf=b=>b.cond===undefined?1:b.cond;
+function locWear(b){if(b._lf)return b._lf;const c=bCenter(b);const ci=Math.round(c.x+N/2),cj=Math.round(c.z+N/2);let sea=0;
+ for(let dj=-3;dj<=3;dj++)for(let di=-3;di<=3;di++){const i=ci+di,j=cj+dj;if(i>=0&&j>=0&&i<N&&j<N&&!land[j*N+i])sea=1}
+ const bi=BIOME[Math.min(N-1,Math.max(0,cj))*N+Math.min(N-1,Math.max(0,ci))];const f=(sea?1.3:1)*(bi===3?1.25:bi===2?1.15:bi===4||bi===5?1.1:1);
+ b._lf=f;b._lt=(sea?'blisko morza, sól i wiatr':bi===3?'mokradło, wilgoć':bi===2?'hale, wiatr i mróz':bi===4||bi===5?'cień lasu, wilgoć':'dobre, suche miejsce');return f}
+function wearRate(b){return .0038*(WEAR[b.kind]||1)*[1,.85,.7][lvOf(b)-1]*locWear(b)*(seasonIdx()===2?1.4:1)*(S.weather.k==='storm'?2:1)}
+function yearsLeft(b){const r=.0038*(WEAR[b.kind]||1)*[1,.85,.7][lvOf(b)-1]*locWear(b)*1.1;return Math.max(0,(condOf(b)-.5)/r/YEAR)}
+const repCost=b=>{const c={};Object.entries(BD[b.kind].cost).forEach(([k,v])=>{if(k!=='cegla'||b.kind==='dom'||b.kind==='piec')c[k]=Math.max(1,Math.ceil(v*.25))});return c};
+const repWork=b=>Math.max(2,Math.ceil(BD[b.kind].work*.4));
+function wearDaily(){S.autoRep=S.autoRep===undefined?true:S.autoRep;
+ S.bld.forEach(b=>{if(!bDone(b))return;const was=condOf(b);b.cond=Math.max(0,was-wearRate(b)*K/2.4);
+  if((was>=.5&&b.cond<.5)||(was>=.15&&b.cond<.15))rebuildMesh(b);
+  if(was>=.5&&b.cond<.5)log(BD[b.kind].n+': '+(BD[b.kind].house?'dach przecieka, ściany pękają':'zużycie widać gołym okiem')+'. Czas na remont.');
+  if(was>=.15&&b.cond<.15){log(BD[b.kind].n+' popada w ruinę. '+(BD[b.kind].wk?'Praca tu stanęła.':'Ledwo trzyma się w całości.'));toast('W ruinie: '+BD[b.kind].n)}
+  if(S.autoRep&&b.cond<.45&&!b.proj&&canAfford(repCost(b)))startProj(b,'rep',null,true)})}
+function condMul(b){const c=condOf(b);return c>=.5?1:c<.15?0:.55+c*.9}

@@ -507,7 +507,7 @@ function planJob(p){
  if(p.fireB){const b=bById(p.fireB);if(!b||!b.fire){p.fireB=null;return false}const e=entryOf(b.kind,b.i,b.j);p.act='biegnie gasić pożar';if(e&&go(p,e,'gasic',b))return true;p.fireB=null;return false}
  if(!isWorker(p)){p.act=p.age<3?'raczkuje przy domu':'bawi się';if(Math.random()<.5)wanderNear(p);return true}
  if(p.hp<.5&&law('odpoczynek')&&p.job!=='wyp'){p.act='odpoczywa, wraca do zdrowia';wanderNear(p);return true}
- if(p.job==='wb'){const b=bById(p.wb);if(!b||!bDone(b)){p.job='rob';p.wb=null;return false}const d=BD[b.kind];
+ if(p.job==='wb'){const b=bById(p.wb);if(!b||!bDone(b)){p.job='rob';p.wb=null;return false}const d=BD[b.kind];if(b.proj&&b.proj.t==='rep'){const e=entryOf(b.kind,b.i,b.j);if(e&&go(p,e,'build',b)){b.workers=(b.workers||0)+1;p.act='remontuje swój warsztat';return true}}if(condOf(b)<.15){p.act='budynek w ruinie, czeka na remont';return false}
   if(d.nodes){const n=pickNodeB(p,b);if(!n){p.act='brak zasobów w zasięgu';return false}const st=nearestWalk(n.stand[0],n.stand[1]);if(!st)return false;
    if(go(p,st,'work',n)){n.claim++;p.act={zbieracz:'zbiera',pomost:'łowi ryby',drwal:'ścina drzewo',kamien:'łupie kamień',glinianka:'kopie glinę',ruda:'kopie rudę'}[b.kind];return true}return false}
   if(b.kind==='mysliwy'){const c=bCenter(b);let best=null,bd=1e9;S.herds.forEach(h=>{const ti=tileOf(h.x,h.z);if(h.n<=0||!ANIMAL[h.type][3]||!revAt(ti[0],ti[1]))return;if(h.type==='niedzwiedz'&&(p.sk.mysliwy||0)<3)return;const dd=Math.hypot(h.x-c.x,h.z-c.z);if(dd<=rOf(b)+3&&dd<bd){bd=dd;best=h}});
@@ -700,14 +700,14 @@ function newDay(){
   if((nx==='frost'||nx==='storm')&&tech('n_kal'))toast('Znaki na niebie: za '+S.weather.left+' d. '+WEATHER[nx][0]);if(k==='storm'){S.lastStorm=S.day;log('Nadciąga sztorm. Praca idzie wolno, morze bije o brzeg.')}}
  const tmp=WEATHER[S.weather.k][2];const fac=K*([0,1,1.6,.7][sea]*(1+Math.max(0,-tmp)*.06)+(sea===0&&tmp<0?.3:0)),cold=fac>0;const heated=new Set();
  if(cold){const homes=Object.values(S.fams).map(f=>f.home?bById(f.home):null).filter(h=>h&&bDone(h));
-  homes.forEach(h=>{const use=BD[h.kind].fuel*fac*(hasB('piec')?.6:1)*(law('z_oszcz')?.85:1);if(S.res.opal>=use){S.res.opal-=use;heated.add(h.id)}else if(S.res.drewno>=use*2){S.res.drewno-=use*2;heated.add(h.id);toastOnce('logs'+Math.floor(S.day/24),'Brak opału: ludzie palą całe kłody. Postaw drewutnię.')}});
+  homes.forEach(h=>{const use=BD[h.kind].fuel*fac*(hasB('piec')?.6:1)*(law('z_oszcz')?.85:1)*(condOf(h)<.5?2-condOf(h):1);if(S.res.opal>=use){S.res.opal-=use;heated.add(h.id)}else if(S.res.drewno>=use*2){S.res.drewno-=use*2;heated.add(h.id);toastOnce('logs'+Math.floor(S.day/24),'Brak opału: ludzie palą całe kłody. Postaw drewutnię.')}});
  const homeless=S.people.filter(p=>!homeOf(p)).length;S.campFire=false;if(homeless){const use=1.2*fac;if(S.res.opal>=use){S.res.opal-=use;S.campFire=true}else if(S.res.drewno>=use*2){S.res.drewno-=use*2;S.campFire=true}}
   if(homes.length>heated.size&&!S.seen['fuel'+Math.floor(S.day/YEAR)+sea]){S.seen['fuel'+Math.floor(S.day/YEAR)+sea]=1;log('Nie starcza opału dla wszystkich domów. Ludzie marzną.')}}
  waterDaily();
  dailyPeople(cold,heated);
  if(law('odpoczynek'))S.people.forEach(p=>{if(p.hp<.5)p.hp=Math.min(1,p.hp+.02*K)});
  if(law('oszczedne'))S.people.forEach(p=>{p.hp=Math.max(.2,p.hp-.006*K)});if(law('dlugi'))S.people.forEach(p=>{if(isWorker(p)&&p.job!=='wyp')p.hp=Math.max(.25,p.hp-.004*K)});
- bldDaily();lawDaily();disDaily();reqTick();fireRoll();
+ bldDaily();wearDaily();lawDaily();disDaily();reqTick();fireRoll();
  {const lv=offLv('zielarz');if(lv)S.people.forEach(p=>{if(p.hp<.9)p.hp=Math.min(1,p.hp+.004*lv*K*(tech('u_ziel')?1.5:1))})}
  familyLife();
  techXp('nauka',K*S.people.filter(p=>isAdult(p)&&(p.trait==='Nauczyciel'||p.age>55)).reduce((a,p)=>a+(p.trait==='Nauczyciel'?.7:.25),0));techTick();
@@ -906,7 +906,7 @@ function renderPanel(){
      `<p class="mut">Nierozpoznane. Trzeba się dostać do środka.</p>${W.target===i?`<div class="pbar"><div style="width:${Math.round(100*(pt.prog||0)/pt.need)}%"></div></div>`:''}<button data-wt="${i}" ${W.target===i?'class="pri"':''}>${W.target===i?'Rozpoznają':'Rozpoznaj'}</button>`)+`</div>`})}}
  else if(tab==='wyprawy'){h+=expHTML()}
  else if(tab==='natura'){h+=natureHTML()}
- else if(tab==='budowa'){
+ else if(tab==='budowa'){{const need=S.bld.filter(b=>bDone(b)&&condOf(b)<.5);h+=`<div class="card"><h4>Remonty</h4><p>Budynki zużywają się co roku: szybciej nad morzem, na mokradłach i w górach, wolniej, gdy są wyżej ulepszone. Remont potrzebny jest zwykle co 2–3 lata.</p><p class="mut">${need.length?'Wymaga remontu: '+need.map(b=>BD[b.kind].n.toLowerCase()+' '+Math.round(condOf(b)*100)+'%').join(', ')+'.':'Wszystko w dobrym stanie.'}</p><button data-autorep="1" class="${S.autoRep!==false?'pri':''}">${S.autoRep!==false?'Remonty automatyczne: włączone':'Remonty automatyczne: wyłączone'}</button></div>`}
   const sites=S.bld.filter(b=>!bDone(b));if(sites.length){h+='<h3>Place budowy</h3>';sites.forEach(s=>{const pc=Math.round(100*s.prog/s.work);h+=`<div class="card"><h4 style="font-size:15px">${BD[s.kind].n}</h4><div class="pbar"><div style="width:${pc}%"></div></div><div class="cost">${pc}% · przy pracy: ${s.workers||0}</div></div>`})}
   CATS.forEach(([cat,cn])=>{h+=`<h3>${cn}</h3>`;BKEYS.filter(k=>BD[k].cat===cat).forEach(k=>{const d=BD[k],av=bAvail(k);
    h+=`<div class="card"><h4>${d.n}</h4><p>${d.d}</p>${av?`<div class="cost">${costHTML(d.cost)} · ${d.work} osobodni${d.wk?` · ${d.wk} prac.`:''}${d.r?` · zasięg ${d.r}`:''}</div><button class="pri" style="margin-top:7px" data-b="${k}">Postaw</button>`:`<div class="cost">Nikt nie wie, jak to zbudować. Zobacz zakładkę Wiedza.</div>`}</div>`})})}
@@ -938,6 +938,8 @@ function onPanelClick(e){const t=e.target.closest('button,[data-p],[data-rg]');i
   if(!S.people.some(p=>p.job==='zdun')){if(freeCount()>0){S.alloc.zdun=Math.max(1,S.alloc.zdun);assign();toast('Przydzieliłem zduna (zakładka Praca)')}else{toast('Przydziel zduna w zakładce Praca');return}}
   Object.entries(cost).forEach(([a,b])=>S.res[a]-=b);k.active=id;k[id+'_p']=0;log('Zaczyna się próba: '+TRIAL[id].n.toLowerCase()+'.');assign();renderPanel()}
  else if(t.dataset.up){upgradeB(+t.dataset.up)}
+ else if(t.dataset.rep){startProj(bById(+t.dataset.rep),'rep')}
+ else if(t.dataset.autorep){S.autoRep=!S.autoRep;renderPanel()}
  else if(t.dataset.lv){startProj(bById(+t.dataset.lv),'lv')}
  else if(t.dataset.ext){startProj(bById(+t.dataset.ext),'ext',t.dataset.eid)}
  else if(t.dataset.cust){custChange(t.dataset.cust,t.dataset.co)}
