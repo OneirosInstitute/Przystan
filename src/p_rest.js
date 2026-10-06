@@ -906,10 +906,14 @@ function renderPanel(){
      `<p class="mut">Nierozpoznane. Trzeba się dostać do środka.</p>${W.target===i?`<div class="pbar"><div style="width:${Math.round(100*(pt.prog||0)/pt.need)}%"></div></div>`:''}<button data-wt="${i}" ${W.target===i?'class="pri"':''}>${W.target===i?'Rozpoznają':'Rozpoznaj'}</button>`)+`</div>`})}}
  else if(tab==='wyprawy'){h+=expHTML()}
  else if(tab==='natura'){h+=natureHTML()}
- else if(tab==='budowa'){{const need=S.bld.filter(b=>bDone(b)&&condOf(b)<.5);h+=`<div class="card"><h4>Remonty</h4><p>Budynki zużywają się co roku: szybciej nad morzem, na mokradłach i w górach, wolniej, gdy są wyżej ulepszone. Remont potrzebny jest zwykle co 2–3 lata.</p><p class="mut">${need.length?'Wymaga remontu: '+need.map(b=>BD[b.kind].n.toLowerCase()+' '+Math.round(condOf(b)*100)+'%').join(', ')+'.':'Wszystko w dobrym stanie.'}</p><button data-autorep="1" class="${S.autoRep!==false?'pri':''}">${S.autoRep!==false?'Remonty automatyczne: włączone':'Remonty automatyczne: wyłączone'}</button></div>`}
-  const sites=S.bld.filter(b=>!bDone(b));if(sites.length){h+='<h3>Place budowy</h3>';sites.forEach(s=>{const pc=Math.round(100*s.prog/s.work);h+=`<div class="card"><h4 style="font-size:15px">${BD[s.kind].n}</h4><div class="pbar"><div style="width:${pc}%"></div></div><div class="cost">${pc}% · przy pracy: ${s.workers||0}</div></div>`})}
-  CATS.forEach(([cat,cn])=>{h+=`<h3>${cn}</h3>`;BKEYS.filter(k=>BD[k].cat===cat).forEach(k=>{const d=BD[k],av=bAvail(k);
-   h+=`<div class="card"><h4>${d.n}</h4><p>${d.d}</p>${av?`<div class="cost">${costHTML(d.cost)} · ${d.work} osobodni${d.wk?` · ${d.wk} prac.`:''}${d.r?` · zasięg ${d.r}`:''}</div><button class="pri" style="margin-top:7px" data-b="${k}">Postaw</button>`:`<div class="cost">Nikt nie wie, jak to zbudować. Zobacz zakładkę Wiedza.</div>`}</div>`})})}
+ else if(tab==='budowa'){const need=S.bld.filter(b=>bDone(b)&&condOf(b)<.5);
+  if(!buildCat)buildCat=S.bld.some(b=>b.kind==='zbieracz')?'dom':'jedzenie';
+  h+=`<div class="dchips bchips">${CATS.map(([c,cn])=>{const ks=BKEYS.filter(k=>BD[k].cat===c);const av=ks.filter(bAvail).length;return`<button data-bcat="${c}" class="${buildCat===c?'on':''}">${cn}<small>${av}/${ks.length}</small></button>`}).join('')}<button data-bcat="remont" class="${buildCat==='remont'?'on':''}">Remonty<small${need.length?' style="color:var(--ember)"':''}>${need.length?need.length+' do zrobienia':'w porządku'}</small></button></div>`;
+  const sites=S.bld.filter(b=>!bDone(b));if(sites.length){h+=`<div class="card"><h4 style="font-size:15px">Place budowy</h4>${sites.map(s=>{const pc=Math.round(100*s.prog/s.work);return`<div class="cost" style="margin-top:4px">${BD[s.kind].n} · ${pc}% · przy pracy: ${s.workers||0}</div><div class="pbar"><div style="width:${pc}%"></div></div>`}).join('')}</div>`}
+  if(buildCat==='remont'){h+=`<div class="card"><h4>Remonty</h4><p>Budynki zużywają się co roku: szybciej nad morzem, na mokradłach i w górach, wolniej, gdy są wyżej ulepszone. Remont potrzebny jest zwykle co 2–3 lata.</p><p class="mut">${need.length?'Wymaga remontu: '+need.map(b=>BD[b.kind].n.toLowerCase()+' '+Math.round(condOf(b)*100)+'%').join(', ')+'.':'Wszystko w dobrym stanie.'}</p><button data-autorep="1" class="${S.autoRep!==false?'pri':''}">${S.autoRep!==false?'Remonty automatyczne: włączone':'Remonty automatyczne: wyłączone'}</button></div>`}
+  else{const ks=BKEYS.filter(k=>BD[k].cat===buildCat).sort((a,b)=>(bAvail(b)?1:0)-(bAvail(a)?1:0));
+   ks.forEach(k=>{const d=BD[k],av=bAvail(k),cnt=S.bld.filter(b=>b.kind===k).length;
+    h+=`<div class="card"${av?'':' style="opacity:.62"'}><h4>${d.n}${cnt?`<small style="font-weight:400;color:var(--mut);font-size:12px"> · masz ${cnt}</small>`:''}</h4><p>${d.d}</p>${av?`<div class="cost">${costHTML(d.cost)} · ${d.work} osobodni${d.wk?` · ${d.wk} prac.`:''}${d.r?` · zasięg ${d.r}`:''}</div><button class="pri" style="margin-top:7px" data-b="${k}">Postaw</button>`:`<div class="cost">Najpierw trzeba poznać: ${TECH_BY[d.need]?'„'+TECH_BY[d.need].n+'” (Wiedza)':{pole:'uprawę pola (Wiedza)',piec:'budowę pieca (Wiedza, próby)',cegla:'wypał cegły (Wiedza, próby)',kuznia:'wytop żelaza (Wiedza, próby)'}[d.need]||'odpowiednią wiedzę'}.</div>`}</div>`})}}
  else if(tab==='wiedza'){const k=S.know;const mason=adultsPool().sort((a,b)=>b.sk.murarz-a.sk.murarz)[0]||S.people[0];
   h+=techHTML();h+='<h3>Próby</h3><p class="lead">Niektórych rzeczy nie da się wyczytać ani podpatrzyć. Trzeba spróbować, często wiele razy. Próby prowadzą zduni (zakładka Praca).</p>';
   h+=`<div class="card"><h4>Wypał cegły</h4><p>Źródło: praktyka i mistrz (${mason.name}, murarz ${mason.sk.murarz}). Pierwsze wypały często pękają.</p>`+
@@ -928,7 +932,9 @@ function renderPanel(){
   h+=S.found.length?S.found.map(i=>`<div class="card"><h4>${TRIBE[i][0]}</h4><p>${TRIBE[i][1]}</p></div>`).join(''):'<p class="lead">Nic jeszcze nie znaleziono. Zwiadowcy odsłaniają wyspę.</p>'}
  else{h+=kronTools()+'<div class="log">'+S.log.map(l=>`<p><small>doba ${l.d}</small>${l.t}</p>`).join('')+'</div>'}
  if(h!==el._h){el._h=h;el.innerHTML=h;el.scrollTop=st}}
+let buildCat=null;
 function onPanelClick(e){const t=e.target.closest('button,[data-p],[data-rg]');if(!t)return;
+ if(t.dataset.bcat){buildCat=t.dataset.bcat;$('body')._h=null;renderPanel();$('body').scrollTop=0;return}
  if(t.dataset.w){const b=bById(+t.dataset.w);if(b)setWant(b,+t.dataset.d)}
  else if(t.dataset.al)setAlloc(t.dataset.al,+t.dataset.d);
  else if(t.dataset.b)startPlace(t.dataset.b);
