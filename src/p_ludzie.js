@@ -11,12 +11,12 @@ function ludInit(){S.rel=S.rel||{};S.hamlets=S.hamlets||[];S.rody=S.rody||{};
  ludReady=true}
 const lpick=a=>a.length?a[(Math.random()*a.length)|0]:null;
 function gen(n){if(/ek$/.test(n))return n.slice(0,-2)+'ka';if(/ś$/.test(n))return n.slice(0,-1)+'sia';if(/o$/.test(n))return n.slice(0,-1)+'a';if(/[kgl]a$/.test(n))return n.slice(0,-1)+'i';if(/a$/.test(n))return n.slice(0,-1)+'y';return n+'a'}
-function rodName(id){const r=S.rody&&S.rody[id];return r?'ród '+gen(r.name):'ród nieznany'}
+function rodName(id){if(!ludReady&&S)ludInit();const r=S.rody&&S.rody[id];return r?'ród '+gen(r.name):'ród nieznany'}
 function placeName(n){if(/sław$/.test(n))return n+'ice';if(/ek$/.test(n))return n.slice(0,-2)+'kowo';if(/[ao]$/.test(n))return n.slice(0,-1)+'owo';if(/ś$/.test(n))return n.slice(0,-1)+'siowo';return n+'owice'}
 // ---- więzi ----
 const rk=(a,b)=>a.id<b.id?a.id+'_'+b.id:b.id+'_'+a.id;
 function relGet(a,b){return(S.rel&&S.rel[rk(a,b)])||0}
-function relAdd(a,b,v){if(a===b)return;const k=rk(a,b);S.rel[k]=clamp((S.rel[k]||0)+v,-100,100)}
+function relAdd(a,b,v){if(a===b)return;S.rel=S.rel||{};const k=rk(a,b);S.rel[k]=clamp((S.rel[k]||0)+v,-100,100)}
 function relsOf(p){const out=[];if(!S.rel)return out;const pre=p.id+'_',suf='_'+p.id;for(const k in S.rel){let o=null;if(k.startsWith(pre))o=+k.slice(pre.length);else if(k.endsWith(suf))o=+k.slice(0,-suf.length);if(o===null)continue;const q=pById(o);if(q)out.push([q,S.rel[k]])}return out}
 function friendsOf(p){return relsOf(p).filter(x=>x[1]>=30).sort((a,b)=>b[1]-a[1]).slice(0,3).map(x=>x[0])}
 function rivalsOf(p){return relsOf(p).filter(x=>x[1]<=-30).sort((a,b)=>a[1]-b[1]).slice(0,1).map(x=>x[0])}
@@ -92,7 +92,7 @@ function ludDaily(){if(!ludReady)ludInit();const ad=S.people.filter(p=>p.age>=14
  // wesele
  if(S.wed&&S.day>=S.wed.day){const k=pById(S.wed.k),m=pById(S.wed.m);S.wed=null;if(k&&m&&k.pair===null&&m.pair===null)wedding(k,m)}
  // swaty
- if(!S.wed&&Math.random()<.3*K){const c=S.people.filter(single);let best=null,bv=44;c.filter(p=>p.sex==='k').forEach(k=>c.filter(m=>m.sex==='m'&&m.rod!==k.rod&&Math.abs(k.age-m.age)<16).forEach(m=>{const v=relGet(k,m);if(v>bv){bv=v;best=[k,m]}}));
+ if(!S.wed&&Math.random()<.3*K){const c=S.people.filter(single);let best=null,bv=offHolder('swat')?36:44;c.filter(p=>p.sex==='k').forEach(k=>c.filter(m=>m.sex==='m'&&m.rod!==k.rod&&Math.abs(k.age-m.age)<16).forEach(m=>{const v=relGet(k,m);if(v>bv){bv=v;best=[k,m]}}));
   if(best){const[k,m]=best;S.wed={k:k.id,m:m.id,day:Math.floor(S.day)+2+((Math.random()*3)|0)};log(`Swaty. Do chaty, w której mieszka ${k.name}, przychodzą swaci od ${gen(m.name)} z chlebem i solą. Chleb zostaje przyjęty: za kilka dni wesele.`);toast('Swaty: '+k.name+' i '+m.name)}
   else if(S.hamlets.length&&Math.random()<.08){const h=S.hamlets.filter(x=>x.pop>=4&&x.wiez>=.45)[0];const lone=c.filter(p=>p.age>=19&&p.age<=36&&!relsOf(p).some(x=>x[1]>=30&&x[0].sex!==p.sex))[0];
    if(h&&lone){const sex=lone.sex==='k'?'m':'k',age=18+Math.random()*8;const np=newPerson(S.pid++,newName(sex),age,sex,lone.fam,{zbieracz:1,[sex==='m'?'drwal':'krawiec']:1},TKEYS[(Math.random()*TKEYS.length)|0]);np.rod=h.rod;np.mirX=0;np.fromHam=h.id;
@@ -109,7 +109,7 @@ function ludDaily(){if(!ludReady)ludInit();const ad=S.people.filter(p=>p.age>=14
   h.wiez+=(.4-h.wiez)*.004*K;if(rd%SD===3&&!S.seen['hamg'+h.id+'_'+Math.floor(S.day/SD)]&&h.wiez>=.3){S.seen['hamg'+h.id+'_'+Math.floor(S.day/SD)]=1;const G=[['mieso',2],['skory',1],['miod',1],['drewno',3],['ryby',2],['grzyby',2]];const g=G[(Math.random()*G.length)|0];const q=Math.max(2,Math.round(g[1]*h.pop*(.6+h.wiez)));S.res[g[0]]=(S.res[g[0]]||0)+q;log(`Z przysiółka ${h.name} przyszli z darami: ${RN[g[0]].toLowerCase()} ${q}.`)}});
  hamVis()}
 function wedding(k,m){const ob=law('obrzedy');const n=S.people.length;if(ob){const tot=foodTotal(),c=K*n*.4;if(tot>c*3)FOOD.forEach(x=>S.res[x]=Math.max(0,S.res[x]-c*(S.res[x]/tot)))}
- k.pair=m.id;m.pair=k.id;k.rodB=k.rod;k.rod=m.rod;S.weds=(S.weds||0)+1;S.wh=(S.wh||0)+(ob?.06:.03);S.wd=(S.wd||0)-.02;
+ k.pair=m.id;m.pair=k.id;k.wedDay=m.wedDay=S.day;k.rodB=k.rod;k.rod=m.rod;S.weds=(S.weds||0)+1;S.wh=(S.wh||0)+(ob?.06:.03);S.wd=(S.wd||0)-.02;
  const fa=famMembers(k.fam).filter(isAdult),fb=famMembers(m.fam).filter(isAdult);fa.forEach(a=>fb.forEach(b=>relAdd(a,b,6)));
  const fh=freeHouse();if(fh){const fid=S.fid++;S.fams[fid]={id:fid,home:fh.id};k.fam=fid;m.fam=fid}else{k.fam=m.fam;k.waitHome=1;m.waitHome=1}
  log(ob?`Wesele: ${k.name} i ${m.name}. Cała osada przy jednym ogniu, grają fujarki. Po północy oczepiny: druhny zdejmują pannie młodej wianek i zakładają jej czepiec.${fh?' Młodzi idą do własnego domu.':' Na razie zamieszkają u '+gen(famName(m.fam))+', dopóki nie stanie dla nich dom.'}`:`${k.name} i ${m.name} zostają mężem i żoną. Skromnie, bez uczty.${fh?' Mają już własny dom.':' Na razie mieszkają u '+gen(famName(m.fam))+'.'}`);

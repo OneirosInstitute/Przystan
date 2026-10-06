@@ -12,7 +12,7 @@ function slavHope(){if(!S)return 0;let h=clamp(S.wh||0,-.12,.15);
 function slavDis(){if(!S)return 0;return(S.wd||0)+(law('skromnie')?.002:0)-(hasB('gaj')?.004:0)}
 function slavDaily(){if(!S.slav){S.slav=1;S.people.forEach(p=>{if(p.age>=7)S.seen['postr'+p.id]=1})}
  S.wh=(S.wh||0)*.8;S.wd=(S.wd||0)*.7;
- const rd=Math.floor(rday()),yr=Math.floor(S.day/YEAR),f=wiaraF(),g=gajF(),ob=law('obrzedy'),n=S.people.length,fear=(ob?1:.6)*(hasB('gaj')?.6:1);
+ const rd=Math.floor(rday()),yr=Math.floor(S.day/YEAR),f=wiaraF(),g=gajF(),ob=law('obrzedy'),n=S.people.length,fear=(ob?1:.6)*(hasB('gaj')?.6:1)*(offHolder('zielarka')?.7:1);
  if(!n)return;
  const once=k=>{const key=k+yr;if(S.seen[key])return false;S.seen[key]=1;return true};
  const eat=c=>{const tot=foodTotal();if(tot>c*3){FOOD.forEach(k=>S.res[k]=Math.max(0,S.res[k]-c*(S.res[k]/tot)));return true}return false};

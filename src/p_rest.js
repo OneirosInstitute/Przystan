@@ -468,7 +468,7 @@ function craftEff(p,c){return 1+0.18*(p.sk[c]||0)+(S.bonus[c]||0)}
 function seasonYield(kind){const s=seasonIdx();if(kind==='bush')return[1,.6,0,.7][s];if(kind==='grzyb')return[.8,1.3,0,.4][s];if(kind==='zboze')return[.7,1,0,0][s];if(kind==='len')return[1,.8,0,.4][s];if(kind==='ziola')return[1,.7,0,.6][s];if(kind==='ul')return[1,.8,0,.3][s];if(kind==='fish')return[1,.9,.7,.9][s];return 1}
 function gainXp(p,c,dt){let m=1;p.mentor=null;p.worked=1;
  for(const q of S.people){if(q!==p&&q.wb===p.wb&&q.job===p.job&&isAdult(q)&&q.sk[c]>p.sk[c]&&q.sk[c]>=2&&(!p.mentor||q.sk[c]>p.mentor.sk[c]))p.mentor=q}
- if(p.mentor)m=(p.mentor.trait==='Nauczyciel'?2.6:2)*(tech('n_kron')?1.25:1);if(law('npracy'))m*=1.2;if(p.trait==='Dociekliwy')m*=1.25;techXp(DOMC[c],dt*.09);
+ if(p.mentor)m=(p.mentor.trait==='Nauczyciel'?2.6:2)*(tech('n_kron')?1.25:1);if(law('npracy'))m*=1.2;if(p.trait==='Dociekliwy')m*=1.25;if(S.offCraft===c&&offHolder('mistrz')&&offHolder('mistrz')!==p)m*=1.25;techXp(DOMC[c],dt*.09);
  const Lv=p.sk[c];const masterOf=Object.keys(CN).filter(q=>p.sk[q]>=3).length;if(Lv===2&&masterOf>=3){p.xp[c]=Math.min(p.xp[c]+dt*m,LVL[2]-1);if(!p.capLog){p.capLog=1;log(p.name+' jest mistrzem w trzech fachach. Na czwarty nie starczy już życia.')}return}
  p.xp[c]+=dt*m;if(Lv<5&&p.xp[c]>=LVL[Lv]){p.sk[c]=Lv+1;log(p.name+' awansuje: '+CN[c]+' '+(Lv+1)+'.');
   if(p.mentor&&p.mentor.sk[c]>=Lv+1&&Lv+1>=2&&(S.bonus[c]||0)<.3&&Math.random()<.2){S.bonus[c]=(S.bonus[c]||0)+.06;log(p.name+' wpada na ulepszenie w fachu '+CN[c]+'. Wszyscy pracują tym szybciej.');toast('Pomysł ucznia: '+CN[c]+' idzie sprawniej')}}}
@@ -702,7 +702,7 @@ function newDay(){
  if(law('oszczedne'))S.people.forEach(p=>{p.hp=Math.max(.2,p.hp-.006*K)});if(law('dlugi'))S.people.forEach(p=>{if(isWorker(p)&&p.job!=='wyp')p.hp=Math.max(.25,p.hp-.004*K)});
  bldDaily();wearDaily();lawDaily();slavDaily();disDaily();reqTick();fireRoll();
  {const lv=offLv('zielarz');if(lv)S.people.forEach(p=>{if(p.hp<.9)p.hp=Math.min(1,p.hp+.004*lv*K*(tech('u_ziel')?1.5:1))})}
- familyLife();ludDaily();
+ familyLife();ludDaily();urzDaily();
  techXp('nauka',K*S.people.filter(p=>isAdult(p)&&(p.trait==='Nauczyciel'||p.age>55)).reduce((a,p)=>a+(p.trait==='Nauczyciel'?.7:.25),0));techTick();
  const t=tierOf();if(t>S.tier){S.tier=t;log('Osada rośnie: teraz to '+TIERS[t][0].toLowerCase()+'.');toast('Nowy poziom: '+TIERS[t][0])}
  const housed=S.people.length?S.people.filter(p=>homeOf(p)).length/S.people.length:0;

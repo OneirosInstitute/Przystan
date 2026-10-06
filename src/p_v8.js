@@ -27,12 +27,12 @@ function removeBuilding(b,why){S.bld=S.bld.filter(x=>x!==b);const d=BD[b.kind];
 
 /* ---- pożary ---- */
 const FLAM={szalas:1.4,chata:1,dom:.6,zbieracz:1,mysliwy:1,drwal:1.2,lesnik:1,kamien:.5,glinianka:.6,drewutnia:1.6,pracownia:1.4,mielerz:3,kuznia:2,warsztat:1.2,szwalnia:1.2,sklad:1.3,spizarnia:1,pomost:.6,ruda:.6,zagroda:.5,cmentarz:0,studnia:0,piec:.3,cegielnia:.4,pole:0};
-function fireRoll(){if(S.day<6||S.bld.some(b=>b.fire))return;const s=seasonIdx();const sea=(law('straz')?.7:1)*[1.8,1,.5,.8][s]*(S.weather.k==='drought'?3:S.weather.k==='rain'||S.weather.k==='snow'?.25:1)*(law('straz')?.45:1);
+function fireRoll(){if(S.day<6||S.bld.some(b=>b.fire))return;const s=seasonIdx();const sea=(law('straz')?.7:1)*[1.8,1,.5,.8][s]*(S.weather.k==='drought'?3:S.weather.k==='rain'||S.weather.k==='snow'?.25:1)*(law('straz')?.45:1)*(offHolder('straznik')?.7:1);
  for(const b of S.bld){if(!bDone(b))continue;const f=(FLAM[b.kind]||0)*(condOf(b)<.5?1.5:1);if(f&&Math.random()<.0022*K*f*sea){startFire(b);break}}}
 function startFire(b){b.fire={s:1,hp:1};S.seen.fire1=1;log('Pożar! Pali się '+BD[b.kind].n.toLowerCase()+'. Ludzie biegną z wiadrami.'+(wellCount()?'':' Bez studni wodę trzeba nosić z daleka.'));toast('Pożar: '+BD[b.kind].n);sfx('bell');
  const c=bCenter(b);const ppl=S.people.filter(p=>p.age>=13&&p.job!=='wyp'&&p.state!=='away').sort((x,y)=>Math.hypot(x.x-c.x,x.z-c.z)-Math.hypot(y.x-c.x,y.z-c.z)).slice(0,law('straz')?6:4);
  ppl.forEach(p=>{release(p);if(p.workKind==='build'&&p.tgt&&p.tgt.workers)p.tgt.workers--;p.path=null;p.state='idle';p.wait=0;p.fireB=b.id});b.fire.crew=ppl.map(p=>p.id);fireFx(b)}
-function fireStep(dt){for(const b of S.bld){if(!b.fire)continue;const f=b.fire;f.hp-=dt*.0055*(law('straz')?.6:1)*(hasB('wieza')?.8:1);
+function fireStep(dt){for(const b of S.bld){if(!b.fire)continue;const f=b.fire;f.hp-=dt*.0055*(law('straz')?.6:1)*(offHolder('straznik')?.8:1)*(hasB('wieza')?.8:1);
   if(f.hp<.55&&seasonIdx()===0&&Math.random()<dt*.0015){const c=bCenter(b);const nb=S.bld.find(x=>x!==b&&!x.fire&&bDone(x)&&(FLAM[x.kind]||0)>0&&Math.hypot(bCenter(x).x-c.x,bCenter(x).z-c.z)<3.6);if(nb){startFire(nb);log('Ogień przeskakuje na '+BD[nb.kind].n.toLowerCase()+'.')}}
   if(f.s<=0||f.hp<=0)endFire(b)}}
 function endFire(b){const f=b.fire;b.fire=null;fireFxRemove(b.id);S.people.forEach(p=>{if(p.fireB===b.id){p.fireB=null;if(p.state==='work'){p.state='idle';p.wait=.5}}});
@@ -135,8 +135,7 @@ function setOffice(id,pid){S.offices=S.offices||{};if(S.offices[id]!==undefined&
 function custHTML(){custInit();let h='<h3>Obyczaje osady</h3>';
  const w=wiecOpen();const next=SD-Math.floor(rday())%SD;
  h+=`<p class="lead">Na wyspie nikt nie rządzi. Ustalenia rodzą się z tego, co się wydarza, i z czasem stają się obyczajem. ${w?'<b style="color:var(--hi)">Wiec trwa:</b> do końca tej pory roku można zmienić jeden obyczaj.':(S.wiecUsed===seasonKey()?'Wiec w tej porze roku już zdecydował. ':'')+'Następny wiec za '+next+' d., na początku nowej pory roku.'}</p>`;
- const st=offHolder('starszy'),stp=S.offices.starszy!=null?pById(S.offices.starszy):null,adults=S.people.filter(isAdult).sort((a,b)=>b.age-a.age);
- h+=`<div class="card"><h4>Starszy osady</h4><p>Prowadzi wiec i łagodzi spory.${stp?'':' Wiec jeszcze nikogo nie wybrał.'}</p><select data-off="starszy"${stp&&!w?' disabled':''}><option value="">nikt</option>${adults.map(p=>`<option value="${p.id}"${stp&&stp.id===p.id?' selected':''}>${p.name} · ${Math.floor(p.age)} l. · ${traitN(p).toLowerCase()} · ${mirWord(p)}</option>`).join('')}</select>${st?`<p class="mut" style="margin-top:5px">${st.trait==='Pogodny'?'Zmiany na wiecu przechodzą łagodniej.':st.trait==='Uparty'?'Trudno go przekonać do zmian: wiec kosztuje więcej niezgody.':'Spory gasną trochę szybciej.'}</p>`:''}</div>`;
+ h+=officesHTML();
  const set=CUSTOMS.filter(c=>S.cust[c.k]);
  set.forEach(c=>{const cur=c.o.find(o=>o.id===S.cust[c.k]);const lg=S.custLog[c.k];const canU=c.k!=='umowa'||youngVoice();
   h+=`<div class="card law on"><div class="eyebrow">${c.n}</div><h4>${cur.n}</h4><p>${cur.d}</p>${lg?`<p class="mut">Od kiedy: ${lg.why.toLowerCase()} (${lg.d}).${(lg.hist||[]).length?'<br>'+lg.hist.join('<br>'):''}</p>`:''}`+

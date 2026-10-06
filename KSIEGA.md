@@ -1,6 +1,6 @@
 ---
 title: "Przystań — Księga gry"
-subtitle: "Wersja 0.15 · 6 października 2026"
+subtitle: "Wersja 0.16 · 6 października 2026"
 ---
 
 # 1. Czym jest Przystań
@@ -173,7 +173,7 @@ Na wyspie nikt nie rządzi. Ustalenia rodzą się z wydarzeń i z czasem stają 
 | Zimowe wieczory | pierwsza zima | wieczory przy ognisku, każdy w swoim domu |
 | Dawne obyczaje | miska dla domowika | trzymamy się dawnych obrzędów, nie czas na obrzędy |
 
-**Wiec** zbiera się raz na porę roku i może zmienić jeden obyczaj kosztem niezgody. **Starszego osady** wybiera wiec. **Umowy z brzegu** nie da się zmienić, dopóki żyje większość rozbitków. Potem odzywa się **głos młodych**.
+**Wiec** zbiera się raz na porę roku i może zmienić jeden obyczaj kosztem niezgody. **Starszego osady** i pozostałe urzędy obsadza wiec. **Umowy z brzegu** nie da się zmienić, dopóki żyje większość rozbitków. Potem odzywa się **głos młodych**.
 
 **Niezgoda** rośnie przez głód, zimno, brak wody, śmierć, pożary, surowe obyczaje, niespełnione prośby i niezadowolonych ludzi. Przy bardzo wysokiej niezgodzie jeden ród odchodzi w głąb wyspy i zakłada przysiółek. **Nadzieja** rośnie z jedzenia, ciepła, dachu nad głową, różnorodności, obrzędów i spełnionych próśb. **Prośby mieszkańców** pojawiają się co kilka dni i dają nadzieję, gdy zostaną spełnione.
 
@@ -203,9 +203,25 @@ Wszystko dzieje się samo, jak w dawnej wsi. Gracz nie dobiera par, tylko widzi 
 - **Mir:** szacunek opisany słowami: jeszcze bez znaczenia, znany w osadzie, ceniony, szanowany, poważany przez wszystkich. Rośnie za mistrzostwo w fachu, wiek, gaszenie pożarów, wyprawy i urząd starszego.
 - **Przysiółki:** ród, który odchodzi, zakłada przysiółek w najbliższej poznanej krainie. Przysiółek nosi nazwę od założyciela (na przykład Lubomirowice, Jagnowo), rośnie, przysyła dary co porę roku, a jego młodzi wracają do osady na swaty. Więź z przysiółkiem podtrzymują dary wysyłane z osady. To pierwszy krok do skolonizowania wyspy.
 
+## Urzędy, spory i obyczaje (od wersji 0.16)
+
+**Urzędy** rodzą się z potrzeb osady. Wiec obsadza je sam, wybierając ludzi z największym mirem i pasującym charakterem. Na wiecu, raz na porę roku, można zmienić ten wybór. Gdy urzędnik umrze albo odejdzie, wiec wybiera następcę. Urzędnik bez miru psuje zgodę.
+
+| Urząd | Kiedy się pojawia | Co daje |
+|---|---|---|
+| Starszy osady | od początku | prowadzi wiec, łagodzi spory, jego mir pomaga przyjąć wyroki |
+| Strażnik ognia | po pierwszym pożarze | pożary wybuchają rzadziej i szybciej gasną |
+| Zielarz albo zielarka | gdy osada zna zioła albo stoi chata zielarki | szybsze leczenie, słabsze lęki z wierzeń |
+| Gospodarz albo gospodyni zapasów | gdy stoi spiżarnia | wolniejsze psucie jedzenia, ostrzeżenie przed głodem |
+| Swat albo swatka | po pierwszym weselu | młodzi szybciej się dobierają, rody rzadziej się kłócą |
+| Mistrz albo mistrzyni fachu | gdy ktoś osiągnie najwyższy poziom fachu | wszyscy uczący się tego fachu robią szybsze postępy |
+
+**Spory rodów** przychodzą co kilkanaście dni najwyżej jeden naraz: o miedzę, łup z wyprawy, kradzież ze spiżarni w czasie głodu, krzywdę przy pracy albo słowa, które padły przy ogniu. Sprawa staje przed starszym osady, przed całym wiecem albo, gdy jest święty gaj, pod starym dębem. Gracz rozstrzyga: racja po jednej stronie, po drugiej, wina po połowie albo odłożenie do wiecu. Wyrok łatwiej przyjąć, gdy starszy ma duży mir, gdy sądzi się pod dębem i gdy racja przypada osobie z większym mirem. Nieprzyjęty wyrok zaczyna **waśń rodów**: rośnie niezgoda, a więzi między rodami się psują. Waśń może zgasnąć na Dziady albo w Szczodre Gody, przy jednym stole, a na pewno kończy ją wesele, które połączy zwaśnione rody.
+
+**Dojrzewanie obyczajów:** każde ustalenie po dwóch latach bez zmian staje się obyczajem, a po czterech latach dawnym obyczajem. Zmiana obyczaju kosztuje na wiecu półtora raza więcej niezgody, a zmiana dawnego obyczaju dwa i pół raza więcej i jest możliwa dopiero wtedy, gdy przemówi głos młodych. Dojrzałe obyczaje same z siebie uspokajają osadę.
+
 ## Plan dalszy
 
-- **0.16 Mir i urzędy:** urzędy rodzące się z potrzeb (strażnik ognia, zielarka, gospodyni zapasów, swat, mistrz fachu), spory rodów i sąd pod dębem, dojrzewanie obyczajów (ustalenie, obyczaj, dawny obyczaj).
 - **0.17 Pamięć osady:** pieśni o wielkich wydarzeniach, nazwa osady nadana przez wiec, znaki rodów, Dziady z imionami zmarłych, pamięć jako warunek końca epoki.
 
 # 12. Epoki
@@ -245,14 +261,14 @@ Po wyborze gra pokazuje Księgę rozbitków: kto się urodził, kto odszedł, ja
 # 14. Interfejs
 
 - **Górny pasek:** pora roku i dzień, tempo, dźwięk, pełny ekran, jakość grafiki, zapasy (żywność z liczbą dni, drewno, opał, ludzie).
-- **Zakładki:** Budowa (kategorie), Praca, Ludzie (największy kłopot, prośby, niezgoda, obyczaje, rok obrzędów, rody, przysiółki, rodziny), Wyprawy, Wiedza (drzewa odkryć), Natura (atlas), Kronika (pełna kronika do pobrania, zapis i wczytanie z pliku).
+- **Zakładki:** Budowa (kategorie), Praca, Ludzie (największy kłopot, prośby, niezgoda, obyczaje z ich wiekiem, urzędy, rok obrzędów, rody, przysiółki, rodziny), Wyprawy, Wiedza (drzewa odkryć), Natura (atlas), Kronika (pełna kronika do pobrania, zapis i wczytanie z pliku).
 - **Okno budynku:** pracownicy, przepisy, co spowalnia, stan i remont, poziomy i rozbudowy.
 - **Karta osoby:** fach, cecha, zdrowie, narzędzia, ród, małżonek, nastrój z powodami, mir i przyjaciele.
 - **Telefon w pionie:** wąski pasek wskaźników, ukryta minimapa (widok wyspy pod przyciskiem „Wyspa”).
 
 # 15. Technika
 
-- **Plik gry:** jeden plik HTML (około 370 kB) składany z części: p_head.html, p_const.js, p_mid.js, p_rest.js, p_map.js, p_tech.js, p_exp.js, p_v8.js, p_bld.js, p_story.js, p_slav.js, p_wild.js, p_ludzie.js, p_gfx.js, p_end.js.
+- **Plik gry:** jeden plik HTML (około 370 kB) składany z części: p_head.html, p_const.js, p_mid.js, p_rest.js, p_map.js, p_tech.js, p_exp.js, p_v8.js, p_bld.js, p_story.js, p_slav.js, p_wild.js, p_ludzie.js, p_urz.js, p_gfx.js, p_end.js.
 - **Grafika:** Three.js r149 (WebGL2), własna obróbka obrazu (bloom, cienie kontaktowe, cienie chmur, tilt-shift).
 - **Zapis:** w pamięci przeglądarki (klucz przystan-v7), do pobrania jako plik JSON i do wczytania z pliku.
 - **Instalacja:** PWA z manifestem i service workerem, działa bez sieci.
@@ -273,10 +289,11 @@ Po wyborze gra pokazuje Księgę rozbitków: kto się urodził, kto odszedł, ja
 | 0.13 | klimat słowiański: imiona, rok obrzędów, wierzenia, święty gaj, dawne nazwy |
 | 0.14 | grafika Ultra, przetwórstwo, „co spowalnia”, największy kłopot, odmiana wyspowa, kronika i zapis w pliku, kategorie budowy |
 | 0.15 | rody, więzi, swaty i wesela, nowe gospodarstwa, sieroty, nastrój i mir ludzi, przysiółki |
+| 0.16 | urzędy rodzące się z potrzeb, spory rodów i waśnie, sąd pod dębem, dojrzewanie obyczajów |
 
 # 17. Otwarte sprawy
 
 - Warunki końca aktów i finał epoki I w samej grze (sceny, wiec pokoleń, Księga rozbitków).
-- Urzędy, spory rodów, dojrzewanie obyczajów (0.16) i pamięć osady (0.17).
+- Pamięć osady (0.17).
 - Zakładanie przysiółków z własnej woli jako część drogi Głąb w epoce II.
 - Wysłanie repozytorium na GitHub i uruchomienie na Railway (czeka na utworzenie repozytorium „przystan”).
