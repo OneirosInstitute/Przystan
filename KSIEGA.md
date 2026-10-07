@@ -1,6 +1,6 @@
 ---
 title: "Przystań — Księga gry"
-subtitle: "Wersja 0.18 · 6 października 2026 · z planem do wersji 1.0"
+subtitle: "Wersja 0.19 · 6 października 2026 · z planem do wersji 1.0"
 ---
 
 # 1. Czym jest Przystań
@@ -234,6 +234,32 @@ Pamięć to wspólny dorobek osady, opisany słowami: krótka, żywa, głęboka 
 
 W finale epoki pamięć zdecyduje, z czym młodzi wejdą w epokę II.
 
+## Kolonizacja (od wersji 0.19)
+
+Celem gry jest zasiedlenie całej wyspy: przysiółek w każdej krainie. Karta „Wspólnota” w zakładce Ludzie pokazuje, ile krain jest zasiedlonych, na przykład „3 z 21”.
+
+**Nowy przysiółek z własnej woli.** Gdy osada ma poziom Osada i co najmniej 14 osób, wiec może wysłać ludzi w poznaną krainę. Najpierw wybiera się krainę: gra mówi, jaki to będzie przysiółek, jak daleko i jak tam groźnie. Potem wybiera się, kto pójdzie: młoda para bez domu albo rodzina. Każdy ma swoją chęć: „chętnie”, „rozważą” albo „niechętnie”. Kto idzie niechętnie, odchodzi z żalem: rośnie niezgoda, a więź z przysiółkiem jest chłodna od początku. Jeśli osada ma zapasy, daje im na drogę 30 jedzenia, 15 kłód i narzędzia.
+
+**Młodzi chcą iść na swoje.** Para, która długo czeka na własny dom, sama przychodzi na wiec z prośbą. Można ją pobłogosławić albo poprosić, żeby została, co budzi żal.
+
+**Rodzaj przysiółka** zależy od krainy: rybacki na wybrzeżu (ryby, foki), leśny w puszczy (drewno, miód, skóry, grzyby), górski na halach (kamień, ruda, skóry), polny na łąkach (ziarno, mleko, zioła). Taki też jest rodzaj darów, które przysiółek przysyła do osady.
+
+**Przysiółek rośnie** przez pięć etapów: obozowisko (szałas i ognisko), zagroda (od 5 osób, pierwsza chata), przysiółek (od 9 osób, druga chata i budynek swojego rodzaju), osiedle (od 14 osób, trzecia chata i płot), wieś (od 24 osób, dom rodu i studnia). Każdy etap widać na mapie w 3D. Przysiółek ma własne zapasy: latem i jesienią rosną, zimą topnieją. Przy głodzie ludzie umierają, a ich imiona trafiają na Dziady.
+
+**Prośby przysiółków.** Raz na jakiś czas przysiółek prosi o jedzenie, opał, narzędzia, odzież, ziarno, naczynia albo płótno. Pomoc wzmacnia więź i zapasy. Brak odpowiedzi ochładza więź.
+
+**Ścieżki i drogi.** Ludzie, którzy idą do nowego przysiółka, wydeptują ścieżkę wzdłuż najłatwiejszej drogi lądem. Ścieżki łączą się ze sobą w sieć. Osada może wytyczyć drogę: kosztuje kłody i kamień, zależnie od długości, i trwa kilka dni. Droga jest szersza i jaśniejsza, przyspiesza dary o połowę, trzyma więź wyżej i zmniejsza niebezpieczeństwo.
+
+**Wędrowcy.** Po ścieżkach chodzą ludzie: rodziny w drodze do nowego przysiółka, posłańcy z darami, goście na obrzędy (Kupała, Dziady, Szczodre Gody, Marzanna). Na drogach ruch jest większy.
+
+**Zagrożenia w głębi wyspy.** Każda kraina ma swoje niebezpieczeństwa: niedźwiedź przy przysiółku (puszcza, góry), wilki zimą, gorączka z bagien (łąki, puszcza), pożar lasu (puszcza, lato), osuwisko (góry, wiosna), sztorm łamiący łodzie (wybrzeże), zaginiony w puszczy. Zawsze jest wybór: pomóc kosztem osady albo zostawić przysiółek samemu sobie. Częstokół, droga i bliskość zmniejszają ryzyko. Na poziomie Surowym zagrożeń jest więcej. Groźne zdarzenia przychodzą najwyżej raz na porę roku.
+
+**Dobre chwile.** Wesele w przysiółku, na które idzie cała osada, dobry rok z pełnymi koszami, ślady dawnego ludu znalezione przez ludzi z przysiółka.
+
+**Mapa wspólnoty.** Otwiera się z karty Wspólnota albo napisem „WYSPA · MAPA” pod minimapą. Pokazuje osadę, przysiółki z liczbą ludzi, ścieżki (przerywane) i drogi (ciągłe), prośby („!”), wyprawy i nazwane krainy. Dotknięcie przysiółka przenosi tam widok.
+
+W Księdze rozbitków jest rozdział o przysiółkach. W epoce II karta celu liczy zasiedlone krainy.
+
 # 12. Epoki
 
 ## Epoka I: Rozbitkowie (6–8 lat na wyspie, od wersji 0.18 grywalna do końca)
@@ -245,7 +271,7 @@ Epoka dzieli się na pięć aktów. Karta celu w lewym górnym rogu pokazuje akt
 | I. Brzeg | dni 1–10 | chata zbieracza, chata drwala, kajuta kapitana rozpoznana, każda rodzina pod własnym dachem |
 | II. Pierwsza zima | jesień roku 1 – wiosna | drewutnia i 80 opału, wrak rozebrany przed sztormem, pierwsza zima przetrwana |
 | III. Zakorzenienie | rok 2 | księga z wraku przeczytana, pierwsza koza, pierwsze plony z pola, poziom Osada (4 domy, 20 osób) |
-| IV. Wyspa | lata 3–4 | 70% krain poznanych, żelazo z własnego pieca, trzy ślady dawnego ludu |
+| IV. Wyspa | lata 3–4 | 70% krain poznanych, żelazo z własnego pieca, trzy ślady dawnego ludu, pierwszy przysiółek |
 | V. Pierwsze pokolenie | lata 5–8 | Wieś (8 domów, 32 osoby), głos młodych na wiecu, trzech mistrzów urodzonych na wyspie, pamięć osady co najmniej żywa |
 
 **Sceny fabularne:**
@@ -291,7 +317,7 @@ Wybór jest ostateczny. Po wyborze gra pokazuje Księgę rozbitków: ilu wyszło
 
 # 15. Technika
 
-- **Plik gry:** jeden plik HTML (około 400 kB) składany z części: p_head.html, p_const.js, p_mid.js, p_rest.js, p_map.js, p_tech.js, p_exp.js, p_v8.js, p_bld.js, p_story.js, p_slav.js, p_wild.js, p_ludzie.js, p_urz.js, p_pamiec.js, p_akt.js, p_gfx.js, p_end.js.
+- **Plik gry:** jeden plik HTML (około 440 kB) składany z części: p_head.html, p_const.js, p_mid.js, p_rest.js, p_map.js, p_tech.js, p_exp.js, p_v8.js, p_bld.js, p_story.js, p_slav.js, p_wild.js, p_ludzie.js, p_urz.js, p_pamiec.js, p_akt.js, p_kol.js, p_gfx.js, p_end.js.
 - **Grafika:** Three.js r149 (WebGL2), własna obróbka obrazu (bloom, cienie kontaktowe, cienie chmur, tilt-shift).
 - **Zapis:** w pamięci przeglądarki (klucz przystan-v7), do pobrania jako plik JSON i do wczytania z pliku.
 - **Instalacja:** PWA z manifestem i service workerem, działa bez sieci.
@@ -315,6 +341,7 @@ Wybór jest ostateczny. Po wyborze gra pokazuje Księgę rozbitków: ilu wyszło
 | 0.16 | urzędy rodzące się z potrzeb, spory rodów i waśnie, sąd pod dębem, dojrzewanie obyczajów |
 | 0.17 | pamięć osady: pieśni, pierwsze razy, groby z imionami na Dziady, imię osady, znaki rodów; czas gry nie zwalnia przy słabszej płynności |
 | 0.18 | finał epoki I: pięć aktów z celami, sceny fabularne, dziecko w 12. roku wybiera fach, „Rok na wyspie”, wiec pokoleń z wyborem drogi, Księga rozbitków do pobrania, trzy poziomy trudności |
+| 0.19 | kolonizacja: przysiółki zakładane z własnej woli i prośby młodych, rodzaje przysiółków, pięć etapów wzrostu w 3D, zapasy i prośby przysiółków, ścieżki i drogi, wędrowcy, zagrożenia w głębi wyspy, mapa wspólnoty |
 
 # 17. Immersja i powroty
 
@@ -366,7 +393,7 @@ Kolejność dalszej pracy. Każda wersja kończy się czymś, w co da się zagra
 | Wersja | Zakres |
 |---|---|
 | 0.18 Finał epoki I (gotowe) | akty jako rozdziały z warunkami końca, sceny fabularne (Nikt nas nie szuka, Za pięć dni sztorm, Ostatnia zima mistrza, Ostatni), dziecko w 12. roku samo wybiera fach, wiec pokoleń z wyborem drogi, Księga rozbitków do pobrania, trzy poziomy trudności, „Rok na wyspie” w noc Kupały |
-| 0.19 Kolonizacja | przysiółki zakładane z własnej woli, ścieżki między osadą a przysiółkami, przysiółki jako małe żywe osady, zagrożenia w głębi wyspy, mapa wspólnoty |
+| 0.19 Kolonizacja (gotowe) | przysiółki zakładane z własnej woli, ścieżki między osadą a przysiółkami, przysiółki jako małe żywe osady, zagrożenia w głębi wyspy, mapa wspólnoty |
 | 0.20 Ład wsi | wytyczanie ścieżek, płoty, ławy, drzewa owocowe, ogródki, słupy rodowe, ład wsi wpływający na nastrój, tryb zdjęć |
 | 0.21 Gospodarstwa | spiżarki rodzin, wieczorne prace przy kądzieli, dowóz materiałów, jakość wyrobów |
 | 0.22 Żywy świat | obrzędy i wesela w 3D, burze, śnieg na dachach, zorza, dźwięk w przestrzeni, opowieści życia, kamera przy ważnych chwilach |
