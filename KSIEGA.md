@@ -1,6 +1,6 @@
 ---
 title: "Przystań — Księga gry"
-subtitle: "Wersja 0.19 · 6 października 2026 · z planem do wersji 1.0"
+subtitle: "Wersja 0.20 · 6 października 2026 · z planem do wersji 1.0"
 ---
 
 # 1. Czym jest Przystań
@@ -16,7 +16,7 @@ Gra opowiada o pokoleniach. Założyciele starzeją się i odchodzą, a osadę p
 # 2. Zasady świata
 
 - **Ton:** ciemny, naturalny, bez fantasy. Nie ma ruin, skarbów ani ukrytej pomocy.
-- **Dawny lud:** na wyspie żył kiedyś prosty, pierwotny lud. Zniknął bez śladu wieki temu i gra nigdy nie wyjaśnia, kim był ani dlaczego zniknął. Zostało po nim osiem miejsc, którym rozbitkowie nadają własne nazwy.
+- **Dawny lud:** na wyspie żył kiedyś prosty, pierwotny lud. Zniknął bez śladu wieki temu i gra nigdy nie wyjaśnia, kim był ani dlaczego zniknął. Zostało po nim osiem miejsc z rzeczami, które wyglądają na drobiazgi, a z czasem okazują się potrzebne.
 - **Klimat słowiański:** imiona, obrzędy, wierzenia, budownictwo z bali i strzechy, mowa kroniki. Nie nazywamy kraju ani roku: liczy się klimat dawnej wsi.
 - **Wiara bez magii:** nic nadprzyrodzonego się nie dzieje. Domowik, leszy, południca czy licho żyją tylko w tym, co ludzie mówią, i działają przez ich nastrój.
 - **Nikt z zewnątrz:** na wyspę nigdy nie przybędą obcy. Wspólnotę tworzą wyłącznie rozbitkowie i ich potomkowie.
@@ -52,20 +52,20 @@ Wyspa ma 192 na 192 pola. Jest duża, a na początku prawie cała kryje się we 
 - **Atlas:** 25 gatunków zwierząt i roślin do rozpoznania.
 - **Krainy:** wyspa dzieli się na kilkanaście krain, które dostają nazwy, gdy osada je pozna. Przykłady: Łysa Góra, Czarny Bór, Głuchy Las, Wilcze Ostępy, Leszy Kąt, Zatoka Mgieł, Foczy Brzeg, Siwa Łąka, Wilcze Błota, Dzwonkowy Stok. Krainę z wrakiem nazywa się Zatoką Wraku.
 
-**Ślady dawnego ludu:**
+**Ślady dawnego ludu (od wersji 0.20).** Wśród rozbitków nie ma lekarza, rolnika, pasterza, sadownika ani garncarza. Póki starcza zapasów z wraku, nikt tego nie odczuwa. Gdy się kończą, proste rzeczy okazują się trudne do odtworzenia. Dawny lud zostawił osiem śladów. Po odkryciu wyglądają na drobiazgi, a ich sens wychodzi na jaw dopiero wtedy, gdy osada czegoś potrzebuje. Wtedy ktoś przypomina sobie ślad i otwiera się scena: można skorzystać z wiedzy dawnego ludu albo odłożyć ją na później. Jeśli potrzeba nie przyjdzie, ślad i tak „przypomni się” po dwóch latach.
 
-| Ślad | Co widać | Jak nazywa go osada |
-|---|---|---|
-| Kamienny krąg | dziewięć głazów otwartych na wschód słońca w najdłuższy dzień | Kupalny krąg |
-| Kopiec | porośnięty kopiec z płaskim kamieniem na szczycie | Mogiła dziadów |
-| Malowidła | ochrowe dłonie, zwierzęta i łodzie na skale | Malowana skała |
-| Palenisko | osmalone kamienie i gruba warstwa muszli | Dziadowe ognisko |
-| Rzeźbiony słup | zatarte twarze patrzące w morze | Stary bałwan |
-| Ułożone kości | kości zwierząt ułożone w krąg | Kościsko |
-| Krzemienne ostrza | odłupki krzemienia i kamienne siekierki | Piorunowe kamienie |
-| Zarośnięte siedlisko | koliste zagłębienia po szałasach w głębi wyspy | Puste siedlisko |
+| Ślad | Co widać | Kiedy okazuje się potrzebny | Dar |
+|---|---|---|---|
+| Naczynka w skale | gliniane naczynka zalepione woskiem, w środku sucha mieszanka ziół | ktoś ciężko choruje albo jest ranny | leki: chorzy i ranni zdrowieją szybciej, zielarstwo poznane |
+| Krzemienne groty | groty cienkie jak liść i spróchniały kawałek cisu | kończą się żelazne narzędzia albo myśliwy zostaje ranny | łuk z cisu: myśliwi +25% i rzadziej ranni |
+| Malowana skała | ochrowe rysunki roślin, przy jadalnych dłoń, przy trujących przekreślenie | przednówek albo brak jedzenia | zbieracze +20%, korzenie na przednówek |
+| Dół z czerwonymi skorupami | dół z popiołem i skorupami, obok zeschła glina | kończą się beczki i naczynia z wraku | garncarstwo: naczynia, garncarnia, komora kiszonek |
+| Kamienie z otworem | płaskie kamienie z otworem w rzędzie przy strumieniu | osada ma pomost, a sieci się drą | ciężarki do sieci: rybacy +25% |
+| Kamień z wgłębieniem | żarna i zwęglone ziarna dzikiej trawy | kończy się ziarno z wraku | dzikie zboże: pole poznane albo lepsze plony |
+| Kamienny okół | krąg z kamieni, w środku kości kóz | dzikie kozy uciekają, nikt nie umie ich oswoić | oswajanie kóz albo lepsza hodowla |
+| Zdziczały sad | jabłonie i grusze w rzędach, pod najstarszą kopiec | jesienią, gdy osada już stoi | sadownictwo: drzewa owocowe w osadzie |
 
-Każdy ślad daje wpis w kronice i małą nagrodę. Żaden nie jest warunkiem końca epoki.
+Wokół każdego odkrytego śladu robi się polana. Kopiec w zdziczałym sadzie wiąże się z Dziadami: osada może co roku zapalić tam ogień dla dawnego ludu. Na Kupałę ogniska płoną pod świętym dębem, jeśli osada ma gaj. W zakładce Wiedza widać, które ślady są już zrozumiane i co dały.
 
 # 5. Pogoda i pory roku
 
@@ -260,6 +260,22 @@ Celem gry jest zasiedlenie całej wyspy: przysiółek w każdej krainie. Karta �
 
 W Księdze rozbitków jest rozdział o przysiółkach. W epoce II karta celu liczy zasiedlone krainy.
 
+## Ład wsi (od wersji 0.20)
+
+Budowa → Ład wsi. Ozdoby i porządek stawia się od razu, bez robotników, w promieniu około 40 pól od ogniska.
+
+- **Ścieżka:** wydeptana ziemia, ludzie chodzą po niej o 20% szybciej. **Ścieżka z kamieni:** 1 kamień za pole, o 30% szybciej.
+- **Płot z żerdzi:** 1 kłoda za pole, sam łączy się z sąsiednimi przęsłami. Nie zatrzymuje ludzi (furtki).
+- **Ława:** 3 kłody. **Grządka:** 1 kłoda, daje trochę warzyw od wiosny do jesieni. **Kwiaty:** bez kosztu, tylko dla urody.
+- **Drzewo owocowe:** po zrozumieniu zdziczałego sadu. Rośnie rok, potem co jesień daje owoce.
+- **Słup rodowy:** 6 kłód, jeden na ród, ze znakiem rodu na szczycie. Wzmacnia mir ludzi tego rodu.
+
+Ścieżki i płoty wytycza się od punktu do punktu: pierwsze dotknięcie wyznacza początek, każde następne przeciąga linię. Pasek na dole pozwala zmieniać narzędzie, zacząć nową linię, usuwać i zakończyć.
+
+**Ocena ładu** (0–100) liczy ścieżki, płoty, ławy, drzewa, grządki, kwiaty i słupy rodowe. Obniżają ją budynki do remontu i ludzie bez dachu. Słowa: bezład, obozowisko, schludnie, ładna wieś, piękny ład. Ład co dzień podnosi nadzieję, a powyżej 40 łagodzi niezgodę. Przy 40 punktach kronika zapisuje, że osada z daleka wygląda jak wieś, przy 75 powstaje „Pieśń o naszej wsi”. Karta ładu jest w zakładce Ludzie.
+
+**Tryb zdjęć:** przycisk „Foto” przy sterowaniu kamerą chowa cały interfejs. Zostaje pasek: obrót kamery, zdjęcie, napisy i wyjście. Zdjęcie zapisuje się jako plik JPG z podpisem: nazwa osady i data na wyspie.
+
 # 12. Epoki
 
 ## Epoka I: Rozbitkowie (6–8 lat na wyspie, od wersji 0.18 grywalna do końca)
@@ -317,7 +333,7 @@ Wybór jest ostateczny. Po wyborze gra pokazuje Księgę rozbitków: ilu wyszło
 
 # 15. Technika
 
-- **Plik gry:** jeden plik HTML (około 440 kB) składany z części: p_head.html, p_const.js, p_mid.js, p_rest.js, p_map.js, p_tech.js, p_exp.js, p_v8.js, p_bld.js, p_story.js, p_slav.js, p_wild.js, p_ludzie.js, p_urz.js, p_pamiec.js, p_akt.js, p_kol.js, p_gfx.js, p_end.js.
+- **Plik gry:** jeden plik HTML (około 490 kB) składany z części: p_head.html, p_const.js, p_mid.js, p_rest.js, p_map.js, p_tech.js, p_exp.js, p_v8.js, p_bld.js, p_story.js, p_slav.js, p_wild.js, p_ludzie.js, p_urz.js, p_pamiec.js, p_akt.js, p_kol.js, p_slady.js, p_lad.js, p_gfx.js, p_end.js.
 - **Grafika:** Three.js r149 (WebGL2), własna obróbka obrazu (bloom, cienie kontaktowe, cienie chmur, tilt-shift).
 - **Zapis:** w pamięci przeglądarki (klucz przystan-v7), do pobrania jako plik JSON i do wczytania z pliku.
 - **Instalacja:** PWA z manifestem i service workerem, działa bez sieci.
@@ -342,6 +358,7 @@ Wybór jest ostateczny. Po wyborze gra pokazuje Księgę rozbitków: ilu wyszło
 | 0.17 | pamięć osady: pieśni, pierwsze razy, groby z imionami na Dziady, imię osady, znaki rodów; czas gry nie zwalnia przy słabszej płynności |
 | 0.18 | finał epoki I: pięć aktów z celami, sceny fabularne, dziecko w 12. roku wybiera fach, „Rok na wyspie”, wiec pokoleń z wyborem drogi, Księga rozbitków do pobrania, trzy poziomy trudności |
 | 0.19 | kolonizacja: przysiółki zakładane z własnej woli i prośby młodych, rodzaje przysiółków, pięć etapów wzrostu w 3D, zapasy i prośby przysiółków, ścieżki i drogi, wędrowcy, zagrożenia w głębi wyspy, mapa wspólnoty |
+| 0.20 | ład wsi: ścieżki, płoty, ławy, drzewa owocowe, grządki, kwiaty, słupy rodowe, ocena ładu, tryb zdjęć; osiem nowych śladów dawnego ludu, które z czasem okazują się potrzebne |
 
 # 17. Immersja i powroty
 
@@ -394,7 +411,7 @@ Kolejność dalszej pracy. Każda wersja kończy się czymś, w co da się zagra
 |---|---|
 | 0.18 Finał epoki I (gotowe) | akty jako rozdziały z warunkami końca, sceny fabularne (Nikt nas nie szuka, Za pięć dni sztorm, Ostatnia zima mistrza, Ostatni), dziecko w 12. roku samo wybiera fach, wiec pokoleń z wyborem drogi, Księga rozbitków do pobrania, trzy poziomy trudności, „Rok na wyspie” w noc Kupały |
 | 0.19 Kolonizacja (gotowe) | przysiółki zakładane z własnej woli, ścieżki między osadą a przysiółkami, przysiółki jako małe żywe osady, zagrożenia w głębi wyspy, mapa wspólnoty |
-| 0.20 Ład wsi | wytyczanie ścieżek, płoty, ławy, drzewa owocowe, ogródki, słupy rodowe, ład wsi wpływający na nastrój, tryb zdjęć |
+| 0.20 Ład wsi (gotowe) | wytyczanie ścieżek, płoty, ławy, drzewa owocowe, ogródki, słupy rodowe, ład wsi wpływający na nastrój, tryb zdjęć |
 | 0.21 Gospodarstwa | spiżarki rodzin, wieczorne prace przy kądzieli, dowóz materiałów, jakość wyrobów |
 | 0.22 Żywy świat | obrzędy i wesela w 3D, burze, śnieg na dachach, zorza, dźwięk w przestrzeni, opowieści życia, kamera przy ważnych chwilach |
 | 0.23 Szlif | „Od ostatniego razu” i „Na co czekamy”, rytm sesji, nowe wyspy i wyzwania, równowaga z ośmioletnich symulacji, łagodny początek, testy na Nordzie 6 |

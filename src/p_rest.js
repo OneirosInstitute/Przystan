@@ -549,7 +549,7 @@ function onArrive(p){const a=p.after;p.after=null;p.wt=0;
 function stepPerson(p,dt){
  if(p.job==='wyp'&&p.state==='away')return;
  const work=isWork()||p.job==='wyp'||!!p.fireB;
- if(p.state==='move'&&p.path&&p.path.length){const sp=(isChild(p)?1.6:2.3)*(p.carry?.85:1);let st=sp*dt;
+ if(p.state==='move'&&p.path&&p.path.length){const sp=(isChild(p)?1.6:2.3)*(p.carry?.85:1)*(typeof ladSpeed==='function'?ladSpeed(p):1);let st=sp*dt;
   while(st>0&&p.path.length){const w=p.path[0],dx=w.x-p.x,dz=w.z-p.z,d=Math.hypot(dx,dz);if(d<=st){p.x=w.x;p.z=w.z;p.path.shift();st-=d}else{p.x+=dx/d*st;p.z+=dz/d*st;p.dir=Math.atan2(dx,dz);st=0}}
   {const tk=tileOf(p.x,p.z),kk=tk[1]*N+tk[0];if(kk!==p.lt){p.lt=kk;tread[kk]=Math.min(1,tread[kk]+(isChild(p)?.012:.03));treadDirty=true}}
   p.rvT=(p.rvT||0)+dt;if(p.rvT>.6){p.rvT=0;const[i,j]=tileOf(p.x,p.z);if(p.job==='zwiad')reveal(i,j,3);else if(!rev[j*N+i])reveal(i,j,3)}
@@ -574,7 +574,7 @@ function stepPerson(p,dt){
   if(k==='hunt'){const h=S.herds[p.herd];if(!h||h.n<=0){p.state='idle';return}p.wt+=dt*e*craftEff(p,'mysliwy')*(tech('h_trop')?1.2:1)*bMul(bById(p.wb));gainXp(p,'mysliwy',dt);
    if(p.wt>=6){p.wt=0;h.n--;const a=Math.random()*6.28;h.tx=clamp(h.x+Math.cos(a)*9,-N/2+3,N/2-3);h.tz=clamp(h.z+Math.sin(a)*9,-N/2+3,N/2-3);toastOnce('hunt','Pierwsze udane polowanie');
     const dng={dzik:[.1,.35,'dzika'],niedzwiedz:[.25,.5,'niedźwiedzia'],lis:[.02,.1,'lisa']}[h.type];const trk=tech('h_trop')?.7:1;
-    if(dng&&Math.random()<dng[0]*trk*(p.trait==='Ostrożny'?.45:1)*(1-Math.min(.5,.08*offLv('lowczy')))){p.hp=Math.max(.1,p.hp-dng[1]);p.hurt=1;log(p.name+' ranny przez '+dng[2]+'. Wróci do sił za kilka dni.');toast(p.name+' ranny przez '+dng[2])}
+    if(dng&&Math.random()<dng[0]*trk*(S.slady&&S.slady.luk?.6:1)*(p.trait==='Ostrożny'?.45:1)*(1-Math.min(.5,.08*offLv('lowczy')))){p.hp=Math.max(.1,p.hp-dng[1]);p.hurt=1;log(p.name+' ranny przez '+dng[2]+'. Wróci do sił za kilka dni.');toast(p.name+' ranny przez '+dng[2])}
     if(h.type==='niedzwiedz')log(p.name+' wraca z polowania na niedźwiedzia. Mięsa starczy na długo, a futro ogrzeje całą rodzinę.');
     finishTrip(p,[{res:'mieso',q:ANIMAL[h.type][2]},{res:'skory',q:ANIMAL[h.type][3]*(tech('h_garb')?1.5:1)*(hasExt(bById(p.wb),'garbarnia')?1.3:1)}])}return}
   if(k==='tame'){const h=S.herds[p.herd],b=bById(p.wb);if(!h||h.n<=0||!b){p.state='idle';return}p.wt+=dt*e*craftEff(p,'hodowca');gainXp(p,'hodowca',dt);
@@ -901,9 +901,9 @@ function renderPanel(){
  else if(tab==='natura'){h+=natureHTML()}
  else if(tab==='budowa'){const need=S.bld.filter(b=>bDone(b)&&condOf(b)<.5);
   if(!buildCat)buildCat=S.bld.some(b=>b.kind==='zbieracz')?'dom':'jedzenie';
-  h+=`<div class="dchips bchips">${CATS.map(([c,cn])=>{const ks=BKEYS.filter(k=>BD[k].cat===c);const av=ks.filter(bAvail).length;return`<button data-bcat="${c}" class="${buildCat===c?'on':''}">${cn}<small>${av}/${ks.length}</small></button>`}).join('')}<button data-bcat="remont" class="${buildCat==='remont'?'on':''}">Remonty<small${need.length?' style="color:var(--ember)"':''}>${need.length?need.length+' do zrobienia':'w porządku'}</small></button></div>`;
+  h+=`<div class="dchips bchips">${CATS.map(([c,cn])=>{const ks=BKEYS.filter(k=>BD[k].cat===c);const av=ks.filter(bAvail).length;return`<button data-bcat="${c}" class="${buildCat===c?'on':''}">${cn}<small>${av}/${ks.length}</small></button>`}).join('')}<button data-bcat="remont" class="${buildCat==='remont'?'on':''}">Remonty<small${need.length?' style="color:var(--ember)"':''}>${need.length?need.length+' do zrobienia':'w porządku'}</small></button>${typeof ladChip==='function'?ladChip():''}</div>`;
   const sites=S.bld.filter(b=>!bDone(b));if(sites.length){h+=`<div class="card"><h4 style="font-size:15px">Place budowy</h4>${sites.map(s=>{const pc=Math.round(100*s.prog/s.work);return`<div class="cost" style="margin-top:4px">${BD[s.kind].n} · ${pc}% · przy pracy: ${s.workers||0}</div><div class="pbar"><div style="width:${pc}%"></div></div>`}).join('')}</div>`}
-  if(buildCat==='remont'){h+=`<div class="card"><h4>Remonty</h4><p>Budynki zużywają się co roku: szybciej nad morzem, na mokradłach i w górach, wolniej, gdy są wyżej ulepszone. Remont potrzebny jest zwykle co 2–3 lata.</p><p class="mut">${need.length?'Wymaga remontu: '+need.map(b=>BD[b.kind].n.toLowerCase()+' '+Math.round(condOf(b)*100)+'%').join(', ')+'.':'Wszystko w dobrym stanie.'}</p><button data-autorep="1" class="${S.autoRep!==false?'pri':''}">${S.autoRep!==false?'Remonty automatyczne: włączone':'Remonty automatyczne: wyłączone'}</button></div>`}
+  if(buildCat==='lad'&&typeof ladBuildHTML==='function'){h+=ladBuildHTML()}else if(buildCat==='remont'){h+=`<div class="card"><h4>Remonty</h4><p>Budynki zużywają się co roku: szybciej nad morzem, na mokradłach i w górach, wolniej, gdy są wyżej ulepszone. Remont potrzebny jest zwykle co 2–3 lata.</p><p class="mut">${need.length?'Wymaga remontu: '+need.map(b=>BD[b.kind].n.toLowerCase()+' '+Math.round(condOf(b)*100)+'%').join(', ')+'.':'Wszystko w dobrym stanie.'}</p><button data-autorep="1" class="${S.autoRep!==false?'pri':''}">${S.autoRep!==false?'Remonty automatyczne: włączone':'Remonty automatyczne: wyłączone'}</button></div>`}
   else{const ks=BKEYS.filter(k=>BD[k].cat===buildCat).sort((a,b)=>(bAvail(b)?1:0)-(bAvail(a)?1:0));
    ks.forEach(k=>{const d=BD[k],av=bAvail(k),cnt=S.bld.filter(b=>b.kind===k).length;
     h+=`<div class="card"${av?'':' style="opacity:.62"'}><h4>${d.n}${cnt?`<small style="font-weight:400;color:var(--mut);font-size:12px"> · masz ${cnt}</small>`:''}</h4><p>${d.d}</p>${av?`<div class="cost">${costHTML(d.cost)} · ${d.work} osobodni${d.wk?` · ${d.wk} prac.`:''}${d.r?` · zasięg ${d.r}`:''}</div><button class="pri" style="margin-top:7px" data-b="${k}">Postaw</button>`:`<div class="cost">Najpierw trzeba poznać: ${TECH_BY[d.need]?'„'+TECH_BY[d.need].n+'” (Wiedza)':{pole:'uprawę pola (Wiedza)',piec:'budowę pieca (Wiedza, próby)',cegla:'wypał cegły (Wiedza, próby)',kuznia:'wytop żelaza (Wiedza, próby)'}[d.need]||'odpowiednią wiedzę'}.</div>`}</div>`})}}
@@ -921,8 +921,7 @@ function renderPanel(){
   h+=`<div class="card"><h4>Pole</h4><p>Źródło: obserwacja dzikiego zboża albo księga „${BOOKS.siew}”.</p>${k.pole==='tak'?'<p class="ok">Poznane. Pola są w zakładce Budowa.</p>':`<p class="mut">Zbieracze zebrali ${Math.floor(S.zbozeTot)} z 25 ziarna potrzebnych do odkrycia.</p>`}</div>`;
   h+=`<div class="card"><h4>Uczniowie i dzieci</h4><p>Kto pracuje obok mistrza swojego fachu, uczy się dwa razy szybciej. Dzieci od szóstego roku podpatrują rodziców. Gdy mistrz umiera bez następcy, jego wiedza ginie.</p><p>${Object.keys(S.bonus).length?'Ulepszenia uczniów: '+Object.entries(S.bonus).map(([c,v])=>`${CN[c]} +${Math.round(v*100)}%`).join(', '):'Ulepszeń uczniów jeszcze nie ma.'}</p></div>`;
   h+=`<div class="card"><h4>Księgi</h4>${Object.keys(BOOKS).map(b=>`<p>„${BOOKS[b]}”: ${S.books[b]===2?'<span class="ok">przeczytana</span>':S.books[b]===1?'do przeczytania':'<span class="mut">na wraku</span>'}</p>`).join('')}</div>`;
-  h+=`<h3>Ślady dawnego ludu (${S.found.length} z ${tribe.length})</h3>`;
-  h+=S.found.length?S.found.map(i=>`<div class="card"><h4>${TRIBE[i][0]}</h4><p>${TRIBE[i][1]}</p></div>`).join(''):'<p class="lead">Nic jeszcze nie znaleziono. Zwiadowcy odsłaniają wyspę.</p>'}
+  h+=typeof sladHTML==='function'?sladHTML():''}
  else{h+=kronTools()+'<div class="log">'+S.log.map(l=>`<p><small>doba ${l.d}</small>${l.t}</p>`).join('')+'</div>'}
  if(h!==el._h){el._h=h;el.innerHTML=h;el.scrollTop=st}}
 let buildCat=null;

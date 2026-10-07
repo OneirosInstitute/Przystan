@@ -39,7 +39,7 @@ function ludDis(){if(!S||!S.people.length)return 0;return(.62-avgZad(S.people))*
 // ---- przysiółki: rody, które odeszły dalej, wciąż są częścią wspólnoty ----
 function hamletSpot(r){let ci=r.i,cj=r.j,best=null,bs=1e9;for(let rr=0;rr<16;rr++)for(let a=0;a<20;a++){const i=Math.round(ci+Math.cos(a/20*6.28)*rr),j=Math.round(cj+Math.sin(a/20*6.28)*rr);if(i<3||j<3||i>N-4||j>N-4)continue;const k=j*N+i;if(!land[k]||beach[k]||occ[k]>=0)continue;
   const sc=forestF(i+.5,j+.5)*20+rr*.6+(tileH(i,j)>6?8:0);if(sc<bs){bs=sc;best=[i,j]}}return best||[ci,cj]}
-function hamClear(h){const x0=tcx(h.i),z0=tcx(h.j);nodeBy.tree.forEach(n=>{if(n.amt>0&&Math.hypot(n.x-x0,n.z-z0)<3.2){n.amt=0;const k=nodes.indexOf(n);if(k>=0)S.nodeAmt[k]=0;setTree(n)}})}
+function hamClear(h){const x0=tcx(h.i),z0=tcx(h.j);nodeBy.tree.forEach(n=>{if(n.amt>0&&Math.hypot(n.x-x0,n.z-z0)<3.2){n.amt=0;const k=nodes.indexOf(n);if(k>=0)S.nodeAmt[k]=0;nodeVis(n)}})}
 function foundHamlet(m,why,rid,o){if(!m.length)return null;o=o||{};ludInit();const fid=m[0].fam,nm=famName(fid),head=m.filter(isAdult).sort((a,b)=>(b.sex==='m')-(a.sex==='m')||b.age-a.age)[0]||m[0];
  const used=new Set(S.hamlets.map(h=>h.rid));let cands=REGIONS.filter(r=>r&&r.id!==0&&!used.has(r.id)&&S.regs&&S.regs[r.id]);
  if(!cands.length)cands=REGIONS.filter(r=>r&&r.id!==0&&!used.has(r.id));const dist=r=>Math.hypot(r.i-camp.i,r.j-camp.j);cands.sort((a,b)=>dist(a)-dist(b));const r=rid!==undefined&&REGIONS[rid]?REGIONS[rid]:cands[0];if(!r)return null;

@@ -19,16 +19,16 @@ function slavDaily(){if(!S.slav){S.slav=1;S.people.forEach(p=>{if(p.age>=7)S.see
  // zaległa scena
  if(S.slavQ&&!evOpen&&!placing){const q=S.slavQ;S.slavQ=null;if(q==='dziadyLud')openEvent(DZIADY_LUD,{})}
  // Noc Kupały: rocznica rozbicia
- if(rd===0&&yr>=1&&once('kupala')){const krag=S.found.includes(0);if(ob&&S.res.opal>=6)S.res.opal-=6;
+ if(rd===0&&yr>=1&&once('kupala')){const krag=S.bld.some(b=>b.kind==='gaj'&&bDone(b));if(ob&&S.res.opal>=6)S.res.opal-=6;
   S.wh+=.07*f*g*(krag?1.25:1);S.wd-=.03*f*g;if(krag)techXp('nauka',10);
-  log(ob?`Noc Kupały. ${yr===1?'Rok':yr+' '+lata(yr)} temu morze wyrzuciło nas na ten brzeg. Płoną ogniska${krag?' w kupalnym kręgu':''}, młodzi skaczą przez ogień, dziewczęta puszczają wianki na wodę zatoki.`:`Najkrótsza noc w roku. ${yr===1?'Rok':yr+' '+lata(yr)} temu rozbiliśmy się o ten brzeg. Ktoś pali małe ognisko na plaży i długo patrzy w morze.`);
+  log(ob?`Noc Kupały. ${yr===1?'Rok':yr+' '+lata(yr)} temu morze wyrzuciło nas na ten brzeg. Płoną ogniska${krag?' pod świętym dębem':''}, młodzi skaczą przez ogień, dziewczęta puszczają wianki na wodę zatoki.`:`Najkrótsza noc w roku. ${yr===1?'Rok':yr+' '+lata(yr)} temu rozbiliśmy się o ten brzeg. Ktoś pali małe ognisko na plaży i długo patrzy w morze.`);
   toast('Noc Kupały');pamAdd(2,'obrzed');if(ob)fujarka()}
  // Dziady
  if(rd===18&&S.died>=1&&once('dziady')){if(ob)eat(K*n*.25);S.wh+=.04*f*g;S.wd-=.03*f*g;
   const lud=S.seen.dziadyLud==='tak';
-  log((law('morze')?'Dziady. Kaszę i chleb puszcza się na wodę zatoki, dla tych, których oddaliśmy morzu.':'Dziady. Na grobach stoją miski z kaszą i miodem, przy mogiłach płoną małe ognie. Nikt nie mówi głośno: tej nocy zmarli wracają do swoich.')+(lud?' Na mogile dziadów za wzgórzem też płonie ogień.':'')+(S.deadNames&&S.deadNames.length?' Wspomina się imiona: '+S.deadNames.slice(-10).join(', ')+'.':''));
+  log((law('morze')?'Dziady. Kaszę i chleb puszcza się na wodę zatoki, dla tych, których oddaliśmy morzu.':'Dziady. Na grobach stoją miski z kaszą i miodem, przy mogiłach płoną małe ognie. Nikt nie mówi głośno: tej nocy zmarli wracają do swoich.')+(lud?' Na kopcu w zdziczałym sadzie też płonie ogień.':'')+(S.deadNames&&S.deadNames.length?' Wspomina się imiona: '+S.deadNames.slice(-10).join(', ')+'.':''));
   toast('Dziady');pamAdd(2,'obrzed');if(lud)S.wh+=.01;
-  if(ob&&S.found.includes(1)&&!S.seen.dziadyLud)S.slavQ='dziadyLud'}
+  if(ob&&S.found.includes(7)&&!S.seen.dziadyLud)S.slavQ='dziadyLud'}
  // Szczodre Gody
  if(rd===25&&once('gody')){
   if(ob&&eat(K*n*.8)){S.wh+=.07*g;S.wd-=.05*g;log('Szczodre Gody. Najdłuższa noc. Cała osada siada do jednej wieczerzy, jedno miejsce zostaje puste dla tych, których zabrakło. Dzieci chodzą od chaty do chaty i śpiewają.');toast('Szczodre Gody');pamAdd(2,'obrzed');fujarka()}
@@ -55,7 +55,7 @@ function slavDaily(){if(!S.slav){S.slav=1;S.people.forEach(p=>{if(p.age>=7)S.see
  if(hasB('gaj')&&!S.seen.gaj){S.seen.gaj=1;S.wh+=.03;log('Pod starym dębem ułożono krąg kamieni, na gałęziach wiszą wstążki. Odtąd tam zbiera się wiec i tam składa się przysięgi.')}
  const sick=S.people.filter(p=>p.hp<.45).length;if(sick>=3&&!S.seen['licho'+yr]){S.seen['licho'+yr]=1;S.wd+=.01*fear;log('Choroba chodzi od chaty do chaty. „Licho nie śpi”, mówią starzy, i wieszają nad drzwiami pęki suszonych ziół.')}}
 const DZIADY_LUD={ey:'Dziady',t:'Mogiła dziadów',
- text:()=>'Ktoś pyta, czy postawić miskę także na starym kopcu za wzgórzem. Tamtych też ktoś kiedyś żegnał, a teraz nie ma ich kto wspomnieć.',
+ text:()=>'Ktoś pyta, czy postawić miskę także na kopcu pod najstarszą jabłonią w zdziczałym sadzie. Ten, kto sadził te drzewa, też miał swoich, a teraz nie ma go kto wspomnieć.',
  opts:[{n:'Postawić miskę i na ich mogile',d:'nadzieja co roku',f:()=>{S.seen.dziadyLud='tak';S.wh+=.03;return'Na kopcu płonie mały ogień. Od tego roku na Dziady wspomina się też dawny lud wyspy.'}},
   {n:'Zostawić ich w spokoju',d:'',f:()=>{S.seen.dziadyLud='nie';return'Kopiec zostaje w ciemności. Każdy ma swoich zmarłych.'}}]};
 // licho przy pożarze

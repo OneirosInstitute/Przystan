@@ -110,14 +110,14 @@ const BKEYS=Object.keys(BD);
 const CATS=[['dom','Domy'],['jedzenie','Jedzenie'],['uprawa','Pola i stada'],['przetw','Przetwórstwo'],['surowce','Surowce'],['rzemioslo','Rzemiosło'],['magazyn','Magazyny'],['wsp','Wspólnota']];
 const TIERS=[['Obóz',0,0],['Osada',4,20],['Wieś',8,32],['Przystań',14,50]];
 const TRIBE=[
- ['Kupalny krąg','Dziewięć głazów w kręgu, otwartym na wschód słońca w najdłuższy dzień. Starsi mówią, że to dobre miejsce na kupalny ogień.'],
- ['Mogiła dziadów','Porośnięty kopiec z płaskim kamieniem na szczycie. Ktoś tu leży od wieków. Odtąd mówią na to miejsce: mogiła dziadów.'],
- ['Malowana skała','Ochrowe dłonie, zwierzęta i łodzie na skale. Nikt nie wie, co znaczą. Ktoś tu żył przed nami.'],
- ['Dziadowe ognisko','Krąg osmalonych kamieni i gruba warstwa muszli. Palono tu ogień przez wiele pokoleń.'],
- ['Stary bałwan','Spróchniały słup z wyrytymi twarzami. Wszystkie patrzą w morze. Starzy nazywają go bałwanem i nie każą go ruszać.'],
- ['Kościsko','Kości zwierząt ułożone w krąg. Może po uczcie, może po obrzędzie. Żadnych ludzkich.'],
- ['Piorunowe kamienie','Odłupki krzemienia i kamienne siekierki. Starzy mówią na nie piorunowe kamienie: tam, gdzie uderzy piorun, zostaje taki kamień.'],
- ['Puste siedlisko','Koliste zagłębienia po szałasach w głębi wyspy. Nic więcej. Nie wiadomo, kiedy ani dokąd odeszli.']];
+ ['Naczynka w skale','W szczelinie skały stoi kilka małych glinianych naczynek, zalepionych woskiem. W środku sucha, gorzko pachnąca mieszanka. Nikt nie wie, do czego służyła.'],
+ ['Krzemienne groty','Pod skalnym nawisem leżą krzemienne groty, cienkie i ostre jak liść, z wcięciami u nasady. Obok spróchniały kawałek cisu, lekko wygięty. Ładne, ale na co komu kamienie, skoro mamy żelazo z wraku.'],
+ ['Malowana skała','Na gładkiej skale ktoś namalował ochrą rośliny: liście, kłącza, korzenie. Przy jednych odcisk dłoni, inne przekreślone. Nikt nie umie tego odczytać.'],
+ ['Dół z czerwonymi skorupami','Płytki dół wyłożony kamieniami, pełen popiołu i czerwonych skorup. Obok kupka gliny, zeschłej na kamień. Ktoś tu coś palił, wiele razy.'],
+ ['Kamienie z otworem','Na płyciźnie przy ujściu strumienia leżą płaskie kamienie z wywierconym otworem, ułożone w równym rzędzie, jakby coś je kiedyś łączyło.'],
+ ['Kamień z wgłębieniem','Płaski kamień z gładkim wgłębieniem i otoczak wytarty od używania. W szczelinach zwęglone ziarna, drobne jak u dzikiej trawy.'],
+ ['Kamienny okół','Krąg z ułożonych płasko kamieni, z wąskim wejściem. W środku kości kóz, młodych i starych, i strzępy rzemieni.'],
+ ['Zdziczały sad','Stare, pokręcone jabłonie i grusze rosną w równych rzędach, choć dokoła jest puszcza. Pod najstarszą jabłonią porośnięty kopiec z płaskim kamieniem.']];
 const TRAITS={Wytrwały:['Wytrwała','pracuje o 10% wydajniej'],Silny:['Silna','szybciej przy ciężkiej pracy'],Dociekliwy:['Dociekliwa','uczy się o 25% szybciej'],Ostrożny:['Ostrożna','rzadziej odnosi rany'],Uparty:['Uparta','próby udają się częściej'],Nauczyciel:['Nauczycielka','uczniowie przy nim uczą się szybciej'],Pogodny:['Pogodna','podnosi nadzieję osady'],Cierpliwy:['Cierpliwa','lepiej znosi głód i zimno']};
 const TKEYS=Object.keys(TRAITS);
 const WEATHER={frost:['siarczysty mróz',.8,-12],clear:['pogodnie',1,0],rain:['deszcz',.75,-2],fog:['mgła',.88,-1],storm:['sztorm',.5,-5],drought:['upał',.92,4],snow:['śnieg',.7,-5]};

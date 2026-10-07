@@ -37,7 +37,7 @@ function kolPath(h){const tl=kolAstar(camp.i,camp.j,h.i,h.j);if(!tl||tl.length<2
  const P={tiles:tl,set:new Set(tl),pts,cum,len:cum[cum.length-1]};hamPath[h.id]=P;return P}
 function kolClearPath(h,wide){const P=hamPath[h.id];if(!P)return;nodeBy.tree.forEach(n=>{if(n.amt<=0)return;const t=tileOf(n.x,n.z),k=t[1]*N+t[0];
   let hit=P.set.has(k)||P.set.has(k+1)||P.set.has(k-1)||P.set.has(k+N)||P.set.has(k-N);if(!hit&&wide)hit=[N+1,N-1,-N+1,-N-1,2,-2,2*N,-2*N].some(d=>P.set.has(k+d));
-  if(hit){n.amt=0;const q=nodes.indexOf(n);if(q>=0)S.nodeAmt[q]=0;setTree(n)}})}
+  if(hit){n.amt=0;const q=nodes.indexOf(n);if(q>=0)S.nodeAmt[q]=0;nodeVis(n)}})}
 function kolTread(){(S.hamlets||[]).forEach(h=>{const P=hamPath[h.id];if(!P)return;const road=h.road===2,v=road?1:.75;
   P.tiles.forEach(k=>{if(tread[k]<v)tread[k]=v;if(road)for(const d of[1,-1,N,-N]){const n=k+d;if(n>=0&&n<N*N&&land[n]&&tread[n]<.7)tread[n]=.7}})});treadDirty=true}
 const hamRib={};const ribMat=new THREE.MeshLambertMaterial({vertexColors:true,transparent:true,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-2,polygonOffsetUnits:-2});
@@ -86,7 +86,7 @@ hamVis=function(){if(!S||!S.hamlets)return;Object.keys(hamM).forEach(id=>{if(!S.
  S.hamlets.forEach(h=>{if(hamPath[h.id]===undefined)kolPath(h);const key=h.st+'|'+(h.pal?1:0)+'|'+(hamPath[h.id]?1:0);let g=hamM[h.id];
   if(g&&g.userData.key!==key){for(let k=fires.length-1;k>=0;k--)if(fires[k].g.parent===g)fires.splice(k,1);scene.remove(g);g=null;delete hamM[h.id]}
   if(!g){g=new THREE.Group();g.userData={key,chims:[]};const x0=tcx(h.i),z0=tcx(h.j),a0=h.id*2.1;const R=3.2+h.st*.9;
-   const x00=x0,z00=z0;nodeBy.tree.forEach(n=>{if(n.amt>0&&Math.hypot(n.x-x00,n.z-z00)<R+(h.pal?2:1.5)){n.amt=0;const k=nodes.indexOf(n);if(k>=0)S.nodeAmt[k]=0;setTree(n)}});
+   const x00=x0,z00=z0;nodeBy.tree.forEach(n=>{if(n.amt>0&&Math.hypot(n.x-x00,n.z-z00)<R+(h.pal?2:1.5)){n.amt=0;const k=nodes.indexOf(n);if(k>=0)S.nodeAmt[k]=0;nodeVis(n)}});
    const put=(m,lx,lz,ry)=>{const c=Math.cos(a0),s=Math.sin(a0),wx=x0+lx*c-lz*s,wz=z0+lx*s+lz*c;m.position.set(wx,Hy(wx,wz),wz);m.rotation.y=(ry||0)-a0;g.add(m);return[wx,wz]};
    put(makeBuildingModel('szalas',null),-1.4,.2,.4);{const c=Math.cos(a0),s=Math.sin(a0),wx=x0+.3*c-1.4*s,wz=z0+.3*s+1.4*c;makeFire(g,wx,Hy(wx,wz),wz,true)}
    if(h.st>=1){const p=put(makeBuildingModel('chata',null),1.6,-.4,-.5);g.userData.chims.push(p)}
