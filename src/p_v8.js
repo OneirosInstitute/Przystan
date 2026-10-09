@@ -3,7 +3,7 @@
 const law=id=>!!(S&&S.laws&&S.laws[id]);
 const isWorker=p=>p.age>=12||(law('pomoc')&&p.age>=10);
 const wellCount=()=>S.bld.filter(b=>b.kind==='studnia'&&bDone(b)).length;
-const waterCap=()=>18+14*wellCount()+8*S.bld.filter(b=>bDone(b)&&hasExt(b,'zuraw')).length;
+const waterCap=()=>18+14*wellCount()+8*S.bld.filter(b=>bDone(b)&&hasExt(b,'zuraw')).length+Math.floor(S.wBonus||0);
 function waterNeedOn(){return seasonIdx()===0||S.weather.k==='drought'}
 
 /* ---- rozbudowa domów w miejscu ---- */

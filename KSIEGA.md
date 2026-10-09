@@ -1,6 +1,6 @@
 ---
 title: "Przystań — Księga gry"
-subtitle: "Wersja 1.2.1 · 9 października 2026 · Epoka I ukończona"
+subtitle: "Wersja 1.3 · 9 października 2026 · Epoka I ukończona"
 ---
 
 # 1. Czym jest Przystań
@@ -395,6 +395,24 @@ Każdą kartę zamyka krzyżyk albo dotknięcie pustej ziemi.
 
 **Wolne ręce nigdy nie stoją (od 1.2.1).** Kolejność pracy robotników: zaznaczone na mapie, budowa i dowóz materiału, wrak (gdy otwarta część jest pusta, sami biorą się za następną), a gdy nic z tego nie zostało, zbierają w promieniu kilkudziesięciu kroków od obozu to, czego brakuje: jedzenie, gdy starcza go na mniej niż 8 dni, drewno, gdy kłód jest mniej niż 80 albo jesienią i zimą kończy się opał. Drzew tuż przy obozie nie ruszają. Gdy niczego nie brakuje, odpoczywają.
 
+## Prace we wsi (od wersji 1.3)
+
+Nikt w osadzie nie stoi bezczynnie. Kto nie ma przydziału (robotnik, a także budowniczy, gdy nie ma budowy), najpierw robi to, co zaznaczysz na mapie, potem pomaga przy budowie i wraku, a gdy tego nie ma, sam bierze się za prostą, ale potrzebną pracę. Wybiera to, czego osada w tej chwili najbardziej potrzebuje, i nie wszyscy robią to samo.
+
+| Praca | Kiedy | Co daje |
+|---|---|---|
+| Chrust na opał | zawsze, gdy opału jest mniej niż 300; jesienią i zimą najczęściej | 1,2 opału z kursu, bez ścinania drzew |
+| Rąbanie drewna przy domu | gdy opału brakuje, a kłód jest co najmniej 25 | z jednej kłody dwie porcje opału (drewutnia daje trzy) |
+| Jagody i grzyby | gdy jest miejsce w spiżarni, poza zimą | jedzenie z krzaków, grzybów i dzikiego zboża w okolicy |
+| Ryby z brzegu | gdy jedzenia starcza na mniej niż 15 dni | ryby z łowisk przy brzegu, mniej niż z pomostu |
+| Naprawy domostw | gdy któryś budynek zużył się poniżej 80% | łata dach i ściany: stan budynku rośnie, zużywa trochę kłód |
+| Noszenie wody | latem, gdy studnie nie wystarczają | woda do domów ze studni albo ze strumienia; dodatkowe porcje wody na ten dzień |
+| Opieka nad chorymi | gdy ktoś słabnie, najczęściej ktoś z rodziny albo starszy | chory szybciej wraca do zdrowia |
+
+Dzieci od 12 lat częściej zbierają jagody i noszą wodę, starsi łatają domy i siedzą przy chorych, silni rąbią drewno. Kto już coś robi, chętniej przy tym zostaje.
+
+W zakładce Praca karta „Prace we wsi” pokazuje, kto teraz czym się zajmuje. Wieczorem przy ognisku ludzie mówią o swojej pracy: „Połatałem dach u Bożydara. Przez jakiś czas nie będzie kapać.”
+
 # 12. Epoki
 
 ## Epoka I: Rozbitkowie (6–8 lat na wyspie, od wersji 0.18 grywalna do końca)
@@ -452,7 +470,7 @@ Wybór jest ostateczny. Po wyborze gra pokazuje Księgę rozbitków: ilu wyszło
 
 # 15. Technika
 
-- **Plik gry:** jeden plik HTML (około 580 kB) składany z części: p_head.html, p_const.js, p_mid.js, p_rest.js, p_map.js, p_tech.js, p_exp.js, p_v8.js, p_bld.js, p_story.js, p_slav.js, p_wild.js, p_ludzie.js, p_urz.js, p_pamiec.js, p_akt.js, p_kol.js, p_slady.js, p_lad.js, p_gosp.js, p_bud.js, p_swiat.js, p_szlif.js, p_mapa.js, p_cisza.js, p_gfx.js, p_end.js.
+- **Plik gry:** jeden plik HTML (około 590 kB) składany z części: p_head.html, p_const.js, p_mid.js, p_rest.js, p_map.js, p_tech.js, p_exp.js, p_v8.js, p_bld.js, p_story.js, p_slav.js, p_wild.js, p_ludzie.js, p_urz.js, p_pamiec.js, p_akt.js, p_kol.js, p_slady.js, p_lad.js, p_gosp.js, p_bud.js, p_swiat.js, p_szlif.js, p_mapa.js, p_cisza.js, p_sluzba.js, p_gfx.js, p_end.js.
 - **Grafika:** Three.js r149 (WebGL2), własna obróbka obrazu (bloom, cienie kontaktowe, cienie chmur, tilt-shift).
 - **Zapis:** w pamięci przeglądarki (klucz przystan-v7, kopia zapasowa przystan-v7-bak), do pobrania jako plik JSON i do wczytania z pliku.
 - **Instalacja:** PWA z manifestem i service workerem, działa bez sieci.
@@ -484,6 +502,7 @@ Wybór jest ostateczny. Po wyborze gra pokazuje Księgę rozbitków: ilu wyszło
 | 1.1 | mapa: dotykanie zasobów na mapie i zaznaczanie ich do wycinki, wydobycia, zbioru i połowu (także całej okolicy), znaki nad zaznaczonymi; budowniczowie przydzielani w zakładce Praca |
 | 1.2 | cicha wyspa: ekran bez menu, górna linia z ostrzeżeniami, przycisk Osada i księga z działami (czas stoi), karta „Postaw tu” po dotknięciu ziemi, zmiana pracy z karty człowieka, znaki przy krawędzi ekranu, rozmowy przy ognisku, obrót dwoma palcami, przełącznik pełnego menu |
 | 1.2.1 | poprawka: budowy kończące się z pełnym materiałem nie były odbierane (budynek bez pracowników, domy bez rodzin), robotnicy stawali, gdy rozebrali otwartą część wraku; teraz budowy zawsze się odbierają, stare zapisy same się naprawiają, robotnicy sami biorą następną część wraku, a wolne ręce bez zajęcia zbierają drewno albo jedzenie w pobliżu obozu |
+| 1.3 | prace we wsi: kto nie ma przydziału, sam zbiera chrust, rąbie drewno, zbiera jagody i grzyby, łowi z brzegu, łata domy, nosi wodę i opiekuje się chorymi, według potrzeb osady; karta w zakładce Praca; ludzie mówią o swojej pracy przy ognisku |
 
 # 17. Immersja i powroty
 
@@ -543,8 +562,9 @@ Kolejność dalszej pracy. Każda wersja kończy się czymś, w co da się zagra
 | 1.0 Epoka I (gotowe) | paczka do instalacji, zapis odporny na zmiany wersji, płynność na telefonie; GitHub i Railway czekają na repozytorium |
 | 1.1 Mapa (gotowe) | zaznaczanie zasobów na mapie, budowniczowie |
 | 1.2 Cicha wyspa (gotowe) | ekran bez menu, karty po dotknięciu, księga Osada, znaki przy krawędzi, rozmowy przy ognisku |
-| 1.3 Rytm roku | dłuższa doba (4 minuty, 20 dób w roku), trójpolówka i chwasty, przednówek z chorobami o jasnej przyczynie i wyborem racji, progi zapasów w warsztatach, pogoda czytana ze znaków przyrody |
-| 1.4 Pamięć wyspy | wiedza, która żyje w ludziach i może zginąć, miejsca nazywane od wydarzeń |
+| 1.3 Prace we wsi (gotowe) | kto nie ma przydziału, sam robi proste, potrzebne prace |
+| 1.4 Rytm roku | dłuższa doba (4 minuty, 20 dób w roku), trójpolówka i chwasty, przednówek z chorobami o jasnej przyczynie i wyborem racji, progi zapasów w warsztatach, pogoda czytana ze znaków przyrody |
+| 1.5 Pamięć wyspy | wiedza, która żyje w ludziach i może zginąć, miejsca nazywane od wydarzeń |
 
 **Epoka II** (po 1.0): trzy drogi z rozdrożami opisanymi wyżej. Przez cały czas obowiązuje: klimat słowiański bez magii, brak przybyszów, decyzje gracza w scenach i na wiecu, a życie ludzi toczy się samo.
 
