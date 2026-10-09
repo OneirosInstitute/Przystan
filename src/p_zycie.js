@@ -53,10 +53,10 @@ const EVE_ACT={dom:'siedzi przed domem',ogien:'siedzi przy ognisku',bania:'w ban
   return _sp(p,dt)}}
 {const _e=eff;eff=function(p){return _e(p)*(p.mealBuff>S.day?1.12:1)}}
 function rytmDaily(){const d=dayN()-1;const ad=S.people.filter(isWorker);if(!ad.length)return;
- const ate=ad.filter(p=>p.mealD===d).length/ad.length;if(ate>.4){S.hope=clamp(S.hope+.012*ate,0,1);S.dis=Math.max(0,(S.dis||0)-.008*ate);
+ const ate=ad.filter(p=>p.mealD===d).length/ad.length;if(ate>.4){S.hope=clamp(S.hope+.012*ate*KF,0,1);S.dis=Math.max(0,(S.dis||0)-.008*ate*KF);
   // wspólny kocioł: gotuje się raz dla wszystkich, nic się nie marnuje
   const tot=foodTotal(),back=K*S.people.length*.12*ate;if(tot>0)FOOD.forEach(k=>S.res[k]+=back*(S.res[k]/tot));S.kociol=(S.kociol||0)+back}
- const eve=S.people.filter(p=>p.eveD===d).length/Math.max(1,S.people.length);if(eve>.5){S.hope=clamp(S.hope+.008,0,1);S.dis=Math.max(0,(S.dis||0)-.01)}
+ const eve=S.people.filter(p=>p.eveD===d).length/Math.max(1,S.people.length);if(eve>.5){S.hope=clamp(S.hope+.008*KF,0,1);S.dis=Math.max(0,(S.dis||0)-.01*KF)}
  const bath=S.people.filter(p=>p.bathD===d);if(bath.length>=3){bath.forEach(p=>p.hp=Math.min(1,p.hp+.04));S.hope=clamp(S.hope+.02,0,1);S.banD=d;if(!S.seen.bania1){S.seen.bania1=1;log('Pierwsza sobota w bani. Para, kamienie, zimna woda po wszystkim. Ludzie wracają czerwoni i weseli.')}}}
 
 // ---------- dzieci ----------
@@ -117,16 +117,16 @@ function dogStep(dt){if(!S||!S.dogs)return;const t=tod(),night=t<T0-.02||t>.9;
 {const _st=step;step=function(dt){_st(dt);try{dogStep(dt);if(S.search&&S.day>=S.search.until)searchEnd();tlokaTick()}catch(e){console.warn(e)}}}
 function dogDaily(){if(!S.dogs)return;const sea=seasonIdx(),yr=Math.floor(S.day/YEAR);
  for(const d of S.dogs){if(d.dead)continue;const was=d.age;d.age+=1/YEAR;
-  if(d.tame<1){const food=S.res.mieso>=.6?'mieso':S.res.ryby>=.6?'ryby':null;if(food){S.res[food]-=.6;d.tame+=.035}else d.tame-=.07;
+  if(d.tame<1){const food=S.res.mieso>=.6?'mieso':S.res.ryby>=.6?'ryby':null;if(food){S.res[food]-=.6*KF;d.tame+=.035*KF}else d.tame-=.07*KF;
    if(d.tame<=0){d.dead=1;d.gone=1;log(`${d.name} uciekł${d.sex==='k'?'a':''} w nocy do lasu. Głód był silniejszy niż ludzie.`);dogDirty=true;continue}
    if(d.tame>=1){d.tame=1;log(`${d.name} już nie ucieka do lasu. Przychodzi na wołanie i śpi przy drzwiach.`)}}
   if(was<1&&d.age>=1&&d.origin!=='statek')log(`${d.name} wyrasta na ${d.wolf>=.5?'rosłego, szarego psa o wilczym spojrzeniu':'silnego psa'}.`);
   if(d.age>=d.life){d.dead=1;S.dogsDead=(S.dogsDead||[]).concat([d.name]);log(`${d.name} nie wstał${d.sex==='k'?'a':''} rano. Dzieci pochowały ${d.sex==='k'?'ją':'go'} pod brzozą i długo nikt nic nie mówił.`);dogDirty=true;continue}
-  if(dogAdult(d)&&Math.random()<.035){const q=Math.random()<.6;S.res.mieso=(S.res.mieso||0)+(q?2.5:1.5);if(!S.seen['dogGift'+d.id]){S.seen['dogGift'+d.id]=1;log(`${d.name} przynosi z lasu ${q?'zająca':'kaczkę'}. Od dziś dzieci chodzą z ${d.sex==='k'?'nią':'nim'} na łąki.`)}}}
- S.hope=clamp(S.hope+.002*Math.min(4,dogsOk().filter(dogAdult).length),0,1);
+  if(dogAdult(d)&&Math.random()<.035*KF){const q=Math.random()<.6;S.res.mieso=(S.res.mieso||0)+(q?2.5:1.5);if(!S.seen['dogGift'+d.id]){S.seen['dogGift'+d.id]=1;log(`${d.name} przynosi z lasu ${q?'zająca':'kaczkę'}. Od dziś dzieci chodzą z ${d.sex==='k'?'nią':'nim'} na łąki.`)}}}
+ S.hope=clamp(S.hope+.002*KF*Math.min(4,dogsOk().filter(dogAdult).length),0,1);
  // szczenięta wiosną
  if(sea===3&&dogsOk().length<9){const A=dogsOk().filter(d=>dogAdult(d)&&d.age>=1.5&&d.litY!==yr);const f=A.filter(d=>d.sex==='k'),m=A.filter(d=>d.sex!=='k');
-  if(f.length&&m.length&&Math.random()<.06){const ma=f[(Math.random()*f.length)|0],pa=m[(Math.random()*m.length)|0];ma.litY=yr;pa.litY=yr;const n=Math.min(9-dogsOk().length,2+((Math.random()*3)|0));const w=(ma.wolf+pa.wolf)/2;
+  if(f.length&&m.length&&Math.random()<.06*KF){const ma=f[(Math.random()*f.length)|0],pa=m[(Math.random()*m.length)|0];ma.litY=yr;pa.litY=yr;const n=Math.min(9-dogsOk().length,2+((Math.random()*3)|0));const w=(ma.wolf+pa.wolf)/2;
    for(let k=0;k<n;k++){const sex=Math.random()<.5?'k':'m';dogNew({name:dogName(sex),sex,age:0,origin:w>0&&w<1?'mies':ma.origin==='wilk'?'wilk':'statek',wolf:Math.max(0,Math.min(1,w+(Math.random()-.5)*.1)),ma:ma.name,pa:pa.name,x:ma.x,z:ma.z,home:ma.home})}
    log(`${ma.name} ma szczenięta: ${n}. Ojcem jest ${pa.name}.${w>0&&w<1?' Po ojcu i matce mają po trochu: szarą sierść i krótki psi ogon, wilcze uszy i psią ufność.':''}`);toast(`Szczenięta u ${gen(ma.name)}`)}}}
 EVENTS.push({id:'wilczeta',w:2.4,cd:YEAR*.9,cond:()=>seasonIdx()===3&&S.day>YEAR*.4&&dogsOk().length<8&&S.herds.some(h=>h.type==='wilk')&&S.people.some(p=>isWorker(p)&&(p.job==='zwiad'||(p.job==='wb'&&(bById(p.wb)||{}).kind==='mysliwy'))),

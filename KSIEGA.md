@@ -1,6 +1,6 @@
 ---
 title: "Przystań — Księga gry"
-subtitle: "Wersja 1.4 · 9 października 2026 · Epoka I ukończona"
+subtitle: "Wersja 1.6 · 9 października 2026 · Epoka I ukończona"
 ---
 
 # 1. Czym jest Przystań
@@ -11,7 +11,7 @@ Gra opowiada o pokoleniach. Założyciele starzeją się i odchodzą, a osadę p
 
 **Platforma.** Gra działa w przeglądarce jako jeden plik HTML i jako aplikacja do zainstalowania na telefonie (PWA, pełny ekran). Projektowana jest najpierw na telefon, w pionie i w poziomie. Docelowym urządzeniem jest OnePlus Nord 6 (Snapdragon 8s Gen 4, grafika Adreno 825, ekran 2772×1272 do 165 Hz).
 
-**Tempo.** Doba trwa 2 minuty przy tempie 1×. Rok ma 40 dni (80 minut) i cztery pory po 10 dni: lato, jesień, zima i wiosna. Gra zaczyna się latem. Tempo można zmieniać (1×, 2×, 4×, 8×) albo zatrzymać grę.
+**Tempo.** Doba trwa 4 minuty przy tempie 1× (od wersji 1.5, wcześniej 2 minuty). Rok ma 20 dób (80 minut) i cztery pory po 5 dób: lato, jesień, zima i wiosna. Gra zaczyna się latem. Tempo można zmieniać (1×, 2×, 4×, 8×) albo zatrzymać grę.
 
 # 2. Zasady świata
 
@@ -445,6 +445,58 @@ Czasem dziecko gubi się w lesie. Do wyboru: szukają wszyscy (dzień pracy prze
 
 **Poprawka.** Gdy ludzie przerywali drogę do pracy, zajęte przez nich drzewa i krzaki zostawały zablokowane. Teraz zawsze się zwalniają.
 
+## Rytm roku (od wersji 1.5)
+
+**Dłuższa doba.** Doba trwa 4 minuty, a rok 20 dób. Rok jest tak samo długi jak wcześniej, ale dzień pracy trwa ponad dwie minuty, więc widać, jak ludzie pracują, jedzą i wracają do domów. Jedzenie, opał, zużycie i wzrost liczą się na dobę tak, żeby na rok wychodziło tyle samo. Stare zapisy są przeliczane przy wczytaniu: pory roku, wiek ludzi i kronika się nie zmieniają.
+
+**Trójpolówka.** Zanim osada pozna płodozmian (Uprawa: odłóg i płodozmian), co roku sieje zboże na tym samym polu. Ziemia słabnie, przybywa chwastów, a po dwóch latach z rzędu w mokry rok w ziarnie może pojawić się sporysz. Z płodozmianem każde pole przechodzi kolejno:
+- **zboże ozime:** plon o 15% większy, ale ziemia się męczy;
+- **jare z grochem:** plon o 15% mniejszy, za to z pola schodzi groch i bób (warzywa) i ziemia odzyskuje siły;
+- **ugór:** rok odpoczynku; żyzność wraca szybko (szybciej, gdy w zagrodzie są kozy), a chwasty się wypalają.
+
+**Chwasty** rosną na polu przez cały wzrost i obniżają plon nawet o 45%. Pielenie je wyrywa. W karcie pola widać płodozmian, chwasty i żyzność. Można też wrócić do „co roku zboże”.
+
+**Przymrozek** jesienią i zimą niszczy ponad połowę niezebranego zboża. **Dożynki:** gdy w danym roku zbierze się ostatnie pole, osada świętuje. Uczta kosztuje trochę jedzenia, ale podnosi nadzieję.
+
+**Choroby o jasnej przyczynie.** Każda ma powód widoczny w karcie chorego, w „Na co czekamy” i u góry ekranu:
+
+| Choroba | Przyczyna | Co pomaga |
+|---|---|---|
+| szkorbut | kilka dni bez owoców, warzyw i kiszonek | jagody, groch z jarego pola, kiszonki; mija, gdy wróci świeże jedzenie |
+| biegunka | latem woda ze strumienia, gdy nie ma studni; zaraża | studnia |
+| gorączka | zimno i wilgoć w domu jesienią i zimą | opał, odzież, sobotnia bania |
+| zatrucie sporyszem | chleb z zepsutego ziarna | płodozmian; zielarstwo zmniejsza ryzyko |
+
+Chory pracuje wolniej i słabnie. Zioła i opatrywanie ran skracają chorobę. Najsłabsi, starzy i małe dzieci, mogą umrzeć.
+
+**Przednówek.** Gdy pod koniec zimy albo wiosną jedzenia zostaje na mniej niż 8 dni, trzeba zdecydować, kto je pierwszy:
+- najpierw dzieci i karmiące matki (dorośli słabną);
+- najpierw ci, którzy pracują (dzieci i starzy chorują);
+- po równo;
+- wszyscy w las i nad wodę: budowy stoją, a wolne ręce szukają jedzenia cztery razy chętniej.
+
+**Progi zapasów.** W karcie warsztatu jest „Rób do”, co 10 sztuk albo bez limitu. Gdy zapas dojdzie do progu, pracownicy warsztatu nie stoją, tylko pomagają w pracach we wsi. Tak samo pracownicy pola, gdy pole leży odłogiem.
+
+**Pogoda ze znaków przyrody.** Gdy zbliża się zmiana pogody, najstarszy i najbardziej doświadczony człowiek odczytuje znaki: jaskółki nisko nad wodą (sztorm), czyste i ostre gwiazdy (mróz), zamknięte mrowiska (deszcz), krążące wrony (śnieg), brak rosy (upał). Myli się tym rzadziej, im jest starszy i im lepiej zna się na zbieraniu i polu. Z Kalendarzem nieba znaki są pewne. Gdy zapowiada mróz albo sztorm, a zboże stoi dojrzałe, wolne ręce rzucają się do żniw.
+
+## Pamięć wyspy (od wersji 1.6)
+
+**Wiedza żyje w ludziach.** Wiedza o uprawie, hodowli i rzemiośle zostaje w osadzie tak długo, jak żyje ktoś, kto ją zna:
+- kto ją poznał i pracuje w tym fachu;
+- albo kto doszedł w fachu do biegłości 2.
+
+Gdy umrze ostatni taki człowiek, osada ją traci. Znikają premie, a budynków, które jej wymagają (kuźnia, piec do cegły, piec zduński), nie da się stawiać. Wiedza wraca, gdy ktoś znów dojdzie w fachu do biegłości 2. Jeśli starsi opowiadali o niej przy ogniu (wieczory „Opowieści”), wystarczy biegłość 1. Gdy umie już tylko jedna osoba, kronika ostrzega, a w zakładce Wiedza karta „Wiedza w ludziach” pokazuje, kto to jest i jakiego ucznia trzeba. Księga osady (Nauka) chroni całą wiedzę przed zapomnieniem.
+
+**Miejsca nazywane od wydarzeń.** Wyspa sama zapisuje swoją historię w nazwach:
+- miejsce, gdzie ktoś zmarł daleko od osady: Mogiła, Kamień albo Kopiec z jego imieniem;
+- wykrot, pod którym znaleziono zgubione dziecko (na przykład Wykrot Wiesi);
+- Wilcze Legowisko;
+- Pogorzelisko po spalonym domu;
+- spalone drzewo po uderzeniu pioruna (na przykład Spalony Dąb);
+- brzoza nad grobem psa.
+
+Nazwy pojawiają się na mapie przy bliższym widoku, w karcie „Postaw tu”, w Kronice (karta „Miejsca na wyspie”) i w rozmowach przy ognisku.
+
 # 12. Epoki
 
 ## Epoka I: Rozbitkowie (6–8 lat na wyspie, od wersji 0.18 grywalna do końca)
@@ -502,7 +554,7 @@ Wybór jest ostateczny. Po wyborze gra pokazuje Księgę rozbitków: ilu wyszło
 
 # 15. Technika
 
-- **Plik gry:** jeden plik HTML (około 615 kB) składany z części: p_head.html, p_const.js, p_mid.js, p_rest.js, p_map.js, p_tech.js, p_exp.js, p_v8.js, p_bld.js, p_story.js, p_slav.js, p_wild.js, p_ludzie.js, p_urz.js, p_pamiec.js, p_akt.js, p_kol.js, p_slady.js, p_lad.js, p_gosp.js, p_bud.js, p_swiat.js, p_szlif.js, p_mapa.js, p_cisza.js, p_sluzba.js, p_zycie.js, p_gfx.js, p_end.js.
+- **Plik gry:** jeden plik HTML (około 650 kB) składany z części: p_head.html, p_const.js, p_mid.js, p_rest.js, p_map.js, p_tech.js, p_exp.js, p_v8.js, p_bld.js, p_story.js, p_slav.js, p_wild.js, p_ludzie.js, p_urz.js, p_pamiec.js, p_akt.js, p_kol.js, p_slady.js, p_lad.js, p_gosp.js, p_bud.js, p_swiat.js, p_szlif.js, p_mapa.js, p_cisza.js, p_sluzba.js, p_zycie.js, p_rok.js, p_wiedza.js, p_gfx.js, p_end.js.
 - **Grafika:** Three.js r149 (WebGL2), własna obróbka obrazu (bloom, cienie kontaktowe, cienie chmur, tilt-shift).
 - **Zapis:** w pamięci przeglądarki (klucz przystan-v7, kopia zapasowa przystan-v7-bak), do pobrania jako plik JSON i do wczytania z pliku.
 - **Instalacja:** PWA z manifestem i service workerem, działa bez sieci.
@@ -536,6 +588,8 @@ Wybór jest ostateczny. Po wyborze gra pokazuje Księgę rozbitków: ilu wyszło
 | 1.2.1 | poprawka: budowy kończące się z pełnym materiałem nie były odbierane (budynek bez pracowników, domy bez rodzin), robotnicy stawali, gdy rozebrali otwartą część wraku; teraz budowy zawsze się odbierają, stare zapisy same się naprawiają, robotnicy sami biorą następną część wraku, a wolne ręce bez zajęcia zbierają drewno albo jedzenie w pobliżu obozu |
 | 1.3 | prace we wsi: kto nie ma przydziału, sam zbiera chrust, rąbie drewno, zbiera jagody i grzyby, łowi z brzegu, łata domy, nosi wodę i opiekuje się chorymi, według potrzeb osady; karta w zakładce Praca; ludzie mówią o swojej pracy przy ognisku |
 | 1.4 | życie wsi: rytm dnia (mycie, wspólny posiłek, wieczór przed domem, sobotnia bania), dzieci w zabawie i przy rodzicach, zgubione dziecko, pies z wraku, wilcze szczenięta i mieszańce, tłoka; wyłączona łódź z obcymi |
+| 1.5 | rytm roku: doba 4 minuty i 20 dób w roku (przeliczanie starych zapisów), trójpolówka, chwasty i sporysz, przymrozek na niezebrane, dożynki, choroby o jasnej przyczynie, przednówek z wyborem racji, progi zapasów w warsztatach, pogoda ze znaków przyrody i pośpiech przy żniwach |
+| 1.6 | pamięć wyspy: wiedza żyje w ludziach, ginie z ostatnim, który umiał, i wraca z nauką albo dzięki opowieściom; miejsca nazywane od wydarzeń, widoczne na mapie |
 
 # 17. Immersja i powroty
 
@@ -597,8 +651,8 @@ Kolejność dalszej pracy. Każda wersja kończy się czymś, w co da się zagra
 | 1.2 Cicha wyspa (gotowe) | ekran bez menu, karty po dotknięciu, księga Osada, znaki przy krawędzi, rozmowy przy ognisku |
 | 1.3 Prace we wsi (gotowe) | kto nie ma przydziału, sam robi proste, potrzebne prace |
 | 1.4 Życie wsi (gotowe) | rytm dnia, dzieci, psy, tłoka |
-| 1.5 Rytm roku | dłuższa doba (4 minuty, 20 dób w roku), trójpolówka i chwasty, przednówek z chorobami o jasnej przyczynie i wyborem racji, progi zapasów w warsztatach, pogoda czytana ze znaków przyrody |
-| 1.6 Pamięć wyspy | wiedza, która żyje w ludziach i może zginąć, miejsca nazywane od wydarzeń |
+| 1.5 Rytm roku (gotowe) | dłuższa doba (4 minuty, 20 dób w roku), trójpolówka i chwasty, przednówek z chorobami o jasnej przyczynie i wyborem racji, progi zapasów w warsztatach, pogoda czytana ze znaków przyrody |
+| 1.6 Pamięć wyspy (gotowe) | wiedza, która żyje w ludziach i może zginąć, miejsca nazywane od wydarzeń |
 
 **Epoka II** (po 1.0): trzy drogi z rozdrożami opisanymi wyżej. Przez cały czas obowiązuje: klimat słowiański bez magii, brak przybyszów, decyzje gracza w scenach i na wiecu, a życie ludzi toczy się samo.
 

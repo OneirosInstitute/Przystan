@@ -517,7 +517,7 @@ function planJob(p){
     if(best&&Math.random()<.75){const st=nearestWalk(...tileOf(best.x,best.z));if(st&&go(p,st,'tame',null)){p.herd=S.herds.indexOf(best);p.act='oswaja kozy';return true}}}
    if(e&&go(p,e,'care',b)){p.act=(b.animals||0)?'doi i karmi kozy':'naprawia płot';return true}return false}
   if(d.field){const e=entryOf(b.kind,b.i,b.j);const f=b.field||(b.field={st:'puste',g:0,fert:1,q:0,left:0});
-   if(f.st==='puste'){if(!inSow()){p.act='pole czeka na siew';return false}if(S.res.ziarno<10){p.act='brak ziarna do siewu';return false}}
+   if(f.st==='puste'){if(f.rot===2){p.act='pole leży odłogiem (ugór)';if(typeof limChore==='function'&&limChore(p,'ugór'))return true;return false}if(!inSow()){p.act='pole czeka na siew';return false}if(S.res.ziarno<10){p.act='brak ziarna do siewu';return false}}
    if(f.st==='rosnie'&&f.q>=1){p.act='zboże rośnie';return false}
    if(e&&go(p,e,'field',b)){p.act={puste:'sieje',rosnie:'pieli',dojrzale:'żnie zboże'}[f.st];return true}return false}
   if(b.kind==='lesnik'){const c=bCenter(b);let best=null,bd=1e9;for(const n of nodeBy.tree){if(n.gone||n.amt>0||n.grow>0||n.claim>0||!revAt(n.i,n.j))continue;const dd=Math.hypot(n.x-c.x,n.z-c.z);if(dd<=rOf(b)&&dd<bd){bd=dd;best=n}}
@@ -583,8 +583,8 @@ function stepPerson(p,dt){
   if(k==='care'){const b=p.tgt;if(!b||!bById(b.id)){p.state='idle';return}gainXp(p,'hodowca',dt);b.care=(b.care||0)+dt*e*craftEff(p,'hodowca');p.wt+=dt;if(p.wt>12){p.state='idle';p.wait=1}return}
   if(k==='field'){const b=p.tgt;if(!b||!bById(b.id)){p.state='idle';return}const f=b.field;gainXp(p,'rolnik',dt);p.wt+=dt*e*craftEff(p,'rolnik');
    if(f.st==='puste'){if(p.wt>=10){p.wt=0;if(S.res.ziarno>=10&&inSow()){S.res.ziarno-=10;f.st='rosnie';f.g=0;f.q=0;log('Zasiano pole. Teraz pielenie i czekanie.');fieldVis(b)}p.state='idle'}}
-   else if(f.st==='rosnie'){f.q=Math.min(1,f.q+dt*e*.004);if(p.wt>=12){p.state='idle';p.wait=.5}}
-   else if(f.st==='dojrzale'){if(p.wt>=6){p.wt=0;const q=Math.min(6,f.left);f.left-=q;if(f.left<=0){f.st='puste';S.seen.harvest=1;adaptHarvest();f.fert=Math.max(.3,f.fert-(tech('u_odlog')?.06:.12));f.g=0;log('Żniwa skończone. Gleba na tym polu jest trochę bardziej zmęczona.');fieldVis(b)}if(q>0)finishTrip(p,[{res:'ziarno',q}]);else p.state='idle'}}
+   else if(f.st==='rosnie'){f.q=Math.min(1,f.q+dt*e*.004);f.weed=Math.max(0,(f.weed||0)-dt*e*.003);if(p.wt>=12){p.state='idle';p.wait=.5}}
+   else if(f.st==='dojrzale'){if(p.wt>=6){p.wt=0;const q=Math.min(6,f.left);f.left-=q;if(f.left<=0){f.st='puste';S.seen.harvest=1;adaptHarvest();f.fert=Math.max(.3,f.fert-(typeof fertLoss==='function'?fertLoss(f):(tech('u_odlog')?.06:.12)));f.g=0;if(typeof fieldDone==='function')fieldDone(b);else log('Żniwa skończone. Gleba na tym polu jest trochę bardziej zmęczona.');fieldVis(b)}if(q>0)finishTrip(p,[{res:'ziarno',q}]);else p.state='idle'}}
    return}
   if(k==='read'){const bk=p.book;if(!bk||S.books[bk]!==1){p.state='idle';return}S.readP[bk]=(S.readP[bk]||0)+dt*e*(p.trait==='Dociekliwy'?1.3:1)*(p.age<20?1.1:1);techXp('nauka',dt*.08);p.act='czyta: '+BOOKS[bk];
    if(S.readP[bk]>=200){S.books[bk]=2;log(p.name+' kończy czytać „'+BOOKS[bk]+'”.'+(bk==='kowal'?' Można spróbować postawić kuźnię (zakładka Wiedza).':bk==='siew'?' Wiemy, jak założyć pole.':''));toast('Przeczytano: '+BOOKS[bk]);if(bk==='siew')S.know.pole='tak';p.state='idle'}return}
@@ -605,8 +605,8 @@ function stepPerson(p,dt){
   if(k==='zdun'){const kn=S.know;if(!kn.active){p.state='idle';return}const T=TRIAL[kn.active];gainXp(p,T.c,dt);techXp('nauka',dt*.04);kn[kn.active+'_p']+=dt*e*craftEff(p,T.c);
    if(kn[kn.active+'_p']>=T.need)finishTrial(p);return}
   if(k==='prod'){const b=p.tgt;if(!b||!bById(b.id)){p.state='idle';return}const d=BD[b.kind];const list=[].concat(d.prod);const has=pr=>Object.entries(pr.in).every(([r,v])=>(S.res[r]||0)>=v);
-   const pr=list.find(x=>has(x)&&(!x.when||x.when()));
-   if(!pr&&list.some(has)){p.act='zapas wystarczy, odpoczywa';p.wt=0;p.wait=6;p.state='idle';return}
+   const pr=list.find(x=>has(x)&&(!x.when||x.when())&&!(typeof limHit==='function'&&limHit(b,x)));
+   if(!pr&&list.some(has)){if(typeof limChore==='function'&&list.some(x=>limHit(b,x))&&limChore(p,'zapas'))return;p.act='zapas wystarczy, odpoczywa';p.wt=0;p.wait=6;p.state='idle';return}
    if(!pr){const p0=list[0];p.act='czeka na: '+Object.keys(p0.in).filter(r=>(S.res[r]||0)<p0.in[r]).map(r=>RN[r].toLowerCase()).join(', ');p.wt=0;p.wait=3;p.state='idle';return}
    p.wt+=dt*e*craftEff(p,d.c)*bMul(b);gainXp(p,d.c,dt);if(p.wt>=pr.t*(pr.out.plotno&&tech('r_tkac')?.6:1)){p.wt=0;Object.entries(pr.in).forEach(([r,v])=>S.res[r]-=v);if(b.kind==='drewutnia'&&hasExt(b,'wiata'))S.res.opal+=1;Object.entries(pr.out).forEach(([r,v])=>{if(typeof gospMade==='function')gospMade(b,r,v);S.res[r]=(S.res[r]||0)+v;if(r==='narz'||r==='narzk'||r==='odziez'){const q=.7+.12*Math.max(...S.people.filter(x=>x.wb===b.id).map(x=>x.sk[d.c]||0),0);S.toolQ=S.toolQ||{};const o=S.toolQ[r]||1,st=Math.max(0,S.res[r]-v);S.toolQ[r]=(o*st+q*v)/(st+v)}});if(b.kind==='cegielnia')toastOnce('cegla','Pierwsze cegły wyjęte z pieca')}return}}}
 function fieldVis(b){const m=bMesh[b.id];if(!m||!m.userData.crops)return;const f=b.field||{st:'puste',g:0};const g=f.st==='puste'?0:f.st==='dojrzale'?1:f.g;const col=new THREE.Color().setRGB(L(lerp(.42,.86,g)),L(lerp(.6,.7,g)),L(lerp(.25,.3,g)));
@@ -721,7 +721,7 @@ function newDay(){
    if(!cared&&(sea===2||Math.random()<.02)&&Math.random()<.08*K){b.animals--;log('Koza uciekła z zaniedbanej zagrody.')}}
   const c=bCenter(b);S.herds.forEach(h=>{if(h.type!=='wilk'||h.n<2||!b.animals)return;if(Math.hypot(h.x-c.x,h.z-c.z)<26&&Math.random()<dM()*K*(cared?.02:.07)*(tech('h_ostr')?.3:1)*(law('straz')?.3:1)*(hasExt(b,'obora')?.5:1)*(hasB('wieza')?.8:1)*(typeof dogGuard==='function'?dogGuard():1)){b.animals--;log('Wilki w nocy zagryzły kozę w zagrodzie.');toast('Wilki napadły na zagrodę')}})});
  // pola
- S.bld.forEach(b=>{if(!b.field)return;const f=b.field;if(f.st==='rosnie'&&sea!==2){f.g+=K/30*(tech('u_selek')?1.15:1)*(hasExt(b,'rowy')?1.15:1);if(f.g>=1){f.st='dojrzale';const best=Math.max(0,...S.people.filter(p=>p.wb===b.id).map(p=>p.sk.rolnik));f.left=Math.round(70*f.fert*(.6+.4*f.q)*(1+.1*best)*(tech('u_selek')?1.2:1)*(tech('u_nawoz')&&S.bld.some(z=>z.kind==='zagroda'&&(z.animals||0)>0)?1.25:1)*(hasExt(b,'strach')?1.1:1)*(1+.1*(lvOf(b)-1))*(1+.3*(S.adapt||0)));log('Zboże na polu dojrzało: około '+f.left+' ziarna do zebrania.');toast('Zboże dojrzało')}fieldVis(b)}
+ S.bld.forEach(b=>{if(!b.field)return;const f=b.field;if(f.st==='rosnie'&&sea!==2){f.g+=K/30*(tech('u_selek')?1.15:1)*(hasExt(b,'rowy')?1.15:1);if(f.g>=1){f.st='dojrzale';const best=Math.max(0,...S.people.filter(p=>p.wb===b.id).map(p=>p.sk.rolnik));f.left=Math.round(70*f.fert*(.6+.4*f.q)*(1+.1*best)*(tech('u_selek')?1.2:1)*(tech('u_nawoz')&&S.bld.some(z=>z.kind==='zagroda'&&(z.animals||0)>0)?1.25:1)*(hasExt(b,'strach')?1.1:1)*(1+.1*(lvOf(b)-1))*(1+.3*(S.adapt||0))*(typeof fieldMul==='function'?fieldMul(b):1));log('Zboże na polu dojrzało: około '+f.left+' ziarna do zebrania.');toast('Zboże dojrzało')}fieldVis(b)}
   else if(f.st==='dojrzale'&&sea===2){f.left=Math.floor(f.left/2);if(f.left<=0){f.st='puste';fieldVis(b)}}
   else if(f.st==='puste'&&sea!==2)f.fert=Math.min(1,f.fert+.003*K*(tech('u_odlog')?3:1)*(hasExt(b,'rowy')?1.5:1))});
  // wrak: rozpad i sztorm

@@ -10,7 +10,7 @@ function ludInit(){S.rel=S.rel||{};S.hamlets=S.hamlets||[];S.rody=S.rody||{};
  S.people.forEach(p=>{if(!p.par&&!p.born&&p.age<18){const par=famMembers(p.fam).filter(q=>q.age>=25&&q.pair!==null);if(par.length)p.par=par.map(q=>q.id)}});
  ludReady=true}
 const lpick=a=>a.length?a[(Math.random()*a.length)|0]:null;
-function gen(n){if(/ek$/.test(n))return n.slice(0,-2)+'ka';if(/ś$/.test(n))return n.slice(0,-1)+'sia';if(/o$/.test(n))return n.slice(0,-1)+'a';if(/[kgl]a$/.test(n))return n.slice(0,-1)+'i';if(/a$/.test(n))return n.slice(0,-1)+'y';return n+'a'}
+function gen(n){if(/ek$/.test(n))return n.slice(0,-2)+'ka';if(/ś$/.test(n))return n.slice(0,-1)+'sia';if(/o$/.test(n))return n.slice(0,-1)+'a';if(/(s|z|c|n|dz)ia$/.test(n))return n.slice(0,-1);if(/ia$/.test(n))return n.slice(0,-1)+'i';if(/[kgl]a$/.test(n))return n.slice(0,-1)+'i';if(/a$/.test(n))return n.slice(0,-1)+'y';return n+'a'}
 function rodName(id){if(!ludReady&&S)ludInit();const r=S.rody&&S.rody[id];return r?'ród '+gen(r.name):'ród nieznany'}
 function placeName(n){if(/sław$/.test(n))return n+'ice';if(/ek$/.test(n))return n.slice(0,-2)+'kowo';if(/[ao]$/.test(n))return n.slice(0,-1)+'owo';if(/ś$/.test(n))return n.slice(0,-1)+'siowo';return n+'owice'}
 // ---- więzi ----

@@ -46,7 +46,7 @@ autoJob=function(p){return choreJob(p)};
 function chLog(p,k,x){S.chLog=S.chLog||[];S.chLog.push({k,id:p.id,x:x||'',d:Math.floor(S.day)});if(S.chLog.length>12)S.chLog.shift();S.chDay=S.chDay||{};S.chDay[k]=(S.chDay[k]||0)+1}
 {const _sp=stepPerson;stepPerson=function(p,dt){
   if(p.state==='work'&&p.workKind==='chore'&&isWork()&&!p.fireB){const k=p.chK;
-   if(!k||!CHORE[k]||!isFree(p)){p.state='idle';p.wait=.2;return}
+   if(!k||!CHORE[k]||(!isFree(p)&&!p.limC)){p.state='idle';p.wait=.2;return}
    const e=eff(p);p.wt+=dt*e;const T=CHORE[k][2];
    if(k==='chrust'){gainXp(p,'drwal',dt*.3);if(p.wt>=T){p.wt=0;chLog(p,k);finishTrip(p,[{res:'opal',q:1.2}])}return}
    if(k==='rabanie'){gainXp(p,'drwal',dt*.5);if(p.wt>=T*(p.trait==='Silny'?.8:1)){p.wt=0;if(S.res.drewno>=20){S.res.drewno-=1;S.res.opal+=2;chLog(p,k)}else{p.chK=null}p.state='idle';p.wait=.3}return}
