@@ -1,6 +1,6 @@
 ---
 title: "Przystań — Księga gry"
-subtitle: "Wersja 1.6 · 9 października 2026 · Epoka I ukończona"
+subtitle: "Wersja 1.7 · 9 października 2026 · Epoka I ukończona"
 ---
 
 # 1. Czym jest Przystań
@@ -542,6 +542,17 @@ Wybór jest ostateczny. Po wyborze gra pokazuje Księgę rozbitków: ilu wyszło
   - wiatr w drzewach, trawie, paprociach i trzcinie, mocniejszy w sztorm;
   - blask słońca na wodzie, opadające liście jesienią, pyłki w letnim słońcu;
   - do około 80 klatek na sekundę, żeby oszczędzać baterię.
+- **Grafika 1.7 (Wysoka i Ultra):**
+  - światło: złota godzina rano i wieczorem, cieplejsze słońce, chłodniejsze cienie, korekcja barw zależna od pory dnia, wilgotny świat po deszczu;
+  - woda: fale z drobnymi zmarszczkami, odbicie nieba silniejsze pod kątem, odblask słońca ostry w południe i szeroki o zmierzchu; cienie chmur sięgają też otwartego morza, więc nie ma już szwu na granicy wody;
+  - teren: drobna faktura ziemi, mokry pas piasku przy linii wody, przyciemnione dno płycizn i refleksy światła na dnie (na Ultra);
+  - gęsta trawa wokół miejsca, na które patrzy kamera (Ultra około 11 kępek na pole, Wysoka 5), w barwach pory roku, znikająca zimą i z daleka;
+  - liście prześwitujące pod słońce w koronach drzew i krzakach;
+  - ludzie: zwężane ręce i nogi, dłonie, barki, szyja, spódnice u kobiet, pasy, buty, chusty, brody i torby;
+  - poranna mgła nad wodą i łąkami, słabsza wieczorem;
+  - budynki starzeją się widocznie: im gorszy stan, tym ciemniejsze i bardziej zielone od mchu drewno, aż do remontu;
+  - ryby wyskakujące z wody przy brzegu;
+  - licznik klatek na sekundę w menu tempa, obok nazwy poziomu jakości.
 - **Dźwięk:** szum morza i wiatru, ptaki za dnia, świerszcze nocą, trzask ognia, dzwonek wydarzeń i fujarka wieczorami oraz w czasie świąt.
 
 # 14. Interfejs
@@ -554,8 +565,8 @@ Wybór jest ostateczny. Po wyborze gra pokazuje Księgę rozbitków: ilu wyszło
 
 # 15. Technika
 
-- **Plik gry:** jeden plik HTML (około 650 kB) składany z części: p_head.html, p_const.js, p_mid.js, p_rest.js, p_map.js, p_tech.js, p_exp.js, p_v8.js, p_bld.js, p_story.js, p_slav.js, p_wild.js, p_ludzie.js, p_urz.js, p_pamiec.js, p_akt.js, p_kol.js, p_slady.js, p_lad.js, p_gosp.js, p_bud.js, p_swiat.js, p_szlif.js, p_mapa.js, p_cisza.js, p_sluzba.js, p_zycie.js, p_rok.js, p_wiedza.js, p_gfx.js, p_end.js.
-- **Grafika:** Three.js r149 (WebGL2), własna obróbka obrazu (bloom, cienie kontaktowe, cienie chmur, tilt-shift).
+- **Plik gry:** jeden plik HTML (około 675 kB) składany z części: p_head.html, p_const.js, p_mid.js, p_rest.js, p_map.js, p_tech.js, p_exp.js, p_v8.js, p_bld.js, p_story.js, p_slav.js, p_wild.js, p_ludzie.js, p_urz.js, p_pamiec.js, p_akt.js, p_kol.js, p_slady.js, p_lad.js, p_gosp.js, p_bud.js, p_swiat.js, p_szlif.js, p_mapa.js, p_cisza.js, p_sluzba.js, p_zycie.js, p_rok.js, p_wiedza.js, p_gfx.js, p_grafika.js, p_end.js.
+- **Grafika:** Three.js r149 (WebGL2), własna obróbka obrazu (bloom, cienie kontaktowe, cienie chmur, tilt-shift, korekcja barw), własne shadery wody i terenu dopinane do materiałów Three.js.
 - **Zapis:** w pamięci przeglądarki (klucz przystan-v7, kopia zapasowa przystan-v7-bak), do pobrania jako plik JSON i do wczytania z pliku.
 - **Instalacja:** PWA z manifestem i service workerem, działa bez sieci.
 - **Repozytorium:** src/ z częściami gry, build.js (składa grę i PWA do dist/), server.js (serwer bez zależności), railway.json (wdrożenie na Railway).
@@ -590,6 +601,7 @@ Wybór jest ostateczny. Po wyborze gra pokazuje Księgę rozbitków: ilu wyszło
 | 1.4 | życie wsi: rytm dnia (mycie, wspólny posiłek, wieczór przed domem, sobotnia bania), dzieci w zabawie i przy rodzicach, zgubione dziecko, pies z wraku, wilcze szczenięta i mieszańce, tłoka; wyłączona łódź z obcymi |
 | 1.5 | rytm roku: doba 4 minuty i 20 dób w roku (przeliczanie starych zapisów), trójpolówka, chwasty i sporysz, przymrozek na niezebrane, dożynki, choroby o jasnej przyczynie, przednówek z wyborem racji, progi zapasów w warsztatach, pogoda ze znaków przyrody i pośpiech przy żniwach |
 | 1.6 | pamięć wyspy: wiedza żyje w ludziach, ginie z ostatnim, który umiał, i wraca z nauką albo dzięki opowieściom; miejsca nazywane od wydarzeń, widoczne na mapie |
+| 1.7 | grafika: złota godzina i korekcja barw, woda z odbiciem nieba i odblaskiem słońca, bez szwu na morzu, faktura terenu, mokry piasek i refleksy na dnie, gęsta trawa, prześwitujące liście, dokładniejsi ludzie, poranna mgła, starzejące się budynki, wyskakujące ryby, licznik klatek |
 
 # 17. Immersja i powroty
 
@@ -653,6 +665,7 @@ Kolejność dalszej pracy. Każda wersja kończy się czymś, w co da się zagra
 | 1.4 Życie wsi (gotowe) | rytm dnia, dzieci, psy, tłoka |
 | 1.5 Rytm roku (gotowe) | dłuższa doba (4 minuty, 20 dób w roku), trójpolówka i chwasty, przednówek z chorobami o jasnej przyczynie i wyborem racji, progi zapasów w warsztatach, pogoda czytana ze znaków przyrody |
 | 1.6 Pamięć wyspy (gotowe) | wiedza, która żyje w ludziach i może zginąć, miejsca nazywane od wydarzeń |
+| 1.7 Grafika (gotowe) | światło, woda, teren, trawa i liście, ludzie, mgła, starzenie się budynków |
 
 **Epoka II** (po 1.0): trzy drogi z rozdrożami opisanymi wyżej. Przez cały czas obowiązuje: klimat słowiański bez magii, brak przybyszów, decyzje gracza w scenach i na wiecu, a życie ludzi toczy się samo.
 
