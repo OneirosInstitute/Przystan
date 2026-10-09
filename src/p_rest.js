@@ -256,7 +256,7 @@ function gable(w,d,h,mat,y,over,sc){over=over===undefined?.25:over;const W=w/2+o
  const gp=[],gu=[];[[0,1,2],[3,5,4]].forEach(t=>t.forEach(i=>{gp.push(P[i*3]*(w/2)/W,P[i*3+1]*.98,P[i*3+2]>0?d/2:-d/2);gu.push((P[i*3]+W)*s*.8,P[i*3+1]*s*.8)}));
  const gg=new THREE.BufferGeometry();gg.setAttribute('position',new THREE.Float32BufferAttribute(gp,3));gg.setAttribute('uv',new THREE.Float32BufferAttribute(gu,2));gg.computeVertexNormals();
  const gm=new THREE.Mesh(gg,mPlankD);gm.material=new THREE.MeshStandardMaterial({map:TX.planks,color:0xa08a70,side:THREE.DoubleSide,roughness:.95});gm.position.y=y;gm.castShadow=true;
- const grp=new THREE.Group();grp.add(m,gm);const rp=new THREE.Mesh(new THREE.CylinderGeometry(.06,.06,D*2+.1,6),matLog2);rp.rotation.x=Math.PI/2;rp.position.set(0,y+h+.02,0);rp.castShadow=true;grp.add(rp);return grp}
+ const grp=new THREE.Group();grp.userData.ridge={y:y+h+.02,D,W,h,base:y};grp.add(m,gm);const rp=new THREE.Mesh(new THREE.CylinderGeometry(.06,.06,D*2+.1,6),matLog2);rp.rotation.x=Math.PI/2;rp.position.set(0,y+h+.02,0);rp.castShadow=true;grp.add(rp);return grp}
 function cyl(r,h,mat,x,y,z,rx,ry,rz,seg){const m=new THREE.Mesh(new THREE.CylinderGeometry(r,r,h,seg||7),mat);m.position.set(x||0,y||0,z||0);m.rotation.set(rx||0,ry||0,rz||0);m.castShadow=true;m.receiveShadow=true;return m}
 function woodpile(g,x,z,n,ry){const p=new THREE.Group();for(let k=0;k<n;k++){const row=(k/5)|0,col=k%5;p.add(cyl(.08,.6,matLog,(col-2)*.17+(row%2)*.08,.08+row*.15,0,0,0,Math.PI/2,6))}p.position.set(x,0,z);p.rotation.y=ry||0;g.add(p)}
 function barrel(g,x,z,s){const b=cyl(.17*(s||1),.42*(s||1),mPlank,x,.21*(s||1),z,0,0,0,10);g.add(b);g.add(cyl(.175*(s||1),.03,M(0x3a3632),x,.12*(s||1),z,0,0,0,10),cyl(.175*(s||1),.03,M(0x3a3632),x,.32*(s||1),z,0,0,0,10))}
@@ -592,7 +592,7 @@ function stepPerson(p,dt){
   if(k==='gasic'){const b=p.tgt;if(!b||!b.fire){p.fireB=null;p.state='idle';p.wait=.3;return}b.fire.s-=dt*.011*e*(wellCount()?1:.35)*(law('straz')?1.4:1);p.dir=(p.dir||0)+Math.sin(clock*3)*.02;return}
   if(k==='build'){const s=p.tgt;if(s&&bDone(s)&&s.proj&&bById(s.id)){s.proj.prog+=dt*e*craftEff(p,'ciesla')*(tech('r_zrab')?1.25:1)*(1+.04*offLv('budowa'));gainXp(p,'ciesla',dt);if(s.proj.prog>=s.proj.work){finishProj(s);p.tgt=null;p.state='idle';p.wait=.2}return}
   if(!s||bDone(s)){if(s&&s.workers>0)s.workers--;p.tgt=null;p.state='idle';p.wait=.2;return}
-   s.prog+=dt*e*craftEff(p,'ciesla')*(tech('r_zrab')?1.25:1)*(1+.04*offLv('budowa'));gainXp(p,'ciesla',dt);if(s.mat&&s.prog>s.work*Math.min(1,(s.del||0)/s.mat)){s.prog=s.work*Math.min(1,(s.del||0)/s.mat);if(s.workers>0)s.workers--;p.tgt=null;p.state='idle';p.wait=.4;p.act='czeka na materiał';return}{const bm=bMesh[s.id];if(bm)bm.scale.y=Math.max(.12,Math.min(1,s.prog/s.work))}
+   s.prog+=dt*e*craftEff(p,'ciesla')*(tech('r_zrab')?1.25:1)*(1+.04*offLv('budowa'));gainXp(p,'ciesla',dt);if(s.mat&&s.prog>s.work*Math.min(1,(s.del||0)/s.mat)){s.prog=s.work*Math.min(1,(s.del||0)/s.mat);if(s.workers>0)s.workers--;p.tgt=null;p.state='idle';p.wait=.4;p.act='czeka na materiał';return}{const bm=bMesh[s.id];if(bm){if(typeof buildApply==='function')buildApply(bm,s.prog/s.work);else bm.scale.y=Math.max(.12,Math.min(1,s.prog/s.work))}}
    if(bDone(s)){completeSite(s);p.tgt=null;p.state='idle';p.wait=.2}return}
   if(k==='wreck'){const W=S.wreck;if(W.gone){p.state='idle';return}gainXp(p,'ciesla',dt);
    const tg=W.target>=0?W.parts[W.target]:null;

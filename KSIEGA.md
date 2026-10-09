@@ -1,6 +1,6 @@
 ---
 title: "Przystań — Księga gry"
-subtitle: "Wersja 0.21 · 6 października 2026 · z planem do wersji 1.0"
+subtitle: "Wersja 0.22 · 6 października 2026 · z planem do wersji 1.0"
 ---
 
 # 1. Czym jest Przystań
@@ -295,6 +295,38 @@ W domach jedzenie psuje się powoli. Dobre naczynia to opóźniają. Scena „Pe
 
 **Pamiątki.** Mistrz (fach 4 albo 5) raz na jakiś czas robi rzecz, o której mówi cała osada, na przykład siekierę, kożuch, dzban, skrzynię albo obrus z imieniem twórcy. Kto ją ma, pracuje o 5% lepiej. Po śmierci właściciela pamiątka przechodzi na najstarsze dziecko, a gdy go nie ma, na kogoś z rodziny albo rodu. Pamiątki i ich kolejni właściciele trafiają do Księgi rozbitków.
 
+## Żywy świat (od wersji 0.22)
+
+**Budowa warstwami.** Budynek nie rośnie już jak rozciągany klocek. Najpierw na placu stoją paliki ze sznurkiem i kupka doniesionego materiału: kłody, kamienie, deski. Potem rośnie podmurówka, ściany wiersz po wierszu, wreszcie dach. Kupka materiału maleje, gdy cieśle go zużywają, i rośnie, gdy robotnicy donoszą nowy. Po ukończeniu budynek przysiada, a spod niego wzbija się kurz.
+
+**Budynki, które dojrzewają.** Domy zmieniają się z wiekiem i z poziomem:
+- po kilku porach roku: śparogi (skrzyżowane deski na szczytach dachu), kamienne stopnie do drzwi, pieniek do rąbania z siekierą;
+- po półtora roku: rzeźbiony konik na kalenicy i skrzynka z kwiatami pod oknem;
+- dom rodu dostaje to wszystko szybciej.
+
+Nad drzwiami wisi znak rodu. Jesienią pod okapem schną wianki cebuli i pęki ziół, zimą przy ścianie rośnie stos drewna. Warsztaty na poziomie 2 dostają śparogi i kamienne stopnie, na poziomie 3 konika na kalenicy i latarnię. Przy spiżarni, składzie i drewutni widać zapasy: worki, beczki, skrzynie i sągi rosną i maleją razem z tym, co osada ma.
+
+**Śnieg.** Zimą śnieg osiada na dachach i na wszystkim, co patrzy w niebo, a wiosną topnieje. Im więcej śnieżnych dni, tym grubsza pokrywa.
+
+**Obrzędy i wesela w 3D.** O zmierzchu cała osada schodzi się do ognia:
+- Noc Kupały: wielkie ognisko (pod świętym dębem, jeśli jest gaj), dwa kręgi tańczących, a na wodzie płyną wianki ze świeczkami.
+- Wesele: para młoda przy ogniu, goście tańczą w kręgu, obok stoi rózga weselna ze wstążkami.
+- Dziady: świeczki przy miejscu pamięci, ludzie stoją w półkolu i wspominają.
+- Szczodre Gody: ognisko i taniec w środku zimy.
+- Topienie Marzanny: słomiana kukła idzie do wody i tonie.
+
+Dziady, Szczodre Gody i Marzanna są w 3D, gdy osada trzyma się dawnych obrzędów. Podczas obrzędu nie przychodzą zwykłe wydarzenia. Gra fujarka.
+
+**Burze.** W czasie sztormu niebo rozświetlają błyskawice, a grzmot przychodzi z opóźnieniem zależnym od odległości. Czasem piorun trafia w wysokie drzewo i zostaje osmalony kikut. Starzy mówią wtedy o Perunie.
+
+**Zorza.** W pogodne zimowe noce nad wyspą tańczą zielone i fioletowe zorze. Za pierwszym razem powstaje pieśń, a starzy mówią, że to dusze przodków.
+
+**Dźwięk w przestrzeni.** Słychać pracę tam, gdzie się dzieje: siekiery drwali, łupanie kamienia, młotki na budowie, kowadło w kuźni, piłę w pracowni. Dźwięk dochodzi z lewej albo prawej strony ekranu i jest głośniejszy, gdy kamera jest blisko.
+
+**Opowieść życia.** Karta każdej osoby pokazuje jej życie: czy przypłynęła statkiem, czy urodziła się na wyspie, fach i biegłość, żonę albo męża, dzieci, urząd, wykonane pamiątki i najbliższego przyjaciela. Gdy ktoś umiera, kronika zapisuje wspomnienie o nim, a ostatnie wspomnienia trafiają do Księgi rozbitków.
+
+**Kamera przy ważnych chwilach.** Przy obrzędach, weselach i pożarach kamera sama płynie w to miejsce, ale tylko wtedy, gdy gracz od kilku sekund nie przesuwa widoku, żaden panel nie jest otwarty i nic nie jest stawiane. Można to wyłączyć w zakładce Kronika.
+
 # 12. Epoki
 
 ## Epoka I: Rozbitkowie (6–8 lat na wyspie, od wersji 0.18 grywalna do końca)
@@ -352,7 +384,7 @@ Wybór jest ostateczny. Po wyborze gra pokazuje Księgę rozbitków: ilu wyszło
 
 # 15. Technika
 
-- **Plik gry:** jeden plik HTML (około 505 kB) składany z części: p_head.html, p_const.js, p_mid.js, p_rest.js, p_map.js, p_tech.js, p_exp.js, p_v8.js, p_bld.js, p_story.js, p_slav.js, p_wild.js, p_ludzie.js, p_urz.js, p_pamiec.js, p_akt.js, p_kol.js, p_slady.js, p_lad.js, p_gosp.js, p_gfx.js, p_end.js.
+- **Plik gry:** jeden plik HTML (około 535 kB) składany z części: p_head.html, p_const.js, p_mid.js, p_rest.js, p_map.js, p_tech.js, p_exp.js, p_v8.js, p_bld.js, p_story.js, p_slav.js, p_wild.js, p_ludzie.js, p_urz.js, p_pamiec.js, p_akt.js, p_kol.js, p_slady.js, p_lad.js, p_gosp.js, p_bud.js, p_swiat.js, p_gfx.js, p_end.js.
 - **Grafika:** Three.js r149 (WebGL2), własna obróbka obrazu (bloom, cienie kontaktowe, cienie chmur, tilt-shift).
 - **Zapis:** w pamięci przeglądarki (klucz przystan-v7), do pobrania jako plik JSON i do wczytania z pliku.
 - **Instalacja:** PWA z manifestem i service workerem, działa bez sieci.
@@ -379,6 +411,7 @@ Wybór jest ostateczny. Po wyborze gra pokazuje Księgę rozbitków: ilu wyszło
 | 0.19 | kolonizacja: przysiółki zakładane z własnej woli i prośby młodych, rodzaje przysiółków, pięć etapów wzrostu w 3D, zapasy i prośby przysiółków, ścieżki i drogi, wędrowcy, zagrożenia w głębi wyspy, mapa wspólnoty |
 | 0.20 | ład wsi: ścieżki, płoty, ławy, drzewa owocowe, grządki, kwiaty, słupy rodowe, ocena ładu, tryb zdjęć; osiem nowych śladów dawnego ludu, które z czasem okazują się potrzebne |
 | 0.21 | gospodarstwa: spiżarki rodzin i scena „Pełna spiżarka”, wieczory (kądziel, naprawy, plecionki, opowieści), prządki, dowóz materiałów na budowę, jakość wyrobów, pamiątki przechodzące z pokolenia na pokolenie |
+| 0.22 | żywy świat: budowa warstwami z kupką materiału, domy dojrzewające z wiekiem (śparogi, konik na kalenicy, znak rodu, kwiaty), zapasy widoczne przy magazynach, śnieg na dachach, obrzędy i wesela w 3D, burze z piorunami, zorza, dźwięk pracy w przestrzeni, opowieści życia i wspomnienia, kamera przy ważnych chwilach |
 
 # 17. Immersja i powroty
 
@@ -433,7 +466,7 @@ Kolejność dalszej pracy. Każda wersja kończy się czymś, w co da się zagra
 | 0.19 Kolonizacja (gotowe) | przysiółki zakładane z własnej woli, ścieżki między osadą a przysiółkami, przysiółki jako małe żywe osady, zagrożenia w głębi wyspy, mapa wspólnoty |
 | 0.20 Ład wsi (gotowe) | wytyczanie ścieżek, płoty, ławy, drzewa owocowe, ogródki, słupy rodowe, ład wsi wpływający na nastrój, tryb zdjęć |
 | 0.21 Gospodarstwa (gotowe) | spiżarki rodzin, wieczorne prace przy kądzieli, dowóz materiałów, jakość wyrobów |
-| 0.22 Żywy świat | obrzędy i wesela w 3D, burze, śnieg na dachach, zorza, dźwięk w przestrzeni, opowieści życia, kamera przy ważnych chwilach |
+| 0.22 Żywy świat (gotowe) | obrzędy i wesela w 3D, burze, śnieg na dachach, zorza, dźwięk w przestrzeni, opowieści życia, kamera przy ważnych chwilach |
 | 0.23 Szlif | „Od ostatniego razu” i „Na co czekamy”, rytm sesji, nowe wyspy i wyzwania, równowaga z ośmioletnich symulacji, łagodny początek, testy na Nordzie 6 |
 | 1.0 Epoka I | wydanie: GitHub, Railway, paczka do instalacji, zapis odporny na zmiany wersji |
 
