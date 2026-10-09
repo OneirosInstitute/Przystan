@@ -4,7 +4,7 @@ function makeNoise(seed){const r=rng(seed),P=new Float32Array(65536);for(let i=0
  const sm=t=>t*t*(3-2*t);
  return function(x,y){const xi=Math.floor(x),yi=Math.floor(y),xf=x-xi,yf=y-yi;const g=(a,b)=>P[((b&255)<<8)|(a&255)];
   const a=g(xi,yi),b=g(xi+1,yi),c=g(xi,yi+1),d=g(xi+1,yi+1),u=sm(xf),v=sm(yf);return a+(b-a)*u+(c-a)*v+(a-b-c+d)*u*v}}
-const SEED=2207, n1=makeNoise(SEED), n2=makeNoise(SEED+7), n3=makeNoise(SEED+13);
+const SEED=(()=>{try{const u=new URLSearchParams(location.search).get('seed');if(u&&+u>0)return +u;const l=localStorage.getItem('przystan-seed');if(l&&+l>0)return +l}catch(e){}return 2207})(), n1=makeNoise(SEED), n2=makeNoise(SEED+7), n3=makeNoise(SEED+13);
 function fbm(nf,x,y,o){let a=.5,f=1,s=0,t=0;for(let k=0;k<o;k++){s+=nf(x*f,y*f)*a;t+=a;a*=.5;f*=2.03}return s/t}
 const clamp=(v,a,b)=>v<a?a:v>b?b:v, lerp=(a,b,t)=>a+(b-a)*t, sstep=(a,b,v)=>{const t=clamp((v-a)/(b-a),0,1);return t*t*(3-2*t)};
 const L=v=>Math.pow(clamp(v,0,1),2.2);

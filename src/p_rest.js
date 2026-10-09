@@ -390,7 +390,7 @@ function freshState(){
   wreck:{parts:JSON.parse(JSON.stringify(WRECK0)),target:-1,gone:0},books:{ciesla:2,zdun:2,dziennik:2,kowal:0,siew:0},readP:{},weather:{k:'clear',left:2},zbozeTot:0,people:[],pid:0,fams:{},fid:7,
   alloc:{zwiad:1,zdun:0,czyt:0},bld:[],nid:1,know:{cegla:'nie',piec:'nie',kuznia:'nie',pole:'nie',cegla_p:0,piec_p:0,kuznia_p:0,cegla_f:0,piec_f:0,kuznia_f:0,active:null},
   bonus:{},hope:.55,health:1,warm:1,hungerDays:0,log:[],nodeAmt:nodes.map(n=>n.amt),grow:{},speed:1,seen:{},found:[],rev:'',tier:0,
-  laws:{},cust:{},custQ:[],custLog:{},offices:{},dis:.08,reqs:[],reqNext:4,toolQ:{},thirst:0,tech:{},tp:{},focus:{},bank:{},dxp:{},atlas:{},exps:[],expSize:2,herds:herdsDef.map(h=>({type:h.type,i:h.i,j:h.j,x:tcx(h.i),z:tcx(h.j),tx:tcx(h.i),tz:tcx(h.j),n:Math.max(2,ANIMAL[h.type][1]-1-((h.i+h.j)%2)),max:ANIMAL[h.type][1],tame:0})),born:0,died:0,variety:1,fedR:1,diff:DIFF_SEL};
+  laws:{},cust:{},custQ:[],custLog:{},offices:{},dis:.08,reqs:[],reqNext:4,toolQ:{},thirst:0,tech:{},tp:{},focus:{},bank:{},dxp:{},atlas:{},exps:[],expSize:2,herds:herdsDef.map(h=>({type:h.type,i:h.i,j:h.j,x:tcx(h.i),z:tcx(h.j),tx:tcx(h.i),tz:tcx(h.j),n:Math.max(2,ANIMAL[h.type][1]-1-((h.i+h.j)%2)),max:ANIMAL[h.type][1],tame:0})),born:0,died:0,variety:1,fedR:1,diff:DIFF_SEL,seed:SEED,chal:typeof CHAL_SEL!=='undefined'?CHAL_SEL:0,ver:'1.0'};
  PEOPLE0.forEach((d,i)=>{const p=newPerson(st.pid++,d[0],d[1],d[2],d[3],d[4],d[5]);const a=i/18*6.28;p.x=tcx(camp.i)+Math.cos(a)*1.9;p.z=tcx(camp.j)+Math.sin(a)*1.9;st.people.push(p)});
  for(let f=1;f<=6;f++)st.fams[f]={id:f,home:null};
  PAIRS.forEach(([a,b])=>{st.people[a].pair=st.people[b].id;st.people[b].pair=st.people[a].id});
@@ -398,7 +398,7 @@ function freshState(){
 function packTread(){let s='';for(let k=0;k<N*N;k++)s+=String.fromCharCode(Math.round(tread[k]*15)+65);return s.replace(/A{3,}/g,m=>'~'+m.length+'~')}
 function unpackTread(str){const s=str.replace(/~(\d+)~/g,(m,n)=>'A'.repeat(+n));for(let k=0;k<N*N&&k<s.length;k++)tread[k]=(s.charCodeAt(k)-65)/15}
 function save(){try{S.rev=packRev();S.tread=packTread();localStorage.setItem(SAVEKEY,JSON.stringify(S,(k,v)=>(k==='mentor'||k==='tgt'||k==='path'||k==='after')?undefined:v))}catch(e){}}
-function load(){try{const s=localStorage.getItem(SAVEKEY);if(!s)return null;const o=JSON.parse(s);if(!o||!o.people||!o.nodeAmt||o.nodeAmt.length!==nodes.length)return null;
+function load(){try{const s=localStorage.getItem(SAVEKEY);if(!s)return null;let o=JSON.parse(s);if(typeof saveFix==='function')o=saveFix(o);if(!o||!o.people||!o.nodeAmt||o.nodeAmt.length!==nodes.length)return null;
  wildFixRes(o);o.people.forEach(p=>{p.path=null;p.tgt=null;p.after=null;p.state='idle';p.carry=null});o.bld.forEach(b=>{b.workers=0});return o}catch(e){return null}}
 function log(t){S.log.unshift({d:Math.floor(S.day)+1,t});if(S.log.length>120)S.log.pop()}
 const adultsPool=()=>S.people.filter(isWorker);
@@ -464,7 +464,7 @@ const hasB=k=>S.bld.some(b=>b.kind===k&&bDone(b));
 function homeOf(p){const f=S.fams[p.fam];return f&&f.home?bById(f.home):null}
 const traitN=(p)=>p.sex==='k'?TRAITS[p.trait][0]:p.trait;
 function eff(p){const tool=p.tool.t===2?1:p.tool.t===1?.8:.55;const w=WEATHER[S.weather.k][1]*(S.buff&&S.buff.until>S.day?(S.buff.k==='praca'?1.1:.93):1);return(0.65+0.35*S.hope)*(p.age>=55?.75:p.age<16?.85:1)*(0.6+0.4*p.hp)*tool*w*(p.trait==='Wytrwały'?1.1:1)*(p.trait==='Silny'&&p.job==='wb'?1.06:1)*(p.age<12?.5:1)*(1-Math.max(0,(S.dis||0)-.5)*.5)*(p.hp<.5&&law('kazdy')?.8:1)*(law('u_swoje')?1.06:law('u_wspolne')?.96:1)}
-function craftEff(p,c){return 1+0.18*(p.sk[c]||0)+(S.bonus[c]||0)}
+function craftEff(p,c){return(1+0.18*(p.sk[c]||0)+(S.bonus[c]||0))*[1.15,1,.94][S.diff===undefined?1:S.diff]}
 function seasonYield(kind){const s=seasonIdx();if(kind==='bush')return[1,.6,0,.7][s];if(kind==='grzyb')return[.8,1.3,0,.4][s];if(kind==='zboze')return[.7,1,0,0][s];if(kind==='len')return[1,.8,0,.4][s];if(kind==='ziola')return[1,.7,0,.6][s];if(kind==='ul')return[1,.8,0,.3][s];if(kind==='fish')return[1,.9,.7,.9][s];return 1}
 function gainXp(p,c,dt){let m=1;p.mentor=null;p.worked=1;
  for(const q of S.people){if(q!==p&&q.wb===p.wb&&q.job===p.job&&isAdult(q)&&q.sk[c]>p.sk[c]&&q.sk[c]>=2&&(!p.mentor||q.sk[c]>p.mentor.sk[c]))p.mentor=q}
@@ -679,7 +679,7 @@ function dailyPeople(cold,fuelHeated){
 function tierOf(){const houses=S.bld.filter(b=>bDone(b)&&BD[b.kind].house).length,pop=S.people.length;let t=0;TIERS.forEach((x,i)=>{if(houses>=x[1]&&pop>=x[2])t=i});return t}
 function newDay(){
  expTick();
- const need=K*S.people.filter(p=>p.job!=='wyp').reduce((a,p)=>a+(p.age<3?.3:p.age<12?.6:p.age>55?.8:1),0)*(law('oszczedne')?.8:1);
+ const need=K*S.people.filter(p=>p.job!=='wyp').reduce((a,p)=>a+(p.age<3?.3:p.age<12?.6:p.age>55?.8:1),0)*(law('oszczedne')?.8:1)*[.85,1,1.08][S.diff===undefined?1:S.diff];
  // jedzenie: każdy rodzaj po trochu
  const seedRes=Math.min(S.res.ziarno,10*S.bld.filter(b=>b.field).length);const avail=k=>k==='ziarno'?S.res.ziarno-seedRes:S.res[k];
  const tot=FOOD.reduce((a,k)=>a+Math.max(0,avail(k)),0);const types=FOOD.filter(k=>avail(k)>.5);S.variety=types.length;
@@ -693,7 +693,7 @@ function newDay(){
   if((nx==='frost'||nx==='storm')&&tech('n_kal'))toast('Znaki na niebie: za '+S.weather.left+' d. '+WEATHER[nx][0]);if(k==='storm'){S.lastStorm=S.day;log('Nadciąga sztorm. Praca idzie wolno, morze bije o brzeg.')}}
  const tmp=WEATHER[S.weather.k][2];const fac=K*([0,1,1.6,.7][sea]*(1+Math.max(0,-tmp)*.06)+(sea===0&&tmp<0?.3:0)),cold=fac>0;const heated=new Set();
  if(cold){const homes=Object.values(S.fams).map(f=>f.home?bById(f.home):null).filter(h=>h&&bDone(h));
-  homes.forEach(h=>{const use=BD[h.kind].fuel*fac*(hasB('piec')?.6:1)*(law('z_oszcz')?.85:1)*(condOf(h)<.5?2-condOf(h):1);if(S.res.opal>=use){S.res.opal-=use;heated.add(h.id)}else if(S.res.drewno>=use*2){S.res.drewno-=use*2;heated.add(h.id);toastOnce('logs'+Math.floor(S.day/24),'Brak opału: ludzie palą całe kłody. Postaw drewutnię.')}});
+  homes.forEach(h=>{const use=BD[h.kind].fuel*fac*[.8,1,1.12][S.diff===undefined?1:S.diff]*(hasB('piec')?.6:1)*(law('z_oszcz')?.85:1)*(condOf(h)<.5?2-condOf(h):1);if(S.res.opal>=use){S.res.opal-=use;heated.add(h.id)}else if(S.res.drewno>=use*2){S.res.drewno-=use*2;heated.add(h.id);toastOnce('logs'+Math.floor(S.day/24),'Brak opału: ludzie palą całe kłody. Postaw drewutnię.')}});
  const homeless=S.people.filter(p=>!homeOf(p)).length;S.campFire=false;if(homeless){const use=1.2*fac;if(S.res.opal>=use){S.res.opal-=use;S.campFire=true}else if(S.res.drewno>=use*2){S.res.drewno-=use*2;S.campFire=true}}
   if(homes.length>heated.size&&!S.seen['fuel'+Math.floor(S.day/YEAR)+sea]){S.seen['fuel'+Math.floor(S.day/YEAR)+sea]=1;log('Nie starcza opału dla wszystkich domów. Ludzie marzną.')}}
  waterDaily();

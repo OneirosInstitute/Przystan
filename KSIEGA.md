@@ -1,6 +1,6 @@
 ---
 title: "Przystań — Księga gry"
-subtitle: "Wersja 0.22 · 6 października 2026 · z planem do wersji 1.0"
+subtitle: "Wersja 1.0 · 9 października 2026 · Epoka I ukończona"
 ---
 
 # 1. Czym jest Przystań
@@ -327,6 +327,28 @@ Dziady, Szczodre Gody i Marzanna są w 3D, gdy osada trzyma się dawnych obrzęd
 
 **Kamera przy ważnych chwilach.** Przy obrzędach, weselach i pożarach kamera sama płynie w to miejsce, ale tylko wtedy, gdy gracz od kilku sekund nie przesuwa widoku, żaden panel nie jest otwarty i nic nie jest stawiane. Można to wyłączyć w zakładce Kronika.
 
+## Szlif i wersja 1.0
+
+**Od ostatniego razu.** Po powrocie do zapisanej gry osada wita gracza krótkim podsumowaniem: ile czasu minęło od ostatniej wizyty, ile osób żyje w osadzie, co ważnego zdarzyło się od ostatniej sesji (narodziny, śmierci, wesela, ukończone budowy, nowe pieśni, wyprawy, przysiółki), na co osada czeka i jaki jest bieżący cel. Przez chwilę po powrocie nie przychodzą zwykłe wydarzenia, żeby podsumowanie nie ginęło pod nimi.
+
+**Na co czekamy.** Na górze zakładki Ludzie jest lista spraw w toku, od najpilniejszych: budowy z postępem i dowozem materiału, rozbudowy i remonty, rosnące zboże i czas żniw, próby wiedzy, czytanie ksiąg, wyprawy z dniem powrotu, rodziny w drodze do przysiółków, drogi w budowie, potrzeby przysiółków, dni do sztormu, który zabierze wrak, dni do zimy i do nocy Kupały. Sprawy pilne są oznaczone wykrzyknikiem.
+
+**Łagodny początek.** Przez pierwsze cztery akty gra delikatnie podpowiada następny krok: pulsuje zakładka, potem kategoria budowy, a na końcu przycisk, który prowadzi do bieżącego celu. Podpowiedzi można wyłączyć w zakładce Kronika.
+
+**Rytm sesji.** Po mniej więcej 25 minutach gry, na granicy pór roku, gra sama zapisuje osadę i proponuje przerwę. Można grać dalej albo wrócić później: „Od ostatniego razu” powie, co się działo.
+
+**Nowe wyspy i wyzwania.** Na ekranie startowym, w rozwijanym polu „Nowa gra: wyspa i wyzwanie”, można:
+- wybrać znaną wyspę albo wylosować nową (inny kształt brzegu, krainy, zasoby i ślady dawnego ludu; numer wyspy trafia do Księgi rozbitków);
+- wybrać wyzwanie: Mała załoga (na brzeg wychodzi dwanaście osób, bez dwóch rodzin, w tym bez kowala) albo Długie zimy (więcej mrozów i śniegu, domy zimą palą więcej opału).
+
+Zapis pamięta numer wyspy, więc „Wróć do osady” zawsze wczytuje tę wyspę, na której toczy się gra.
+
+**Zapis odporny na wersje.** Przy wczytaniu gra naprawia zapis z wcześniejszych wersji: uzupełnia brakujące pola i wyrównuje dane przyrody, gdy zmieniła się wyspa. Co cztery dni gry powstaje kopia zapasowa. Jeśli główny zapis się uszkodzi, gra wczytuje kopię i mówi o tym w „Od ostatniego razu”.
+
+**Płynność na telefonie.** Ukończone budynki i przysiółki są łączone w jedną bryłę na materiał, więc karta graficzna rysuje je jednym wywołaniem zamiast kilkudziesięciu. W osadzie z 26 budynkami to około 300 wywołań rysowania na klatkę zamiast około 1140. Ogień, iskry, znaki rodów i zapasy przy magazynach pozostają osobno, bo się ruszają albo zmieniają.
+
+**Poprawki z symulacji.** Ośmioletnie symulacje z automatycznym graczem na trzech poziomach trudności znalazły błędy, które zatrzymywały budowy: nosiciele utykali na zablokowanych polach, liczba budowniczych na placu się rozjeżdżała, a jeden plac bez dojścia blokował wszystkie budowy. Teraz ludzie schodzą z zablokowanych pól, budowniczowie próbują kilku placów po kolei, liczba robotników jest co dzień liczona od nowa, a „Największy kłopot” ostrzega o placu bez dojścia i o budowach, które stoją.
+
 # 12. Epoki
 
 ## Epoka I: Rozbitkowie (6–8 lat na wyspie, od wersji 0.18 grywalna do końca)
@@ -384,9 +406,9 @@ Wybór jest ostateczny. Po wyborze gra pokazuje Księgę rozbitków: ilu wyszło
 
 # 15. Technika
 
-- **Plik gry:** jeden plik HTML (około 535 kB) składany z części: p_head.html, p_const.js, p_mid.js, p_rest.js, p_map.js, p_tech.js, p_exp.js, p_v8.js, p_bld.js, p_story.js, p_slav.js, p_wild.js, p_ludzie.js, p_urz.js, p_pamiec.js, p_akt.js, p_kol.js, p_slady.js, p_lad.js, p_gosp.js, p_bud.js, p_swiat.js, p_gfx.js, p_end.js.
+- **Plik gry:** jeden plik HTML (około 555 kB) składany z części: p_head.html, p_const.js, p_mid.js, p_rest.js, p_map.js, p_tech.js, p_exp.js, p_v8.js, p_bld.js, p_story.js, p_slav.js, p_wild.js, p_ludzie.js, p_urz.js, p_pamiec.js, p_akt.js, p_kol.js, p_slady.js, p_lad.js, p_gosp.js, p_bud.js, p_swiat.js, p_szlif.js, p_gfx.js, p_end.js.
 - **Grafika:** Three.js r149 (WebGL2), własna obróbka obrazu (bloom, cienie kontaktowe, cienie chmur, tilt-shift).
-- **Zapis:** w pamięci przeglądarki (klucz przystan-v7), do pobrania jako plik JSON i do wczytania z pliku.
+- **Zapis:** w pamięci przeglądarki (klucz przystan-v7, kopia zapasowa przystan-v7-bak), do pobrania jako plik JSON i do wczytania z pliku.
 - **Instalacja:** PWA z manifestem i service workerem, działa bez sieci.
 - **Repozytorium:** src/ z częściami gry, build.js (składa grę i PWA do dist/), server.js (serwer bez zależności), railway.json (wdrożenie na Railway).
 - **Testy:** symulacje kilku lat gry w przeglądarce bez okna oraz zrzuty ekranu na komputerze i telefonie.
@@ -412,6 +434,7 @@ Wybór jest ostateczny. Po wyborze gra pokazuje Księgę rozbitków: ilu wyszło
 | 0.20 | ład wsi: ścieżki, płoty, ławy, drzewa owocowe, grządki, kwiaty, słupy rodowe, ocena ładu, tryb zdjęć; osiem nowych śladów dawnego ludu, które z czasem okazują się potrzebne |
 | 0.21 | gospodarstwa: spiżarki rodzin i scena „Pełna spiżarka”, wieczory (kądziel, naprawy, plecionki, opowieści), prządki, dowóz materiałów na budowę, jakość wyrobów, pamiątki przechodzące z pokolenia na pokolenie |
 | 0.22 | żywy świat: budowa warstwami z kupką materiału, domy dojrzewające z wiekiem (śparogi, konik na kalenicy, znak rodu, kwiaty), zapasy widoczne przy magazynach, śnieg na dachach, obrzędy i wesela w 3D, burze z piorunami, zorza, dźwięk pracy w przestrzeni, opowieści życia i wspomnienia, kamera przy ważnych chwilach |
+| 1.0 | szlif i wydanie epoki I: „Od ostatniego razu”, „Na co czekamy”, pulsujące podpowiedzi, rytm sesji, nowe wyspy i dwa wyzwania, zapis z kopią zapasową i naprawą starych zapisów, łączenie brył budynków (około 4 razy mniej wywołań rysowania), poprawki budowy z ośmioletnich symulacji, trudność wpływa na pracę, jedzenie i opał |
 
 # 17. Immersja i powroty
 
@@ -467,12 +490,12 @@ Kolejność dalszej pracy. Każda wersja kończy się czymś, w co da się zagra
 | 0.20 Ład wsi (gotowe) | wytyczanie ścieżek, płoty, ławy, drzewa owocowe, ogródki, słupy rodowe, ład wsi wpływający na nastrój, tryb zdjęć |
 | 0.21 Gospodarstwa (gotowe) | spiżarki rodzin, wieczorne prace przy kądzieli, dowóz materiałów, jakość wyrobów |
 | 0.22 Żywy świat (gotowe) | obrzędy i wesela w 3D, burze, śnieg na dachach, zorza, dźwięk w przestrzeni, opowieści życia, kamera przy ważnych chwilach |
-| 0.23 Szlif | „Od ostatniego razu” i „Na co czekamy”, rytm sesji, nowe wyspy i wyzwania, równowaga z ośmioletnich symulacji, łagodny początek, testy na Nordzie 6 |
-| 1.0 Epoka I | wydanie: GitHub, Railway, paczka do instalacji, zapis odporny na zmiany wersji |
+| 0.23 Szlif (gotowe, w 1.0) | „Od ostatniego razu” i „Na co czekamy”, rytm sesji, nowe wyspy i wyzwania, równowaga z ośmioletnich symulacji, łagodny początek, testy na Nordzie 6 |
+| 1.0 Epoka I (gotowe) | paczka do instalacji, zapis odporny na zmiany wersji, płynność na telefonie; GitHub i Railway czekają na repozytorium |
 
 **Epoka II** (po 1.0): trzy drogi z rozdrożami opisanymi wyżej. Przez cały czas obowiązuje: klimat słowiański bez magii, brak przybyszów, decyzje gracza w scenach i na wiecu, a życie ludzi toczy się samo.
 
-**Trudność (od wersji 0.18):** trzy poziomy wybierane na ekranie startowym, zapamiętywane dla następnych gier. Łagodny: psucie się jedzenia, zużycie budynków, pożary i wilki o 30% rzadziej, część mrozów i sztormów łagodnieje do śniegu i deszczu. Zwykły: tak, jak gra była pomyślana. Surowy: wszystko to o 30% częściej, zimą częstsze mrozy, wiosną i jesienią więcej sztormów. Poziom trafia do Księgi rozbitków.
+**Trudność (od wersji 0.18):** trzy poziomy wybierane na ekranie startowym, zapamiętywane dla następnych gier. Łagodny: psucie się jedzenia, zużycie budynków, pożary i wilki o 30% rzadziej, część mrozów i sztormów łagodnieje do śniegu i deszczu. Zwykły: tak, jak gra była pomyślana. Surowy: wszystko to o 30% częściej, zimą częstsze mrozy, wiosną i jesienią więcej sztormów. Od wersji 1.0 poziom zmienia też samą gospodarkę: na łagodnym ludzie jedzą o 15% mniej, domy palą o 20% mniej opału, a rzemiosło idzie o 15% sprawniej; na surowym jedzą o 8% więcej, palą o 12% więcej, a rzemiosło idzie o 6% wolniej. Poziom trafia do Księgi rozbitków.
 
 **Długość epoki I:** 6–8 lat na wyspie, czyli 8–10 godzin gry przy tempie 1×.
 

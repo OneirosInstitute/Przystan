@@ -7,7 +7,7 @@ const DIFF_N=['Łagodny','Zwykły','Surowy'];
 function dM(){return[.7,1,1.3][S&&S.diff!==undefined?S.diff:1]}
 {const box=document.createElement('div');box.className='diffsel';box.innerHTML=`<span>Poziom trudności nowej gry</span><div>${DIFF_N.map((n,i)=>`<button data-diff="${i}" class="${i===DIFF_SEL?'on':''}">${n}</button>`).join('')}</div><small id="diffInfo"></small>`;
  const acts=document.querySelector('#intro .acts');if(acts)acts.parentNode.insertBefore(box,acts);
- const info=['Jedzenie i budynki zużywają się wolniej, mniej złych chwil, krótsze mrozy.','Tak, jak gra była pomyślana.','Wszystko psuje się szybciej, więcej pożarów i wilków, dłuższe mrozy i więcej sztormów.'];
+ const info=['Praca idzie szybciej, ludzie jedzą i palą mniej, jedzenie i budynki zużywają się wolniej, mniej złych chwil, krótsze mrozy.','Tak, jak gra była pomyślana.','Praca idzie wolniej, jedzenie i opał znikają szybciej, wszystko psuje się szybciej, więcej pożarów i wilków, dłuższe mrozy i więcej sztormów.'];
  const upd=()=>{box.querySelectorAll('button').forEach(b=>b.classList.toggle('on',+b.dataset.diff===DIFF_SEL));const i=document.getElementById('diffInfo');if(i)i.textContent=info[DIFF_SEL]};upd();
  box.addEventListener('click',e=>{const b=e.target.closest('[data-diff]');if(!b)return;DIFF_SEL=+b.dataset.diff;try{localStorage.setItem('przystan-diff',String(DIFF_SEL))}catch(er){}upd()});
  const st=document.createElement('style');st.textContent=`.diffsel{margin:14px 0 4px}.diffsel>span{display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}

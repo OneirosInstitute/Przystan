@@ -62,27 +62,28 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-wiecz]');i
 const MATW={drewno:1,kamien:1,glina:1,cegla:.8,deski:.6,gwozdzie:.08,plotno:.3,narz:.5,skory:.4,wlokna:.2,naczynia:.3};
 function matOf(c){return Object.entries(c||{}).reduce((a,[k,v])=>a+v*(MATW[k]===undefined?.5:MATW[k]),0)}
 function matRes(b){const c=BD[b.kind].cost||{};return Object.entries(c).sort((x,y)=>y[1]*(MATW[y[0]]||.5)-x[1]*(MATW[x[0]]||.5))[0]?.[0]||'drewno'}
-function haulCap(p){return 4*(p.trait==='Silny'?1.5:1)*(p.age<16?.6:1)}
+function haulCap(p){return 6*(p.trait==='Silny'?1.4:1)*(p.age<16?.6:1)}
 {const _tp=tryPlace;tryPlace=function(){const n0=S?S.bld.length:0;_tp();if(S&&S.bld.length>n0){const b=S.bld[S.bld.length-1];const m=matOf(BD[b.kind].cost);if(m>0){b.mat=Math.round(m*10)/10;b.del=0;
   // budowa tuż przy składzie albo obozie: część materiału od razu na miejscu
-  const c=bCenter(b);const near=[[camp.i,camp.j]].concat(S.bld.filter(x=>bDone(x)&&BD[x.kind].store==='all').map(x=>[x.i,x.j])).some(([i,j])=>Math.hypot(i-b.i,j-b.j)<5);if(near)b.del=b.mat*.5}}}}
+  const c=bCenter(b);const near=[[camp.i,camp.j]].concat(S.bld.filter(x=>bDone(x)&&BD[x.kind].store==='all').map(x=>[x.i,x.j])).some(([i,j])=>Math.hypot(i-b.i,j-b.j)<7);if(near)b.del=b.mat*.6}}}}
 function haulEnd(p){const s=bById(p.haulB);if(s){s.haul=Math.max(0,(s.haul||0)-1);if(p.haulQ)s.inTr=Math.max(0,(s.inTr||0)-p.haulQ)}p.haulB=null;p.haulQ=0;if(p.carry&&p.carry[0]&&p.carry[0].q===0)p.carry=null}
-function haulSite(lim){return S.bld.find(b=>!bDone(b)&&b.mat&&(b.del||0)+(b.inTr||0)<b.mat-.01&&(b.haul||0)<lim)}
+function haulSite(lim){return S.bld.find(b=>!bDone(b)&&b.mat&&!(b.unr>S.day)&&(b.del||0)+(b.inTr||0)<b.mat-.01&&(b.haul||0)<lim)}
 function siteCap(b){return b.mat?b.work*Math.min(1,(b.del||0)/b.mat):b.work}
-function goNow(p,tile,after){const[pi,pj]=tileOf(p.x,p.z);if(Math.hypot(tile[0]-pi,tile[1]-pj)<=1.01){p.after=after;p.path=null;onArrive(p);return true}return go(p,tile,after,null)}
-{const _pj=planJob;planJob=function(p){if(p.haulB)haulEnd(p);
+function goNow(p,tile,after){const[pi,pj]=tileOf(p.x,p.z);if(Math.hypot(tile[0]-pi,tile[1]-pj)<=1.01){p.after=after;p.path=null;onArrive(p);return true}if(go(p,tile,after,null))return true;const t=nearestWalk(pi,pj);if(t&&(t[0]!==pi||t[1]!==pj)){p.x=tcx(t[0]);p.z=tcx(t[1]);return go(p,tile,after,null)}return false}
+{const _pj=planJob;planJob=function(p){if(p.haulB)haulEnd(p);{const[ti,tj]=tileOf(p.x,p.z);if(!walk[tj*N+ti]){const t=nearestWalk(ti,tj);if(t){p.x=tcx(t[0]);p.z=tcx(t[1])}}}
   if(S&&!p.fireB&&isAdult(p)&&(p.job==='rob'||!p.job)&&isWorker(p)&&!(p.hp<.5&&law('odpoczynek'))){
-   const bs=S.bld.find(b=>!bDone(b)&&!b.proj&&(b.workers||0)<4&&b.prog<siteCap(b)-.02&&entryOf(b.kind,b.i,b.j));
+   const cand=S.bld.filter(b=>!bDone(b)&&!b.proj&&(b.workers||0)<4&&b.prog<siteCap(b)-.02&&!(b.unr>S.day)).sort((a,b)=>Math.hypot(a.i-p.x-N/2,a.j-p.z-N/2)-Math.hypot(b.i-p.x-N/2,b.j-p.z-N/2));const bs=cand[0];
    const hs=haulSite(2)||(!bs&&haulSite(6));
-   if(bs&&(!hs||Math.random()<.6)){const e=entryOf(bs.kind,bs.i,bs.j);if(go(p,e,'build',bs)){bs.workers=(bs.workers||0)+1;p.act='buduje: '+BD[bs.kind].n.toLowerCase();return true}}
+   if(bs&&(!hs||Math.random()<.6)){for(const b of cand.slice(0,4)){const e=entryOf(b.kind,b.i,b.j);if(e&&go(p,e,'build',b)){b.workers=(b.workers||0)+1;p.act='buduje: '+BD[b.kind].n.toLowerCase();return true}b.unr=S.day+.5;b.unrN=(b.unrN||0)+1}}
    if(hs){const st=storeTile(p,false);hs.haul=(hs.haul||0)+1;p.haulB=hs.id;p.act='idzie po materiał: '+BD[hs.kind].n.toLowerCase();if(st&&goNow(p,st,'haulPick'))return true;haulEnd(p)}}
   return _pj(p)}}
 {const _oa=onArrive;onArrive=function(p){const a=p.after;if(a!=='haulPick'&&a!=='haulDrop')return _oa(p);p.after=null;p.wt=0;const s=bById(p.haulB);
   if(!s||bDone(s)||!s.mat){haulEnd(p);p.state='idle';return}
   if(a==='haulPick'){const q=Math.min(haulCap(p),s.mat-(s.del||0)-(s.inTr||0));if(q<=.01){haulEnd(p);p.state='idle';return}s.inTr=(s.inTr||0)+q;p.haulQ=q;p.carry=[{res:matRes(s),q:0}];
-   p.act='niesie materiał na budowę: '+BD[s.kind].n.toLowerCase();const e=entryOf(s.kind,s.i,s.j);if(!e||!goNow(p,e,'haulDrop')){haulEnd(p);p.state='idle'}return}
+   p.act='niesie materiał na budowę: '+BD[s.kind].n.toLowerCase();const e=entryOf(s.kind,s.i,s.j);if(e&&goNow(p,e,'haulDrop'))return;const t=nearestWalk(...tileOf(p.x,p.z));if(t){p.x=tcx(t[0]);p.z=tcx(t[1]);if(e&&goNow(p,e,'haulDrop'))return}
+   s.del=Math.min(s.mat,(s.del||0)+q);s.inTr=Math.max(0,(s.inTr||0)-q);p.haulQ=0;p.carry=null;haulEnd(p);p.state='idle';p.wait=1.5;return}
   s.del=Math.min(s.mat,(s.del||0)+(p.haulQ||0));s.inTr=Math.max(0,(s.inTr||0)-(p.haulQ||0));p.haulQ=0;p.carry=null;haulEnd(p);gainXp(p,'ciesla',.4);p.state='idle';p.wait=.2}}
-function haulDaily(){S.bld.forEach(b=>{b.haul=0;b.inTr=0});S.people.forEach(p=>{if(p.haulB){p.haulB=null;p.haulQ=0;if(p.carry&&p.carry[0]&&p.carry[0].q===0)p.carry=null}})}
+function haulDaily(){S.bld.forEach(b=>{b.haul=0;b.inTr=0;b.workers=S.people.filter(p=>p.tgt===b&&p.state==='work').length});S.people.forEach(p=>{if(p.haulB){p.haulB=null;p.haulQ=0;if(p.carry&&p.carry[0]&&p.carry[0].q===0)p.carry=null}})}
 
 // ---------- jakość wyrobów i pamiątki ----------
 const QRES={narz:'narzędzia żelazne',narzk:'narzędzia kamienne',odziez:'odzież',naczynia:'naczynia',deski:'deski',plotno:'płótno',chleb:'chleb',ser:'ser'};
