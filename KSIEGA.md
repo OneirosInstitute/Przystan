@@ -1,6 +1,6 @@
 ---
 title: "Przystań — Księga gry"
-subtitle: "Wersja 1.2 · 9 października 2026 · Epoka I ukończona"
+subtitle: "Wersja 1.2.1 · 9 października 2026 · Epoka I ukończona"
 ---
 
 # 1. Czym jest Przystań
@@ -393,6 +393,8 @@ Każdą kartę zamyka krzyżyk albo dotknięcie pustej ziemi.
 
 **Pełne menu.** W dziale Kronika można wrócić do dawnego układu z zakładkami i paskami potrzeb.
 
+**Wolne ręce nigdy nie stoją (od 1.2.1).** Kolejność pracy robotników: zaznaczone na mapie, budowa i dowóz materiału, wrak (gdy otwarta część jest pusta, sami biorą się za następną), a gdy nic z tego nie zostało, zbierają w promieniu kilkudziesięciu kroków od obozu to, czego brakuje: jedzenie, gdy starcza go na mniej niż 8 dni, drewno, gdy kłód jest mniej niż 80 albo jesienią i zimą kończy się opał. Drzew tuż przy obozie nie ruszają. Gdy niczego nie brakuje, odpoczywają.
+
 # 12. Epoki
 
 ## Epoka I: Rozbitkowie (6–8 lat na wyspie, od wersji 0.18 grywalna do końca)
@@ -481,6 +483,7 @@ Wybór jest ostateczny. Po wyborze gra pokazuje Księgę rozbitków: ilu wyszło
 | 1.0 | szlif i wydanie epoki I: „Od ostatniego razu”, „Na co czekamy”, pulsujące podpowiedzi, rytm sesji, nowe wyspy i dwa wyzwania, zapis z kopią zapasową i naprawą starych zapisów, łączenie brył budynków (około 4 razy mniej wywołań rysowania), poprawki budowy z ośmioletnich symulacji, trudność wpływa na pracę, jedzenie i opał |
 | 1.1 | mapa: dotykanie zasobów na mapie i zaznaczanie ich do wycinki, wydobycia, zbioru i połowu (także całej okolicy), znaki nad zaznaczonymi; budowniczowie przydzielani w zakładce Praca |
 | 1.2 | cicha wyspa: ekran bez menu, górna linia z ostrzeżeniami, przycisk Osada i księga z działami (czas stoi), karta „Postaw tu” po dotknięciu ziemi, zmiana pracy z karty człowieka, znaki przy krawędzi ekranu, rozmowy przy ognisku, obrót dwoma palcami, przełącznik pełnego menu |
+| 1.2.1 | poprawka: budowy kończące się z pełnym materiałem nie były odbierane (budynek bez pracowników, domy bez rodzin), robotnicy stawali, gdy rozebrali otwartą część wraku; teraz budowy zawsze się odbierają, stare zapisy same się naprawiają, robotnicy sami biorą następną część wraku, a wolne ręce bez zajęcia zbierają drewno albo jedzenie w pobliżu obozu |
 
 # 17. Immersja i powroty
 

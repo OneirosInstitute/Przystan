@@ -32,7 +32,7 @@ function markPick(p){let best=null,bd=1e9;
   const max=n.type==='fish'?2:1;if(n.claim>=max||n.bad>S.t||seasonYield(n.type)<=0||mkWhy(n))continue;
   const d=Math.abs(n.x-p.x)+Math.abs(n.z-p.z);if(d<bd){bd=d;best=n}}
  return best}
-function markJob(p){for(let t=0;t<3;t++){const n=markPick(p);if(!n)return false;const s=mkStand(n);const st=nearestWalk(s[0],s[1]);if(!st){n.bad=S.t+40;continue}
+function markJob(p){p.mkAuto=false;for(let t=0;t<3;t++){const n=markPick(p);if(!n)return false;const s=mkStand(n);const st=nearestWalk(s[0],s[1]);if(!st){n.bad=S.t+40;continue}
   if(go(p,st,'mark',n)){n.claim++;p.act=MKT[n.type][1];return true}}return false}
 function budSites(){return S.bld.filter(b=>((!bDone(b)&&!(b.unr>S.day))||b.proj)&&(b.workers||0)<4).length}
 function asRob(p){p.job='rob';let r=false;try{r=planJob0(p)}finally{if(p.job==='rob')p.job='bud'}return r}
@@ -41,9 +41,9 @@ let planJob0=null;
   if(!S||p.fireB||!isAdult(p)||!isWorker(p)||(p.hp<.5&&law('odpoczynek')))return _pj(p);
   if(p.job==='bud'){if(p.haulB&&typeof haulEnd==='function')haulEnd(p);
    if(budSites()||haulSite(6)){if(asRob(p))return true}
-   if(markJob(p))return true;return asRob(p)}
+   if(markJob(p))return true;if(asRob(p))return true;return autoJob(p)}
   if((p.job==='rob'||!p.job)&&S.mark&&markJob(p))return true;
-  return _pj(p)}}
+  if(_pj(p))return true;return(p.job==='rob'||!p.job)?autoJob(p):false}}
 {const _oa=onArrive;onArrive=function(p){if(p.after!=='mark')return _oa(p);p.after=null;p.wt=0;p.state='work';p.workKind='mark'}}
 function mkYield(p,n){const gm=tech('u_rozp')?1.15:1,sy=seasonYield(n.type);
  switch(n.type){case'bush':return[{res:'jagody',q:3*sy*gm}];case'grzyb':return[{res:'grzyby',q:3.5*sy*gm}];
@@ -55,7 +55,7 @@ function mkYield(p,n){const gm=tech('u_rozp')?1.15:1,sy=seasonYield(n.type);
   case'tree':return[{res:'drewno',q:1.5}];case'rock':return[{res:'kamien',q:1}];default:return[{res:'glina',q:1.5}]}}
 {const _sp=stepPerson;stepPerson=function(p,dt){
   if(p.state==='work'&&p.workKind==='mark'&&isWork()&&!p.fireB){const n=p.tgt;
-   if(!n||!mkUsable(n)||!mkOn(n)){release(p);p.state='idle';p.wait=.2;return}
+   if(!n||!mkUsable(n)||(!mkOn(n)&&!p.mkAuto)){release(p);p.state='idle';p.wait=.2;return}
    const kd=MKT[n.type][0],c=BD[kd].c;p.wt+=dt*eff(p)*craftEff(p,c)*(p.job==='wb'?1:.8);gainXp(p,c,dt);
    const T={tree:7,rock:9,clay:7,ruda:9,fish:8,ul:9}[n.type]||5;
    if(p.wt>=T){p.wt=0;n.amt=Math.max(0,n.amt-1);S.nodeAmt[n.id]=n.amt;nodeVis(n);release(p);const items=mkYield(p,n);
@@ -141,7 +141,7 @@ function mkFrame(rdt){if(!S)return;mkT+=rdt;if(mkDirty||mkT>.7){mkT=0;mkSync()}
 {const _mt=mapTick;mapTick=function(rdt){_mt(rdt);try{mkFrame(rdt)}catch(e){}}}
 
 // ---------- dzień, zapis, na co czekamy ----------
-{const _ad=actDaily;actDaily=function(){_ad();if(!S)return;mkClean();mkDirty=true;assign()}}
+{const _ad=actDaily;actDaily=function(){_ad();if(!S)return;mkClean();mkDirty=true;assign();try{bldRepair();wreckAuto()}catch(e){}}}
 {const _cz=czekamy;czekamy=function(){const L=_cz();if(!S||!S.mark)return L;const c=mkCount();if(!c.tot)return L;
   const hands=S.people.filter(p=>(p.job==='rob'||p.job==='bud')&&isWorker(p)).length;
   L.push(hands?[`Zaznaczone na mapie: ${mkCountText(c)}`,4]:[`Zaznaczone na mapie czekają (${c.tot}), a wszyscy mają inną pracę`,1]);return L.sort((a,b)=>a[1]-b[1])}}
@@ -150,3 +150,23 @@ function mkInit(){if(!S)return;S.mark=S.mark||{};S.alloc=S.alloc||{};if(S.alloc.
 window.__mk={mkSet,mkArea,mkCount,nodeAtScreen,selectN,markPick,markJob,budRowHTML,mkCardHTML,mkSync,nodeName,get selN(){return selN},scr(n,f){const r=cv.getBoundingClientRect();mkV.set(n.x,Hy(n.x,n.z)+nodeTopH(n)*(f||.6),n.z).project(cam);return[(mkV.x+1)/2*r.width+r.left,(1-mkV.y)/2*r.height+r.top]},get spr(){return Object.keys(mkSpr).length},nodeTopH};
 // nowy plac budowy: budowniczowie odkładają zaznaczoną robotę
 {const _tp=tryPlace;tryPlace=function(){const n0=S?S.bld.length:0;_tp();if(S&&S.bld.length>n0)S.people.forEach(p=>{if(p.job==='bud'&&!p.carry&&(p.after==='mark'||p.workKind==='mark')&&(p.state==='work'||p.state==='move')){release(p);p.path=null;p.after=null;p.workKind=null;p.state='idle';p.wait=.1}})}}
+
+// ---------- wolne ręce bez zajęcia: same zbierają to, czego brakuje ----------
+function autoNeed(){const sea=seasonIdx();const fd=typeof czNeedDays==='function'?czNeedDays():99;
+ if(fd<8&&foodTotal()<foodCap()-20&&sea!==2)return['bush','grzyb','zboze'];
+ if(S.res.drewno<80||((sea===1||sea===2)&&S.res.opal<40))return['tree'];
+ if(foodTotal()<foodCap()-20&&sea!==2)return['bush','grzyb'];return null}
+function autoJob(p){if(!S||!isWorker(p))return false;const T=autoNeed();if(!T){p.act='odpoczywa, nic pilnego';return false}
+ const c={x:tcx(camp.i),z:tcx(camp.j)};let best=null,bd=1e9;
+ for(const t of T)for(const n of nodeBy[t]){if(!mkUsable(n)||n.claim>=1||n.bad>S.t||seasonYield(n.type)<=0)continue;const st=mkStand(n);if(!revAt(st[0],st[1]))continue;
+  const dc=Math.hypot(n.x-c.x,n.z-c.z);if(t==='tree'&&dc<5)continue;if(dc>26)continue;const d=Math.abs(n.x-p.x)+Math.abs(n.z-p.z)+dc*.5;if(d<bd){bd=d;best=n}}
+ if(!best){p.act='bez zajęcia';return false}const s=mkStand(best);const st=nearestWalk(s[0],s[1]);if(!st){best.bad=S.t+40;return false}
+ if(go(p,st,'mark',best)){best.claim++;p.mkAuto=true;p.act=best.type==='tree'?'zbiera drewno w pobliżu':'zbiera jedzenie w pobliżu';return true}return false}
+// ---------- naprawy: budowy ukończone bez odbioru, wrak bez celu ----------
+function bldRepair(){if(!S)return;S.bld.forEach(b=>{if(!bDone(b)||b.cmp)return;b.cmp=1;const g=bMesh[b.id];
+  if(g&&g.userData&&g.userData.site){completeSite(b);return}
+  if(BD[b.kind].wk&&!(b.want>0)&&!S.people.some(p=>p.job==='wb'&&p.wb===b.id)){b.want=Math.min(BD[b.kind].wk,Math.max(1,Math.min(2,freeCount())));assign()}});
+ if(S.bld.some(b=>bDone(b)&&BD[b.kind].house))assignHomes()}
+{const _cs=completeSite;completeSite=function(s){s.cmp=1;return _cs(s)}}
+function wreckAuto(){const W=S&&S.wreck;if(!W||W.gone||W.target>=0||wreckLeft())return;const k=W.parts.findIndex(x=>!x.open);if(k>=0){W.target=k;log('Robotnicy biorą się za następną część wraku: '+W.parts[k].n.toLowerCase()+'.')}}
+let repT=0;{const _mt=mapTick;mapTick=function(rdt){_mt(rdt);repT+=rdt;if(repT>1.5&&S){repT=0;try{bldRepair();wreckAuto()}catch(e){}}}}

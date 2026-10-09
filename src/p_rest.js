@@ -592,7 +592,7 @@ function stepPerson(p,dt){
   if(k==='gasic'){const b=p.tgt;if(!b||!b.fire){p.fireB=null;p.state='idle';p.wait=.3;return}b.fire.s-=dt*.011*e*(wellCount()?1:.35)*(law('straz')?1.4:1);p.dir=(p.dir||0)+Math.sin(clock*3)*.02;return}
   if(k==='build'){const s=p.tgt;if(s&&bDone(s)&&s.proj&&bById(s.id)){s.proj.prog+=dt*e*craftEff(p,'ciesla')*(tech('r_zrab')?1.25:1)*(1+.04*offLv('budowa'));gainXp(p,'ciesla',dt);if(s.proj.prog>=s.proj.work){finishProj(s);p.tgt=null;p.state='idle';p.wait=.2}return}
   if(!s||bDone(s)){if(s&&s.workers>0)s.workers--;p.tgt=null;p.state='idle';p.wait=.2;return}
-   s.prog+=dt*e*craftEff(p,'ciesla')*(tech('r_zrab')?1.25:1)*(1+.04*offLv('budowa'));gainXp(p,'ciesla',dt);if(s.mat&&s.prog>s.work*Math.min(1,(s.del||0)/s.mat)){s.prog=s.work*Math.min(1,(s.del||0)/s.mat);if(s.workers>0)s.workers--;p.tgt=null;p.state='idle';p.wait=.4;p.act='czeka na materiał';return}{const bm=bMesh[s.id];if(bm){if(typeof buildApply==='function')buildApply(bm,s.prog/s.work);else bm.scale.y=Math.max(.12,Math.min(1,s.prog/s.work))}}
+   s.prog+=dt*e*craftEff(p,'ciesla')*(tech('r_zrab')?1.25:1)*(1+.04*offLv('budowa'));gainXp(p,'ciesla',dt);if(s.mat&&(s.del||0)<s.mat-1e-6&&s.prog>s.work*Math.min(1,(s.del||0)/s.mat)){s.prog=s.work*Math.min(1,(s.del||0)/s.mat);if(s.workers>0)s.workers--;p.tgt=null;p.state='idle';p.wait=.4;p.act='czeka na materiał';return}{const bm=bMesh[s.id];if(bm){if(typeof buildApply==='function')buildApply(bm,s.prog/s.work);else bm.scale.y=Math.max(.12,Math.min(1,s.prog/s.work))}}
    if(bDone(s)){completeSite(s);p.tgt=null;p.state='idle';p.wait=.2}return}
   if(k==='wreck'){const W=S.wreck;if(W.gone){p.state='idle';return}gainXp(p,'ciesla',dt);
    const tg=W.target>=0?W.parts[W.target]:null;
