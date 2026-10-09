@@ -38,7 +38,7 @@ function budSites(){return S.bld.filter(b=>((!bDone(b)&&!(b.unr>S.day))||b.proj)
 function asRob(p){p.job='rob';let r=false;try{r=planJob0(p)}finally{if(p.job==='rob')p.job='bud'}return r}
 let planJob0=null;
 {const _pj=planJob;planJob0=_pj;planJob=function(p){
-  if(!S||p.fireB||!isAdult(p)||!isWorker(p)||(p.hp<.5&&law('odpoczynek')))return _pj(p);
+  if(!S||p.fireB||!isAdult(p)||!isWorker(p)||restNow(p))return _pj(p);
   if(p.job==='bud'){if(p.haulB&&typeof haulEnd==='function')haulEnd(p);
    if(budSites()||haulSite(6)){if(asRob(p))return true}
    if(markJob(p))return true;if(asRob(p))return true;return autoJob(p)}

@@ -506,7 +506,7 @@ const inSow=()=>{const d=yday(),x=tech('n_kal')?5:0;return d>=72-x||d<10+x};
 function planJob(p){
  if(p.fireB){const b=bById(p.fireB);if(!b||!b.fire){p.fireB=null;return false}const e=entryOf(b.kind,b.i,b.j);p.act='biegnie gasić pożar';if(e&&go(p,e,'gasic',b))return true;p.fireB=null;return false}
  if(!isWorker(p)){p.act=p.age<3?'raczkuje przy domu':'bawi się';if(Math.random()<.5)wanderNear(p);return true}
- if(p.hp<.5&&law('odpoczynek')&&p.job!=='wyp'){p.act='odpoczywa, wraca do zdrowia';wanderNear(p);return true}
+ if(restNow(p)){restSpot(p);return true}
  if(p.job==='wb'){const b=bById(p.wb);if(!b||!bDone(b)){p.job='rob';p.wb=null;return false}const d=BD[b.kind];if(b.proj&&b.proj.t==='rep'){const e=entryOf(b.kind,b.i,b.j);if(e&&go(p,e,'build',b)){b.workers=(b.workers||0)+1;p.act='remontuje swój warsztat';return true}}if(condOf(b)<.15){p.act='budynek w ruinie, czeka na remont';return false}
   if(d.nodes){const n=pickNodeB(p,b);if(!n){p.act='brak zasobów w zasięgu';return false}const st=nearestWalk(n.stand[0],n.stand[1]);if(!st)return false;
    if(go(p,st,'work',n)){n.claim++;p.act={zbieracz:'zbiera',pomost:'łowi ryby',drwal:'ścina drzewo',kamien:'łupie kamień',glinianka:'kopie glinę',ruda:'kopie rudę'}[b.kind];return true}return false}

@@ -71,7 +71,7 @@ function haulSite(lim){return S.bld.find(b=>!bDone(b)&&b.mat&&!(b.unr>S.day)&&(b
 function siteCap(b){return b.mat?b.work*Math.min(1,(b.del||0)/b.mat):b.work}
 function goNow(p,tile,after){const[pi,pj]=tileOf(p.x,p.z);if(Math.hypot(tile[0]-pi,tile[1]-pj)<=1.01){p.after=after;p.path=null;onArrive(p);return true}if(go(p,tile,after,null))return true;const t=nearestWalk(pi,pj);if(t&&(t[0]!==pi||t[1]!==pj)){p.x=tcx(t[0]);p.z=tcx(t[1]);return go(p,tile,after,null)}return false}
 {const _pj=planJob;planJob=function(p){if(p.haulB)haulEnd(p);{const[ti,tj]=tileOf(p.x,p.z);if(!walk[tj*N+ti]){const t=nearestWalk(ti,tj);if(t){p.x=tcx(t[0]);p.z=tcx(t[1])}}}
-  if(S&&!p.fireB&&isAdult(p)&&(p.job==='rob'||!p.job)&&isWorker(p)&&!(p.hp<.5&&law('odpoczynek'))){
+  if(S&&!p.fireB&&isAdult(p)&&(p.job==='rob'||!p.job)&&isWorker(p)&&!restNow(p)){
    const cand=S.bld.filter(b=>!bDone(b)&&!b.proj&&(b.workers||0)<4&&b.prog<siteCap(b)-.02&&!(b.unr>S.day)).sort((a,b)=>Math.hypot(a.i-p.x-N/2,a.j-p.z-N/2)-Math.hypot(b.i-p.x-N/2,b.j-p.z-N/2));const bs=cand[0];
    const hs=haulSite(2)||(!bs&&haulSite(6));
    if(bs&&(!hs||Math.random()<.6)){for(const b of cand.slice(0,4)){const e=entryOf(b.kind,b.i,b.j);if(e&&go(p,e,'build',b)){b.workers=(b.workers||0)+1;p.act='buduje: '+BD[b.kind].n.toLowerCase();return true}b.unr=S.day+.5;b.unrN=(b.unrN||0)+1}}

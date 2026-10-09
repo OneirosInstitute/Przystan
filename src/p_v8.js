@@ -77,7 +77,7 @@ const CUSTOMS=[
    {id:'nauka',n:'Dzieci się uczą',d:'Uczą się fachu półtora raza szybciej. Rośnie nadzieja.',r:'Dzieci mają się uczyć. Na pracę przyjdzie jeszcze czas.'}]},
  {k:'chorzy',n:'Chorzy i ranni',trig:()=>S.people.some(p=>p.hp<.5),why:'Gdy ktoś pierwszy raz ciężko zachorował albo został ranny.',
   t:'Ranny przy ognisku',x:()=>{const p=S.people.find(q=>q.hp<.5);return(p?p.name:'Ktoś')+' leży przy ognisku i ledwo wstaje. Pracy jest dużo, rąk mało.'},
-  o:[{id:'odpoczynek',n:'Chorzy odpoczywają',d:'Nie pracują, ale zdrowieją dwa razy szybciej.',r:'Chorzy leżą, dopóki nie wyzdrowieją. Inni przejmują ich pracę.'},
+  o:[{id:'odpoczynek',n:'Chorzy odpoczywają',d:'Najciężej chorzy leżą i zdrowieją dwa razy szybciej. Gdy brakuje jedzenia, słabsi też zbierają.',r:'Najciężej chorzy leżą, dopóki nie wyzdrowieją. Inni przejmują ich pracę, a gdy garnek pustoszeje, każdy, kto ustoi, idzie zbierać.'},
    {id:'kazdy',n:'Każdy pracuje',d:'Ranni pracują dalej, wolniej zdrowieją, rośnie niezgoda.',r:'Kto może stać, ten pracuje. Wyspa nie poczeka.'}]},
  {k:'spory',n:'Spory',trig:()=>(S.dis||0)>.35,why:'Po pierwszej poważnej kłótni w osadzie.',
   t:'Kłótnia',x:()=>{const a=S.people.filter(isAdult);const x=a[0],y=a[a.length-1];return`${x?x.name:'Ktoś'} i ${y?y.name:'ktoś inny'} krzyczą na siebie przy całej osadzie. Poszło o drewno, a naprawdę o wszystko. Kto ma rozstrzygać takie spory?`},
