@@ -1,6 +1,6 @@
 ---
 title: "Przystań — Księga gry"
-subtitle: "Wersja 1.0 · 9 października 2026 · Epoka I ukończona"
+subtitle: "Wersja 1.1 · 9 października 2026 · Epoka I ukończona"
 ---
 
 # 1. Czym jest Przystań
@@ -349,6 +349,21 @@ Zapis pamięta numer wyspy, więc „Wróć do osady” zawsze wczytuje tę wysp
 
 **Poprawki z symulacji.** Ośmioletnie symulacje z automatycznym graczem na trzech poziomach trudności znalazły błędy, które zatrzymywały budowy: nosiciele utykali na zablokowanych polach, liczba budowniczych na placu się rozjeżdżała, a jeden plac bez dojścia blokował wszystkie budowy. Teraz ludzie schodzą z zablokowanych pól, budowniczowie próbują kilku placów po kolei, liczba robotników jest co dzień liczona od nowa, a „Największy kłopot” ostrzega o placu bez dojścia i o budowach, które stoją.
 
+## Mapa i budowniczowie (od wersji 1.1)
+
+**Zasoby do zaznaczenia.** Każde drzewo, głaz, krzak jagód, grzyby, dzikie zboże, len, zioła, barć, odsłonięcie gliny, złoże rudy i łowisko można dotknąć na mapie. Karta pokazuje, co to jest i ile jeszcze da (na przykład „Sosna · zostało: kłody 8”), a przyciski pozwalają:
+- zaznaczyć do wycinki, wydobycia, zbioru albo połowu;
+- zaznaczyć okolicę, czyli wszystkie takie same zasoby w promieniu kilku kroków;
+- odznaczyć jeden albo całą okolicę.
+
+Nad zaznaczonymi wisi znak: siekiera nad drzewami, kilof nad kamieniem, gliną i rudą, kosz nad tym, co się zbiera, ryba nad łowiskiem. Znak rośnie, gdy ktoś przy nim pracuje. Zioła i barć da się zaznaczyć dopiero z odpowiednią wiedzą, a zimą to, co rośnie, czeka na wiosnę.
+
+**Kto bierze zaznaczone.** Najpierw wolne ręce (robotnicy), potem budowniczowie, gdy nie ma budowy. Ludzie z chaty roboczej (drwale, kamieniarze, zbieracze, rybacy) biorą najpierw zaznaczone w zasięgu swojej chaty. Kto pracuje bez chaty, robi to o 20% wolniej, a łowienie z brzegu bez pomostu daje mniej ryb. Ścięte drzewo zostawia pniak, który leśnik może obsadzić. Gdy zasób się wyczerpie, znak znika.
+
+**Budowniczowie.** W zakładce Praca, w części „Budowa i mapa”, można przydzielić budowniczych. Wybierani są ludzie z największą wprawą cieśli. Budują i donoszą materiał na każdy plac budowy, rozbudowę i remont, zanim zajmą się czymkolwiek innym. Gdy pojawia się nowy plac, od razu odkładają zaznaczoną robotę. Gdy budów nie ma, pomagają przy zaznaczonych i przy wraku. Nowa gra zaczyna z trzema budowniczymi. Robotnicy nadal pomagają przy budowie, gdy nie mają zaznaczonej roboty.
+
+**Na co czekamy** pokazuje, ile jest zaznaczonych, i ostrzega, gdy zaznaczone czekają, a wszyscy mają inną pracę.
+
 # 12. Epoki
 
 ## Epoka I: Rozbitkowie (6–8 lat na wyspie, od wersji 0.18 grywalna do końca)
@@ -406,7 +421,7 @@ Wybór jest ostateczny. Po wyborze gra pokazuje Księgę rozbitków: ilu wyszło
 
 # 15. Technika
 
-- **Plik gry:** jeden plik HTML (około 555 kB) składany z części: p_head.html, p_const.js, p_mid.js, p_rest.js, p_map.js, p_tech.js, p_exp.js, p_v8.js, p_bld.js, p_story.js, p_slav.js, p_wild.js, p_ludzie.js, p_urz.js, p_pamiec.js, p_akt.js, p_kol.js, p_slady.js, p_lad.js, p_gosp.js, p_bud.js, p_swiat.js, p_szlif.js, p_gfx.js, p_end.js.
+- **Plik gry:** jeden plik HTML (około 560 kB) składany z części: p_head.html, p_const.js, p_mid.js, p_rest.js, p_map.js, p_tech.js, p_exp.js, p_v8.js, p_bld.js, p_story.js, p_slav.js, p_wild.js, p_ludzie.js, p_urz.js, p_pamiec.js, p_akt.js, p_kol.js, p_slady.js, p_lad.js, p_gosp.js, p_bud.js, p_swiat.js, p_szlif.js, p_mapa.js, p_gfx.js, p_end.js.
 - **Grafika:** Three.js r149 (WebGL2), własna obróbka obrazu (bloom, cienie kontaktowe, cienie chmur, tilt-shift).
 - **Zapis:** w pamięci przeglądarki (klucz przystan-v7, kopia zapasowa przystan-v7-bak), do pobrania jako plik JSON i do wczytania z pliku.
 - **Instalacja:** PWA z manifestem i service workerem, działa bez sieci.
@@ -435,6 +450,7 @@ Wybór jest ostateczny. Po wyborze gra pokazuje Księgę rozbitków: ilu wyszło
 | 0.21 | gospodarstwa: spiżarki rodzin i scena „Pełna spiżarka”, wieczory (kądziel, naprawy, plecionki, opowieści), prządki, dowóz materiałów na budowę, jakość wyrobów, pamiątki przechodzące z pokolenia na pokolenie |
 | 0.22 | żywy świat: budowa warstwami z kupką materiału, domy dojrzewające z wiekiem (śparogi, konik na kalenicy, znak rodu, kwiaty), zapasy widoczne przy magazynach, śnieg na dachach, obrzędy i wesela w 3D, burze z piorunami, zorza, dźwięk pracy w przestrzeni, opowieści życia i wspomnienia, kamera przy ważnych chwilach |
 | 1.0 | szlif i wydanie epoki I: „Od ostatniego razu”, „Na co czekamy”, pulsujące podpowiedzi, rytm sesji, nowe wyspy i dwa wyzwania, zapis z kopią zapasową i naprawą starych zapisów, łączenie brył budynków (około 4 razy mniej wywołań rysowania), poprawki budowy z ośmioletnich symulacji, trudność wpływa na pracę, jedzenie i opał |
+| 1.1 | mapa: dotykanie zasobów na mapie i zaznaczanie ich do wycinki, wydobycia, zbioru i połowu (także całej okolicy), znaki nad zaznaczonymi; budowniczowie przydzielani w zakładce Praca |
 
 # 17. Immersja i powroty
 
