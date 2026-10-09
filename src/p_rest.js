@@ -592,7 +592,7 @@ function stepPerson(p,dt){
   if(k==='gasic'){const b=p.tgt;if(!b||!b.fire){p.fireB=null;p.state='idle';p.wait=.3;return}b.fire.s-=dt*.011*e*(wellCount()?1:.35)*(law('straz')?1.4:1);p.dir=(p.dir||0)+Math.sin(clock*3)*.02;return}
   if(k==='build'){const s=p.tgt;if(s&&bDone(s)&&s.proj&&bById(s.id)){s.proj.prog+=dt*e*craftEff(p,'ciesla')*(tech('r_zrab')?1.25:1)*(1+.04*offLv('budowa'));gainXp(p,'ciesla',dt);if(s.proj.prog>=s.proj.work){finishProj(s);p.tgt=null;p.state='idle';p.wait=.2}return}
   if(!s||bDone(s)){if(s&&s.workers>0)s.workers--;p.tgt=null;p.state='idle';p.wait=.2;return}
-   s.prog+=dt*e*craftEff(p,'ciesla')*(tech('r_zrab')?1.25:1)*(1+.04*offLv('budowa'));gainXp(p,'ciesla',dt);{const bm=bMesh[s.id];if(bm)bm.scale.y=Math.max(.12,Math.min(1,s.prog/s.work))}
+   s.prog+=dt*e*craftEff(p,'ciesla')*(tech('r_zrab')?1.25:1)*(1+.04*offLv('budowa'));gainXp(p,'ciesla',dt);if(s.mat&&s.prog>s.work*Math.min(1,(s.del||0)/s.mat)){s.prog=s.work*Math.min(1,(s.del||0)/s.mat);if(s.workers>0)s.workers--;p.tgt=null;p.state='idle';p.wait=.4;p.act='czeka na materiał';return}{const bm=bMesh[s.id];if(bm)bm.scale.y=Math.max(.12,Math.min(1,s.prog/s.work))}
    if(bDone(s)){completeSite(s);p.tgt=null;p.state='idle';p.wait=.2}return}
   if(k==='wreck'){const W=S.wreck;if(W.gone){p.state='idle';return}gainXp(p,'ciesla',dt);
    const tg=W.target>=0?W.parts[W.target]:null;
@@ -608,7 +608,7 @@ function stepPerson(p,dt){
    const pr=list.find(x=>has(x)&&(!x.when||x.when()));
    if(!pr&&list.some(has)){p.act='zapas wystarczy, odpoczywa';p.wt=0;p.wait=6;p.state='idle';return}
    if(!pr){const p0=list[0];p.act='czeka na: '+Object.keys(p0.in).filter(r=>(S.res[r]||0)<p0.in[r]).map(r=>RN[r].toLowerCase()).join(', ');p.wt=0;p.wait=3;p.state='idle';return}
-   p.wt+=dt*e*craftEff(p,d.c)*bMul(b);gainXp(p,d.c,dt);if(p.wt>=pr.t*(pr.out.plotno&&tech('r_tkac')?.6:1)){p.wt=0;Object.entries(pr.in).forEach(([r,v])=>S.res[r]-=v);if(b.kind==='drewutnia'&&hasExt(b,'wiata'))S.res.opal+=1;Object.entries(pr.out).forEach(([r,v])=>{S.res[r]=(S.res[r]||0)+v;if(r==='narz'||r==='narzk'||r==='odziez'){const q=.7+.12*Math.max(...S.people.filter(x=>x.wb===b.id).map(x=>x.sk[d.c]||0),0);S.toolQ=S.toolQ||{};const o=S.toolQ[r]||1,st=Math.max(0,S.res[r]-v);S.toolQ[r]=(o*st+q*v)/(st+v)}});if(b.kind==='cegielnia')toastOnce('cegla','Pierwsze cegły wyjęte z pieca')}return}}}
+   p.wt+=dt*e*craftEff(p,d.c)*bMul(b);gainXp(p,d.c,dt);if(p.wt>=pr.t*(pr.out.plotno&&tech('r_tkac')?.6:1)){p.wt=0;Object.entries(pr.in).forEach(([r,v])=>S.res[r]-=v);if(b.kind==='drewutnia'&&hasExt(b,'wiata'))S.res.opal+=1;Object.entries(pr.out).forEach(([r,v])=>{if(typeof gospMade==='function')gospMade(b,r,v);S.res[r]=(S.res[r]||0)+v;if(r==='narz'||r==='narzk'||r==='odziez'){const q=.7+.12*Math.max(...S.people.filter(x=>x.wb===b.id).map(x=>x.sk[d.c]||0),0);S.toolQ=S.toolQ||{};const o=S.toolQ[r]||1,st=Math.max(0,S.res[r]-v);S.toolQ[r]=(o*st+q*v)/(st+v)}});if(b.kind==='cegielnia')toastOnce('cegla','Pierwsze cegły wyjęte z pieca')}return}}}
 function fieldVis(b){const m=bMesh[b.id];if(!m||!m.userData.crops)return;const f=b.field||{st:'puste',g:0};const g=f.st==='puste'?0:f.st==='dojrzale'?1:f.g;const col=new THREE.Color().setRGB(L(lerp(.42,.86,g)),L(lerp(.6,.7,g)),L(lerp(.25,.3,g)));
  m.userData.crops.children.forEach((c,i)=>{const s=g<=0?0:.25+.75*g;c.scale.set(s,s*(.85+((i*7)%5)*.06),s);c.material.color.copy(col)})}
 function completeSite(s){{const old=bMesh[s.id];if(old){old.scale.y=1;if(old.userData.scaf){bGroup.remove(old.userData.scaf);old.userData.scaf=null}}}log('Ukończono: '+BD[s.kind].n.toLowerCase()+'.');toast('Ukończono: '+BD[s.kind].n);
@@ -663,7 +663,7 @@ function dailyPeople(cold,fuelHeated){
   if(cold&&w<1&&p.coat>0)w=Math.min(1,w+.25);p.warm=w;
   if(p.hp<.9&&S.res.ziola>=.05){S.res.ziola-=.05;p.hp=Math.min(1,p.hp+K*(tech('u_ziel')?.03:.012))}
   if(p.hurt){p.hp=Math.min(1,p.hp+K*(tech('n_opat')?.03:.0));if(p.hp>.9)p.hurt=0}
-  const pat=p.trait==='Cierpliwy'?.75:1;p.hp=clamp(p.hp+K*((S.fedR>=.999?.03:-(1-S.fedR)*.04*pat*hungerMul(p))+(w<.6?-(0.6-w)*.08*pat:.008)+(S.variety-2)*.006),0,1);
+  const pat=p.trait==='Cierpliwy'?.75:1;p.hp=clamp(p.hp+K*((fedOf(p)>=.999?.03:-(1-fedOf(p))*.04*pat*hungerMul(p))+(w<.6?-(0.6-w)*.08*pat:.008)+(S.variety-2)*.006),0,1);
   if(p.worked){p.tool.d-=K;if(p.tool.t&&p.tool.d<=0){p.tool.t=0;toastOnce('tool','Narzędzia się zużywają. Warsztat zrobi kamienne.')}p.worked=0}
   if(isAdult(p)&&p.tool.t===0&&p.job!=='rob'){const TQ=S.toolQ||{};if(S.res.narz>=1){S.res.narz--;p.tool={t:2,d:(tech('r_stal')?225:150)*(TQ.narz||1)}}else if(S.res.narzk>=1){S.res.narzk--;p.tool={t:1,d:(tech('r_narz')?85:50)*(TQ.narzk||1)}}}
   p.coat-=(cold?(sea===2?1.4:.9):.3)*K;if(p.coat<=0&&S.res.odziez>=1){S.res.odziez--;p.coat=(tech('r_tkac')?230:170)*((S.toolQ||{}).odziez||1)}
@@ -880,13 +880,13 @@ function renderPanel(){
   S.goals=S.goals||{};h+='<h3>Cele</h3><div class="card">'+GOALS.map((g,i)=>`<p>${S.goals[i]?'<span class="ok">✓</span>':'<span class="mut">○</span>'} ${g[0]}</p>`).join('')+'</div>';
   h+=pamHTML()+rodyHTML()+hamletHTML();h+='<h3>Rodziny</h3>';
   Object.values(S.fams).forEach(f=>{const mem=famMembers(f.id);if(!mem.length)return;const hm=f.home?bById(f.home):null;
-   h+=`<div class="card"><h4>Rodzina ${famName(f.id)}</h4><p class="mut">${hm?BD[hm.kind].n:'bez domu, śpi w obozie'}</p>`+mem.sort((a,b)=>b.age-a.age).map(p=>`<div class="row" data-p="${p.id}" style="cursor:pointer;padding:5px 0"><div class="n"><b style="color:var(--hi)">${p.name}</b> <span class="mut">${Math.floor(p.age)} l. · ${traitN(p).toLowerCase()}</span><small>${jobLabel(p)} · ${p.act}${p.mentor?' · uczy się od: '+p.mentor.name:''}</small><div>${skillTags(p,3)}</div></div></div>`).join('')+`</div>`})}
+   h+=`<div class="card"><h4>Rodzina ${famName(f.id)}</h4><p class="mut">${hm?BD[hm.kind].n:'bez domu, śpi w obozie'}${typeof spizWord==='function'?spizWord(f):''}</p>`+mem.sort((a,b)=>b.age-a.age).map(p=>`<div class="row" data-p="${p.id}" style="cursor:pointer;padding:5px 0"><div class="n"><b style="color:var(--hi)">${p.name}</b> <span class="mut">${Math.floor(p.age)} l. · ${traitN(p).toLowerCase()}</span><small>${jobLabel(p)} · ${p.act}${p.mentor?' · uczy się od: '+p.mentor.name:''}</small><div>${skillTags(p,3)}</div></div></div>`).join('')+`</div>`})}
  else if(tab==='praca'){const wbs=workBuildings();
   h+=`<p class="lead">Wolne ręce: <b style="color:var(--hi)">${freeCount()}</b> z ${adultsPool().length}. Wolni pracują jako robotnicy: budują i rozbierają wrak.</p>`;
   if(!wbs.length)h+='<p class="lead">Nie ma jeszcze budynków roboczych. Postaw chatę zbieracza i chatę drwala w zakładce Budowa.</p>';
   wbs.forEach(b=>{const d=BD[b.kind];const ws=S.people.filter(p=>p.job==='wb'&&p.wb===b.id);const n=countInRange(b.kind,b.i,b.j);
    h+=`<div class="row"><div class="n">${d.n}${bDone(b)?'':' <span class="mut">(w budowie)</span>'}<small>${ws.length?ws.map(p=>p.name).join(', '):'nikt nie pracuje'}${n!==null?' · '+rangeLabel(b.kind,n):''}</small></div><button class="mini" data-w="${b.id}" data-d="-1" aria-label="Mniej">−</button><span class="cnt">${b.want||0}/${wkOf(b)}</span><button class="mini" data-w="${b.id}" data-d="1" aria-label="Więcej">+</button></div>`});
-  h+='<h3>Bez budynku</h3>';
+  if(typeof wieczHTML==='function')h+=wieczHTML();h+='<h3>Bez budynku</h3>';
   let c=0;for(let k=0;k<N*N;k++)if(rev[k]&&land[k])c++;
   h+=`<div class="row"><div class="n">Zwiadowcy<small>Odsłaniają wyspę. Odkryto ${Math.round(100*c/landCount)}%.</small></div><button class="mini" data-al="zwiad" data-d="-1">−</button><span class="cnt">${S.alloc.zwiad||0}</span><button class="mini" data-al="zwiad" data-d="1">+</button></div>`;
   h+=`<div class="row"><div class="n">Próby<small>Zduni i kowale prowadzą próby z zakładki Wiedza.</small></div><button class="mini" data-al="zdun" data-d="-1">−</button><span class="cnt">${S.alloc.zdun||0}</span><button class="mini" data-al="zdun" data-d="1">+</button></div>`;
@@ -902,7 +902,7 @@ function renderPanel(){
  else if(tab==='budowa'){const need=S.bld.filter(b=>bDone(b)&&condOf(b)<.5);
   if(!buildCat)buildCat=S.bld.some(b=>b.kind==='zbieracz')?'dom':'jedzenie';
   h+=`<div class="dchips bchips">${CATS.map(([c,cn])=>{const ks=BKEYS.filter(k=>BD[k].cat===c);const av=ks.filter(bAvail).length;return`<button data-bcat="${c}" class="${buildCat===c?'on':''}">${cn}<small>${av}/${ks.length}</small></button>`}).join('')}<button data-bcat="remont" class="${buildCat==='remont'?'on':''}">Remonty<small${need.length?' style="color:var(--ember)"':''}>${need.length?need.length+' do zrobienia':'w porządku'}</small></button>${typeof ladChip==='function'?ladChip():''}</div>`;
-  const sites=S.bld.filter(b=>!bDone(b));if(sites.length){h+=`<div class="card"><h4 style="font-size:15px">Place budowy</h4>${sites.map(s=>{const pc=Math.round(100*s.prog/s.work);return`<div class="cost" style="margin-top:4px">${BD[s.kind].n} · ${pc}% · przy pracy: ${s.workers||0}</div><div class="pbar"><div style="width:${pc}%"></div></div>`}).join('')}</div>`}
+  const sites=S.bld.filter(b=>!bDone(b));if(sites.length){h+=`<div class="card"><h4 style="font-size:15px">Place budowy</h4>${sites.map(s=>{const pc=Math.round(100*s.prog/s.work);return`<div class="cost" style="margin-top:4px">${BD[s.kind].n} · ${pc}% · przy pracy: ${s.workers||0}${s.mat?' · materiał '+Math.round(100*Math.min(1,(s.del||0)/s.mat))+'%':''}</div><div class="pbar"><div style="width:${pc}%"></div></div>`}).join('')}</div>`}
   if(buildCat==='lad'&&typeof ladBuildHTML==='function'){h+=ladBuildHTML()}else if(buildCat==='remont'){h+=`<div class="card"><h4>Remonty</h4><p>Budynki zużywają się co roku: szybciej nad morzem, na mokradłach i w górach, wolniej, gdy są wyżej ulepszone. Remont potrzebny jest zwykle co 2–3 lata.</p><p class="mut">${need.length?'Wymaga remontu: '+need.map(b=>BD[b.kind].n.toLowerCase()+' '+Math.round(condOf(b)*100)+'%').join(', ')+'.':'Wszystko w dobrym stanie.'}</p><button data-autorep="1" class="${S.autoRep!==false?'pri':''}">${S.autoRep!==false?'Remonty automatyczne: włączone':'Remonty automatyczne: wyłączone'}</button></div>`}
   else{const ks=BKEYS.filter(k=>BD[k].cat===buildCat).sort((a,b)=>(bAvail(b)?1:0)-(bAvail(a)?1:0));
    ks.forEach(k=>{const d=BD[k],av=bAvail(k),cnt=S.bld.filter(b=>b.kind===k).length;

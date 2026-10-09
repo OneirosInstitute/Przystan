@@ -1,6 +1,6 @@
 ---
 title: "Przystań — Księga gry"
-subtitle: "Wersja 0.20 · 6 października 2026 · z planem do wersji 1.0"
+subtitle: "Wersja 0.21 · 6 października 2026 · z planem do wersji 1.0"
 ---
 
 # 1. Czym jest Przystań
@@ -276,6 +276,25 @@ Budowa → Ład wsi. Ozdoby i porządek stawia się od razu, bez robotników, w 
 
 **Tryb zdjęć:** przycisk „Foto” przy sterowaniu kamerą chowa cały interfejs. Zostaje pasek: obrót kamery, zdjęcie, napisy i wyjście. Zdjęcie zapisuje się jako plik JPG z podpisem: nazwa osady i data na wyspie.
 
+## Gospodarstwa (od wersji 0.21)
+
+**Spiżarki rodzin.** Każda rodzina z domem ma własną spiżarkę: szałas mieści 8 porcji, chata 20, dom 32, piwniczka dodaje 15. Gdy we wspólnej spiżarni jest zapas na ponad sześć dni, część jedzenia trafia do domów. Gdy wspólnej żywności zabraknie, rodziny jedzą ze swoich spiżarek i dopiero potem głodują. Dlatego głód nie przychodzi naraz: najpierw cierpią rodziny z pustą spiżarką. Jak się napełniają, zależy od Umowy z brzegu:
+- Wszystko wspólne: po równo.
+- Każdy na swoim: więcej dostają rodziny, w których dorośli zdobywają jedzenie (zbieracze, myśliwi, rybacy, rolnicy, hodowcy, piekarze).
+- Słuchamy starszych: najpierw dostają rody najstarszych.
+
+W domach jedzenie psuje się powoli. Dobre naczynia to opóźniają. Scena „Pełna spiżarka” pojawia się, gdy trwa głód, a jedna rodzina ma pełne garnki, gdy u innej dzieci chodzą głodne. Wiec może poprosić o podział albo zostawić każdemu swoje. Na karcie każdej rodziny widać jej spiżarkę i na ile dni starczy.
+
+**Wieczory.** Po pracy każda chata coś robi. W zakładce Praca wybiera się, co: kądziel (z włókien powstaje płótno), naprawy (narzędzia i odzież służą dłużej), plecionki (kosze i maty, liczone jak naczynia), opowieści (dzieci uczą się fachów, rośnie nadzieja i pamięć) albo „sami wiedzą”, wtedy osada wybiera według potrzeb. Zimą wieczory są długie, więc pożytek jest o 60% większy, latem mniejszy.
+
+**Prządki.** Od jesieni do wiosny, jeśli w osadzie stoi chata albo dom, kobiety i młodzież schodzą się wieczorami do jednej chaty z kądzielami. Wieczorem widać, jak tam idą, a w oknach pali się łuczywo. Prządki zbliżają ludzi, zwłaszcza młodych: rodzą się z tego swaty. Kronika zapisuje śpiewy, opowieści o strzygach i wróżby z wosku.
+
+**Dowóz materiałów.** Materiał na budowę trzeba donieść ze składu albo z obozu. Robotnicy chodzą tam i z powrotem z ładunkiem na plecach: 4 jednostki naraz, silni po 6. Kłody i kamień są ciężkie, gwoździe i płótno lekkie. Budowa idzie tylko tak daleko, jak daleko starcza doniesionego materiału. Postawiona blisko obozu albo składu ma połowę materiału od razu na miejscu. Dlatego skład przy nowej części wsi przyspiesza budowę. Robotnicy sami dzielą się na tych, którzy noszą, i tych, którzy budują. Karta „Place budowy” pokazuje postęp i ile materiału już doniesiono.
+
+**Jakość wyrobów.** Narzędzia, odzież, naczynia, deski, płótno, chleb i ser mają jakość: lichą, zwykłą, dobrą albo mistrzowską. Zależy ona od ręki: im wyższy fach najlepszego pracownika, tym lepszy wyrób. Dobre narzędzia i odzież służą dłużej, dobre naczynia chronią zapasy w domach, dobry chleb i ser podnoszą nadzieję. Karta „Gospodarstwa” w zakładce Ludzie pokazuje jakość wszystkich wyrobów.
+
+**Pamiątki.** Mistrz (fach 4 albo 5) raz na jakiś czas robi rzecz, o której mówi cała osada, na przykład siekierę, kożuch, dzban, skrzynię albo obrus z imieniem twórcy. Kto ją ma, pracuje o 5% lepiej. Po śmierci właściciela pamiątka przechodzi na najstarsze dziecko, a gdy go nie ma, na kogoś z rodziny albo rodu. Pamiątki i ich kolejni właściciele trafiają do Księgi rozbitków.
+
 # 12. Epoki
 
 ## Epoka I: Rozbitkowie (6–8 lat na wyspie, od wersji 0.18 grywalna do końca)
@@ -333,7 +352,7 @@ Wybór jest ostateczny. Po wyborze gra pokazuje Księgę rozbitków: ilu wyszło
 
 # 15. Technika
 
-- **Plik gry:** jeden plik HTML (około 490 kB) składany z części: p_head.html, p_const.js, p_mid.js, p_rest.js, p_map.js, p_tech.js, p_exp.js, p_v8.js, p_bld.js, p_story.js, p_slav.js, p_wild.js, p_ludzie.js, p_urz.js, p_pamiec.js, p_akt.js, p_kol.js, p_slady.js, p_lad.js, p_gfx.js, p_end.js.
+- **Plik gry:** jeden plik HTML (około 505 kB) składany z części: p_head.html, p_const.js, p_mid.js, p_rest.js, p_map.js, p_tech.js, p_exp.js, p_v8.js, p_bld.js, p_story.js, p_slav.js, p_wild.js, p_ludzie.js, p_urz.js, p_pamiec.js, p_akt.js, p_kol.js, p_slady.js, p_lad.js, p_gosp.js, p_gfx.js, p_end.js.
 - **Grafika:** Three.js r149 (WebGL2), własna obróbka obrazu (bloom, cienie kontaktowe, cienie chmur, tilt-shift).
 - **Zapis:** w pamięci przeglądarki (klucz przystan-v7), do pobrania jako plik JSON i do wczytania z pliku.
 - **Instalacja:** PWA z manifestem i service workerem, działa bez sieci.
@@ -359,6 +378,7 @@ Wybór jest ostateczny. Po wyborze gra pokazuje Księgę rozbitków: ilu wyszło
 | 0.18 | finał epoki I: pięć aktów z celami, sceny fabularne, dziecko w 12. roku wybiera fach, „Rok na wyspie”, wiec pokoleń z wyborem drogi, Księga rozbitków do pobrania, trzy poziomy trudności |
 | 0.19 | kolonizacja: przysiółki zakładane z własnej woli i prośby młodych, rodzaje przysiółków, pięć etapów wzrostu w 3D, zapasy i prośby przysiółków, ścieżki i drogi, wędrowcy, zagrożenia w głębi wyspy, mapa wspólnoty |
 | 0.20 | ład wsi: ścieżki, płoty, ławy, drzewa owocowe, grządki, kwiaty, słupy rodowe, ocena ładu, tryb zdjęć; osiem nowych śladów dawnego ludu, które z czasem okazują się potrzebne |
+| 0.21 | gospodarstwa: spiżarki rodzin i scena „Pełna spiżarka”, wieczory (kądziel, naprawy, plecionki, opowieści), prządki, dowóz materiałów na budowę, jakość wyrobów, pamiątki przechodzące z pokolenia na pokolenie |
 
 # 17. Immersja i powroty
 
@@ -412,7 +432,7 @@ Kolejność dalszej pracy. Każda wersja kończy się czymś, w co da się zagra
 | 0.18 Finał epoki I (gotowe) | akty jako rozdziały z warunkami końca, sceny fabularne (Nikt nas nie szuka, Za pięć dni sztorm, Ostatnia zima mistrza, Ostatni), dziecko w 12. roku samo wybiera fach, wiec pokoleń z wyborem drogi, Księga rozbitków do pobrania, trzy poziomy trudności, „Rok na wyspie” w noc Kupały |
 | 0.19 Kolonizacja (gotowe) | przysiółki zakładane z własnej woli, ścieżki między osadą a przysiółkami, przysiółki jako małe żywe osady, zagrożenia w głębi wyspy, mapa wspólnoty |
 | 0.20 Ład wsi (gotowe) | wytyczanie ścieżek, płoty, ławy, drzewa owocowe, ogródki, słupy rodowe, ład wsi wpływający na nastrój, tryb zdjęć |
-| 0.21 Gospodarstwa | spiżarki rodzin, wieczorne prace przy kądzieli, dowóz materiałów, jakość wyrobów |
+| 0.21 Gospodarstwa (gotowe) | spiżarki rodzin, wieczorne prace przy kądzieli, dowóz materiałów, jakość wyrobów |
 | 0.22 Żywy świat | obrzędy i wesela w 3D, burze, śnieg na dachach, zorza, dźwięk w przestrzeni, opowieści życia, kamera przy ważnych chwilach |
 | 0.23 Szlif | „Od ostatniego razu” i „Na co czekamy”, rytm sesji, nowe wyspy i wyzwania, równowaga z ośmioletnich symulacji, łagodny początek, testy na Nordzie 6 |
 | 1.0 Epoka I | wydanie: GitHub, Railway, paczka do instalacji, zapis odporny na zmiany wersji |
