@@ -1,6 +1,6 @@
 
 // ================= 1.2 Cicha wyspa: ekran bez menu, wszystko pod palcem =================
-let czOn=true;try{czOn=localStorage.getItem('przystan-ui')!=='pelne'}catch(e){}
+let czPaused=null;let czOn=true;try{czOn=localStorage.getItem('przystan-ui')!=='pelne'}catch(e){}
 document.body.classList.toggle('cz',czOn);
 {const st=document.createElement('style');st.textContent=`
 body.cz #date,body.cz #stats,body.cz #res,body.cz #goal,body.cz #needs,body.cz #tabbar,body.cz #brand{display:none!important}
@@ -103,7 +103,7 @@ function czShowGoal(){const g=goalInfo();if(!g)return;setH(czGoal,`<small>${g.ch
   const d=Math.floor(rday()),s=Math.floor(d/SD),t=tod();const part=t<.2?'noc':t<.3?'świt':t<.7?'dzień':t<.82?'zmierzch':'noc';
   setH($('cz-date'),`<b>${SEAS[s]} · ${d%SD+1}</b><small>${part} · ${WEATHER[S.weather.k][0]}</small>`);
   setH($('cz-thr'),czThreats().map(x=>`<button class="czc ${x[2]}" data-czthr="1">${x[0]==='pożar'?CZ_FIRE:''}${x[0]}</button>`).join(''));
-  setH($('cz-tempo'),S.speed===0?`<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l12 7-12 7z"/></svg>pauza`:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M8 5v14M16 5v14"/></svg>${S.speed}×`);
+  setH($('cz-tempo'),S.speed===0?`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M8 5v14M16 5v14"/></svg>${czPaused&&!$('sheet').hidden?'czas stoi':'stoi'}`:`<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l12 7-12 7z"/></svg>${S.speed}×`);
   $('cz-isl').classList.toggle('on',!!overview);document.body.classList.toggle('placing',!!placing);
   const g=goalInfo();const gt=g?g.t:null;if(gt!==czGoalT){czGoalT=gt;if(gt)czShowGoal()}}}
 $('cz-date').addEventListener('click',()=>{if(S)czShowGoal()});
@@ -117,7 +117,6 @@ $('cz-osada').addEventListener('click',()=>{if(S)openSheet(czLastTab)});
 cv.addEventListener('pointerdown',()=>document.body.classList.remove('czpop'));
 
 // ---------- księga Osada: działy zamiast zakładek, gra stoi ----------
-let czPaused=null;
 function czChips(){if(!czOn)return;const el=$('cz-chips');setH(el,CZ_TABS.map(([k,n])=>`<button data-czt="${k}" class="${tab===k?'on':''}">${n}</button>`).join(''))}
 $('cz-chips').addEventListener('click',e=>{const b=e.target.closest('[data-czt]');if(b&&S)openSheet(b.dataset.czt)});
 {const _os=openSheet;openSheet=function(t){const was=$('sheet').hidden;_os(t);czLastTab=t;if(czOn&&was&&S&&S.speed>0){czPaused=S.speed;setSpeed(0)}document.body.classList.remove('czpop');if(czOn)select(null);czChips()}}

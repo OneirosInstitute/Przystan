@@ -1,6 +1,6 @@
 ---
 title: "Przystań — Księga gry"
-subtitle: "Wersja 1.7 · 9 października 2026 · Epoka I ukończona"
+subtitle: "Wersja 1.7.1 · 9 października 2026 · Epoka I ukończona"
 ---
 
 # 1. Czym jest Przystań
@@ -561,11 +561,13 @@ Wybór jest ostateczny. Po wyborze gra pokazuje Księgę rozbitków: ilu wyszło
 - **Zakładki:** Budowa (kategorie), Praca, Ludzie (największy kłopot, prośby, niezgoda, obyczaje z ich wiekiem, urzędy, rok obrzędów, pamięć osady, rody, przysiółki, rodziny), Wyprawy, Wiedza (drzewa odkryć), Natura (atlas), Kronika (pełna kronika do pobrania, zapis i wczytanie z pliku).
 - **Okno budynku:** pracownicy, przepisy, co spowalnia, stan i remont, poziomy i rozbudowy.
 - **Karta osoby:** fach, cecha, zdrowie, narzędzia, ród, małżonek, nastrój z powodami, mir i przyjaciele.
+- **Księga Osada (od wersji 1.7.1):** arkusz zajmuje cały ekran pod górną linią. Działy (Ludzie, Praca, Budowa, Wyprawy, Wiedza, Natura, Kronika) są w jednym przesuwanym rzędzie razem z przyciskami zwiń i zamknij. Gdy arkusz jest otwarty, przycisk tempa pokazuje „czas stoi”, a komunikaty pojawiają się na dole ekranu.
+- **Budowa (od wersji 1.7.1):** kategorie jako małe przyciski, które przewijają się razem z listą; kategorie bez znanych budynków są przygaszone. Karta „Budowy” pokazuje każdą budowę z postępem, materiałem i powodem, dlaczego stoi albo idzie: buduje kilka osób, donoszą materiał, czeka na dowóz, zaczną rano, nikt nie ma wolnych rąk, nie da się dojść. Dotknięcie budowy przenosi do niej na mapie. Pod listą są budowniczowie z przyciskami − i +. Koszt pokazuje, ile jest z ilu potrzeba; gdy czegoś brakuje, zamiast „Postaw” widać, czego i ile brakuje. Budynki, których osada jeszcze nie umie, są zebrane w jednej karcie „Jeszcze nie umiecie” z tym, czego trzeba się nauczyć.
 - **Telefon w pionie:** wąski pasek wskaźników, ukryta minimapa (widok wyspy pod przyciskiem „Wyspa”).
 
 # 15. Technika
 
-- **Plik gry:** jeden plik HTML (około 675 kB) składany z części: p_head.html, p_const.js, p_mid.js, p_rest.js, p_map.js, p_tech.js, p_exp.js, p_v8.js, p_bld.js, p_story.js, p_slav.js, p_wild.js, p_ludzie.js, p_urz.js, p_pamiec.js, p_akt.js, p_kol.js, p_slady.js, p_lad.js, p_gosp.js, p_bud.js, p_swiat.js, p_szlif.js, p_mapa.js, p_cisza.js, p_sluzba.js, p_zycie.js, p_rok.js, p_wiedza.js, p_gfx.js, p_grafika.js, p_end.js.
+- **Plik gry:** jeden plik HTML (około 675 kB) składany z części: p_head.html, p_const.js, p_mid.js, p_rest.js, p_map.js, p_tech.js, p_exp.js, p_v8.js, p_bld.js, p_story.js, p_slav.js, p_wild.js, p_ludzie.js, p_urz.js, p_pamiec.js, p_akt.js, p_kol.js, p_slady.js, p_lad.js, p_gosp.js, p_bud.js, p_swiat.js, p_szlif.js, p_mapa.js, p_cisza.js, p_sluzba.js, p_zycie.js, p_rok.js, p_wiedza.js, p_gfx.js, p_grafika.js, p_ksiega.js, p_end.js.
 - **Grafika:** Three.js r149 (WebGL2), własna obróbka obrazu (bloom, cienie kontaktowe, cienie chmur, tilt-shift, korekcja barw), własne shadery wody i terenu dopinane do materiałów Three.js.
 - **Zapis:** w pamięci przeglądarki (klucz przystan-v7, kopia zapasowa przystan-v7-bak), do pobrania jako plik JSON i do wczytania z pliku.
 - **Instalacja:** PWA z manifestem i service workerem, działa bez sieci.
@@ -602,6 +604,7 @@ Wybór jest ostateczny. Po wyborze gra pokazuje Księgę rozbitków: ilu wyszło
 | 1.5 | rytm roku: doba 4 minuty i 20 dób w roku (przeliczanie starych zapisów), trójpolówka, chwasty i sporysz, przymrozek na niezebrane, dożynki, choroby o jasnej przyczynie, przednówek z wyborem racji, progi zapasów w warsztatach, pogoda ze znaków przyrody i pośpiech przy żniwach |
 | 1.6 | pamięć wyspy: wiedza żyje w ludziach, ginie z ostatnim, który umiał, i wraca z nauką albo dzięki opowieściom; miejsca nazywane od wydarzeń, widoczne na mapie |
 | 1.7 | grafika: złota godzina i korekcja barw, woda z odbiciem nieba i odblaskiem słońca, bez szwu na morzu, faktura terenu, mokry piasek i refleksy na dnie, gęsta trawa, prześwitujące liście, dokładniejsi ludzie, poranna mgła, starzejące się budynki, wyskakujące ryby, licznik klatek |
+| 1.7.1 | lepsza księga Osada: arkusz na cały ekran, działy w jednym rzędzie, kategorie budowy jako małe przyciski bez nachodzenia na listę, budowy z powodem przestoju i budowniczymi, koszt „ile jest z ilu”, jasne „Brakuje” zamiast złudnego „Postaw”, „czas stoi” w tempie, komunikaty na dole |
 
 # 17. Immersja i powroty
 

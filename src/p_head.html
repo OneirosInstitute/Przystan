@@ -128,8 +128,30 @@ h3:first-child{margin-top:0}
 .dchips button{padding:6px 2px;font-size:13px;display:flex;flex-direction:column;align-items:center;line-height:1.15}
 .dchips button small{font-size:11px;color:var(--mut)}
 .dchips button.on{border-color:var(--gold);background:#2c2a20;color:var(--hi)}
-.bchips{grid-template-columns:repeat(3,1fr);position:sticky;top:-2px;z-index:2;background:#161e1a;padding:4px 0 6px;margin:-4px 0 10px}
-.bchips button{font-size:12.5px;padding:7px 2px}
+.bchips{display:flex;flex-wrap:wrap;gap:6px 5px;margin:0 0 12px}
+.bchips button{flex:0 0 auto;height:34px;padding:0 11px;border-radius:17px;font-size:13.5px;display:flex;align-items:center;gap:6px;background:transparent}
+.bchips button.on{border-color:var(--gold);background:#2c2a20;color:var(--hi);font-weight:700}
+.bchips button.dim{opacity:.45}
+.bchips button small{font-size:11.5px;color:var(--mut);font-weight:400}
+.bchips button small.no{color:#fff;background:var(--bad);border-radius:9px;padding:0 6px;font-weight:700}
+.card.bk{padding:11px 12px 12px}
+.bkh{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.bkh .mut{font-size:12.5px}
+.cost .sep{margin:0 5px;opacity:.5}
+.bkb{display:block;width:100%;margin-top:9px;min-height:40px}
+.bkb[disabled]{background:transparent;border:1px dashed #6b4a40;color:#d9a79c;font-size:13px;opacity:1}
+.unkc p{display:flex;justify-content:space-between;gap:10px;border-top:1px solid #26302b;padding-top:6px;margin-top:6px}
+.unkc p b{font-weight:500;color:#c3c8ba;font-size:13.5px}.unkc p span{color:var(--mut);font-size:12.5px;text-align:right}
+.sites{padding:8px 12px 6px}
+.sites h4{display:flex;justify-content:space-between;align-items:baseline;font-size:15px}
+.sites h4 small{font-family:var(--sans);font-size:12.5px;color:var(--mut);font-weight:400}
+.site{display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center;padding:7px 0;border-top:1px solid #26302b;cursor:pointer}
+.site b{font-weight:600;color:var(--hi);font-size:14px}
+.site i{font-style:normal;font-size:12.5px;text-align:right;color:var(--mut)}
+.site i.warn{color:#e3a571}.site i.bad{color:var(--bad)}.site i.ok{color:var(--moss)}
+.site .pbar{grid-column:1/3;margin:3px 0 0}
+.sites .sbud{display:flex;align-items:center;gap:8px;border-top:1px solid #26302b;padding-top:8px;margin-top:2px}
+.sites .sbud>span:first-child{flex:1;font-size:12.5px;color:var(--mut)}
 .tree{position:relative;margin:4px 0 10px}
 .tlines{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
 .tlines path{fill:none;stroke:#3c4841;stroke-width:2;vector-effect:non-scaling-stroke}
