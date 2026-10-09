@@ -571,7 +571,7 @@ function stepPerson(p,dt){
     else if(n.type==='len')items=[{res:'wlokna',q:2.5*gm*(tech('u_len')?1.5:1)}];else if(n.type==='ruda')items=[{res:'ruda',q:1.5*(hasExt(b,'pluczka')?1.5:1)}];
     else if(n.type==='tree')items=[{res:'drewno',q:1.5+(hasExt(b,'wiatad')?.5:0)}];else if(n.type==='rock')items=[{res:'kamien',q:1}];else items=[{res:'glina',q:1.5*(hasExt(b,'dol')?1.5:1)}];
     finishTrip(p,items)}return}
-  if(k==='hunt'){const h=S.herds[p.herd];if(!h||h.n<=0){p.state='idle';return}p.wt+=dt*e*craftEff(p,'mysliwy')*(tech('h_trop')?1.2:1)*bMul(bById(p.wb));gainXp(p,'mysliwy',dt);
+  if(k==='hunt'){const h=S.herds[p.herd];if(!h||h.n<=0){p.state='idle';return}p.wt+=dt*e*craftEff(p,'mysliwy')*(tech('h_trop')?1.2:1)*bMul(bById(p.wb))*(typeof dogHunt==='function'?dogHunt(p):1);gainXp(p,'mysliwy',dt);
    if(p.wt>=6){p.wt=0;h.n--;const a=Math.random()*6.28;h.tx=clamp(h.x+Math.cos(a)*9,-N/2+3,N/2-3);h.tz=clamp(h.z+Math.sin(a)*9,-N/2+3,N/2-3);toastOnce('hunt','Pierwsze udane polowanie');
     const dng={dzik:[.1,.35,'dzika'],niedzwiedz:[.25,.5,'niedźwiedzia'],lis:[.02,.1,'lisa']}[h.type];const trk=tech('h_trop')?.7:1;
     if(dng&&Math.random()<dng[0]*trk*(S.slady&&S.slady.luk?.6:1)*(p.trait==='Ostrożny'?.45:1)*(1-Math.min(.5,.08*offLv('lowczy')))){p.hp=Math.max(.1,p.hp-dng[1]);p.hurt=1;log(p.name+' ranny przez '+dng[2]+'. Wróci do sił za kilka dni.');toast(p.name+' ranny przez '+dng[2])}
@@ -719,7 +719,7 @@ function newDay(){
  S.bld.forEach(b=>{if(b.kind!=='zagroda'||!bDone(b))return;const a=b.animals||0;const cared=(b.care||0)>20;b.care=0;
   if(a){S.res.mleko+=K*a*(sea===2&&!hasExt(b,'obora')?.4:.9)*(cared?1:.4)*(tech('h_doj')?1.4:1);if(tech('h_siersc'))S.res.wlokna+=K*a*.12;if((sea===3||(tech('h_rozr')&&sea!==2))&&a>=2&&a<penCap(b)&&Math.random()<K*.06*a/2*(tech('h_rozr')?2:1)){b.animals++;log('W zagrodzie urodziło się koźlę.')}
    if(!cared&&(sea===2||Math.random()<.02)&&Math.random()<.08*K){b.animals--;log('Koza uciekła z zaniedbanej zagrody.')}}
-  const c=bCenter(b);S.herds.forEach(h=>{if(h.type!=='wilk'||h.n<2||!b.animals)return;if(Math.hypot(h.x-c.x,h.z-c.z)<26&&Math.random()<dM()*K*(cared?.02:.07)*(tech('h_ostr')?.3:1)*(law('straz')?.3:1)*(hasExt(b,'obora')?.5:1)*(hasB('wieza')?.8:1)){b.animals--;log('Wilki w nocy zagryzły kozę w zagrodzie.');toast('Wilki napadły na zagrodę')}})});
+  const c=bCenter(b);S.herds.forEach(h=>{if(h.type!=='wilk'||h.n<2||!b.animals)return;if(Math.hypot(h.x-c.x,h.z-c.z)<26&&Math.random()<dM()*K*(cared?.02:.07)*(tech('h_ostr')?.3:1)*(law('straz')?.3:1)*(hasExt(b,'obora')?.5:1)*(hasB('wieza')?.8:1)*(typeof dogGuard==='function'?dogGuard():1)){b.animals--;log('Wilki w nocy zagryzły kozę w zagrodzie.');toast('Wilki napadły na zagrodę')}})});
  // pola
  S.bld.forEach(b=>{if(!b.field)return;const f=b.field;if(f.st==='rosnie'&&sea!==2){f.g+=K/30*(tech('u_selek')?1.15:1)*(hasExt(b,'rowy')?1.15:1);if(f.g>=1){f.st='dojrzale';const best=Math.max(0,...S.people.filter(p=>p.wb===b.id).map(p=>p.sk.rolnik));f.left=Math.round(70*f.fert*(.6+.4*f.q)*(1+.1*best)*(tech('u_selek')?1.2:1)*(tech('u_nawoz')&&S.bld.some(z=>z.kind==='zagroda'&&(z.animals||0)>0)?1.25:1)*(hasExt(b,'strach')?1.1:1)*(1+.1*(lvOf(b)-1))*(1+.3*(S.adapt||0)));log('Zboże na polu dojrzało: około '+f.left+' ziarna do zebrania.');toast('Zboże dojrzało')}fieldVis(b)}
   else if(f.st==='dojrzale'&&sea===2){f.left=Math.floor(f.left/2);if(f.left<=0){f.st='puste';fieldVis(b)}}

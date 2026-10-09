@@ -1,6 +1,6 @@
 ---
 title: "Przystań — Księga gry"
-subtitle: "Wersja 1.3 · 9 października 2026 · Epoka I ukończona"
+subtitle: "Wersja 1.4 · 9 października 2026 · Epoka I ukończona"
 ---
 
 # 1. Czym jest Przystań
@@ -413,6 +413,38 @@ Dzieci od 12 lat częściej zbierają jagody i noszą wodę, starsi łatają dom
 
 W zakładce Praca karta „Prace we wsi” pokazuje, kto teraz czym się zajmuje. Wieczorem przy ognisku ludzie mówią o swojej pracy: „Połatałem dach u Bożydara. Przez jakiś czas nie będzie kapać.”
 
+## Życie wsi (od wersji 1.4)
+
+**Rytm dnia.**
+- Rano część ludzi, którzy mają wodę blisko, myje się w strumieniu.
+- W południe przerwa na posiłek. Kto pracuje blisko obozu, schodzi do ogniska na wspólny posiłek, a kto daleko, je chleb w polu. Po posiłku przez pół popołudnia pracuje się o 12% sprawniej. Gdy przy ognisku zje większość osady, wspólny kocioł oszczędza jedzenie (gotuje się raz dla wszystkich), rośnie nadzieja i maleje niezgoda.
+- Po pracy, do późnego wieczora, ludzie siedzą przed domami albo przy ognisku. Potem idą spać. Wieczory w gromadzie podnoszą nadzieję i łagodzą spory.
+- W sobotę, gdy stoi łaźnia, wieczór spędza się w bani. Kto był w bani, wraca do zdrowia, a osada nabiera otuchy.
+
+**Dzieci.** Dzieci od 5 do 11 lat:
+- grają w berka na łące przy obozie;
+- latem i wiosną puszczają kaczki na wodzie;
+- chodzą za matką albo ojcem i patrzą, jak pracują. Kto przy kim spędza czas, ten tego się uczy: fach, który dziecko wybiera w 12. roku, zależy także od tego, co podpatrywało.
+
+Czasem dziecko gubi się w lesie. Do wyboru: szukają wszyscy (dzień pracy przepada, ale szanse są największe), szukają dwie osoby najlepiej tropiące, albo czeka się do wieczora. Dziecko wraca znalezione albo samo nad ranem, przemarznięte.
+
+**Psy.**
+- Z wraku na brzeg przepłynęła Łata, suka kapitana. Chodzi za dziećmi, ujada na wilki i odgania je od osady, czasem przynosi z lasu zająca albo kaczkę.
+- Wiosną zwiadowca albo myśliwy może znaleźć wilcze legowisko z osieroconymi szczeniętami. Można zabrać jedno, wszystkie albo zostawić je w lesie. Wilcze szczenię trzeba codziennie karmić mięsem albo rybą i cierpliwie oswajać; bez jedzenia ucieknie do lasu.
+- Oswojony wilk i pies dają wiosną mieszańce: krew wilka po rodzicach, wilcze uszy i psią ufność. Im więcej wilka, tym pies czujniejszy i lepiej tropi, ale mniej posłuszny.
+- Dorosłe psy odstraszają wilki od zagród (im więcej psów i wilczej krwi, tym rzadziej giną kozy), a pies przy myśliwym przyspiesza polowanie.
+- Psy się starzeją: żyją 10–14 lat.
+- Dotknięcie psa na mapie pokazuje jego kartę: imię, wiek, pochodzenie, krew wilka, oswojenie i to, za kim chodzi. Psu można kazać chodzić na polowania albo pilnować dzieci. W księdze, w dziale Ludzie, jest lista psów.
+
+**Tłoka.** W karcie budowy można zwołać tłokę, raz na porę roku:
+- cała osada przez dzień buduje tylko to, a każdy przynosi coś ze sobą, więc materiał jest od razu na miejscu;
+- wieczorem jest uczta, która kosztuje jedzenie, ale podnosi nadzieję i łagodzi spory;
+- gdy tłoka stawia dom, rodzina, która się do niego wprowadza, ugaszcza wszystkich, a jej ród ma u innych dług wdzięczności, który poprawia stosunki między rodami.
+
+**Bez przybyszów.** Wydarzenie z łodzią obcych rozbitków, które zostało w grze z wczesnych wersji, jest wyłączone. Na wyspie nikt nowy się nie pojawia.
+
+**Poprawka.** Gdy ludzie przerywali drogę do pracy, zajęte przez nich drzewa i krzaki zostawały zablokowane. Teraz zawsze się zwalniają.
+
 # 12. Epoki
 
 ## Epoka I: Rozbitkowie (6–8 lat na wyspie, od wersji 0.18 grywalna do końca)
@@ -470,7 +502,7 @@ Wybór jest ostateczny. Po wyborze gra pokazuje Księgę rozbitków: ilu wyszło
 
 # 15. Technika
 
-- **Plik gry:** jeden plik HTML (około 590 kB) składany z części: p_head.html, p_const.js, p_mid.js, p_rest.js, p_map.js, p_tech.js, p_exp.js, p_v8.js, p_bld.js, p_story.js, p_slav.js, p_wild.js, p_ludzie.js, p_urz.js, p_pamiec.js, p_akt.js, p_kol.js, p_slady.js, p_lad.js, p_gosp.js, p_bud.js, p_swiat.js, p_szlif.js, p_mapa.js, p_cisza.js, p_sluzba.js, p_gfx.js, p_end.js.
+- **Plik gry:** jeden plik HTML (około 615 kB) składany z części: p_head.html, p_const.js, p_mid.js, p_rest.js, p_map.js, p_tech.js, p_exp.js, p_v8.js, p_bld.js, p_story.js, p_slav.js, p_wild.js, p_ludzie.js, p_urz.js, p_pamiec.js, p_akt.js, p_kol.js, p_slady.js, p_lad.js, p_gosp.js, p_bud.js, p_swiat.js, p_szlif.js, p_mapa.js, p_cisza.js, p_sluzba.js, p_zycie.js, p_gfx.js, p_end.js.
 - **Grafika:** Three.js r149 (WebGL2), własna obróbka obrazu (bloom, cienie kontaktowe, cienie chmur, tilt-shift).
 - **Zapis:** w pamięci przeglądarki (klucz przystan-v7, kopia zapasowa przystan-v7-bak), do pobrania jako plik JSON i do wczytania z pliku.
 - **Instalacja:** PWA z manifestem i service workerem, działa bez sieci.
@@ -503,6 +535,7 @@ Wybór jest ostateczny. Po wyborze gra pokazuje Księgę rozbitków: ilu wyszło
 | 1.2 | cicha wyspa: ekran bez menu, górna linia z ostrzeżeniami, przycisk Osada i księga z działami (czas stoi), karta „Postaw tu” po dotknięciu ziemi, zmiana pracy z karty człowieka, znaki przy krawędzi ekranu, rozmowy przy ognisku, obrót dwoma palcami, przełącznik pełnego menu |
 | 1.2.1 | poprawka: budowy kończące się z pełnym materiałem nie były odbierane (budynek bez pracowników, domy bez rodzin), robotnicy stawali, gdy rozebrali otwartą część wraku; teraz budowy zawsze się odbierają, stare zapisy same się naprawiają, robotnicy sami biorą następną część wraku, a wolne ręce bez zajęcia zbierają drewno albo jedzenie w pobliżu obozu |
 | 1.3 | prace we wsi: kto nie ma przydziału, sam zbiera chrust, rąbie drewno, zbiera jagody i grzyby, łowi z brzegu, łata domy, nosi wodę i opiekuje się chorymi, według potrzeb osady; karta w zakładce Praca; ludzie mówią o swojej pracy przy ognisku |
+| 1.4 | życie wsi: rytm dnia (mycie, wspólny posiłek, wieczór przed domem, sobotnia bania), dzieci w zabawie i przy rodzicach, zgubione dziecko, pies z wraku, wilcze szczenięta i mieszańce, tłoka; wyłączona łódź z obcymi |
 
 # 17. Immersja i powroty
 
@@ -563,8 +596,9 @@ Kolejność dalszej pracy. Każda wersja kończy się czymś, w co da się zagra
 | 1.1 Mapa (gotowe) | zaznaczanie zasobów na mapie, budowniczowie |
 | 1.2 Cicha wyspa (gotowe) | ekran bez menu, karty po dotknięciu, księga Osada, znaki przy krawędzi, rozmowy przy ognisku |
 | 1.3 Prace we wsi (gotowe) | kto nie ma przydziału, sam robi proste, potrzebne prace |
-| 1.4 Rytm roku | dłuższa doba (4 minuty, 20 dób w roku), trójpolówka i chwasty, przednówek z chorobami o jasnej przyczynie i wyborem racji, progi zapasów w warsztatach, pogoda czytana ze znaków przyrody |
-| 1.5 Pamięć wyspy | wiedza, która żyje w ludziach i może zginąć, miejsca nazywane od wydarzeń |
+| 1.4 Życie wsi (gotowe) | rytm dnia, dzieci, psy, tłoka |
+| 1.5 Rytm roku | dłuższa doba (4 minuty, 20 dób w roku), trójpolówka i chwasty, przednówek z chorobami o jasnej przyczynie i wyborem racji, progi zapasów w warsztatach, pogoda czytana ze znaków przyrody |
+| 1.6 Pamięć wyspy | wiedza, która żyje w ludziach i może zginąć, miejsca nazywane od wydarzeń |
 
 **Epoka II** (po 1.0): trzy drogi z rozdrożami opisanymi wyżej. Przez cały czas obowiązuje: klimat słowiański bez magii, brak przybyszów, decyzje gracza w scenach i na wiecu, a życie ludzi toczy się samo.
 
