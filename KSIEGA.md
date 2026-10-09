@@ -1,6 +1,6 @@
 ---
 title: "Przystań — Księga gry"
-subtitle: "Wersja 1.1 · 9 października 2026 · Epoka I ukończona"
+subtitle: "Wersja 1.2 · 9 października 2026 · Epoka I ukończona"
 ---
 
 # 1. Czym jest Przystań
@@ -364,6 +364,35 @@ Nad zaznaczonymi wisi znak: siekiera nad drzewami, kilof nad kamieniem, gliną i
 
 **Na co czekamy** pokazuje, ile jest zaznaczonych, i ostrzega, gdy zaznaczone czekają, a wszyscy mają inną pracę.
 
+## Cicha wyspa: ekran bez menu (od wersji 1.2)
+
+Na ekranie widać przede wszystkim wyspę. Wszystko inne pojawia się, gdy czegoś dotkniesz albo gdy coś naprawdę się dzieje.
+
+**Na ekranie na stałe:**
+- u góry pora roku i dzień, pora doby i pogoda, a obok najwyżej dwa ostrzeżenia, gdy coś jest zagrożone (pożar, jedzenie na kilka dni, mało opału jesienią i zimą, zimno w domach, choroby, kłótnie, ludzie bez dachu); dotknięcie ostrzeżenia otwiera księgę;
+- po prawej przycisk tempa; otwiera pauzę, tempa 1–8×, dźwięk, pełny ekran, jakość grafiki i tryb zdjęć;
+- na dole przycisk „Osada”, a obok cała wyspa i powrót do obozu.
+
+**Cel** pokazuje się na kilka sekund, gdy się zmienia. Dotknięcie daty przypomina go ponownie, a w księdze stoi na górze działu Ludzie.
+
+**Dotknięcie świata:**
+- pusta ziemia: karta „Postaw tu” z nazwą miejsca, odległością od obozu i trzema budynkami, które tam najlepiej pasują, z powodem przy każdym („w zasięgu drzew: 14”, „rodzina Lubomira śpi pod gołym niebem”, „to teraz najważniejszy cel”) i kosztem; „Postaw” od razu wytycza plac budowy;
+- budynek: kto pracuje, przyciski − i +, zasięg, rozbudowa;
+- człowiek: karta życia oraz „Zmień pracę” (wolne ręce, budowniczy, zwiadowca albo wolne miejsce w budynku roboczym) i „Idź za nim” (kamera podąża za tą osobą);
+- drzewo, kamień, krzak, łowisko: zaznaczanie jak w 1.1.
+
+Każdą kartę zamyka krzyżyk albo dotknięcie pustej ziemi.
+
+**Księga „Osada”** zastępuje siedem zakładek. Działy: Ludzie, Praca, Budowa, Wyprawy, Wiedza, Natura, Kronika. Gdy księga jest otwarta, czas stoi, a po zamknięciu wraca do poprzedniego tempa. Dział Ludzie zaczyna się od stanu osady w jednym zdaniu, bieżącego celu i liczb dla tych, którzy chcą je widzieć.
+
+**Znaki przy krawędzi ekranu.** Pożar, trwający obrzęd albo przysiółek, który prosi o pomoc, poza widokiem pokazują się jako znak przy krawędzi ze strzałką w ich stronę. Dotknięcie przenosi tam kamerę.
+
+**Przy ognisku.** Każdego wieczoru u dołu ekranu pojawiają się dwa zdania mieszkańców z imieniem mówiącego. Odbijają prawdziwy stan osady: kończące się jedzenie i opał, rodzinę bez dachu, chorego, kogoś bez zajęcia, kłótnie, niedawną śmierć albo wesele, rzednący las, wrak przed sztormem, zbliżającą się zimę, nadzieję.
+
+**Gesty.** Przeciąganie przesuwa widok, szczypanie przybliża, obrót dwoma palcami obraca wyspę. Na telefonie nie ma już przycisków kamery; na komputerze zostają, razem z klawiaturą.
+
+**Pełne menu.** W dziale Kronika można wrócić do dawnego układu z zakładkami i paskami potrzeb.
+
 # 12. Epoki
 
 ## Epoka I: Rozbitkowie (6–8 lat na wyspie, od wersji 0.18 grywalna do końca)
@@ -421,7 +450,7 @@ Wybór jest ostateczny. Po wyborze gra pokazuje Księgę rozbitków: ilu wyszło
 
 # 15. Technika
 
-- **Plik gry:** jeden plik HTML (około 560 kB) składany z części: p_head.html, p_const.js, p_mid.js, p_rest.js, p_map.js, p_tech.js, p_exp.js, p_v8.js, p_bld.js, p_story.js, p_slav.js, p_wild.js, p_ludzie.js, p_urz.js, p_pamiec.js, p_akt.js, p_kol.js, p_slady.js, p_lad.js, p_gosp.js, p_bud.js, p_swiat.js, p_szlif.js, p_mapa.js, p_gfx.js, p_end.js.
+- **Plik gry:** jeden plik HTML (około 580 kB) składany z części: p_head.html, p_const.js, p_mid.js, p_rest.js, p_map.js, p_tech.js, p_exp.js, p_v8.js, p_bld.js, p_story.js, p_slav.js, p_wild.js, p_ludzie.js, p_urz.js, p_pamiec.js, p_akt.js, p_kol.js, p_slady.js, p_lad.js, p_gosp.js, p_bud.js, p_swiat.js, p_szlif.js, p_mapa.js, p_cisza.js, p_gfx.js, p_end.js.
 - **Grafika:** Three.js r149 (WebGL2), własna obróbka obrazu (bloom, cienie kontaktowe, cienie chmur, tilt-shift).
 - **Zapis:** w pamięci przeglądarki (klucz przystan-v7, kopia zapasowa przystan-v7-bak), do pobrania jako plik JSON i do wczytania z pliku.
 - **Instalacja:** PWA z manifestem i service workerem, działa bez sieci.
@@ -451,6 +480,7 @@ Wybór jest ostateczny. Po wyborze gra pokazuje Księgę rozbitków: ilu wyszło
 | 0.22 | żywy świat: budowa warstwami z kupką materiału, domy dojrzewające z wiekiem (śparogi, konik na kalenicy, znak rodu, kwiaty), zapasy widoczne przy magazynach, śnieg na dachach, obrzędy i wesela w 3D, burze z piorunami, zorza, dźwięk pracy w przestrzeni, opowieści życia i wspomnienia, kamera przy ważnych chwilach |
 | 1.0 | szlif i wydanie epoki I: „Od ostatniego razu”, „Na co czekamy”, pulsujące podpowiedzi, rytm sesji, nowe wyspy i dwa wyzwania, zapis z kopią zapasową i naprawą starych zapisów, łączenie brył budynków (około 4 razy mniej wywołań rysowania), poprawki budowy z ośmioletnich symulacji, trudność wpływa na pracę, jedzenie i opał |
 | 1.1 | mapa: dotykanie zasobów na mapie i zaznaczanie ich do wycinki, wydobycia, zbioru i połowu (także całej okolicy), znaki nad zaznaczonymi; budowniczowie przydzielani w zakładce Praca |
+| 1.2 | cicha wyspa: ekran bez menu, górna linia z ostrzeżeniami, przycisk Osada i księga z działami (czas stoi), karta „Postaw tu” po dotknięciu ziemi, zmiana pracy z karty człowieka, znaki przy krawędzi ekranu, rozmowy przy ognisku, obrót dwoma palcami, przełącznik pełnego menu |
 
 # 17. Immersja i powroty
 
@@ -508,6 +538,10 @@ Kolejność dalszej pracy. Każda wersja kończy się czymś, w co da się zagra
 | 0.22 Żywy świat (gotowe) | obrzędy i wesela w 3D, burze, śnieg na dachach, zorza, dźwięk w przestrzeni, opowieści życia, kamera przy ważnych chwilach |
 | 0.23 Szlif (gotowe, w 1.0) | „Od ostatniego razu” i „Na co czekamy”, rytm sesji, nowe wyspy i wyzwania, równowaga z ośmioletnich symulacji, łagodny początek, testy na Nordzie 6 |
 | 1.0 Epoka I (gotowe) | paczka do instalacji, zapis odporny na zmiany wersji, płynność na telefonie; GitHub i Railway czekają na repozytorium |
+| 1.1 Mapa (gotowe) | zaznaczanie zasobów na mapie, budowniczowie |
+| 1.2 Cicha wyspa (gotowe) | ekran bez menu, karty po dotknięciu, księga Osada, znaki przy krawędzi, rozmowy przy ognisku |
+| 1.3 Rytm roku | dłuższa doba (4 minuty, 20 dób w roku), trójpolówka i chwasty, przednówek z chorobami o jasnej przyczynie i wyborem racji, progi zapasów w warsztatach, pogoda czytana ze znaków przyrody |
+| 1.4 Pamięć wyspy | wiedza, która żyje w ludziach i może zginąć, miejsca nazywane od wydarzeń |
 
 **Epoka II** (po 1.0): trzy drogi z rozdrożami opisanymi wyżej. Przez cały czas obowiązuje: klimat słowiański bez magii, brak przybyszów, decyzje gracza w scenach i na wiecu, a życie ludzi toczy się samo.
 
