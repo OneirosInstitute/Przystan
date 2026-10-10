@@ -1,6 +1,6 @@
 ---
 title: "Przystań — Księga gry"
-subtitle: "Wersja 1.7.2 · 9 października 2026 · Epoka I ukończona"
+subtitle: "Wersja 1.8 · 9 października 2026 · Epoka I ukończona"
 ---
 
 # 1. Czym jest Przystań
@@ -559,6 +559,18 @@ Wybór jest ostateczny. Po wyborze gra pokazuje Księgę rozbitków: ilu wyszło
   - budynki starzeją się widocznie: im gorszy stan, tym ciemniejsze i bardziej zielone od mchu drewno, aż do remontu;
   - ryby wyskakujące z wody przy brzegu;
   - licznik klatek na sekundę w menu tempa, obok nazwy poziomu jakości.
+- **Grafika II (od wersji 1.8):**
+  - nowy silnik rysowania: Three.js r186 zamiast r149, z zachowaniem dawnego wyglądu światła;
+  - światło z nieba: barwa powietrza o świcie, w południe, we mgle i nocą oświetla świat ze wszystkich stron, a od strony słońca jest cieplej; odbija się delikatnie na gładszych powierzchniach;
+  - miękkie cienie, rozmyte na brzegach;
+  - okluzja otoczenia: ciemniejsze zakamarki, styki z ziemią, wnętrza koron drzew i okapów (na Ultra, gaśnie przy widoku całej wyspy);
+  - teren z fakturą: kępy i źdźbła w trawie z suchymi plamami, grudki i kamyki w ziemi, zmarszczki na piasku, warstwy, pęknięcia i porosty na skałach, zaspy w śniegu; faktura ma też wypukłość, która łapie światło;
+  - barwy pór roku i pogody: lato ciepłe i soczyste, jesień bursztynowa, zima chłodna i stonowana, wiosna świeża; deszcz, burza, mgła, susza, śnieg i noc mają własne barwy; przejścia między porami są płynne;
+  - wygładzanie krawędzi na każdym poziomie jakości;
+  - nowi ludzie: gładkie bryły, twarze z oczami i nosem, haftowane obszycia, pasy, fartuchy, chusty, warkocze, brody, kapelusze i kołpaki, onuce i łapcie; chód z kołysaniem, ręce z przodu przy noszeniu, siedzenie przy ognisku; jedna osoba to 5 wywołań rysowania zamiast kilkunastu;
+  - nowe drzewa: sosny z wysokim rudym pniem i koroną w górze, świerki z postrzępionymi piętrami, dęby i brzozy z kęp liści, pnie z korą i gałęziami;
+  - domy z prawdziwych, okrągłych bali układanych na zakładkę, grube strzechy z wałkami na okapach, szczytach i kalenicy;
+  - rysowane jest tylko to, co jest w kadrze: drzewa, krzaki, kępki i kamienie poza ekranem nie obciążają telefonu (w typowym widoku kilkanaście razy mniej trójkątów).
 - **Dźwięk:** szum morza i wiatru, ptaki za dnia, świerszcze nocą, trzask ognia, dzwonek wydarzeń i fujarka wieczorami oraz w czasie świąt.
 
 # 14. Interfejs
@@ -575,8 +587,8 @@ Wybór jest ostateczny. Po wyborze gra pokazuje Księgę rozbitków: ilu wyszło
 
 # 15. Technika
 
-- **Plik gry:** jeden plik HTML (około 675 kB) składany z części: p_head.html, p_const.js, p_mid.js, p_rest.js, p_map.js, p_tech.js, p_exp.js, p_v8.js, p_bld.js, p_story.js, p_slav.js, p_wild.js, p_ludzie.js, p_urz.js, p_pamiec.js, p_akt.js, p_kol.js, p_slady.js, p_lad.js, p_gosp.js, p_bud.js, p_swiat.js, p_szlif.js, p_mapa.js, p_cisza.js, p_sluzba.js, p_zycie.js, p_rok.js, p_wiedza.js, p_gfx.js, p_grafika.js, p_ksiega.js, p_ratunek.js, p_end.js.
-- **Grafika:** Three.js r149 (WebGL2), własna obróbka obrazu (bloom, cienie kontaktowe, cienie chmur, tilt-shift, korekcja barw), własne shadery wody i terenu dopinane do materiałów Three.js.
+- **Plik gry:** jeden plik HTML (około 720 kB) i biblioteka Three.js r186 (dwa moduły, około 2 MB, w paczce do instalacji trzymane lokalnie) składany z części: p_head.html, p_const.js, p_mid.js, p_rest.js, p_map.js, p_tech.js, p_exp.js, p_v8.js, p_bld.js, p_story.js, p_slav.js, p_wild.js, p_ludzie.js, p_urz.js, p_pamiec.js, p_akt.js, p_kol.js, p_slady.js, p_lad.js, p_gosp.js, p_bud.js, p_swiat.js, p_szlif.js, p_mapa.js, p_cisza.js, p_sluzba.js, p_zycie.js, p_rok.js, p_wiedza.js, p_gfx.js, p_grafika.js, p_ksiega.js, p_ratunek.js, p_g18.js, p_end.js.
+- **Grafika:** Three.js r186 (WebGL2, ładowany jako moduł), własna obróbka obrazu (bloom, cienie kontaktowe, cienie chmur, tilt-shift, korekcja barw), własne shadery wody i terenu dopinane do materiałów Three.js.
 - **Zapis:** w pamięci przeglądarki (klucz przystan-v7, kopia zapasowa przystan-v7-bak), do pobrania jako plik JSON i do wczytania z pliku.
 - **Instalacja:** PWA z manifestem i service workerem, działa bez sieci.
 - **Repozytorium:** src/ z częściami gry, build.js (składa grę i PWA do dist/), server.js (serwer bez zależności), railway.json (wdrożenie na Railway).
@@ -614,6 +626,7 @@ Wybór jest ostateczny. Po wyborze gra pokazuje Księgę rozbitków: ilu wyszło
 | 1.7 | grafika: złota godzina i korekcja barw, woda z odbiciem nieba i odblaskiem słońca, bez szwu na morzu, faktura terenu, mokry piasek i refleksy na dnie, gęsta trawa, prześwitujące liście, dokładniejsi ludzie, poranna mgła, starzejące się budynki, wyskakujące ryby, licznik klatek |
 | 1.7.1 | lepsza księga Osada: arkusz na cały ekran, działy w jednym rzędzie, kategorie budowy jako małe przyciski bez nachodzenia na listę, budowy z powodem przestoju i budowniczymi, koszt „ile jest z ilu”, jasne „Brakuje” zamiast złudnego „Postaw”, „czas stoi” w tempie, komunikaty na dole |
 | 1.7.2 | nikt nie stoi bez powodu: przy obyczaju „chorzy odpoczywają” leżą tylko najciężej chorzy, a przy braku jedzenia każdy zbiera; opiekunów nie więcej niż trzeba; prace zastępcze dla wolnych rąk i warsztatów bez roboty; wyraźne „czas stoi” wznawiane jednym dotknięciem; słabi ludzie z przyczynami |
+| 1.8 | grafika II: Three.js r186, światło z nieba, miękkie cienie, okluzja otoczenia, teren z fakturą i wypukłością, barwy pór roku i pogody, wygładzanie krawędzi, nowi ludzie, drzewa i domy z bali, rysowanie tylko tego, co w kadrze |
 
 # 17. Immersja i powroty
 
@@ -678,6 +691,7 @@ Kolejność dalszej pracy. Każda wersja kończy się czymś, w co da się zagra
 | 1.5 Rytm roku (gotowe) | dłuższa doba (4 minuty, 20 dób w roku), trójpolówka i chwasty, przednówek z chorobami o jasnej przyczynie i wyborem racji, progi zapasów w warsztatach, pogoda czytana ze znaków przyrody |
 | 1.6 Pamięć wyspy (gotowe) | wiedza, która żyje w ludziach i może zginąć, miejsca nazywane od wydarzeń |
 | 1.7 Grafika (gotowe) | światło, woda, teren, trawa i liście, ludzie, mgła, starzenie się budynków |
+| 1.8 Grafika II (gotowe) | nowy Three.js, światło z nieba, cienie, okluzja, faktury terenu, barwy pór roku, nowe modele ludzi, drzew i domów |
 
 **Epoka II** (po 1.0): trzy drogi z rozdrożami opisanymi wyżej. Przez cały czas obowiązuje: klimat słowiański bez magii, brak przybyszów, decyzje gracza w scenach i na wiecu, a życie ludzi toczy się samo.
 

@@ -1,10 +1,10 @@
 // Składa grę z plików w src/ w jeden index.html i przygotowuje wersję do instalacji (PWA) w dist/.
 const fs=require('fs'),path=require('path'),crypto=require('crypto');
 const SRC=path.join(__dirname,'src'),AS=path.join(__dirname,'assets'),OUT=path.join(__dirname,'dist');
-const PARTS=['p_head.html','p_const.js','p_mid.js','p_rest.js','p_map.js','p_tech.js','p_exp.js','p_v8.js','p_bld.js','p_story.js','p_slav.js','p_wild.js','p_ludzie.js','p_urz.js','p_pamiec.js','p_akt.js','p_kol.js','p_slady.js','p_lad.js','p_gosp.js','p_bud.js','p_swiat.js','p_szlif.js','p_mapa.js','p_cisza.js','p_sluzba.js','p_zycie.js','p_rok.js','p_wiedza.js','p_gfx.js','p_grafika.js','p_ksiega.js','p_ratunek.js','p_end.js'];
+const PARTS=['p_head.html','p_const.js','p_mid.js','p_rest.js','p_map.js','p_tech.js','p_exp.js','p_v8.js','p_bld.js','p_story.js','p_slav.js','p_wild.js','p_ludzie.js','p_urz.js','p_pamiec.js','p_akt.js','p_kol.js','p_slady.js','p_lad.js','p_gosp.js','p_bud.js','p_swiat.js','p_szlif.js','p_mapa.js','p_cisza.js','p_sluzba.js','p_zycie.js','p_rok.js','p_wiedza.js','p_gfx.js','p_grafika.js','p_ksiega.js','p_ratunek.js','p_g18.js','p_end.js'];
 fs.rmSync(OUT,{recursive:true,force:true});fs.mkdirSync(OUT,{recursive:true});
 let game=PARTS.map(f=>fs.readFileSync(path.join(SRC,f),'utf8')).join('');
-game=game.replace(/<script src="https:\/\/cdn\.jsdelivr\.net\/npm\/three@0\.149\.0\/build\/three\.min\.js"><\/script>/,'<script src="three.min.js"></script>');
+game=game.replace('https://cdn.jsdelivr.net/npm/three@0.186.0/build/three.module.min.js','./three.module.js');
 const head=`<!doctype html>
 <html lang="pl">
 <head>
@@ -28,7 +28,7 @@ const man={name:'Przystań – dzika wyspa',short_name:'Przystań',description:'
  icons:[{src:'icon-192.png',sizes:'192x192',type:'image/png',purpose:'any'},{src:'icon-512.png',sizes:'512x512',type:'image/png',purpose:'any'},{src:'icon-maskable-512.png',sizes:'512x512',type:'image/png',purpose:'maskable'}],
  screenshots:[{src:'screen-wide.png',sizes:'1280x800',type:'image/png',form_factor:'wide',label:'Osada nad zatoką'},{src:'screen-narrow.png',sizes:'412x870',type:'image/png',form_factor:'narrow',label:'Osada na telefonie'}]};
 fs.writeFileSync(path.join(OUT,'manifest.webmanifest'),JSON.stringify(man,null,1));
-const core=['./','index.html','three.min.js','manifest.webmanifest','icon-192.png','icon-512.png','icon-maskable-512.png','apple-touch-icon.png'];
+const core=['./','index.html','three.module.js','three.core.js','manifest.webmanifest','icon-192.png','icon-512.png','icon-maskable-512.png','apple-touch-icon.png'];
 const ver=crypto.createHash('md5').update(html+JSON.stringify(man)).digest('hex').slice(0,10);
 fs.writeFileSync(path.join(OUT,'sw.js'),`// Przystań: działa bez internetu. Pliki gry w pamięci podręcznej, czcionki dociągane przy pierwszym uruchomieniu.
 const V='przystan-${ver}';

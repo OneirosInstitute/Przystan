@@ -43,10 +43,10 @@ THREE.ShaderChunk.tonemapping_fragment+=`
 const coarse=matchMedia('(pointer:coarse)').matches;
 const scene=new THREE.Scene();
 const cv=document.getElementById('c');
-const renderer=new THREE.WebGLRenderer({canvas:cv,antialias:!coarse,powerPreference:'high-performance'});
+const renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true,powerPreference:'high-performance'});
 renderer.setPixelRatio(Math.min(devicePixelRatio||1,coarse?1.6:2));
-renderer.outputEncoding=THREE.sRGBEncoding;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.0;
-renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.0;
+renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFShadowMap;
 scene.fog=new THREE.Fog(0xa9bcbf,170,300);
 const cam=new THREE.OrthographicCamera(-10,10,10,-10,1,500);
 const hemi=new THREE.HemisphereLight(0xdde7e8,0x46503e,.8);scene.add(hemi);
@@ -123,7 +123,7 @@ const wMat=new THREE.ShaderMaterial({uniforms:wUni,transparent:true,depthWrite:f
   float fg=smoothstep(uFogN,uFogF,vFd);c=mix(c,uFog,fg);
   gl_FragColor=vec4(c,a);
   #include <tonemapping_fragment>
-  #include <encodings_fragment>
+  #include <colorspace_fragment>
  }`});
 const water=new THREE.Mesh(wGeo,wMat);water.position.y=-.04;water.renderOrder=2;scene.add(water);
 const oGeo=new THREE.PlaneGeometry(2000,2000,1,1);oGeo.rotateX(-Math.PI/2);oGeo.setAttribute('depth',new THREE.BufferAttribute(new Float32Array([4,4,4,4]),1));

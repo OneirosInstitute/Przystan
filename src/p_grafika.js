@@ -60,11 +60,11 @@ const TU={uT:{value:0},uWet:{value:0},uDay:{value:1},uDet:{value:1},uCau:{value:
  tm.customProgramCacheKey=()=>'terr17';tm.needsUpdate=true}
 
 // ---------- liście prześwietlone słońcem ----------
-function backlit(m){const prev=m.onBeforeCompile;m.onBeforeCompile=(sh,r)=>{if(prev)prev(sh,r);sh.fragmentShader=sh.fragmentShader.replace('#include <output_fragment>',`
+function backlit(m){const prev=m.onBeforeCompile;m.onBeforeCompile=(sh,r)=>{if(prev)prev(sh,r);sh.fragmentShader=sh.fragmentShader.replace('#include <opaque_fragment>',`
  #if NUM_DIR_LIGHTS>0
  {vec3 Vv=normalize(vViewPosition);float bl=pow(max(dot(-Vv,directionalLights[0].direction),0.),3.);outgoingLight+=diffuseColor.rgb*directionalLights[0].color*bl*.5;}
  #endif
- #include <output_fragment>`)};const pk=m.customProgramCacheKey;m.customProgramCacheKey=()=>(pk?pk.call(m):'')+'bl';m.needsUpdate=true}
+ #include <opaque_fragment>`)};const pk=m.customProgramCacheKey;m.customProgramCacheKey=()=>(pk?pk.call(m):'')+'bl';m.needsUpdate=true}
 Object.values(crownM).forEach(cm=>backlit(cm.material));if(typeof bushes!=='undefined'&&bushes.material)backlit(bushes.material);
 
 // ---------- gęsta trawa wokół kamery ----------

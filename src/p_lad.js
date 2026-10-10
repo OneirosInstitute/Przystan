@@ -34,7 +34,7 @@ const LG={post:new THREE.CylinderGeometry(.045,.055,.95,5),rail:new THREE.BoxGeo
  flower:new THREE.ConeGeometry(.07,.16,5),pole:new THREE.CylinderGeometry(.14,.17,2.1,7),ring:new THREE.CylinderGeometry(.2,.2,.12,7)};
 const LM={stone:M(0x8d8a82),soil:M(0x4a3626),green:M(0x5c7f3a),crown:M(0x6c8f48),crownA:M(0x8a8a3c),fruit:M(0xc2492a),pole:M(0x6a4e34),flower:M(0xffffff)};
 const znakTex={};function znakMat(z){if(znakTex[z])return znakTex[z];const c=document.createElement('canvas');c.width=c.height=64;const x=c.getContext('2d');x.fillStyle='rgba(30,22,14,.85)';x.beginPath();x.arc(32,32,30,0,6.3);x.fill();
- x.fillStyle='#e2c48c';x.font='36px Georgia, serif';x.textAlign='center';x.textBaseline='middle';x.fillText(z||'◆',32,34);const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;return znakTex[z]=new THREE.SpriteMaterial({map:t,depthWrite:false})}
+ x.fillStyle='#e2c48c';x.font='36px Georgia, serif';x.textAlign='center';x.textBaseline='middle';x.fillText(z||'◆',32,34);const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;return znakTex[z]=new THREE.SpriteMaterial({map:t,depthWrite:false})}
 function ladBuild(){ladDirty=0;ladSea=seasonIdx();ladG.children.slice().forEach(o=>{ladG.remove(o);if(o.isInstancedMesh)o.dispose()});if(!S||!S.lad)return;
  const items=Object.entries(S.lad).map(([k,v])=>[+k,v]);const pos=k=>{const i=k%N,j=(k/N)|0,x=tcx(i),z=tcx(j);return[x,Hy(x,z),z,i,j]};const dm=new THREE.Object3D();const win=ladSea===2;
  const inst=(geo,mat,arr,fn)=>{if(!arr.length)return;const m=new THREE.InstancedMesh(geo,mat,arr.length);arr.forEach((a,q)=>{fn(a,dm);dm.updateMatrix();m.setMatrixAt(q,dm.matrix)});m.castShadow=true;m.receiveShadow=true;ladG.add(m);return m};

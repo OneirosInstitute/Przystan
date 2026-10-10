@@ -336,8 +336,12 @@ h3:first-child{margin-top:0}
     </div>
   </div></div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.min.js"></script>
+<script type="module">
+import * as T from 'https://cdn.jsdelivr.net/npm/three@0.186.0/build/three.module.min.js';
+window.THREE=Object.assign({},T);
+try{window.__przystan()}catch(e){console.error(e);const d=document.createElement('pre');d.style.cssText='position:fixed;inset:auto 0 0 0;max-height:40%;overflow:auto;background:#300;color:#fdd;font:12px monospace;z-index:99;margin:0;padding:8px';d.textContent='Błąd gry: '+e.message+'\n'+(e.stack||'');document.body.appendChild(d)}
+</script>
 <script>
-(function(){
+window.__przystan=(function(){
 'use strict';
 THREE.ColorManagement.legacyMode=false;

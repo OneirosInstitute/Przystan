@@ -144,5 +144,5 @@ window.__g={mapTick:r=>mapTick(r),storyTick:()=>storyTick(),get S(){return S},lu
  get ghostTile(){return ghostTile},get placing(){return placing},get zoom(){return zoom},setZoom(z){zoom=zoomT=z;setCam()},get qLevel(){return qLevel},setTime(t){S.day=Math.floor(S.day)+t},look(x,z){camT.x=x;camT.z=z;setCam()},
  build(kind,i,j){startPlace(kind);moveGhost(i,j);const gt=ghostTile;const ok=checkPlace(kind,gt[0],gt[1]);if(ok)tryPlace();else cancelPlace();return ok},
  scene,Hy,tcx,pGroup,bGroup,nodeBy,pickNodeB,inRange,TRIAL,herdsDef,planJob,astar,tileOf,nearestWalk,finishAll(){S.bld.forEach(b=>{if(!bDone(b)){b.prog=b.work;completeSite(b)}})}};
-})();
+});
 </script>

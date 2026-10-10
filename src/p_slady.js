@@ -92,7 +92,7 @@ const plantTex=(function(){const c=document.createElement('canvas');c.width=256;
  [[38,30,1],[98,24,0],[160,32,1],[218,26,0]].forEach(([a,b,k])=>plant(a,b,k));
  x.globalAlpha=.85;[[38,118],[160,118]].forEach(([a,b])=>{x.beginPath();x.ellipse(a,b,10,13,0,0,6.3);x.fill();for(let f=0;f<5;f++){x.beginPath();x.ellipse(a-12+f*6,b-16-(f%4?4:0),3,8,0,0,6.3);x.fill()}});
  x.lineWidth=5;[[98,118],[218,118]].forEach(([a,b])=>{x.beginPath();x.moveTo(a-14,b-14);x.lineTo(a+14,b+14);x.moveTo(a+14,b-14);x.lineTo(a-14,b+14);x.stroke()});
- const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;return t})();
+ const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;return t})();
 makeTribeModel=function(k){const g=new THREE.Group();const clay=M(0x9a5a3a),clayD=M(0x6e3f2a),flint=M(0x5b5d63),bone=matBone,moss=matMoss;
  if(k===0){g.add(mesh(new THREE.DodecahedronGeometry(1.1,0),matStone,0,.6,0,0,.3));g.add(mesh(new THREE.DodecahedronGeometry(.8,0),matStone,1.2,.4,.3,0,1.2));
   [[.55,.08,.75,.16],[.8,.06,.95,.12],[.35,.07,1.0,.14],[.7,.08,.55,.1]].forEach(([x,y,z,r])=>{g.add(mesh(new THREE.SphereGeometry(r,8,6),clay,x,y+r*.8,z));g.add(mesh(new THREE.CylinderGeometry(r*.5,r*.55,r*.35,8),M(0xd9c27a),x,y+r*1.75,z))})}

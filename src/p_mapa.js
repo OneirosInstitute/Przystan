@@ -127,7 +127,7 @@ function mkIcon(kind){const c=document.createElement('canvas');c.width=c.height=
  else if(kind==='pick'){g.beginPath();g.moveTo(24,46);g.lineTo(38,22);g.stroke();g.beginPath();g.moveTo(20,22);g.quadraticCurveTo(36,10,50,26);g.stroke()}
  else if(kind==='bask'){g.beginPath();g.moveTo(18,30);g.lineTo(46,30);g.lineTo(42,46);g.lineTo(22,46);g.closePath();g.fill();g.beginPath();g.arc(32,30,11,Math.PI,0);g.stroke()}
  else{g.beginPath();g.ellipse(30,32,13,7,0,0,6.283);g.fill();g.beginPath();g.moveTo(41,32);g.lineTo(50,24);g.lineTo(50,40);g.closePath();g.fill();g.fillStyle='#16140f';g.beginPath();g.arc(23,30,1.8,0,6.283);g.fill()}
- const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;return new THREE.SpriteMaterial({map:t,transparent:true,depthWrite:false,toneMapped:false})}
+ const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;return new THREE.SpriteMaterial({map:t,transparent:true,depthWrite:false,toneMapped:false})}
 const mkSpr={};let mkDirty=true,mkT=0;
 function mkSync(){if(!S)return;mkClean();const want=S.mark||{};
  for(const id in mkSpr){if(!want[id]){mkGroup.remove(mkSpr[id]);delete mkSpr[id]}}

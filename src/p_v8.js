@@ -190,7 +190,7 @@ function bubbleTex(key,col){const id=key+col;if(bubTex[id])return bubTex[id];con
  x.save();x.translate(48-24*1.15,44-24*1.15);x.scale(1.15,1.15);x.strokeStyle=col;x.lineWidth=2.8;x.lineCap='round';x.lineJoin='round';
  if(key==='!'){x.restore();x.fillStyle='#8a5a1a';x.font='bold 50px Georgia,serif';x.textAlign='center';x.textBaseline='middle';x.fillText('!',48,46)}
  else{const svg=IC[key]||'';(svg.match(/d="([^"]+)"/g)||[]).forEach(m=>{x.stroke(new Path2D(m.slice(3,-1)))});(svg.match(/<circle[^>]*>/g)||[]).forEach(m=>{const g=a=>+(m.match(new RegExp(a+'="([\\d.]+)"'))||[0,0])[1];x.beginPath();x.arc(g('cx'),g('cy'),g('r'),0,6.283);x.stroke()});x.restore()}
- const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;bubTex[id]=new THREE.SpriteMaterial({map:t,depthTest:false,transparent:true});return bubTex[id]}
+ const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;bubTex[id]=new THREE.SpriteMaterial({map:t,depthTest:false,transparent:true});return bubTex[id]}
 function needOf(p){if(p.state==='away')return null;if(p.fireB)return['fire','#d0501c'];if(p.hp<.45)return['zdrowie','#b8342a'];if(S.fedR<.95&&S.hungerDays>0&&p.id%3===1)return['zywnosc','#a8641a'];
  if(p.warm!==undefined&&p.warm<.6)return['cieplo','#2a6aa8'];if(S.thirst>0&&p.id%3===0)return['woda','#2a74a8'];if(S.reqs&&S.reqs.some(r=>r.pid===p.id))return['!','#c9a66b'];if((S.dis||0)>.72&&p.id%4===0&&isAdult(p))return['niezgoda','#a8342a'];return null}
 let bubT=0;
