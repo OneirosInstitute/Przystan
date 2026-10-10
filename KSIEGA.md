@@ -1,6 +1,6 @@
 ---
 title: "Przystań — Księga gry"
-subtitle: "Wersja 1.8 · 9 października 2026 · Epoka I ukończona"
+subtitle: "Wersja 1.8.1 · 9 października 2026 · Epoka I ukończona"
 ---
 
 # 1. Czym jest Przystań
@@ -627,6 +627,7 @@ Wybór jest ostateczny. Po wyborze gra pokazuje Księgę rozbitków: ilu wyszło
 | 1.7.1 | lepsza księga Osada: arkusz na cały ekran, działy w jednym rzędzie, kategorie budowy jako małe przyciski bez nachodzenia na listę, budowy z powodem przestoju i budowniczymi, koszt „ile jest z ilu”, jasne „Brakuje” zamiast złudnego „Postaw”, „czas stoi” w tempie, komunikaty na dole |
 | 1.7.2 | nikt nie stoi bez powodu: przy obyczaju „chorzy odpoczywają” leżą tylko najciężej chorzy, a przy braku jedzenia każdy zbiera; opiekunów nie więcej niż trzeba; prace zastępcze dla wolnych rąk i warsztatów bez roboty; wyraźne „czas stoi” wznawiane jednym dotknięciem; słabi ludzie z przyczynami |
 | 1.8 | grafika II: Three.js r186, światło z nieba, miękkie cienie, okluzja otoczenia, teren z fakturą i wypukłością, barwy pór roku i pogody, wygładzanie krawędzi, nowi ludzie, drzewa i domy z bali, rysowanie tylko tego, co w kadrze |
+| 1.8.1 | poprawka: na telefonach (Adreno) przy brzegu i na granicy nieodkrytego terenu pojawiały się czarne prostokąty; faktura terenu liczy teraz pochodne poza rozgałęzieniami, a obróbka obrazu nie przepuszcza błędnych pikseli do poświaty; na poziomie Wysoka teren ma lżejszą fakturę |
 
 # 17. Immersja i powroty
 

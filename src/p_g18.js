@@ -47,11 +47,11 @@ const aoMat=new THREE.ShaderMaterial({depthTest:false,depthWrite:false,vertexSha
   void main(){float d=texture2D(tDep,vUv).x;if(d>.9999){gl_FragColor=vec4(1.);return;}
    vec2 px=1./uRes;vec3 P=vp(vUv);
    vec3 a=vp(vUv+vec2(px.x,0.)),b=vp(vUv-vec2(px.x,0.)),c=vp(vUv+vec2(0.,px.y)),e=vp(vUv-vec2(0.,px.y));
-   vec3 dx=abs(a.z-P.z)<abs(P.z-b.z)?a-P:P-b;vec3 dy=abs(c.z-P.z)<abs(P.z-e.z)?c-P:P-e;vec3 N=normalize(cross(dx,dy));
+   vec3 dx=abs(a.z-P.z)<abs(P.z-b.z)?a-P:P-b;vec3 dy=abs(c.z-P.z)<abs(P.z-e.z)?c-P:P-e;vec3 Nc=cross(dx,dy);if(!(dot(Nc,Nc)>1e-24)){gl_FragColor=vec4(1.);return;}vec3 N=normalize(Nc);
    float ang=ign(gl_FragCoord.xy)*6.2832;float occ=0.;float R2=uR*uR;
    for(int i=0;i<14;i++){float fi=(float(i)+.5)/14.;float an=ang+float(i)*2.39996;vec2 o=vec2(cos(an),sin(an))*sqrt(fi)*uR*uPS;
     vec3 v=vp(vUv+o)-P;float vv=dot(v,v);float vn=dot(v,N);occ+=max(vn-.012*uR,0.)/(vv+.02*R2)*max(1.-vv/R2/2.25,0.);}
-   float ao=clamp(1.-uI*occ*uR*.32,0.,1.);gl_FragColor=vec4(ao,ao,ao,1.);}`});
+   float ao=clamp(1.-uI*occ*uR*.32,0.,1.);if(!(ao>=0.&&ao<=1.))ao=1.;gl_FragColor=vec4(ao,ao,ao,1.);}`});
 const aoBlur=new THREE.ShaderMaterial({depthTest:false,depthWrite:false,vertexShader:PV,
  uniforms:{tAO:{value:null},tDep:{value:null},uDir:{value:new THREE.Vector2()},uNF:{value:new THREE.Vector2(1,500)}},
  fragmentShader:`uniform sampler2D tAO;uniform sampler2D tDep;uniform vec2 uDir;uniform vec2 uNF;varying vec2 vUv;
@@ -86,7 +86,7 @@ varying vec3 vTN;uniform float uTex;
 vec2 t_h2(vec2 p){p=vec2(dot(p,vec2(127.1,311.7)),dot(p,vec2(269.5,183.3)));return fract(sin(p)*43758.5453);}
 vec2 t_vor(vec2 p){vec2 i=floor(p),f=fract(p);float d1=8.,d2=8.;for(int y=-1;y<=1;y++)for(int x=-1;x<=1;x++){vec2 g=vec2(float(x),float(y));vec2 o=t_h2(i+g);float d=length(g+o-f);if(d<d1){d2=d1;d1=d;}else if(d<d2)d2=d;}return vec2(d1,d2);}
 float t_fbm(vec2 p){return g_vn(p)*.5+g_vn(p*2.03+7.1)*.3+g_vn(p*4.1+3.3)*.2;}
-vec3 t_bump(vec3 sp,vec3 sn,float h){vec3 sx=dFdx(sp),sy=dFdy(sp);vec3 r1=cross(sy,sn),r2=cross(sn,sx);float det=dot(sx,r1);vec3 gr=sign(det)*(dFdx(h)*r1+dFdy(h)*r2);return normalize(abs(det)*sn-gr);}
+vec3 t_bump(vec3 sp,vec3 sn,float h){vec3 sx=dFdx(sp),sy=dFdy(sp);float hx=dFdx(h),hy=dFdy(h);vec3 r1=cross(sy,sn),r2=cross(sn,sx);float det=dot(sx,r1);vec3 gr=sign(det)*(hx*r1+hy*r2);vec3 nn=abs(det)*sn-gr;float l2=dot(nn,nn);bool ok=abs(det)>1e-10&&l2>1e-20&&!(any(isnan(nn))||any(isinf(nn)));nn=ok?nn*inversesqrt(max(l2,1e-20)):sn;return dot(nn,sn)>.2?nn:sn;}
 `).replace('float landF=smoothstep(-.06,.08,vTW.y);',`float landF=smoothstep(-.06,.08,vTW.y);
    float tH=0.;
    if(uTex>0.){vec3 bc=sqrt(max(diffuseColor.rgb,0.));float lum=dot(bc,vec3(.3,.55,.15));float mx=max(bc.r,max(bc.g,bc.b)),mn=min(bc.r,min(bc.g,bc.b));float sat=(mx-mn)/max(mx,.01);
@@ -102,20 +102,20 @@ vec3 t_bump(vec3 sp,vec3 sn,float h){vec3 sx=dFdx(sp),sy=dFdy(sp);vec3 r1=cross(
     {vec2 q=mat2(.8,-.6,.6,.8)*p;float bl=g_vn(q*vec2(26.,6.))*.55+g_vn(q*vec2(7.,30.)+4.)*.45;float cl=t_fbm(p*.9);float dry=smoothstep(.62,.8,t_fbm(p*.35+11.));
      float gm=(1.+.3*(bl-.5)*fine+.22*(cl-.5));m+=wG*(gm-1.);diffuseColor.rgb=mix(diffuseColor.rgb,diffuseColor.rgb*vec3(1.22,1.1,.62),wG*dry*.55*gate);tH+=wG*(bl*.5*fine+cl*.5);}
     // ziemia: grudki, kamyki, koleiny
-    {vec2 v=t_vor(p*2.6);float peb=(1.-smoothstep(.1,.2,v.x))*mid*step(.55,t_h2(floor(p*2.6)).x);float mot=t_fbm(p*1.3);float ru=g_vn(p*9.)*fine;
+    {vec2 v=vec2(1.,2.);if(uTex>.9)v=t_vor(p*2.6);float peb=(1.-smoothstep(.1,.2,v.x))*mid*step(.55,t_h2(floor(p*2.6)).x);float mot=t_fbm(p*1.3);float ru=g_vn(p*9.)*fine;
      m+=wDirt*(.2*(mot-.5)+.12*peb+.08*(ru-.5));tH+=wDirt*(peb*.7+mot*.5+ru*.2);}
     // piasek: zmarszczki od wiatru
     {float rp=sin(dot(p,vec2(.9,.43))*7.+t_fbm(p*.8)*5.)*.5+.5;float gr2=g_vn(p*14.);m+=wSand*(.07*(rp-.5)*mid+.05*(gr2-.5)*fine);tH+=wSand*rp*.6;}
     // skała: warstwy i pęknięcia
-    {vec2 v=t_vor(p*1.6+vTW.y*.3);float st=sin(vTW.y*9.+t_fbm(p*1.2)*4.)*.5+.5;float ck=1.-smoothstep(.0,.05,v.y-v.x);float lich=smoothstep(.6,.75,t_fbm(p*2.2+5.));
+    {vec2 v=vec2(1.,2.);if(uTex>.9)v=t_vor(p*1.6+vTW.y*.3);float st=sin(vTW.y*9.+t_fbm(p*1.2)*4.)*.5+.5;float ck=1.-smoothstep(.0,.05,v.y-v.x);float lich=smoothstep(.6,.75,t_fbm(p*2.2+5.));
      m+=wRock*(.14*(st-.5)-.22*ck*mid+.1*(t_fbm(p*3.)-.5));diffuseColor.rgb=mix(diffuseColor.rgb,diffuseColor.rgb*vec3(.9,1.05,.78),wRock*lich*.4*gate);tH+=wRock*(st*.6-ck*.8);}
     // śnieg: zaspy i iskry
     {float dr=t_fbm(p*.6);m+=wSnow*.06*(dr-.5);tH+=wSnow*dr*.5;}
     diffuseColor.rgb*=1.+m*gate;tH*=gate;
    }`).replace('#include <normal_fragment_maps>',`#include <normal_fragment_maps>
-   if(uTex>0.&&tH!=0.)normal=t_bump(-vViewPosition,normal,tH*.045);`)};
+   if(uTex>0.){if(any(isnan(vec2(tH)))||any(isinf(vec2(tH))))tH=0.;normal=t_bump(-vViewPosition,normal,tH*.045);}`)};
  const pk=tm.customProgramCacheKey;tm.customProgramCacheKey=()=>(pk?pk.call(tm):'')+'t18';tm.needsUpdate=true}
-{const _mt=mapTick;mapTick=function(rdt){_mt(rdt);TG18.uTex.value=GFX.level===0||window.__noTex?0:1}}
+{const _mt=mapTick;mapTick=function(rdt){_mt(rdt);TG18.uTex.value=GFX.level===0||window.__noTex?0:GFX.level===1?.6:1}}
 
 // ================= KROK 4: barwy pór roku i pogody (gradacja jak tablica barw) =================
 Object.assign(compMat.uniforms,{uShT:{value:new THREE.Vector3(1,1,1)},uHiT:{value:new THREE.Vector3(1,1,1)},uCon:{value:1},uVib:{value:0}});
@@ -292,3 +292,8 @@ function cullUpdate(force){const v=CULL.v;cam.updateMatrixWorld();
   const key=[camT.x,camT.z,zoom,yaw].map(x=>Math.round(x*8)).join(',')+(CULL.list.map(s=>s.instanceMatrix.version+(s.instanceColor?s.instanceColor.version:0)).join('.'));
   if(key!==CULL.key&&clock-CULL.t>.12||clock-CULL.t>2){CULL.key=key;CULL.t=clock;cullUpdate()}}}
 window.__cull=CULL;
+
+// ---------- bezpiecznik: pojedyncze piksele bez liczby (NaN/Inf) nie mogą rozlać się w czarne plamy ----------
+brightMat.fragmentShader=brightMat.fragmentShader.replace('float l=max(c.r,max(c.g,c.b));','if(any(isnan(c))||any(isinf(c)))c=vec3(0.);c=min(c,vec3(64.));float l=max(c.r,max(c.g,c.b));');brightMat.needsUpdate=true;
+blurMat.fragmentShader=blurMat.fragmentShader.replace('gl_FragColor=vec4(c,1.);}','if(any(isnan(c))||any(isinf(c)))c=vec3(0.);gl_FragColor=vec4(c,1.);}');blurMat.needsUpdate=true;
+compMat.fragmentShader=compMat.fragmentShader.replace('vec3 c=texture2D(tCol,vUv).rgb;','vec3 c=texture2D(tCol,vUv).rgb;if(any(isnan(c))||any(isinf(c)))c=vec3(0.);').replace('c+=texture2D(tBl,vUv).rgb*uBloom;','{vec3 bl=texture2D(tBl,vUv).rgb;if(!(any(isnan(bl))||any(isinf(bl))))c+=bl*uBloom;}');compMat.needsUpdate=true;
