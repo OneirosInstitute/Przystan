@@ -1,6 +1,6 @@
 ---
 title: "Przystań — Księga gry"
-subtitle: "Wersja 1.10 · 9 października 2026 · Epoka I ukończona"
+subtitle: "Wersja 2.0 · 13 października 2026 · Epoka II: trzy drogi do pierwszego rozdroża"
 ---
 
 # 1. Czym jest Przystań
@@ -117,6 +117,7 @@ Budowa jest podzielona na kategorie:
 | Rzemiosło | drewutnia, pracownia cieśli, mielerz, kuźnia, warsztat, szwalnia, piec do cegły, garncarnia |
 | Magazyny | skład, spiżarnia |
 | Wspólnota | studnia, miejsce pamięci, łaźnia, strażnica, chata wiecowa, izba nauki, chata zielarki, święty gaj |
+| Epoka II (od 2.0) | targowisko i brama grodu (droga Domu), stanica, kopanka torfu, dymarka, sztolnia i piwnica w skale (droga Głębi), szkutnia (droga Morza); każda pojawia się dopiero na swojej drodze |
 
 - **Poziomy:** budynki z pracownikami mają trzy poziomy. Każdy daje więcej rąk do pracy, większy zasięg i wyższą wydajność. Trzeci poziom wymaga wiedzy o zrębie na jaskółczy ogon.
 - **Rozbudowy:** 25 dobudówek, na przykład suszarnia, wędzarnia, łódź rybacka, obora, strach na wróble, lodownia, ganek z ławą czy żuraw przy studni.
@@ -538,6 +539,56 @@ Wybór jest ostateczny. Po wyborze gra pokazuje Księgę rozbitków: ilu wyszło
 
 **Porażka:** osada wymiera albo rozpada się na przysiółki. Gdy zostaje mniej niż czworo dorosłych, pojawia się scena „Ostatni”, a gra toczy się dalej, tylko trudniej.
 
+## Epoka II: Drogi (od wersji 2.0)
+
+Po wiecu pokoleń zaczyna się epoka dzieci rozbitków. Każda droga ma akt VI, który prowadzi do pierwszego rozdroża, a po rozdrożu akt VII, zależny od tego, co wybrał wiec. Karta celu pokazuje drogę, akt i najbliższy cel, na przykład „Morze · Akt VI · Szkutnicy”. Pełną listę celów aktu widać w podsumowaniu osady (karta „Epoka II”). Gdy wszystkie cele aktu VI są spełnione, wiec zbiera się na rozstajach. Tego wyboru nie da się cofnąć. Zapisy z wersji 1.x, w których wiec pokoleń już wybrał drogę, zaczynają od aktu VI.
+
+**Start od epoki II.** Na ekranie startowym jest przycisk „Zacznij od epoki II”. Gra stawia gotową wieś po siedmiu latach na wyspie, na wybranej wyspie i tymi samymi regułami co w grze:
+
+- 33 osoby w osadzie: 15 rozbitków (wśród nich dzieci, które przypłynęły jako małe i założyły już własne rodziny) i 18 dzieci urodzonych na wyspie, każde z rodem i rodzicami;
+- przysiółek rybacki na wybrzeżu, w którym mieszka siedmioosobowa rodzina Dobromira;
+- 53 budowle: dziesięć domów z bali i z piecem, pola z trójpolówką, zagroda z kozami, kuźnia, piec do cegły, warsztaty, łaźnia, chata wiecowa i święty gaj, a między nimi wydeptane ścieżki, ławy i kwiaty;
+- wyspa poznana, wiedza z wraku i ksiąg, ślady dawnego ludu zrozumiane, obyczaje sprzed lat, pieśni i pierwsze razy w pamięci osady.
+
+Wieś stoi tuż przed wiecem pokoleń, który zbiera się zaraz po starcie. Lubomir nie żyje, a historię statku opowiada Wszebora.
+
+### Dom: „To nasza wyspa.”
+
+**Akt VI · Gospodarze:** postaw targowisko, doczekaj pierwszego dnia targowego, spisz prawo zwyczajowe, każda rodzina w chacie albo domu.
+
+- **Targowisko:** trzy kramy pod daszkami. Co pięć dni jest dzień targowy: z każdego przysiółka przychodzą ludzie z dobrami (ryby, skóry, zioła, ziarno, mleko, kamień, zależnie od krainy). Przysiółek dostaje zapasy i silniejszą więź, osada nadzieję.
+- **Prawo zwyczajowe:** gdy stoi chata wiecowa, a co najmniej cztery obyczaje trwają od dwóch lat, wiec sam zbiera się, żeby je spisać. Prawo może przechowywać starszyzna (mniej niezgody) albo słup przed chatą wiecową (więcej nadziei i pamięci).
+
+**Rozdroże: gród czy otwarta wieś?**
+
+- **Gród z wałem i ostrokołem.** Nowa budowla: brama grodu z dwiema wieżami. Gdy stanie, wał i ostrokół obiegają wieś w takiej odległości od ogniska, w jakiej stoi brama, z przerwami na budynki i wodę. Za wałem wilki prawie nie dostają się do zagród, a niezgoda co dzień trochę spada. Więź z przysiółkami słabnie odrobinę szybciej. **Akt VII · Gród:** brama grodu, osiem domów za ostrokołem, chata wiecowa za ostrokołem, 40 osób w grodzie.
+- **Otwarta wieś z siecią przysiółków.** Drogi do przysiółków kosztują połowę i budują się szybciej, więź z przysiółkami rośnie sama, przysiółki z pełnymi zapasami przybierają ludzi, a na targ przychodzi półtora raza więcej. **Akt VII · Sieć przysiółków:** cztery przysiółki, drogi do wszystkich, przysiółek wielkości osiedla, 60 osób we wspólnocie.
+
+### Głąb: „Pójdziemy w puszczę.”
+
+**Akt VI · W głąb wyspy:** poznaj wszystkie krainy, postaw stanicę w głębi lądu, załóż trzy przysiółki, wytycz drogę do najdalszego.
+
+- **Stanica:** chata z nadwieszonym piętrem i częstokołem, co najmniej 30 kroków od ogniska. Skład na urobek z dala od osady, odsłania okolicę, wyprawy idą o piątą część krócej, a przysiółki w promieniu 40 kroków są bezpieczniejsze.
+
+**Rozdroże: przez bagna czy przez góry?**
+
+- **Przez bagna.** Kopanka torfu (na mokradle albo tuż przy nim) daje opał bez ścinania lasu, od wiosny do jesieni. Dymarka wytapia z rudy darniowej na torfie narzędzia, a gdy jest ich dość, gwoździe. Latem kto pracuje przy torfie i rudzie, może złapać gorączkę bagienną (zioła pomagają). **Akt VII · Za bagnami:** kopanka torfu, 300 opału z torfu, dymarka, nowy przysiółek.
+- **Przez góry.** Sztolnia (w górach albo przy skałach) daje rudę i kamień przez cały rok. Piwnica w skale to magazyn żywności, przy którym jedzenie psuje się o jedną piątą wolniej. Zimy są ostrzejsze: domy palą więcej opału. **Akt VII · W górach:** sztolnia, 60 rudy ze skały, piwnica w skale, przysiółek w górskiej krainie.
+
+### Morze: „Zbudujemy statek.”
+
+**Akt VI · Szkutnicy:** postaw szkutnię, zbuduj dwie łodzie, popłyń w trzy rejsy wzdłuż brzegu, daj łodzie rybackie dwóm pomostom.
+
+- **Szkutnia:** wiata i pochylnia zwrócona do wody. Cieśle budują łódź z 12 desek, 16 gwoździ i 2 płócien, w dwie osoby mniej więcej przez dwa dni. Łodzie stoją przy brzegu i pływają w pobliżu osady.
+- **Rejs wzdłuż brzegu** (zakładka Wyprawy): łódź i trzy osoby płyną cztery dni. Przywożą ryby, skóry fok i drewno z wyrzutów, a każdy rejs odsłania inny kawał wybrzeża. W sztorm i zimą łatwiej o wypadek, a łódź może się rozbić.
+
+**Rozdroże: wielka łódź czy flotylla?**
+
+- **Wielka łódź.** Szkutnia buduje ją w czterech etapach: stępka, wręgi, poszycie, maszt z żaglem. Każdy etap widać na pochylni. Dwóch szkutników potrzebuje na całość mniej więcej roku. **Akt VII · Wielka łódź:** cztery etapy.
+- **Flotylla.** Łodzie kosztują połowę i powstają szybciej, każda łódź przy brzegu zwiększa połów przy pomostach (do 30%), a łodzie rybackie z pomostów też wypływają na wodę. **Akt VII · Flotylla:** pięć łodzi, wędzarnie przy dwóch pomostach, 300 ryb w zapasie.
+
+Po akcie VII osada żyje dalej i czeka na drugie rozdroże, które przyjdzie w kolejnej wersji. Księga rozbitków zapisuje drogę, wybór na rozstajach, spełnione cele, dni targowe, łodzie i rejsy.
+
 # 13. Grafika i dźwięk
 
 - **Styl:** trójwymiarowe, niskopoligonowe modele w ściszonej, chłodnej palecie północy. Mgła nieznanego, pory dnia i roku, deszcz, śnieg, mgły, dym z kominów, świetliki latem, ptaki.
@@ -600,8 +651,9 @@ Wybór jest ostateczny. Po wyborze gra pokazuje Księgę rozbitków: ilu wyszło
 
 # 15. Technika
 
-- **Plik gry:** jeden plik HTML (około 720 kB) i biblioteka Three.js r186 (dwa moduły, około 2 MB, w paczce do instalacji trzymane lokalnie) składany z części: p_head.html, p_const.js, p_mid.js, p_rest.js, p_map.js, p_tech.js, p_exp.js, p_v8.js, p_bld.js, p_story.js, p_slav.js, p_wild.js, p_ludzie.js, p_urz.js, p_pamiec.js, p_akt.js, p_kol.js, p_slady.js, p_lad.js, p_gosp.js, p_bud.js, p_swiat.js, p_szlif.js, p_mapa.js, p_cisza.js, p_sluzba.js, p_zycie.js, p_rok.js, p_wiedza.js, p_gfx.js, p_grafika.js, p_ksiega.js, p_ratunek.js, p_g18.js, p_end.js.
+- **Plik gry:** jeden plik HTML (około 800 kB) i biblioteka Three.js r186 (dwa moduły, około 2 MB, w paczce do instalacji trzymane lokalnie) składany z części: p_head.html, p_const.js, p_mid.js, p_rest.js, p_map.js, p_tech.js, p_exp.js, p_v8.js, p_bld.js, p_story.js, p_slav.js, p_wild.js, p_ludzie.js, p_urz.js, p_pamiec.js, p_akt.js, p_kol.js, p_slady.js, p_lad.js, p_gosp.js, p_bud.js, p_swiat.js, p_szlif.js, p_mapa.js, p_cisza.js, p_sluzba.js, p_zycie.js, p_rok.js, p_wiedza.js, p_gfx.js, p_grafika.js, p_ksiega.js, p_ratunek.js, p_g18.js, p_e2.js, p_e2d.js, p_e2m.js, p_end.js.
 - **Grafika:** Three.js r186 (WebGL2, ładowany jako moduł), własna obróbka obrazu (bloom, cienie kontaktowe, cienie chmur, tilt-shift, korekcja barw), własne shadery wody i terenu dopinane do materiałów Three.js.
+- **Wydajność dużej wsi (od 2.0):** gotowe budynki w każdym kwadracie wyspy (32 na 32 pola) rysuje się jako jedna bryła na materiał, gładkie kolory przechodzą do wspólnego materiału z kolorem w wierzchołkach, a kłosy na polach są instancjami. W gotowej wsi z epoki II to 1070 zamiast 2030 wywołań rysowania na klatkę. Dotknięcie budynku działa jak dawniej.
 - **Zapis:** w pamięci przeglądarki (klucz przystan-v7, kopia zapasowa przystan-v7-bak), do pobrania jako plik JSON i do wczytania z pliku.
 - **Instalacja:** PWA z manifestem i service workerem, działa bez sieci.
 - **Repozytorium:** src/ z częściami gry, build.js (składa grę i PWA do dist/), server.js (serwer bez zależności), railway.json (wdrożenie na Railway).
@@ -645,6 +697,7 @@ Wybór jest ostateczny. Po wyborze gra pokazuje Księgę rozbitków: ilu wyszło
 | 1.8.3 | poprawka: rozbudowa domu (szałas w chatę, chata w dom) nie zabiera już rodzinie spiżarki; w czasie budowy zapas zostaje w starym domu w granicach jego pojemności |
 | 1.9 | budynki z charakterem: każdy budynek inny (ściany, dachy, spadek, okap), koniki, malowane okiennice, ganki, przybudówki, garnki na płocie, zioła pod okapem, szyldy rzemiosł, wyraźniejsza kuźnia, łaźnia i chata wiecowa |
 | 1.10 | wykonanie budynków: surowe, porządne i mistrzowskie, wyraźnie widoczne po rozbudowie (wielkość, podmurówka, dach, okiennice, obramienia okien, kwiaty, płotek, szyld); karta budynku pokazuje wykonanie i trwałość; odmiany szałasów, studni, zagród i spiżarni |
+| 2.0 | epoka II: trzy drogi z aktem VI, pierwszym rozdrożem i aktem VII; start od gotowej wsi po siedmiu latach; targowisko i dni targowe, prawo zwyczajowe, brama grodu z wałem i ostrokołem; stanica, kopanka torfu, dymarka, sztolnia, piwnica w skale, gorączka bagienna; szkutnia, łodzie na wodzie, rejsy wzdłuż brzegu, wielka łódź w czterech etapach, flotylla; budynki rysowane w bryłach (o połowę mniej wywołań rysowania w dużej wsi); poprawka miecha w kuźni |
 
 # 17. Immersja i powroty
 
@@ -687,7 +740,7 @@ Wybór drogi na wiecu pokoleń jest ostateczny. W epoce II każda droga rozwidla
 | Głąb | przez bagna (torf, ruda, gorączka) albo przez góry (kamień, jaskinie, mróz) | jedna silna druga osada albo łańcuch przysiółków | puszcza: karczować pod pola albo żyć z lasu (barcie, łowy, święte gaje) |
 | Morze | wielka łódź na dalekie wyprawy albo flotylla łodzi rybackich | sąsiednie bezludne wyspy albo zatoki i ptasie skały wokół własnej wyspy | statek odbudowany jak tamten albo łodzie zbudowane po swojemu |
 
-Daje to dwadzieścia siedem różnych zakończeń epoki II. Każde ma swoją nazwę w Księdze rozbitków, na przykład „Gród nad Zatoką” albo „Ludzie Puszczy”.
+Pierwsze rozdroże każdej drogi jest grywalne od wersji 2.0, drugie i trzecie przyjdą w kolejnych wersjach. Daje to dwadzieścia siedem różnych zakończeń epoki II. Każde ma swoją nazwę w Księdze rozbitków, na przykład „Gród nad Zatoką” albo „Ludzie Puszczy”.
 
 # 19. Droga do końca
 
@@ -712,8 +765,11 @@ Kolejność dalszej pracy. Każda wersja kończy się czymś, w co da się zagra
 | 1.8 Grafika II (gotowe) | nowy Three.js, światło z nieba, cienie, okluzja, faktury terenu, barwy pór roku, nowe modele ludzi, drzew i domów |
 | 1.9 Budynki z charakterem (gotowe) | każdy budynek inny, słowiańskie detale, szyldy rzemiosł |
 | 1.10 Wykonanie budynków (gotowe) | surowe, porządne, mistrzowskie; rozbudowa widoczna na budynku i w karcie |
+| 2.0 Epoka II: drogi (gotowe) | trzy drogi do pierwszego rozdroża i akt VII każdego odgałęzienia, start od gotowej wsi |
+| 2.1 Drugie rozdroża | prawo i rzemiosło w grodzie albo we wsi, druga osada za bagnami albo w górach, sąsiednie wyspy albo ptasie skały |
+| 2.2 Trzecie rozdroża i zakończenia | rzemiosło, puszcza, statek; dwadzieścia siedem zakończeń z nazwą w Księdze rozbitków |
 
-**Epoka II** (po 1.0): trzy drogi z rozdrożami opisanymi wyżej. Przez cały czas obowiązuje: klimat słowiański bez magii, brak przybyszów, decyzje gracza w scenach i na wiecu, a życie ludzi toczy się samo.
+**Epoka II** (od 2.0): trzy drogi z rozdrożami opisanymi wyżej, kolejne rozdroża w wersjach 2.1 i 2.2. Przez cały czas obowiązuje: klimat słowiański bez magii, brak przybyszów, decyzje gracza w scenach i na wiecu, a życie ludzi toczy się samo.
 
 **Trudność (od wersji 0.18):** trzy poziomy wybierane na ekranie startowym, zapamiętywane dla następnych gier. Łagodny: psucie się jedzenia, zużycie budynków, pożary i wilki o 30% rzadziej, część mrozów i sztormów łagodnieje do śniegu i deszczu. Zwykły: tak, jak gra była pomyślana. Surowy: wszystko to o 30% częściej, zimą częstsze mrozy, wiosną i jesienią więcej sztormów. Od wersji 1.0 poziom zmienia też samą gospodarkę: na łagodnym ludzie jedzą o 15% mniej, domy palą o 20% mniej opału, a rzemiosło idzie o 15% sprawniej; na surowym jedzą o 8% więcej, palą o 12% więcej, a rzemiosło idzie o 6% wolniej. Poziom trafia do Księgi rozbitków.
 
@@ -721,4 +777,5 @@ Kolejność dalszej pracy. Każda wersja kończy się czymś, w co da się zagra
 
 # 20. Otwarte sprawy
 
-- Wysłanie repozytorium na GitHub i uruchomienie na Railway (czeka na utworzenie repozytorium „przystan”).
+- Uruchomienie na Railway (repozytorium jest już na GitHubie: OneirosInstitute/Przysta-).
+- Liczba klatek na sekundę na Nordzie 6 w gotowej wsi z epoki II (licznik jest w menu tempa).

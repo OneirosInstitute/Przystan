@@ -360,7 +360,7 @@ function addCharacter(g,kind){const T=STY;if(!T)return;const H=T.house;const mai
   if(T.pots&&BD[kind].w>=2&&BD[kind].h>=2)potsFence(g,kind);
   if(kind==='domwsp'&&main){for(const gb of T.gables)if(gb!==main&&gb.w>2)koniki(gb);
    const top=.3+1.25*.82;for(let k=0;k<5;k++)g.add(tbox(.08,top,.08,matLog2,-1.6+k*.8,top/2,1.25));const pr=gable(3.6,.55,.25,T.roof,top,.05);pr.position.set(0,0,1.0);g.add(pr)}
-  if(kind==='kuznia'){const bl=new THREE.Group();bl.position.set(.05,0,-.45);bl.add(tbox(.38,.12,.26,mHide,0,.72,0,0,2),tbox(.42,.04,.3,mPlankD,0,.64,0,0,2),tbox(.42,.04,.3,mPlankD,0,.8,0,0,2));g.add(bl);
+  if(kind==='kuznia'){const bl=new THREE.Group();bl.position.set(.05,0,-.45);bl.add(tbox(.38,.12,.26,matHide,0,.72,0,0,2),tbox(.42,.04,.3,mPlankD,0,.64,0,0,2),tbox(.42,.04,.3,mPlankD,0,.8,0,0,2));g.add(bl);
    for(let k=0;k<3;k++){const hs=new THREE.Mesh(new THREE.TorusGeometry(.07,.015,4,10,4.2),M(0x3a3c40,{metalness:.5,roughness:.4}));hs.position.set(-.85+k*.16,1.05,.62);g.add(hs)}}
   if(kind==='laznia'){g.add(cyl(.16,.28,mPlank,.95,.14,-.45,0,0,0,9));const st=new THREE.Sprite(new THREE.SpriteMaterial({map:softTex,transparent:true,opacity:.35,depthWrite:false,color:0xe8ece8}));st.scale.set(1.2,1.2,1);st.position.set(-.45,1.9,-.3);g.add(st)}
  }catch(e){console.warn('budynek',kind,e)}}
