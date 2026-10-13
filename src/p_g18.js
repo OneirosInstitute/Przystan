@@ -8,33 +8,30 @@ THREE.ShaderChunk.lights_pars_begin=THREE.ShaderChunk.lights_pars_begin.replace(
 const G18={lights:[],lt:-1};
 {const _r=renderer.render.bind(renderer);renderer.render=function(sc,c){if(sc!==scene)return _r(sc,c);
   if(clock-G18.lt>2||G18.lt<0){G18.lt=clock;G18.lights=[];scene.traverse(o=>{if(o.isLight)G18.lights.push(o)})}
-  const L=G18.lights;for(const l of L){l._i0=l.intensity;l.intensity*=Math.PI}
+  const L=G18.lights;for(const l of L){l._i0=l.intensity;if(!l.isLightProbe)l.intensity*=Math.PI}
   try{_r(sc,c)}finally{for(const l of L)l.intensity=l._i0}}}
 window.__g18=G18;
 
 // ================= KROK 2: światło z nieba (IBL), miękkie cienie, okluzja otoczenia =================
-const ENV={pm:null,rt:null,scn:null,mat:null,lt:-9,key:'',on:false,amb:0};
-function envInit(){ENV.pm=new THREE.PMREMGenerator(renderer);ENV.scn=new THREE.Scene();
- ENV.mat=new THREE.ShaderMaterial({side:THREE.BackSide,depthWrite:false,depthTest:false,
-  uniforms:{uZ:{value:new THREE.Color()},uH:{value:new THREE.Color()},uG:{value:new THREE.Color()},uS:{value:new THREE.Color()},uD:{value:new THREE.Vector3(0,1,0)}},
-  vertexShader:'varying vec3 vD;void main(){vD=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
-  fragmentShader:`uniform vec3 uZ;uniform vec3 uH;uniform vec3 uG;uniform vec3 uS;uniform vec3 uD;varying vec3 vD;
-   void main(){vec3 d=normalize(vD);float y=d.y;vec3 c=y>0.?mix(uH,uZ,pow(y,.55)):mix(uH,uG,pow(min(-y*3.,1.),.5));
-    float s=max(dot(d,uD),0.);c+=uS*(pow(s,6.)*.5+pow(s,90.)*4.)*step(-.05,y);c+=uS*.35*pow(max(1.-abs(y),0.),4.)*pow(s,1.5);gl_FragColor=vec4(c,1.);}`});
- ENV.scn.add(new THREE.Mesh(new THREE.SphereGeometry(10,32,16),ENV.mat))}
-const _ec=new THREE.Color();
-function envUpdate(){if(!ENV.pm)envInit();const U=ENV.mat.uniforms;const sky=scene.background&&scene.background.isColor?scene.background:_ec.setRGB(.5,.6,.65);
- {const lh=hemi.color.r*.3+hemi.color.g*.55+hemi.color.b*.15,ls=Math.max(.02,sky.r*.3+sky.g*.55+sky.b*.15);U.uH.value.copy(sky).multiplyScalar(lh/ls).lerp(hemi.color,.5);}U.uZ.value.copy(U.uH.value).multiply(_ec.setRGB(.86,.94,1.12));U.uG.value.copy(hemi.groundColor);
- U.uS.value.copy(sun.color).multiplyScalar(Math.min(1.6,sun.intensity)*.3);U.uD.value.copy(G17.sunDir);
- const q=v=>Math.round(v*40);const key=[sky.r,sky.g,sky.b,U.uS.value.r,U.uS.value.g,U.uD.value.x,U.uD.value.y].map(q).join(',');
- if(key===ENV.key&&ENV.rt)return;if(ENV.rt&&clock-ENV.lt<1.2)return;ENV.key=key;ENV.lt=clock;
- const rt=ENV.pm.fromScene(ENV.scn,0,.1,100,{size:128});if(ENV.rt)ENV.rt.dispose();ENV.rt=rt;scene.environment=rt.texture}
+const ENV={probe:null,lt:-9,key:'',on:false,dirs:null,H:new THREE.Color(),Z:new THREE.Color(),G:new THREE.Color(),S:new THREE.Color(),D:new THREE.Vector3(0,1,0)};
+const _ec=new THREE.Color(),_eb=[];for(let i=0;i<9;i++)_eb.push(0);
+function envDirs(){const N=160,L=[];const ga=Math.PI*(3-Math.sqrt(5));for(let i=0;i<N;i++){const y=1-(i+.5)/N*2,r=Math.sqrt(1-y*y),a=i*ga;L.push(new THREE.Vector3(Math.cos(a)*r,y,Math.sin(a)*r))}return L}
+function envSky(d,o){const y=d.y;if(y>0){const t=Math.pow(y,.55);o.copy(ENV.H).lerp(ENV.Z,t)}else{const t=Math.pow(Math.min(-y*3,1),.5);o.copy(ENV.H).lerp(ENV.G,t)}
+ const s=Math.max(d.dot(ENV.D),0);const k=(y>-.05?(Math.pow(s,6)*.5+Math.pow(s,90)*4):0)+.35*Math.pow(Math.max(1-Math.abs(y),0),4)*Math.pow(s,1.5);o.r+=ENV.S.r*k;o.g+=ENV.S.g*k;o.b+=ENV.S.b*k;return o}
+function envUpdate(){if(!ENV.probe){ENV.probe=new THREE.LightProbe();ENV.probe.userData.noPi=1;scene.add(ENV.probe);ENV.dirs=envDirs()}
+ const sky=scene.background&&scene.background.isColor?scene.background:_ec.setRGB(.5,.6,.65);
+ {const lh=hemi.color.r*.3+hemi.color.g*.55+hemi.color.b*.15,ls=Math.max(.02,sky.r*.3+sky.g*.55+sky.b*.15);ENV.H.copy(sky).multiplyScalar(lh/ls).lerp(hemi.color,.5);}
+ ENV.Z.copy(ENV.H).multiply(_ec.setRGB(.86,.94,1.12));ENV.G.copy(hemi.groundColor);ENV.S.copy(sun.color).multiplyScalar(Math.min(1.6,sun.intensity)*.3);ENV.D.copy(G17.sunDir);
+ const q=v=>Math.round(v*60);const key=[ENV.H.r,ENV.H.g,ENV.H.b,ENV.G.r,ENV.S.r,ENV.S.g,ENV.D.x,ENV.D.y,ENV.D.z].map(q).join(',');
+ if(key===ENV.key||clock-ENV.lt<.4)return;ENV.key=key;ENV.lt=clock;
+ const sh=ENV.probe.sh;sh.zero();const w=4*Math.PI/ENV.dirs.length,c=new THREE.Color();
+ for(const d of ENV.dirs){envSky(d,c);THREE.SphericalHarmonics3.getBasisAt(d,_eb);for(let j=0;j<9;j++){sh.coefficients[j].x+=c.r*_eb[j]*w;sh.coefficients[j].y+=c.g*_eb[j]*w;sh.coefficients[j].z+=c.b*_eb[j]*w}}}
 // natężenia: część światła z półkuli przechodzi na niebo; cienie miękkie
 {const _l=lighting;lighting=function(){const Lt=_l();if(!S)return Lt;
-  ENV.on=GFX.level>0&&!LOWQ&&!window.__noEnv;
+  ENV.on=GFX.level>0&&!LOWQ&&!window.__noEnv;scene.environment=null;
   if(ENV.on){const h=hemi.intensity;try{envUpdate()}catch(e){ENV.on=false;console.warn(e)}
-   if(ENV.on){hemi.intensity=h*.38;scene.environmentIntensity=h*.62*(GFX.level===2?1:.9)}}
-  if(!ENV.on){scene.environment=null}
+   if(ENV.on){hemi.intensity=h*.38;ENV.probe.intensity=h*.62*(GFX.level===2?1:.9);ENV.probe.visible=true}}
+  if(!ENV.on&&ENV.probe)ENV.probe.intensity=0;
   sun.shadow.radius=GFX.level===2?3.2:GFX.level===1?1.8:1;
   return Lt}}
 
@@ -51,7 +48,7 @@ const aoMat=new THREE.ShaderMaterial({depthTest:false,depthWrite:false,vertexSha
    float ang=ign(gl_FragCoord.xy)*6.2832;float occ=0.;float R2=uR*uR;
    for(int i=0;i<14;i++){float fi=(float(i)+.5)/14.;float an=ang+float(i)*2.39996;vec2 o=vec2(cos(an),sin(an))*sqrt(fi)*uR*uPS;
     vec3 v=vp(vUv+o)-P;float vv=dot(v,v);float vn=dot(v,N);occ+=max(vn-.012*uR,0.)/(vv+.02*R2)*max(1.-vv/R2/2.25,0.);}
-   float ao=clamp(1.-uI*occ*uR*.32,0.,1.);if(!(ao>=0.&&ao<=1.))ao=1.;gl_FragColor=vec4(ao,ao,ao,1.);}`});
+   float ao=clamp(1.-uI*occ*uR*.32,0.,1.);if(!(ao>=0.&&ao<=1.))ao=1.;if(!(ao>=0.&&ao<=1.))ao=1.;gl_FragColor=vec4(ao,ao,ao,1.);}`});
 const aoBlur=new THREE.ShaderMaterial({depthTest:false,depthWrite:false,vertexShader:PV,
  uniforms:{tAO:{value:null},tDep:{value:null},uDir:{value:new THREE.Vector2()},uNF:{value:new THREE.Vector2(1,500)}},
  fragmentShader:`uniform sampler2D tAO;uniform sampler2D tDep;uniform vec2 uDir;uniform vec2 uNF;varying vec2 vUv;
@@ -59,7 +56,7 @@ const aoBlur=new THREE.ShaderMaterial({depthTest:false,depthWrite:false,vertexSh
    float wt=(1.-abs(float(i))/4.5)*exp(-dd*dd*6.);s+=texture2D(tAO,uv).r*wt;w+=wt;}float a=s/max(w,1e-4);gl_FragColor=vec4(a,a,a,1.);}`});
 Object.assign(compMat.uniforms,{tAO:{value:null},uAO2:{value:0}});
 compMat.fragmentShader=compMat.fragmentShader.replace('uniform float uDpr;','uniform float uDpr;uniform sampler2D tAO;uniform float uAO2;')
- .replace('if(uCloud>0.)','if(uAO2>0.)c*=mix(1.,texture2D(tAO,vUv).r,uAO2);\n  if(uCloud>0.)');
+ .replace('if(uCloud>0.)','if(uAO2>0.){float aoV=texture2D(tAO,vUv).r;if(!(aoV>=0.&&aoV<=1.))aoV=1.;c*=mix(1.,aoV,uAO2);}\n  if(uCloud>0.)');
 compMat.needsUpdate=true;
 {const _gr=gfxResize;gfxResize=function(){_gr();['ao1','ao2'].forEach(k=>{if(GFX[k]){GFX[k].dispose();GFX[k]=null}});if(GFX.level<2||!GFX.rt)return;
   const w=Math.max(2,GFX.rt.width>>1),h=Math.max(2,GFX.rt.height>>1);GFX.ao1=new THREE.WebGLRenderTarget(w,h,{type:THREE.UnsignedByteType});GFX.ao2=new THREE.WebGLRenderTarget(w,h,{type:THREE.UnsignedByteType});
@@ -297,3 +294,7 @@ window.__cull=CULL;
 brightMat.fragmentShader=brightMat.fragmentShader.replace('float l=max(c.r,max(c.g,c.b));','if(any(isnan(c))||any(isinf(c)))c=vec3(0.);c=min(c,vec3(64.));float l=max(c.r,max(c.g,c.b));');brightMat.needsUpdate=true;
 blurMat.fragmentShader=blurMat.fragmentShader.replace('gl_FragColor=vec4(c,1.);}','if(any(isnan(c))||any(isinf(c)))c=vec3(0.);gl_FragColor=vec4(c,1.);}');blurMat.needsUpdate=true;
 compMat.fragmentShader=compMat.fragmentShader.replace('vec3 c=texture2D(tCol,vUv).rgb;','vec3 c=texture2D(tCol,vUv).rgb;if(any(isnan(c))||any(isinf(c)))c=vec3(0.);').replace('c+=texture2D(tBl,vUv).rgb*uBloom;','{vec3 bl=texture2D(tBl,vUv).rgb;if(!(any(isnan(bl))||any(isinf(bl))))c+=bl*uBloom;}');compMat.needsUpdate=true;
+// zabezpieczenie obróbki obrazu: ujemne i nieliczbowe barwy nie zamieniają się w czarne plamy
+compMat.fragmentShader=compMat.fragmentShader.replace('c+=texture2D(tBl,vUv).rgb*uBloom;','c+=texture2D(tBl,vUv).rgb*uBloom;c=clamp(c,vec3(0.),vec3(64.));if(!(c.r>=0.&&c.g>=0.&&c.b>=0.))c=vec3(0.);');
+compMat.needsUpdate=true;
+brightMat.fragmentShader=brightMat.fragmentShader.replace('float l=max(c.r,max(c.g,c.b));','c=clamp(c,vec3(0.),vec3(64.));if(!(c.r>=0.&&c.g>=0.&&c.b>=0.))c=vec3(0.);float l=max(c.r,max(c.g,c.b));');brightMat.needsUpdate=true;
