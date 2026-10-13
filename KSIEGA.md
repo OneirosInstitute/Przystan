@@ -1,6 +1,6 @@
 ---
 title: "Przystań — Księga gry"
-subtitle: "Wersja 1.8.1 · 9 października 2026 · Epoka I ukończona"
+subtitle: "Wersja 1.8.2 · 9 października 2026 · Epoka I ukończona"
 ---
 
 # 1. Czym jest Przystań
@@ -561,7 +561,7 @@ Wybór jest ostateczny. Po wyborze gra pokazuje Księgę rozbitków: ilu wyszło
   - licznik klatek na sekundę w menu tempa, obok nazwy poziomu jakości.
 - **Grafika II (od wersji 1.8):**
   - nowy silnik rysowania: Three.js r186 zamiast r149, z zachowaniem dawnego wyglądu światła;
-  - światło z nieba: barwa powietrza o świcie, w południe, we mgle i nocą oświetla świat ze wszystkich stron, a od strony słońca jest cieplej (od 1.8.1 liczone jako sonda światła, bez tekstur otoczenia, co jest pewniejsze na telefonach);
+  - światło z nieba: barwa powietrza o świcie, w południe, we mgle i nocą oświetla świat ze wszystkich stron, a od strony słońca jest cieplej (od 1.8.2 liczone jako sonda światła, bez tekstur otoczenia, co jest pewniejsze na telefonach);
   - miękkie cienie, rozmyte na brzegach;
   - okluzja otoczenia: ciemniejsze zakamarki, styki z ziemią, wnętrza koron drzew i okapów (na Ultra, gaśnie przy widoku całej wyspy);
   - teren z fakturą: kępy i źdźbła w trawie z suchymi plamami, grudki i kamyki w ziemi, zmarszczki na piasku, warstwy, pęknięcia i porosty na skałach, zaspy w śniegu; faktura ma też wypukłość, która łapie światło;
@@ -627,8 +627,8 @@ Wybór jest ostateczny. Po wyborze gra pokazuje Księgę rozbitków: ilu wyszło
 | 1.7.1 | lepsza księga Osada: arkusz na cały ekran, działy w jednym rzędzie, kategorie budowy jako małe przyciski bez nachodzenia na listę, budowy z powodem przestoju i budowniczymi, koszt „ile jest z ilu”, jasne „Brakuje” zamiast złudnego „Postaw”, „czas stoi” w tempie, komunikaty na dole |
 | 1.7.2 | nikt nie stoi bez powodu: przy obyczaju „chorzy odpoczywają” leżą tylko najciężej chorzy, a przy braku jedzenia każdy zbiera; opiekunów nie więcej niż trzeba; prace zastępcze dla wolnych rąk i warsztatów bez roboty; wyraźne „czas stoi” wznawiane jednym dotknięciem; słabi ludzie z przyczynami |
 | 1.8 | grafika II: Three.js r186, światło z nieba, miękkie cienie, okluzja otoczenia, teren z fakturą i wypukłością, barwy pór roku i pogody, wygładzanie krawędzi, nowi ludzie, drzewa i domy z bali, rysowanie tylko tego, co w kadrze |
-| 1.8.1 | poprawka: czarne prostokąty przy brzegu i na mokrej ziemi na telefonie; światło z nieba bez tekstur otoczenia (sonda światła), zabezpieczenia obróbki obrazu, okluzji i wypukłości terenu przed błędnymi wartościami |
 | 1.8.1 | poprawka: na telefonach (Adreno) przy brzegu i na granicy nieodkrytego terenu pojawiały się czarne prostokąty; faktura terenu liczy teraz pochodne poza rozgałęzieniami, a obróbka obrazu nie przepuszcza błędnych pikseli do poświaty; na poziomie Wysoka teren ma lżejszą fakturę |
+| 1.8.2 | poprawka: czarne prostokąty wracały na telefonie; światło z nieba liczone jako sonda światła zamiast tekstury otoczenia (PMREM), ujemne barwy zerowane przed tonowaniem |
 
 # 17. Immersja i powroty
 

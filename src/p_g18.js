@@ -48,7 +48,7 @@ const aoMat=new THREE.ShaderMaterial({depthTest:false,depthWrite:false,vertexSha
    float ang=ign(gl_FragCoord.xy)*6.2832;float occ=0.;float R2=uR*uR;
    for(int i=0;i<14;i++){float fi=(float(i)+.5)/14.;float an=ang+float(i)*2.39996;vec2 o=vec2(cos(an),sin(an))*sqrt(fi)*uR*uPS;
     vec3 v=vp(vUv+o)-P;float vv=dot(v,v);float vn=dot(v,N);occ+=max(vn-.012*uR,0.)/(vv+.02*R2)*max(1.-vv/R2/2.25,0.);}
-   float ao=clamp(1.-uI*occ*uR*.32,0.,1.);if(!(ao>=0.&&ao<=1.))ao=1.;if(!(ao>=0.&&ao<=1.))ao=1.;gl_FragColor=vec4(ao,ao,ao,1.);}`});
+   float ao=clamp(1.-uI*occ*uR*.32,0.,1.);if(!(ao>=0.&&ao<=1.))ao=1.;gl_FragColor=vec4(ao,ao,ao,1.);}`});
 const aoBlur=new THREE.ShaderMaterial({depthTest:false,depthWrite:false,vertexShader:PV,
  uniforms:{tAO:{value:null},tDep:{value:null},uDir:{value:new THREE.Vector2()},uNF:{value:new THREE.Vector2(1,500)}},
  fragmentShader:`uniform sampler2D tAO;uniform sampler2D tDep;uniform vec2 uDir;uniform vec2 uNF;varying vec2 vUv;
@@ -56,7 +56,7 @@ const aoBlur=new THREE.ShaderMaterial({depthTest:false,depthWrite:false,vertexSh
    float wt=(1.-abs(float(i))/4.5)*exp(-dd*dd*6.);s+=texture2D(tAO,uv).r*wt;w+=wt;}float a=s/max(w,1e-4);gl_FragColor=vec4(a,a,a,1.);}`});
 Object.assign(compMat.uniforms,{tAO:{value:null},uAO2:{value:0}});
 compMat.fragmentShader=compMat.fragmentShader.replace('uniform float uDpr;','uniform float uDpr;uniform sampler2D tAO;uniform float uAO2;')
- .replace('if(uCloud>0.)','if(uAO2>0.){float aoV=texture2D(tAO,vUv).r;if(!(aoV>=0.&&aoV<=1.))aoV=1.;c*=mix(1.,aoV,uAO2);}\n  if(uCloud>0.)');
+ .replace('if(uCloud>0.)','if(uAO2>0.)c*=mix(1.,texture2D(tAO,vUv).r,uAO2);\n  if(uCloud>0.)');
 compMat.needsUpdate=true;
 {const _gr=gfxResize;gfxResize=function(){_gr();['ao1','ao2'].forEach(k=>{if(GFX[k]){GFX[k].dispose();GFX[k]=null}});if(GFX.level<2||!GFX.rt)return;
   const w=Math.max(2,GFX.rt.width>>1),h=Math.max(2,GFX.rt.height>>1);GFX.ao1=new THREE.WebGLRenderTarget(w,h,{type:THREE.UnsignedByteType});GFX.ao2=new THREE.WebGLRenderTarget(w,h,{type:THREE.UnsignedByteType});
@@ -294,7 +294,6 @@ window.__cull=CULL;
 brightMat.fragmentShader=brightMat.fragmentShader.replace('float l=max(c.r,max(c.g,c.b));','if(any(isnan(c))||any(isinf(c)))c=vec3(0.);c=min(c,vec3(64.));float l=max(c.r,max(c.g,c.b));');brightMat.needsUpdate=true;
 blurMat.fragmentShader=blurMat.fragmentShader.replace('gl_FragColor=vec4(c,1.);}','if(any(isnan(c))||any(isinf(c)))c=vec3(0.);gl_FragColor=vec4(c,1.);}');blurMat.needsUpdate=true;
 compMat.fragmentShader=compMat.fragmentShader.replace('vec3 c=texture2D(tCol,vUv).rgb;','vec3 c=texture2D(tCol,vUv).rgb;if(any(isnan(c))||any(isinf(c)))c=vec3(0.);').replace('c+=texture2D(tBl,vUv).rgb*uBloom;','{vec3 bl=texture2D(tBl,vUv).rgb;if(!(any(isnan(bl))||any(isinf(bl))))c+=bl*uBloom;}');compMat.needsUpdate=true;
-// zabezpieczenie obróbki obrazu: ujemne i nieliczbowe barwy nie zamieniają się w czarne plamy
-compMat.fragmentShader=compMat.fragmentShader.replace('c+=texture2D(tBl,vUv).rgb*uBloom;','c+=texture2D(tBl,vUv).rgb*uBloom;c=clamp(c,vec3(0.),vec3(64.));if(!(c.r>=0.&&c.g>=0.&&c.b>=0.))c=vec3(0.);');
-compMat.needsUpdate=true;
-brightMat.fragmentShader=brightMat.fragmentShader.replace('float l=max(c.r,max(c.g,c.b));','c=clamp(c,vec3(0.),vec3(64.));if(!(c.r>=0.&&c.g>=0.&&c.b>=0.))c=vec3(0.);float l=max(c.r,max(c.g,c.b));');brightMat.needsUpdate=true;
+
+// ujemne barwy przed tonowaniem też zerujemy
+compMat.fragmentShader=compMat.fragmentShader.replace('c=toS(aces(c));','c=toS(aces(max(c,vec3(0.))));');compMat.needsUpdate=true;
