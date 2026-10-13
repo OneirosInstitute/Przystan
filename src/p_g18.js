@@ -312,13 +312,19 @@ const mBoards=TM(TX.planks,0x9a8670),mSod=TM(TX.thatch,0x7c9a4e),mDarkThatch=TM(
 const SHC={};function shutM(c){return SHC[c]||(SHC[c]=TM(TX.planks,c))}
 const mPot=M(0x9a5a34,{flatShading:false,roughness:.7}),mPot2=M(0x6a4a3a,{flatShading:false,roughness:.6}),mHerb=M(0x6a7a3a),mGarlic=M(0xe8e0cc);
 function styPick(r,list){let t=0;list.forEach(x=>t+=x[1]);let v=r()*t;for(const x of list){if(v<x[1])return x[0];v-=x[1]}return list[0][0]}
-function styFor(kind,bb){const r=rng(((bb&&bb.id)||((Math.random()*1e6)|0))*104729+kind.length*131+7);const house=kind==='chata'||kind==='dom';
- const pal=['kuznia','laznia','mielerz','drwal'].includes(kind)?(r()<.7?'dark':'nat'):house?styPick(r,[['nat',.4],['white',.3],['grey',.15],['dark',.15]]):styPick(r,[['nat',.5],['grey',.25],['dark',.2],['white',.05]]);
- const roof=house?styPick(r,[[mShingle,.32],[mThatch,.3],[mThatchOld,.12],[mBoards,.14],[mSod,.12]]):styPick(r,[[mThatch,.3],[mThatchOld,.2],[mBoards,.2],[mShingle,.12],[mSod,.18]]);
- const sh=house||r()<.4?styPick(r,[[0x4a6a8a,.3],[0x3e5a74,.15],[0x5a7a4a,.2],[0x8a3a2a,.15],[0x6a5a8a,.08],[0,.12]]):0;
+// wykonanie: 1 surowe, 2 porządne, 3 mistrzowskie (poziom budynku, a dla domów rodzaj i rozbudowy)
+function qOf(kind,bb){if(kind==='szalas')return 1;if(kind==='dom')return 3;if(kind==='chata')return bb&&bb.ext&&bb.ext.length>=2?3:2;
+ if(BD[kind]&&(BD[kind].wk||BD[kind].store)&&kind!=='pole')return bb?Math.min(3,lvOf(bb)):1;return 2}
+function styFor(kind,bb){const r=rng(((bb&&bb.id)||((Math.random()*1e6)|0))*104729+kind.length*131+7);const house=kind==='chata'||kind==='dom';const q=qOf(kind,bb);
+ let pal=['kuznia','laznia','mielerz','drwal'].includes(kind)?(r()<.7?'dark':'nat'):house?styPick(r,[['nat',.4],['white',.3],['grey',.15],['dark',.15]]):styPick(r,[['nat',.5],['grey',.25],['dark',.2],['white',.05]]);
+ if(q===1)pal=r()<.6?'dark':r()<.5?'grey':'nat';if(q===3&&!['kuznia','laznia','mielerz'].includes(kind))pal=r()<.5?'white':'nat';
+ let roof=house?styPick(r,[[mShingle,.32],[mThatch,.3],[mThatchOld,.12],[mBoards,.14],[mSod,.12]]):styPick(r,[[mThatch,.3],[mThatchOld,.2],[mBoards,.2],[mShingle,.12],[mSod,.18]]);
+ if(q===1)roof=styPick(r,[[mThatchOld,.4],[mSod,.35],[mThatch,.25]]);else if(q===3&&!house)roof=styPick(r,[[mShingle,.45],[mBoards,.25],[mThatch,.3]]);
+ let sh=house||r()<.4?styPick(r,[[0x4a6a8a,.3],[0x3e5a74,.15],[0x5a7a4a,.2],[0x8a3a2a,.15],[0x6a5a8a,.08],[0,.12]]):0;
+ if(q===1)sh=0;else if(q===3&&!sh)sh=styPick(r,[[0x4a6a8a,.4],[0x5a7a4a,.3],[0x8a3a2a,.3]]);
  const roof2=kind==='kuznia'?mDarkThatch:(kind==='dom'||kind==='domwsp')?(r()<.62?mShingle:mBoards):roof;
- return{r,kind,pal,roof:roof2,sh,pitch:.85+r()*.42,over:.22+r()*.22,jw:.93+r()*.08,jh:.92+r()*.18,dx:(r()-.5)*.5,
-  koniki:kind==='dom'||kind==='domwsp'||r()<(house?.65:.3),ganek:house&&r()<.6,lean:r()<(house?.45:.3),pots:r()<(house?.5:.2),herbs:r()<.4,bench:r()<.45,gables:[],house:null}}
+ return{r,kind,q,pal,roof:roof2,sh,pitch:.85+r()*.42,over:(q===1?.16:.22)+r()*.22,jw:(q===3?.97:.93)+r()*.06,jh:(q===1?.88:q===3?.98:.92)+r()*.14,dx:(r()-.5)*.5,
+  koniki:q>=3||kind==='domwsp'||(q===2&&r()<(house?.6:.3)),ganek:q>=2&&(house?r()<(q===3?.85:.45):q===3&&r()<.4),lean:r()<(house?.45:.3),pots:q>=2&&r()<(house?.55:.25),herbs:r()<(q===1?.6:.4),bench:q>=2&&r()<.5,trims:q>=3,gables:[],house:null}}
 const ROOFS=[mThatch,mThatchOld,mShingle];
 {const _lh=logHouse;logHouse=function(g,w,d,h,opt){opt=Object.assign({},opt||{});const S0=STY;
   if(S0&&!S0.house){w*=S0.jw;h*=S0.jh;opt.rh=(opt.rh||h*.85)*S0.pitch;if(opt.over===undefined)opt.over=S0.over;if(!opt.roof||ROOFS.includes(opt.roof))opt.roof=S0.roof;if(opt.dx===undefined)opt.dx=S0.dx;
@@ -374,3 +380,54 @@ function tradeSign(g,kind){const key=SIGNK[kind];if(!key||!IC[key])return;const 
  const bd=new THREE.Mesh(new THREE.PlaneGeometry(.42,.42),signTex(key));bd.position.set(-s*.27,.86,0);bd.castShadow=true;sg.add(bd);
  for(const q of[-.14,.14])sg.add(tbox(.008,.08,.008,matDark,-s*.27+q,1.1,0));g.add(sg)}
 {const _ac=addCharacter;addCharacter=function(g,kind){_ac(g,kind);try{tradeSign(g,kind)}catch(e){console.warn('szyld',e)}}}
+// --- wykonanie widoczne na budynku ---
+const TXNL=ctex(128,128,(x,w,h)=>{const n=6,rh=h/n;for(let i=0;i<n;i++){const y=i*rh;const gr=x.createLinearGradient(0,y,0,y+rh);const b=200+RT()*35;gr.addColorStop(0,`rgb(${b*.62|0},${b*.62|0},${b*.62|0})`);gr.addColorStop(.4,`rgb(${b|0},${b|0},${b|0})`);gr.addColorStop(1,`rgb(${b*.78|0},${b*.78|0},${b*.78|0})`);x.fillStyle=gr;x.fillRect(0,y,w,rh);
+ x.strokeStyle='rgba(60,60,60,.25)';for(let k=0;k<4;k++){x.beginPath();const yy=y+3+RT()*(rh-6);x.moveTo(RT()*w*.3,yy);x.lineTo(w*.5+RT()*w*.5,yy+RT()*2-1);x.stroke()}}x.fillStyle='rgba(30,30,30,.5)';for(let i=0;i<=n;i++)x.fillRect(0,i*rh-1,w,2)});
+const PALL={};function palLog(k){return PALL[k]||(PALL[k]=new THREE.MeshStandardMaterial({map:TXNL,color:PAL[k][0],roughness:.95}))}
+const mTrim=M(0xf0ece0,{flatShading:false}),mFlow=[M(0xc04050),M(0xe0c050),M(0xd8d8f0),M(0x8a5aa8)],mSillW=M(0x5a4430);
+{const _wi2=win;win=function(g,x,y,z,ry){_wi2(g,x,y,z,ry);const T=STY;if(!T)return;const wg=g.children[g.children.length-1];if(!wg)return;
+  if(T.q===1){wg.traverse(o=>{if(o.isMesh&&o.material===mWin&&o.geometry.parameters&&o.geometry.parameters.width>.2){o.scale.set(.75,.7,1)}});return}
+  if(T.trims){const tc=T.pal==='white'?shutM(T.sh||0x4a6a8a):mTrim;wg.add(tbox(.5,.05,.03,tc,0,.21,.05),tbox(.46,.04,.03,tc,0,-.2,.05),tbox(.04,.42,.03,tc,-.22,0,.05),tbox(.04,.42,.03,tc,.22,0,.05));
+   const top=tbox(.58,.07,.06,tc,0,.27,.06);wg.add(top);const pk=tbox(.12,.12,.04,tc,0,.33,.06);pk.rotation.z=Math.PI/4;wg.add(pk);
+   if(T.r()<.75){wg.add(tbox(.44,.08,.11,mPlank,0,-.27,.1,0,2));for(let k=0;k<4;k++)wg.add(mesh(new THREE.SphereGeometry(.045,6,4),mFlow[(k+((x*7)|0))&3],-.15+k*.1,-.2,.1))}}}}
+{const _lh2=logHouse;logHouse=function(g,w,d,h,opt){const n0=g.children.length;const r=_lh2(g,w,d,h,opt);const T=STY;if(!T||!T.house)return r;const H=T.house;
+  for(let i=n0;i<g.children.length;i++){const c=g.children[i];const p=c.geometry&&c.geometry.parameters;if(c.material===mStone&&p&&Math.abs(p.height-.3)<1e-6&&p.width>H.w){
+    if(T.q===1){c.material=matLog2;c.scale.y=.55;c.position.y=.08}else if(T.q===3){g.add(tbox(p.width+.2,.12,p.depth+.2,mStone,0,.06,0,0,.9))}break}}
+  if(T.q===1&&T.r()<.7)for(let k=0;k<3;k++){const pt=tbox(.3+T.r()*.2,.04,.26,mThatchOld,(T.r()-.5)*H.w*.6,.3+H.h+H.rh*.45,(T.r()-.5)*H.d*.5);pt.rotation.z=(T.r()<.5?1:-1)*Math.atan2(H.rh,H.w/2+.3);g.add(pt)}
+  return r}}
+{const _ph2=plankHut;plankHut=function(g0,w,d,h,opt){const g=_ph2(g0,w,d,h,opt);const T=STY;if(!T)return g;
+  for(const c of g.children){const p=c.geometry&&c.geometry.parameters;if(c.material===mStone&&p&&Math.abs(p.height-.16)<1e-6){if(T.q===1){c.material=matLog2;c.scale.y=.6}else if(T.q===3)g.add(tbox(p.width+.18,.1,p.depth+.18,mStone,0,.05,0,0,.9));break}}return g}}
+{const _ga2=gable;gable=function(w,d,h,mat,y,over,sc){if(STY&&(mat===mThatch||mat===mThatchOld||(mat===mShingle&&STY.kind!=='studnia')))mat=STY.roof;return _ga2(w,d,h,mat,y,over,sc)}}
+// odmiany pozostałych budynków
+function variants(g,kind){const T=STY;if(!T)return;const r=T.r;
+ // ściany z bali i desek w kolorze budynku
+ g.traverse(o=>{if(!o.isMesh)return;const p=o.geometry&&o.geometry.parameters;
+  if(o.material===mLogs||o.material===mLogsD||o.material===mLogsG){if(T.pal!=='nat'||r()<.5)o.material=palLog(T.pal)}
+  else if((o.material===mPlank||o.material===mPlankG)&&p&&p.height>.6&&T.pal!=='nat')o.material=palMats(T.pal)[0]});
+ if(kind==='szalas'){const tint=[0xffffff,0xe8dcc0,0xd8d0c0,0xc8bca4][(r()*4)|0];const cm=mCanvas.clone();cm.color.setHex(tint);g.traverse(o=>{if(o.isMesh&&o.material===mCanvas)o.material=cm});
+  const pm=mCanvas.clone();pm.color.setHex(0x9a8a6a);for(let k=0;k<2+((r()*3)|0);k++){const pa=new THREE.Mesh(new THREE.PlaneGeometry(.22+r()*.15,.18+r()*.12),pm);const s=r()<.5?-1:1;const a=Math.atan2(1.3,.82);
+   pa.position.set(s*(.25+r()*.4),.35+r()*.6,(r()-.5)*1.3);pa.rotation.set(0,s*Math.PI/2,0);pa.rotateX(-(Math.PI/2-a)*s*0);pa.rotation.z=s*(Math.PI/2-a);pa.translateZ(.012);g.add(pa)}}
+ if(kind==='studnia'&&r()<.5){g.traverse(o=>{const p=o.geometry&&o.geometry.parameters;if(o.isMesh&&o.material===mStone&&p&&Math.abs((p.radiusTop||0)-.36)<1e-6)o.visible=false});
+  for(let k=0;k<4;k++){const y=.07+k*.13;g.add(tbox(.8,.13,.13,palLog(T.pal),0,y,.34+(k%2)*.02,0,1.4),tbox(.8,.13,.13,palLog(T.pal),0,y,-.34,0,1.4),tbox(.13,.13,.7,palLog(T.pal),.34,y+.065,0,0,1.4),tbox(.13,.13,.7,palLog(T.pal),-.34,y+.065,0,0,1.4))}}
+ if(kind==='zagroda'&&r()<.5)g.traverse(o=>{const p=o.geometry&&o.geometry.parameters;if(o.isMesh&&o.material===mPlank&&p&&Math.abs((p.width||0)-.62)<1e-6){o.material=mWattle;o.scale.y=3.2;o.position.y=Math.max(o.position.y,.27)}});
+ if(kind==='spizarnia'&&T.q>=2)for(const[x,z]of[[-.65,-.6],[.65,-.6],[-.65,.6],[.65,.6]])g.add(mesh(new THREE.CylinderGeometry(.2,.12,.08,8),matStone,x,.62,z));
+}
+{const _ac2=addCharacter;addCharacter=function(g,kind){try{variants(g,kind)}catch(e){console.warn('odmiany',e)}_ac2(g,kind)}}
+// szyld według wykonania
+{const _st=signTex;signTex=function(key){const T=STY;const q=T?T.q:2;const k2=key+'|'+q;if(SIGNT[k2])return SIGNT[k2];const m=_st(key);delete SIGNT[key];
+  if(q!==2){const c=m.map.image;const x=c.getContext('2d');if(q===1){x.fillStyle='rgba(30,20,10,.35)';x.fillRect(0,0,96,96)}else{x.strokeStyle='#8a2a22';x.lineWidth=5;x.strokeRect(9,9,78,78);x.fillStyle='#e0c060';[[12,12],[84,12],[12,84],[84,84]].forEach(([a,b])=>{x.beginPath();x.arc(a,b,4,0,6.3);x.fill()})}m.map.needsUpdate=true}
+  return SIGNT[k2]=m}}
+// karta budynku: wykonanie i trwałość
+{const _rs=renderSel;renderSel=function(){_rs();try{if(!S||selB===null)return;const b=bById(selB);if(!b||!bDone(b))return;const el=$('sel');if(!el||el.querySelector('.q18'))return;
+  const q=qOf(b.kind,b);const nm=['surowe','porządne','mistrzowskie'][q-1];const wr=b.kind==='szalas'?'szałas niszczeje najszybciej':b.kind==='dom'?'dom z piecem niszczeje najwolniej':(BD[b.kind].wk||BD[b.kind].store)?['zużycie zwykłe','zużycie o 15% wolniejsze','zużycie o 30% wolniejsze'][q-1]:'';
+  const tip=q<3&&(BD[b.kind].wk||BD[b.kind].store)?' Rozbudowa poprawi wykonanie.':q<3&&b.kind==='chata'?' Dwie dobudówki dadzą mistrzowskie wykończenie.':'';
+  const h=el.querySelector('h4');if(h)h.insertAdjacentHTML('afterend',`<p class="mut q18">Wykonanie: <b style="color:var(--gold2)">${nm}</b>${wr?' · '+wr:''}.${tip}</p>`)}catch(e){}}}
+// chwila rozbudowy: kurz i dźwięk
+{const _fp=finishProj;finishProj=function(b){const t=b.proj&&b.proj.t;_fp(b);if(t==='lv'||t==='ext'||(t&&t!=='rep')){try{const c=bCenter(b);dustPuff(c.x,Hy(c.x,c.z),c.z,10,BD[b.kind].w);if(typeof sfx==='function')sfx('bell')}catch(e){}}}}
+// wykonanie widać także w skali i obejściu: surowe niższe i mniejsze, mistrzowskie większe, z płotkiem i furtką
+function picket(g,kind,T){const fw=BD[kind].w,fh=BD[kind].h;if(fw<2)return;const z=fh/2+.02,mat=T.pal==='white'?mTrim:mPlank;const gap=.55,half=fw/2-.08;
+ for(const s of[-1,1]){const x0=s*gap/2,x1=s*half;const len=Math.abs(x1-x0);const cx=(x0+x1)/2;g.add(tbox(len,.05,.03,mat,cx,.32,z,0,2),tbox(len,.05,.03,mat,cx,.16,z,0,2));
+  for(let k=0;k<=Math.round(len/.16);k++){const x=x0+s*k*.16;const p=tbox(.045,.42,.025,mat,x,.21,z+.02,0,2);g.add(p);const tip=tbox(.04,.04,.02,mat,x,.43,z+.02);tip.rotation.z=Math.PI/4;g.add(tip)}}}
+{const _ac3=addCharacter;addCharacter=function(g,kind){_ac3(g,kind);const T=STY;if(!T)return;
+  const sc=T.q===1?.92:T.q===3?1.06:1;if(sc!==1)for(const c of g.children){c.position.x*=sc;c.position.z*=sc;c.position.y*=sc;c.scale.multiplyScalar(sc)}
+  if(T.q===3&&kind!=='domwsp'&&!['zagroda','cmentarz','ogrodziol','pomost','pasieka','studnia','gaj','wieza','mielerz','szalas'].includes(kind))try{picket(g,kind,T)}catch(e){}}}

@@ -1,6 +1,6 @@
 ---
 title: "Przystań — Księga gry"
-subtitle: "Wersja 1.9 · 9 października 2026 · Epoka I ukończona"
+subtitle: "Wersja 1.10 · 9 października 2026 · Epoka I ukończona"
 ---
 
 # 1. Czym jest Przystań
@@ -577,6 +577,13 @@ Wybór jest ostateczny. Po wyborze gra pokazuje Księgę rozbitków: ilu wyszło
   - koniki na szczycie dachu (zawsze na domu z piecem i chacie wiecowej), malowane okiennice i drzwi (niebieskie, zielone, czerwone, fioletowe), ganek z ławą, przybudówka z drewnem albo beczkami, płot z garnkami na kołkach, wiązki ziół i czosnku pod okapem, ława pod ścianą;
   - kuźnia ma miech i podkowy, łaźnia osmolone ściany i parę nad dachem, chata wiecowa podcień na słupach i koniki na obu szczytach;
   - warsztaty i miejsca pracy mają szyld z wymalowanym znakiem rzemiosła (drewno, kamień, glina, ryby, skóry, narzędzia, odzież, zboże, zioła, miód i inne), więc z daleka widać, co gdzie się robi.
+- **Wykonanie budynków (od wersji 1.10):** każdy budynek ma wykonanie surowe, porządne albo mistrzowskie. Dla warsztatów i magazynów zależy od poziomu (1, 2, 3), dla domów od rodzaju: szałas surowy, chata porządna (z dwiema dobudówkami mistrzowska), dom z piecem mistrzowski. Pozostałe budynki są porządne.
+  - surowe: niższe i mniejsze, ciemne albo posiwiałe drewno, darń albo stara strzecha z łatami, drewniane podwaliny zamiast kamieni, małe okna bez malowanych okiennic, bez koników, szyld z ciemnej deski;
+  - porządne: kamienna podmurówka, różne dachy, czasem koniki, malowane okiennice, ganki, ławy i garnki na płocie;
+  - mistrzowskie: większe, z wyższą, podwójną podmurówką, gontem, deskami albo świeżą strzechą, bielone albo jasne ściany, zawsze koniki i malowane okiennice, białe obramienia okien z daszkiem, skrzynki z kwiatami, płotek ze sztachet z furtką, szyld z czerwoną ramką i złotymi ćwiekami;
+  - karta budynku mówi, jakie jest wykonanie i o ile wolniej budynek się zużywa (warsztaty: o 15% na poziomie 2, o 30% na poziomie 3), oraz co je poprawi;
+  - zakończenie rozbudowy, poziomu albo dobudówki to chwila: kurz wokół budynku i dźwięk dzwonka;
+  - pozostałe budynki też mają odmiany: szałasy w różnych odcieniach płótna z łatami, studnie kamienne albo w zrębie z bali, zagrody z żerdzi albo z plecionki, spiżarnie na kamiennych „grzybkach”, ściany w kolorze budynku.
 - **Dźwięk:** szum morza i wiatru, ptaki za dnia, świerszcze nocą, trzask ognia, dzwonek wydarzeń i fujarka wieczorami oraz w czasie świąt.
 
 # 14. Interfejs
@@ -637,6 +644,7 @@ Wybór jest ostateczny. Po wyborze gra pokazuje Księgę rozbitków: ilu wyszło
 | 1.8.2 | poprawka: czarne prostokąty wracały na telefonie; światło z nieba liczone jako sonda światła zamiast tekstury otoczenia (PMREM), ujemne barwy zerowane przed tonowaniem |
 | 1.8.3 | poprawka: rozbudowa domu (szałas w chatę, chata w dom) nie zabiera już rodzinie spiżarki; w czasie budowy zapas zostaje w starym domu w granicach jego pojemności |
 | 1.9 | budynki z charakterem: każdy budynek inny (ściany, dachy, spadek, okap), koniki, malowane okiennice, ganki, przybudówki, garnki na płocie, zioła pod okapem, szyldy rzemiosł, wyraźniejsza kuźnia, łaźnia i chata wiecowa |
+| 1.10 | wykonanie budynków: surowe, porządne i mistrzowskie, wyraźnie widoczne po rozbudowie (wielkość, podmurówka, dach, okiennice, obramienia okien, kwiaty, płotek, szyld); karta budynku pokazuje wykonanie i trwałość; odmiany szałasów, studni, zagród i spiżarni |
 
 # 17. Immersja i powroty
 
@@ -703,6 +711,7 @@ Kolejność dalszej pracy. Każda wersja kończy się czymś, w co da się zagra
 | 1.7 Grafika (gotowe) | światło, woda, teren, trawa i liście, ludzie, mgła, starzenie się budynków |
 | 1.8 Grafika II (gotowe) | nowy Three.js, światło z nieba, cienie, okluzja, faktury terenu, barwy pór roku, nowe modele ludzi, drzew i domów |
 | 1.9 Budynki z charakterem (gotowe) | każdy budynek inny, słowiańskie detale, szyldy rzemiosł |
+| 1.10 Wykonanie budynków (gotowe) | surowe, porządne, mistrzowskie; rozbudowa widoczna na budynku i w karcie |
 
 **Epoka II** (po 1.0): trzy drogi z rozdrożami opisanymi wyżej. Przez cały czas obowiązuje: klimat słowiański bez magii, brak przybyszów, decyzje gracza w scenach i na wiecu, a życie ludzi toczy się samo.
 
