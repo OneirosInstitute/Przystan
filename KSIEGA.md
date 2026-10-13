@@ -1,6 +1,6 @@
 ---
 title: "Przystań — Księga gry"
-subtitle: "Wersja 1.8.3 · 9 października 2026 · Epoka I ukończona"
+subtitle: "Wersja 1.9 · 9 października 2026 · Epoka I ukończona"
 ---
 
 # 1. Czym jest Przystań
@@ -571,6 +571,12 @@ Wybór jest ostateczny. Po wyborze gra pokazuje Księgę rozbitków: ilu wyszło
   - nowe drzewa: sosny z wysokim rudym pniem i koroną w górze, świerki z postrzępionymi piętrami, dęby i brzozy z kęp liści, pnie z korą i gałęziami;
   - domy z prawdziwych, okrągłych bali układanych na zakładkę, grube strzechy z wałkami na okapach, szczytach i kalenicy;
   - rysowane jest tylko to, co jest w kadrze: drzewa, krzaki, kępki i kamienie poza ekranem nie obciążają telefonu (w typowym widoku kilkanaście razy mniej trójkątów).
+- **Budynki z charakterem (od wersji 1.9):** każdy budynek jest inny od sąsiada, a ten sam budynek wygląda tak samo po wczytaniu gry:
+  - ściany: drewno naturalne, ciemne (osmolone), posiwiałe albo bielone wapnem;
+  - dachy: strzecha, stara strzecha, gont, deski albo darń porośnięta trawą; różny spadek i okap; dom z piecem i chata wiecowa mają gont albo deski;
+  - koniki na szczycie dachu (zawsze na domu z piecem i chacie wiecowej), malowane okiennice i drzwi (niebieskie, zielone, czerwone, fioletowe), ganek z ławą, przybudówka z drewnem albo beczkami, płot z garnkami na kołkach, wiązki ziół i czosnku pod okapem, ława pod ścianą;
+  - kuźnia ma miech i podkowy, łaźnia osmolone ściany i parę nad dachem, chata wiecowa podcień na słupach i koniki na obu szczytach;
+  - warsztaty i miejsca pracy mają szyld z wymalowanym znakiem rzemiosła (drewno, kamień, glina, ryby, skóry, narzędzia, odzież, zboże, zioła, miód i inne), więc z daleka widać, co gdzie się robi.
 - **Dźwięk:** szum morza i wiatru, ptaki za dnia, świerszcze nocą, trzask ognia, dzwonek wydarzeń i fujarka wieczorami oraz w czasie świąt.
 
 # 14. Interfejs
@@ -630,6 +636,7 @@ Wybór jest ostateczny. Po wyborze gra pokazuje Księgę rozbitków: ilu wyszło
 | 1.8.1 | poprawka: na telefonach (Adreno) przy brzegu i na granicy nieodkrytego terenu pojawiały się czarne prostokąty; faktura terenu liczy teraz pochodne poza rozgałęzieniami, a obróbka obrazu nie przepuszcza błędnych pikseli do poświaty; na poziomie Wysoka teren ma lżejszą fakturę |
 | 1.8.2 | poprawka: czarne prostokąty wracały na telefonie; światło z nieba liczone jako sonda światła zamiast tekstury otoczenia (PMREM), ujemne barwy zerowane przed tonowaniem |
 | 1.8.3 | poprawka: rozbudowa domu (szałas w chatę, chata w dom) nie zabiera już rodzinie spiżarki; w czasie budowy zapas zostaje w starym domu w granicach jego pojemności |
+| 1.9 | budynki z charakterem: każdy budynek inny (ściany, dachy, spadek, okap), koniki, malowane okiennice, ganki, przybudówki, garnki na płocie, zioła pod okapem, szyldy rzemiosł, wyraźniejsza kuźnia, łaźnia i chata wiecowa |
 
 # 17. Immersja i powroty
 
@@ -695,6 +702,7 @@ Kolejność dalszej pracy. Każda wersja kończy się czymś, w co da się zagra
 | 1.6 Pamięć wyspy (gotowe) | wiedza, która żyje w ludziach i może zginąć, miejsca nazywane od wydarzeń |
 | 1.7 Grafika (gotowe) | światło, woda, teren, trawa i liście, ludzie, mgła, starzenie się budynków |
 | 1.8 Grafika II (gotowe) | nowy Three.js, światło z nieba, cienie, okluzja, faktury terenu, barwy pór roku, nowe modele ludzi, drzew i domów |
+| 1.9 Budynki z charakterem (gotowe) | każdy budynek inny, słowiańskie detale, szyldy rzemiosł |
 
 **Epoka II** (po 1.0): trzy drogi z rozdrożami opisanymi wyżej. Przez cały czas obowiązuje: klimat słowiański bez magii, brak przybyszów, decyzje gracza w scenach i na wiecu, a życie ludzi toczy się samo.
 

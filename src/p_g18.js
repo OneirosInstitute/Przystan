@@ -258,8 +258,8 @@ const mBal=[0x8a6a46,0x7a5c3c,0x6e5236].map(c=>TM(TX.planks,c));const mBalEnd=M(
   for(let i=n0;i<g.children.length;i++){const c=g.children[i];const p=c.geometry&&c.geometry.parameters;if(p&&Math.abs(p.width-w)<1e-6&&Math.abs(p.height-h)<1e-6&&Math.abs(p.depth-d)<1e-6){
    c.scale.set((w-.16)/w,1,(d-.16)/d);c.material=matDark;
    const r=.1,step=.19,y0=.3+r*.9;let row=0;for(let y=y0;y<.3+h-r*.4;y+=step,row++){const off=row%2?step/2:0;
-    const lx=cyl(r,w+.26,mBal[(row+1)%3],0,y+off*0,0,0,0,Math.PI/2,8);lx.position.z=d/2-r*.6;g.add(lx);const lx2=lx.clone();lx2.position.z=-d/2+r*.6;lx2.material=mBal[row%3];g.add(lx2);
-    const lz=cyl(r,d+.26,mBal[row%3],w/2-r*.6,y+step/2,0,Math.PI/2,0,0,8);if(y+step/2<.3+h-r*.3){g.add(lz);const lz2=lz.clone();lz2.position.x=-w/2+r*.6;lz2.material=mBal[(row+2)%3];g.add(lz2)}}
+    const lx=cyl(r,w+.26,balM((row+1)%3),0,y+off*0,0,0,0,Math.PI/2,8);lx.position.z=d/2-r*.6;g.add(lx);const lx2=lx.clone();lx2.position.z=-d/2+r*.6;lx2.material=balM(row%3);g.add(lx2);
+    const lz=cyl(r,d+.26,balM(row%3),w/2-r*.6,y+step/2,0,Math.PI/2,0,0,8);if(y+step/2<.3+h-r*.3){g.add(lz);const lz2=lz.clone();lz2.position.x=-w/2+r*.6;lz2.material=balM((row+2)%3);g.add(lz2)}}
    break}}
   // usuń stare krótkie końcówki bali, nowe bale wystają same
   for(let i=g.children.length-1;i>=n0;i--){const c=g.children[i];const p=c.geometry&&c.geometry.parameters;if(c.material===matLog&&p&&p.height===.34&&p.radiusTop===.075)g.remove(c)}}}
@@ -297,3 +297,80 @@ compMat.fragmentShader=compMat.fragmentShader.replace('vec3 c=texture2D(tCol,vUv
 
 // ujemne barwy przed tonowaniem też zerujemy
 compMat.fragmentShader=compMat.fragmentShader.replace('c=toS(aces(c));','c=toS(aces(max(c,vec3(0.))));');compMat.needsUpdate=true;
+
+
+// ================= 1.9 Budynki z charakterem: każdy dom inny, słowiańskie detale =================
+let STY=null;
+const TXN=ctex(128,128,(x,w,h)=>{const n=4,ph=h/n;for(let i=0;i<n;i++){const b=205+RT()*30;x.fillStyle=`rgb(${b|0},${b|0},${b|0})`;x.fillRect(0,i*ph,w,ph);
+ x.strokeStyle='rgba(60,60,60,.22)';for(let k=0;k<7;k++){x.beginPath();const yy=i*ph+2+RT()*(ph-4);x.moveTo(0,yy);x.bezierCurveTo(w*.3,yy+3,w*.6,yy-3,w,yy+1);x.stroke()}
+ x.fillStyle='rgba(40,40,40,.35)';x.fillRect(0,i*ph,w,1.5);for(let k=0;k<2;k++){x.fillStyle='rgba(50,50,50,.35)';x.beginPath();x.ellipse(RT()*w,i*ph+ph*.5,2.5,1.6,0,0,6.3);x.fill()}}});
+TXN.repeat.set(1,1);
+const PAL={nat:[0x9a7652,0x8a6846,0x7a5c3c],dark:[0x5a4430,0x4e3a2a,0x463424],grey:[0xa8a296,0x9a948a,0x8c877e],white:[0xf4f6f4,0xeceeee,0xe6eaee]};
+const PALM={};function palMats(k){return PALM[k]||(PALM[k]=PAL[k].map(c=>new THREE.MeshStandardMaterial({map:TXN,color:c,roughness:.92})))}
+function balM(i){return palMats(STY&&STY.pal||'nat')[i%3]}
+const mBoards=TM(TX.planks,0x9a8670),mSod=TM(TX.thatch,0x7c9a4e),mDarkThatch=TM(TX.thatch,0x6a5e44),mPlankW=new THREE.MeshStandardMaterial({map:TXN,color:0xf0f2f0,roughness:.92}),mPlankGr=new THREE.MeshStandardMaterial({map:TXN,color:0xa29c90,roughness:.92});
+const SHC={};function shutM(c){return SHC[c]||(SHC[c]=TM(TX.planks,c))}
+const mPot=M(0x9a5a34,{flatShading:false,roughness:.7}),mPot2=M(0x6a4a3a,{flatShading:false,roughness:.6}),mHerb=M(0x6a7a3a),mGarlic=M(0xe8e0cc);
+function styPick(r,list){let t=0;list.forEach(x=>t+=x[1]);let v=r()*t;for(const x of list){if(v<x[1])return x[0];v-=x[1]}return list[0][0]}
+function styFor(kind,bb){const r=rng(((bb&&bb.id)||((Math.random()*1e6)|0))*104729+kind.length*131+7);const house=kind==='chata'||kind==='dom';
+ const pal=['kuznia','laznia','mielerz','drwal'].includes(kind)?(r()<.7?'dark':'nat'):house?styPick(r,[['nat',.4],['white',.3],['grey',.15],['dark',.15]]):styPick(r,[['nat',.5],['grey',.25],['dark',.2],['white',.05]]);
+ const roof=house?styPick(r,[[mShingle,.32],[mThatch,.3],[mThatchOld,.12],[mBoards,.14],[mSod,.12]]):styPick(r,[[mThatch,.3],[mThatchOld,.2],[mBoards,.2],[mShingle,.12],[mSod,.18]]);
+ const sh=house||r()<.4?styPick(r,[[0x4a6a8a,.3],[0x3e5a74,.15],[0x5a7a4a,.2],[0x8a3a2a,.15],[0x6a5a8a,.08],[0,.12]]):0;
+ const roof2=kind==='kuznia'?mDarkThatch:(kind==='dom'||kind==='domwsp')?(r()<.62?mShingle:mBoards):roof;
+ return{r,kind,pal,roof:roof2,sh,pitch:.85+r()*.42,over:.22+r()*.22,jw:.93+r()*.08,jh:.92+r()*.18,dx:(r()-.5)*.5,
+  koniki:kind==='dom'||kind==='domwsp'||r()<(house?.65:.3),ganek:house&&r()<.6,lean:r()<(house?.45:.3),pots:r()<(house?.5:.2),herbs:r()<.4,bench:r()<.45,gables:[],house:null}}
+const ROOFS=[mThatch,mThatchOld,mShingle];
+{const _lh=logHouse;logHouse=function(g,w,d,h,opt){opt=Object.assign({},opt||{});const S0=STY;
+  if(S0&&!S0.house){w*=S0.jw;h*=S0.jh;opt.rh=(opt.rh||h*.85)*S0.pitch;if(opt.over===undefined)opt.over=S0.over;if(!opt.roof||ROOFS.includes(opt.roof))opt.roof=S0.roof;if(opt.dx===undefined)opt.dx=S0.dx;
+   S0.house={w,d,h,rh:opt.rh,dx:opt.dx||0,y0:.3,type:'log'}}
+  return _lh(g,w,d,h,opt)}}
+{const _ph=plankHut;plankHut=function(g0,w,d,h,opt){opt=Object.assign({},opt||{});const S0=STY;let rec=null;
+  if(S0&&!S0.house){w*=S0.jw;h*=S0.jh;opt.rh=(opt.rh||h*.8)*S0.pitch;if(opt.over===undefined)opt.over=S0.over;if(!opt.roof||ROOFS.includes(opt.roof))opt.roof=S0.roof;rec={w,d,h,rh:opt.rh,dx:opt.dx||0,y0:.16,type:'plank'};S0.house=rec}
+  const g=_ph(g0,w,d,h,opt);
+  if(S0&&(S0.pal==='white'||S0.pal==='grey'))g.traverse(o=>{const p=o.geometry&&o.geometry.parameters;if(o.isMesh&&(o.material===mPlank||o.material===mPlankG)&&p&&p.height>.6)o.material=S0.pal==='white'?mPlankW:mPlankGr});
+  if(rec)rec.grp=g;return g}}
+{const _sh=shed;shed=function(g,w,d,h,roof){if(STY&&(!roof||ROOFS.includes(roof)))roof=STY.roof;return _sh(g,w,d,h*(STY?STY.jh:1),roof)}}
+{const _ga=gable;gable=function(w,d,h,mat,y,over,sc){const grp=_ga(w,d,h,mat,y,over,sc);if(STY)STY.gables.push({grp,w,d,h,mat});return grp}}
+{const _wi=win;win=function(g,x,y,z,ry){_wi(g,x,y,z,ry);const wg=g.children[g.children.length-1];if(STY&&STY.sh&&wg)wg.traverse(o=>{if(o.isMesh&&o.material===mPlankD)o.material=shutM(STY.sh)})}}
+{const _do=door;door=function(g,x,z,ry,w,h){const d=_do(g,x,z,ry,w,h);if(STY&&STY.sh&&STY.r()<.6&&d)d.traverse(o=>{if(o.isMesh&&o.material===mPlankD)o.material=shutM(STY.sh)});return d}}
+// koniki na szczycie dachu
+function koniki(gb){const R=gb.grp.userData.ridge;if(!R)return;const y=R.y,D=R.D,ang=Math.atan2(R.h,R.W);const mt=matLog2;
+ for(const z of[-D-.02,D+.02])for(const s of[-1,1]){const b=tbox(.05,.62,.04,mt,s*.1,y+.12,z);b.rotation.z=s*-(Math.PI/2-ang)*.55;gb.grp.add(b);
+  const hd=tbox(.16,.07,.045,mt,s*.27,y+.38,z);hd.rotation.z=s*-.5;gb.grp.add(hd);const ear=tbox(.03,.06,.04,mt,s*.22,y+.43,z);gb.grp.add(ear)}}
+function ganek(g,H){const z0=H.d/2,x=H.dx,top=H.y0+H.h*.8;g.add(tbox(.07,top,.07,matLog2,x-.42,top/2,z0+.42),tbox(.07,top,.07,matLog2,x+.42,top/2,z0+.42));
+ const pr=gable(1.05,.5,.3,STY.roof,top,.06);pr.position.set(x,0,z0+.2);g.add(pr);g.add(tbox(1.0,.06,.5,mPlank,x,.06,z0+.25,0,2))}
+function leanTo(g,H,kind){const fw=BD[kind].w,margin=(fw-H.w)/2;const lw=Math.max(.3,Math.min(.55,margin+.18));const s=STY.r()<.5?-1:1;const x0=s*(H.w/2+lw/2);const hh=H.y0+H.h*.72;
+ for(const z of[-H.d/2+.08,H.d/2-.08])g.add(tbox(.06,hh*.8,.06,matDark,x0+s*lw/2-s*.03,hh*.4,z));
+ const rf=tbox(lw+.12,.05,H.d+.1,STY.roof===mSod?mSod:mBoards,x0,hh*.92,0,0,2);rf.rotation.z=s*-.32;g.add(rf);
+ if(STY.r()<.6)woodpile(g,x0,0,Math.max(4,Math.round(H.d*3)),Math.PI/2);else{barrel(g,x0,-H.d*.2,.7);crate(g,x0,H.d*.2,.3)}}
+function potsFence(g,kind){const fw=BD[kind].w,fh=BD[kind].h;const s=STY.r()<.5?-1:1;const x=s*(fw/2-.35),z=fh/2-.12;const fg=new THREE.Group();fg.position.set(x,0,z);
+ fg.add(tbox(.8,.3,.04,mWattle,0,.17,0,0,2));for(const q of[-.38,0,.38]){fg.add(tbox(.04,.5,.04,matDark,q,.25,0));if(STY.r()<.8){const p=mesh(new THREE.SphereGeometry(.08,8,6,0,6.283,0,1.7),STY.r()<.5?mPot:mPot2,q,.55,0);p.rotation.x=Math.PI;g.add(fg);fg.add(p)}}g.add(fg)}
+function herbs(g,H){const z=H.d/2+.12,y=H.y0+H.h-.04;for(let k=0;k<3;k++){const c=new THREE.Mesh(new THREE.ConeGeometry(.05,.18,5),k===1?mGarlic:mHerb);c.position.set(H.dx+(k-1)*.18+(H.dx>0?-.5:.5),y-.1,z);c.rotation.x=Math.PI;c.castShadow=true;g.add(c)}}
+function bench(g,H){const x=H.dx>0?H.dx-.75:H.dx+.75,z=H.d/2+.2;g.add(tbox(.62,.05,.18,mPlank,x,.3,z,0,2),tbox(.05,.28,.14,matDark,x-.25,.14,z),tbox(.05,.28,.14,matDark,x+.25,.14,z))}
+function addCharacter(g,kind){const T=STY;if(!T)return;const H=T.house;const main=T.gables.slice().sort((a,b)=>b.w*b.d-a.w*a.d)[0];
+ try{if(main&&T.koniki&&H)koniki(main);
+  if(H&&H.type==='log'){if(T.ganek)ganek(g,H);if(T.lean)leanTo(g,H,kind);if(T.herbs)herbs(g,H);if(T.bench&&!T.ganek)bench(g,H)}
+  else if(H&&H.type==='plank'){const G=H.grp||g;if(T.herbs)herbs(G,H);if(T.lean&&BD[kind].w>=2)leanTo(G,H,kind)}
+  if(T.pots&&BD[kind].w>=2&&BD[kind].h>=2)potsFence(g,kind);
+  if(kind==='domwsp'&&main){for(const gb of T.gables)if(gb!==main&&gb.w>2)koniki(gb);
+   const top=.3+1.25*.82;for(let k=0;k<5;k++)g.add(tbox(.08,top,.08,matLog2,-1.6+k*.8,top/2,1.25));const pr=gable(3.6,.55,.25,T.roof,top,.05);pr.position.set(0,0,1.0);g.add(pr)}
+  if(kind==='kuznia'){const bl=new THREE.Group();bl.position.set(.05,0,-.45);bl.add(tbox(.38,.12,.26,mHide,0,.72,0,0,2),tbox(.42,.04,.3,mPlankD,0,.64,0,0,2),tbox(.42,.04,.3,mPlankD,0,.8,0,0,2));g.add(bl);
+   for(let k=0;k<3;k++){const hs=new THREE.Mesh(new THREE.TorusGeometry(.07,.015,4,10,4.2),M(0x3a3c40,{metalness:.5,roughness:.4}));hs.position.set(-.85+k*.16,1.05,.62);g.add(hs)}}
+  if(kind==='laznia'){g.add(cyl(.16,.28,mPlank,.95,.14,-.45,0,0,0,9));const st=new THREE.Sprite(new THREE.SpriteMaterial({map:softTex,transparent:true,opacity:.35,depthWrite:false,color:0xe8ece8}));st.scale.set(1.2,1.2,1);st.position.set(-.45,1.9,-.3);g.add(st)}
+ }catch(e){console.warn('budynek',kind,e)}}
+{const _mb=makeBuildingModel;makeBuildingModel=function(kind,bb){if(GFX.level===0&&!window.__b19)return _mb(kind,bb);STY=styFor(kind,bb);try{const g=_mb(kind,bb);addCharacter(g,kind);return g}finally{STY=null}}}
+window.__mk18={makeBuildingModel:(k,b)=>makeBuildingModel(k,b),BD,BKEYS};
+// szyldy rzemiosła: deska z wymalowanym znakiem przy wejściu
+const SIGNK={drwal:'drewno',kamien:'kamien',glinianka:'glina',ruda:'ruda',zbieracz:'zywnosc',mysliwy:'skory',pomost:'woda',pracownia:'deski',warsztat:'narz',kuznia:'narz',szwalnia:'odziez',mielerz:'wegiel',cegielnia:'cegla',drewutnia:'opal',garncarnia:'glina',piekarnia:'ziarno',zarna:'ziarno',serownia:'zywnosc',kiszarnia:'zapasy',spizarnia:'zapasy',sklad:'zapasy',izbanauki:'wiedza',izbachorych:'ziola',pasieka:'miod',ogrodziol:'ziola',lesnik:'natura',zagroda:'skory',laznia:'woda'};
+const SIGNT={};
+function signTex(key){if(SIGNT[key])return SIGNT[key];const c=document.createElement('canvas');c.width=c.height=96;const x=c.getContext('2d');
+ x.fillStyle='#7a5a38';x.fillRect(0,0,96,96);x.fillStyle='rgba(40,25,12,.35)';for(let i=0;i<4;i++)x.fillRect(0,i*24+22,96,2);x.strokeStyle='#3a2414';x.lineWidth=6;x.strokeRect(3,3,90,90);
+ x.save();x.translate(48-24*1.6,48-24*1.6);x.scale(1.6,1.6);x.strokeStyle='#efe2c0';x.lineWidth=2.2;x.lineCap='round';x.lineJoin='round';const svg=IC[key]||'';
+ (svg.match(/d="([^"]+)"/g)||[]).forEach(m=>{x.stroke(new Path2D(m.slice(3,-1)))});(svg.match(/<circle[^>]*>/g)||[]).forEach(m=>{const g=a=>+(m.match(new RegExp(a+'="([\\d.]+)"'))||[0,0])[1];x.beginPath();x.arc(g('cx'),g('cy'),g('r'),0,6.283);x.stroke()});
+ (svg.match(/<rect[^>]*>/g)||[]).forEach(m=>{const g=a=>+(m.match(new RegExp(a+'="([\\d.]+)"'))||[0,0])[1];x.strokeRect(g('x'),g('y'),g('width'),g('height'))});(svg.match(/<ellipse[^>]*>/g)||[]).forEach(m=>{const g=a=>+(m.match(new RegExp(a+'="([\\d.]+)"'))||[0,0])[1];x.beginPath();x.ellipse(g('cx'),g('cy'),g('rx'),g('ry'),0,0,6.283);x.stroke()});x.restore();
+ const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=4;return SIGNT[key]=new THREE.MeshStandardMaterial({map:t,roughness:.9,side:THREE.DoubleSide})}
+function tradeSign(g,kind){const key=SIGNK[kind];if(!key||!IC[key])return;const fw=BD[kind].w,fh=BD[kind].h;const s=STY&&STY.r()<.5?-1:1;const x=s*(fw/2-.18),z=fh/2-.14;
+ const sg=new THREE.Group();sg.position.set(x,0,z);sg.add(tbox(.06,1.2,.06,matLog2,0,.6,0));sg.add(tbox(.5,.04,.04,matLog2,-s*.22,1.15,0));
+ const bd=new THREE.Mesh(new THREE.PlaneGeometry(.42,.42),signTex(key));bd.position.set(-s*.27,.86,0);bd.castShadow=true;sg.add(bd);
+ for(const q of[-.14,.14])sg.add(tbox(.008,.08,.008,matDark,-s*.27+q,1.1,0));g.add(sg)}
+{const _ac=addCharacter;addCharacter=function(g,kind){_ac(g,kind);try{tradeSign(g,kind)}catch(e){console.warn('szyld',e)}}}
