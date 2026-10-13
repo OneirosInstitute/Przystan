@@ -2,7 +2,7 @@
 /* ================= 0.21: gospodarstwa — spiżarki rodzin, wieczory i prządki, dowóz materiałów, jakość wyrobów i pamiątki ================= */
 // ---------- spiżarki rodzin ----------
 const SPIZ_CAP={szalas:8,chata:20,dom:32};
-function spizCap(f){const h=f&&f.home?bById(f.home):null;if(!h||!bDone(h))return 0;return(SPIZ_CAP[h.kind]||10)+(typeof hasExt==='function'&&hasExt(h,'piwnica')?15:0)}
+function spizCap(f){const h=f&&f.home?bById(f.home):null;if(!h)return 0;let k=h.kind;if(!bDone(h)){if(!h.upFrom)return 0;k=h.upFrom}return(SPIZ_CAP[k]||10)+(typeof hasExt==='function'&&hasExt(h,'piwnica')?15:0)}
 function pNeed(p){return p.age<3?.3:p.age<12?.6:p.age>55?.8:1}
 function fedOf(p){return p.fedR===undefined?S.fedR:p.fedR}
 function famNeed(fid){return K*famMembers(fid).filter(p=>p.job!=='wyp').reduce((a,p)=>a+pNeed(p),0)*(law('oszczedne')?.8:1)}

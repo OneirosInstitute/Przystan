@@ -17,7 +17,7 @@ function upgradeB(id){const b=bById(id);if(!b||!bDone(b))return;const to=UPG[b.k
  Object.entries(c).forEach(([k,v])=>S.res[k]-=v);
  const old=bMesh[b.id];if(old){bGroup.remove(old);if(old.userData.scaf)bGroup.remove(old.userData.scaf)}
  log('Rozbudowa: '+BD[b.kind].n.toLowerCase()+' staje się '+(to==='chata'?'chatą z bali':'domem z piecem')+'.');
- b.kind=to;b.prog=0;b.work=BD[to].work;b.workers=0;placeFootprint(to,b.i,b.j,b.id);
+ b.upFrom=b.kind;b.kind=to;b.prog=0;b.work=BD[to].work;b.workers=0;placeFootprint(to,b.i,b.j,b.id);
  const d=BD[to];nodes.forEach(n=>{if(n.type!=='fish'&&n.i>=b.i&&n.i<b.i+d.w&&n.j>=b.j&&n.j<b.j+d.h){n.gone=1;n.amt=0;S.nodeAmt[n.id]=0;nodeVis(n)}});
  addBuildingMesh(b);if(freeCount()===0)toast('Nikt nie buduje: wszyscy mają pracę.');renderSel();renderPanel()}
 function removeBuilding(b,why){S.bld=S.bld.filter(x=>x!==b);const d=BD[b.kind];
