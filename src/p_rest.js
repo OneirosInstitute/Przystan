@@ -531,7 +531,7 @@ function planJob(p){
  // robotnicy: budowa, potem wrak
  const s=S.bld.find(x=>(!bDone(x)||x.proj)&&(x.workers||0)<4);
  if(s){const e=entryOf(s.kind,s.i,s.j);if(e&&go(p,e,'build',s)){s.workers=(s.workers||0)+1;p.act='buduje: '+BD[s.kind].n.toLowerCase();return true}}
- if(wreckTodo()){if(go(p,wreck.stand,'wreck',null)){p.act='przy wraku';return true}}
+ if(wreckTodo()){if(goWreck(p)){p.act='przy wraku';return true}}
  p.act='bez zajęcia';return false}
 function finishTrip(p,items){p.carry=items;p.act='niesie: '+items.map(c=>RN[c.res].toLowerCase()).join(', ');
  const food=items.some(c=>FOOD.includes(c.res));const t=storeTile(p,food);if(!go(p,t,'deposit',null)){deposit(p);p.state='idle'}}
@@ -894,7 +894,7 @@ function renderPanel(){
   const unread=Object.keys(S.books).filter(k=>S.books[k]===1);h+=`<div class="row"><div class="n">Czytelnicy<small>${unread.length?'Do przeczytania: '+unread.map(k=>'„'+BOOKS[k]+'” '+Math.round(100*(S.readP[k]||0)/200)+'%').join(', '):'Brak nieprzeczytanych ksiąg.'}</small></div><button class="mini" data-al="czyt" data-d="-1">−</button><span class="cnt">${S.alloc.czyt||0}</span><button class="mini" data-al="czyt" data-d="1">+</button></div>`;
   const W=S.wreck;h+='<h3>Wrak</h3>';
   if(W.gone)h+='<p class="lead">Wraku już nie ma. Zabrał go wiosenny sztorm.</p>';
-  else{const left=YEAR-5-Math.floor(S.day);h+=`<p class="lead">Robotnicy bez innej pracy rozbierają wrak. Każda pora roku niszczy część ładunku, a za ${left} dni sztorm może go zabrać.</p>`;
+  else{const left=YEAR-5-Math.floor(S.day);h+=`<p class="lead">Robotnicy rozbierają wrak, gdy nie budują; kilku zostaje przy nim nawet przy oznaczonych pracach. „Wynieś najpierw” ściąga tam wszystkich wolnych. Każda pora roku niszczy część ładunku, a za ${left} dni sztorm może go zabrać.</p>`;
    W.parts.forEach((pt,i)=>{const it=Object.entries(pt.items).filter(([k,v])=>v>0).map(([k,v])=>k.startsWith('ks_')?'księga':RN[k].toLowerCase()+' '+v);
     h+=`<div class="card"><h4 style="font-size:15px">${pt.n}</h4>`+(pt.open?`<p>${it.length?it.join(' · '):'pusto'}</p>${it.length?`<button data-wt="${i}" ${W.target===i?'class="pri"':''}>${W.target===i?'Wynoszą to najpierw':'Wynieś najpierw'}</button>`:''}`:
      `<p class="mut">Nierozpoznane. Trzeba się dostać do środka.</p>${W.target===i?`<div class="pbar"><div style="width:${Math.round(100*(pt.prog||0)/pt.need)}%"></div></div>`:''}<button data-wt="${i}" ${W.target===i?'class="pri"':''}>${W.target===i?'Rozpoznają':'Rozpoznaj'}</button>`)+`</div>`})}}

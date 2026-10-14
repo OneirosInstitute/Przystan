@@ -38,3 +38,18 @@ $('cz-tempo').addEventListener('click',e=>{if(!S||S.speed!==0||!$('sheet').hidde
 {const _rt=renderTop;renderTop=function(){_rt();if(!S)return;const t=$('cz-tempo');if(!t)return;const stop=S.speed===0&&$('sheet').hidden;t.classList.toggle('stop',stop);
   if(stop)setH(t,`<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l12 7-12 7z"/></svg>czas stoi`)}}
 window.__rat={restNow,foodEmerg,weakWhy};
+
+// ---------- wrak: dojście z innej strony, gdy stanowisko zastawione; pierwszeństwo przed oznaczeniami ----------
+let wreckAlt=null;
+function goWreck(p){if(go(p,wreck.stand,'wreck',null))return true;
+ if(wreckAlt&&walk[wreckAlt[1]*N+wreckAlt[0]]&&go(p,wreckAlt,'wreck',null))return true;
+ const c=[];for(let r=1;r<=7;r++)for(let dy=-r;dy<=r;dy++)for(let dx=-r;dx<=r;dx++){if(Math.max(Math.abs(dx),Math.abs(dy))!==r)continue;const x=wreck.stand[0]+dx,y=wreck.stand[1]+dy;if(x<0||y<0||x>=N||y>=N||!walk[y*N+x])continue;c.push([x,y,Math.hypot(x-wreck.i,y-wreck.j)])}
+ c.sort((a,b)=>a[2]-b[2]);for(const t of c.slice(0,10)){if(go(p,[t[0],t[1]],'wreck',null)){wreckAlt=[t[0],t[1]];return true}}return false}
+function wreckCrew(){return S.people.filter(q=>(q.state==='work'&&q.workKind==='wreck')||(q.state==='move'&&q.after==='wreck')).length}
+{const _pj=planJob;planJob=function(p){
+  if(S&&S.wreck&&!p.fireB&&p.state!=='away'&&isAdult(p)&&isWorker(p)&&(p.job==='rob'||p.job==='bud'||!p.job)&&isWork()&&!restNow(p)&&wreckTodo()){
+   const t=tod(),meal=t>=.49&&t<.52,W=S.wreck,left=YEAR-5-S.day;
+   const pri=W.target>=0||(S.wreckRush&&S.day<S.wreckRush)||left<3;
+   const marks=S.mark&&Object.keys(S.mark).length>0;
+   if(!meal&&(pri?wreckCrew()<10:(marks&&wreckCrew()<4))&&goWreck(p)){p.act='przy wraku';return true}}
+  return _pj(p)}}
