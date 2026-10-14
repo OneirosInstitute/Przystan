@@ -84,10 +84,10 @@ const E2B={
   ['Pięć łodzi',()=>e2Boats()>=5,'Łodzie w szkutni i łodzie rybackie przy pomostach liczą się razem.'],
   ['Wędzarnie przy dwóch pomostach',()=>anyExt('wedzarnia')>=2,'Karta pomostu → Rozbudowa → Wędzarnia.'],
   ['Zapas: 300 ryb',()=>(S.res.ryby||0)>=300,'Rybacy na łodziach łowią więcej, a wędzarnie sprawiają, że ryby leżą dłużej.']]}};
-const E2RN={6:'VI',7:'VII',9:'VIII'};
-function e2Act(){const e=S.e2;return!e?null:e.a===6?E2A[S.path]:e.a===7?E2B[e.r1]:e.a===9&&e.r2&&typeof E2C!=='undefined'?E2C[e.r2]:null}
+const E2RN={6:'VI',7:'VII',9:'VIII',11:'IX'};
+function e2Act(){const e=S.e2;return!e?null:e.a===6?E2A[S.path]:e.a===7?E2B[e.r1]:e.a===9&&e.r2&&typeof E2C!=='undefined'?E2C[e.r2]:e.a===11&&e.r3&&typeof E2D!=='undefined'?E2D[e.r3]:null}
 function e2Init(){if(!S||S.epoch!==2||!PATHS[S.path])return;if(!S.e2){S.e2={a:6,g:{},t6:S.day,introQ:1,targN:0,torf:0,rudaS:0,boats:0,rejsy:0,big:0,bigP:0};S.tech=S.tech||{};}
- S.tech['e2_'+S.path]=1;if(S.e2.r1)S.tech['e2_'+S.e2.r1]=1;if(S.e2.r2)S.tech['e2_'+S.e2.r2]=1;e2Keys()}
+ S.tech['e2_'+S.path]=1;if(S.e2.r1)S.tech['e2_'+S.e2.r1]=1;if(S.e2.r2)S.tech['e2_'+S.e2.r2]=1;if(S.e2.r3)S.tech['e2_'+S.e2.r3]=1;e2Keys()}
 function e2Intro(){const A=e2Act();if(!A)return;const e=S.e2;openEvent({ey:'Epoka II · '+PATHS[S.path].n+' · Akt '+E2RN[e.a],t:A.n,text:()=>A.intro,opts:[{n:'Dalej',d:'',f:()=>{log(`Zaczyna się akt ${E2RN[e.a]}: ${A.n.toLowerCase()}.`);return A.g.map(g=>'· '+g[0]).join('\n')}}]},{})}
 function e2Roz(){const R=ROZ[S.path];const e=S.e2;openEvent({ey:'Rozstaje · pierwsze rozdroże',t:R.t,text:()=>R.x+'\n\nTej decyzji nie da się cofnąć.',
  opts:R.o.map(o=>({n:o.n,d:o.d,f:()=>{e.r1=o.id;e.a=7;e.t7=S.day;S.tech['e2_'+o.id]=1;e2Keys();pamAdd(4,'rozdroze');song(o.song);log('Rozstaje: '+o.n.toLowerCase()+'. '+o.r);e.introQ=1;e2Apply();renderPanel();return o.r}}))},{})}
@@ -97,26 +97,34 @@ function e2Prawo(){const n=Object.keys(S.cust||{}).filter(k=>obyStage(k)>=1).len
   {n:'Prawo wyryte na słupie',d:'więcej pamięci i nadziei, prawo zna każdy',f:()=>{S.e2.prawo='slup';S.hope=clamp(S.hope+.05,0,1);pamAdd(5,'prawo');song('Pieśń o słupie prawa');log('Prawo zwyczajowe: wyryte znakami na słupie przed chatą wiecową.');return'Cieśle wycinają znaki na dębowym słupie. Dzieci uczą się ich jak pieśni.'}}]},{})}
 function e2GoalsTick(){if(!S||S.epoch!==2)return;e2Init();const e=S.e2;if(!e)return;const A=e2Act();
  if(A){A.g.forEach((g,i)=>{const k=e.a+'_'+i;let ok=false;try{ok=g[1]()}catch(er){}if(!e.g[k]&&ok){e.g[k]=1;S.hope=clamp(S.hope+.04,0,1);log('Cel osiągnięty: '+g[0].toLowerCase()+'.');toast('Cel osiągnięty: '+g[0]);sfx('bell')}});
-  if(A.g.every((g,i)=>e.g[e.a+'_'+i])){if(e.a===6&&!e.rozQ&&!e.r1)e.rozQ=1;else if(e.a===7){e.a=8;e.t8=S.day;pamAdd(5,'akt');log(`Akt VII zakończony: ${A.n.toLowerCase()}. Osada czeka na drugie rozdroże.`)}else if(e.a===9){e.a=10;e.t10=S.day;pamAdd(5,'akt');log(`Akt VIII zakończony: ${A.n.toLowerCase()}. Osada czeka na trzecie rozdroże.`);e.endQ=1}}}
+  if(A.g.every((g,i)=>e.g[e.a+'_'+i])){if(e.a===6&&!e.rozQ&&!e.r1)e.rozQ=1;else if(e.a===7){e.a=8;e.t8=S.day;pamAdd(5,'akt');log(`Akt VII zakończony: ${A.n.toLowerCase()}. Osada czeka na drugie rozdroże.`)}else if(e.a===9){e.a=10;e.t10=S.day;pamAdd(5,'akt');log(`Akt VIII zakończony: ${A.n.toLowerCase()}. Osada czeka na trzecie rozdroże.`);if(typeof e2Roz3!=='function')e.endQ=1}else if(e.a===11){e.a=12;e.t12=S.day;pamAdd(6,'akt');log(`Akt IX zakończony: ${A.n.toLowerCase()}.`);e.finQ2=1}}}
+ if(e.a===10&&!e.r3&&!e.roz3Q&&S.day-(e.t10||0)>=1&&typeof e2Roz3==='function')e.roz3Q=1;
  if(e.a===8&&!e.r2&&!e.roz2Q&&S.day-(e.t8||0)>=1&&typeof e2Roz2==='function')e.roz2Q=1;
  if(evOpen||placing)return;
  if(e.introQ){e.introQ=0;e2Intro();return}
  if(e.rozQ&&isWork()){e.rozQ=0;e2Roz();return}
  if(e.prawoQ&&isWork()){e.prawoQ=0;e2Prawo();return}
  if(e.roz2Q&&isWork()){e.roz2Q=0;e2Roz2();return}
+ if(e.roz3Q&&isWork()){e.roz3Q=0;e2Roz3();return}
+ if(e.finQ2&&isWork()&&typeof e2Final==='function'){e.finQ2=0;e2Final();return}
  if(typeof e2Tick21==='function'&&e2Tick21())return;
  if(e.endQ){e.endQ=0;const B=e.r2&&typeof E2C!=='undefined'?E2C[e.r2]:E2B[e.r1];openEvent({ey:'Epoka II · '+PATHS[S.path].n,t:B.n+': gotowe',text:()=>'Wszystkie cele tego aktu są spełnione. Trzecie rozdroże tej drogi przyjdzie w następnej wersji gry. Do tego czasu osada żyje dalej, a wyspa czeka na kolejne przysiółki.',opts:[{n:'Dalej',d:'',f:()=>'Osada żyje dalej.'}]},{})}}
 {const _gt=goalsTick;goalsTick=function(){_gt();try{e2GoalsTick()}catch(er){console.warn(er)}}}
-{const _gi=goalInfo;goalInfo=function(){const g=_gi();if(!S||S.epoch!==2||!S.e2)return g;const e=S.e2,A=e2Act();if(!A){if(e.a===8&&!e.r2)return{ch:'Epoka II · '+PATHS[S.path].n,t:'Drugie rozdroże',d:'Wiec zbierze się na rozstajach po raz drugi, gdy przyjdzie pora pracy.'};return g}
- const i=A.g.findIndex((x,i)=>!e.g[e.a+'_'+i]);if(i<0)return{ch:'Epoka II · '+PATHS[S.path].n,t:e.a===6?'Rozstaje':e.a===7?'Drugie rozdroże':'Trzecie rozdroże',d:e.a===6?'Wiec zbierze się na rozstajach, gdy przyjdzie pora pracy.':e.a===7?'Wiec zbierze się na rozstajach po raz drugi.':'W następnej wersji gry.'};
+{const _gi=goalInfo;goalInfo=function(){const g=_gi();if(!S||S.epoch!==2||!S.e2)return g;const e=S.e2,A=e2Act();if(!A){if(e.a===8&&!e.r2)return{ch:'Epoka II · '+PATHS[S.path].n,t:'Drugie rozdroże',d:'Wiec zbierze się na rozstajach po raz drugi, gdy przyjdzie pora pracy.'};if(e.a===10&&!e.r3&&typeof e2Roz3==='function')return{ch:'Epoka II · '+PATHS[S.path].n,t:'Trzecie rozdroże',d:'Wiec zbierze się na rozstajach po raz trzeci, gdy przyjdzie pora pracy.'};if(e.a===12&&e.endName&&g)return{ch:'Epoka II: '+e.endName,t:g.t,d:g.d};return g}
+ const i=A.g.findIndex((x,i)=>!e.g[e.a+'_'+i]);if(i<0)return{ch:'Epoka II · '+PATHS[S.path].n,t:e.a===6?'Rozstaje':e.a===7?'Drugie rozdroże':e.a===9?'Trzecie rozdroże':'Koniec epoki II',d:e.a===6?'Wiec zbierze się na rozstajach, gdy przyjdzie pora pracy.':e.a===7?'Wiec zbierze się na rozstajach po raz drugi.':e.a===9?'Wiec zbierze się na rozstajach po raz trzeci.':'Wiec zbierze się, gdy przyjdzie pora pracy.'};
  const x=A.g[i];return{ch:`${PATHS[S.path].n} · Akt ${E2RN[e.a]} · ${A.n}`,t:x[0],d:x[2]}}}
 // karta drogi w podsumowaniu osady
 function e2HTML(){if(!S||S.epoch!==2||!S.e2)return'';const e=S.e2,A=e2Act();const P=PATHS[S.path];let h=`<div class="card e2c"><h4>Epoka II · ${P.n} <small>${P.q}</small></h4>`;
  if(e.r1){const o=ROZ[S.path].o.find(o=>o.id===e.r1);h+=`<p class="mut">Pierwsze rozdroże: <b>${o.n}</b>.</p>`}
  if(e.r2&&typeof ROZ2!=='undefined'){const o=ROZ2[S.path].o.find(o=>o.id===e.r2);if(o)h+=`<p class="mut">Drugie rozdroże: <b>${o.n}</b>.</p>`}
+ if(e.r3&&typeof ROZ3!=='undefined'){const o=ROZ3[S.path].o.find(o=>o.id===e.r3);if(o)h+=`<p class="mut">Trzecie rozdroże: <b>${o.n}</b>.</p>`}
+ if(e.endName)h+=`<p class="ok">Zakończenie epoki II: <b>${e.endName}</b>.</p>`;
  if(A){h+=`<p><b>Akt ${E2RN[e.a]} · ${A.n}</b></p><ul class="e2g">${A.g.map((g,i)=>`<li class="${e.g[e.a+'_'+i]?'ok':''}">${e.g[e.a+'_'+i]?'✓':'·'} ${g[0]}</li>`).join('')}</ul>`;if(e.a===6)h+=`<p class="mut">Potem: rozstaje. ${ROZ[S.path].t}</p>`}
  if(A&&e.a===7&&typeof ROZ2!=='undefined')h+=`<p class="mut">Potem: drugie rozdroże. ${ROZ2[S.path].t}</p>`;
- if(!A)h+=e.a===8?'<p class="mut">Akt VII zakończony. Wiec zbierze się na rozstajach po raz drugi.</p>':'<p class="mut">Akt VIII zakończony. Trzecie rozdroże przyjdzie w następnej wersji gry.</p>';
+ if(A&&e.a===9&&typeof ROZ3!=='undefined')h+=`<p class="mut">Potem: trzecie rozdroże. ${ROZ3[S.path].t}</p>`;
+ if(A&&e.a===11)h+='<p class="mut">Potem: koniec epoki II i nazwa, pod którą osada przejdzie do pieśni.</p>';
+ if(!A)h+=e.a===8?'<p class="mut">Akt VII zakończony. Wiec zbierze się na rozstajach po raz drugi.</p>':e.a===10?'<p class="mut">Akt VIII zakończony. Wiec zbierze się na rozstajach po raz trzeci.</p>':e.a===12&&!e.endName?'<p class="mut">Akt IX zakończony. Wiec zbierze się po raz ostatni w tej epoce.</p>':'';
+ if(typeof e2HTML22==='function')h+=e2HTML22();
  if(typeof e2HTML21==='function')h+=e2HTML21();
  if(S.e2.r1==='wielka'&&hasDone('szkutnia')){const st=Math.min(S.e2.big||0,4);h+=`<p class="mut">Wielka łódź: ${st<4?BIG[st].n.toLowerCase()+' '+Math.round(100*(S.e2.bigP||0)/BIG[st].need)+'%':'gotowa, stoi przy szkutni'}.</p>`}
  return h+'</div>'}
@@ -126,6 +134,8 @@ function e2HTML(){if(!S||S.epoch!==2||!S.e2)return'';const e=S.e2,A=e2Act();cons
  const A=E2A[S.path];L.push(`Akt VI, ${A.n.toLowerCase()}: ${A.g.filter((g,i)=>e.g['6_'+i]).map(g=>g[0].toLowerCase()).join(', ')||'dopiero się zaczyna'}.`);
  if(e.r1){const o=ROZ[S.path].o.find(o=>o.id===e.r1);L.push(`Pierwsze rozdroże: ${o.n.toLowerCase()}. ${o.r}`);const B=E2B[e.r1];L.push(`Akt VII, ${B.n.toLowerCase()}: ${B.g.filter((g,i)=>e.g['7_'+i]).map(g=>g[0].toLowerCase()).join(', ')||'dopiero się zaczyna'}.`)}
  if(e.r2&&typeof ROZ2!=='undefined'){const o=ROZ2[S.path].o.find(o=>o.id===e.r2);L.push(`Drugie rozdroże: ${o.n.toLowerCase()}. ${o.r}`);const C=E2C[e.r2];L.push(`Akt VIII, ${C.n.toLowerCase()}: ${C.g.filter((g,i)=>e.g['9_'+i]).map(g=>g[0].toLowerCase()).join(', ')||'dopiero się zaczyna'}.`)}
+ if(e.r3&&typeof ROZ3!=='undefined'){const o=ROZ3[S.path].o.find(o=>o.id===e.r3);L.push(`Trzecie rozdroże: ${o.n.toLowerCase()}. ${o.r}`);const D=E2D[e.r3];L.push(`Akt IX, ${D.n.toLowerCase()}: ${D.g.filter((g,i)=>e.g['11_'+i]).map(g=>g[0].toLowerCase()).join(', ')||'dopiero się zaczyna'}.`)}
+ if(e.endName)L.push('',`ZAKOŃCZENIE EPOKI II: ${e.endName.toUpperCase()}`,'');
  if(e.targN)L.push(`Dni targowych: ${e.targN}.`);if(e.boats)L.push(`Łodzi zbudowanych w szkutni: ${e.boats}. Rejsów wzdłuż brzegu: ${e.rejsy||0}.`);t+='\n'+L.join('\n')}return t}}
 
 // ---------- skutki dróg ----------

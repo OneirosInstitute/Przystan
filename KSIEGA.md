@@ -1,6 +1,6 @@
 ---
 title: "Przystań — Księga gry"
-subtitle: "Wersja 2.1 · 14 października 2026 · Epoka II: drugie rozdroża"
+subtitle: "Wersja 2.2 · 14 października 2026 · Epoka II ukończona: trzecie rozdroża i 28 zakończeń"
 ---
 
 # 1. Czym jest Przystań
@@ -117,7 +117,7 @@ Budowa jest podzielona na kategorie:
 | Rzemiosło | drewutnia, pracownia cieśli, mielerz, kuźnia, warsztat, szwalnia, piec do cegły, garncarnia |
 | Magazyny | skład, spiżarnia |
 | Wspólnota | studnia, miejsce pamięci, łaźnia, strażnica, chata wiecowa, izba nauki, chata zielarki, święty gaj |
-| Epoka II (od 2.0) | targowisko i brama grodu (droga Domu), stanica, kopanka torfu, dymarka, sztolnia i piwnica w skale (droga Głębi), szkutnia (droga Morza); od 2.1 także ława starszych, plac wiecowy, dwór rodu i chata ptaszników; każda pojawia się dopiero na swojej drodze |
+| Epoka II (od 2.0) | targowisko i brama grodu (droga Domu), stanica, kopanka torfu, dymarka, sztolnia i piwnica w skale (droga Głębi), szkutnia (droga Morza); od 2.1 także ława starszych, plac wiecowy, dwór rodu i chata ptaszników, od 2.2 dom cechowy, spichlerz na palach, stodoła i przystań łodzi; każda pojawia się dopiero na swojej drodze |
 
 - **Poziomy:** budynki z pracownikami mają trzy poziomy. Każdy daje więcej rąk do pracy, większy zasięg i wyższą wydajność. Trzeci poziom wymaga wiedzy o zrębie na jaskółczy ogon.
 - **Rozbudowy:** 25 dobudówek, na przykład suszarnia, wędzarnia, łódź rybacka, obora, strach na wróble, lodownia, ganek z ławą czy żuraw przy studni.
@@ -609,7 +609,37 @@ Drugie rozdroże każdej drogi otwiera akt VIII. Pierwsze rozdroże nie zamyka �
 - **Sąsiednie bezludne wyspy.** Wyprawa za horyzont (zakładka Wyprawy): wielka łódź (6 dni) albo dwie łodzie (8 dni) i czworo ludzi. Każda wyprawa może odnaleźć jedną z czterech wysp: Wyspę Mew, Sosnową Wyspę, Kamienny Garb i Wyspę Fok. Odkryte wyspy widać na morzu za brzegiem. Na wyspie można założyć obóz: 40 kłód, 10 desek, 2 narzędzia, 60 jedzenia i troje ludzi, którzy zostają tam na stałe. Co pięć dni łódź z obozów przywozi ich dobra, jeśli przy brzegu stoi choć jedna łódź. **Akt VIII:** dwie odkryte wyspy, obóz na jednej z nich, 100 dóbr z wysp.
 - **Zatoki i ptasie skały.** Chata ptaszników (na brzegu) daje wiosną i latem jaja i pierze. Jaja to nowy rodzaj jedzenia, a gdy w zapasie jest co najmniej 30 pierza, zimą domy palą mniej opału. Rejsy wzdłuż brzegu przywożą więcej ryb oraz jaja i pierze, a połów przy pomostach jest o 15% większy. **Akt VIII:** chata ptaszników, 80 zebranych jaj, sześć rejsów wokół wyspy.
 
-Po akcie VIII osada żyje dalej i czeka na trzecie rozdroże, które przyjdzie w wersji 2.2.
+Po akcie VIII, dzień później, wiec zbiera się na rozstajach po raz trzeci (od wersji 2.2).
+
+## Trzecie rozdroża, akt IX i zakończenia (od wersji 2.2)
+
+### Dom: cechy czy każdy dom sobie?
+
+- **Cechy mistrzów.** Dom cechowy z podcieniem i szyldami cechów. Warsztaty pracują o 12% sprawniej. Karta Epoka II pokazuje, któremu fachowi brakuje mistrza. **Akt IX:** dom cechowy, mistrz w każdym z jedenastu fachów, 100 wyrobów z warsztatów, przetwórni i drewutni.
+- **Każdy dom samowystarczalny.** Spichlerze na palach (magazyny jedzenia na kamiennych grzybach). Przy każdym domu ogród i kurnik: poza zimą codziennie trochę warzyw i jaj. Warsztaty pracują o 7% wolniej. **Akt IX:** trzy spichlerze, każda rodzina z pełną spiżarką, dwadzieścia dni z rzędu bez głodu.
+
+### Głąb: karczować pod pola czy żyć z lasu?
+
+- **Karczować pod pola.** Stodoła na snopy. Pola dają o 15% więcej. **Akt IX:** stodoła, sześć pól, 60 wykarczowanych drzew (liczą się pniaki, więc leśnik przy karczowisku przeszkadza).
+- **Żyć z lasu.** Barcie, chaty myśliwych i zbieraczy dają o 25% więcej. **Akt IX:** trzy barcie, drugi święty gaj, 80 miodu w zapasie.
+
+### Morze: statek jak tamten czy łodzie po swojemu?
+
+- **Statek jak tamten.** Szkutnia buduje statek na wzór dawnego w trzech etapach: kadłub z dębu, pokład z dwoma masztami, żagle i liny. Etapy widać na pochylni. Gotowy statek stoi na kotwicy przy brzegu. **Akt IX:** trzy etapy statku.
+- **Łodzie po swojemu.** Przystań łodzi: długi pomost, szopa i suszarnie sieci. Łodzie kosztują jeszcze o 40% mniej i powstają szybciej, a rejsy są o połowę bezpieczniejsze. **Akt IX:** przystań łodzi, osiem łodzi, dziesięć rejsów.
+
+### Koniec epoki II
+
+Gdy akt IX jest spełniony, wiec zbiera się ostatni raz w tej epoce. Scena „Koniec epoki II” podsumowuje lata na wyspie i nadaje osadzie nazwę, pod którą przechodzi do pieśni. Nazwa zależy od trzech wyborów na rozstajach, więc zakończeń jest 28 (droga Domu ma na drugim rozdrożu trzy wybory):
+
+| Droga | Zakończenia |
+|---|---|
+| Dom, gród | Gród Mistrzów pod Lipą, Gród Starszych i Gospodarzy, Wolny Gród Rzemieślników, Wolny Gród Gospodarzy, Gród Rodu i Cechów, Gniazdo Rodu za Wałem |
+| Dom, otwarta wieś | Wieś Mistrzów pod Lipą, Wieś Starszych, Wolne Wsie Rzemieślników, Wolne Wsie Gospodarzy, Ziemia Rodu i Cechów, Ziemia Jednego Rodu |
+| Głąb | Osada za Bagnami, Ludzie Puszczy za Bagnami, Szlak przez Mokradła, Ludzie Mszarów, Osada pod Granią, Ludzie Puszczy spod Grani, Szlak Grani, Ludzie Gór i Lasów |
+| Morze | Statek do Dalekich Wysp, Żeglarze Dalekich Wysp, Statek spod Ptasich Skał, Żeglarze Ptasich Skał, Flota Wysp, Rybacy Wysp, Statek z Zatoki, Rybacy z Zatoki |
+
+Nazwa trafia do Księgi rozbitków i na kartę celu. Zdobyte zakończenia zapamiętuje przeglądarka, a ekran startowy pokazuje, ile z 28 już się udało. Po zakończeniu osada żyje dalej, a celem pozostaje zasiedlenie całej wyspy.
 
 # 13. Grafika i dźwięk
 
@@ -673,7 +703,7 @@ Po akcie VIII osada żyje dalej i czeka na trzecie rozdroże, które przyjdzie w
 
 # 15. Technika
 
-- **Plik gry:** jeden plik HTML (około 840 kB) i biblioteka Three.js r186 (dwa moduły, około 2 MB, w paczce do instalacji trzymane lokalnie) składany z części: p_head.html, p_const.js, p_mid.js, p_rest.js, p_map.js, p_tech.js, p_exp.js, p_v8.js, p_bld.js, p_story.js, p_slav.js, p_wild.js, p_ludzie.js, p_urz.js, p_pamiec.js, p_akt.js, p_kol.js, p_slady.js, p_lad.js, p_gosp.js, p_bud.js, p_swiat.js, p_szlif.js, p_mapa.js, p_cisza.js, p_sluzba.js, p_zycie.js, p_rok.js, p_wiedza.js, p_gfx.js, p_grafika.js, p_ksiega.js, p_ratunek.js, p_g18.js, p_e2.js, p_e2d.js, p_e2m.js, p_e21.js, p_end.js.
+- **Plik gry:** jeden plik HTML (około 860 kB) i biblioteka Three.js r186 (dwa moduły, około 2 MB, w paczce do instalacji trzymane lokalnie) składany z części: p_head.html, p_const.js, p_mid.js, p_rest.js, p_map.js, p_tech.js, p_exp.js, p_v8.js, p_bld.js, p_story.js, p_slav.js, p_wild.js, p_ludzie.js, p_urz.js, p_pamiec.js, p_akt.js, p_kol.js, p_slady.js, p_lad.js, p_gosp.js, p_bud.js, p_swiat.js, p_szlif.js, p_mapa.js, p_cisza.js, p_sluzba.js, p_zycie.js, p_rok.js, p_wiedza.js, p_gfx.js, p_grafika.js, p_ksiega.js, p_ratunek.js, p_g18.js, p_e2.js, p_e2d.js, p_e2m.js, p_e21.js, p_e22.js, p_end.js.
 - **Grafika:** Three.js r186 (WebGL2, ładowany jako moduł), własna obróbka obrazu (bloom, cienie kontaktowe, cienie chmur, tilt-shift, korekcja barw), własne shadery wody i terenu dopinane do materiałów Three.js.
 - **Wydajność dużej wsi (od 2.0):** gotowe budynki w każdym kwadracie wyspy (32 na 32 pola) rysuje się jako jedna bryła na materiał, gładkie kolory przechodzą do wspólnego materiału z kolorem w wierzchołkach, a kłosy na polach są instancjami. W gotowej wsi z epoki II to 1070 zamiast 2030 wywołań rysowania na klatkę. Dotknięcie budynku działa jak dawniej.
 - **Zapis:** w pamięci przeglądarki (klucz przystan-v7, kopia zapasowa przystan-v7-bak), do pobrania jako plik JSON i do wczytania z pliku.
@@ -719,6 +749,7 @@ Po akcie VIII osada żyje dalej i czeka na trzecie rozdroże, które przyjdzie w
 | 1.8.3 | poprawka: rozbudowa domu (szałas w chatę, chata w dom) nie zabiera już rodzinie spiżarki; w czasie budowy zapas zostaje w starym domu w granicach jego pojemności |
 | 1.9 | budynki z charakterem: każdy budynek inny (ściany, dachy, spadek, okap), koniki, malowane okiennice, ganki, przybudówki, garnki na płocie, zioła pod okapem, szyldy rzemiosł, wyraźniejsza kuźnia, łaźnia i chata wiecowa |
 | 1.10 | wykonanie budynków: surowe, porządne i mistrzowskie, wyraźnie widoczne po rozbudowie (wielkość, podmurówka, dach, okiennice, obramienia okien, kwiaty, płotek, szyld); karta budynku pokazuje wykonanie i trwałość; odmiany szałasów, studni, zagród i spiżarni |
+| 2.2 | trzecie rozdroża i akt IX: cechy mistrzów albo każdy dom sobie (dom cechowy, spichlerze na palach), karczowiska albo życie z lasu (stodoła), statek jak tamten na kotwicy albo łodzie po swojemu (przystań łodzi); scena „Koniec epoki II” z jedną z 28 nazw osady; licznik zakończeń na ekranie startowym |
 | 2.1 | drugie rozdroża i akt VIII: rada starszych, wiec wszystkich albo najstarszy ród (ława starszych, plac wiecowy, dwór rodu); druga osada z wozami zapasów albo łańcuch przysiółków; wyprawy za horyzont, cztery bezludne wyspy widoczne na morzu i obozy na nich albo ptasie skały z chatą ptaszników, jajami i pierzem |
 | 2.0 | epoka II: trzy drogi z aktem VI, pierwszym rozdrożem i aktem VII; start od gotowej wsi po siedmiu latach; targowisko i dni targowe, prawo zwyczajowe, brama grodu z wałem i ostrokołem; stanica, kopanka torfu, dymarka, sztolnia, piwnica w skale, gorączka bagienna; szkutnia, łodzie na wodzie, rejsy wzdłuż brzegu, wielka łódź w czterech etapach, flotylla; budynki rysowane w bryłach (o połowę mniej wywołań rysowania w dużej wsi); poprawka miecha w kuźni |
 
@@ -763,7 +794,7 @@ Wybór drogi na wiecu pokoleń jest ostateczny. W epoce II każda droga rozwidla
 | Głąb | przez bagna (torf, ruda, gorączka) albo przez góry (kamień, jaskinie, mróz) | jedna silna druga osada albo łańcuch przysiółków | puszcza: karczować pod pola albo żyć z lasu (barcie, łowy, święte gaje) |
 | Morze | wielka łódź na dalekie wyprawy albo flotylla łodzi rybackich | sąsiednie bezludne wyspy albo zatoki i ptasie skały wokół własnej wyspy | statek odbudowany jak tamten albo łodzie zbudowane po swojemu |
 
-Pierwsze rozdroże każdej drogi jest grywalne od wersji 2.0, drugie od wersji 2.1, trzecie przyjdzie w wersji 2.2. Daje to dwadzieścia siedem różnych zakończeń epoki II. Każde ma swoją nazwę w Księdze rozbitków, na przykład „Gród nad Zatoką” albo „Ludzie Puszczy”.
+Pierwsze rozdroże każdej drogi jest grywalne od wersji 2.0, drugie od wersji 2.1, trzecie od wersji 2.2. Droga Domu ma na drugim rozdrożu trzy wybory zamiast dwóch, więc różnych zakończeń epoki II jest 28. Każde ma swoją nazwę w Księdze rozbitków, na przykład „Gród Mistrzów pod Lipą” albo „Ludzie Puszczy za Bagnami”.
 
 # 19. Droga do końca
 
@@ -790,9 +821,9 @@ Kolejność dalszej pracy. Każda wersja kończy się czymś, w co da się zagra
 | 1.10 Wykonanie budynków (gotowe) | surowe, porządne, mistrzowskie; rozbudowa widoczna na budynku i w karcie |
 | 2.0 Epoka II: drogi (gotowe) | trzy drogi do pierwszego rozdroża i akt VII każdego odgałęzienia, start od gotowej wsi |
 | 2.1 Drugie rozdroża (gotowe) | kto stanowi prawo, druga osada albo łańcuch przysiółków, sąsiednie wyspy albo ptasie skały, akt VIII każdego odgałęzienia |
-| 2.2 Trzecie rozdroża i zakończenia | rzemiosło, puszcza, statek; dwadzieścia siedem zakończeń z nazwą w Księdze rozbitków |
+| 2.2 Trzecie rozdroża i zakończenia (gotowe) | rzemiosło, puszcza, statek; 28 zakończeń z nazwą w Księdze rozbitków |
 
-**Epoka II** (od 2.0): trzy drogi z rozdrożami opisanymi wyżej, kolejne rozdroża w wersjach 2.1 i 2.2. Przez cały czas obowiązuje: klimat słowiański bez magii, brak przybyszów, decyzje gracza w scenach i na wiecu, a życie ludzi toczy się samo.
+**Epoka II** (od 2.0, ukończona w 2.2): trzy drogi z trzema rozdrożami każda i 28 zakończeniami. Przez cały czas obowiązuje: klimat słowiański bez magii, brak przybyszów, decyzje gracza w scenach i na wiecu, a życie ludzi toczy się samo.
 
 **Trudność (od wersji 0.18):** trzy poziomy wybierane na ekranie startowym, zapamiętywane dla następnych gier. Łagodny: psucie się jedzenia, zużycie budynków, pożary i wilki o 30% rzadziej, część mrozów i sztormów łagodnieje do śniegu i deszczu. Zwykły: tak, jak gra była pomyślana. Surowy: wszystko to o 30% częściej, zimą częstsze mrozy, wiosną i jesienią więcej sztormów. Od wersji 1.0 poziom zmienia też samą gospodarkę: na łagodnym ludzie jedzą o 15% mniej, domy palą o 20% mniej opału, a rzemiosło idzie o 15% sprawniej; na surowym jedzą o 8% więcej, palą o 12% więcej, a rzemiosło idzie o 6% wolniej. Poziom trafia do Księgi rozbitków.
 
