@@ -130,7 +130,7 @@ function czSumHTML(){const pop=S.people.length,houses=S.bld.filter(b=>bDone(b)&&
  const hl=S.people.filter(p=>!homeOf(p)).length;if(hl)s+=` Bez dachu: ${hl}.`;
  if((S.dis||0)>.6)s+=' Ludzie się kłócą.';else if(S.hope>.75)s+=' Ludzie mają nadzieję.';
  const g=goalInfo();const pc=v=>Math.round(v*100)+'%';
- return`<div class="card"><p style="font-family:var(--serif);font-size:17px;color:var(--hi);margin:0 0 6px;line-height:1.35">${s}</p>${g?`<p style="margin:0 0 4px"><span class="cz-ey">${g.ch||'Cel'}</span><br><b style="color:var(--hi)">${g.t}</b> <span class="mut">${g.d||''}</span></p>`:''}<p class="mut" style="margin:4px 0 0">Ciepło ${pc(S.warm)} · zdrowie ${pc(S.health)} · nadzieja ${pc(S.hope)} · niezgoda ${pc(S.dis||0)}</p></div>`}
+ return`<div class="card"><p style="font-family:var(--serif);font-size:17px;color:var(--hi);margin:0 0 6px;line-height:1.35">${s}</p><p class="mut" style="margin:4px 0 0">Ciepło ${pc(S.warm)} · zdrowie ${pc(S.health)} · nadzieja ${pc(S.hope)} · niezgoda ${pc(S.dis||0)}</p></div>`}
 {const _th=troubleHTML;troubleHTML=function(){return(czOn&&S?czSumHTML():'')+_th()}}
 
 // ---------- karty: zamknij, człowiek, teren ----------

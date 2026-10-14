@@ -177,7 +177,7 @@ function reqTick(){S.reqs=S.reqs||[];
   if(R.done(r,p)){if(R.take)R.take(r);S.reqs=S.reqs.filter(x=>x!==r);S.hope=clamp(S.hope+.04,0,1);S.dis=clamp((S.dis||0)-.07,0,1);if(r.k==='fach')p.xp[r.c]+=40;S.reqDone=(S.reqDone||0)+1;log('Prośba spełniona. '+R.t(r,p)+'. '+p.name+' dziękuje.');toast('Prośba spełniona');continue}
   if(S.day>r.until){S.reqs=S.reqs.filter(x=>x!==r);S.dis=clamp((S.dis||0)+.04,0,1);log('Prośba bez odpowiedzi. '+R.t(r,p)+'.')}}
  if(S.reqs.length<3&&S.day>=(S.reqNext||3)){const keys=Object.keys(REQS).filter(k=>!S.reqs.some(r=>r.k===k));const pool=[];keys.forEach(k=>{for(let q=0;q<REQS[k].w;q++)pool.push(k)});
-  for(let t=0;t<8&&pool.length;t++){const k=pool[(Math.random()*pool.length)|0];const x=REQS[k].make();if(x&&x.pid!==undefined&&pById(x.pid)){const r=Object.assign({k,made:Math.floor(S.day),until:Math.floor(S.day)+12},x);S.reqs.push(r);const p=pById(r.pid);log('Prośba: '+REQS[k].t(r,p)+'. '+REQS[k].d);toast('Nowa prośba: '+p.name);break}}
+  for(let t=0;t<8&&pool.length;t++){const k=pool[(Math.random()*pool.length)|0];const x=REQS[k].make();if(x&&x.pid!==undefined&&pById(x.pid)){const r=Object.assign({k,made:Math.floor(S.day),until:Math.floor(S.day)+12},x);S.reqs.push(r);const p=pById(r.pid);log('Prośba: '+REQS[k].t(r,p)+'. '+(REQS[k].say?'„'+(typeof REQS[k].say==='function'?REQS[k].say(r,p):REQS[k].say)+'”':REQS[k].d));toast('Nowa prośba: '+p.name);break}}
   S.reqNext=S.day+3+Math.random()*4}}
 function reqHTML(){S.reqs=S.reqs||[];let h='<h3>Prośby mieszkańców</h3>';
  if(!S.reqs.length)return h+'<p class="lead">Nikt teraz o nic nie prosi.</p>';

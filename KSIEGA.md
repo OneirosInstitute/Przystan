@@ -652,6 +652,21 @@ Nazwa trafia do Księgi rozbitków i na kartę celu. Zdobyte zakończenia zapami
 **Wozy.** Robotnik, który idzie po materiał na daleką budowę, bierze wolny wóz i zabiera cztery razy więcej niż na plecach (24 jednostki zamiast 6). Woźnica ciągnie wóz za dyszel, a na skrzyni widać ładunek. Wolne wozy stoją przy warsztacie (do czterech). Karta budowy pokazuje, ile wozów jest wolnych. Osada, która zaczyna od epoki II, ma już koło i oś oraz dwa wozy.
 
 
+## Zadania, prośby i opowieść (od wersji 2.4)
+
+**Cel mówi głosem wsi.** Karta celu na górze ekranu i w księdze Osada pokazuje to, co widać we wsi, a nie drogę przez menu: „Pod gołym niebem śpi jeszcze 6 osób. Noce na brzegu są zimne i mokre.” albo „Na wraku zostało: deski 16, skóry 6.”. Liczby w podpowiedziach są aktualne. Dokładna droga („Budowa → Domy…”) jest schowana pod „Jak to zrobić?” w księdze Osada.
+
+**Bez ślepych zaułków.** Cele, przy których teraz nie ma nic do zrobienia (przetrwać zimę, głos młodych, mistrzowie urodzeni na wyspie, plony poza porą siewu, księga, której jeszcze nie ma), nie zasłaniają innych celów aktu. Karta pokazuje najpierw to, co da się zrobić. Cel wraku brzmi teraz „Wynieś z wraku wszystko, co się da” i spełnia się, gdy wrak jest pusty, a nie dopiero wtedy, gdy zabierze go sztorm.
+
+**Podpowiedzi bez prowadzenia za rękę.** Pulsujące wskazówki na przyciskach (łagodny początek) pojawiają się dopiero wtedy, gdy cel stoi w miejscu dłużej niż dobę.
+
+**Prośby mieszkańców.** Ludzie mówią własnymi słowami, co ich gnębi („Nogi już nie te. Wieczorem chciałoby się usiąść…”), a sposób jest schowany pod „Jak?”. Doszło dziesięć próśb: ława dla najstarszego, grządki, skład, opał przed zimą, kozie mleko dla małych, własny dom dla młodych, kwiaty pod oknami (prośba dziecka), łaźnia, święty gaj i słup rodu. Spełniona prośba zostawia w kronice krótką scenę, a czasem dodaje zdrowie, ciepło albo pamięć osady.
+
+**Wątki z historią.** Kilkuetapowe opowieści, które pokazują się w księdze Osada pod celem jako „Opowieść”:
+- *Wiosło z napisem* (akt I–III): ktoś przynosi z dalekiego brzegu wiosło ze statku. Można szukać szalupy, która odbiła tamtej nocy z bosmanem, albo uznać, że morze ich zabrało. Zwiadowcy chętniej idą w tamtą stronę. Na końcu scena „Szalupa” z wyborem pochówku bosmana Wszebora, pieśnią i jego skrzynią (narzędzia, gwoździe, płótno).
+- *Kamień z imionami* (od aktu III, gdy wraku już nie ma): najstarszy z rozbitków chce wyryć w kamieniu imiona tych, którzy nie dopłynęli. Potrzeba miejsca pamięci, kogoś, kto umie ciosać kamień (kamieniarz 2), i 20 kamienia. Na końcu scena, pieśń i duży przyrost pamięci osady.
+
+
 # 13. Grafika i dźwięk
 
 - **Styl:** trójwymiarowe, niskopoligonowe modele w ściszonej, chłodnej palecie północy. Mgła nieznanego, pory dnia i roku, deszcz, śnieg, mgły, dym z kominów, świetliki latem, ptaki.
@@ -714,7 +729,7 @@ Nazwa trafia do Księgi rozbitków i na kartę celu. Zdobyte zakończenia zapami
 
 # 15. Technika
 
-- **Plik gry:** jeden plik HTML (około 860 kB) i biblioteka Three.js r186 (dwa moduły, około 2 MB, w paczce do instalacji trzymane lokalnie) składany z części: p_head.html, p_const.js, p_mid.js, p_rest.js, p_map.js, p_tech.js, p_exp.js, p_v8.js, p_bld.js, p_story.js, p_slav.js, p_wild.js, p_ludzie.js, p_urz.js, p_pamiec.js, p_akt.js, p_kol.js, p_slady.js, p_lad.js, p_gosp.js, p_bud.js, p_swiat.js, p_szlif.js, p_mapa.js, p_cisza.js, p_sluzba.js, p_zycie.js, p_rok.js, p_wiedza.js, p_gfx.js, p_grafika.js, p_ksiega.js, p_ratunek.js, p_g18.js, p_e2.js, p_e2d.js, p_e2m.js, p_e21.js, p_e22.js, p_woz.js, p_end.js.
+- **Plik gry:** jeden plik HTML (około 860 kB) i biblioteka Three.js r186 (dwa moduły, około 2 MB, w paczce do instalacji trzymane lokalnie) składany z części: p_head.html, p_const.js, p_mid.js, p_rest.js, p_map.js, p_tech.js, p_exp.js, p_v8.js, p_bld.js, p_story.js, p_slav.js, p_wild.js, p_ludzie.js, p_urz.js, p_pamiec.js, p_akt.js, p_kol.js, p_slady.js, p_lad.js, p_gosp.js, p_bud.js, p_swiat.js, p_szlif.js, p_mapa.js, p_cisza.js, p_sluzba.js, p_zycie.js, p_rok.js, p_wiedza.js, p_gfx.js, p_grafika.js, p_ksiega.js, p_ratunek.js, p_g18.js, p_e2.js, p_e2d.js, p_e2m.js, p_e21.js, p_e22.js, p_woz.js, p_zad.js, p_end.js.
 - **Grafika:** Three.js r186 (WebGL2, ładowany jako moduł), własna obróbka obrazu (bloom, cienie kontaktowe, cienie chmur, tilt-shift, korekcja barw), własne shadery wody i terenu dopinane do materiałów Three.js.
 - **Wydajność dużej wsi (od 2.0):** gotowe budynki w każdym kwadracie wyspy (32 na 32 pola) rysuje się jako jedna bryła na materiał, gładkie kolory przechodzą do wspólnego materiału z kolorem w wierzchołkach, a kłosy na polach są instancjami. W gotowej wsi z epoki II to 1070 zamiast 2030 wywołań rysowania na klatkę. Dotknięcie budynku działa jak dawniej.
 - **Zapis:** w pamięci przeglądarki (klucz przystan-v7, kopia zapasowa przystan-v7-bak), do pobrania jako plik JSON i do wczytania z pliku.
@@ -760,6 +775,7 @@ Nazwa trafia do Księgi rozbitków i na kartę celu. Zdobyte zakończenia zapami
 | 1.8.3 | poprawka: rozbudowa domu (szałas w chatę, chata w dom) nie zabiera już rodzinie spiżarki; w czasie budowy zapas zostaje w starym domu w granicach jego pojemności |
 | 1.9 | budynki z charakterem: każdy budynek inny (ściany, dachy, spadek, okap), koniki, malowane okiennice, ganki, przybudówki, garnki na płocie, zioła pod okapem, szyldy rzemiosł, wyraźniejsza kuźnia, łaźnia i chata wiecowa |
 | 1.10 | wykonanie budynków: surowe, porządne i mistrzowskie, wyraźnie widoczne po rozbudowie (wielkość, podmurówka, dach, okiennice, obramienia okien, kwiaty, płotek, szyld); karta budynku pokazuje wykonanie i trwałość; odmiany szałasów, studni, zagród i spiżarni |
+| 2.4 | zadania i opowieść: cel aktu mówi głosem wsi, a „jak to zrobić” jest schowane pod jednym dotknięciem; cele bez roboty (zima, czekanie na sztorm) nie zasłaniają innych; cel wraku spełnia się, gdy wrak jest pusty; podpowiedzi pulsują dopiero, gdy cel stoi ponad dobę; dziesięć nowych próśb mieszkańców, każda prośba mówi własnymi słowami i kończy się krótką sceną w kronice; wątki „Wiosło z napisem” i „Kamień z imionami” |
 | 2.3 | dowóz i wozy: urobek z okolicy idzie prosto na budowę, która go potrzebuje; na dalekie budowy materiał idzie ze składu najbliższego budowie; wiedza „Koło i oś” i wozy z warsztatu (cztery razy większy ładunek, wolne wozy stoją przy warsztacie); osada w epoce II zaczyna z dwoma wozami |
 | 2.2.2 | wrak: oznaczone prace nie blokują już wynoszenia (kilku robotników zostaje przy wraku, „Wynieś najpierw” ściąga wszystkich wolnych, na trzy dni przed sztormem też); gdy stanowisko przy wraku jest zastawione, ludzie dochodzą z innej strony plaży |
 | 2.2.1 | pogoda trzyma się wyspy: chmury, mgła o świcie, deszcz, śnieg i pyłki mają stałe miejsca w świecie i nie jeżdżą za palcem przy przesuwaniu widoku; mgła poranna leży nad wybrzeżem i nizinami |
@@ -837,6 +853,7 @@ Kolejność dalszej pracy. Każda wersja kończy się czymś, w co da się zagra
 | 2.1 Drugie rozdroża (gotowe) | kto stanowi prawo, druga osada albo łańcuch przysiółków, sąsiednie wyspy albo ptasie skały, akt VIII każdego odgałęzienia |
 | 2.2 Trzecie rozdroża i zakończenia (gotowe) | rzemiosło, puszcza, statek; 28 zakończeń z nazwą w Księdze rozbitków |
 | 2.3 Dowóz i wozy (gotowe) | urobek prosto na budowę, dalekie budowy zaopatrywane ze składu, koło i oś, wozy z warsztatu |
+| 2.4 Zadania i opowieść (gotowe) | cele bez ślepych zaułków, podpowiedzi zamiast instrukcji, nowe prośby, pierwsze wątki z historią |
 
 **Epoka II** (od 2.0, ukończona w 2.2): trzy drogi z trzema rozdrożami każda i 28 zakończeniami. Przez cały czas obowiązuje: klimat słowiański bez magii, brak przybyszów, decyzje gracza w scenach i na wiecu, a życie ludzi toczy się samo.
 
