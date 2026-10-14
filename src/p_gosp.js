@@ -62,7 +62,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-wiecz]');i
 const MATW={drewno:1,kamien:1,glina:1,cegla:.8,deski:.6,gwozdzie:.08,plotno:.3,narz:.5,skory:.4,wlokna:.2,naczynia:.3};
 function matOf(c){return Object.entries(c||{}).reduce((a,[k,v])=>a+v*(MATW[k]===undefined?.5:MATW[k]),0)}
 function matRes(b){const c=BD[b.kind].cost||{};return Object.entries(c).sort((x,y)=>y[1]*(MATW[y[0]]||.5)-x[1]*(MATW[x[0]]||.5))[0]?.[0]||'drewno'}
-function haulCap(p){return 6*(p.trait==='Silny'?1.4:1)*(p.age<16?.6:1)}
+function haulCap(p){return 6*(p.trait==='Silny'?1.4:1)*(p.age<16?.6:1)*(p.woz?WOZ_CAP:1)}
 {const _tp=tryPlace;tryPlace=function(){const n0=S?S.bld.length:0;_tp();if(S&&S.bld.length>n0){const b=S.bld[S.bld.length-1];const m=matOf(BD[b.kind].cost);if(m>0){b.mat=Math.round(m*10)/10;b.del=0;
   // budowa tuż przy składzie albo obozie: część materiału od razu na miejscu
   const c=bCenter(b);const near=[[camp.i,camp.j]].concat(S.bld.filter(x=>bDone(x)&&BD[x.kind].store==='all').map(x=>[x.i,x.j])).some(([i,j])=>Math.hypot(i-b.i,j-b.j)<7);if(near)b.del=b.mat*.6}}}}
@@ -75,7 +75,7 @@ function goNow(p,tile,after){const[pi,pj]=tileOf(p.x,p.z);if(Math.hypot(tile[0]-
    const cand=S.bld.filter(b=>!bDone(b)&&!b.proj&&(b.workers||0)<4&&b.prog<siteCap(b)-.02&&!(b.unr>S.day)).sort((a,b)=>Math.hypot(a.i-p.x-N/2,a.j-p.z-N/2)-Math.hypot(b.i-p.x-N/2,b.j-p.z-N/2));const bs=cand[0];
    const hs=haulSite(2)||(!bs&&haulSite(6));
    if(bs&&(!hs||Math.random()<.6)){for(const b of cand.slice(0,4)){const e=entryOf(b.kind,b.i,b.j);if(e&&go(p,e,'build',b)){b.workers=(b.workers||0)+1;p.act='buduje: '+BD[b.kind].n.toLowerCase();return true}b.unr=S.day+.5;b.unrN=(b.unrN||0)+1}}
-   if(hs){const st=storeTile(p,false);hs.haul=(hs.haul||0)+1;p.haulB=hs.id;p.act='idzie po materiał: '+BD[hs.kind].n.toLowerCase();if(st&&goNow(p,st,'haulPick'))return true;haulEnd(p)}}
+   if(hs){const st=haulFrom(p,hs);hs.haul=(hs.haul||0)+1;p.haulB=hs.id;p.act='idzie po materiał: '+BD[hs.kind].n.toLowerCase();if(st&&goNow(p,st,'haulPick'))return true;haulEnd(p)}}
   return _pj(p)}}
 {const _oa=onArrive;onArrive=function(p){const a=p.after;if(a!=='haulPick'&&a!=='haulDrop')return _oa(p);p.after=null;p.wt=0;const s=bById(p.haulB);
   if(!s||bDone(s)||!s.mat){haulEnd(p);p.state='idle';return}

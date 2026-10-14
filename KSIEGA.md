@@ -641,6 +641,17 @@ Gdy akt IX jest spełniony, wiec zbiera się ostatni raz w tej epoce. Scena „K
 
 Nazwa trafia do Księgi rozbitków i na kartę celu. Zdobyte zakończenia zapamiętuje przeglądarka, a ekran startowy pokazuje, ile z 28 już się udało. Po zakończeniu osada żyje dalej, a celem pozostaje zasiedlenie całej wyspy.
 
+## Dowóz na budowy i wozy (od wersji 2.3)
+
+**Najpierw budowa.** Gdy we wsi stoi budowa, która czeka na materiał, ludzie wracający z urobkiem (drwale, kamieniarze, zbieracze, robotnicy przy zaznaczonych pracach) niosą go prosto na nią, jeśli jest w promieniu 18 kroków i potrzebuje tego, co niosą. Urobek liczy się od razu jako dowieziony i nikt nie musi go potem nosić ze składu. Skład niczego tu nie zmienia: obecne budowy mają pierwszeństwo, a do składu trafia to, czego żadna budowa nie potrzebuje.
+
+**Daleka budowa.** Budowa dalej niż 22 kroki od obozu i od każdego składu jest daleka. Na nią nikt nie niesie urobku prosto z lasu: wszystko idzie najpierw do składu, a robotnicy dowożą materiał ze składu położonego najbliżej budowy. Karta budowy pokazuje, ile materiału jest na miejscu i czy budowa jest daleka.
+
+**Koło i oś.** Nowa wiedza w rzemiośle (pod zrębem na jaskółczy ogon). Rośnie z pracy cieśli, ale dopiero wtedy, gdy we wsi stoi warsztat. Po jej poznaniu karta warsztatu ma pozycję „Wóz”: deski 8, kłody 6, gwoździe 10. Materiał schodzi od razu, a wóz robią ludzie pracujący w warsztacie (dwóch robi wóz w około trzecią część dnia). Gdy nikt nie pracuje w warsztacie, karta to mówi.
+
+**Wozy.** Robotnik, który idzie po materiał na daleką budowę, bierze wolny wóz i zabiera cztery razy więcej niż na plecach (24 jednostki zamiast 6). Woźnica ciągnie wóz za dyszel, a na skrzyni widać ładunek. Wolne wozy stoją przy warsztacie (do czterech). Karta budowy pokazuje, ile wozów jest wolnych. Osada, która zaczyna od epoki II, ma już koło i oś oraz dwa wozy.
+
+
 # 13. Grafika i dźwięk
 
 - **Styl:** trójwymiarowe, niskopoligonowe modele w ściszonej, chłodnej palecie północy. Mgła nieznanego, pory dnia i roku, deszcz, śnieg, mgły, dym z kominów, świetliki latem, ptaki.
@@ -703,7 +714,7 @@ Nazwa trafia do Księgi rozbitków i na kartę celu. Zdobyte zakończenia zapami
 
 # 15. Technika
 
-- **Plik gry:** jeden plik HTML (około 860 kB) i biblioteka Three.js r186 (dwa moduły, około 2 MB, w paczce do instalacji trzymane lokalnie) składany z części: p_head.html, p_const.js, p_mid.js, p_rest.js, p_map.js, p_tech.js, p_exp.js, p_v8.js, p_bld.js, p_story.js, p_slav.js, p_wild.js, p_ludzie.js, p_urz.js, p_pamiec.js, p_akt.js, p_kol.js, p_slady.js, p_lad.js, p_gosp.js, p_bud.js, p_swiat.js, p_szlif.js, p_mapa.js, p_cisza.js, p_sluzba.js, p_zycie.js, p_rok.js, p_wiedza.js, p_gfx.js, p_grafika.js, p_ksiega.js, p_ratunek.js, p_g18.js, p_e2.js, p_e2d.js, p_e2m.js, p_e21.js, p_e22.js, p_end.js.
+- **Plik gry:** jeden plik HTML (około 860 kB) i biblioteka Three.js r186 (dwa moduły, około 2 MB, w paczce do instalacji trzymane lokalnie) składany z części: p_head.html, p_const.js, p_mid.js, p_rest.js, p_map.js, p_tech.js, p_exp.js, p_v8.js, p_bld.js, p_story.js, p_slav.js, p_wild.js, p_ludzie.js, p_urz.js, p_pamiec.js, p_akt.js, p_kol.js, p_slady.js, p_lad.js, p_gosp.js, p_bud.js, p_swiat.js, p_szlif.js, p_mapa.js, p_cisza.js, p_sluzba.js, p_zycie.js, p_rok.js, p_wiedza.js, p_gfx.js, p_grafika.js, p_ksiega.js, p_ratunek.js, p_g18.js, p_e2.js, p_e2d.js, p_e2m.js, p_e21.js, p_e22.js, p_woz.js, p_end.js.
 - **Grafika:** Three.js r186 (WebGL2, ładowany jako moduł), własna obróbka obrazu (bloom, cienie kontaktowe, cienie chmur, tilt-shift, korekcja barw), własne shadery wody i terenu dopinane do materiałów Three.js.
 - **Wydajność dużej wsi (od 2.0):** gotowe budynki w każdym kwadracie wyspy (32 na 32 pola) rysuje się jako jedna bryła na materiał, gładkie kolory przechodzą do wspólnego materiału z kolorem w wierzchołkach, a kłosy na polach są instancjami. W gotowej wsi z epoki II to 1070 zamiast 2030 wywołań rysowania na klatkę. Dotknięcie budynku działa jak dawniej.
 - **Zapis:** w pamięci przeglądarki (klucz przystan-v7, kopia zapasowa przystan-v7-bak), do pobrania jako plik JSON i do wczytania z pliku.
@@ -749,9 +760,10 @@ Nazwa trafia do Księgi rozbitków i na kartę celu. Zdobyte zakończenia zapami
 | 1.8.3 | poprawka: rozbudowa domu (szałas w chatę, chata w dom) nie zabiera już rodzinie spiżarki; w czasie budowy zapas zostaje w starym domu w granicach jego pojemności |
 | 1.9 | budynki z charakterem: każdy budynek inny (ściany, dachy, spadek, okap), koniki, malowane okiennice, ganki, przybudówki, garnki na płocie, zioła pod okapem, szyldy rzemiosł, wyraźniejsza kuźnia, łaźnia i chata wiecowa |
 | 1.10 | wykonanie budynków: surowe, porządne i mistrzowskie, wyraźnie widoczne po rozbudowie (wielkość, podmurówka, dach, okiennice, obramienia okien, kwiaty, płotek, szyld); karta budynku pokazuje wykonanie i trwałość; odmiany szałasów, studni, zagród i spiżarni |
-| 2.2 | trzecie rozdroża i akt IX: cechy mistrzów albo każdy dom sobie (dom cechowy, spichlerze na palach), karczowiska albo życie z lasu (stodoła), statek jak tamten na kotwicy albo łodzie po swojemu (przystań łodzi); scena „Koniec epoki II” z jedną z 28 nazw osady; licznik zakończeń na ekranie startowym |
-| 2.2.1 | pogoda trzyma się wyspy: chmury, mgła o świcie, deszcz, śnieg i pyłki mają stałe miejsca w świecie i nie jeżdżą za palcem przy przesuwaniu widoku; mgła poranna leży nad wybrzeżem i nizinami |
+| 2.3 | dowóz i wozy: urobek z okolicy idzie prosto na budowę, która go potrzebuje; na dalekie budowy materiał idzie ze składu najbliższego budowie; wiedza „Koło i oś” i wozy z warsztatu (cztery razy większy ładunek, wolne wozy stoją przy warsztacie); osada w epoce II zaczyna z dwoma wozami |
 | 2.2.2 | wrak: oznaczone prace nie blokują już wynoszenia (kilku robotników zostaje przy wraku, „Wynieś najpierw” ściąga wszystkich wolnych, na trzy dni przed sztormem też); gdy stanowisko przy wraku jest zastawione, ludzie dochodzą z innej strony plaży |
+| 2.2.1 | pogoda trzyma się wyspy: chmury, mgła o świcie, deszcz, śnieg i pyłki mają stałe miejsca w świecie i nie jeżdżą za palcem przy przesuwaniu widoku; mgła poranna leży nad wybrzeżem i nizinami |
+| 2.2 | trzecie rozdroża i akt IX: cechy mistrzów albo każdy dom sobie (dom cechowy, spichlerze na palach), karczowiska albo życie z lasu (stodoła), statek jak tamten na kotwicy albo łodzie po swojemu (przystań łodzi); scena „Koniec epoki II” z jedną z 28 nazw osady; licznik zakończeń na ekranie startowym |
 | 2.1 | drugie rozdroża i akt VIII: rada starszych, wiec wszystkich albo najstarszy ród (ława starszych, plac wiecowy, dwór rodu); druga osada z wozami zapasów albo łańcuch przysiółków; wyprawy za horyzont, cztery bezludne wyspy widoczne na morzu i obozy na nich albo ptasie skały z chatą ptaszników, jajami i pierzem |
 | 2.0 | epoka II: trzy drogi z aktem VI, pierwszym rozdrożem i aktem VII; start od gotowej wsi po siedmiu latach; targowisko i dni targowe, prawo zwyczajowe, brama grodu z wałem i ostrokołem; stanica, kopanka torfu, dymarka, sztolnia, piwnica w skale, gorączka bagienna; szkutnia, łodzie na wodzie, rejsy wzdłuż brzegu, wielka łódź w czterech etapach, flotylla; budynki rysowane w bryłach (o połowę mniej wywołań rysowania w dużej wsi); poprawka miecha w kuźni |
 
@@ -824,6 +836,7 @@ Kolejność dalszej pracy. Każda wersja kończy się czymś, w co da się zagra
 | 2.0 Epoka II: drogi (gotowe) | trzy drogi do pierwszego rozdroża i akt VII każdego odgałęzienia, start od gotowej wsi |
 | 2.1 Drugie rozdroża (gotowe) | kto stanowi prawo, druga osada albo łańcuch przysiółków, sąsiednie wyspy albo ptasie skały, akt VIII każdego odgałęzienia |
 | 2.2 Trzecie rozdroża i zakończenia (gotowe) | rzemiosło, puszcza, statek; 28 zakończeń z nazwą w Księdze rozbitków |
+| 2.3 Dowóz i wozy (gotowe) | urobek prosto na budowę, dalekie budowy zaopatrywane ze składu, koło i oś, wozy z warsztatu |
 
 **Epoka II** (od 2.0, ukończona w 2.2): trzy drogi z trzema rozdrożami każda i 28 zakończeniami. Przez cały czas obowiązuje: klimat słowiański bez magii, brak przybyszów, decyzje gracza w scenach i na wiecu, a życie ludzi toczy się samo.
 
