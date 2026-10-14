@@ -17,3 +17,12 @@ let nocT=0;
 {const _mt=mapTick;mapTick=function(rdt){_mt(rdt);nocT+=rdt;if(nocT<.25)return;nocT=0;if(!S)return;
   if(nocSkip){const t=tod();if((Math.floor(S.day)>=nocSkip.d0&&t>=T0&&t<T1-.05)||S.speed===0&&!evOpen)nocEnd()}nocUI()}}
 window.__noc={nocStart,nocEnd,isNight};
+// ---------- 3.0.1: po wyjściu z menu gra zawsze rusza ----------
+{const _cs=closeSheet;closeSheet=function(){const want=(typeof czPaused!=='undefined'&&czPaused)||(typeof czLastSp!=='undefined'&&czLastSp)||1;_cs();
+  if(S&&S.speed===0&&!evOpen&&!placing){setSpeed(want);if(typeof czPaused!=='undefined')czPaused=null;renderTop()}}}
+// zwinięty panel: patrzymy na wyspę, więc czas płynie; rozwinięty znów zatrzymuje
+$('smin').addEventListener('click',()=>{if(!S||$('sheet').hidden)return;const min=$('sheet').classList.contains('min');
+ if(min){if(S.speed===0&&!evOpen){setSpeed((typeof czPaused!=='undefined'&&czPaused)||(typeof czLastSp!=='undefined'&&czLastSp)||1);if(typeof czPaused!=='undefined')czPaused=null}}
+ else if(czOn&&S.speed>0){czPaused=S.speed;setSpeed(0)}renderTop()});
+// przycisk zamknięcia był podpięty do pierwotnej funkcji, z pominięciem wznowienia czasu
+$('sclose').addEventListener('click',e=>{e.stopImmediatePropagation();closeSheet()},true);
