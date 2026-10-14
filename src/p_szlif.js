@@ -1,6 +1,6 @@
 
 /* ================= 1.0: szlif — wydajność, zapis odporny na wersje, nowe wyspy i wyzwania, łagodny początek, „Od ostatniego razu”, „Na co czekamy”, rytm sesji ================= */
-const GAME_VER='2.4.1';
+const GAME_VER='2.5';
 // ---------- wydajność: gotowe budynki scalane w jedną bryłę na materiał ----------
 const _mInv=new THREE.Matrix4(),_mM=new THREE.Matrix4(),_mN=new THREE.Matrix3(),_vP=new THREE.Vector3(),_vN=new THREE.Vector3();
 function mergeGroup(g){if(!g)return 0;g.updateMatrixWorld(true);_mInv.copy(g.matrixWorld).invert();const fireSet=new Set(fires.map(f=>f.g));const byMat=new Map();
@@ -72,7 +72,7 @@ function hintTick(rdt){hintT+=rdt;if(hintT<.6)return;hintT=0;hintEl.forEach(e=>e
 
 // ---------- Na co czekamy ----------
 function czekamy(){const L=[],d=Math.floor(S.day);
- S.bld.forEach(b=>{if(!bDone(b))L.push([`${BD[b.kind].n}: budowa ${Math.round(100*b.prog/b.work)}%${b.mat?', materiał '+Math.round(100*Math.min(1,(b.del||0)/b.mat))+'%':''}`,1]);else if(b.proj)L.push([`${BD[b.kind].n}: ${b.proj.t==='rep'?'remont':b.proj.t==='lv'?'nowy poziom':'rozbudowa'} ${Math.round(100*b.proj.prog/b.proj.work)}%`,2]);
+ S.bld.forEach(b=>{if(!bDone(b))L.push([`${BD[b.kind].n}: budowa ${Math.round(100*b.prog/b.work)}%${b.mat?', materiał '+Math.round(100*Math.min(1,(b.del||0)/b.mat))+'%':''}`,1]);else if(b.proj)L.push([`${BD[b.kind].n}: ${b.proj.t==='rep'?'remont':b.proj.t==='rozb'?'rozbiórka':b.proj.t==='lv'?'nowy poziom':'rozbudowa'} ${Math.round(100*b.proj.prog/b.proj.work)}%`,2]);
   if(b.field&&b.field.st==='rosnie')L.push([`Pole: zboże rośnie (${Math.round(100*(b.field.g||0))}%)`,3]);if(b.field&&b.field.st==='dojrzale')L.push(['Pole: czas na żniwa',0])});
  if(S.know&&S.know.active&&typeof TRIAL!=='undefined'){const T=TRIAL[S.know.active];L.push([`Próba: ${T.n.toLowerCase()} ${Math.round(100*(S.know[S.know.active+'_p']||0)/T.need)}%`,2])}
  Object.keys(S.books||{}).forEach(k=>{if(S.books[k]===1)L.push([`Czytanie: „${BOOKS[k]}” ${Math.round(100*(S.readP[k]||0)/200)}%`,2])});
