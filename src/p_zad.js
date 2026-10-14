@@ -98,7 +98,8 @@ reqHTML=function(){S.reqs=S.reqs||[];let h='<h3>Prośby mieszkańców</h3>';if(!
   h+=`<div class="card req zad"><h4>${R.t(r,p)}</h4>${sy?`<p style="font-style:italic">„${sy}”</p>`:''}<details><summary>Jak?</summary><p class="mut">${R.d}</p></details><p class="mut">Zostało ${left} ${dniW(left)}</p></div>`});return h};
 function sprInit(){S.spr=S.spr||{a:[],ch:{}};S.spr.ch=S.spr.ch||{};S.spr.a=S.spr.a||[];return S.spr}
 function sprTick(){if(!S||!S.people.length)return;const R=sprInit();
- for(const s of R.a.slice()){const p=pById(s.pid);const d=CHAIN[s.chain];if(d&&!p){const q=s.chain==='kamien'?S.people.filter(x=>!x.born&&x.age>=30).sort((a,b)=>b.age-a.age)[0]:adultsZ()[0];if(q){s.pid=q.id;log(`${q.name} przejmuje sprawę: ${d.t.toLowerCase()}.`);continue}}
+ for(const s of R.a.slice()){const p=pById(s.pid);const d=CHAIN[s.chain];if(d&&!p&&d.noRe){R.a.splice(R.a.indexOf(s),1);R.ch[s.chain]='x';if(d.lost)log(d.lost());continue}
+  if(d&&!p){const q=s.chain==='kamien'?S.people.filter(x=>!x.born&&x.age>=30).sort((a,b)=>b.age-a.age)[0]:adultsZ()[0];if(q){s.pid=q.id;log(`${q.name} przejmuje sprawę: ${d.t.toLowerCase()}.`);continue}}
   if(!d||!p){R.a.splice(R.a.indexOf(s),1);if(d&&!p)R.ch[s.chain]=s.chain==='kamien'?undefined:'x';continue}
   if(d.ok(s)&&!evOpen&&!placing&&isWork()){R.a.splice(R.a.indexOf(s),1);R.ch[s.chain]='ok';d.fin(s,p);return}}
  chainTick()}
