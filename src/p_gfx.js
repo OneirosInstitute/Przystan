@@ -82,7 +82,7 @@ function gfxParticles(rdt,Lt){if(GFX.level<2||!S){gPts.visible=false;return}
  ptMat.opacity=on;ptMat.color.setHex(autumn?0xc88a3e:0xf2e6b0);ptMat.size=(autumn?.16:.07)*Math.max(.8,zoom*.7);
  const R=26/Math.max(.4,zoom),wind=wk==='storm'?3:1;
  for(let k=0;k<ptN;k++){const a=ptSeed[k*4],b=ptSeed[k*4+1],sp=ptSeed[k*4+2],ph=ptSeed[k*4+3];const T=clock*(autumn?.07:.03)*(.5+sp)*wind+ph;const f=T%1;
-  const x=camT.x+(a-.5)*2*R+Math.sin(clock*.6+ph*9)*.8+f*(autumn?6:2),z=camT.z+(b-.5)*2*R+Math.cos(clock*.5+ph*7)*.6+f*2;
+  const x=wrapC(a*2*R+Math.sin(clock*.6+ph*9)*.8+f*(autumn?6:2),camT.x,R),z=wrapC(b*2*R+Math.cos(clock*.5+ph*7)*.6+f*2,camT.z,R);
   const g=Hy(x,z);ptPos[k*3]=x;ptPos[k*3+1]=autumn?g+(1-f)*4.5+.05:g+.6+Math.sin(clock*.9+ph*20)*.4+sp;ptPos[k*3+2]=z}
  ptGeo.attributes.position.needsUpdate=true}
 function gfxTick(rdt,Lt){GFXU.t.value=clock;const wk=S?S.weather.k:'clear';const tgt=(wk==='storm'?3.2:wk==='rain'?1.7:wk==='snow'?1.3:1)*(GFX.level===2?1:GFX.level===1?.7:0);GFXU.amp.value+=(tgt-GFXU.amp.value)*Math.min(1,rdt*.8);

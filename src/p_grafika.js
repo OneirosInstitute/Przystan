@@ -106,9 +106,12 @@ const PM={belt:M(0x2e241a),boot:M(0x2a2018),beard:[M(0x4a3626),M(0x6b4e30),M(0x2
   return g}}
 
 // ---------- mgła o świcie nad wodą i nizinami ----------
-const dawnMist=[];function mistInit(){const r0=rng(171);for(let k=0;k<8;k++){const m=new THREE.Mesh(new THREE.PlaneGeometry(16,16),new THREE.MeshBasicMaterial({map:mistTex,transparent:true,opacity:0,depthWrite:false,color:0xe6ecee,fog:false}));m.rotation.x=-Math.PI/2;m.renderOrder=4;m.userData={a:r0()*6.28,r:6+r0()*20,sp:(r0()-.5)*.05};scene.add(m);dawnMist.push(m)}}
-function mistTick(rdt){if(!S)return;if(!dawnMist.length)mistInit();const t=tod();const f=Math.max(1-Math.abs(t-.255)/.07,0)+Math.max(1-Math.abs(t-.86)/.06,0)*.3;const wk=S.weather.k;const amt=Math.min(1,f*(wk==='fog'?1.6:1))*(GFX.level>0?1:0);
- dawnMist.forEach((m,k)=>{const u=m.userData;u.a+=u.sp*rdt;const x=camT.x+Math.cos(u.a)*u.r,z=camT.z+Math.sin(u.a)*u.r;const h=Hy(x,z);m.position.set(x,Math.max(h,-.04)+.35+k*.04,z);m.material.opacity=amt*(h<.5?.32:.13);m.material.color.setHex(t>.5?0x8a8f96:0xe6ecee)})}
+const dawnMist=[];function mistInit(){const r0=rng(171);let k=0;for(let t=0;t<6000&&k<44;t++){const x=(r0()*2-1)*92,z=(r0()*2-1)*92,h=Hy(x,z);if(h>.7||h<-1.6)continue;
+ let near=false;for(const o of dawnMist){if(Math.hypot(o.userData.x-x,o.userData.z-z)<9){near=true;break}}if(near)continue;
+ const m=new THREE.Mesh(new THREE.PlaneGeometry(17,17),new THREE.MeshBasicMaterial({map:mistTex,transparent:true,opacity:0,depthWrite:false,color:0xe6ecee,fog:false}));m.rotation.x=-Math.PI/2;m.renderOrder=4;m.visible=false;
+ m.userData={x,z,y:Math.max(h,-.04)+.35+(k%8)*.04,low:h<.5,ph:r0()*6.28,sp:.04+r0()*.05};scene.add(m);dawnMist.push(m);k++}}
+function mistTick(rdt){if(!S)return;if(!dawnMist.length)mistInit();const t=tod();const f=Math.max(1-Math.abs(t-.255)/.07,0)+Math.max(1-Math.abs(t-.86)/.06,0)*.3;const wk=S.weather.k;const amt=Math.min(1,f*(wk==='fog'?1.6:1))*(GFX.level>0?1:0);const col=t>.5?0x8a8f96:0xe6ecee;
+ dawnMist.forEach(m=>{const u=m.userData;m.visible=amt>.004;if(!m.visible)return;const a=clock*u.sp+u.ph;m.position.set(u.x+Math.sin(a)*2.2,u.y,u.z+Math.cos(a*.8)*1.6);m.material.opacity=amt*(u.low?.32:.13);m.material.color.setHex(col)})}
 
 // ---------- licznik klatek w menu tempa ----------
 {const sp=$('speed');if(sp&&!$('fpsv'))sp.insertAdjacentHTML('beforeend','<span id="fpsv" style="font-size:12.5px;color:var(--mut);padding:0 8px;align-self:center;white-space:nowrap"></span>')}
