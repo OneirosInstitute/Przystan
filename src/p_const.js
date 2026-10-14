@@ -84,7 +84,7 @@ const BD={
  mielerz:{cat:'rzemioslo',n:'Mielerz',w:2,h:2,cost:{drewno:10,glina:6},work:5,wk:1,c:'drwal',prod:{in:{drewno:3},out:{wegiel:2},t:20,when:()=>S.res.wegiel<40},d:'Wypala węgiel drzewny dla kuźni.'},
  kuznia:{cat:'rzemioslo',n:'Kuźnia',w:2,h:2,cost:{kamien:20,glina:10,deski:8},work:12,wk:2,c:'kowal',need:'kuznia',prod:[{in:{ruda:3,wegiel:2},out:{narz:1},t:30,when:()=>S.res.narz<10},{in:{ruda:1,wegiel:1},out:{gwozdzie:10},t:14}],d:'Z rudy i węgla robi żelazne narzędzia, a gdy jest ich dość, gwoździe.'},
  warsztat:{cat:'rzemioslo',n:'Warsztat',w:2,h:2,cost:{drewno:16,kamien:8},work:7,wk:2,c:'ciesla',prod:{in:{kamien:1,drewno:1},out:{narzk:1},t:16,when:()=>S.res.narzk<12},d:'Robi kamienne narzędzia. Gorsze od żelaznych z wraku, ale własne.'},
- szwalnia:{cat:'rzemioslo',n:'Szwalnia',w:2,h:2,cost:{drewno:14,plotno:1},work:6,wk:1,c:'krawiec',prod:[{in:{skory:2},out:{odziez:1},t:18},{in:{wlokna:4},out:{plotno:1},t:16}],d:'Szyje ciepłą odzież ze skór, a z włókien lnu tka płótno.'},
+ szwalnia:{cat:'rzemioslo',n:'Szwalnia',w:2,h:2,cost:{drewno:16},work:6,wk:1,c:'krawiec',prod:[{in:{skory:2},out:{odziez:1},t:18},{in:{wlokna:4},out:{plotno:1},t:16}],d:'Szyje ciepłą odzież ze skór, a z włókien lnu tka płótno.'},
  cegielnia:{cat:'rzemioslo',n:'Piec do cegły',w:2,h:2,cost:{kamien:15,glina:20,drewno:10},work:8,wk:2,c:'murarz',need:'cegla',prod:{in:{glina:10,drewno:6},out:{cegla:8},t:100},d:'Wypala cegły z gliny.'},
  sklad:{cat:'magazyn',n:'Skład',w:2,h:2,cost:{drewno:6},work:3,store:'all',cap:250,d:'Miejsce na wszystko. Ludzie odnoszą tu urobek zamiast iść do obozu.'},
  spizarnia:{cat:'magazyn',n:'Spiżarnia',w:2,h:2,cost:{drewno:12,deski:10,gwozdzie:20},work:8,store:'food',cap:700,d:'Chłodny magazyn żywności. Zapasy psują się o połowę wolniej.'},

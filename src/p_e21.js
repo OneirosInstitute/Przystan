@@ -101,7 +101,7 @@ const E2C={
  druga:{n:'Druga osada',intro:'Druga osada ma stać się prawdziwą wsią w głębi wyspy, z własnym ogniem i własnymi ludźmi.',g:[
   ['Druga osada: 18 osób',()=>{const h=e2Second();return!!h&&h.pop>=18},'Druga osada rośnie, gdy ma pełne zapasy. Droga i wozy z zapasami pomagają.'],
   ['Droga do drugiej osady',()=>{const h=e2Second();return!!h&&h.road===2},'Karta przysiółka → wytycz drogę.'],
-  ['Trzy wozy z zapasami',()=>(S.e2.wypN||0)>=3,'Podsumowanie osady → karta Epoka II → wyślij wóz.']]},
+  ['Trzy wozy z zapasami',()=>(S.e2.wypN||0)>=3,'Ludzie → karta Epoka II → wyślij wóz.']]},
  lancuch:{n:'Łańcuch przysiółków',intro:'Przysiółki mają leżeć jeden przy drugim, połączone drogami, tak żeby z każdego dało się dojść do sąsiada przed zmrokiem.',g:[
   ['Sześć przysiółków',()=>(S.hamlets||[]).length>=6,'Ludzie → Wspólnota → nowy przysiółek.'],
   ['Drogi do wszystkich przysiółków',()=>(S.hamlets||[]).length>=2&&S.hamlets.every(h=>h.road===2),'Drogi są teraz tańsze.'],

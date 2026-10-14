@@ -82,7 +82,7 @@ const E2B={
  wielka:{n:'Wielka łódź',intro:'Na pochylni szkutni rośnie wielka łódź. Etap po etapie: najpierw stępka, potem wręgi, poszycie, a na końcu maszt i żagiel.',g:BIG.map((s,i)=>[s.n+' wielkiej łodzi',()=>(S.e2.big||0)>i,'Szkutnicy pracują w szkutni: '+s.d+'.'])},
  flotylla:{n:'Flotylla',intro:'Łodzie są teraz tańsze, a każda na wodzie to więcej ryb przy pomostach. Wędzarnie zamienią połów w zapas na zimę.',g:[
   ['Pięć łodzi',()=>e2Boats()>=5,'Łodzie w szkutni i łodzie rybackie przy pomostach liczą się razem.'],
-  ['Wędzarnie przy dwóch pomostach',()=>anyExt('wedzarnia')>=2,'Karta pomostu → Rozbudowa → Wędzarnia.'],
+  ['Wędzarnie przy dwóch pomostach',()=>anyExt('wedzarnia')>=2,'Karta pomostu → Rozbudowa → Wędzarnia. Pomost, który ma już łódź, trzeba najpierw ulepszyć do poziomu 2, żeby zmieścił drugą rozbudowę.'],
   ['Zapas: 300 ryb',()=>(S.res.ryby||0)>=300,'Rybacy na łodziach łowią więcej, a wędzarnie sprawiają, że ryby leżą dłużej.']]}};
 const E2RN={6:'VI',7:'VII',9:'VIII',11:'IX'};
 function e2Act(){const e=S.e2;return!e?null:e.a===6?E2A[S.path]:e.a===7?E2B[e.r1]:e.a===9&&e.r2&&typeof E2C!=='undefined'?E2C[e.r2]:e.a===11&&e.r3&&typeof E2D!=='undefined'?E2D[e.r3]:null}

@@ -16,8 +16,8 @@ const ZH={
  'Postaw chatę zbieracza':()=>'Jagody i grzyby rosną tuż za obozem, a każdy zbiera je na własną rękę. Przydałby się ktoś, kto zajmie się tym na stałe.',
  'Postaw chatę drwala':()=>'Kłody na szałasy noszą z daleka ci, którzy akurat mają wolne ręce. A las stoi tuż obok.',
  'Rozpoznaj kajutę kapitana na wraku':()=>'Drzwi kajuty kapitana są zaklinowane. Kapitan trzymał tam księgi i swoje narzędzia.',
- 'Każda rodzina pod własnym dachem':()=>{const n=zHomeless();return n?`Pod gołym niebem śpi jeszcze ${n} ${osb(n)}. Noce na brzegu są zimne i mokre.`:'Wszyscy mają już dach nad głową.'},
- 'Postaw drewutnię i zgromadź 80 opału':()=>hasB('drewutnia')?`Drewutnia stoi. Opału jest ${fmt(S.res.opal)}, a na zimę trzeba co najmniej 80.`:`Opału jest ${fmt(S.res.opal)}. Zimą każdy dom spala go codziennie, a kłody same się nie porąbią.`,
+ 'Każda rodzina pod własnym dachem':()=>{const n=zHomeless();return n?`Pod gołym niebem śpi jeszcze ${n} ${osb(n)}. Noce na brzegu są zimne i mokre.${S.res.drewno<8?' Kłód nie starczy nawet na szałas.':''}`:'Wszyscy mają już dach nad głową.'},
+ 'Postaw drewutnię i zgromadź 80 opału':()=>{const dw=S.bld.find(b=>b.kind==='drewutnia'&&bDone(b));if(dw&&S.res.drewno<10)return`Drewutnia stoi, ale kłód jest tylko ${fmt(S.res.drewno)}. Bez drwali nie będzie czego rąbać.`;if(dw&&!S.people.some(q=>q.job==='wb'&&q.wb===dw.id))return'Drewutnia stoi pusta. Nikt w niej nie rąbie.';return dw?`Drewutnia stoi. Opału jest ${fmt(S.res.opal)}, a na zimę trzeba co najmniej 80.`:`Opału jest ${fmt(S.res.opal)}. Zimą każdy dom spala go codziennie, a kłody same się nie porąbią.`},
  'Wynieś z wraku wszystko, co się da':()=>{const t=wreckLeftTxt(),cl=S.wreck.parts.filter(p=>!p.open).map(p=>p.n.toLowerCase());return t?`Na wraku zostało: ${t}. Morze co porę roku zabiera część, a wiosną przyjdzie sztorm.`:cl.length?`Zamknięte są jeszcze: ${cl.join(', ')}. Ktoś musi się tam dostać.`:'Wrak jest pusty.'},
  'Przetrwaj pierwszą zimę':()=>{const d=Math.floor(zDaysFood()),o=fmt(S.res.opal),L=[];if(d<15)L.push(`jedzenia na ${d} ${dniW(d)}`);if(S.res.opal<60)L.push(`opału ${o}`);const hl=zHomeless();if(hl)L.push(`bez dachu ${hl}`);if((S.res.odziez||0)<S.people.length*.3)L.push('mało ciepłej odzieży');
   return L.length?`Do wiosny daleko: ${L.join(', ')}. Tego może nie starczyć.`:'Zapasy wyglądają dobrze. Teraz trzeba po prostu doczekać wiosny.'},
@@ -62,10 +62,10 @@ Object.assign(REQS.pomost,{say:'Z brzegu łowi się marnie. Ryba stoi dalej, za 
 Object.assign(REQS.cieply,{say:'W szałasie wieje ze wszystkich stron. Zimy w nim nie przetrwamy.',end:p=>`W nowej chacie jest tak ciepło, że ${p.name} pierwszą noc śpi bez okrycia.`});
 Object.assign(REQS,{
  lawa:{w:1,make:()=>S.people.some(p=>p.age>50)&&zLad('lawa')<2?mk(oldestZ(),{base:zLad('lawa')}):null,t:(r,p)=>`${p.name} chciałby ławę przed chatą`,
-  say:'Nogi już nie te. Wieczorem chciałoby się usiąść i popatrzeć, jak dzieci się bawią.',d:'Ład wsi: dotknij terenu przy chatach i wybierz ławę. Trzy kłody.',done:r=>zLad('lawa')>r.base,
+  say:'Nogi już nie te. Wieczorem chciałoby się usiąść i popatrzeć, jak dzieci się bawią.',d:'Budowa → Ład wsi → ława, przy chatach. Trzy kłody.',done:r=>zLad('lawa')>r.base,
   end:p=>{pamAdd(1);return`${p.name} siada na nowej ławie i od razu zaczyna opowiadać o statku. Dzieci zbierają się wokół.`}},
  grzadki:{w:1,make:()=>S.day>YEAR*.4&&zLad('grzadka')<4?mk(motherZ()||pickAdult(),{base:zLad('grzadka')}):null,t:(r,p)=>`${p.name} chce mieć warzywa przy domu`,
-  say:'Jagody z lasu to nie wszystko. W domu, skąd płynęliśmy, każdy miał kawałek ziemi pod oknem.',d:'Ład wsi → grządka, dwie sztuki. Od wiosny do jesieni dają warzywa.',done:r=>zLad('grzadka')>=r.base+2,
+  say:'Jagody z lasu to nie wszystko. W domu, skąd płynęliśmy, każdy miał kawałek ziemi pod oknem.',d:'Budowa → Ład wsi → grządka, dwie sztuki. Od wiosny do jesieni dają warzywa.',done:r=>zLad('grzadka')>=r.base+2,
   end:p=>`${p.name} wsadza w ziemię pierwsze cebule. Mówi, że teraz to już naprawdę dom.`},
  sklad:{w:2,make:()=>!hasB('sklad')&&S.bld.filter(bDone).length>=5?mk(pickAdult(p=>p.job==='rob'||p.job==='bud')||pickAdult()):null,t:(r,p)=>`${p.name} ma dość noszenia wszystkiego do obozu`,
   say:'Wszystko nosimy do obozu, a potem z obozu z powrotem. Nogi bolą od samego chodzenia.',d:'Budowa → Magazyny → Skład, między lasem a budowami.',done:()=>hasB('sklad'),
@@ -80,16 +80,16 @@ Object.assign(REQS,{
   say:'Śpimy u rodziców, we czworo pod jednym kocem. Chciałoby się mieć coś swojego.',d:'Budowa → Domy. Wystarczy każdy nowy dom.',done:r=>zHouses()>r.base,
   end:p=>`${p.name} wnosi do nowego domu własną łyżkę i miskę. To pierwsze rzeczy, które są tylko jej albo jego.`},
  kwiaty:{w:1,make:()=>{if(zLad('kwiaty')>=6||seasonIdx()===2)return null;const c=anyZ(S.people.filter(p=>p.age>=6&&p.age<12&&!S.reqs.some(r=>r.pid===p.id)));return mk(c,{base:zLad('kwiaty')})},t:(r,p)=>`${p.name} chce kwiatów pod oknami`,
-  say:'Na łące rosną takie żółte. Można by je przesadzić do nas?',d:'Ład wsi → kwiaty, trzy kępy. Nic nie kosztują.',done:r=>zLad('kwiaty')>=r.base+3,
+  say:'Na łące rosną takie żółte. Można by je przesadzić do nas?',d:'Budowa → Ład wsi → kwiaty, trzy kępy. Nic nie kosztują.',done:r=>zLad('kwiaty')>=r.base+3,
   end:p=>`${p.name} podlewa kwiaty co rano z glinianego kubka. Wieś jest od razu weselsza.`},
  laznia:{w:1,make:()=>!hasB('laznia')&&bAvail('laznia')&&S.people.length>=16?mk(pickAdult()):null,t:(r,p)=>`${p.name} tęskni za gorącą parą`,
-  say:'Po całym dniu przy glinie albo w lesie nie da się domyć w zimnym strumieniu.',d:'Budowa → Wspólne → Łaźnia.',done:()=>hasB('laznia'),
+  say:'Po całym dniu przy glinie albo w lesie nie da się domyć w zimnym strumieniu.',d:'Budowa → Wspólnota → Łaźnia.',done:()=>hasB('laznia'),
   end:p=>{S.health=clamp(S.health+.04,0,1);return`W łaźni para gęsta jak mgła. ${p.name} wychodzi czerwony i szczęśliwy prosto w śnieg.`}},
  gaj:{w:1,make:()=>!hasB('gaj')&&bAvail('gaj')?mk(oldestZ()):null,t:(r,p)=>`${p.name} szuka miejsca dla bogów`,
-  say:'Dziadowie mieli miejsce, gdzie się nie rąbie drzew i nie podnosi głosu. Tu takiego nie mamy.',d:'Budowa → Wspólne → Święty gaj. Najlepiej na wzgórzu, wśród starych drzew.',done:()=>hasB('gaj'),
+  say:'Dziadowie mieli miejsce, gdzie się nie rąbie drzew i nie podnosi głosu. Tu takiego nie mamy.',d:'Budowa → Wspólnota → Święty gaj. Najlepiej na wzgórzu, wśród starych drzew.',done:()=>hasB('gaj'),
   end:p=>{pamAdd(2,'gaj');return`${p.name} wiesza na najstarszym dębie pierwszy wieniec. Ludzie mówią tam ciszej.`}},
  slup:{w:1,make:()=>{if(!S.vname||!ladFreeRod())return null;const r=ladFreeRod();return mk(S.people.filter(p=>isAdult(p)&&String(p.rod)===String(r)&&!S.reqs.some(q=>q.pid===p.id)).sort((a,b)=>b.age-a.age)[0],{base:zLad('slup')})},t:(r,p)=>`${p.name} chce postawić słup rodu`,
-  say:'Inne rody mają już swoje znaki przy domach. Nasz jeszcze nie.',d:'Ład wsi → słup rodowy. Sześć kłód.',done:r=>zLad('slup')>r.base,
+  say:'Inne rody mają już swoje znaki przy domach. Nasz jeszcze nie.',d:'Budowa → Ład wsi → słup rodowy. Sześć kłód.',done:r=>zLad('slup')>r.base,
   end:p=>{pamAdd(1);return`${p.name} rzeźbi znak rodu do późnej nocy. Rano słup stoi przy obejściu.`}}});
 Object.keys(REQS).forEach(k=>{const R=REQS[k],t0=R.take;R.take=r=>{if(t0)t0(r);const p=pById(r.pid);if(R.end&&p){try{log(R.end(p))}catch(e){}}}});
 const reqSay=(R,r,p)=>R.say?(typeof R.say==='function'?R.say(r,p):R.say):'';
@@ -98,7 +98,8 @@ reqHTML=function(){S.reqs=S.reqs||[];let h='<h3>Prośby mieszkańców</h3>';if(!
   h+=`<div class="card req zad"><h4>${R.t(r,p)}</h4>${sy?`<p style="font-style:italic">„${sy}”</p>`:''}<details><summary>Jak?</summary><p class="mut">${R.d}</p></details><p class="mut">Zostało ${left} ${dniW(left)}</p></div>`});return h};
 function sprInit(){S.spr=S.spr||{a:[],ch:{}};S.spr.ch=S.spr.ch||{};S.spr.a=S.spr.a||[];return S.spr}
 function sprTick(){if(!S||!S.people.length)return;const R=sprInit();
- for(const s of R.a.slice()){const p=pById(s.pid);const d=CHAIN[s.chain];if(!d||!p){R.a.splice(R.a.indexOf(s),1);if(d&&!p)R.ch[s.chain]='x';continue}
+ for(const s of R.a.slice()){const p=pById(s.pid);const d=CHAIN[s.chain];if(d&&!p){const q=s.chain==='kamien'?S.people.filter(x=>!x.born&&x.age>=30).sort((a,b)=>b.age-a.age)[0]:adultsZ()[0];if(q){s.pid=q.id;log(`${q.name} przejmuje sprawę: ${d.t.toLowerCase()}.`);continue}}
+  if(!d||!p){R.a.splice(R.a.indexOf(s),1);if(d&&!p)R.ch[s.chain]=s.chain==='kamien'?undefined:'x';continue}
   if(d.ok(s)&&!evOpen&&!placing&&isWork()){R.a.splice(R.a.indexOf(s),1);R.ch[s.chain]='ok';d.fin(s,p);return}}
  chainTick()}
 // ---------- wątki z historią ----------
@@ -112,7 +113,7 @@ const CHAIN={
    opts:[{n:'Pochować bosmana obok jego ludzi',d:'pieśń o bosmanie, pamięć osady',f:()=>{pamAdd(3,'szalupa');song('Pieśń o bosmanie z szalupy','Wszebor');S.deadNames=(S.deadNames||[]).concat(['bosman Wszebor']);zChest();return'Trzy kopce nad zatoką, jeden przy drugim. Na desce z burty dochodzi trzecie imię. Skrzynia bosmana wraca z nimi do osady.'}},
     {n:'Zanieść go do osady',d:'nadzieja, jego imię przy naszych grobach',f:()=>{S.hope=clamp(S.hope+.04,0,1);pamAdd(2,'szalupa');S.deadNames=(S.deadNames||[]).concat(['bosman Wszebor']);zChest();return'Niosą go na noszach z wioseł przez dwa dni. Teraz leży wśród swoich, a dzieci znają jego imię.'}}]},{})}},
  kamien:{t:'Kamień z imionami',ok:s=>hasB('cmentarz')&&S.people.some(q=>(q.sk.kamieniarz||0)>=2)&&S.res.kamien>=20,
-  how:()=>{const L=[];if(!hasB('cmentarz'))L.push('miejsce pamięci (Budowa → Wspólne)');if(!S.people.some(q=>(q.sk.kamieniarz||0)>=2))L.push('ktoś, kto umie ciosać kamień (fach kamieniarza 2, kamieniołom)');if(S.res.kamien<20)L.push('20 kamienia');return L.length?'Potrzeba: '+L.join(', ')+'.':'Wszystko gotowe.'},
+  how:()=>{const L=[];if(!hasB('cmentarz'))L.push('miejsce pamięci (Budowa → Wspólnota)');if(!S.people.some(q=>(q.sk.kamieniarz||0)>=2))L.push('ktoś, kto umie ciosać kamień (fach kamieniarza 2, kamieniołom)');if(S.res.kamien<20)L.push('20 kamienia');return L.length?'Potrzeba: '+L.join(', ')+'.':'Wszystko gotowe.'},
   say:()=>'Tamtej nocy na statku było nas więcej. Coraz mniej pamiętam ich twarzy. Imiona trzeba wyryć w kamieniu, póki ktoś je jeszcze zna.',
   fin:(s,p)=>{S.res.kamien-=20;openEvent({ey:'Opowieść',t:'Kamień z imionami',text:()=>{const mason=S.people.filter(q=>(q.sk.kamieniarz||0)>=2).sort((a,b)=>b.sk.kamieniarz-a.sk.kamieniarz)[0];return`${mason?mason.name:'Kamieniarz'} ciosa kamień przez cały tydzień. ${p.name} siedzi obok i dyktuje imiona, jedno po drugim. Przy niektórych długo milknie.\n\nNa końcu zostaje miejsce. Ktoś pyta, po co. ${p.name} mówi, że kiedyś będzie trzeba dopisać i nas.`},
    opts:[{n:'Postawić kamień przy grobach',d:'pieśń, pamięć osady, nadzieja',f:()=>{pamAdd(5,'kamien');song('Pieśń o kamieniu z imionami',p.name);S.hope=clamp(S.hope+.05,0,1);return'Kamień stoi na miejscu pamięci. W Dziady pali się przy nim najwięcej świateł.'}}]},{})}}};
@@ -141,4 +142,26 @@ function zadHTML(){if(!S)return'';const g=goalInfo();const R=sprInit();let h='<d
 {const _th=troubleHTML;troubleHTML=function(){return(!czOn&&S?zadHTML():'')+_th()}}
 czShowGoal=function(){const g=goalInfo();if(!g)return;setH(czGoal,`<small>${g.ch||'Cel'}</small><span>${g.t}</span>${g.d&&g.d!==g.how?`<em>${g.d}</em>`:''}`);czGoal.classList.add('on');clearTimeout(czGoalTm);czGoalTm=setTimeout(()=>czGoal.classList.remove('on'),11000)};
 {const _gt=goalsTick;goalsTick=function(){_gt();try{sprTick()}catch(e){console.warn(e)}}}
-window.__zad={goalInfo:()=>goalInfo(),CHAIN,sprTick,zadHTML,wreckEmpty,zCoast,chainTick};
+// ---------- 2.5: ślepe uliczki ----------
+// kajuta: gdy sztorm zabrał wrak, zanim ktoś się do niej dostał, cel nie blokuje aktu
+ACTS[1].g[2][1]=()=>S.wreck.parts[2].open||!!S.wreck.gone;
+// koza: wiedza rośnie z pracy myśliwych, rybaków i hodowców
+ACTS[3].g[1][2]='Wiedza o oswajaniu kóz rośnie z pracy myśliwych i rybaków (Wiedza → Hodowla). Potem zagroda i hodowca, blisko hal z kozami.';
+ZH['Oswój pierwszą kozę']=()=>tech('h_zagr')?(S.bld.some(b=>b.kind==='zagroda')?'Zagroda stoi. Hodowca musi jeszcze zagnać kozy z hal.':'Wiemy już, jak podejść kozy. Brakuje płotu, za który można by je zagnać.'):'Myśliwi widzą dzikie kozy na halach, ale nikt jeszcze nie wie, jak je oswoić.';
+// prośby tylko wtedy, gdy da się je spełnić
+{const m=REQS.ubrania.make;REQS.ubrania.make=()=>hasB('szwalnia')?m():null}
+{const m=REQS.cieply.make;REQS.cieply.make=()=>(S.res.gwozdzie>=16||hasB('kuznia'))?m():null}
+// skrzynia kapitana: księgi, których nikt nie wyniósł przed sztormem, wracają z morzem
+function bookRescueTick(){if(!S||!S.wreck||!S.wreck.gone||S.seen.skrzynia||S.epoch===2)return;
+ const lost=[];S.wreck.parts.forEach(pt=>Object.entries(pt.items).forEach(([k,v])=>{if(k.startsWith('ks_')&&v>0&&!S.books[k.slice(3)])lost.push(k.slice(3))}));
+ if(!lost.length){S.seen.skrzynia=1;return}S.skrzD=S.skrzD||S.day+1+Math.random();if(S.day<S.skrzD||evOpen||placing||!isWork())return;S.seen.skrzynia=1;
+ const p=adultsZ()[0];openEvent({ey:'Opowieść',t:'Skrzynia kapitana',text:()=>`Kilka dni po sztormie ${p?p.name:'ktoś'} znajduje na plaży okutą skrzynię oblepioną wodorostami. To skrzynia z kajuty kapitana. Smoła trzymała szczelnie: w środku, owinięte w natłuszczone płótno, leżą suche księgi.`,
+  opts:[{n:'Zanieść do obozu',d:'księgi do przeczytania',f:()=>{lost.forEach(b=>S.books[b]=1);S.wreck.parts.forEach(pt=>Object.keys(pt.items).forEach(k=>{if(k.startsWith('ks_'))pt.items[k]=0}));pamAdd(1);return'W skrzyni: '+lost.map(b=>'„'+BOOKS[b]+'”').join(' i ')+'. Trzeba je przeczytać (Praca → czytelnicy).'}}]},{})}
+{const _st=sprTick;sprTick=function(){_st();try{bookRescueTick()}catch(e){}}}
+// plac budowy tylko tam, dokąd da się dojść z osady
+{const _cp=checkPlace;checkPlace=function(kind,i,j){if(!_cp(kind,i,j))return false;if(!reach)return true;const e=entryOf(kind,i,j);return!e||!!reach[e[1]*N+e[0]]}}
+// zdunowie bez próby, czytelnicy bez księgi, zwiadowcy bez nieznanego: pomagają robotnikom, zamiast stać
+{const _pj=planJob;planJob=function(p){const r=_pj(p);if(r||!S||!isWorker(p)||p.fireB||restNow(p)||!isWork())return r;const j=p.job;
+  if(j!=='zdun'&&j!=='czyt'&&j!=='zwiad')return r;const why=p.act||'';p.job='rob';let ok=false;try{ok=_pj(p)}finally{p.job=j}
+  if(ok)p.act=(j==='zdun'?'nie ma próby, pomaga: ':j==='czyt'?'nie ma co czytać, pomaga: ':'okolica odkryta, pomaga: ')+p.act;else p.act=why;return ok}}
+window.__zad={bookRescueTick,goalInfo:()=>goalInfo(),CHAIN,sprTick,zadHTML,wreckEmpty,zCoast,chainTick};
