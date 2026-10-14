@@ -1,7 +1,7 @@
 // Składa grę z plików w src/ w jeden index.html i przygotowuje wersję do instalacji (PWA) w dist/.
 const fs=require('fs'),path=require('path'),crypto=require('crypto');
 const SRC=path.join(__dirname,'src'),AS=path.join(__dirname,'assets'),OUT=path.join(__dirname,'dist');
-const PARTS=['p_head.html','p_const.js','p_mid.js','p_rest.js','p_map.js','p_tech.js','p_exp.js','p_v8.js','p_bld.js','p_story.js','p_slav.js','p_wild.js','p_ludzie.js','p_urz.js','p_pamiec.js','p_akt.js','p_kol.js','p_slady.js','p_lad.js','p_gosp.js','p_bud.js','p_swiat.js','p_szlif.js','p_mapa.js','p_cisza.js','p_sluzba.js','p_zycie.js','p_rok.js','p_wiedza.js','p_gfx.js','p_grafika.js','p_ksiega.js','p_ratunek.js','p_g18.js','p_e2.js','p_e2d.js','p_e2m.js','p_end.js'];
+const PARTS=['p_head.html','p_const.js','p_mid.js','p_rest.js','p_map.js','p_tech.js','p_exp.js','p_v8.js','p_bld.js','p_story.js','p_slav.js','p_wild.js','p_ludzie.js','p_urz.js','p_pamiec.js','p_akt.js','p_kol.js','p_slady.js','p_lad.js','p_gosp.js','p_bud.js','p_swiat.js','p_szlif.js','p_mapa.js','p_cisza.js','p_sluzba.js','p_zycie.js','p_rok.js','p_wiedza.js','p_gfx.js','p_grafika.js','p_ksiega.js','p_ratunek.js','p_g18.js','p_e2.js','p_e2d.js','p_e2m.js','p_e21.js','p_end.js'];
 fs.rmSync(OUT,{recursive:true,force:true});fs.mkdirSync(OUT,{recursive:true});
 let game=PARTS.map(f=>fs.readFileSync(path.join(SRC,f),'utf8')).join('');
 game=game.replace('https://cdn.jsdelivr.net/npm/three@0.186.0/build/three.module.min.js','./three.module.js');
