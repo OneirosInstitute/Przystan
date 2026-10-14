@@ -707,6 +707,25 @@ Nazwa trafia do Księgi rozbitków i na kartę celu. Zdobyte zakończenia zapami
 **Serwer.** server.js bez zależności: GET /api/tydzien (tydzień ISO w UTC, wyspa z hasza tygodnia, wyzwanie po kolei), GET /api/wyniki?week=… (20 najlepszych), POST /api/wynik (sprawdza tydzień i wyspę, czyści imię, jeden wpis na imię, najwyżej raz na 4 sekundy z jednego adresu). Wyniki są w pliku wyniki-TYDZIEŃ.json w katalogu DATA_DIR. Na Railway trzeba dodać Volume i ustawić DATA_DIR na jego ścieżkę (np. /data), inaczej tabela czyści się przy każdym wdrożeniu. Service worker nie zapisuje odpowiedzi /api/ w pamięci podręcznej.
 
 
+## Epoka III: cała wyspa (od wersji 3.0)
+
+**Początek.** Gdy epoka II się kończy (scena z nazwą osady), przy następnej okazji przychodzi scena „Cała wyspa” i zaczyna się epoka III. Gry, w których epoka II już się skończyła, wchodzą w nią same. Na ekranie startowym jest też „Zacznij od epoki III”: wieś po epoce II (droga Domu: otwarta wieś, wiec wszystkich, każdy dom sobie), z kilkoma przysiółkami, drogami i trzema wozami.
+
+**Cel epoki.** Ogień w każdej krainie, do której da się dojść lądem z osady (krainy odcięte wodą się nie liczą). Karta „Epoka III” na górze działu Wspólnota pokazuje, ile krain jest zasiedlonych, ilu ludzi żyje na całej wyspie i ile wozów przyjechało z towarem.
+
+| Akt | Cele |
+|---|---|
+| X Krainy | przysiółki w połowie krain; przysiółek zakłada przysiółek; wyrównane drogi do pięciu przysiółków |
+| XI Wymiana | zajazd przy drodze; 40 wozów z towarem; towar z czterech rodzajów krain (wybrzeże, bór, góry, łąki) |
+| XII Wyspa nasza | przysiółek w każdej krainie; 150 osób na całej wyspie; trzy przysiółki urosły do osiedli (14 osób) |
+
+**Przysiółek zakłada przysiółek.** Przysiółek z co najmniej 8 osobami ma w karcie przycisk „Wyślij młodych dalej”: troje młodych idzie do najbliższej pustej krainy i zakłada tam nowy przysiółek (osada daje im 20 jedzenia i 10 kłód). Ta sama prośba przychodzi też sama jako scena „Za ciasno w przysiółku”. Dzięki temu wyspę da się zasiedlić bez wyludniania osady.
+
+**Zajazd.** Nowy budynek (Wspólnota, od aktu XI): kłody 36, deski 16, gwoździe 16, kamień 8. Wozy wyjeżdżają prawie dwa razy częściej i przywożą półtora raza więcej; w epoce III każdy wóz przywozi jeszcze o ćwierć więcej.
+
+**Koniec.** Po trzech aktach scena „Wyspa jest nasza”: ogniska na każdym wzgórzu, podsumowanie ludzi, przysiółków i lat, pieśń, rozdział „Epoka III” w Księdze rozbitków. Gra toczy się dalej.
+
+
 # 13. Grafika i dźwięk
 
 - **Styl:** trójwymiarowe, niskopoligonowe modele w ściszonej, chłodnej palecie północy. Mgła nieznanego, pory dnia i roku, deszcz, śnieg, mgły, dym z kominów, świetliki latem, ptaki.
@@ -769,7 +788,7 @@ Nazwa trafia do Księgi rozbitków i na kartę celu. Zdobyte zakończenia zapami
 
 # 15. Technika
 
-- **Plik gry:** jeden plik HTML (około 860 kB) i biblioteka Three.js r186 (dwa moduły, około 2 MB, w paczce do instalacji trzymane lokalnie) składany z części: p_head.html, p_const.js, p_mid.js, p_rest.js, p_map.js, p_tech.js, p_exp.js, p_v8.js, p_bld.js, p_story.js, p_slav.js, p_wild.js, p_ludzie.js, p_urz.js, p_pamiec.js, p_akt.js, p_kol.js, p_slady.js, p_lad.js, p_gosp.js, p_bud.js, p_swiat.js, p_szlif.js, p_mapa.js, p_cisza.js, p_sluzba.js, p_zycie.js, p_rok.js, p_wiedza.js, p_gfx.js, p_grafika.js, p_ksiega.js, p_ratunek.js, p_g18.js, p_e2.js, p_e2d.js, p_e2m.js, p_e21.js, p_e22.js, p_woz.js, p_zad.js, p_rozb.js, p_noc.js, p_opow.js, p_przyr.js, p_handel.js, p_tydzien.js, p_end.js.
+- **Plik gry:** jeden plik HTML (około 860 kB) i biblioteka Three.js r186 (dwa moduły, około 2 MB, w paczce do instalacji trzymane lokalnie) składany z części: p_head.html, p_const.js, p_mid.js, p_rest.js, p_map.js, p_tech.js, p_exp.js, p_v8.js, p_bld.js, p_story.js, p_slav.js, p_wild.js, p_ludzie.js, p_urz.js, p_pamiec.js, p_akt.js, p_kol.js, p_slady.js, p_lad.js, p_gosp.js, p_bud.js, p_swiat.js, p_szlif.js, p_mapa.js, p_cisza.js, p_sluzba.js, p_zycie.js, p_rok.js, p_wiedza.js, p_gfx.js, p_grafika.js, p_ksiega.js, p_ratunek.js, p_g18.js, p_e2.js, p_e2d.js, p_e2m.js, p_e21.js, p_e22.js, p_woz.js, p_zad.js, p_rozb.js, p_noc.js, p_opow.js, p_przyr.js, p_handel.js, p_tydzien.js, p_e3.js, p_end.js.
 - **Grafika:** Three.js r186 (WebGL2, ładowany jako moduł), własna obróbka obrazu (bloom, cienie kontaktowe, cienie chmur, tilt-shift, korekcja barw), własne shadery wody i terenu dopinane do materiałów Three.js.
 - **Wydajność dużej wsi (od 2.0):** gotowe budynki w każdym kwadracie wyspy (32 na 32 pola) rysuje się jako jedna bryła na materiał, gładkie kolory przechodzą do wspólnego materiału z kolorem w wierzchołkach, a kłosy na polach są instancjami. W gotowej wsi z epoki II to 1070 zamiast 2030 wywołań rysowania na klatkę. Dotknięcie budynku działa jak dawniej.
 - **Zapis:** w pamięci przeglądarki (klucz przystan-v7, kopia zapasowa przystan-v7-bak), do pobrania jako plik JSON i do wczytania z pliku.
@@ -815,6 +834,7 @@ Nazwa trafia do Księgi rozbitków i na kartę celu. Zdobyte zakończenia zapami
 | 1.8.3 | poprawka: rozbudowa domu (szałas w chatę, chata w dom) nie zabiera już rodzinie spiżarki; w czasie budowy zapas zostaje w starym domu w granicach jego pojemności |
 | 1.9 | budynki z charakterem: każdy budynek inny (ściany, dachy, spadek, okap), koniki, malowane okiennice, ganki, przybudówki, garnki na płocie, zioła pod okapem, szyldy rzemiosł, wyraźniejsza kuźnia, łaźnia i chata wiecowa |
 | 1.10 | wykonanie budynków: surowe, porządne i mistrzowskie, wyraźnie widoczne po rozbudowie (wielkość, podmurówka, dach, okiennice, obramienia okien, kwiaty, płotek, szyld); karta budynku pokazuje wykonanie i trwałość; odmiany szałasów, studni, zagród i spiżarni |
+| 3.0 | epoka III, cała wyspa: zaczyna się po zakończeniu epoki II albo od razu przyciskiem „Zacznij od epoki III”; akty X Krainy, XI Wymiana, XII Wyspa nasza; przysiółki zakładają przysiółki („Wyślij młodych dalej” i scena „Za ciasno w przysiółku”); zajazd przy drodze (wozy częściej i z większym towarem); scena „Wyspa jest nasza” i rozdział w Księdze rozbitków |
 | 2.8 | Wyspa tygodnia: serwer na Railway co tydzień podaje tę samą wyspę i wyzwanie wszystkim graczom; karta na ekranie startowym z tabelą wyników, imię gracza, wynik wysyła się sam na początku każdej pory roku; API /api/tydzien, /api/wyniki, /api/wynik; wyniki w pliku w katalogu DATA_DIR |
 | 2.7 | przyroda z wyborem i wozy na drogach: sceny „Woda wzbiera” (wiosenna powódź: pola albo zapasy), „Las płonie” (przecinka, gaszenie albo ucieczka; pogorzelisko na mapie), „Sztorm u brzegu” (łodzie na brzeg, kamienie na pomost albo ryzyko); wozy jeżdżą po wytyczonych drogach do przysiółków i z powrotem, z przysiółków przywożą ryby, kłody, kamień albo ziarno |
 | 2.6 | przewiń noc i nowe opowieści: przycisk „Przewiń noc” po zmierzchu; wątki „Ślady przy obozie” (wilki, płot), „Woreczek z domu” (ziarno z rodzinnej wsi, chleb), „Znaki na kamieniach” (kamienny krąg, mapa brzegu), „Ostatni z wraku” (wyprawa na szczyt), w epoce II „Dzwon w piasku” i zdarzenie „Głód w przysiółku” |
@@ -903,6 +923,7 @@ Kolejność dalszej pracy. Każda wersja kończy się czymś, w co da się zagra
 | 2.6 Noc i opowieści (gotowe) | przewijanie nocy, wątek z historią w każdym akcie epoki I i w epoce II |
 | 2.7 Przyroda i handel (gotowe) | powódź, pożar lasu, sztorm z wyborem; wozy na drogach do przysiółków |
 | 2.8 Wyspa tygodnia (gotowe) | wspólna wyspa i wyzwanie na tydzień, tabela wyników na serwerze |
+| 3.0 Epoka III: cała wyspa (gotowe) | osada w każdej krainie, przysiółki-córki, drogi, wymiana wozami, zajazd, zakończenie „Wyspa jest nasza” |
 
 **Epoka II** (od 2.0, ukończona w 2.2): trzy drogi z trzema rozdrożami każda i 28 zakończeniami. Przez cały czas obowiązuje: klimat słowiański bez magii, brak przybyszów, decyzje gracza w scenach i na wiecu, a życie ludzi toczy się samo.
 

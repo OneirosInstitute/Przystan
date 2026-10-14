@@ -2,7 +2,7 @@
 /* ================= 2.8: Wyspa tygodnia — ta sama wyspa i wyzwanie dla wszystkich, wyniki na serwerze ================= */
 const TYD_API=p=>new URL('api/'+p,location.href.replace(/[^/]*$/,'')).href;
 let TYD=null,tydName='';try{tydName=localStorage.getItem('przystan-name')||''}catch(e){}
-function tydFetch(p,opt){const c=new AbortController();const t=setTimeout(()=>c.abort(),4000);return fetch(TYD_API(p),Object.assign({signal:c.signal,cache:'no-store'},opt||{})).then(r=>{clearTimeout(t);if(!r.ok)throw new Error(r.status);return r.json()})}
+function tydFetch(p,opt){if(location.protocol==='file:')return Promise.reject(new Error('plik'));const c=new AbortController();const t=setTimeout(()=>c.abort(),4000);return fetch(TYD_API(p),Object.assign({signal:c.signal,cache:'no-store'},opt||{})).then(r=>{clearTimeout(t);if(!r.ok)throw new Error(r.status);return r.json()})}
 const tydScore=()=>!S?0:Math.round(S.day*10+S.people.length*25+(S.pam||0)*3+(S.hamlets||[]).reduce((a,h)=>a+h.pop,0)*10+(S.epoch===2?500:0));
 function tydWhen(d){const y=Math.floor(d/YEAR)+1,s=Math.floor((d%YEAR)/SD);return`rok ${y}, ${SEAS[s].toLowerCase()}`}
 function tydRow(e,k){return`<li><b>${k+1}.</b> ${e.name}${e.vil?` <small>(${e.vil})</small>`:''}<span>${e.score} · ${tydWhen(e.day)} · ${e.pop} ${osb(e.pop)}</span></li>`}

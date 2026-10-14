@@ -7,7 +7,7 @@ function cartSpawn(h,dir){const P=hamPath[h.id];if(!P||carts.length>=8)return fa
  if(m.userData.carry)m.userData.carry.visible=false;wGroup.add(m);carts.push({g,m,P,h:h.id,s:dir>0?0:P.len,dir,sp:.62+Math.random()*.08,ph:Math.random()*6});return true}
 function cartFree(c){scene.remove(c.g);wGroup.remove(c.m);c.g.traverse(o=>{if(o.geometry)o.geometry.dispose()})}
 function cartArrive(c){const h=(S.hamlets||[]).find(x=>x.id===c.h);if(!h)return;
- if(c.dir<0){const[r,q]=HAN_RES[hType(h)]||['drewno',5];S.res[r]=(S.res[r]||0)+q;S.hanN=(S.hanN||0)+1;if(!S.seen.han1){S.seen.han1=1;log(`Pierwszy wóz z przysiółka ${h.name} wjeżdża do osady: ${RN[r].toLowerCase()} na wymianę.`)}}
+ if(c.dir<0){const ty=hType(h),[r,q0]=HAN_RES[ty]||['drewno',5],q=Math.round(q0*hanMul());S.res[r]=(S.res[r]||0)+q;S.hanN=(S.hanN||0)+1;S.hanTy=S.hanTy||{};S.hanTy[ty]=1;if(!S.seen.han1){S.seen.han1=1;log(`Pierwszy wóz z przysiółka ${h.name} wjeżdża do osady: ${RN[r].toLowerCase()} na wymianę.`)}}
  else{h.zap=Math.min(1,(h.zap||.5)+.03);h.wiez=Math.min(1,(h.wiez||.5)+.01)}}
 function cartFrame(rdt){if(!S)return;const gdt=rdt*(S.speed||0);
  for(let k=carts.length-1;k>=0;k--){const C=carts[k];C.s+=C.dir*C.sp*gdt;if(C.s<0||C.s>C.P.len){cartArrive(C);cartFree(C);carts.splice(k,1);continue}
@@ -19,7 +19,9 @@ function cartFrame(rdt){if(!S)return;const gdt=rdt*(S.speed||0);
   const cx=x-fx*1.05,cz=z-fz*1.05;C.g.position.set(cx,Hy(cx,cz),cz);C.g.rotation.y=d;C.g.visible=vis;C.g.userData.load.visible=C.dir<0}}
 // co jakiś czas wóz rusza do przysiółka z drogą albo wraca z niego z towarem
 let hanT=0;
-{const _mt=mapTick;mapTick=function(rdt){_mt(rdt);try{cartFrame(rdt)}catch(e){}if(!S)return;hanT+=rdt*(S.speed||0);if(hanT<40)return;hanT=0;
+{const _mt=mapTick;mapTick=function(rdt){_mt(rdt);try{cartFrame(rdt)}catch(e){}if(!S)return;hanT+=rdt*(S.speed||0);if(hanT<hanEvery())return;hanT=0;
   if(!(S.wozy>0)&&S.epoch!==2)return;const L=(S.hamlets||[]).filter(h=>h.road===2&&hamPath[h.id]&&!(h.arr&&S.day<h.arr)&&!carts.some(c=>c.h===h.id));if(!L.length||!isWork())return;
   const h=L[(Math.random()*L.length)|0];cartSpawn(h,Math.random()<.5?1:-1)}}
+function hanEvery(){return S&&S.bld.some(b=>b.kind==='zajazd'&&bDone(b))?22:40}
+function hanMul(){return(S&&S.bld.some(b=>b.kind==='zajazd'&&bDone(b))?1.5:1)*(S&&S.e3&&S.e3.on?1.25:1)}
 window.__han={carts,cartSpawn,cartFrame};
