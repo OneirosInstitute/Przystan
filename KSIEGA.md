@@ -687,6 +687,17 @@ Nazwa trafia do Księgi rozbitków i na kartę celu. Zdobyte zakończenia zapami
 - *Głód w przysiółku* (epoka II, zima i przednówek): przysiółek prosi o jedzenie; można posłać zapasy, ziarno siewne albo odmówić.
 
 
+## Przyroda z wyborem i wozy na drogach (od wersji 2.7)
+
+**Woda wzbiera** (wiosna, deszcz albo sztorm, gdy coś rośnie na polu): wały przy polach (część zapasów zamoknie), ratowanie zapasów (zasiewy tracą prawie połowę wzrostu i trochę żyzności) albo czekanie (połowa szans, że się obejdzie).
+
+**Las płonie** (lato, susza albo pogoda, gdy przy borze stoi chata drwala, zbieracza, myśliwego, leśniczówka albo barć): przecinka (ogień staje, ścięte drzewa idą na kłody), gaszenie wodą (ze studnią 72% szans, bez niej 40%; ktoś może się poparzyć, a przy porażce zajmuje się budynek) albo ucieczka (spłonie kawał boru, budynek może zapłonąć, na mapie zostaje Pogorzelisko). Spalone drzewa odsadza leśniczy.
+
+**Sztorm u brzegu** (jesień i zima, sztorm, gdy jest pomost): łodzie i sieci na brzeg (5 opału na ogniska), kamienie na pomost (10 kamienia, pomost mocniejszy) albo ryzyko (połowa szans, że pomost straci połowę stanu, a łódź rybacka może się rozbić).
+
+**Wozy na drogach.** Gdy osada ma wozy (albo jest w epoce II), co kilka godzin wóz rusza wytyczoną drogą do jednego z przysiółków albo wraca z niego. Wóz z przysiółka przywozi towar z jego krainy: z wybrzeża ryby, z boru kłody, z gór kamień, z łąk ziarno. Wóz z osady poprawia zapasy i więź przysiółka.
+
+
 # 13. Grafika i dźwięk
 
 - **Styl:** trójwymiarowe, niskopoligonowe modele w ściszonej, chłodnej palecie północy. Mgła nieznanego, pory dnia i roku, deszcz, śnieg, mgły, dym z kominów, świetliki latem, ptaki.
@@ -749,7 +760,7 @@ Nazwa trafia do Księgi rozbitków i na kartę celu. Zdobyte zakończenia zapami
 
 # 15. Technika
 
-- **Plik gry:** jeden plik HTML (około 860 kB) i biblioteka Three.js r186 (dwa moduły, około 2 MB, w paczce do instalacji trzymane lokalnie) składany z części: p_head.html, p_const.js, p_mid.js, p_rest.js, p_map.js, p_tech.js, p_exp.js, p_v8.js, p_bld.js, p_story.js, p_slav.js, p_wild.js, p_ludzie.js, p_urz.js, p_pamiec.js, p_akt.js, p_kol.js, p_slady.js, p_lad.js, p_gosp.js, p_bud.js, p_swiat.js, p_szlif.js, p_mapa.js, p_cisza.js, p_sluzba.js, p_zycie.js, p_rok.js, p_wiedza.js, p_gfx.js, p_grafika.js, p_ksiega.js, p_ratunek.js, p_g18.js, p_e2.js, p_e2d.js, p_e2m.js, p_e21.js, p_e22.js, p_woz.js, p_zad.js, p_rozb.js, p_noc.js, p_opow.js, p_end.js.
+- **Plik gry:** jeden plik HTML (około 860 kB) i biblioteka Three.js r186 (dwa moduły, około 2 MB, w paczce do instalacji trzymane lokalnie) składany z części: p_head.html, p_const.js, p_mid.js, p_rest.js, p_map.js, p_tech.js, p_exp.js, p_v8.js, p_bld.js, p_story.js, p_slav.js, p_wild.js, p_ludzie.js, p_urz.js, p_pamiec.js, p_akt.js, p_kol.js, p_slady.js, p_lad.js, p_gosp.js, p_bud.js, p_swiat.js, p_szlif.js, p_mapa.js, p_cisza.js, p_sluzba.js, p_zycie.js, p_rok.js, p_wiedza.js, p_gfx.js, p_grafika.js, p_ksiega.js, p_ratunek.js, p_g18.js, p_e2.js, p_e2d.js, p_e2m.js, p_e21.js, p_e22.js, p_woz.js, p_zad.js, p_rozb.js, p_noc.js, p_opow.js, p_przyr.js, p_handel.js, p_end.js.
 - **Grafika:** Three.js r186 (WebGL2, ładowany jako moduł), własna obróbka obrazu (bloom, cienie kontaktowe, cienie chmur, tilt-shift, korekcja barw), własne shadery wody i terenu dopinane do materiałów Three.js.
 - **Wydajność dużej wsi (od 2.0):** gotowe budynki w każdym kwadracie wyspy (32 na 32 pola) rysuje się jako jedna bryła na materiał, gładkie kolory przechodzą do wspólnego materiału z kolorem w wierzchołkach, a kłosy na polach są instancjami. W gotowej wsi z epoki II to 1070 zamiast 2030 wywołań rysowania na klatkę. Dotknięcie budynku działa jak dawniej.
 - **Zapis:** w pamięci przeglądarki (klucz przystan-v7, kopia zapasowa przystan-v7-bak), do pobrania jako plik JSON i do wczytania z pliku.
@@ -795,6 +806,7 @@ Nazwa trafia do Księgi rozbitków i na kartę celu. Zdobyte zakończenia zapami
 | 1.8.3 | poprawka: rozbudowa domu (szałas w chatę, chata w dom) nie zabiera już rodzinie spiżarki; w czasie budowy zapas zostaje w starym domu w granicach jego pojemności |
 | 1.9 | budynki z charakterem: każdy budynek inny (ściany, dachy, spadek, okap), koniki, malowane okiennice, ganki, przybudówki, garnki na płocie, zioła pod okapem, szyldy rzemiosł, wyraźniejsza kuźnia, łaźnia i chata wiecowa |
 | 1.10 | wykonanie budynków: surowe, porządne i mistrzowskie, wyraźnie widoczne po rozbudowie (wielkość, podmurówka, dach, okiennice, obramienia okien, kwiaty, płotek, szyld); karta budynku pokazuje wykonanie i trwałość; odmiany szałasów, studni, zagród i spiżarni |
+| 2.7 | przyroda z wyborem i wozy na drogach: sceny „Woda wzbiera” (wiosenna powódź: pola albo zapasy), „Las płonie” (przecinka, gaszenie albo ucieczka; pogorzelisko na mapie), „Sztorm u brzegu” (łodzie na brzeg, kamienie na pomost albo ryzyko); wozy jeżdżą po wytyczonych drogach do przysiółków i z powrotem, z przysiółków przywożą ryby, kłody, kamień albo ziarno |
 | 2.6 | przewiń noc i nowe opowieści: przycisk „Przewiń noc” po zmierzchu; wątki „Ślady przy obozie” (wilki, płot), „Woreczek z domu” (ziarno z rodzinnej wsi, chleb), „Znaki na kamieniach” (kamienny krąg, mapa brzegu), „Ostatni z wraku” (wyprawa na szczyt), w epoce II „Dzwon w piasku” i zdarzenie „Głód w przysiółku” |
 | 2.5 | rozbiórka i odwołanie budowy: w karcie budynku „Rozbierz” (robotnicy rozbierają go jak przy remoncie, wraca połowa materiału), „Wstrzymaj rozbiórkę” i dla placu budowy „Anuluj budowę” (wraca materiał pomniejszony o to, co już zużyto); obie z potwierdzeniem; bramy grodu się nie rozbiera, a rozbiórka miejsca pamięci albo świętego gaju obniża nadzieję |
 | 2.4.1 | przegląd ślepych uliczek: szwalnia bez płótna w koszcie (wcześniej można było zużyć całe płótno na szałasy i nie mieć jak zrobić nowego); księgi, których nikt nie wyniósł przed sztormem, wracają w skrzyni kapitana wyrzuconej na plażę; cel kajuty nie blokuje aktu, gdy wrak zabrał sztorm; prośby o ubrania i ciepły dom tylko wtedy, gdy da się je spełnić; budowy tylko tam, dokąd da się dojść; zduni bez próby, czytelnicy bez księgi i zwiadowcy bez nieznanego terenu pomagają robotnikom; opowieść przechodzi na kogoś innego, gdy proszący umrze; poprawione drogi w podpowiedziach (Wspólnota, Ład wsi, karta Epoka II, drugi poziom pomostu na wędzarnię); podpowiedzi pokazują, czego brakuje (kłód, ludzi w drewutni) |
@@ -879,6 +891,7 @@ Kolejność dalszej pracy. Każda wersja kończy się czymś, w co da się zagra
 | 2.4 Zadania i opowieść (gotowe) | cele bez ślepych zaułków, podpowiedzi zamiast instrukcji, nowe prośby, pierwsze wątki z historią |
 | 2.5 Rozbiórka (gotowe) | rozbieranie budynków i odwoływanie budów z karty budynku |
 | 2.6 Noc i opowieści (gotowe) | przewijanie nocy, wątek z historią w każdym akcie epoki I i w epoce II |
+| 2.7 Przyroda i handel (gotowe) | powódź, pożar lasu, sztorm z wyborem; wozy na drogach do przysiółków |
 
 **Epoka II** (od 2.0, ukończona w 2.2): trzy drogi z trzema rozdrożami każda i 28 zakończeniami. Przez cały czas obowiązuje: klimat słowiański bez magii, brak przybyszów, decyzje gracza w scenach i na wiecu, a życie ludzi toczy się samo.
 
