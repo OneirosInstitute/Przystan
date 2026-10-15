@@ -774,6 +774,15 @@ Nazwa trafia do Księgi rozbitków i na kartę celu. Zdobyte zakończenia zapami
   - pozostałe budynki też mają odmiany: szałasy w różnych odcieniach płótna z łatami, studnie kamienne albo w zrębie z bali, zagrody z żerdzi albo z plecionki, spiżarnie na kamiennych „grzybkach”, ściany w kolorze budynku.
 - **Dźwięk:** szum morza i wiatru, ptaki za dnia, świerszcze nocą, trzask ognia, dzwonek wydarzeń i fujarka wieczorami oraz w czasie świąt.
 
+## Ludzie i zwierzęta (od wersji 3.1)
+
+**Zwierzęta** mają nowe modele z gładkich brył zamiast pudełek: tułów z piersią i zadem, szyja, głowa z pyskiem, oczy, uszy, nogi z kolanem i kopytem, ogon. Barwa przechodzi od jasnego brzucha do ciemniejszego grzbietu. Każdy gatunek ma swoje cechy: rogacz w każdym stadzie saren ma poroże, sarny biały lustro na zadzie, kozy rogi i bródkę (kozy w zagrodach są jaśniejsze, domowe), dziki kły, ryj i szczecinę na grzbiecie, wilki puszysty ogon, lisy czarne łapy i białą końcówkę kity, zające długie uszy z czarnymi końcami i biały ogonek, niedźwiedzie garb na karku, foki wrzecionowate ciało, płetwy i cętki, psy zakręcony ogon i oklapnięte uszy.
+
+**Ruch zwierząt.** Każdy gatunek ma pozy: stoi, krok w lewo, krok w prawo, skubie trawę. Idące stado przełącza kroki kilka razy na sekundę, każde zwierzę we własnym rytmie; stojące sarny, kozy, dziki i zające co chwilę pochylają głowę do trawy. Zwierzęta jednego gatunku i pozy rysuje jedno wywołanie (instancje), puste pozy nie są rysowane.
+
+**Ludzie** mają brwi. Zimą (i w mróz albo śnieg) zakładają kożuchy z futrzanym brzegiem i kołnierzem: mężczyźni długie, z futrzaną czapą, kobiety krótkie, z ciepłą chustą na głowie; rękawy zmieniają barwę na kożuchową. Ubranie zmienia się samo z porą roku, bez dodatkowych wywołań rysowania. W pracy każdy trzyma narzędzie swojej roboty: drwal siekierę, kamieniarz i górnik kilof, budowniczy i kowal młot, żniwiarz sierp, leśnik łopatę, rybak wędkę, myśliwy łuk, zbieracz kosz, pasterz kij. Najstarsi (po 62. roku) chodzą o lasce.
+
+
 # 14. Interfejs
 
 - **Górny pasek:** pora roku i dzień, tempo, dźwięk, pełny ekran, jakość grafiki, zapasy (żywność z liczbą dni, drewno, opał, ludzie).
@@ -788,7 +797,7 @@ Nazwa trafia do Księgi rozbitków i na kartę celu. Zdobyte zakończenia zapami
 
 # 15. Technika
 
-- **Plik gry:** jeden plik HTML (około 860 kB) i biblioteka Three.js r186 (dwa moduły, około 2 MB, w paczce do instalacji trzymane lokalnie) składany z części: p_head.html, p_const.js, p_mid.js, p_rest.js, p_map.js, p_tech.js, p_exp.js, p_v8.js, p_bld.js, p_story.js, p_slav.js, p_wild.js, p_ludzie.js, p_urz.js, p_pamiec.js, p_akt.js, p_kol.js, p_slady.js, p_lad.js, p_gosp.js, p_bud.js, p_swiat.js, p_szlif.js, p_mapa.js, p_cisza.js, p_sluzba.js, p_zycie.js, p_rok.js, p_wiedza.js, p_gfx.js, p_grafika.js, p_ksiega.js, p_ratunek.js, p_g18.js, p_e2.js, p_e2d.js, p_e2m.js, p_e21.js, p_e22.js, p_woz.js, p_zad.js, p_rozb.js, p_noc.js, p_opow.js, p_przyr.js, p_handel.js, p_tydzien.js, p_e3.js, p_end.js.
+- **Plik gry:** jeden plik HTML (około 860 kB) i biblioteka Three.js r186 (dwa moduły, około 2 MB, w paczce do instalacji trzymane lokalnie) składany z części: p_head.html, p_const.js, p_mid.js, p_rest.js, p_map.js, p_tech.js, p_exp.js, p_v8.js, p_bld.js, p_story.js, p_slav.js, p_wild.js, p_ludzie.js, p_urz.js, p_pamiec.js, p_akt.js, p_kol.js, p_slady.js, p_lad.js, p_gosp.js, p_bud.js, p_swiat.js, p_szlif.js, p_mapa.js, p_cisza.js, p_sluzba.js, p_zycie.js, p_rok.js, p_wiedza.js, p_gfx.js, p_grafika.js, p_ksiega.js, p_ratunek.js, p_g18.js, p_e2.js, p_e2d.js, p_e2m.js, p_e21.js, p_e22.js, p_woz.js, p_zad.js, p_rozb.js, p_noc.js, p_opow.js, p_przyr.js, p_handel.js, p_tydzien.js, p_e3.js, p_zwierz.js, p_postaci.js, p_end.js.
 - **Grafika:** Three.js r186 (WebGL2, ładowany jako moduł), własna obróbka obrazu (bloom, cienie kontaktowe, cienie chmur, tilt-shift, korekcja barw), własne shadery wody i terenu dopinane do materiałów Three.js.
 - **Wydajność dużej wsi (od 2.0):** gotowe budynki w każdym kwadracie wyspy (32 na 32 pola) rysuje się jako jedna bryła na materiał, gładkie kolory przechodzą do wspólnego materiału z kolorem w wierzchołkach, a kłosy na polach są instancjami. W gotowej wsi z epoki II to 1070 zamiast 2030 wywołań rysowania na klatkę. Dotknięcie budynku działa jak dawniej.
 - **Zapis:** w pamięci przeglądarki (klucz przystan-v7, kopia zapasowa przystan-v7-bak), do pobrania jako plik JSON i do wczytania z pliku.
@@ -834,6 +843,7 @@ Nazwa trafia do Księgi rozbitków i na kartę celu. Zdobyte zakończenia zapami
 | 1.8.3 | poprawka: rozbudowa domu (szałas w chatę, chata w dom) nie zabiera już rodzinie spiżarki; w czasie budowy zapas zostaje w starym domu w granicach jego pojemności |
 | 1.9 | budynki z charakterem: każdy budynek inny (ściany, dachy, spadek, okap), koniki, malowane okiennice, ganki, przybudówki, garnki na płocie, zioła pod okapem, szyldy rzemiosł, wyraźniejsza kuźnia, łaźnia i chata wiecowa |
 | 1.10 | wykonanie budynków: surowe, porządne i mistrzowskie, wyraźnie widoczne po rozbudowie (wielkość, podmurówka, dach, okiennice, obramienia okien, kwiaty, płotek, szyld); karta budynku pokazuje wykonanie i trwałość; odmiany szałasów, studni, zagród i spiżarni |
+| 3.1 | ludzie i zwierzęta: nowe modele zwierząt (sarny z rogaczami, kozy z rogami i bródką, dziki z kłami i szczeciną, wilki, lisy z białym końcem kity, zające, niedźwiedzie z garbem, foki, psy) z przejściem barwy od brzucha do grzbietu; chód z naprzemiennych póz, sarny, kozy, dziki i zające skubią trawę; ludzie mają brwi, zimą kożuchy z futrzanym brzegiem, czapy i ciepłe chusty, w pracy narzędzie w ręku (siekiera, kilof, młot, sierp, łopata, wędka, łuk, kosz, kij), najstarsi chodzą o lasce |
 | 3.0.1 | po wyjściu z menu gra zawsze rusza: przycisk zamknięcia (×) zatrzymywał czas na stałe, bo był podpięty z pominięciem wznowienia; gra rusza też wtedy, gdy przed otwarciem menu stała; zwinięty panel puszcza czas, rozwinięty znów go zatrzymuje |
 | 3.0 | epoka III, cała wyspa: zaczyna się po zakończeniu epoki II albo od razu przyciskiem „Zacznij od epoki III”; akty X Krainy, XI Wymiana, XII Wyspa nasza; przysiółki zakładają przysiółki („Wyślij młodych dalej” i scena „Za ciasno w przysiółku”); zajazd przy drodze (wozy częściej i z większym towarem); scena „Wyspa jest nasza” i rozdział w Księdze rozbitków |
 | 2.8 | Wyspa tygodnia: serwer na Railway co tydzień podaje tę samą wyspę i wyzwanie wszystkim graczom; karta na ekranie startowym z tabelą wyników, imię gracza, wynik wysyła się sam na początku każdej pory roku; API /api/tydzien, /api/wyniki, /api/wynik; wyniki w pliku w katalogu DATA_DIR |
@@ -925,6 +935,7 @@ Kolejność dalszej pracy. Każda wersja kończy się czymś, w co da się zagra
 | 2.7 Przyroda i handel (gotowe) | powódź, pożar lasu, sztorm z wyborem; wozy na drogach do przysiółków |
 | 2.8 Wyspa tygodnia (gotowe) | wspólna wyspa i wyzwanie na tydzień, tabela wyników na serwerze |
 | 3.0 Epoka III: cała wyspa (gotowe) | osada w każdej krainie, przysiółki-córki, drogi, wymiana wozami, zajazd, zakończenie „Wyspa jest nasza” |
+| 3.1 Ludzie i zwierzęta (gotowe) | nowe modele i chód zwierząt, zimowe stroje, narzędzia w ręku |
 
 **Epoka II** (od 2.0, ukończona w 2.2): trzy drogi z trzema rozdrożami każda i 28 zakończeniami. Przez cały czas obowiązuje: klimat słowiański bez magii, brak przybyszów, decyzje gracza w scenach i na wiecu, a życie ludzi toczy się samo.
 
