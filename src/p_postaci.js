@@ -20,7 +20,7 @@ function winterExtra(p){const k=p.sex==='k',adult=p.age>=12,id=p.id;const koz=md
   T.push([new THREE.CylinderGeometry(.118,.118,.035,14,1,true),fur,mdM(0,HYP+.035,-.004)])}
  else{const sz=mdCol(SZAL[id%4]);T.push([new THREE.SphereGeometry(.12,14,10,0,6.283,0,1.6),sz,mdM(0,HYP+.012,-.016,-.42)]);T.push([new THREE.ConeGeometry(.12,.16,8,1,true),sz,mdM(0,.74-H0P,-.04,.2)])}
  return mdMerge(T)}
-const isWinterNow=()=>!!S&&(seasonIdx()===2||S.weather.k==='frost'||S.weather.k==='snow');
+const isWinterNow=()=>!!S&&(seasonIdx()===2||['frost','snow','zamiec'].includes(S.weather.k));
 // narzędzia w prawej ręce (w układzie ręki: dłoń w (0,−.355,.045), trzonek biegnie dalej w dół ramienia)
 const TOOL={};
 function toolGeo(t){if(TOOL[t])return TOOL[t];const T=[];const wood=mdCol(0x6a4a2c),iron=mdCol(0x5a5e64),lt=mdCol(0x9a7a50);const HX=0,HY=-.355,HZ=.05;

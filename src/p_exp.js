@@ -52,7 +52,7 @@ const regDist=r=>Math.hypot(r.i-camp.i,r.j-camp.j);
 function expDays(r,type){return Math.max(2,Math.round((regDist(r)/22+(type==='zbior'?3:2))*(tech('n_mapa')?.7:1)))}
 const perDay=()=>K*1;
 function expFood(r,type,n){return Math.ceil(perDay()*n*expDays(r,type))}
-function expRisk(r,n){const s=seasonIdx();let k=ERISK[r.type]*[1,1.2,2,1.1][s]*(S.weather.k==='storm'?1.5:1)*(tech('n_mapa')?.7:1)*(r.type==='coast'&&tech('n_gwiazd')?.7:1);return clamp(k*(1+regDist(r)/120),.02,.6)}
+function expRisk(r,n){const s=seasonIdx();let k=ERISK[r.type]*[1,1.2,2,1.1][s]*wxRisk()*(tech('n_mapa')?.7:1)*(r.type==='coast'&&tech('n_gwiazd')?.7:1);return clamp(k*(1+regDist(r)/120),.02,.6)}
 function expCandidates(n){return adultsPool().filter(p=>(p.job==='rob'||!p.job)&&p.hp>.55&&p.age<60).sort((a,b)=>(b.sk.mysliwy+b.sk.zbieracz)-(a.sk.mysliwy+a.sk.zbieracz)).slice(0,n)}
 function canSend(r,type){const n=S.expSize;if(S.exps.some(e=>e.r===r.id))return'Tam już ktoś idzie.';if(expCandidates(n).length<n)return'Za mało wolnych, zdrowych ludzi ('+n+'). Zwolnij kogoś w zakładce Praca.';if(foodTotal()<expFood(r,type,n))return'Za mało jedzenia na drogę.';if(type==='zbior'&&!r.known)return'Najpierw trzeba poznać ten teren.';return''}
 function exitTile(r){const dx=r.i-camp.i,dy=r.j-camp.j,l=Math.hypot(dx,dy)||1;for(let d=12;d>=3;d--){const t=nearestWalk(clamp(Math.round(camp.i+dx/l*d),1,N-2),clamp(Math.round(camp.j+dy/l*d),1,N-2));if(t&&reach[t[1]*N+t[0]])return t}return[camp.i,camp.j+1]}

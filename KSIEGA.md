@@ -69,14 +69,14 @@ Wokół każdego odkrytego śladu robi się polana. Kopiec w zdziczałym sadzie 
 
 # 5. Pogoda i pory roku
 
-- **Pogoda:** pogodnie, deszcz, mgła, sztorm, upał, śnieg i siarczysty mróz. Każda wpływa na pracę, ciepło i nastrój.
+- **Pogoda:** pogodnie, deszcz (mżawka, deszcz, ulewa), mgła, sztorm, upał, śnieg, siarczysty mróz, a od wersji 3.2 także letnia burza, grad, zamieć, odwilż, wichura i babie lato, do tego poranny szron i tęcza. Każda wpływa na pracę, ciepło, pola i nastrój (szczegóły w rozdziale „Ziemia i niebo”).
 - **Zima** jest próbą: domy palą opał, ludzie bez ciepłej odzieży marzną, a dojrzałe zboże na polu marnieje.
 - **Sztormy** zabierają wrak wiosną pierwszego roku (zapowiedź na 5 dni wcześniej) i szybciej niszczą budynki.
 - **Kalendarz nieba** (wiedza) zapowiada mrozy i sztormy z wyprzedzeniem.
 
 # 6. Gospodarka
 
-**Zasoby:** suchary z wraku, jagody, grzyby, ryby, mięso, ziarno, mleko, miód, warzywa, chleb, ser, kiszonki (żywność), a także kłody, opał, kamień, glina, deski, gwoździe, płótno, skóry, odzież, narzędzia kamienne i żelazne, cegły, ruda darniowa, węgiel drzewny, włókna lnu, zioła, mąka i naczynia.
+**Zasoby:** suchary z wraku, jagody, grzyby, ryby, mięso, ziarno, mleko, miód, warzywa, chleb, ser, kiszonki (żywność), a także kłody, opał, kamień, glina, deski, gwoździe, płótno, skóry, odzież, narzędzia kamienne i żelazne, cegły, ruda darniowa, węgiel (drzewny z mielerza i kamienny z odkrywki), włókna lnu, zioła, mąka i naczynia, a od wersji 3.2 także jaja, pierze, sól i bursztyn.
 
 **Żywność** psuje się w różnym tempie: mleko w dwa dni, ryby i mięso szybko, ziarno, ser i kiszonki bardzo wolno. Spiżarnia, garncarstwo, naczynia i lodownia spowalniają psucie. Im więcej rodzajów jedzenia, tym większa nadzieja i lepsze zdrowie.
 
@@ -87,6 +87,8 @@ Wokół każdego odkrytego śladu robi się polana. Kopiec w zdziczałym sadzie 
 | kłody | drewutnia | opał |
 | kłody | pracownia cieśli | deski |
 | kłody | mielerz | węgiel drzewny |
+| (wychodnia węgla) | odkrywka węgla | węgiel, opał |
+| opał i solanka | warzelnia soli | sól |
 | kamień i kłody | warsztat | narzędzia kamienne |
 | ruda i węgiel | kuźnia | narzędzia żelazne, gwoździe |
 | glina i kłody | piec do cegły | cegły |
@@ -726,6 +728,53 @@ Nazwa trafia do Księgi rozbitków i na kartę celu. Zdobyte zakończenia zapami
 **Koniec.** Po trzech aktach scena „Wyspa jest nasza”: ogniska na każdym wzgórzu, podsumowanie ludzi, przysiółków i lat, pieśń, rozdział „Epoka III” w Księdze rozbitków. Gra toczy się dalej.
 
 
+## Ziemia i niebo (od wersji 3.2)
+
+### Pogoda
+
+Pogoda zmienia się z dnia na dzień, ale płynnie: deszcz zaczyna się od kropel i rozkręca, mgła gęstnieje i rzednie, chmury ciemnieją powoli. Wieczorem przed deszczową nocą niebo szarzeje.
+
+- **Deszcz** ma natężenie: mżawka, deszcz albo ulewa. Wiosną i latem słabszy deszcz przechodzi przelotnie, z przerwami na słońce.
+- **Burza** (lato i koniec wiosny): rano parno, po południu ciemne chmury, pioruny i ulewa, wieczorem czyste niebo. Piorun potrafi zapalić drzewo, a rzadko strzechę. Kiedy burza mija przy niskim słońcu, nad wyspą staje tęcza.
+- **Sztorm** to wicher od morza z ulewą i falami; pioruny rzadkie.
+- **Grad** (lato i wiosna): krótka nawałnica w środku dnia, biała kasza odbija się od ziemi, kładzie zboże na polach.
+- **Zamieć** (zima): śnieg niesiony poziomo, prawie nic nie widać, praca na dworze idzie w 40%, domy palą najwięcej opału.
+- **Odwilż** (koniec zimy, początek wiosny): śnieg topnieje szybko, wszędzie błoto, na wiosnę może zalać pola.
+- **Wichura** (jesień i wiosna): silny wiatr bez deszczu, morze w białych grzywach, budynki szybciej się niszczą, ogień łatwo się roznosi, łodzie zostają na brzegu.
+- **Babie lato** (wczesna jesień): ciepło i cicho, w powietrzu srebrne nitki pajęczyn, ludzie pracują chętniej.
+- **Mgła** jest najgęstsza o świcie i rzednie do południa. **Szron** bieli trawę po pogodnej nocy jesienią, zimą i wczesną wiosną; wiosną to przymrozek, który ścina młode wschody.
+- **Wiatr** ma kierunek i siłę. Z nim płyną deszcz, śnieg, mgła, dym z kominów, liście i cienie chmur, a trawa i zboże kładą się po wietrze.
+- **Ziemia** moknie w deszczu, w zagłębieniach stoją kałuże, a schnie dopiero po deszczu, szybciej w słońcu i na wietrze. Na wodzie widać kręgi od kropel.
+- **Znaki:** każda nowa pogoda ma ludowy znak zapowiedzi (parne rano przed burzą, sine chmury przed gradem, sople, które płaczą przed odwilżą).
+- **Karta „Niebo”** (dotknięcie ikony pogody obok daty albo daty w pełnym widoku): pogoda, odczuwalne zimno lub ciepło, wiatr od morza albo od lądu, stan ziemi, a pod spodem skutki: praca pod gołym niebem, ryzyko pożaru, morze, wyprawy, zużycie budynków, opał i pola. Na dole zapowiedź z kalendarza albo znak, jeśli ktoś go zauważył.
+
+### Uprawa roli
+
+- **Gleba** zależy od miejsca: czarna ziemia na łąkach (najlepsza), leśna po lesie, piaszczysta przy brzegu (sucha, słabszy plon), podmokła (żyzna, ale w ulewy staje woda) i kamienista na stokach (ciężka do orki). Przy stawianiu pola widać, jaka ziemia jest pod spodem.
+- **Wilgoć ziemi:** deszcz i burze nawadniają, upał, wichura i pogodne lato wysuszają. Za sucho zboże rośnie dwa razy wolniej, za mokro też gorzej. W suszy rolnicy noszą wodę, jeśli w pobliżu jest studnia albo woda. Rowy odprowadzają nadmiar wody.
+- **Co siać:** zboże, len (od wiedzy „Uprawa lnu”: włókno na płótno, rośnie szybciej, mocniej męczy ziemię) albo kapusta i rzepa (po odkryciu dzikiej kapusty na klifie: warzywa przeciw szkorbutowi i do kiszenia, nie boją się przymrozku). Len i kapusta nie potrzebują ziarna do siewu. W trójpolówce wybór dotyczy roku jarego; co roku inna uprawa na tym samym polu też chroni przed chwastami.
+- **Szkody i obrona:** dziki z pobliskiego lasu ryją nocą pola. Przy pierwszym razie osada wybiera: czuwać nocami (dziki rzadziej, ale ludzie są niewyspani), ogrodzić pola płotem z żerdzi albo zapolować. Płot to też rozbudowa pola (nie zajmuje miejsca na inne rozbudowy). Psy, strach na wróble i myśliwi w pobliżu też pomagają. Grad kładzie zboże, przymrozek ścina wschody, deszcz w żniwa sprawia, że ziarno kiełkuje w kłosach.
+- **Wygląd pola:** bruzdy dopasowane do terenu, wschody, łan falujący na wietrze i złocący się przed żniwami, len kwitnący na niebiesko, główki kapusty, po żniwach ściernisko z kopkami snopków, ugór zarośnięty chwastami. Mokra ziemia ciemnieje, sucha jaśnieje.
+- **Karta pola:** gleba, wilgoć, co teraz (siew za ile dni, kiedy dojrzeje), następny siew i zagrożenia.
+
+### Odkrycia na wyspie
+
+Wyspa kryje miejsca, które zawsze leżą w tym samym miejscu dla danej wyspy. Gdy zwiadowcy odsłonią okolicę, na mapie pojawia się zagadka z pytajnikiem, na przykład „Czarne skały?”. Ktoś musi tam pójść: przycisk „Wyślij kogoś, żeby obejrzał” w karcie miejsca, a zwiadowcy czasem zaglądają tam sami. Wieczorami przy ognisku ludzie wspominają o tych miejscach.
+
+| Miejsce | Co daje |
+|---|---|
+| Kurza Gęstwina (zdziczałe kury z ładowni) | kurnik: hodowca łapie kury, jaja przez większą część roku, pierze; zimą kury jedzą ziarno, wiosną kwoki wysiadują pisklęta; lisy i jastrzębie porywają kury |
+| Tokowisko cietrzewi | wiosną myśliwi przynoszą mięso i pióra |
+| Lisie jamy | jesienią i zimą sidła dają futra; znane nory i myśliwi w pobliżu to mniej lisów w kurniku |
+| Wilcze legowisko | wiosną można zabrać szczenięta, ale wadera może wrócić |
+| Wychodnia węgla | odkrywka węgla: węgiel dla kuźni i opał, aż żyła się wyczerpie |
+| Torfowisko | kopanka torfu już w pierwszej epoce |
+| Słone źródło | warzelnia soli: z solą mięso i ryby psują się prawie o połowę wolniej |
+| Bursztynowy brzeg | po sztormach zbieracze i rybacy z okolicy przynoszą bursztyn: korale cieszą ludzi |
+| Dzika kapusta na klifie | kapusta i rzepa na polach |
+
+Pierze z kurnika i tokowiska idzie zimą na pierzyny: domy palą mniej opału. Odkryte miejsca są w Naturze, w rozdziale „Miejsca na wyspie”, razem z tymi, które widziano tylko z daleka.
+
 # 13. Grafika i dźwięk
 
 - **Styl:** trójwymiarowe, niskopoligonowe modele w ściszonej, chłodnej palecie północy. Mgła nieznanego, pory dnia i roku, deszcz, śnieg, mgły, dym z kominów, świetliki latem, ptaki.
@@ -843,6 +892,7 @@ Nazwa trafia do Księgi rozbitków i na kartę celu. Zdobyte zakończenia zapami
 | 1.8.3 | poprawka: rozbudowa domu (szałas w chatę, chata w dom) nie zabiera już rodzinie spiżarki; w czasie budowy zapas zostaje w starym domu w granicach jego pojemności |
 | 1.9 | budynki z charakterem: każdy budynek inny (ściany, dachy, spadek, okap), koniki, malowane okiennice, ganki, przybudówki, garnki na płocie, zioła pod okapem, szyldy rzemiosł, wyraźniejsza kuźnia, łaźnia i chata wiecowa |
 | 1.10 | wykonanie budynków: surowe, porządne i mistrzowskie, wyraźnie widoczne po rozbudowie (wielkość, podmurówka, dach, okiennice, obramienia okien, kwiaty, płotek, szyld); karta budynku pokazuje wykonanie i trwałość; odmiany szałasów, studni, zagród i spiżarni |
+| 3.2 | ziemia i niebo: płynne przejścia pogody, natężenie deszczu, letnie burze z tęczą, grad, zamieć, odwilż, wichura, babie lato, poranny szron, wiatr z kierunkiem (deszcz, śnieg, mgła, dym, chmury, przechył trawy i zboża), kręgi od kropel na wodzie, kałuże i mokra ziemia, grzywy fal, dźwięk deszczu, karta „Niebo”; uprawa roli: gleba wg miejsca, wilgoć i podlewanie, len oraz kapusta z rzepą na polach, dziki ryjące pola (wybór obrony, płot), grad, przymrozek i deszcz w żniwa, nowe pole z bruzdami, łanem, kwitnącym lnem, kapustą i kopkami na ściernisku, kalendarz w karcie pola; odkrycia: zdziczałe kury i kurnik, tokowisko, lisie jamy, wilcze legowisko ze szczeniętami, wychodnia węgla i odkrywka, torfowisko w I epoce, słone źródło i warzelnia soli, bursztyn po sztormach, dzika kapusta, pierzyny z pierza, rozdział „Miejsca na wyspie” w Naturze |
 | 3.1 | ludzie i zwierzęta: nowe modele zwierząt (sarny z rogaczami, kozy z rogami i bródką, dziki z kłami i szczeciną, wilki, lisy z białym końcem kity, zające, niedźwiedzie z garbem, foki, psy) z przejściem barwy od brzucha do grzbietu; chód z naprzemiennych póz, sarny, kozy, dziki i zające skubią trawę; ludzie mają brwi, zimą kożuchy z futrzanym brzegiem, czapy i ciepłe chusty, w pracy narzędzie w ręku (siekiera, kilof, młot, sierp, łopata, wędka, łuk, kosz, kij), najstarsi chodzą o lasce |
 | 3.0.1 | po wyjściu z menu gra zawsze rusza: przycisk zamknięcia (×) zatrzymywał czas na stałe, bo był podpięty z pominięciem wznowienia; gra rusza też wtedy, gdy przed otwarciem menu stała; zwinięty panel puszcza czas, rozwinięty znów go zatrzymuje |
 | 3.0 | epoka III, cała wyspa: zaczyna się po zakończeniu epoki II albo od razu przyciskiem „Zacznij od epoki III”; akty X Krainy, XI Wymiana, XII Wyspa nasza; przysiółki zakładają przysiółki („Wyślij młodych dalej” i scena „Za ciasno w przysiółku”); zajazd przy drodze (wozy częściej i z większym towarem); scena „Wyspa jest nasza” i rozdział w Księdze rozbitków |
@@ -936,6 +986,7 @@ Kolejność dalszej pracy. Każda wersja kończy się czymś, w co da się zagra
 | 2.8 Wyspa tygodnia (gotowe) | wspólna wyspa i wyzwanie na tydzień, tabela wyników na serwerze |
 | 3.0 Epoka III: cała wyspa (gotowe) | osada w każdej krainie, przysiółki-córki, drogi, wymiana wozami, zajazd, zakończenie „Wyspa jest nasza” |
 | 3.1 Ludzie i zwierzęta (gotowe) | nowe modele i chód zwierząt, zimowe stroje, narzędzia w ręku |
+| 3.2 Ziemia i niebo (gotowe) | pogoda z natężeniem i nowymi zjawiskami, uprawa roli z glebą i wilgocią, odkrycia na wyspie |
 
 **Epoka II** (od 2.0, ukończona w 2.2): trzy drogi z trzema rozdrożami każda i 28 zakończeniami. Przez cały czas obowiązuje: klimat słowiański bez magii, brak przybyszów, decyzje gracza w scenach i na wiecu, a życie ludzi toczy się samo.
 

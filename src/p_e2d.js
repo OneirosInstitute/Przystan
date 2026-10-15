@@ -185,7 +185,7 @@ function e2RejsCands(){return expCandidates(3)}
 function e2RejsWhy(){if(!hasDone('szkutnia'))return'Najpierw trzeba postawić szkutnię.';if((S.res.lodz||0)<1)return'Nie ma wolnej łodzi. Szkutnia musi ją najpierw zbudować.';if(S.exps.some(e=>e.type==='rejs'))return'Jedna łódź jest już w rejsie.';if(e2RejsCands().length<3)return'Za mało wolnych, zdrowych ludzi (3).';if(foodTotal()<K*3*4)return'Za mało jedzenia na drogę.';return''}
 function e2Rejs(){const why=e2RejsWhy();if(why){toast(why);return}const sz=S.bld.find(b=>b.kind==='szkutnia'&&bDone(b));const ppl=e2RejsCands();const days=4,food=Math.ceil(K*3*days);
  const tot=foodTotal();FOOD.forEach(k=>{S.res[k]-=food*(S.res[k]/tot)});S.res.lodz-=1;const ex=entryOf(sz.kind,sz.i,sz.j)||[camp.i,camp.j];
- const arc=(S.e2.rejsy||0)%3;const e={id:(S.expN=(S.expN||0)+1),r:0,type:'rejs',ppl:ppl.map(p=>p.id),days,left:days,exit:ex,risk:.08*(S.weather.k==='storm'?2:1)*(seasonIdx()===2?1.6:1),arc};S.exps.push(e);
+ const arc=(S.e2.rejsy||0)%3;const e={id:(S.expN=(S.expN||0)+1),r:0,type:'rejs',ppl:ppl.map(p=>p.id),days,left:days,exit:ex,risk:.08*wxSea()*(seasonIdx()===2?1.6:1),arc};S.exps.push(e);
  ppl.forEach(p=>{release(p);p.path=null;p.state='idle';p.wait=0;p.job='wyp';p.wb=null;p.exp=e.id;p.act='wypływa w rejs wzdłuż brzegu'});
  log(`Łódź wypływa w rejs wzdłuż brzegu. Płyną: ${ppl.map(p=>p.name).join(', ')}. Wrócą za ${days} dni.`);toast('Łódź wypłynęła');assign();renderPanel()}
 {const _fe=finishExp;finishExp=function(e,out){if(e.type!=='rejs')return _fe(e,out);S.exps=S.exps.filter(x=>x!==e);const lines=[];

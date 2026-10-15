@@ -101,7 +101,7 @@ let czGoalT=null,czGoalTm=0;
 function czShowGoal(){const g=goalInfo();if(!g)return;setH(czGoal,`<small>${g.ch||'Cel'}</small><span>${g.t}</span>`);czGoal.classList.add('on');clearTimeout(czGoalTm);czGoalTm=setTimeout(()=>czGoal.classList.remove('on'),9000)}
 {const _rt=renderTop;renderTop=function(){_rt();if(!czOn||!S)return;
   const d=Math.floor(rday()),s=Math.floor(d/SD),t=tod();const part=t<.2?'noc':t<.3?'świt':t<.7?'dzień':t<.82?'zmierzch':'noc';
-  setH($('cz-date'),`<b>${SEAS[s]} · ${d%SD+1}</b><small>${part} · ${WEATHER[S.weather.k][0]}</small>`);
+  setH($('cz-date'),`<b>${SEAS[s]} · ${d%SD+1}</b><small>${part} · ${wxName()}</small>`);
   setH($('cz-thr'),czThreats().map(x=>`<button class="czc ${x[2]}" data-czthr="1">${x[0]==='pożar'?CZ_FIRE:''}${x[0]}</button>`).join(''));
   setH($('cz-tempo'),S.speed===0?`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M8 5v14M16 5v14"/></svg>${czPaused&&!$('sheet').hidden?'czas stoi':'stoi'}`:`<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l12 7-12 7z"/></svg>${S.speed}×`);
   $('cz-isl').classList.toggle('on',!!overview);document.body.classList.toggle('placing',!!placing);

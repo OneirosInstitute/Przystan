@@ -1,15 +1,15 @@
 
 /* ================= grafika: poziomy jakości, wiatr, obróbka obrazu ================= */
 // Poziomy: 2 Ultra (obróbka obrazu, cienie 4096, wiatr, drobiny, blask wody), 1 Wysoka, 0 Niska.
-const GFXU={t:{value:0},amp:{value:1}};
-function windify(m,k){m.onBeforeCompile=sh=>{sh.uniforms.uWT=GFXU.t;sh.uniforms.uWA=GFXU.amp;sh.uniforms.uWK={value:k};
-  sh.vertexShader='uniform float uWT;uniform float uWA;uniform float uWK;\n'+sh.vertexShader.replace('#include <begin_vertex>',`#include <begin_vertex>
+const GFXU={t:{value:0},amp:{value:1},wd:{value:new THREE.Vector2(0,0)}};
+function windify(m,k){m.onBeforeCompile=sh=>{sh.uniforms.uWT=GFXU.t;sh.uniforms.uWA=GFXU.amp;sh.uniforms.uWK={value:k};sh.uniforms.uWD=GFXU.wd;
+  sh.vertexShader='uniform float uWT;uniform float uWA;uniform float uWK;uniform vec2 uWD;\n'+sh.vertexShader.replace('#include <begin_vertex>',`#include <begin_vertex>
   { vec2 ip=vec2(0.);
   #ifdef USE_INSTANCING
    ip=instanceMatrix[3].xz;
   #endif
    float hh=max(position.y,0.);float ph=uWT*1.7+ip.x*.37+ip.y*.29;float g=hh*hh*uWK*uWA;
-   transformed.x+=(sin(ph)*.7+sin(ph*2.7+1.3)*.3)*g; transformed.z+=(cos(ph*.83)*.5+sin(ph*3.1)*.2)*g*.8; }`)};
+   transformed.x+=(sin(ph)*.7+sin(ph*2.7+1.3)*.3)*g+uWD.x*hh*hh*uWK*(.8+.2*sin(ph*.6)); transformed.z+=(cos(ph*.83)*.5+sin(ph*3.1)*.2)*g*.8+uWD.y*hh*hh*uWK*(.8+.2*sin(ph*.6)); }`)};
  m.customProgramCacheKey=()=>'wind'+k;return m}
 const GFX={level:1,forced:false,gpu:'',rt:null,b1:null,b2:null,hdr:true,lastR:0,slow:0,zoomS:-1};
 const pScene=new THREE.Scene(),pCam=new THREE.OrthographicCamera(-1,1,1,-1,0,1),pQuad=new THREE.Mesh(new THREE.PlaneGeometry(2,2));pQuad.frustumCulled=false;pScene.add(pQuad);
@@ -43,7 +43,7 @@ const compMat=new THREE.ShaderMaterial({depthTest:false,depthWrite:false,vertexS
     float d1=dep(vUv+o),d2=dep(vUv-o);float df=(d-(d1+d2)*.5)*rng;occ+=smoothstep(.015,.18,df)*(1.-smoothstep(.3,.8,df));}}
    c*=1.-uAO*clamp(occ/9.,0.,1.);}
   if(uCloud>0.&&d<.9999){vec4 v=uIP*vec4(vUv*2.-1.,d*2.-1.,1.);v/=v.w;vec3 w=(uCW*v).xyz;
-   float n=vn(w.xz*.03+uWind*uT)*.65+vn(w.xz*.08+uWind*uT*1.4+3.7)*.35;c*=1.-uCloud*smoothstep(.48,.74,n);}
+   float n=vn(w.xz*.03+uWind)*.65+vn(w.xz*.08+uWind*1.4+3.7)*.35;c*=1.-uCloud*smoothstep(.48,.74,n);}
   c+=texture2D(tBl,vUv).rgb*uBloom;
   c=toS(aces(c));
   c=mix(c,c*c*(3.-2.*c),.32);{float l=dot(c,vec3(.2126,.7152,.0722));c=mix(vec3(l),c,1.06);}
@@ -77,15 +77,15 @@ const ptN=260,ptGeo=new THREE.BufferGeometry(),ptPos=new Float32Array(ptN*3),ptS
 ptGeo.setAttribute('position',new THREE.BufferAttribute(ptPos,3));
 const ptMat=new THREE.PointsMaterial({size:.14,transparent:true,depthWrite:false,opacity:0,color:0xd8a050,sizeAttenuation:true});const gPts=new THREE.Points(ptGeo,ptMat);gPts.frustumCulled=false;scene.add(gPts);
 function gfxParticles(rdt,Lt){if(GFX.level<2||!S){gPts.visible=false;return}
- const autumn=yday()>=24&&yday()<48,summer=yday()<24||yday()>=76,wk=S.weather.k;
- const on=autumn?(.85*(.4+.6*Lt.day)):summer&&Lt.day>.3&&wk!=='rain'&&wk!=='storm'?.5*Lt.day:0;gPts.visible=on>.01;if(!gPts.visible)return;
- ptMat.opacity=on;ptMat.color.setHex(autumn?0xc88a3e:0xf2e6b0);ptMat.size=(autumn?.16:.07)*Math.max(.8,zoom*.7);
- const R=26/Math.max(.4,zoom),wind=wk==='storm'?3:1;
+ const autumn=yday()>=24&&yday()<48,summer=yday()<24||yday()>=76;
+ const babie=S.weather.k==='babie'&&Lt.day>.3;const on=(babie?.7*Lt.day:autumn?(.85*(.4+.6*Lt.day))*(WX.rain>.3?.5:1):summer&&Lt.day>.3&&WX.rain<.15?.5*Lt.day:0)*(1-Math.min(1,WX.snow*2));gPts.visible=on>.01;if(!gPts.visible)return;
+ ptMat.opacity=on;ptMat.color.setHex(babie?0xf4f6fa:autumn?0xc88a3e:0xf2e6b0);ptMat.size=(babie?.06:autumn?.16:.07)*Math.max(.8,zoom*.7);
+ const R=26/Math.max(.4,zoom),wind=1+3*WX.wind*WX.wind,ldx=WX.wx*(autumn?6:2)*(.5+2*WX.wind),ldz=WX.wz*(autumn?6:2)*(.5+2*WX.wind);
  for(let k=0;k<ptN;k++){const a=ptSeed[k*4],b=ptSeed[k*4+1],sp=ptSeed[k*4+2],ph=ptSeed[k*4+3];const T=clock*(autumn?.07:.03)*(.5+sp)*wind+ph;const f=T%1;
-  const x=wrapC(a*2*R+Math.sin(clock*.6+ph*9)*.8+f*(autumn?6:2),camT.x,R),z=wrapC(b*2*R+Math.cos(clock*.5+ph*7)*.6+f*2,camT.z,R);
-  const g=Hy(x,z);ptPos[k*3]=x;ptPos[k*3+1]=autumn?g+(1-f)*4.5+.05:g+.6+Math.sin(clock*.9+ph*20)*.4+sp;ptPos[k*3+2]=z}
+  const x=wrapC(a*2*R+Math.sin(clock*.6+ph*9)*.8+f*ldx,camT.x,R),z=wrapC(b*2*R+Math.cos(clock*.5+ph*7)*.6+f*ldz,camT.z,R);
+  const g=Hy(x,z);ptPos[k*3]=x;ptPos[k*3+1]=autumn&&!babie?g+(1-f)*4.5+.05:g+.6+Math.sin(clock*.9+ph*20)*.4+sp;ptPos[k*3+2]=z}
  ptGeo.attributes.position.needsUpdate=true}
-function gfxTick(rdt,Lt){GFXU.t.value=clock;const wk=S?S.weather.k:'clear';const tgt=(wk==='storm'?3.2:wk==='rain'?1.7:wk==='snow'?1.3:1)*(GFX.level===2?1:GFX.level===1?.7:0);GFXU.amp.value+=(tgt-GFXU.amp.value)*Math.min(1,rdt*.8);
+function gfxTick(rdt,Lt){GFXU.t.value=clock;const lv=GFX.level===2?1:GFX.level===1?.7:0;const tgt=(1+2.6*clamp((WX.wind-.25)/.75,0,1))*lv;GFXU.amp.value+=(tgt-GFXU.amp.value)*Math.min(1,rdt*.8);const lean=Math.max(0,WX.wind-.3)*1.1*lv;GFXU.wd.value.set(WX.wx*lean,WX.wz*lean);
  if(GFX.level===2&&Math.abs(GFX.zoomS-zoom)>.02){GFX.zoomS=zoom;const e=clamp(32/zoom*1.15,12,40);const s=sun.shadow.camera;s.left=-e;s.right=e;s.top=e;s.bottom=-e;s.updateProjectionMatrix()}
  if(Lt)gfxParticles(rdt,Lt)}
 function gfxSkip(now){if(GFX.level===2&&now-GFX.lastR<10.5)return true;GFX.lastR=now;return false}
@@ -98,7 +98,7 @@ function gfxRender(){if(GFX.level<2){renderer.render(scene,cam);return}if(!GFX.r
  U.tCol.value=GFX.rt.texture;U.tDep.value=GFX.rt.depthTexture;U.tBl.value=GFX.b1.texture;U.uExp.value=renderer.toneMappingExposure;U.uT.value=clock;
  U.uNear.value=cam.near;U.uFar.value=cam.far;U.uIP.value.copy(cam.projectionMatrixInverse);U.uCW.value.copy(cam.matrixWorld);
  U.uTilt.value=clamp(.2+(zoom-1)*.3,.12,.7);U.uAOR.value=clamp(3+zoom*2.4,3,12);
- const wk=S?S.weather.k:'clear',day=S?clamp(sun.intensity/1.2,0,1):1;U.uCloud.value=(wk==='clear'||wk==='drought'?.24:wk==='fog'?.05:.1)*day;
+ const day=S?clamp(sun.intensity/1.2,0,1):1;U.uCloud.value=(S?WX.cloud:.24)*day;U.uWind.value.set(S?WX.cox:clock*.012,S?WX.coz:clock*.007);
  U.uBloom.value=S?.22+.35*(1-day):.22;
  pQuad.material=compMat;renderer.setRenderTarget(null);renderer.render(pScene,pCam)}
 // spowolnienie: z Ultra najpierw schodzimy na Wysoką

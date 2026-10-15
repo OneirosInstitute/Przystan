@@ -22,7 +22,7 @@ function fieldDone(b){const f=b.field;fieldInit(f);const crop=ROT_N[f.mode==='tr
   if(f.mono>=2&&(S.wet||0)>=3&&Math.random()<.4){S.sporD=S.day+YEAR*.4;log('W ziarnie z tego pola czarne rożki sporyszu. Kto zje chleb z takiego ziarna, może ciężko zachorować.');toast('Sporysz w ziarnie')}}
  harvestDone()}
 function fieldDaily(){const sea=seasonIdx();
- if(S.weather.k==='rain'||S.weather.k==='storm')S.wet=(S.wet||0)+1;if(sea===3&&yday()<74)S.wet=0;
+ if(wxWetDay())S.wet=(S.wet||0)+1;if(sea===3&&yday()<74)S.wet=0;
  S.bld.forEach(b=>{const f=b.field;if(!f)return;fieldInit(f);
   if(!f.mode||f.mode==='zboze'){if(tech('u_odlog')&&!f.asked){f.asked=1;f.mode='trzy';f.rot=f.rot||0;log('Pola przechodzą na trójpolówkę: rok zboże ozime, rok jare z grochem, rok ugór.')}}
   if(f.st==='rosnie'&&sea!==2)f.weed=Math.min(1,f.weed+.012*KF*(f.mode==='zboze'?1.4:1));
@@ -97,7 +97,7 @@ function signDaily(){const nx=S.weather.next;if(!nx||!SIGN[nx]||S.signFor===nx+'
  const acc=tech('n_kal')?1:Math.min(.92,.55+.006*Math.max(0,who.age-30)+.05*((who.sk.zbieracz||0)+(who.sk.rolnik||0)));
  const keys=Object.keys(SIGN).filter(k=>k!==nx&&(seasonIdx()===2||k!=='snow'));const pred=Math.random()<acc?nx:keys[(Math.random()*keys.length)|0];
  S.sign={k:pred,who:who.name,d:S.day,txt:SIGN[pred][0]};log(`${who.name}: „${SIGN[pred][0]} ${SIGN[pred][1][0].toUpperCase()+SIGN[pred][1].slice(1)}.”`);
- if((pred==='frost'||pred==='storm')&&S.bld.some(b=>b.field&&b.field.st==='dojrzale')){S.rush={until:S.day+.9};toast(`${who.name}: ${SIGN[pred][1]}. Zbierać zboże, póki czas!`)}else toast(`${who.name}: ${SIGN[pred][1]}`)}
+ if((pred==='frost'||pred==='storm'||pred==='grad'||pred==='burza')&&S.bld.some(b=>b.field&&b.field.st==='dojrzale')){S.rush={until:S.day+.9};toast(`${who.name}: ${SIGN[pred][1]}. Zbierać zboże, póki czas!`)}else toast(`${who.name}: ${SIGN[pred][1]}`)}
 // pośpiech przy żniwach: wolne ręce do pola
 {const _pj=planJob;planJob=function(p){if(S&&S.rush&&S.rush.until>S.day&&isWork()&&isWorker(p)&&(p.job==='rob'||p.job==='bud')&&!p.fireB){const b=S.bld.find(x=>x.field&&x.field.st==='dojrzale'&&bDone(x));
    if(b){const e=entryOf(b.kind,b.i,b.j);if(e&&go(p,e,'field',b)){p.act='pomaga przy żniwach przed złą pogodą';return true}}}return _pj(p)}}

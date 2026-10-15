@@ -50,7 +50,7 @@ function slavDaily(){if(!S.slav){S.slav=1;S.people.forEach(p=>{if(p.age>=7)S.see
   if(!S.seen['leszy'+yr]){S.seen['leszy'+yr]=1;log('Mgła w borze. Wyprawa długo krąży w miejscu, a po powrocie ktoś przysięga, że leszy ich wodził. Nikt nie chce iść do lasu przed świtem.')}}
  if(w==='drought'&&S.bld.some(b=>b.field&&bDone(b))&&Math.random()<.5){S.wh-=.015*fear;
   if(!S.seen['poludnica'+yr]){S.seen['poludnica'+yr]=1;log('Upał w samo południe. Ludzie kładą się w cieniu miedzy, bo po polu chodzi południca. Kto zostanie w słońcu, tego zamroczy.')}}
- if(w==='storm'&&!S.seen['perun'+Math.floor(S.day/4)]&&Math.random()<.35*f){S.seen['perun'+Math.floor(S.day/4)]=1;log('Grzmi nad morzem. Starzy mówią, że to Perun bije w złe moce i że burza oczyści wyspę.');S.wh+=.01}
+ if((w==='storm'||w==='burza')&&!S.seen['perun'+Math.floor(S.day/4)]&&Math.random()<.35*f){S.seen['perun'+Math.floor(S.day/4)]=1;log('Grzmi nad morzem. Starzy mówią, że to Perun bije w złe moce i że burza oczyści wyspę.');S.wh+=.01}
  if(ob&&!S.seen.domowik&&S.bld.some(b=>b.kind==='chata'&&bDone(b))){S.seen.domowik=1;S.wh+=.03;log('W nowej chacie z bali gospodyni zostawia okruchy przy palenisku. Dla domowika, żeby dom był ciepły i zgodny.')}
  if(hasB('gaj')&&!S.seen.gaj){S.seen.gaj=1;S.wh+=.03;log('Pod starym dębem ułożono krąg kamieni, na gałęziach wiszą wstążki. Odtąd tam zbiera się wiec i tam składa się przysięgi.')}
  const sick=S.people.filter(p=>p.hp<.45).length;if(sick>=3&&!S.seen['licho'+yr]){S.seen['licho'+yr]=1;S.wd+=.01*fear;log('Choroba chodzi od chaty do chaty. „Licho nie śpi”, mówią starzy, i wieszają nad drzwiami pęki suszonych ziół.')}}
@@ -80,4 +80,4 @@ function fujarka(){if(typeof AUD==='undefined'||!AUD||muted)return;try{const t0=
   o.frequency.setValueAtTime(fq,t);g.gain.setTargetAtTime(.03,t,.02);g.gain.setTargetAtTime(.011,t+d*.65,.06);t+=d}
  g.gain.setTargetAtTime(.0001,t,.18);o.start(t0);v.start(t0);o.stop(t+1);v.stop(t+1)}catch(e){}}
 function slavSound(rdt,Lt){fujT-=rdt;if(fujT>0)return;fujT=50+Math.random()*90;
- if(Lt.night>.25&&S.hope>.45&&seasonIdx()!==2&&S.weather.k!=='storm'&&S.weather.k!=='rain'&&Math.random()<.6)fujarka()}
+ if(Lt.night>.25&&S.hope>.45&&seasonIdx()!==2&&WX.rain<.1&&WX.wind<.7&&Math.random()<.6)fujarka()}

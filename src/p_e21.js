@@ -37,7 +37,7 @@ function e2HorWhy(){if(!hasDone('szkutnia'))return'Potrzebna szkutnia.';const bi
  if(S.exps.some(e=>e.type==='horyzont'))return'Jedna wyprawa już płynie za horyzont.';if(expCandidates(4).length<4)return'Za mało wolnych, zdrowych ludzi (4).';if(foodTotal()<K*4*8)return'Za mało jedzenia na drogę.';return''}
 function e2Hor(){const why=e2HorWhy();if(why){toast(why);return}const sz=S.bld.find(b=>b.kind==='szkutnia'&&bDone(b));const ppl=expCandidates(4);const big=(S.e2.big||0)>=4,days=big?6:8;
  const tot=foodTotal();FOOD.forEach(k=>{S.res[k]-=K*4*days*((S.res[k]||0)/tot)});if(!big)S.res.lodz-=2;const ex=entryOf(sz.kind,sz.i,sz.j)||[camp.i,camp.j];
- const e={id:(S.expN=(S.expN||0)+1),r:0,type:'horyzont',ppl:ppl.map(p=>p.id),days,left:days,exit:ex,big,risk:(big?.05:.12)*(S.weather.k==='storm'?2:1)*(seasonIdx()===2?1.7:1)};S.exps.push(e);
+ const e={id:(S.expN=(S.expN||0)+1),r:0,type:'horyzont',ppl:ppl.map(p=>p.id),days,left:days,exit:ex,big,risk:(big?.05:.12)*wxSea()*(seasonIdx()===2?1.7:1)};S.exps.push(e);
  ppl.forEach(p=>{release(p);p.path=null;p.state='idle';p.wait=0;p.job='wyp';p.wb=null;p.exp=e.id;p.act='płynie za horyzont'});
  log(`${big?'Wielka łódź':'Dwie łodzie'} wypływa${big?'':'ją'} za horyzont. Płyną: ${ppl.map(p=>p.name).join(', ')}. Wrócą za ${days} dni.`);toast('Wyprawa za horyzont');assign();renderPanel()}
 {const _fe=finishExp;finishExp=function(e,out){if(e.type!=='horyzont')return _fe(e,out);S.exps=S.exps.filter(x=>x!==e);const lines=[];const L=e2Isl();

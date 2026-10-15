@@ -59,9 +59,9 @@ function bolt(x,z){if(boltM){scene.remove(boltM);boltM.children.forEach(c=>c.geo
   const L=Math.hypot(nx-px,ny-py,nz-pz),m=new THREE.Mesh(new THREE.BoxGeometry(.16,L,.16),boltMat);m.position.set((px+nx)/2,(py+ny)/2,(pz+nz)/2);m.lookAt(nx,ny,nz);m.rotateX(Math.PI/2);g.add(m);px=nx;py=ny;pz=nz}
  scene.add(g);boltM=g;boltMat.opacity=1}
 function stormTick(rdt){if(!S)return;const k=S.weather.k;if(boltMat.opacity>0){boltMat.opacity=Math.max(0,boltMat.opacity-rdt*3.5);if(boltMat.opacity===0&&boltM){scene.remove(boltM);boltM=null}}
- flashA=Math.max(0,flashA-rdt*4);if(k!=='storm'||!S.speed)return;boltT-=rdt;if(boltT>0)return;boltT=3+Math.random()*9;
+ flashA=Math.max(0,flashA-rdt*4);if(WX.storm<.15||!S.speed)return;boltT-=rdt*Math.min(3,S.speed);if(boltT>0)return;boltT=(2+Math.random()*7)/Math.max(.25,WX.storm);
  const a=Math.random()*6.283,r=6+Math.random()*26/Math.max(.5,zoom),x=camT.x+Math.cos(a)*r,z=camT.z+Math.sin(a)*r;flashA=1;setTimeout(()=>flashA=.8,120);bolt(x,z);thunder(Math.min(2.5,r*.06),1.2-Math.min(.8,r/40));
- if(Math.random()<.18){const t=nodeBy.tree.filter(n=>n.amt>0&&revAt(n.i,n.j)&&Math.hypot(n.x-x,n.z-z)<8).sort((p,q)=>q.sc-p.sc)[0];if(t){t.amt=0;const q=nodes.indexOf(t);if(q>=0)S.nodeAmt[q]=0;nodeVis(t);bolt(t.x,t.z);dustPuff(t.x,Hy(t.x,t.z)+1,t.z,6,1);
+ wxBoltHit(x,z);if(Math.random()<.18){const t=nodeBy.tree.filter(n=>n.amt>0&&revAt(n.i,n.j)&&Math.hypot(n.x-x,n.z-z)<8).sort((p,q)=>q.sc-p.sc)[0];if(t){t.amt=0;const q=nodes.indexOf(t);if(q>=0)S.nodeAmt[q]=0;nodeVis(t);bolt(t.x,t.z);dustPuff(t.x,Hy(t.x,t.z)+1,t.z,6,1);
    if(!S.seen['piorun'+Math.floor(S.day/4)]){S.seen['piorun'+Math.floor(S.day/4)]=1;log('Piorun trzaska w wysokie drzewo za osadą. Zostaje osmalony kikut. Starzy mówią, że Perun bił w coś złego, co się w nim ukryło.');S.wh=(S.wh||0)+.005;if(typeof placeAdd==='function')placeAdd({oak:'Spalony Dąb',birch:'Spalona Brzoza',pine:'Spalona Sosna',spruce:'Spalony Świerk'}[t.sp]||'Spalone Drzewo',t.x,t.z,'tu piorun trafił w drzewo')}}}}
 {const _l=lighting;lighting=function(){const L=_l();if(flashA>0){hemi.intensity+=flashA*2.4;renderer.toneMappingExposure+=flashA*.5;scene.background.lerp(new THREE.Color(0xc8d4ff),flashA*.45)}return L}}
 

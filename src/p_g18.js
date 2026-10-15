@@ -132,7 +132,7 @@ function lkMix(o,a,w){for(let i=0;i<2;i++)for(let k=0;k<3;k++)o[i][k]+=(a[i][k]-
   // płynne przejścia: każda pora waży wg odległości od swojego środka
   let tw=0;const ws=seas.map(([k,s])=>{let d=Math.abs(((yd-(s+12))%96+96+48)%96-48);const w=Math.max(0,1-Math.max(0,d-8)/8);tw+=w;return[k,w]});
   ws.forEach(([k,w])=>{if(w>0)lkMix(o,LOOK[k],w/tw)});
-  const wk=S.weather.k,wm={rain:'deszcz',storm:'burza',fog:'mgla',drought:'susza',snow:'snieg'}[wk];if(wm)lkMix(o,LOOK[wm],.85);
+  if(WX.rain>.005)lkMix(o,LOOK.deszcz,Math.min(1,WX.rain*1.3)*(1-WX.dark)*.85);if(WX.dark>.005)lkMix(o,LOOK.burza,WX.dark*.85);if(WX.fog>.005)lkMix(o,LOOK.mgla,WX.fog*.85);if(WX.heat>.005)lkMix(o,LOOK.susza,WX.heat*.85);if(WX.snow>.005)lkMix(o,LOOK.snieg,Math.min(1,WX.snow*1.4)*.85);if(WX.rime>.005)lkMix(o,LOOK.zima,WX.rime*.35);
   if(Lt.night>0)lkMix(o,LOOK.noc,Lt.night*.8);
   const U=compMat.uniforms;U.uShT.value.set(...o[0]);U.uHiT.value.set(...o[1]);U.uCon.value=o[2];U.uVib.value=o[3];G18.look=o;
   return Lt}}

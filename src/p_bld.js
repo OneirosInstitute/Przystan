@@ -24,7 +24,7 @@ const LEVELABLE=k=>!!(BD[k].wk||BD[k].store)&&k!=='pole'||k==='pole';
 const lvOf=b=>b.lv||1;
 const hasExt=(b,id)=>!!(b&&b.ext&&b.ext.includes(id));
 const anyExt=id=>S.bld.filter(b=>bDone(b)&&hasExt(b,id)).length;
-const extSlots=b=>b.kind==='szalas'?0:b.kind==='chata'?2:b.kind==='dom'?3:lvOf(b);
+const extSlots=b=>(b.kind==='szalas'?0:b.kind==='chata'?2:b.kind==='dom'?3:lvOf(b))+(b.kind==='pole'&&b.ext&&b.ext.includes('plot')?1:0);
 const wkOf=b=>BD[b.kind].wk?BD[b.kind].wk+lvOf(b)-1:0;
 const rOf=b=>(BD[b.kind].r||0)+2*(lvOf(b)-1)+(hasExt(b,'lodz')?6:0);
 function bMul(b){if(!b)return 1;let m=(1+.15*(lvOf(b)-1))*condMul(b);(b.ext||[]).forEach(id=>{const e=(EXT[b.kind]||[]).find(x=>x.id===id);if(e&&e.sp)m*=e.sp});return m}
@@ -136,7 +136,7 @@ function locWear(b){if(b._lf)return b._lf;const c=bCenter(b);const ci=Math.round
  for(let dj=-3;dj<=3;dj++)for(let di=-3;di<=3;di++){const i=ci+di,j=cj+dj;if(i>=0&&j>=0&&i<N&&j<N&&!land[j*N+i])sea=1}
  const bi=BIOME[Math.min(N-1,Math.max(0,cj))*N+Math.min(N-1,Math.max(0,ci))];const f=(sea?1.3:1)*(bi===3?1.25:bi===2?1.15:bi===4||bi===5?1.1:1);
  b._lf=f;b._lt=(sea?'blisko morza, sól i wiatr':bi===3?'mokradło, wilgoć':bi===2?'hale, wiatr i mróz':bi===4||bi===5?'cień lasu, wilgoć':'dobre, suche miejsce');return f}
-function wearRate(b){return .0038*dM()*(WEAR[b.kind]||1)*[1,.85,.7][lvOf(b)-1]*locWear(b)*(seasonIdx()===2?1.4:1)*(S.weather.k==='storm'?2:1)}
+function wearRate(b){return .0038*dM()*(WEAR[b.kind]||1)*[1,.85,.7][lvOf(b)-1]*locWear(b)*(seasonIdx()===2?1.4:1)*wxWear()}
 function yearsLeft(b){const r=.0038*(WEAR[b.kind]||1)*[1,.85,.7][lvOf(b)-1]*locWear(b)*1.1;return Math.max(0,(condOf(b)-.5)/r/YEAR)}
 const repCost=b=>{const c={};Object.entries(BD[b.kind].cost).forEach(([k,v])=>{if(k!=='cegla'||b.kind==='dom'||b.kind==='piec')c[k]=Math.max(1,Math.ceil(v*.25))});return c};
 const repWork=b=>Math.max(2,Math.ceil(BD[b.kind].work*.4));

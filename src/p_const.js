@@ -120,8 +120,13 @@ const TRIBE=[
  ['Zdziczały sad','Stare, pokręcone jabłonie i grusze rosną w równych rzędach, choć dokoła jest puszcza. Pod najstarszą jabłonią porośnięty kopiec z płaskim kamieniem.']];
 const TRAITS={Wytrwały:['Wytrwała','pracuje o 10% wydajniej'],Silny:['Silna','szybciej przy ciężkiej pracy'],Dociekliwy:['Dociekliwa','uczy się o 25% szybciej'],Ostrożny:['Ostrożna','rzadziej odnosi rany'],Uparty:['Uparta','próby udają się częściej'],Nauczyciel:['Nauczycielka','uczniowie przy nim uczą się szybciej'],Pogodny:['Pogodna','podnosi nadzieję osady'],Cierpliwy:['Cierpliwa','lepiej znosi głód i zimno']};
 const TKEYS=Object.keys(TRAITS);
-const WEATHER={frost:['siarczysty mróz',.8,-12],clear:['pogodnie',1,0],rain:['deszcz',.75,-2],fog:['mgła',.88,-1],storm:['sztorm',.5,-5],drought:['upał',.92,4],snow:['śnieg',.7,-5]};
-const WROLL=[[['clear',.55],['rain',.2],['fog',.15],['drought',.1]],[['clear',.35],['rain',.3],['fog',.2],['storm',.15]],[['snow',.38],['clear',.28],['frost',.14],['fog',.1],['storm',.1]],[['clear',.4],['rain',.35],['fog',.25]]];
+const WEATHER={frost:['siarczysty mróz',.8,-12],clear:['pogodnie',1,0],rain:['deszcz',.75,-2],fog:['mgła',.88,-1],storm:['sztorm',.5,-5],drought:['upał',.92,4],snow:['śnieg',.7,-5],
+ burza:['burza',.88,1],grad:['grad',.8,-2],zamiec:['zamieć',.5,-14],odwilz:['odwilż',.85,2],wiatr:['wichura',.9,-2],babie:['babie lato',1.04,3]};
+// 3.2: lato burzowe, jesień z babim latem i wichurami, zima z zamiecią i odwilżą, wiosna z przymrozkami i gradem
+const WROLL=[[['clear',.42],['rain',.15],['burza',.12],['drought',.11],['fog',.06],['wiatr',.05],['grad',.03]],[['clear',.24],['rain',.24],['fog',.18],['storm',.12],['wiatr',.1],['babie',.08]],
+ [['snow',.32],['clear',.22],['frost',.14],['zamiec',.07],['fog',.08],['storm',.08],['odwilz',.06]],[['clear',.32],['rain',.28],['fog',.14],['odwilz',.08],['wiatr',.08],['grad',.04],['burza',.04]]];
+// stan pogody do rysowania: wszystko płynnie dochodzi do celu (p_pogoda.js)
+const WX={rain:0,snow:0,hail:0,fog:0,dim:1,cloud:.24,wind:.25,wx:-.8,wz:.6,wet:0,storm:0,dark:0,heat:0,rime:0,bow:0,blow:0,cox:0,coz:0};
 const BOOKS={ciesla:'Podręcznik ciesielki',zdun:'Fragmenty podręcznika zduńskiego',dziennik:'Dziennik okrętowy',kowal:'Mistrzowska księga kowalska',siew:'O siewie i gospodarstwie'};
 const WRECK0=[{n:'Pokład',open:1,need:0,items:{deski:50,plotno:6,wlokna:12,narz:2}},{n:'Ładownia rufowa',open:0,need:40,items:{narz:8,gwozdzie:160,ziarno:30,odziez:8}},{n:'Kajuta kapitana',open:0,need:30,items:{ks_kowal:1,ks_siew:1,narz:2}},{n:'Zalana ładownia dziobowa',open:0,need:80,items:{deski:60,gwozdzie:80,skory:6,suchary:40}}];
 const ANIMAL={sarna:['sarny',6,7,1],koza:['kozy',7,5,1],dzik:['dziki',5,10,2],wilk:['wilki',4,0,0],zajac:['zające',6,2,1],lis:['lisy',3,1,2],foka:['foki',5,12,2],niedzwiedz:['niedźwiedź',2,30,4]};

@@ -6,7 +6,7 @@ float g_vn(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(g_h
 
 // ---------- światło: mocniejsze słońce, słabsze rozproszone, złota godzina ----------
 {const _l=lighting;lighting=function(){const Lt=_l();if(!S)return Lt;const e=Lt.e,day=Lt.day;const low=day*(1-sstep(.22,.62,e));G17.low=low;
-  const wk=S.weather.k,dim=wk==='storm'?.45:wk==='rain'?.65:wk==='fog'?.75:wk==='snow'?.8:1;
+  const dim=WX.dim;
   sun.intensity*=1.12;hemi.intensity*=.6+.12*(1-dim);renderer.toneMappingExposure*=.84+.2*(1-day);
   sun.color.setRGB(1,.74+.2*(1-low)*day,.5+.38*(1-low)*day);
   hemi.color.setRGB(.5+.32*day,.6+.28*day,.86+.1*day);hemi.groundColor.setRGB(.34+.06*day,.33+.04*day,.24);
@@ -18,7 +18,7 @@ float g_vn(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(g_h
   U.uLift.value.set(.006+.01*low,.012,.026+.02*night+.012*win);
   U.uSat.value=1.16+.06*aut-.18*win-.08*night-(1-dim)*.25;
   // mokra ziemia w deszczu
-  const wetT=wk==='rain'||wk==='storm'?1:0;G17.wet+=(wetT-G17.wet)*.004;TU.uWet.value=G17.wet;TU.uT.value=clock;TU.uDay.value=day;
+  G17.wet=WX.wet;TU.uWet.value=G17.wet;TU.uT.value=clock;TU.uDay.value=day;
   return Lt}}
 
 // ---------- obróbka obrazu: gradacja kolorów, cienie chmur także na morzu ----------
@@ -45,16 +45,18 @@ wMat.fragmentShader=wMat.fragmentShader
 wMat.needsUpdate=true;
 
 // ---------- teren: faktura, mokry piasek, dno pod wodą, refleksy świetlne na dnie ----------
-const TU={uT:{value:0},uWet:{value:0},uDay:{value:1},uDet:{value:1},uCau:{value:1}};
+const TU={uT:{value:0},uWet:{value:0},uDay:{value:1},uDet:{value:1},uCau:{value:1},uRime:{value:0}};
 {const tm=terrain.material;const prev=tm.onBeforeCompile;tm.onBeforeCompile=(sh,r)=>{if(prev)prev(sh,r);Object.assign(sh.uniforms,TU);
   sh.vertexShader=sh.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 vTW;').replace('#include <begin_vertex>','#include <begin_vertex>\nvTW=(modelMatrix*vec4(transformed,1.)).xyz;');
-  sh.fragmentShader=sh.fragmentShader.replace('#include <common>','#include <common>\nvarying vec3 vTW;uniform float uT;uniform float uWet;uniform float uDay;uniform float uDet;uniform float uCau;\n'+GN)
+  sh.fragmentShader=sh.fragmentShader.replace('#include <common>','#include <common>\nvarying vec3 vTW;uniform float uT;uniform float uWet;uniform float uDay;uniform float uDet;uniform float uCau;uniform float uRime;\n'+GN)
    .replace('#include <color_fragment>',`#include <color_fragment>
    float landF=smoothstep(-.06,.08,vTW.y);
    {float n1=g_vn(vTW.xz*1.7),n2=g_vn(vTW.xz*5.4),n3=g_vn(vTW.xz*.31);diffuseColor.rgb*=mix(1.,.84+.16*n1+.1*n2+.14*(n3-.5),uDet*landF);}
    float dw=-.04-vTW.y;if(dw>0.)diffuseColor.rgb=mix(diffuseColor.rgb,diffuseColor.rgb*vec3(.5,.72,.76),clamp(dw*.7,0.,.85));
-   float wetB=(1.-smoothstep(.03,.2,vTW.y))*smoothstep(-.12,-.02,vTW.y);diffuseColor.rgb*=1.-.24*wetB-.12*uWet*landF;`)
-   .replace('#include <roughnessmap_fragment>','#include <roughnessmap_fragment>\nroughnessFactor=mix(roughnessFactor,.3,max(wetB,uWet*landF*.75));')
+   float wetB=(1.-smoothstep(.03,.2,vTW.y))*smoothstep(-.12,-.02,vTW.y);diffuseColor.rgb*=1.-.24*wetB-.12*uWet*landF;
+   float pud=uWet*smoothstep(.6,.78,g_vn(vTW.xz*.85+3.1))*landF;diffuseColor.rgb*=1.-.22*pud;
+   diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.82,.86,.9),uRime*landF*(.12+.38*smoothstep(.3,.8,g_vn(vTW.xz*3.1)))*smoothstep(.04,.3,vTW.y));`)
+   .replace('#include <roughnessmap_fragment>','#include <roughnessmap_fragment>\nroughnessFactor=mix(roughnessFactor,.3,max(wetB,uWet*landF*.75));roughnessFactor=mix(roughnessFactor,.08,pud);')
    .replace('#include <emissivemap_fragment>',`#include <emissivemap_fragment>
    if(dw>0.&&uCau>0.){vec2 q=vTW.xz*1.15;float a=g_vn(q+vec2(uT*.35,uT*.22)),b=g_vn(q*1.7-vec2(uT*.28,-uT*.31));float cs=pow(1.-abs(a-b),9.);totalEmissiveRadiance+=vec3(.5,.72,.66)*cs*uCau*uDay*(1.-smoothstep(.05,1.3,dw));}`)};
  tm.customProgramCacheKey=()=>'terr17';tm.needsUpdate=true}
@@ -110,7 +112,7 @@ const dawnMist=[];function mistInit(){const r0=rng(171);let k=0;for(let t=0;t<60
  let near=false;for(const o of dawnMist){if(Math.hypot(o.userData.x-x,o.userData.z-z)<9){near=true;break}}if(near)continue;
  const m=new THREE.Mesh(new THREE.PlaneGeometry(17,17),new THREE.MeshBasicMaterial({map:mistTex,transparent:true,opacity:0,depthWrite:false,color:0xe6ecee,fog:false}));m.rotation.x=-Math.PI/2;m.renderOrder=4;m.visible=false;
  m.userData={x,z,y:Math.max(h,-.04)+.35+(k%8)*.04,low:h<.5,ph:r0()*6.28,sp:.04+r0()*.05};scene.add(m);dawnMist.push(m);k++}}
-function mistTick(rdt){if(!S)return;if(!dawnMist.length)mistInit();const t=tod();const f=Math.max(1-Math.abs(t-.255)/.07,0)+Math.max(1-Math.abs(t-.86)/.06,0)*.3;const wk=S.weather.k;const amt=Math.min(1,f*(wk==='fog'?1.6:1))*(GFX.level>0?1:0);const col=t>.5?0x8a8f96:0xe6ecee;
+function mistTick(rdt){if(!S)return;if(!dawnMist.length)mistInit();const t=tod();const f=Math.max(1-Math.abs(t-.255)/.07,0)+Math.max(1-Math.abs(t-.86)/.06,0)*.3;const amt=Math.min(1,f*(1+.9*WX.fog)+WX.fog*(t<.45?.6:.3))*(1-WX.wind*.8)*(GFX.level>0?1:0);const col=t>.5?0x8a8f96:0xe6ecee;
  dawnMist.forEach(m=>{const u=m.userData;m.visible=amt>.004;if(!m.visible)return;const a=clock*u.sp+u.ph;m.position.set(u.x+Math.sin(a)*2.2,u.y,u.z+Math.cos(a*.8)*1.6);m.material.opacity=amt*(u.low?.32:.13);m.material.color.setHex(col)})}
 
 // ---------- licznik klatek w menu tempa ----------

@@ -126,7 +126,7 @@ function sfx(k){if(!AUD||muted)return;const t=AUD.currentTime;
  else if(k==='cricket'){const o=AUD.createOscillator(),g=AUD.createGain();o.type='square';o.frequency.value=4300;for(let i=0;i<3;i++){g.gain.setValueAtTime(.006,t+i*.07);g.gain.setValueAtTime(0,t+i*.07+.035)}o.connect(g);g.connect(AUD.destination);o.start(t);o.stop(t+.25)}}
 let sndT=0;
 function soundTick(rdt,Lt){if(!AUD||muted||!amb)return;slavSound(rdt,Lt);const k=S.weather.k;const near=1/Math.max(.6,zoom);
- const sea=(.05+.04*Math.sin(clock*.35)+.02*Math.sin(clock*.9))*(k==='storm'?2.2:1);amb.sea.gn.gain.setTargetAtTime(sea*(.6+.4*near),AUD.currentTime,.3);
- const wind=k==='storm'?.12:k==='rain'?.05:k==='snow'?.04:.015+.01*Math.sin(clock*.2);amb.wind.gn.gain.setTargetAtTime(wind,AUD.currentTime,.5);amb.wind.fl.frequency.setTargetAtTime(700+500*Math.sin(clock*.3),AUD.currentTime,.5);
- sndT-=rdt;if(sndT<=0){sndT=.4+Math.random()*1.4;if(Lt.day>.5&&k!=='storm'&&k!=='rain'&&Math.random()<.45)sfx('bird');else if(Lt.night>.6&&seasonIdx()!==2&&Math.random()<.5)sfx('cricket');else if(Lt.night>.4&&Math.random()<.4)sfx('crack')}}
+ const sea=(.05+.04*Math.sin(clock*.35)+.02*Math.sin(clock*.9))*(1+1.6*Math.max(0,WX.wind-.35));amb.sea.gn.gain.setTargetAtTime(sea*(.6+.4*near),AUD.currentTime,.3);
+ const gust=.75+.25*Math.sin(clock*.7)*Math.sin(clock*.23+1),wind=(.012+.13*WX.wind*WX.wind*gust)+.01*Math.sin(clock*.2);amb.wind.gn.gain.setTargetAtTime(wind,AUD.currentTime,.5);amb.wind.fl.frequency.setTargetAtTime(600+500*Math.sin(clock*.3)+700*WX.wind*gust,AUD.currentTime,.5);wxSound();
+ sndT-=rdt;if(sndT<=0){sndT=.4+Math.random()*1.4;if(Lt.day>.5&&WX.rain<.15&&WX.wind<.7&&WX.snow<.3&&Math.random()<.45)sfx('bird');else if(Lt.night>.6&&seasonIdx()!==2&&Math.random()<.5)sfx('cricket');else if(Lt.night>.4&&Math.random()<.4)sfx('crack')}}
 function toggleMute(){muted=!muted;try{localStorage.setItem('przystan-mute',muted?'1':'0')}catch(e){}if(muted&&AUD){AUD.close();AUD=null;amb=null}else if(!muted)audioStart();toast(muted?'Dźwięk wyłączony':'Dźwięk włączony');renderCtl()}
