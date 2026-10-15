@@ -156,7 +156,7 @@ function makePerson18(p){const g=new THREE.Group();const k=p.sex==='k',adult=p.a
  const T=[];const h0=.5;
  if(k){T.push([mdLathe([[.0,.06],[.205,.06],[.19,.16],[.165,.3],[.13,.46],[.118,.54],[.13,.62],[.14,.68],[.135,.74],[.1,.79],[.05,.82],[0,.83]].map(([r,y])=>[r,y-h0]),14),cloth]);
   T.push([new THREE.CylinderGeometry(.208,.208,.03,14,1,true),emb,mdM(0,.08-h0,0)]);
-  if(adult&&id%3!==2){const ac=mdCol(id%2?0xb8ac90:0x5a4a3a);T.push([new THREE.CylinderGeometry(.13,.178,.34,10,1,true,-.75,1.5),ac,mdM(0,.37-h0,.006)]);T.push([new THREE.CylinderGeometry(.18,.18,.018,10,1,true,-.75,1.5),emb,mdM(0,.21-h0,.006)])}}
+  if(adult&&id%3!==2){const ac=mdCol(id%2?0xb8ac90:0x5a4a3a);T.push([new THREE.CylinderGeometry(.13,.178,.34,10,6,true,-.75,1.5),ac,mdM(0,.37-h0,.006)]);T.push([new THREE.CylinderGeometry(.18,.18,.018,10,1,true,-.75,1.5),emb,mdM(0,.21-h0,.006)])}}
  else{T.push([mdLathe([[0,.37],[.16,.37],[.15,.44],[.122,.52],[.135,.6],[.148,.68],[.14,.75],[.1,.8],[.05,.83],[0,.84]].map(([r,y])=>[r,y-h0]),14),cloth]);
   T.push([new THREE.CylinderGeometry(.162,.162,.025,14,1,true),emb,mdM(0,.385-h0,0)]);}
  T.push([new THREE.CylinderGeometry(k?.122:.128,k?.124:.13,.04,14),belt,mdM(0,(k?.55:.52)-h0,0)]);

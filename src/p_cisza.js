@@ -116,6 +116,69 @@ let czLastTab='osada';
 $('cz-osada').addEventListener('click',()=>{if(S)openSheet(czLastTab)});
 cv.addEventListener('pointerdown',()=>document.body.classList.remove('czpop'));
 
+// ---------- 3.3 zapasy pod palcem: pasek pod datą i karta wszystkich zapasów ----------
+{const st=document.createElement('style');st.textContent=`
+body.cz #cz-top{align-items:flex-start}
+#cz-l .czbr{flex-basis:100%;height:0}
+#cz-res{display:none}
+body.cz #cz-res{display:inline-flex;align-items:center;gap:10px;height:32px;padding:0 6px 0 11px;margin-top:-2px;border-radius:16px;border:1px solid #c9a66b66;background:#18201cc7;color:var(--hi);font:600 14px var(--sans);font-variant-numeric:tabular-nums;cursor:pointer;box-shadow:0 2px 8px #0005}
+#cz-res span{display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+#cz-res svg{width:16px;height:16px;color:var(--gold)}#cz-res .chv{width:14px;height:14px;color:#c9c3ad;margin-left:-4px}
+#cz-res span.warn{color:#f6c48e}#cz-res span.warn svg{color:var(--ember)}#cz-res span.bad{color:#f4b3aa}#cz-res span.bad svg{color:var(--bad)}
+#cz-res small{font-weight:500;color:#c9c3ad;font-size:12.5px}
+body.cz #cz-goal{top:calc(94px + env(safe-area-inset-top,0px))}
+body.cz #toast{top:calc(98px + env(safe-area-inset-top,0px))}
+#zappop{position:absolute;z-index:30;left:10px;top:96px;width:min(360px,calc(100vw - 20px));max-height:calc(100% - 120px);overflow-y:auto;box-sizing:border-box;padding:12px 14px 10px;border-radius:14px;background:#141b18f4;border:1px solid #c9a66b55;color:var(--txt,#e8e2d0);font:14px var(--sans);box-shadow:0 6px 24px #000a}
+#zappop[hidden]{display:none}
+.zph{display:flex;gap:10px;align-items:center;margin-bottom:4px}.zph svg{width:28px;height:28px;color:var(--gold);flex:none}
+.zph b{display:block;font-family:var(--serif);font-size:19px;color:var(--hi)}.zph small{display:block;color:var(--mut,#a8a290);font-size:12.5px;line-height:1.35}
+.zpg{display:grid;grid-template-columns:1fr 1fr;gap:0 14px;margin-top:6px}
+.zpg h5{grid-column:1/-1;margin:6px 0 1px;font:600 11px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.zpr{display:flex;justify-content:space-between;align-items:baseline;gap:6px;padding:3px 0;border-top:1px solid #ffffff10;font-variant-numeric:tabular-nums;min-width:0}
+.zpr span{color:#cfc9b4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.zpr b{font-weight:600;color:var(--hi);white-space:nowrap}
+.zpr i{font-style:normal;font-size:11.5px;margin-left:4px;color:var(--mut,#a8a290)}.zpr i.up{color:#a8d090}.zpr i.dn{color:#e0a080}
+.zpr.low b{color:#f4b3aa}.zpr.wide{grid-column:1/-1}.zph i{font-style:normal;font-weight:700}.zph i.up{color:#a8d090}.zph i.dn{color:#e0a080}
+#zappop .zpb{display:flex;gap:6px;margin-top:10px}#zappop .zpb button{flex:1;min-height:40px}
+.zapc .zpg{margin-top:2px}`;document.head.appendChild(st)}
+const ZAP_G=[['Jedzenie',null],['Opał i budulec',['opal','drewno','kamien','glina','deski','gwozdzie','cegla']],['Rzemiosło',['narz','narzk','odziez','skory','plotno','wlokna','ruda','wegiel','maka','naczynia','ziola']],['Z wyspy',['sol','pierze','bursztyn','lodz']]];
+const ZAP_CORE={opal:1,drewno:1,kamien:1,glina:1,odziez:1},ZAP_WIDE={narz:1,narzk:1};
+const ZAP_N={narz:'Narzędzia żelazne',narzk:'Narzędzia kamienne',drewno:'Kłody',ruda:'Ruda',wegiel:'Węgiel drzewny'};
+let zapH=[];// dobowe zdjęcia zapasów (nie trafiają do zapisu)
+function zapSnap(){if(!S)return;zapH.push({d:S.day,r:Object.assign({},S.res),f:foodTotal()});if(zapH.length>3)zapH.shift()}
+function zapRate(k){if(!S||!zapH.length)return null;let s=zapH[0];for(const x of zapH)if(S.day-x.d>=.9)s=x;const dt=S.day-s.d;if(dt<.5)return null;const now=k==='_f'?foodTotal():(S.res[k]||0),was=k==='_f'?s.f:(s.r[k]||0);return(now-was)/dt}
+function zapRateH(k){const v=zapRate(k);if(v===null||Math.abs(v)<.5)return'';const a=Math.round(Math.abs(v));return`<i class="${v>0?'up':'dn'}">${v>0?'+':'−'}${a}/d</i>`}
+function zapItems(g){if(g===null)return FOOD.filter(k=>(S.res[k]||0)>=.5);const sea=seasonIdx();
+ return g.filter(k=>(S.res[k]||0)>=.5||ZAP_CORE[k]||(k==='narz'&&S.res.narz<.5&&S.res.narzk<.5)||(k==='cegla'&&S.know.cegla==='tak'))}
+function zapBody(){let h='';const sea=seasonIdx();
+ ZAP_G.forEach(([n,g])=>{const it=zapItems(g);if(!it.length)return;h+=`<h5>${n}</h5>`;
+  it.forEach(k=>{const v=S.res[k]||0;const low=(k==='opal'&&(sea===1||sea===2)&&v<20)||(k==='odziez'&&sea>=1&&sea<=2&&v<1&&S.people.some(p=>p.coat<=0));
+   h+=`<div class="zpr${low?' low':''}${ZAP_WIDE[k]?' wide':''}"><span>${ZAP_N[k]||RN[k]||k}</span><b>${fmt(v)}${zapRateH(k)}</b></div>`})});
+ return`<div class="zpg">${h}</div>`}
+function zapHead(){const days=czNeedDays(),tot=foodTotal(),sp=typeof spizTot==='function'?spizTot():0;
+ const dw=days>=99?'na długo':days<1?'na mniej niż dzień':`na ${Math.floor(days)} ${dniW(Math.floor(days))}`;
+ const fr=zapRate('_f');const tr=fr===null||Math.abs(fr)<.5?'':`${fr>0?'przybywa':'ubywa'} <i class="${fr>0?'up':'dn'}">${Math.round(Math.abs(fr))}</i> dziennie · `;
+ return`<div class="zph">${ico('zapasy')}<div><b>Zapasy</b><small>Żywność ${fmt(tot)} / ${foodCap()} · ${dw}<br>${tr}rodzajów ${S.variety||0}${sp>=1?` · w spiżarkach rodzin ${fmt(sp)}`:''}</small></div></div>`}
+function zapCard(){return`<div class="card zapc">${zapHead()}${zapBody()}</div>`}
+const zapPop=document.createElement('div');zapPop.id='zappop';zapPop.hidden=true;document.body.appendChild(zapPop);
+zapPop.innerHTML='<div class="zpc"></div><div class="zpb"><button data-zapgo="osada">Ludzie i rodziny</button><button data-zapgo="praca">Kto pracuje</button></div>';
+let zapFT=0;function zapFill(force){if(!S)return;const t=performance.now();if(!force&&t-zapFT<900)return;zapFT=t;setH(zapPop.firstChild,zapHead()+zapBody())}
+function zapShow(){if(!S)return;if(!zapPop.hidden){zapPop.hidden=true;return}const wp=$('wxpop');if(wp)wp.hidden=true;zapFill(true);zapPop.hidden=false;
+ try{const r=$('cz-res').getBoundingClientRect();zapPop.style.top=(r.bottom+6)+'px';zapPop.style.left=Math.max(10,Math.min(r.left,innerWidth-zapPop.offsetWidth-10))+'px'}catch(e){}}
+{const l=$('cz-l');l.insertAdjacentHTML('beforeend','<i class="czbr"></i><button id="cz-res" type="button" aria-label="Zapasy"></button>');
+ $('cz-res').addEventListener('click',e=>{e.stopPropagation();zapShow()})}
+zapPop.addEventListener('click',e=>{const b=e.target.closest('[data-zapgo]');if(!b||!S)return;zapPop.hidden=true;openSheet(b.dataset.zapgo)});
+document.addEventListener('pointerdown',e=>{if(zapPop.hidden)return;if(e.target.closest('#zappop,#cz-res'))return;zapPop.hidden=true},true);
+{const _nd=newDay;newDay=function(){const r=_nd.apply(this,arguments);try{zapSnap()}catch(e){}return r}}
+{const _rt=renderTop;renderTop=function(){_rt();if(!czOn||!S)return;const days=czNeedDays(),sea=seasonIdx();
+  const fc=days<2?'bad':days<5?'warn':'',oc=(sea===1||sea===2)&&S.res.opal<10?'bad':(sea>=1&&sea<=2&&S.res.opal<30)||S.res.opal<5?'warn':'';
+  const b=$('cz-res');if(!b._ok){b._ok=1;b.innerHTML=`<span data-k="f">${ico('zywnosc')}<b></b><small></small></span><span data-k="d">${ico('drewno')}<b></b></span><span data-k="o">${ico('opal')}<b></b></span><span data-k="l">${ico('ludzie')}<b></b></span>${ico('chev','chv')}`}
+  const sp=b.children,tx=(el,t)=>{if(el.textContent!==t)el.textContent=t},cl=(el,c)=>{if(el.className!==c)el.className=c};const dd=Math.min(99,Math.floor(days));
+  cl(sp[0],fc);tx(sp[0].children[1],days>=99?'99+':String(dd));tx(sp[0].children[2],dniW(dd));tx(sp[1].children[1],fmt(S.res.drewno));cl(sp[2],oc);tx(sp[2].children[1],fmt(S.res.opal));tx(sp[3].children[1],String(S.people.length));
+  if(!zapPop.hidden)zapFill()}}
+{const _os=openSheet;openSheet=function(t){zapPop.hidden=true;return _os(t)}}
+// cel pokazuje się pod całą górną linią (data, ostrzeżenia, zapasy), żeby nie zasłaniać paska
+{const _sg=czShowGoal;czShowGoal=function(){_sg();try{const r=$('cz-l').getBoundingClientRect();czGoal.style.top=Math.round(r.bottom+8)+'px'}catch(e){}}}
+
 // ---------- księga Osada: działy zamiast zakładek, gra stoi ----------
 function czChips(){if(!czOn)return;const el=$('cz-chips');setH(el,CZ_TABS.map(([k,n])=>`<button data-czt="${k}" class="${tab===k?'on':''}">${n}</button>`).join(''))}
 $('cz-chips').addEventListener('click',e=>{const b=e.target.closest('[data-czt]');if(b&&S)openSheet(b.dataset.czt)});
@@ -131,7 +194,7 @@ function czSumHTML(){const pop=S.people.length,houses=S.bld.filter(b=>bDone(b)&&
  if((S.dis||0)>.6)s+=' Ludzie się kłócą.';else if(S.hope>.75)s+=' Ludzie mają nadzieję.';
  const g=goalInfo();const pc=v=>Math.round(v*100)+'%';
  return`<div class="card"><p style="font-family:var(--serif);font-size:17px;color:var(--hi);margin:0 0 6px;line-height:1.35">${s}</p><p class="mut" style="margin:4px 0 0">Ciepło ${pc(S.warm)} · zdrowie ${pc(S.health)} · nadzieja ${pc(S.hope)} · niezgoda ${pc(S.dis||0)}</p></div>`}
-{const _th=troubleHTML;troubleHTML=function(){return(czOn&&S?czSumHTML():'')+_th()}}
+{const _th=troubleHTML;troubleHTML=function(){return(czOn&&S?czSumHTML()+zapCard():'')+_th()}}
 
 // ---------- karty: zamknij, człowiek, teren ----------
 let selT=null,czJobs=false;

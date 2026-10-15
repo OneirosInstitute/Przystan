@@ -72,7 +72,12 @@ function ludCard(p){const q=p.pair!==null?pById(p.pair):null;const fr=friendsOf(
  return`<p class="mut">${S.rody&&S.rody[p.rod]&&S.rody[p.rod].znak?S.rody[p.rod].znak+' ':''}${rodName(p.rod)}${q?` · ${p.sex==='k'?'mąż':'żona'}: ${q.name}`:''}${p.waitHome?' · czekają na własny dom':''}</p>`+
   (p.age>=14?`<p>Nastrój: <b>${zadWord(p)}</b>${p.zr&&p.zr.length?' · '+p.zr.join(', '):''}</p><p class="mut">Mir: ${mirWord(p)}${fr.length?' · przyjaciele: '+fr.map(x=>x.name).join(', '):' · bez bliskich przyjaciół'}${rv.length?' · zatarg: '+rv[0].name:''}</p>`:'')}
 // ---- rytm dnia ----
-function single(p){return p.pair===null&&p.age>=17&&p.age<=46&&!p.waitHome&&!(p.widowT&&S.day<p.widowT)}
+function single(p){return p.pair===null&&p.age>=(p.sex==='m'?18:17)&&p.age<=46&&!p.waitHome&&!(p.widowT&&S.day<p.widowT)}
+// 3.3: zakaz ślubu w bliskim pokrewieństwie (rodzeństwo, kuzynostwo, wuj i bratanica), a nie w całym rodzie: ród po kilku pokoleniach to pół wsi
+const kinX=(a,b)=>!!a&&!!b&&a.some(x=>b.includes(x));
+function kinClose(a,b){const pa=a.par,pb=b.par;if(!pa&&!pb)return a.rod===b.rod;const ga=a.gp||[],gb=b.gp||[];
+ return(pa||[]).includes(b.id)||(pb||[]).includes(a.id)||ga.includes(b.id)||gb.includes(a.id)||kinX(pa,pb)||kinX(ga,gb)||kinX(pa,gb)||kinX(pb,ga)}
+function wedOk(a,b){return a.sex!==b.sex&&!kinClose(a,b)}
 function freeHouse(){return S.bld.find(b=>bDone(b)&&BD[b.kind].house&&!Object.values(S.fams).some(f=>f.home===b.id))}
 function ludDaily(){if(!ludReady)ludInit();const ad=S.people.filter(p=>p.age>=14),yr=Math.floor(S.day/YEAR),rd=Math.floor(rday());
  for(const k in S.rel){S.rel[k]*=.993;if(Math.abs(S.rel[k])<2)delete S.rel[k]}
@@ -82,20 +87,20 @@ function ludDaily(){if(!ludReady)ludInit();const ad=S.people.filter(p=>p.age>=14
  if((S.dis||0)>.4&&Math.random()<(S.dis-.3)*K*.6){const a=lpick(ad),b=lpick(ad);if(a&&b&&a!==b&&a.fam!==b.fam){relAdd(a,b,-14);if(Math.random()<.5)log(`${a.name} i ${b.name} kłócą się o ${['drewno','jedzenie','pracę','miejsce przy ogniu'][(Math.random()*4)|0]}. Od tej pory omijają się szerokim łukiem.`)}}
  // spotkania przy studni, przy ogniu, w drodze: wieś się poznaje
  for(let q=0;q<6;q++){const a=lpick(ad),b=lpick(ad);if(a&&b&&a!==b)relAdd(a,b,2*compat(a,b))}
- {const sg=S.people.filter(single);for(let q=0;q<2;q++){const a=lpick(sg),b=lpick(sg);if(a&&b&&a.sex!==b.sex&&a.rod!==b.rod&&Math.abs(a.age-b.age)<12)relAdd(a,b,2.2*K*(seasonIdx()===0?1.4:1))}}
+ {const sg=S.people.filter(single);for(let q=0;q<2;q++){const a=lpick(sg),b=lpick(sg);if(a&&b&&wedOk(a,b)&&Math.abs(a.age-b.age)<12)relAdd(a,b,2.2*K*(seasonIdx()===0?1.4:1))}}
  if(law('u_swoje')&&Math.random()<.2*K){const a=lpick(ad),b=lpick(ad);if(a&&b&&a!==b)relAdd(a,b,-4)}
  // noc Kupały: wianki i paproć
- if(rd===0&&yr>=1&&!S.seen['kupL'+yr]){S.seen['kupL'+yr]=1;let n=0;const sg=S.people.filter(single);sg.forEach(a=>sg.forEach(b=>{if(a.id<b.id&&a.sex!==b.sex&&a.rod!==b.rod&&relGet(a,b)>12){relAdd(a,b,14);n++}}));
+ if(rd===0&&yr>=1&&!S.seen['kupL'+yr]){S.seen['kupL'+yr]=1;let n=0;const sg=S.people.filter(single);sg.forEach(a=>sg.forEach(b=>{if(a.id<b.id&&wedOk(a,b)&&relGet(a,b)>12){relAdd(a,b,14);n++}}));
   if(n)log('W noc Kupały dziewczęta puszczają wianki na wodę, a chłopcy wyławiają je z zatoki. Niejeden wianek trafia w ręce, w które miał trafić.')}
  // nastrój i wydajność
  S.people.forEach(p=>{zadOf(p);const g=p.job==='wb'?'b'+p.wb:null;let se=1;if(g&&groups[g]){const fr=friendsOf(p).filter(q=>q.job==='wb'&&q.wb===p.wb).length,rv=rivalsOf(p).filter(q=>q.job==='wb'&&q.wb===p.wb).length;se=1+.04*Math.min(2,fr)-.06*Math.min(1,rv)}p._se=se});
  // wesele
  if(S.wed&&S.day>=S.wed.day){const k=pById(S.wed.k),m=pById(S.wed.m);S.wed=null;if(k&&m&&k.pair===null&&m.pair===null)wedding(k,m)}
  // swaty
- if(!S.wed&&Math.random()<.3*K){const c=S.people.filter(single);let best=null,bv=offHolder('swat')?36:44;c.filter(p=>p.sex==='k').forEach(k=>c.filter(m=>m.sex==='m'&&m.rod!==k.rod&&Math.abs(k.age-m.age)<16).forEach(m=>{const v=relGet(k,m);if(v>bv){bv=v;best=[k,m]}}));
+ if(!S.wed&&Math.random()<.3*K){const c=S.people.filter(single);let best=null,bv=offHolder('swat')?36:44;c.filter(p=>p.sex==='k').forEach(k=>c.filter(m=>m.sex==='m'&&wedOk(k,m)&&Math.abs(k.age-m.age)<16).forEach(m=>{const v=relGet(k,m);if(v>bv){bv=v;best=[k,m]}}));
   if(best){const[k,m]=best;S.wed={k:k.id,m:m.id,day:Math.floor(S.day)+2+((Math.random()*3)|0)};log(`Swaty. Do chaty, w której mieszka ${k.name}, przychodzą swaci od ${gen(m.name)} z chlebem i solą. Chleb zostaje przyjęty: za kilka dni wesele.`);toast('Swaty: '+k.name+' i '+m.name)}
   else if(S.hamlets.length&&Math.random()<.08){const h=S.hamlets.filter(x=>x.pop>=4&&x.wiez>=.45)[0];const lone=c.filter(p=>p.age>=19&&p.age<=36&&!relsOf(p).some(x=>x[1]>=30&&x[0].sex!==p.sex))[0];
-   if(h&&lone){const sex=lone.sex==='k'?'m':'k',age=18+Math.random()*8;const np=newPerson(S.pid++,newName(sex),age,sex,lone.fam,{zbieracz:1,[sex==='m'?'drwal':'krawiec']:1},TKEYS[(Math.random()*TKEYS.length)|0]);np.rod=h.rod;np.mirX=0;np.fromHam=h.id;
+   if(h&&lone){const sex=lone.sex==='k'?'m':'k',age=18+Math.random()*8;const np=newPerson(S.pid++,newName(sex),age,sex,lone.fam,{zbieracz:1,[sex==='m'?'drwal':'krawiec']:1},TKEYS[(Math.random()*TKEYS.length)|0]);np.rod=h.rod;np.par=[];np.mirX=0;np.fromHam=h.id;
     const hc=homeOf(lone);const c0=hc?bCenter(hc):{x:tcx(camp.i),z:tcx(camp.j)};np.x=c0.x+.8;np.z=c0.z+.6;S.people.push(np);addPersonMesh(np);h.pop--;relAdd(np,lone,52);
     log(`Z przysiółka ${h.name} przychodzi ${np.name}, ${Math.floor(age)} lat. W przysiółku za ciasno, a tu ${lone.name} od dawna nie ma z kim tańczyć.`);assign()}}}
  // młodzi czekający na dom

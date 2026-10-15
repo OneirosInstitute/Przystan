@@ -13,7 +13,7 @@ const KOZ=[0x8a6a48,0x7a5a3c,0x9a7a52,0x6a5038],FUR=0xd8ccb4,FUR2=0x5a4632,SZAL=
 function winterExtra(p){const k=p.sex==='k',adult=p.age>=12,id=p.id;const koz=mdCol(KOZ[id%4]),fur=mdCol(id%3?FUR:FUR2);const T=[];const L=(pts)=>mdLathe(pts.map(([r,y])=>[r,y-H0P]),14);
  if(!k){T.push([L([[.0,.29],[.19,.29],[.19,.37],[.175,.45],[.155,.53],[.163,.6],[.176,.68],[.168,.75],[.12,.8],[.06,.83],[0,.835]]),koz]);
   T.push([new THREE.CylinderGeometry(.2,.2,.04,14,1,true),fur,mdM(0,.3-H0P,0)])}
- else{T.push([L([[0,.43],[.168,.43],[.142,.5],[.15,.58],[.162,.66],[.17,.72],[.162,.77],[.11,.81],[.06,.835],[0,.84]]),koz]);T.push([new THREE.CylinderGeometry(.172,.172,.035,14,1,true),fur,mdM(0,.44-H0P,0)])}
+ else{T.push([L([[0,.43],[.17,.43],[.156,.5],[.156,.58],[.162,.66],[.17,.72],[.162,.77],[.11,.81],[.06,.835],[0,.84]]),koz]);T.push([new THREE.CylinderGeometry(.172,.172,.035,14,1,true),fur,mdM(0,.44-H0P,0)])}
  T.push([new THREE.TorusGeometry(.075,.026,6,14),fur,mdM(0,.8-H0P,0,Math.PI/2)]);
  [-1,1].forEach(s=>T.push([new THREE.SphereGeometry(.064,10,8),koz,mdM(s*.15,.755-H0P,0,0,0,0,1,.9,1)]));
  if(!k){const cap=mdCol(id%2?0x4a3a2c:0x6a5440);T.push([new THREE.CylinderGeometry(.112,.108,.1,14),cap,mdM(0,HYP+.07,-.004)]);T.push([new THREE.SphereGeometry(.105,12,6,0,6.283,0,1.4),cap,mdM(0,HYP+.11,-.004,0,0,0,1,.6,1)]);

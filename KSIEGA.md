@@ -198,8 +198,8 @@ Na wyspie nikt nie rządzi. Ustalenia rodzą się z wydarzeń i z czasem stają 
 Wszystko dzieje się samo, jak w dawnej wsi. Gracz nie dobiera par, tylko widzi to w kronice i na kartach ludzi.
 
 - **Więzi:** ludzie zbliżają się przy wspólnej pracy, na wyprawach, przy obrzędach, w zimowe wieczory i przy zwykłych spotkaniach. Oddalają się przy kłótniach i nierównym podziale. Każdy ma do trzech przyjaciół i czasem jeden zatarg. Przyjaciele przy jednej pracy pracują szybciej, a zatarg ją spowalnia.
-- **Rody:** każdy należy do rodu (ród Bożydara, ród Radosława…). Ród przechodzi z ojca na dzieci, a żona przechodzi do rodu męża. W obrębie jednego rodu nikt się nie żeni.
-- **Swaty i wesele:** gdy dwoje młodych z różnych rodów zbliży się do siebie, przychodzą swaci z chlebem i solą, a po kilku dniach jest wesele z oczepinami. Noc Kupały zbliża młodych.
+- **Rody:** każdy należy do rodu (ród Bożydara, ród Radosława…). Ród przechodzi z ojca na dzieci, a żona przechodzi do rodu męża. Od wersji 3.3 nie pobierają się rodzeństwo, kuzynostwo ani wuj z bratanicą, ale daleka rodzina z jednego rodu może. Wcześniej zakaz obejmował cały ród, a ponieważ rody z czasem wymierają po mieczu, po kilkudziesięciu latach mogło nie zostać nikogo, kto wolno się żenić.
+- **Swaty i wesele:** gdy dwoje młodych spoza bliskiej rodziny zbliży się do siebie (kobiety od 17 lat, mężczyźni od 18), przychodzą swaci z chlebem i solą, a po kilku dniach jest wesele z oczepinami. Noc Kupały zbliża młodych.
 - **Nowe gospodarstwo:** młoda para potrzebuje własnego domu. Do tego czasu mieszka u rodziny męża i nie ma dzieci, więc wesela naturalnie napędzają budowę.
 - **Wdowy, wdowcy i sieroty:** po żałobie można wejść w nowy związek, a dzieci bez rodziców przyjmuje inna rodzina, najchętniej z tego samego rodu.
 - **Nastrój:** każdy jest zadowolony, spokojny, markotny albo rozgoryczony, z widocznymi powodami: głód, zimno, brak dachu, choroba, samotność, praca nie po fachu, obyczaj, który mu nie pasuje, zatarg, brak nadziei.
@@ -218,6 +218,7 @@ Wszystko dzieje się samo, jak w dawnej wsi. Gracz nie dobiera par, tylko widzi 
 | Gospodarz albo gospodyni zapasów | gdy stoi spiżarnia | wolniejsze psucie jedzenia, ostrzeżenie przed głodem |
 | Swat albo swatka | po pierwszym weselu | młodzi szybciej się dobierają, rody rzadziej się kłócą |
 | Mistrz albo mistrzyni fachu | gdy ktoś osiągnie najwyższy poziom fachu | wszyscy uczący się tego fachu robią szybsze postępy |
+| Baba pępowa (od 3.3) | przy pierwszej ciąży | przyjmuje porody: rzadziej umierają matki, mniej martwych urodzeń, zdrowsze niemowlęta |
 
 **Spory rodów** przychodzą co kilkanaście dni najwyżej jeden naraz: o miedzę, łup z wyprawy, kradzież ze spiżarni w czasie głodu, krzywdę przy pracy albo słowa, które padły przy ogniu. Sprawa staje przed starszym osady, przed całym wiecem albo, gdy jest święty gaj, pod starym dębem. Gracz rozstrzyga: racja po jednej stronie, po drugiej, wina po połowie albo odłożenie do wiecu. Wyrok łatwiej przyjąć, gdy starszy ma duży mir, gdy sądzi się pod dębem i gdy racja przypada osobie z większym mirem. Nieprzyjęty wyrok zaczyna **waśń rodów**: rośnie niezgoda, a więzi między rodami się psują. Waśń może zgasnąć na Dziady albo w Szczodre Gody, przy jednym stole, a na pewno kończy ją wesele, które połączy zwaśnione rody.
 
@@ -373,6 +374,7 @@ Na ekranie widać przede wszystkim wyspę. Wszystko inne pojawia się, gdy czego
 
 **Na ekranie na stałe:**
 - u góry pora roku i dzień, pora doby i pogoda, a obok najwyżej dwa ostrzeżenia, gdy coś jest zagrożone (pożar, jedzenie na kilka dni, mało opału jesienią i zimą, zimno w domach, choroby, kłótnie, ludzie bez dachu); dotknięcie ostrzeżenia otwiera księgę;
+- pod datą pasek zapasów (od wersji 3.3): na ile dni starczy jedzenia, kłody, opał i liczba ludzi; kolor ostrzega, gdy jedzenia albo opału jest mało. Dotknięcie otwiera kartę „Zapasy”: wszystkie zapasy w grupach (jedzenie, opał i budulec, rzemiosło, dary wyspy), przy każdym, ile przybyło albo ubyło przez ostatnią dobę, pojemność spiżarni, zapasy w spiżarkach rodzin i przyciski do księgi. Ta sama karta stoi w księdze na górze działu Ludzie;
 - po prawej przycisk tempa; otwiera pauzę, tempa 1–8×, dźwięk, pełny ekran, jakość grafiki i tryb zdjęć;
 - na dole przycisk „Osada”, a obok cała wyspa i powrót do obozu.
 
@@ -728,6 +730,34 @@ Nazwa trafia do Księgi rozbitków i na kartę celu. Zdobyte zakończenia zapami
 **Koniec.** Po trzech aktach scena „Wyspa jest nasza”: ogniska na każdym wzgórzu, podsumowanie ludzi, przysiółków i lat, pieśń, rozdział „Epoka III” w Księdze rozbitków. Gra toczy się dalej.
 
 
+## Pokolenia (od wersji 3.3)
+
+Rok gry to dwa lata życia ludzi. Dzieci przychodzą na świat tak jak w dawnej wsi: po weselu, we własnym domu i po dziewięciu miesiącach. Wcześniej dziecko pojawiało się od razu, gdy w domu było miejsce, więc rodzice mieli kolejne dzieci co kilka miesięcy, a żadne dziecko nie umierało.
+
+- **Ciąża:** w ciążę może zajść zamężna kobieta w wieku 18–45 lat, która mieszka z mężem we własnym, gotowym domu, gdzie jest jeszcze miejsce. Dziecko w drodze już zajmuje to miejsce. Szansa zależy od wieku (najwyższa między 20. a 30. rokiem życia, po 35. spada, po 45. gaśnie), od najedzenia, zdrowia, ciepła w domu i nadziei w osadzie. W głodzie szansa spada kilkukrotnie.
+- **Widać to:** po trzech miesiącach kronika podaje, że para spodziewa się dziecka. Karta kobiety pokazuje termin porodu, a sylwetka powoli się zaokrągla, także pod zimowym kożuchem. Pod koniec ciąży i tuż po porodzie kobieta pracuje lżej.
+- **Poród** przychodzi po 7–8 dniach gry. Czasem rodzą się bliźnięta. Rzadko dziecko rodzi się martwe, a bardzo rzadko matka umiera przy porodzie. To ryzyko rośnie w głodzie, zimnie, chorobie i bez dachu, a maleje, gdy jest baba pępowa i osada zna zioła. W ciężkim głodzie albo chorobie kobieta może stracić ciążę.
+- **Karmienie:** po porodzie matka mniej więcej przez trzy kwartały karmi niemowlę i nie zachodzi w kolejną ciążę. Między dziećmi mijają zwykle około dwa lata.
+- **Dzieciństwo:** niemowlęta i małe dzieci chorują najłatwiej. Głód, zimno w domu i choroby (gorączka, biegunka, kaszel, krup, szkorbut) mnożą ryzyko. Zielarka, baba pępowa, wiedza o ziołach i studnia je zmniejszają. Po piątym roku życia dzieci umierają rzadko. Zmarłe dziecko chowa się pod brzozą za chatami.
+- **Baba pępowa:** nowy urząd, który pojawia się przy pierwszej ciąży. Wiec wybiera doświadczoną kobietę, najchętniej starszą matkę. Przy niej rzadziej umierają matki i niemowlęta.
+- **Na start:** na statku dwie kobiety są już przy nadziei, więc pierwsze dzieci wyspy rodzą się w pierwszych dniach, jeszcze przy ognisku w obozie. W gotowej wsi epoki II i III co czwarta zamężna kobieta jest w ciąży.
+- **Karta „Pokolenia”** w dziale Ludzie pokazuje, kto spodziewa się dziecka i kiedy, ile dzieci urodziło się i zmarło w ostatnich latach, ile dzieci przypada na kobietę, ile z nich dożywa dwunastu lat i współczynnik zastępowalności pokoleń z opisem (osada rośnie, ledwo się zastępuje albo maleje). Pod spodem stoi to, co najbardziej hamuje narodziny: kobiety bez męża, młode pary bez własnego domu, rodziny bez gotowego domu albo ciasnota.
+
+**Współczynnik zastępowalności pokoleń** mówi, ile córek dożywających wieku matki przypada na jedną matkę. 1 oznacza, że pokolenia się zastępują, 2 oznacza, że każde pokolenie jest dwa razy liczniejsze. Pomiary w symulacji (osada z epoki II, pełne zapasy, nagrody zdarzeń losowe):
+
+| Warunki | 3.2.1 | 3.3 |
+|---|---|---|
+| Dom dla każdej pary, pełne zapasy (30 lat życia): dzieci na kobietę | 6,7 | 5,5 |
+| … zastępowalność pokoleń | 3,3 | 2,6 |
+| … odstęp między porodami (mediana) | 0,8 roku, ponad połowa krótsza niż rok | 1,8 roku, najkrócej 1,5 roku |
+| … dzieci dożywające 12 lat | 100% | ok. 96% |
+| Niedojadanie, spiżarnia stale na 70% potrzeb: dzieci na kobietę / zastępowalność | 5,1 / 2,5 | 4,5 / 2,0 |
+| … dzieci dożywające 12 lat | 100% | ok. 92%, do tego martwe urodzenia i poronienia |
+| Epoka I od rozbicia, 20 lat życia: ludność | 18 → 43, w tym 12 narodzin w pierwszych 40 dniach | 18 → 34–37, w tym 5–6 narodzin w pierwszych 40 dniach |
+| Bez nowych domów: dzietność / zastępowalność | 2,2 / 1,1 (100 lat życia) | 2,3 / 1,0 albo więcej, gdy młode pary odchodzą do przysiółków i zwalniają domy |
+
+Główną dźwignią gracza są domy: para bez domu nie ma dzieci, a w pełnym domu nie ma miejsca na kolejne. Druga dźwignia to jedzenie, ciepło i zdrowie dzieci.
+
 ## Ziemia i niebo (od wersji 3.2)
 
 ### Pogoda
@@ -892,6 +922,7 @@ Pierze z kurnika i tokowiska idzie zimą na pierzyny: domy palą mniej opału. O
 | 1.8.3 | poprawka: rozbudowa domu (szałas w chatę, chata w dom) nie zabiera już rodzinie spiżarki; w czasie budowy zapas zostaje w starym domu w granicach jego pojemności |
 | 1.9 | budynki z charakterem: każdy budynek inny (ściany, dachy, spadek, okap), koniki, malowane okiennice, ganki, przybudówki, garnki na płocie, zioła pod okapem, szyldy rzemiosł, wyraźniejsza kuźnia, łaźnia i chata wiecowa |
 | 1.10 | wykonanie budynków: surowe, porządne i mistrzowskie, wyraźnie widoczne po rozbudowie (wielkość, podmurówka, dach, okiennice, obramienia okien, kwiaty, płotek, szyld); karta budynku pokazuje wykonanie i trwałość; odmiany szałasów, studni, zagród i spiżarni |
+| 3.3 | pokolenia: ciąża (dziewięć miesięcy, zapowiedź w kronice, termin na karcie, zaokrąglona sylwetka), poród z rzadkimi bliźniętami, martwymi urodzeniami i śmiercią matki, karmienie i odstęp ok. dwóch lat między dziećmi, śmiertelność niemowląt i małych dzieci zależna od głodu, zimna i chorób, urząd baby pępowej, dwie kobiety przy nadziei na statku, zakaz ślubów tylko w bliskiej rodzinie zamiast w całym rodzie, karta „Pokolenia” z dzietnością, przeżywalnością dzieci, współczynnikiem zastępowalności i tym, co hamuje narodziny; zapasy w cichym widoku: pasek pod datą (dni jedzenia, kłody, opał, ludzie) i karta wszystkich zapasów z dobowym przybytkiem, ta sama karta na górze działu Ludzie; kożuch kobiet nie przepuszcza już fartucha |
 | 3.2.1 | poprawki po testach jakości: serwer nie pada na zniekształconym adresie (wcześniej jedno złe żądanie wyłączało grę do restartu), limit wysyłania wyników nie daje się obejść podrobionym nagłówkiem, zbyt duże żądanie dostaje odpowiedź 413; każde pole jest obsiewane raz w roku (len i kapusta nie dają już dwóch zbiorów), mokra wiosna nie hamuje wzrostu na zwykłej ziemi; psy nie zjadają mięsa poniżej zera; karta „Niebo” otwiera się pod datą; drobne poprawki tekstów i zabezpieczenia zdarzeń |
 | 3.2 | ziemia i niebo: płynne przejścia pogody, natężenie deszczu, letnie burze z tęczą, grad, zamieć, odwilż, wichura, babie lato, poranny szron, wiatr z kierunkiem (deszcz, śnieg, mgła, dym, chmury, przechył trawy i zboża), kręgi od kropel na wodzie, kałuże i mokra ziemia, grzywy fal, dźwięk deszczu, karta „Niebo”; uprawa roli: gleba wg miejsca, wilgoć i podlewanie, len oraz kapusta z rzepą na polach, dziki ryjące pola (wybór obrony, płot), grad, przymrozek i deszcz w żniwa, nowe pole z bruzdami, łanem, kwitnącym lnem, kapustą i kopkami na ściernisku, kalendarz w karcie pola; odkrycia: zdziczałe kury i kurnik, tokowisko, lisie jamy, wilcze legowisko ze szczeniętami, wychodnia węgla i odkrywka, torfowisko w I epoce, słone źródło i warzelnia soli, bursztyn po sztormach, dzika kapusta, pierzyny z pierza, rozdział „Miejsca na wyspie” w Naturze |
 | 3.1 | ludzie i zwierzęta: nowe modele zwierząt (sarny z rogaczami, kozy z rogami i bródką, dziki z kłami i szczeciną, wilki, lisy z białym końcem kity, zające, niedźwiedzie z garbem, foki, psy) z przejściem barwy od brzucha do grzbietu; chód z naprzemiennych póz, sarny, kozy, dziki i zające skubią trawę; ludzie mają brwi, zimą kożuchy z futrzanym brzegiem, czapy i ciepłe chusty, w pracy narzędzie w ręku (siekiera, kilof, młot, sierp, łopata, wędka, łuk, kosz, kij), najstarsi chodzą o lasce |
@@ -988,6 +1019,7 @@ Kolejność dalszej pracy. Każda wersja kończy się czymś, w co da się zagra
 | 3.0 Epoka III: cała wyspa (gotowe) | osada w każdej krainie, przysiółki-córki, drogi, wymiana wozami, zajazd, zakończenie „Wyspa jest nasza” |
 | 3.1 Ludzie i zwierzęta (gotowe) | nowe modele i chód zwierząt, zimowe stroje, narzędzia w ręku |
 | 3.2 Ziemia i niebo (gotowe) | pogoda z natężeniem i nowymi zjawiskami, uprawa roli z glebą i wilgocią, odkrycia na wyspie |
+| 3.3 Pokolenia (gotowe) | ciąża, poród, karmienie, śmiertelność dzieci, baba pępowa, współczynnik zastępowalności w księdze, zapasy w cichym widoku |
 
 **Epoka II** (od 2.0, ukończona w 2.2): trzy drogi z trzema rozdrożami każda i 28 zakończeniami. Przez cały czas obowiązuje: klimat słowiański bez magii, brak przybyszów, decyzje gracza w scenach i na wiecu, a życie ludzi toczy się samo.
 
