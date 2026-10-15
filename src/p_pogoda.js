@@ -169,10 +169,11 @@ const wxPop=document.createElement('div');wxPop.id='wxpop';wxPop.hidden=true;doc
 #wxpop[hidden]{display:none}#wxpop .wxh{display:flex;gap:10px;align-items:center;margin-bottom:6px}#wxpop .wxh svg{width:30px;height:30px;color:var(--gold2,#d8b878);flex:none}#wxpop .wxh b{display:block;font-family:var(--serif);font-size:19px;color:var(--hi,#f4ecd8)}
 #wxpop .wxh small{display:block;color:var(--mut,#a8a290);font-size:12.5px}#wxpop p{margin:6px 0;line-height:1.35}#wxpop .wxr{display:flex;justify-content:space-between;gap:10px;padding:3px 0;border-top:1px solid #ffffff10}#wxpop .wxr span{color:var(--mut,#a8a290)}#wxpop .wxr b{font-weight:600;text-align:right}#wxpop .wxr b.bad{color:#e0a080}#wxpop .wxr b.ok{color:#a8d090}
 #cz-wx{background:none;border:0;padding:2px 4px;margin-left:2px;color:var(--gold2,#d8b878);cursor:pointer;filter:drop-shadow(0 1px 2px #000a);vertical-align:middle}#cz-wx svg{width:22px;height:22px}body:not(.cz) #cz-wx{display:none}#date{cursor:pointer}`;document.head.appendChild(st)}
-function wxPopShow(){if(!S)return;if(!wxPop.hidden){wxPop.hidden=true;return}wxPop.innerHTML=wxCard();wxPop.hidden=false}
+function wxPopShow(el){if(!S)return;if(!wxPop.hidden){wxPop.hidden=true;return}wxPop.innerHTML=wxCard();wxPop.hidden=false;
+ try{const r=(el||$('cz-date')).getBoundingClientRect();const top=Math.max(r.bottom+6,48);wxPop.style.top=Math.min(top,innerHeight-wxPop.offsetHeight-8)+'px';wxPop.style.left=Math.max(10,Math.min(r.left,innerWidth-wxPop.offsetWidth-10))+'px'}catch(e){}}
 document.addEventListener('pointerdown',e=>{if(wxPop.hidden)return;if(e.target.closest('#wxpop,#cz-wx,#date'))return;wxPop.hidden=true},true);
-$('date').addEventListener('click',()=>wxPopShow());
-{const l=$('cz-l');if(l){const b=document.createElement('button');b.id='cz-wx';b.type='button';b.setAttribute('aria-label','Pogoda');const d=$('cz-date');d.insertAdjacentElement('afterend',b);b.addEventListener('click',e=>{e.stopPropagation();wxPopShow()})}}
+$('date').addEventListener('click',()=>wxPopShow($('date')));
+{const l=$('cz-l');if(l){const b=document.createElement('button');b.id='cz-wx';b.type='button';b.setAttribute('aria-label','Pogoda');const d=$('cz-date');d.insertAdjacentElement('afterend',b);b.addEventListener('click',e=>{e.stopPropagation();wxPopShow($('cz-l')||b)})}}
 let wxUiT=0;
 {const _mt=mapTick;mapTick=function(rdt){_mt(rdt);if(!S)return;try{wxFrame(rdt)}catch(e){console.warn(e)}wxUiT+=rdt;if(wxUiT>1){wxUiT=0;const b=$('cz-wx');if(b){const h=ico(wxIcon(tod()>.82||tod()<.2));if(b._h!==h){b._h=h;b.innerHTML=h}}if(!wxPop.hidden)wxPop.innerHTML=wxCard()}}}
 // wczytanie starego zapisu: brak natężenia i wiatru

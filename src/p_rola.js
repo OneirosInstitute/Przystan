@@ -13,7 +13,7 @@ const cropKnown=c=>c==='zboze'||(c==='len'&&tech('u_len'))||(c==='kapusta'&&S.kn
 // co pójdzie w ziemię przy najbliższym siewie: w trójpolówce wybór dotyczy roku jarego
 function rolaNext(b){const f=b.field;if(!f)return'zboze';fieldInit(f);if(f.mode==='trzy'&&f.rot!==1)return'zboze';const w=f.want||'zboze';return cropKnown(w)?w:'zboze'}
 const rolaCur=b=>(b.field&&b.field.cur)||'zboze';
-function rolaMoistMul(f,b){const m=f.m;if(m<.15)return .35;if(m<.3)return .7;if(m<=.8)return 1;if(f.soil==='mokra'&&!hasExt(b,'rowy'))return m>.9?.5:.75;return m>.92?.7:.88}
+function rolaMoistMul(f,b){const m=f.m;if(m<.15)return .35;if(m<.3)return .7;if(m<=.85)return 1;if(f.soil==='mokra'&&!hasExt(b,'rowy'))return m>.93?.5:.75;return m>.95?.85:1}
 const rolaWords=m=>m<.15?'sucha jak pieprz':m<.3?'przesycha':m<=.8?'w sam raz':m<=.92?'mokra':'stoi na niej woda';
 function rolaWater(b){const f=b.field;if(f.wsD===Math.floor(S.day))return f.ws;f.wsD=Math.floor(S.day);const c=bCenter(b);
  let ok=S.bld.some(w=>w.kind==='studnia'&&bDone(w)&&Math.hypot(bCenter(w).x-c.x,bCenter(w).z-c.z)<16);
@@ -25,9 +25,9 @@ function rolaProt(b){return(hasExt(b,'plot')?.3:1)*(hasExt(b,'strach')?.85:1)*(t
 function rolaDaily(){const sea=seasonIdx(),k=S.weather.k,i=wxI(),day=Math.floor(S.day),sk=Math.floor(S.day/SD);let boarHit=null;
  S.bld.forEach(b=>{const f=b.field;if(!f||!bDone(b))return;rolaInit(b);const so=SOIL[f.soil];
   let dm;if(sea===2)dm=(.65-f.m)*.3;else{dm=({rain:.08+.2*i,storm:.3,burza:.3,grad:.2,odwilz:.25,fog:.04,snow:.05,clear:sea===0?-.1:-.06,drought:-.17,wiatr:-.11,babie:-.07,frost:-.02})[k]||0;if(dm<0)dm*=so.dry;else if(f.soil==='mokra')dm*=1.2}
-  f.m=clamp(f.m+dm,0,1);if(hasExt(b,'rowy')&&f.m>.75)f.m=Math.max(.75,f.m-.12);
+  f.m=clamp(f.m+dm,0,1);if(f.soil!=='mokra'&&f.m>.8)f.m-=(f.m-.8)*(f.soil==='piasek'?.6:.35);if(hasExt(b,'rowy')&&f.m>.75)f.m=Math.max(.75,f.m-.12);
   const c=rolaCur(b);
-  if(f.st==='rosnie'&&sea!==2){const mm=rolaMoistMul(f,b),cm=c==='len'?1.25:c==='kapusta'?.95:1;const base=K/30*(tech('u_selek')?1.15:1)*(hasExt(b,'rowy')?1.15:1);f.g=Math.max(0,f.g+base*(mm*cm-1));if(mm<.75)f.ms=(f.ms||0)+1;
+  if(f.st==='rosnie'&&sea!==2){const mm=rolaMoistMul(f,b),cm=c==='len'?1.25:c==='kapusta'?.95:1;const base=K/30*(tech('u_selek')?1.15:1)*(hasExt(b,'rowy')?1.15:1);f.g=Math.min(1,Math.max(0,f.g+base*(mm*cm-1)));if(mm<.75)f.ms=(f.ms||0)+1;
    if(f.m<.15&&!rolaWater(b)&&!S.seen['susza'+sk]){S.seen['susza'+sk]=1;log('Na polach ziemia pęka od suszy, zboże więdnie. Bez studni w pobliżu nie ma czym podlać.')}
    if(f.soil==='mokra'&&f.m>.95&&!hasExt(b,'rowy')&&!S.seen['zalew'+sk]){S.seen['zalew'+sk]=1;log('Na podmokłym polu stoi woda i zboże żółknie. Rowy odprowadziłyby ją do strumienia.')}}
   // przymrozek na wschodach
@@ -61,14 +61,16 @@ function rolaRipe(b,f){const c=rolaCur(b),n=Math.round(f.left*CROP[c].k);
  else{log('Zboże na polu dojrzało: około '+f.left+' ziarna do zebrania.');toast('Zboże dojrzało')}}
 // siew: len i kapusta nie potrzebują ziarna
 const rolaFree=b=>b&&b.field&&b.field.st==='puste'&&rolaNext(b)!=='zboze';
-{const _pj=planJob;planJob=function(p){const b=p.job==='wb'&&p.wb?bById(p.wb):null;const free=rolaFree(b)&&S.res.ziarno<10;if(free)S.res.ziarno+=10;let r;try{r=_pj(p)}finally{if(free)S.res.ziarno-=10}
+// jeden siew w roku: po zbiorze pole czeka do następnej wiosny
+const rolaSown=f=>f&&f.sowD!==undefined&&S.day-f.sowD<YEAR*.55;
+{const _pj=planJob;planJob=function(p){const b=p.job==='wb'&&p.wb?bById(p.wb):null;if(b&&b.field&&bDone(b)&&b.field.st==='puste'&&rolaSown(b.field)&&!p.fireB&&isWorker(p)&&!restNow(p)){p.act='pole odpoczywa do wiosny';return false}const free=rolaFree(b)&&S.res.ziarno<10;if(free)S.res.ziarno+=10;let r;try{r=_pj(p)}finally{if(free)S.res.ziarno-=10}
   if(b&&b.field){const f=b.field;rolaInit(b);
    if(!r&&f.st==='rosnie'&&f.q>=1&&f.m<.32&&rolaWater(b)){const e=entryOf(b.kind,b.i,b.j);if(e&&go(p,e,'field',b)){p.act='nosi wodę na pole';return true}}
    const c=f.st==='puste'?rolaNext(b):rolaCur(b);if(c!=='zboze'&&typeof p.act==='string'){const M=c==='len'?{sieje:'sieje len',pieli:'pieli len','żnie zboże':'rwie len','zboże rośnie':'len rośnie'}:{sieje:'sadzi kapustę i rzepę',pieli:'okopuje grządki','żnie zboże':'zbiera kapustę','zboże rośnie':'kapusta rośnie'};if(M[p.act])p.act=M[p.act]}}
   return r}}
-{const _sp=stepPerson;stepPerson=function(p,dt){if(p.state!=='work'||p.workKind!=='field'||!p.tgt||!p.tgt.field)return _sp(p,dt);const b=p.tgt,f=b.field;rolaInit(b);const st0=f.st,nx=rolaNext(b),free=st0==='puste'&&nx!=='zboze';
+{const _sp=stepPerson;stepPerson=function(p,dt){if(p.state!=='work'||p.workKind!=='field'||!p.tgt||!p.tgt.field)return _sp(p,dt);const b=p.tgt,f=b.field;rolaInit(b);const st0=f.st,nx=rolaNext(b),free=st0==='puste'&&nx!=='zboze';if(st0==='puste'&&rolaSown(f)){p.state='idle';p.wait=2;return}
   if(free)S.res.ziarno+=10;try{_sp(p,dt)}finally{if(free&&f.st==='puste')S.res.ziarno-=10}
-  if(st0==='puste'&&f.st==='rosnie'){f.cur=nx;f.ms=0;f.stub=-9;f.hit=-9;if(nx!=='zboze')log(nx==='len'?'Na polu zasiano len. Za kilka tygodni zakwitnie na niebiesko.':'Na polu posadzono kapustę i rzepę. Trzeba pielić i okopywać.');fieldVis(b)}
+  if(st0==='puste'&&f.st==='rosnie'){f.cur=nx;f.ms=0;f.sowD=S.day;f.stub=-9;f.hit=-9;if(nx!=='zboze')log(nx==='len'?'Na polu zasiano len. Za kilka tygodni zakwitnie na niebiesko.':'Na polu posadzono kapustę i rzepę. Trzeba pielić i okopywać.');fieldVis(b)}
   if(f.st==='rosnie'&&f.m<.32&&rolaWater(b)){f.m=Math.min(.6,f.m+dt*eff(p)*.0028);p.act='nosi wodę na pole'}
   if(SOIL[f.soil].dry&&f.soil==='kamien'&&st0==='puste')p.wt-=dt*.15*eff(p)}}
 {const _ft=finishTrip;finishTrip=function(p,items){if(p.workKind==='field'&&p.tgt&&p.tgt.field){const c=rolaCur(p.tgt);if(c!=='zboze')items=items.map(it=>it.res==='ziarno'?{res:CROP[c].res,q:Math.round(it.q*CROP[c].k*10)/10}:it)}return _ft(p,items)}}
@@ -147,7 +149,7 @@ function rolaNow(b){const f=b.field,sea=seasonIdx(),c=rolaCur(b);
  if(f.st==='dojrzale')return c==='len'?'Teraz: rwanie lnu.':c==='kapusta'?'Teraz: zbiór kapusty i rzepy.':'Teraz: żniwa. Zboże nie poczeka, deszcz i mróz zabierają plon.';
  if(f.st==='rosnie')return sea===2?'Zimą nic nie rośnie. Wschody czekają pod śniegiem.':`Rośnie. Dojrzeje za około ${rolaETA(b)} ${rolaETA(b)===1?'dzień':'dni'}.`;
  if(f.mode==='trzy'&&f.rot===2)return'Ugór: pole odpoczywa przez rok, kozy mogą tu paść.';
- const yd=yday(),x=tech('n_kal')?5:0;if(inSow())return'Teraz: siew. Rolnicy idą w pole, gdy jest czym siać.';const d=Math.ceil((((72-x)-yd+96)%96)/(96/YEAR));return`Siew wiosną i na początku lata, za około ${d} ${d===1?'dzień':'dni'}.`}
+ const yd=yday(),x=tech('n_kal')?5:0;if(rolaSown(f))return'W tym roku już zebrano. Pole odpocznie do następnej wiosny.';if(inSow())return'Teraz: siew. Rolnicy idą w pole, gdy jest czym siać.';const d=Math.ceil((((72-x)-yd+96)%96)/(96/YEAR));return`Siew wiosną i na początku lata, za około ${d} ${d===1?'dzień':'dni'}.`}
 function rolaRisks(b){const f=b.field,sea=seasonIdx(),c=rolaCur(b),L=[];
  if(f.st!=='puste'&&sea!==2&&rolaBoars(b))L.push(hasExt(b,'plot')?'dziki w pobliżu, ale płot je trzyma z dala':S.fieldWatch>S.day?'dziki w pobliżu, przy polu czuwają ludzie':'dziki w pobliżu: nocą mogą zryć pole');
  if(f.st==='rosnie'&&sea===3&&f.g<.4&&c!=='kapusta')L.push('przymrozki na wschody');if(f.st!=='puste'&&(sea===0||sea===3))L.push('grad i letnie burze');

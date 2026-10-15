@@ -20,10 +20,11 @@ const clean=v=>String(v||'').replace(/[^\p{L}\p{N} .'-]/gu,'').trim().slice(0,24
 function api(req,res,p){
  if(p==='/api/tydzien'&&req.method==='GET')return json(res,200,weekInfo());
  if(p==='/api/wyniki'&&req.method==='GET'){const w=new URL(req.url,'http://x').searchParams.get('week')||weekInfo().week;return json(res,200,{week:w,list:load(w).sort((a,b)=>b.score-a.score).slice(0,20)})}
- if(p==='/api/wynik'&&req.method==='POST'){const ip=String(req.headers['x-forwarded-for']||req.socket.remoteAddress||'').split(',')[0].trim();const t=Date.now();
+ if(p==='/api/wynik'&&req.method==='POST'){// ostatni adres dopisuje serwer pośredniczący Railway; pierwsze może podać sam klient
+  const ip=String(req.headers['x-forwarded-for']||req.socket.remoteAddress||'').split(',').pop().trim();const t=Date.now();
   if(t-(lastPost.get(ip)||0)<4000)return json(res,429,{err:'za często'});lastPost.set(ip,t);if(lastPost.size>5000)lastPost.clear();
-  let body='';req.on('data',c=>{body+=c;if(body.length>2048)req.destroy()});
-  req.on('end',()=>{let o;try{o=JSON.parse(body)}catch(e){return json(res,400,{err:'zły JSON'})}
+  let body='',big=false;req.on('data',c=>{if(big)return;body+=c;if(body.length>2048){big=true;json(res,413,{err:'za duże'});req.destroy()}});
+  req.on('end',()=>{if(big)return;let o;try{o=JSON.parse(body)}catch(e){return json(res,400,{err:'zły JSON'})}
    const W=weekInfo();if(o.week!==W.week||+o.seed!==W.seed)return json(res,400,{err:'to nie jest wyspa tego tygodnia'});
    const n=(v,max)=>Math.max(0,Math.min(max,Math.round(+v||0)));
    const e={name:clean(o.name)||'Bezimienni',vil:clean(o.vil),day:n(o.day,4000),pop:n(o.pop,999),score:n(o.score,200000),ver:String(o.ver||'').slice(0,10),t};
@@ -32,8 +33,8 @@ function api(req,res,p){
    L.sort((a,b)=>b.score-a.score);if(L.length>500)L.length=500;saveRes(W.week,L);json(res,200,{ok:true,best:e.score,place:place(L,e.name),of:L.length})});return}
  json(res,404,{err:'nie ma'})}
 http.createServer((req,res)=>{
- let p=decodeURIComponent((req.url||'/').split('?')[0]);if(p.startsWith('/api/'))return api(req,res,p);if(p.endsWith('/'))p+='index.html';
- const f=path.normalize(path.join(ROOT,p));if(!f.startsWith(ROOT)){res.writeHead(403);return res.end()}
+ let p;try{p=decodeURIComponent((req.url||'/').split('?')[0])}catch(e){res.writeHead(400);return res.end()}if(p.startsWith('/api/'))return api(req,res,p);if(p.endsWith('/'))p+='index.html';
+ const f=path.normalize(path.join(ROOT,p));if(f!==ROOT&&!f.startsWith(ROOT+path.sep)){res.writeHead(403);return res.end()}
  fs.stat(f,(err,st)=>{
   const file=err||!st.isFile()?path.join(ROOT,'index.html'):f;const ext=path.extname(file);
   const noCache=ext==='.html'||file.endsWith('sw.js')||ext==='.webmanifest';
@@ -41,6 +42,9 @@ http.createServer((req,res)=>{
   if(file.endsWith('sw.js'))h['Service-Worker-Allowed']='/';
   const gz=/gzip/.test(req.headers['accept-encoding']||'')&&/\.(html|js|webmanifest|json)$/.test(file);
   if(gz)h['Content-Encoding']='gzip';res.writeHead(200,h);
-  const s=fs.createReadStream(file);if(gz)s.pipe(zlib.createGzip()).pipe(res);else s.pipe(res);
+  const s=fs.createReadStream(file);s.on('error',()=>{try{res.end()}catch(e){}});if(gz)s.pipe(zlib.createGzip()).pipe(res);else s.pipe(res);
  });
-}).listen(PORT,()=>console.log('Przystań działa na porcie '+PORT));
+}).on('clientError',(e,sock)=>{try{sock.end('HTTP/1.1 400 Bad Request\r\n\r\n')}catch(er){}}).listen(PORT,()=>console.log('Przystań działa na porcie '+PORT));
+
+// siatka bezpieczeństwa: pojedyncze złe żądanie nie może położyć gry
+process.on('uncaughtException',e=>console.error('błąd serwera',e&&e.message));

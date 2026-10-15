@@ -58,7 +58,7 @@ const EVENTS=[
    {n:'Dać ludziom odpocząć',d:'nadzieja',f:()=>{S.hope=clamp(S.hope+.05,0,1);return'Ludzie śpią do południa. Po burzy wszyscy potrzebowali ciszy.'}}]},
  {id:'jaskinia',w:2,cd:999,once:1,cond:()=>S.day>10&&tribe.some(t=>!S.found.includes(t.k)),t:'Dzieci i jaskinia',
   text:()=>'Dzieci wracają podekscytowane: za wzgórzem widziały otwór w skale, a w nim coś jak kamienne groty. Opisują to bardzo dokładnie.',
-  opts:[{n:'Wysłać tam kogoś',d:'odsłania kawałek wyspy',f:()=>{const t=tribe.filter(t=>!S.found.includes(t.k)).sort((a,b)=>Math.hypot(a.i-camp.i,a.j-camp.j)-Math.hypot(b.i-camp.i,b.j-camp.j))[0];reveal(t.i,t.j,7);return'Zwiadowca idzie wskazaną drogą i znajduje to, o czym mówiły dzieci.'}},
+  opts:[{n:'Wysłać tam kogoś',d:'odsłania kawałek wyspy',f:()=>{const t=tribe.filter(t=>!S.found.includes(t.k)).sort((a,b)=>Math.hypot(a.i-camp.i,a.j-camp.j)-Math.hypot(b.i-camp.i,b.j-camp.j))[0];if(!t)return'Zwiadowca chodzi do wieczora, ale w miejscu, o którym mówiły dzieci, jest tylko pusta nisza w skale.';reveal(t.i,t.j,7);return'Zwiadowca idzie wskazaną drogą i znajduje to, o czym mówiły dzieci.'}},
    {n:'Zabronić dzieciom chodzić tak daleko',d:'',f:()=>'Dzieci obiecują, że nie pójdą. Pewnie pójdą.'}]},
  {id:'swieto',w:2,cd:60,cond:()=>foodTotal()>350&&S.day>15,t:'Święto',
   text:()=>'Spiżarnia jest pełna, a wieczór ciepły. Ktoś proponuje, żeby po raz pierwszy od katastrofy zrobić prawdziwą ucztę.',

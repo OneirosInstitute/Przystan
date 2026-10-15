@@ -117,7 +117,7 @@ function dogStep(dt){if(!S||!S.dogs)return;const t=tod(),night=t<T0-.02||t>.9;
 {const _st=step;step=function(dt){_st(dt);try{dogStep(dt);if(S.search&&S.day>=S.search.until)searchEnd();tlokaTick()}catch(e){console.warn(e)}}}
 function dogDaily(){if(!S.dogs)return;const sea=seasonIdx(),yr=Math.floor(S.day/YEAR);
  for(const d of S.dogs){if(d.dead)continue;const was=d.age;d.age+=1/YEAR;
-  if(d.tame<1){const food=S.res.mieso>=.6?'mieso':S.res.ryby>=.6?'ryby':null;if(food){S.res[food]-=.6*KF;d.tame+=.035*KF}else d.tame-=.07*KF;
+  if(d.tame<1){const food=S.res.mieso>=.6*KF?'mieso':S.res.ryby>=.6*KF?'ryby':null;if(food){S.res[food]-=.6*KF;d.tame+=.035*KF}else d.tame-=.07*KF;
    if(d.tame<=0){d.dead=1;d.gone=1;log(`${d.name} uciekł${d.sex==='k'?'a':''} w nocy do lasu. Głód był silniejszy niż ludzie.`);dogDirty=true;continue}
    if(d.tame>=1){d.tame=1;log(`${d.name} już nie ucieka do lasu. Przychodzi na wołanie i śpi przy drzwiach.`)}}
   if(was<1&&d.age>=1&&d.origin!=='statek')log(`${d.name} wyrasta na ${d.wolf>=.5?'rosłego, szarego psa o wilczym spojrzeniu':'silnego psa'}.`);
