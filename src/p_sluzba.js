@@ -18,7 +18,16 @@ function choreCands(p){const C=[],sea=seasonIdx(),fd=czNeedDays(),op=S.res.opal,
  C.forEach(c=>{const n=S.people.filter(q=>q!==p&&q.chK===c[0]&&isFree(q)&&q.state!=='sleep').length;c[1]/=1+.5*n;if(p.chK===c[0])c[1]*=1.35;
   if(p.trait==='Silny'&&(c[0]==='rabanie'||c[0]==='chrust'))c[1]*=1.3;if(young&&c[0]==='zbior')c[1]*=1.4;if(old&&c[0]==='naprawa')c[1]*=1.3});
  return C.sort((a,b)=>b[1]-a[1])}
-function chPick(C){const top=C.slice(0,3);let tot=top.reduce((a,c)=>a+c[1],0),x=Math.random()*tot;for(const c of top){if(x<c[1])return c;x-=c[1]}return top[0]}
+function chPick(candidates){
+ const ranked=candidates.filter(candidate=>Number.isFinite(candidate[1])&&candidate[1]>0).slice().sort((first,second)=>second[1]-first[1]);
+ if(!ranked.length)return null;
+ // Wyraźny kryzys: nie losuj mniej pilnej pracy, gdy lider ma dwukrotną przewagę.
+ if(ranked.length===1||ranked[0][1]>=2*ranked[1][1])return ranked[0];
+ const top=ranked.slice(0,3);
+ let remaining=Math.random()*top.reduce((sum,candidate)=>sum+candidate[1],0);
+ for(const candidate of top){if(remaining<candidate[1])return candidate;remaining-=candidate[1]}
+ return top[0];
+}
 function chGo(p,tile,k,extra){if(!tile)return false;Object.assign(p,{chK:k,chN:null,chB:null,chP:null,chPh:0},extra||{});if(go(p,tile,'chore',null)){p.act=CHORE[k][0]+(extra&&extra.actX?extra.actX:'');return true}return false}
 function nearHouse(p){const h=homeOf(p);if(h&&bDone(h))return h;let best=null,bd=1e9;S.bld.forEach(b=>{if(!bDone(b)||!BD[b.kind].house)return;const c=bCenter(b);const d=Math.hypot(c.x-p.x,c.z-p.z);if(d<bd){bd=d;best=b}});return best}
 function choreDo(p,k){const c={x:tcx(camp.i),z:tcx(camp.j)};
