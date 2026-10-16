@@ -28,7 +28,14 @@ function chPick(candidates){
  for(const candidate of top){if(remaining<candidate[1])return candidate;remaining-=candidate[1]}
  return top[0];
 }
-function chGo(p,tile,k,extra){if(!tile)return false;Object.assign(p,{chK:k,chN:null,chB:null,chP:null,chPh:0},extra||{});if(go(p,tile,'chore',null)){p.act=CHORE[k][0]+(extra&&extra.actX?extra.actX:'');return true}return false}
+function chGo(p,tile,k,extra){
+ if(!tile)return false;
+ // Nie pozostawiaj fałszywego przydziału, jeżeli nie udało się wyznaczyć trasy.
+ if(!go(p,tile,'chore',null))return false;
+ Object.assign(p,{chK:k,chN:null,chB:null,chP:null,chPh:0},extra||{});
+ p.act=CHORE[k][0]+(extra&&extra.actX?extra.actX:'');
+ return true;
+}
 function nearHouse(p){const h=homeOf(p);if(h&&bDone(h))return h;let best=null,bd=1e9;S.bld.forEach(b=>{if(!bDone(b)||!BD[b.kind].house)return;const c=bCenter(b);const d=Math.hypot(c.x-p.x,c.z-p.z);if(d<bd){bd=d;best=b}});return best}
 function choreDo(p,k){const c={x:tcx(camp.i),z:tcx(camp.j)};
  if(k==='zbior'||k==='ryby'){const T=k==='ryby'?['fish']:['bush','grzyb','zboze'].concat(tech('u_rozp')?['ziola']:[]);let best=null,bd=1e9;
