@@ -19,10 +19,10 @@ function upgradeB(id){const b=bById(id);if(!b||!bDone(b))return;const to=UPG[b.k
  log('Rozbudowa: '+BD[b.kind].n.toLowerCase()+' staje się '+(to==='chata'?'chatą z bali':'domem z piecem')+'.');
  b.upFrom=b.kind;b.kind=to;b.prog=0;b.work=BD[to].work;b.workers=0;placeFootprint(to,b.i,b.j,b.id);
  const d=BD[to];nodes.forEach(n=>{if(n.type!=='fish'&&n.i>=b.i&&n.i<b.i+d.w&&n.j>=b.j&&n.j<b.j+d.h){n.gone=1;n.amt=0;S.nodeAmt[n.id]=0;nodeVis(n)}});
- addBuildingMesh(b);if(freeCount()===0)toast('Nikt nie buduje: wszyscy mają pracę.');renderSel();renderPanel()}
+ addBuildingMesh(b);if(old)retireObjects(old,old.userData.scaf);if(freeCount()===0)toast('Nikt nie buduje: wszyscy mają pracę.');renderSel();renderPanel()}
 function removeBuilding(b,why){S.bld=S.bld.filter(x=>x!==b);const d=BD[b.kind];
  for(let a=0;a<d.w;a++)for(let q=0;q<d.h;q++){const k=(b.j+q)*N+b.i+a;if(occ[k]===b.id)occ[k]=-1}recomputeWalk();
- const m=bMesh[b.id];if(m){bGroup.remove(m);if(m.userData.scaf)bGroup.remove(m.userData.scaf);delete bMesh[b.id]}
+ const m=bMesh[b.id];if(m){retireObjects(m,m.userData.scaf);delete bMesh[b.id]}
  Object.values(S.fams).forEach(f=>{if(f.home===b.id)f.home=null});if(selB===b.id)select(null);fireFxRemove(b.id);assign();assignHomes()}
 
 /* ---- pożary ---- */
@@ -38,7 +38,7 @@ function fireStep(dt){for(const b of S.bld){if(!b.fire)continue;const f=b.fire;f
 function endFire(b){const f=b.fire;b.fire=null;fireFxRemove(b.id);S.people.forEach(p=>{if(p.fireB===b.id){p.fireB=null;if(p.state==='work'){p.state='idle';p.wait=.5}}});
  if(f.hp<=0){log('Ogień strawił '+BD[b.kind].n.toLowerCase()+'. Zostały zgliszcza.');toast('Spłonęło: '+BD[b.kind].n);S.dis=clamp((S.dis||0)+.06,0,1);S.hope=clamp(S.hope-.04,0,1);
   if(BD[b.kind].store){['drewno','deski','opal','skory','plotno'].forEach(k=>S.res[k]=(S.res[k]||0)*.75)}removeBuilding(b);return}
- if(f.hp<.8){b.prog=b.work*Math.max(.2,f.hp);const m=bMesh[b.id];if(m){bGroup.remove(m);if(m.userData.scaf)bGroup.remove(m.userData.scaf)}addBuildingMesh(b);log('Pożar ugaszony, ale '+BD[b.kind].n.toLowerCase()+' trzeba naprawić ('+Math.round((1-f.hp)*100)+'% zniszczeń).')}
+ if(f.hp<.8){b.prog=b.work*Math.max(.2,f.hp);const m=bMesh[b.id];if(m){retireObjects(m,m.userData.scaf)}addBuildingMesh(b);log('Pożar ugaszony, ale '+BD[b.kind].n.toLowerCase()+' trzeba naprawić ('+Math.round((1-f.hp)*100)+'% zniszczeń).')}
  else log('Pożar ugaszony w porę. '+BD[b.kind].n+' ocalało.');S.dis=clamp((S.dis||0)+.02,0,1)}
 const fireFxs={};
 function fireFx(b){fireFxRemove(b.id);const c=bCenter(b);const g=new THREE.Group();g.position.set(c.x,Hy(c.x,c.z),c.z);const d=BD[b.kind];const fl=[];

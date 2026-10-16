@@ -43,7 +43,7 @@ function finishProj(b){const pr=b.proj;b.proj=null;b.workers=0;
  else if(pr.t==='lv'){b.lv=lvOf(b)+1;b.cond=1;log(BD[b.kind].n+' rozbudowane do poziomu '+b.lv+'. '+(BD[b.kind].wk?'Mieści więcej ludzi i pracuje sprawniej.':'Mieści więcej.'));toast(BD[b.kind].n+': poziom '+b.lv)}
  else{b.ext=(b.ext||[]).concat(pr.id);const e=EXT[b.kind].find(x=>x.id===pr.id);log('Gotowe: '+e.n.toLowerCase()+' przy budynku: '+BD[b.kind].n.toLowerCase()+'. '+e.d);toast('Gotowe: '+e.n)}
  rebuildMesh(b);assign();renderSel();renderPanel()}
-function rebuildMesh(b){const m=bMesh[b.id];if(m){bGroup.remove(m);if(m.userData.scaf)bGroup.remove(m.userData.scaf)}addBuildingMesh(b)}
+function rebuildMesh(b){const previous=bMesh[b.id];if(previous){previous.removeFromParent();if(previous.userData.scaf)previous.userData.scaf.removeFromParent()}addBuildingMesh(b);if(previous)retireObjects(previous,previous.userData.scaf)}
 function bldDaily(){const sea=seasonIdx();
  S.bld.forEach(b=>{if(!bDone(b))return;
   if(hasExt(b,'wnyki'))S.res.mieso+=1.5*K;

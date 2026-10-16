@@ -30,7 +30,7 @@ function siteNeeding(p,items){const[pi,pj]=tileOf(p.x,p.z);let best=null,bd=1e9;
    if(!S.seen.siteDrop){S.seen.siteDrop=1;log(p.name+' niesie urobek prosto na budowę: '+BD[s.kind].n.toLowerCase()+'. Nie trzeba go potem nosić ze składu.')}}
   p.siteB=null;p.siteQ=0;p.state='idle';p.wait=.3}}
 // przy zmianie planu niesiony na budowę urobek trafia do zapasów, a budowa przestaje na niego czekać
-{const _pj=planJob;planJob=function(p){if(p.siteB&&p.after!=='siteDrop'){const s=bById(p.siteB);if(s)s.inTr=Math.max(0,(s.inTr||0)-(p.siteQ||0));if(p.carry)deposit(p);p.siteB=null;p.siteQ=0}return _pj(p)}}
+{const _pj=planJob;planJob=function(p){if(p.siteB&&p.after!=='siteDrop'){const s=bById(p.siteB);if(s)s.inTr=Math.max(0,(s.inTr||0)-(p.siteQ||0));p.siteB=null;p.siteQ=0}return _pj(p)}}
 // wóz w warsztacie
 function wozWhy(b){if(!tech('r_woz'))return'Najpierw trzeba poznać koło i oś (Wiedza → rzemiosło).';const m=Object.entries(WOZ_COST).filter(([k,v])=>(S.res[k]||0)<v);return m.length?'Brakuje: '+m.map(([k,v])=>RN[k].toLowerCase()+' '+Math.ceil(v-(S.res[k]||0))).join(', ')+'.':''}
 function wozOrder(id){const b=bById(id);if(!b)return;const why=wozWhy(b);if(why){toast(why);return}Object.entries(WOZ_COST).forEach(([k,v])=>S.res[k]-=v);b.wozQ=(b.wozQ||0)+1;toast('Warsztat zrobi wóz');renderPanel();if(typeof renderSel==='function')renderSel()}

@@ -155,9 +155,9 @@ ZH['Oswój pierwszą kozę']=()=>tech('h_zagr')?(S.bld.some(b=>b.kind==='zagroda
 // skrzynia kapitana: księgi, których nikt nie wyniósł przed sztormem, wracają z morzem
 function bookRescueTick(){if(!S||!S.wreck||!S.wreck.gone||S.seen.skrzynia||S.epoch===2)return;
  const lost=[];S.wreck.parts.forEach(pt=>Object.entries(pt.items).forEach(([k,v])=>{if(k.startsWith('ks_')&&v>0&&!S.books[k.slice(3)])lost.push(k.slice(3))}));
- if(!lost.length){S.seen.skrzynia=1;return}S.skrzD=S.skrzD||S.day+1+Math.random();if(S.day<S.skrzD||evOpen||placing||!isWork())return;S.seen.skrzynia=1;
+ if(!lost.length){S.seen.skrzynia=1;return}S.skrzD=S.skrzD||S.day+1+Math.random();if(S.day<S.skrzD||evOpen||placing||!isWork())return;
  const p=adultsZ()[0];openEvent({ey:'Opowieść',t:'Skrzynia kapitana',text:()=>`Kilka dni po sztormie ${p?p.name:'ktoś'} znajduje na plaży okutą skrzynię oblepioną wodorostami. To skrzynia z kajuty kapitana. Smoła trzymała szczelnie: w środku, owinięte w natłuszczone płótno, leżą suche księgi.`,
-  opts:[{n:'Zanieść do obozu',d:'księgi do przeczytania',f:()=>{lost.forEach(b=>S.books[b]=1);S.wreck.parts.forEach(pt=>Object.keys(pt.items).forEach(k=>{if(k.startsWith('ks_'))pt.items[k]=0}));pamAdd(1);return'W skrzyni: '+lost.map(b=>'„'+BOOKS[b]+'”').join(' i ')+'. Trzeba je przeczytać (Praca → czytelnicy).'}}]},{})}
+  opts:[{n:'Zanieść do obozu',d:'księgi do przeczytania',f:()=>{S.seen.skrzynia=1;lost.forEach(b=>{if(!S.books[b])S.books[b]=1});S.wreck.parts.forEach(pt=>Object.keys(pt.items).forEach(k=>{if(k.startsWith('ks_'))pt.items[k]=0}));pamAdd(1);return'W skrzyni: '+lost.map(b=>'„'+BOOKS[b]+'”').join(' i ')+'. Trzeba je przeczytać (Praca → czytelnicy).'}}]},{})}
 {const _st=sprTick;sprTick=function(){_st();try{bookRescueTick()}catch(e){}}}
 // plac budowy tylko tam, dokąd da się dojść z osady
 {const _cp=checkPlace;checkPlace=function(kind,i,j){if(!_cp(kind,i,j))return false;if(!reach)return true;const e=entryOf(kind,i,j);return!e||!!reach[e[1]*N+e[0]]}}

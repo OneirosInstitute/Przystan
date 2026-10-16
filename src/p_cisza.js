@@ -43,8 +43,9 @@ body.cz.open #cz-talk,body.cz.selon #cz-talk{opacity:0}
 #cz-talk p{margin:0;font-family:var(--serif);font-style:italic;font-size:18px;line-height:1.3;color:var(--hi);text-shadow:0 1px 4px #000,0 0 12px #000a}
 #cz-talk p span{font-family:var(--sans);font-style:normal;font-size:13.5px;color:#d8d6c6;margin-left:6px}
 #cz-chips{display:none}
-body.cz #cz-chips{display:flex;gap:6px;flex-wrap:wrap;padding:0 14px 10px;border-bottom:1px solid var(--line)}
-#cz-chips button{height:36px;padding:0 13px;border-radius:18px;border:1px solid var(--line);background:transparent;color:var(--fg);font:500 14.5px var(--sans)}
+body.cz #cz-chips{display:flex;gap:6px;flex-wrap:nowrap;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none;touch-action:pan-x;min-height:52px;padding:0 14px 10px;border-bottom:1px solid var(--line)}
+body.cz #cz-chips::-webkit-scrollbar{display:none}
+#cz-chips button{height:36px;flex-shrink:0;white-space:nowrap;padding:0 13px;border-radius:18px;border:1px solid var(--line);background:transparent;color:var(--fg);font:500 14.5px var(--sans)}
 #cz-chips button.on{border-color:var(--gold);background:#2c2a20;color:var(--hi);font-weight:700}
 body.cz #sel{padding:14px 14px 12px;border-radius:14px;width:340px;bottom:calc(20px + env(safe-area-inset-bottom,0px))}
 body.cz #sel h4{font-size:20px;padding-right:46px}

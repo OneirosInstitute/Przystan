@@ -114,7 +114,7 @@ const E2C={
   ['Postaw chatę ptaszników',()=>hasDone('ptasznik'),'Budowa → Jedzenie → Chata ptaszników, na brzegu.'],
   ['Zbierz 80 jaj',()=>(S.e2.jajaN||0)>=80,'Ptasznicy zbierają jaja wiosną i latem.'],
   ['Sześć rejsów wokół wyspy',()=>(S.e2.rejsy||0)>=6,'Wyprawy → Rejs wzdłuż brzegu. Rejsy przywożą teraz więcej.']]}};
-function e2Roz2(){const R=ROZ2[S.path];const e=S.e2;openEvent({ey:'Rozstaje · drugie rozdroże',t:R.t,text:()=>R.x+'\n\nTej decyzji nie da się cofnąć.',
+function e2Roz2(){const R=ROZ2[S.path];const e=S.e2;openEvent({id:'e2-second',ey:'Rozstaje · drugie rozdroże',t:R.t,text:()=>R.x+'\n\nTej decyzji nie da się cofnąć.',
  opts:R.o.map(o=>({n:o.n,d:o.d,f:()=>{e.r2=o.id;e.a=9;e.t9=S.day;S.tech['e2_'+o.id]=1;e2Keys();pamAdd(4,'rozdroze');song(o.song);log('Drugie rozstaje: '+o.n.toLowerCase()+'. '+o.r);e.introQ=1;e2Apply2();renderPanel();return o.r}}))},{})}
 function e2Apply2(){const e=S.e2;if(e.r2==='rod'){e.rodLead=e2RodBig();e.rodN0=e2LeadN();e.rodM0=e2LeadM();log(`Prowadzi ${rodName(e.rodLead)}.`)}
  if(e.r2==='druga'){const hs=(S.hamlets||[]).slice().sort((a,b)=>b.pop-a.pop||Math.hypot(b.i-camp.i,b.j-camp.j)-Math.hypot(a.i-camp.i,a.j-camp.j));if(hs[0]){e.second=hs[0].id;hs[0].zap=Math.max(hs[0].zap||0,.6);log(`Drugą osadą będzie ${hs[0].name}.`)}}}

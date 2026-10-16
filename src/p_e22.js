@@ -59,7 +59,7 @@ const ENDS_D={dom:'Wyspa należy do nas. Mamy prawo, drogi i warsztaty, a przysi
 function e2EndName(){const e=S.e2;return ENDS[[e.r1,e.r2,e.r3].join('-')]||'Przystań'}
 function endsSeen(){try{return JSON.parse(localStorage.getItem('przystan-konce')||'[]')}catch(er){return[]}}
 function endsAdd(n){try{const L=endsSeen();if(!L.includes(n)){L.push(n);localStorage.setItem('przystan-konce',JSON.stringify(L))}}catch(er){}}
-function e2Roz3(){const R=ROZ3[S.path];const e=S.e2;openEvent({ey:'Rozstaje · trzecie rozdroże',t:R.t,text:()=>R.x+'\n\nTej decyzji nie da się cofnąć.',
+function e2Roz3(){const R=ROZ3[S.path];const e=S.e2;openEvent({id:'e2-third',ey:'Rozstaje · trzecie rozdroże',t:R.t,text:()=>R.x+'\n\nTej decyzji nie da się cofnąć.',
  opts:R.o.map(o=>({n:o.n,d:o.d,f:()=>{e.r3=o.id;e.a=11;e.t11=S.day;S.tech['e2_'+o.id]=1;e2Keys();pamAdd(4,'rozdroze');song(o.song);log('Trzecie rozstaje: '+o.n.toLowerCase()+'. '+o.r);e.introQ=1;e2Apply3();renderPanel();return o.r}}))},{})}
 function e2Apply3(){const e=S.e2;if(e.r3==='karcz')e.karcz0=e2Stumps();if(e.r3==='statek'){e.ship=e.ship||0;e.shipP=0}}
 const zyjeW=n=>osb(n)==='osoby'?'żyją':'żyje';

@@ -80,10 +80,10 @@ function goNow(p,tile,after){const[pi,pj]=tileOf(p.x,p.z);if(Math.hypot(tile[0]-
 {const _oa=onArrive;onArrive=function(p){const a=p.after;if(a!=='haulPick'&&a!=='haulDrop')return _oa(p);p.after=null;p.wt=0;const s=bById(p.haulB);
   if(!s||bDone(s)||!s.mat){haulEnd(p);p.state='idle';return}
   if(a==='haulPick'){const q=Math.min(haulCap(p),s.mat-(s.del||0)-(s.inTr||0));if(q<=.01){haulEnd(p);p.state='idle';return}s.inTr=(s.inTr||0)+q;p.haulQ=q;p.carry=[{res:matRes(s),q:0}];
-   p.act='niesie materiał na budowę: '+BD[s.kind].n.toLowerCase();const e=entryOf(s.kind,s.i,s.j);if(e&&goNow(p,e,'haulDrop'))return;const t=nearestWalk(...tileOf(p.x,p.z));if(t){p.x=tcx(t[0]);p.z=tcx(t[1]);if(e&&goNow(p,e,'haulDrop'))return}
-   s.del=Math.min(s.mat,(s.del||0)+q);s.inTr=Math.max(0,(s.inTr||0)-q);p.haulQ=0;p.carry=null;haulEnd(p);p.state='idle';p.wait=1.5;return}
+   p.act='niesie materiał na budowę: '+BD[s.kind].n.toLowerCase();const e=entryOf(s.kind,s.i,s.j);if(e&&goNow(p,e,'haulDrop'))return;
+   p.state='idle';p.wait=2;p.act='brak drogi na budowę — zachowuje materiał';return}
   s.del=Math.min(s.mat,(s.del||0)+(p.haulQ||0));s.inTr=Math.max(0,(s.inTr||0)-(p.haulQ||0));p.haulQ=0;p.carry=null;haulEnd(p);gainXp(p,'ciesla',.4);p.state='idle';p.wait=.2}}
-function haulDaily(){S.bld.forEach(b=>{b.haul=0;b.inTr=0;b.workers=S.people.filter(p=>p.tgt===b&&p.state==='work').length});S.people.forEach(p=>{if(p.haulB){p.haulB=null;p.haulQ=0;if(p.carry&&p.carry[0]&&p.carry[0].q===0)p.carry=null}})}
+function haulDaily(){S.bld.forEach(building=>{building.haul=0;building.inTr=0;building.workers=S.people.filter(person=>person.tgt===building&&((person.state==='work'&&person.workKind==='build')||(person.state==='move'&&person.after==='build'))).length});S.people.forEach(person=>{if(person.haulB){const site=bById(person.haulB);if(site){site.haul++;site.inTr+=(person.haulQ||0)}}if(person.siteB){const site=bById(person.siteB);if(site)site.inTr+=(person.siteQ||0)}})}
 
 // ---------- jakość wyrobów i pamiątki ----------
 const QRES={narz:'narzędzia żelazne',narzk:'narzędzia kamienne',odziez:'odzież',naczynia:'naczynia',deski:'deski',plotno:'płótno',chleb:'chleb',ser:'ser'};

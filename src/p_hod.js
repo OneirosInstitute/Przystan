@@ -4,17 +4,33 @@
 // Zagroda może więc stać przy osadzie. Bliskie stado to krótka droga, dalekie to cała wyprawa.
 const ZAG_NEAR=25;
 try{delete BD.zagroda.r;BD.zagroda.d='Hodowcy chodzą na łowy tam, gdzie pasą się dzikie kozy, choćby daleko na halach, oswajają je i prowadzą do zagrody. Oswojone dają mleko i rodzą młode. Ktoś musi zostać przy zagrodzie: bez opieki kozy uciekają, a wilki polują.'}catch(e){}
-function kozDeliver(p){const b=bById(p.kozB);if(b&&bDone(b)&&p.kozN){const tot=S.bld.reduce((x,q)=>x+(q.animals||0),0);const was=b.animals||0;b.animals=Math.min(penCap(b),was+p.kozN);
-  if(!tot&&!S.seen.koza1){S.seen.koza1=S.seen.koza=1;log(`${p.name} przyprowadza do zagrody pierwszą oswojoną kozę. Idzie na postronku, ale już nie ucieka.`);toast('Pierwsza oswojona koza')}
-  else if(Math.random()<.35)log(`${p.name} wraca z łowów z kozą na postronku. W zagrodzie jest ich teraz ${b.animals}.`)}
- p.kozN=0;p.state='idle';p.wait=.4}
+function kozRelease(person){if(!person.kozN)return;const [i,j]=tileOf(person.x,person.z);
+ const herd=S.herds.find(item=>item.type==='koza'&&Math.hypot(item.x-person.x,item.z-person.z)<4);
+ if(herd){herd.n+=person.kozN;herd.max=Math.max(herd.max,herd.n)}else S.herds.push({type:'koza',i,j,x:person.x,z:person.z,tx:person.x,tz:person.z,n:person.kozN,max:Math.max(ANIMAL.koza[1],person.kozN),tame:0});
+ person.kozN=0;person.kozB=null;log('Brak wolnej zagrody. '+person.name+' wypuszcza prowadzoną kozę tam, gdzie stoi.');toast('Koza wypuszczona — brakuje miejsca w zagrodzie.');
+}
+function kozResume(person){
+ const pens=S.bld.filter(building=>building.kind==='zagroda'&&bDone(building)&&(building.animals||0)+S.people.filter(other=>other!==person&&other.kozB===building.id).reduce((sum,other)=>sum+(other.kozN||0),0)+person.kozN<=penCap(building));
+ const preferred=pens.find(building=>building.id===person.kozB);if(preferred)pens.splice(pens.indexOf(preferred),1),pens.unshift(preferred);
+ for(const pen of pens){const entry=entryOf(pen.kind,pen.i,pen.j);if(!entry)continue;person.kozB=pen.id;if(go(person,entry,'kozdom',null)){person.act='prowadzi kozę do zagrody';return true}}
+ if(!pens.length){kozRelease(person);person.state='idle';person.wait=.4;return true}
+ person.state='idle';person.wait=2;person.act='brak drogi do zagrody — prowadzi kozę';return true;
+}
+function kozDeliver(person){if(!person.kozN){person.state='idle';return}
+ const pen=bById(person.kozB),entry=pen&&entryOf(pen.kind,pen.i,pen.j);
+ const arrived=entry&&Math.hypot(person.x-tcx(entry[0]),person.z-tcx(entry[1]))<=1.5;
+ if(!pen||pen.kind!=='zagroda'||!bDone(pen)||(pen.animals||0)+person.kozN>penCap(pen)||!arrived){kozResume(person);return}
+ pen.animals=(pen.animals||0)+person.kozN;
+ if(!S.seen.koza1){S.seen.koza1=S.seen.koza=1;log(person.name+' przyprowadza do zagrody pierwszą oswojoną kozę.');toast('Pierwsza oswojona koza')}
+ person.kozN=0;person.kozB=null;person.state='idle';person.wait=.4;
+}
 {const _oa=onArrive;onArrive=function(p){const a=p.after;
   if(a==='kozdom'){p.after=null;kozDeliver(p);return}
   // stado poszło dalej, zanim hodowca doszedł: idzie jego śladem
   if(a==='tame'){const h=S.herds[p.herd];if(h&&h.n>0){const d=Math.hypot(h.x-p.x,h.z-p.z);if(d>=4.5&&d<40&&isWork()){const st=nearestWalk(...tileOf(h.x,h.z));if(st&&go(p,st,'tame',null)){p.act='idzie śladem kóz';return}}}}
   return _oa(p)}}
 // koza na postronku nie może zostać przy człowieku, którego odwołano do innej pracy
-function kozDaily(){S.people.forEach(p=>{if(p.kozN&&p.after!=='kozdom')kozDeliver(p)})}
+function kozDaily(){S.people.forEach(person=>{if(person.kozN&&person.after!=='kozdom')kozResume(person)})}
 {const _nd=newDay;newDay=function(){const r=_nd.apply(this,arguments);try{kozDaily()}catch(e){}return r}}
 // widać, jak koza idzie za hodowcą
 {const _da=drawAnimals;drawAnimals=function(){_da();if(!S||typeof zMeshes!=='function')return;const L=S.people.filter(p=>p.kozN&&pMesh[p.id]&&pMesh[p.id].visible);if(!L.length)return;

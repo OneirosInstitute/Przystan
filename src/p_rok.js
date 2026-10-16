@@ -72,13 +72,20 @@ EVENTS.push({id:'przednowek',w:6,cd:YEAR*.6,cond:()=>(seasonIdx()===3||(seasonId
   {n:'Najpierw ci, którzy pracują',d:'praca idzie, ale dzieci i starzy chorują',f:()=>racje('praca')},
   {n:'Po równo',d:'wszyscy głodni tak samo',f:()=>racje('rowno')},
   {n:'Wszyscy w las i nad wodę',d:'budowy stoją, każdy szuka jedzenia',f:()=>racje('zbior')}]});
-function racje(m){S.racje={m,until:S.day+YEAR*.3};S.racjeY=Math.floor(S.day/YEAR);
+function racje(m){if(m==='zbior')S.people.forEach(person=>{if(person.after==='build'||person.workKind==='build'){release(person);person.path=null;person.state='idle';person.wait=0}});S.racje={m,until:S.day+YEAR*.3};S.racjeY=Math.floor(S.day/YEAR);
  return{dzieci:'Matki dostają podwójną miskę, dzieci jedzą do syta. Mężczyźni zaciskają pasa i milczą.',praca:'Kto idzie do lasu i na pole, je pierwszy. Starzy oddają swoje dzieciom po cichu, kiedy nikt nie widzi.',rowno:'Każdy dostaje tyle samo. Za mało dla wszystkich, ale nikt nie może powiedzieć, że go skrzywdzono.',zbior:'Budowy stoją. Kto może, chodzi po korzonki, pokrzywę, szczaw i ryby. Każda garść się liczy.'}[m]}
 const racjeOn=m=>S.racje&&S.racje.until>S.day&&S.racje.m===m;
-{const _ge=gospEat;gospEat=function(){_ge();if(!S.racje||S.racje.until<=S.day||S.fedR>=1)return;const m=S.racje.m;
-  S.people.forEach(p=>{const f=fedOf(p);if(m==='dzieci'){if(p.age<12||(p.sex==='k'&&S.people.some(c=>c.age<2&&(c.par||[]).includes(p.id))))p.fedR=Math.min(1,f+.4);else p.fedR=f*.85}
-   else if(m==='praca'){if(isWorker(p)&&p.age<56)p.fedR=Math.min(1,f+.3);else p.fedR=f*.72}});
-  if(m==='praca'&&Math.random()<.3*KF){const q=S.people.filter(p=>(p.age<8||p.age>58)&&!p.ill);const p=q[(Math.random()*q.length)|0];if(p)illGive(p,'goraczka')}}}
+{const previousEat=gospEat;gospEat=function(){previousEat();if(!S.racje||S.racje.until<=S.day||S.fedR>=1)return;const mode=S.racje.m;if(!['dzieci','praca'].includes(mode))return;
+ const people=S.people.filter(person=>person.job!=='wyp');const portions=people.map(person=>({person,need:K*pNeed(person)*(law('oszczedne')?.8:1)}));
+ const budget=portions.reduce((sum,entry)=>sum+entry.need*fedOf(entry.person),0);
+ const weight=person=>mode==='dzieci'?(person.age<12||(person.sex==='k'&&S.people.some(child=>child.age<2&&(child.par||[]).includes(person.id)))?2:1):(isWorker(person)&&person.age<56?2:1);
+ let remaining=budget,waiting=portions.filter(entry=>entry.need>0);portions.forEach(entry=>entry.person.fedR=0);
+ while(remaining>1e-9&&waiting.length){const denominator=waiting.reduce((sum,entry)=>sum+entry.need*weight(entry.person),0);const share=remaining/denominator;const full=waiting.filter(entry=>share*weight(entry.person)>=1);
+  if(!full.length){waiting.forEach(entry=>entry.person.fedR=share*weight(entry.person));break}
+  full.forEach(entry=>{entry.person.fedR=1;remaining-=entry.need});waiting=waiting.filter(entry=>!full.includes(entry));
+ }
+ if(mode==='praca'&&Math.random()<.3*KF){const eligible=S.people.filter(person=>(person.age<8||person.age>58)&&!person.ill);const person=eligible[(Math.random()*eligible.length)|0];if(person)illGive(person,'goraczka')}
+}}
 {const _cc=choreCands;choreCands=function(p){const C=_cc(p);if(racjeOn('zbior'))C.forEach(c=>{if(c[0]==='zbior'||c[0]==='ryby')c[1]*=4});return C.sort((a,b)=>b[1]-a[1])}}
 {const _bs=budSites;budSites=function(){return racjeOn('zbior')?0:_bs()}}
 

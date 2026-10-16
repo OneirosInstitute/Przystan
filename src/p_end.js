@@ -77,7 +77,7 @@ function weatherFx(rdt){const blowM=WX.blow>.2&&WX.rain<.01,isRain=WX.rain>.01||
   sGeo.attributes.position.needsUpdate=true;snowP.position.set(0,base,0);snowP.material.size=5-1.2*WX.blow}
  const fogK=Math.min(1,WX.fog+.35*WX.rain+.3*WX.snow+.5*WX.blow);{const sz=34/zoom,ov=sstep(.5,.25,zoom);scene.fog.near=160+lerp(.05,-.45,fogK)*sz+ov*sz*.25;scene.fog.far=160+lerp(1.7,.95,fogK)*sz+ov*sz*.6;}wUni.uFogN.value=scene.fog.near;wUni.uFogF.value=scene.fog.far;
  return fogK}
-function frame(now){requestAnimationFrame(frame);if(gfxSkip(now))return;const rdt=Math.min(.25,(now-last)/1000);last=now;clock+=rdt;
+function frame(now){requestAnimationFrame(frame);if(document.hidden){last=now;return}if(gfxSkip(now))return;const rdt=Math.min(.25,(now-last)/1000);last=now;clock+=rdt;
  wUni.uT.value=clock;
  GFXU.t.value=clock;if(!S){yaw+=rdt*.04;yawT=yaw;setCam();introLight();gfxRender();return}
  if(S.speed>0&&S.people.length){let dt=rdt*S.speed;while(dt>0){const s=Math.min(.1,dt);step(s);dt-=s}storyTick()}
@@ -111,6 +111,7 @@ gfxSetLevel(GFX.level,true);
 
 /* ================= start ================= */
 function boot(fresh){
+ evOpen=null;$('ev').hidden=true;if(fresh){saveStatus.blocked=false;saveStatus.blockedRaw=null}
  S=fresh?freshState():(load()||freshState());custInit();
  if(!S.log.length){log('Wyszliśmy na brzeg. Wrak leży na płyciźnie, w obozie płonie ognisko. Wyspa sięga dalej, niż widać.');
   log('Suchary z wraku wystarczą na mniej więcej jedną porę roku. Postaw chatę zbieracza i chatę drwala (zakładka Budowa), potem przydziel do nich ludzi.');
@@ -118,7 +119,7 @@ function boot(fresh){
   log('Każda rodzina potrzebuje domu: bez własnego dachu para nie będzie miała dzieci. Przed zimą potrzebny jest opał z drewutni.')}
  rebuildWorldFromState();wreckG.visible=!S.wreck.gone;buildPeopleMeshes();assign();assignHomes();
  camT.x=tcx(camp.i)+1;camT.z=tcx(camp.j)+2;zoom=zoomT=1.6;overview=null;setSpeed(S.speed||1);resize();regionScan(true);minimapBase();renderTop();renderCtl();
- if(innerWidth>760&&innerHeight>460)openSheet('budowa')}
+ if(innerWidth>760&&innerHeight>460)openSheet('budowa');restoreDecision();if(saveStatus.blocked)saveWarning(new Error('Nie udało się odczytać zapisu. Automatyczne nadpisanie wstrzymane.'))}
 /* ===== pełny ekran i instalacja ===== */
 function fsAvail(){const d=document.documentElement;return !!(d.requestFullscreen||d.webkitRequestFullscreen)&&(document.fullscreenEnabled!==false)}
 function isFull(){return !!(document.fullscreenElement||document.webkitFullscreenElement)}
@@ -136,8 +137,13 @@ let hasSave=false;try{hasSave=!!localStorage.getItem(SAVEKEY)}catch(e){}
 if(hasSave){$('go').textContent='Wróć do osady';$('goNew').hidden=false}
 $('go').addEventListener('click',()=>startGame(false));
 $('goNew').addEventListener('click',()=>{try{localStorage.removeItem(SAVEKEY)}catch(e){}startGame(true)});
+// Zapis awaryjny przy przejściu aplikacji w tło oraz cykliczny niezależny od upływu dni w grze.
+// Odstęp w czasie rzeczywistym działa również przy zatrzymanej symulacji.
+const autosaveIntervalMs=90000;
+setInterval(()=>{if(S&&!document.hidden&&!saveStatus.blocked)save()},autosaveIntervalMs);
+addEventListener('pagehide',()=>{if(S)save()});
 addEventListener('beforeunload',()=>{if(S)save()});
-document.addEventListener('visibilitychange',()=>{if(S&&document.hidden)save()});
+document.addEventListener('visibilitychange',()=>{last=performance.now();batLastR=0;if(S&&document.hidden)save()});
 reveal(camp.i,camp.j,24);curYd=6;paintBase(6);applyFog();refreshNodes();refreshDeco();buildStatic();revNew.length=0;
 camT.x=tcx(camp.i);camT.z=tcx(camp.j);zoom=zoomT=1.1;resize();
 document.body.classList.add('pre');

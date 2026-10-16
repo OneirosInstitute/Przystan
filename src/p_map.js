@@ -26,7 +26,7 @@ const REGIONS=[];
 })();
 const regLayer=$('labels');
 REGIONS.forEach(r=>{if(!r)return;const el=document.createElement('div');el.className='rl';el.innerHTML='<i>?</i><span>Nieznany teren</span>';el.style.opacity=0;
- el.addEventListener('click',()=>{if(r.known)lookAt(tcx(r.i),tcx(r.j),1.25)});regLayer.appendChild(el);r.el=el});
+ el.addEventListener('click',()=>{if(!r.known)return;const title=r.el.querySelector('span');if(title){title.style.display='block';clearTimeout(r._nameTimer);r._nameTimer=setTimeout(()=>{title.style.display=''},2600)}else lookAt(tcx(r.i),tcx(r.j),1.25)});regLayer.appendChild(el);r.el=el});
 const campLbl=document.createElement('div');campLbl.className='rl camp';campLbl.innerHTML=`<i>${'P'}</i><span>Przystań</span>`;regLayer.appendChild(campLbl);
 campLbl.addEventListener('click',()=>lookAt(tcx(camp.i),tcx(camp.j),1.6));
 let regT=0;
@@ -39,7 +39,7 @@ function regionScan(quiet){if(!S)return;S.regs=S.regs||{};atlasScan(quiet);const
   if(r.el._h!==h){r.el._h=h;r.el.innerHTML=h;r.el.classList.toggle('known',r.known);r.el.classList.toggle('unk',!r.known);r.el.style.pointerEvents=r.known?'auto':'none';r.el.style.cursor='pointer'}})}
 const v3r=new THREE.Vector3();
 function placeRegionLabels(){const show=sstep(1.05,.75,zoom);
- const put=(el,x,z,op)=>{v3r.set(x,Hy(x,z)+1.2,z).project(cam);if(op<=.02||v3r.x<-1.1||v3r.x>1.1||v3r.y<-1.1||v3r.y>1.1){el.style.display='none';return}
+ const labelsVisible=zoom>=.84;regLayer.classList.toggle('map-labels-expanded',labelsVisible);const put=(el,x,z,op)=>{v3r.set(x,Hy(x,z)+1.2,z).project(cam);if(op<=.02||v3r.x<-1.1||v3r.x>1.1||v3r.y<-1.1||v3r.y>1.1){el.style.display='none';return}
   el.style.display='flex';el.style.left=((v3r.x+1)/2*innerWidth)+'px';el.style.top=((1-v3r.y)/2*innerHeight)+'px';el.style.opacity=op};
  REGIONS.forEach(r=>{if(!r||!r.el)return;if(r.id===0){r.el.style.display='none';return}
   const op=(r.known?1:sstep(.6,.4,zoom)*.85)*show;put(r.el,tcx(r.i),tcx(r.j),op)});
@@ -76,3 +76,5 @@ function mapTick(rdt){placeRegionLabels();miniT+=rdt;miniBaseT+=rdt;
 mcv.addEventListener('pointerdown',e=>{e.stopPropagation();const r=mcv.getBoundingClientRect();const px=(e.clientX-r.left)/r.width*MS,py=(e.clientY-r.top)/r.height*MS;
  const xp=(px-MC)/MSC,yp=(py-MC)/MSC,c=Math.cos(yaw),s=Math.sin(yaw);const x=xp*c+yp*s,z=-xp*s+yp*c;
  if(!S)return;lookAt(x,z,overview?1.3:zoomT);drawMinimap()});
+
+/* Przy widoku wyspy nazwy nie przesłaniają terenu; dotknięcie znacznika ujawnia nazwę. */
