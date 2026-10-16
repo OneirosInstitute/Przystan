@@ -16,7 +16,7 @@ function e2Find(kind,mode,rnd){const d=BD[kind],R={core:[2,7],house:[3,11],mid:[
   let s=-r;if(mode==='res'){const c=countInRange(kind,i,j)||0;s=c*1.2-r*.35}else if(mode==='house')s=-Math.abs(r-6)*1.3+rnd()*2;else if(mode==='mid'||mode==='outer'||mode==='field')s=-r+rnd()*3;
   cands.push([s,i,j]);if(mode!=='res'&&cands.length>40)break}if(mode!=='res'&&cands.length>40)break}
  cands.sort((a,b)=>b[0]-a[0]);return cands[0]?[cands[0][1],cands[0][2]]:null}
-const E2_PLAN=[['studnia',1,'core'],['domwsp',1,'core',{lv:1}],['dom',4,'house',{ext:['ogrod','piwnica','ganek']}],['chata',3,'house',{ext:['ogrod','ganek']}],['chata',3,'house',{ext:['ogrod']}],
+const E2_PLAN=[['studnia',1,'core'],['serce',1,'core',{x:{st:3}}],['dom',4,'house',{ext:['ogrod','piwnica','ganek']}],['chata',3,'house',{ext:['ogrod','ganek']}],['chata',3,'house',{ext:['ogrod']}],
  ['spizarnia',1,'core',{ext:['lodownia']}],['sklad',2,'mid',{ext:['dobud']}],['studnia',2,'house',{ext:['zuraw']}],
  ['zbieracz',2,'res',{lv:2,ext:['kosze','suszarnia']}],['pomost',1,'shore',{lv:2,ext:['lodz']}],['pomost',1,'shore',{lv:1}],['mysliwy',1,'res',{lv:2,ext:['wnyki']}],['drwal',2,'res',{lv:2,ext:['pila']}],['lesnik',1,'res',{ext:['szkolka']}],
  ['kamien',1,'res',{ext:['kliny']}],['glinianka',1,'res'],['ruda',1,'res'],

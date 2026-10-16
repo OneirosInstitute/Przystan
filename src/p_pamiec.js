@@ -18,7 +18,7 @@ function pamDaily(){S.firsts=S.firsts||{};
  // zimą śpiewa się pieśni
  if(seasonIdx()===2&&S.songs&&S.songs.length)S.wh=(S.wh||0)+.0015*Math.min(12,S.songs.length);
  if(seasonIdx()===2&&S.hungerDays>0)S.zimaGlod=Math.floor(S.day/YEAR);
- if(Math.floor(rday())===30&&S.zimaGlod===Math.floor(S.day/YEAR)&&!S.seen['pglod'+S.zimaGlod]){S.seen['pglod'+S.zimaGlod]=1;song('Pieśń o głodnej zimie '+(S.zimaGlod+1)+'. roku')}
+ if(Math.floor(rday())===15&&S.zimaGlod===Math.floor(S.day/YEAR)&&!S.seen['pglod'+S.zimaGlod]){S.seen['pglod'+S.zimaGlod]=1;song('Pieśń o głodnej zimie '+(S.zimaGlod+1)+'. roku')}
  // nazwa osady i znaki rodów
  if(S.tier>=1&&!S.vname&&!S.vnameQ){S.vnameQ=1;setTimeout(askVName,1500)}
  setVName()}

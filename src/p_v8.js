@@ -114,7 +114,7 @@ const seasonKey=()=>Math.floor(S.day/SD);
 function founders(){return S.people.filter(p=>!p.born).length}
 function youngVoice(){return founders()<9&&S.people.filter(p=>p.born&&isAdult(p)).length>=2}
 function wiecOpen(){return S.day>3&&S.wiecUsed!==seasonKey()}
-function changeCost(){const st=offHolder('starszy');return .04*(law('s_wiec')?.5:1)*(hasB('domwsp')?.5:1)*(hasB('gaj')?.7:1)*(st?(st.trait==='Pogodny'?.6:st.trait==='Uparty'?1.5:1):1)}
+function changeCost(){const st=offHolder('starszy');return .04*(law('s_wiec')?.5:1)*(wspOn()?.5:1)*(hasB('gaj')?.7:1)*(st?(st.trait==='Pogodny'?.6:st.trait==='Uparty'?1.5:1):1)}
 function custChange(k,id){const c=CUST_BY[k];if(!c||!S.cust[k]||S.cust[k]===id)return;if(!wiecOpen()){toast('Obyczaj można zmienić tylko na wiecu, raz na porę roku.');return}
  if(k==='umowa'&&!youngVoice()){toast('Umowy z brzegu nikt nie odważy się zmienić, dopóki żyje większość rozbitków.');return}
  const from=c.o.find(o=>o.id===S.cust[k]),to=c.o.find(o=>o.id===id);S.cust[k]=id;custRebuild();S.wiecUsed=seasonKey();S.dis=clamp((S.dis||0)+changeCost(),0,1);
@@ -145,7 +145,7 @@ function custHTML(){custInit();let h='<h3>Obyczaje osady</h3>';
 
 /* ---- niezgoda ---- */
 function disDaily(){let d=0;if(S.hungerDays>0)d+=.03;if(S.warm<.75)d+=.025*(1-S.warm);if(law('oszczedne'))d+=.01;if(law('dlugi'))d+=.008;if(law('pomoc'))d+=.004;
- if(law('kazdy')&&S.people.some(p=>p.hp<.5&&isWorker(p)))d+=.006;if(S.thirst>0)d+=.02*S.thirst;if(law('opowiesci'))d-=.012;if(hasB('domwsp'))d-=.006;if(law('sad'))d-=.01;if(law('s_wiec'))d-=.004;if(law('lup'))d+=.002;if(law('u_wspolne'))d-=.004;if(law('u_swoje'))d+=.005;if(law('u_starsi'))d+=S.people.filter(p=>p.born&&isAdult(p)).length>=3?.008:-.006;if(S.hungerDays>0&&law('g_rowno'))d-=.012;d-=.002*offLv('starszy');d+=slavDis()+ludDis();if(law('wspolne'))d-=.008;d-=.01*(S.hope-.5);
+ if(law('kazdy')&&S.people.some(p=>p.hp<.5&&isWorker(p)))d+=.006;if(S.thirst>0)d+=.02*S.thirst;if(law('opowiesci'))d-=.012;if(wspOn())d-=.006;if(law('sad'))d-=.01;if(law('s_wiec'))d-=.004;if(law('lup'))d+=.002;if(law('u_wspolne'))d-=.004;if(law('u_swoje'))d+=.005;if(law('u_starsi'))d+=S.people.filter(p=>p.born&&isAdult(p)).length>=3?.008:-.006;if(S.hungerDays>0&&law('g_rowno'))d-=.012;d-=.002*offLv('starszy');d+=slavDis()+ludDis();if(law('wspolne'))d-=.008;d-=.01*(S.hope-.5);
  S.dis=clamp((S.dis||0)+K*d+(.08-(S.dis||0))*.03*K,0,1);
  if(S.dis>.8&&Math.random()<.25*K){const a=S.people.filter(isAdult);if(a.length>1){const x=a[(Math.random()*a.length)|0],y=a[(Math.random()*a.length)|0];if(x!==y)log(['Kłótnia przy ognisku: '+x.name+' i '+y.name+' oskarżają się o lenistwo.',x.name+' mówi głośno, że rada prowadzi wszystkich na zgubę.','Ktoś podzielił zapasy po swojemu. Nikt się nie przyznaje.'][(Math.random()*3)|0])}}
  if(S.dis>=.97){const fams=Object.values(S.fams).map(f=>famMembers(f.id)).filter(m=>m.length&&m.length<=4&&!m.some(p=>p.id===selId));if(fams.length){const m=fams.sort((a,b)=>avgZad(a)-avgZad(b))[0];foundHamlet(m,'spor');S.dis=.6}}}

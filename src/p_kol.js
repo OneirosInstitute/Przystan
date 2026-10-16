@@ -120,7 +120,7 @@ function kolDaily(){if(!S.hamlets)return;kolInit();const sea=seasonIdx();
   if(h.need&&S.day>h.need.until){h.wiez=Math.max(0,h.wiez-.1);log(`Nikt nie odpowiedział na prośbę przysiółka ${h.name}. Więź jest ${wiezWord(h)}.`);h.need=null}
   else if(!h.need&&S.day-(h.needD||h.day)>SD*1.5&&Math.random()<(h.zap<.3?.3:.05)){genNeed(h);h.needD=S.day}
   if(h.rb){h.rb.p++;if(h.rb.p>=h.rb.n){h.rb=null;h.road=2;kolClearPath(h,true);pamAdd(2,'droga');log(`Droga do przysiółka ${h.name} gotowa: wyrównana, z kładkami przez strumienie i palami przy brzegu. Ludzie chodzą nią co kilka dni.`);toast('Droga do '+h.name+' gotowa');song('Pieśń o drodze do przysiółka '+h.name)}}
-  if([0,18,25,30].includes(Math.floor(rday()))&&h.wiez>=.3)for(let k=0;k<Math.min(4,1+(h.pop>>2));k++)spawnWalker(h,-1,null,0,k*2+Math.random()*3);
+  if([0,9,12,15].includes(Math.floor(rday()))&&h.wiez>=.3)for(let k=0;k<Math.min(4,1+(h.pop>>2));k++)spawnWalker(h,-1,null,0,k*2+Math.random()*3);
   if(h.road===2&&Math.random()<.4)spawnWalker(h,Math.random()<.5?1:-1,null,Math.random()<.4,Math.random()*30)
   else if(Math.random()<.12*h.wiez)spawnWalker(h,Math.random()<.5?1:-1,null,0,Math.random()*30)});
  kolTread();hamVis()}

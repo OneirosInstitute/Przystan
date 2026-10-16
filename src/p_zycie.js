@@ -4,7 +4,7 @@
 {const e=EVENTS.find(e=>e.id==='lodz');if(e)e.cond=()=>false}
 const dayN=()=>Math.floor(S.day);
 const ZYOFF=(()=>{try{return new URLSearchParams(location.search).get('zyoff')||''}catch(e){return''}})();
-const campX=()=>tcx(camp.i),campZ=()=>tcx(camp.j)+.6;
+const campX=()=>{const c=scC();return c?c.x:tcx(camp.i)},campZ=()=>{const c=scC();return c?c.z:tcx(camp.j)+.6};
 function ringSpot(k,n,r){const a=k/Math.max(1,n)*6.283+.4;const x=campX()+Math.cos(a)*r,z=campZ()+Math.sin(a)*r;return nearestWalk(...tileOf(x,z))}
 const cerOn=()=>typeof cerActive==='function'&&cerActive();
 const isSobota=()=>dayN()%7===5;

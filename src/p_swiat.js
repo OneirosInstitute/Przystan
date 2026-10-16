@@ -47,7 +47,7 @@ function cerFrame(rdt){if(!S)return;const C=S.cer,act=cerActive();if(act&&C&&(!C
  if(cerRT.eff){const e=cerRT.eff,u=cerRT.t;if(e.w&&u>6){const k=Math.min(1,(u-6)/6);e.ef.position.x=C.c.x+(e.w.x-C.c.x)*k;e.ef.position.z=C.c.z+(e.w.z-C.c.z)*k;e.ef.position.y=Hy(e.ef.position.x,e.ef.position.z)*(1-k)+(-.3-Math.max(0,u-12)*.08)*k;e.ef.rotation.z=k*.9}}
  if(C.k!=='dziady'){cerRT.mus-=rdt;if(cerRT.mus<=0){cerRT.mus=5+Math.random()*3;if(typeof fujarka==='function')fujarka()}}}
 function cerDaily(){const rd=Math.floor(rday()),yr=Math.floor(S.day/YEAR),ob=law('obrzedy');
- if(rd===0&&yr>=1)cerSet('kupala');else if(rd===18&&(S.died||0)>=1&&ob)cerSet('dziady');else if(rd===25&&ob)cerSet('gody');else if(rd===30&&ob)cerSet('marzanna')}
+ if(rd===0&&yr>=1)cerSet('kupala');else if(rd===9&&(S.died||0)>=1&&ob)cerSet('dziady');else if(rd===12&&ob)cerSet('gody');else if(rd===15&&ob)cerSet('marzanna')}
 {const _w=wedding;wedding=function(k,m){_w(k,m);if(S)cerSet('wesele',[k.id,m.id],tod()>T1-.06?1:0)}}
 
 // ---------- burze ----------

@@ -118,7 +118,8 @@ Budowa jest podzielona na kategorie:
 | Surowce | chata drwala, leśniczówka, kamieniołom, wykop rudy, glinianka |
 | Rzemiosło | drewutnia, pracownia cieśli, mielerz, kuźnia, warsztat, szwalnia, piec do cegły, garncarnia |
 | Magazyny | skład, spiżarnia |
-| Wspólnota | studnia, miejsce pamięci, łaźnia, strażnica, chata wiecowa, izba nauki, chata zielarki, święty gaj |
+| Wspólnota | ognisko (serce osady, rośnie do ratusza), studnia, miejsce pamięci, łaźnia, strażnica, izba nauki, chata zielarki, szpital, święty gaj |
+| Serce osady (od 3.4) | bednarnia (od wiaty); słodownia, chmielnik, browar, miodosytnia, piekarnia (od Domu osadników); szpital, winnica, winiarnia, wiatrak (od Domu rady) |
 | Epoka II (od 2.0) | targowisko i brama grodu (droga Domu), stanica, kopanka torfu, dymarka, sztolnia i piwnica w skale (droga Głębi), szkutnia (droga Morza); od 2.1 także ława starszych, plac wiecowy, dwór rodu i chata ptaszników, od 2.2 dom cechowy, spichlerz na palach, stodoła i przystań łodzi; każda pojawia się dopiero na swojej drodze |
 
 - **Poziomy:** budynki z pracownikami mają trzy poziomy. Każdy daje więcej rąk do pracy, większy zasięg i wyższą wydajność. Trzeci poziom wymaga wiedzy o zrębie na jaskółczy ogon.
@@ -186,9 +187,9 @@ Na wyspie nikt nie rządzi. Ustalenia rodzą się z wydarzeń i z czasem stają 
 |---|---|---|
 | lato, dzień 1 | Noc Kupały | rocznica rozbicia, ogniska i wianki, przy Kupalnym kręgu mocniej |
 | jesień, po żniwach | Dożynki | wieniec z ostatniego snopa i uczta (jeśli osada tak ustaliła) |
-| koniec jesieni | Dziady | jadło dla zmarłych, można wspomnieć też dawny lud na jego mogile |
-| środek zimy | Szczodre Gody | wspólna wieczerza w najdłuższą noc |
-| przedwiośnie | Topienie Marzanny | koniec zimy, nadzieja |
+| ostatni dzień jesieni | Dziady | jadło dla zmarłych, można wspomnieć też dawny lud na jego mogile |
+| trzeci dzień zimy | Szczodre Gody | wspólna wieczerza w najdłuższą noc |
+| pierwszy dzień wiosny | Topienie Marzanny | koniec zimy, nadzieja |
 | 7. rok dziecka | Postrzyżyny | dziecko zaczyna naukę fachu u mistrza |
 
 **Wierzenia** działają na nastrój i porządek: domowik (spokój w chatach z piecem), leszy (lęk przed mgłą w borze), południca (upał w polu), błędne ogniki i topielice (mokradła), Perun (burza), licho (pożar i choroba). **Święty gaj** ze starym dębem wzmacnia obrzędy, łagodzi wiec i spory.
@@ -376,7 +377,8 @@ Na ekranie widać przede wszystkim wyspę. Wszystko inne pojawia się, gdy czego
 - u góry pora roku i dzień, pora doby i pogoda, a obok najwyżej dwa ostrzeżenia, gdy coś jest zagrożone (pożar, jedzenie na kilka dni, mało opału jesienią i zimą, zimno w domach, choroby, kłótnie, ludzie bez dachu); dotknięcie ostrzeżenia otwiera księgę;
 - pod datą pasek zapasów (od wersji 3.3): na ile dni starczy jedzenia, kłody, opał i liczba ludzi; kolor ostrzega, gdy jedzenia albo opału jest mało. Dotknięcie otwiera kartę „Zapasy”: wszystkie zapasy w grupach (jedzenie, opał i budulec, rzemiosło, dary wyspy), przy każdym, ile przybyło albo ubyło przez ostatnią dobę, pojemność spiżarni, zapasy w spiżarkach rodzin i przyciski do księgi. Ta sama karta stoi w księdze na górze działu Ludzie;
 - po prawej przycisk tempa; otwiera pauzę, tempa 1–8×, dźwięk, pełny ekran, jakość grafiki i tryb zdjęć;
-- na dole przycisk „Osada”, a obok cała wyspa i powrót do obozu.
+- pod paskiem zapasów przycisk serca osady (od wersji 3.4): „Postaw ognisko”, a potem licznik zadań do następnego etapu (zielona strzałka, gdy można rozbudować); dotknięcie pokazuje serce i jego kartę;
+- na dole przycisk „Osada”, a obok cała wyspa i powrót do serca osady (do obozu, dopóki serca nie ma).
 
 **Cel** pokazuje się na kilka sekund, gdy się zmienia. Dotknięcie daty przypomina go ponownie, a w księdze stoi na górze działu Ludzie.
 
@@ -730,6 +732,113 @@ Nazwa trafia do Księgi rozbitków i na kartę celu. Zdobyte zakończenia zapami
 **Koniec.** Po trzech aktach scena „Wyspa jest nasza”: ogniska na każdym wzgórzu, podsumowanie ludzi, przysiółków i lat, pieśń, rozdział „Epoka III” w Księdze rozbitków. Gra toczy się dalej.
 
 
+## Serce osady (od wersji 3.4)
+
+Każda osada ma swoje serce: miejsce, gdzie ludzie jedzą razem, siadają wieczorem, świętują i radzą. Na wyspie zaczyna się ono od ogniska pod gołym niebem i rośnie razem z ludźmi przez pięć etapów, aż do ratusza. To kręgosłup całej gry: od rozbitków przy ognisku na plaży do miasta, które gospodaruje całą wyspą.
+
+**Jak to działa w trzech zdaniach.** Ognisko stawia się raz (Budowa → Wspólnota → Ognisko), tam, gdzie ma być środek osady. Każdy następny etap otwiera pakiet sześciu zadań, po jednym na każdy filar życia osady, a od trzeciego etapu osada musi też być dość duża. Gdy pakiet jest spełniony, w karcie serca pojawia się „Rozbuduj”: płaci się materiałem, wolni robotnicy budują, a nowy etap odblokowuje kolejne budynki i urzędy.
+
+### Pięć etapów
+
+| Etap | Jak wygląda | Co daje | Odblokowuje | Rozbudowa kosztuje |
+|---|---|---|---|---|
+| 1. Ognisko | krąg z kamieni, kłody do siedzenia, kocioł na trójnogu, kołki wyznaczające plac | wspólny posiłek w południe, wieczory przy ogniu, obrzędy; zasięg 10 kroków | | kłody 10, 4 osobodni (kamienie do kręgu zbiera się na plaży) |
+| 2. Wiata przy ognisku | dach ze strzechy na słupach, dwa długie stoły i ławy, kocioł na łańcuchu | wieczory także w deszczu i śniegu; wspólny kocioł (z posiłku w południe wraca więcej jedzenia); zasięg 12 | bednarnia (beczki do kiszonek, potem do napitków) | kłody 30, kamień 6, 10 osobodni |
+| 3. Dom osadników | długa chata z bali z dymnikiem, ognisko przed wejściem | zimą i w słotę wieczory w ciepłej izbie (więcej nadziei i zgody, więzi rosną); obyczaje zmienia się łagodniej i jest mniej sporów; wieczorem pije się napitki; zasięg 14 | słodownia, chmielnik, browar, miodosytnia, piekarnia | kłody 60, deski 24, kamień 20, gwoździe 24, 26 osobodni |
+| 4. Dom rady | wysoki dom na kamiennej podmurówce, podcień na rzeźbionych słupach, chorągwie rodów, plac wyłożony kamieniem | rada osady: trzech radnych z tekami i wnioskami; zmiana obyczaju na wiecu kosztuje o ćwierć mniej zgody; zasięg 16 | szpital, winnica, winiarnia, wiatrak | deski 50, kamień 40, cegły 30, gwoździe 36, płótno 8, 44 osobodni |
+| 5. Ratusz | murowany parter z arkadami, piętro z ryglowym szkieletem, wieża z dzwonem, rynek z bruku, studnia i kram | pięciu radnych; wieża odsłania okolicę; jarmark raz w roku; cechy rzemieślników; prawa miejskie; zasięg 18 | jarmark, cechy | kamień 90, cegły 70, deski 60, gwoździe 60, narzędzia 6, płótno 12, 80 osobodni |
+
+Podczas rozbudowy serce działa jak dotąd. Na placu widać, co rośnie: słupy wiaty, ściany Domu osadników, rusztowania wokół Domu rady i szkielet wieży ratusza. Ukończenie etapu to krótka scena, pieśń przy Domu osadników i ratuszu, więcej nadziei i wpis w pamięci osady. Serca się nie rozbiera.
+
+### Pakiety zadań: sześć filarów
+
+Zadanie raz spełnione zostaje spełnione, więc zimowy spadek zapasów niczego nie cofa. Wielkość osady liczy się na bieżąco. Pakiet wymusza równy rozwój: ratusza nie postawi głodna wieś z jednym warsztatem, a Domu rady wieś bez opału na zimę.
+
+| Filar | → Wiata | → Dom osadników | → Dom rady | → Ratusz |
+|---|---|---|---|---|
+| Wielkość | | Osada: 4 domy, 20 osób | Wieś: 8 domów, 32 osoby | Przystań: 14 domów, 50 osób, przysiółki w połowie krain |
+| Dach | każda rodzina pod dachem | 4 chaty z bali albo domy | 3 domy z piecem, nikt w szałasie | 8 domów z piecem, żaden budynek w ruinie |
+| Stół | jedzenie na 6 dni | jedzenie na 10 dni, z 4 rodzajów | 60 porcji przetworów (chleb, ser, kiszonki) | jedzenie na 20 dni, z 7 rodzajów |
+| Ciepło | drewutnia i 40 opału | odzież w zapasie dla połowy osady | opał na 15 dni zimy | opał na 25 dni zimy |
+| Zdrowie | studnia | czysta woda dla wszystkich | chata zielarki i 20 ziół | szpital i zdrowie osady 80% |
+| Rzemiosło | pracownia cieśli albo warsztat | 4 różne warsztaty | kuźnia albo dymarka | mistrzowie poziomu 4: cieśla, kowal, murarz, krawiec |
+| Wspólnota | 5 wieczorów przy ognisku | nadzieja 60%, niezgoda poniżej 30% | uczta z napitkami | 3 spełnione wnioski rady |
+
+„Opał na X dni zimy” liczy się z tego, ile opału zimą palą domy osady (dom z piecem pali najmniej). Rodzaj jedzenia liczy się od 5 porcji w zapasie. Wieczór przy ognisku liczy się, gdy siedzi przy nim co najmniej co trzecia osoba.
+
+**Gdzie to widać.** Karta serca (dotknij ogniska albo „Pokaż serce osady”) ma: pasek pięciu etapów, zadania następnego pakietu z postępem i przyciskiem „Postaw”, gdy brakuje budynku, przycisk rozbudowy z kosztem, kropki równowagi (ile zadań każdego filaru już spełniono, od 0 do 4), „Co daje teraz” i „Drogę rozwoju” z listą wszystkich etapów i tego, co otwierają. Ta sama karta w skrócie jest na górze zakładki Ludzie, a na cichej wyspie pod paskiem zapasów stoi przycisk z ogniskiem i licznikiem zadań (zielona strzałka, gdy można rozbudować). Zablokowane budynki w menu Budowa mówią, który etap serca je otwiera.
+
+### Plac, zasięg i planowanie zabudowy
+
+- **Plac 5 × 5 kroków** zostaje wolny od pierwszego dnia: wyznaczają go kołki ze sznurem. Ludzie po nim chodzą, ale nic innego się na nim nie postawi, bo na nim staną kolejne etapy. Hala Domu osadników, Domu rady i ratusza zajmuje tylną część placu, przód to plac zgromadzeń, a w ratuszu rynek.
+- **Zasięg serca** (10, 12, 14, 16 i 18 kroków) widać jako okrąg po zaznaczeniu serca. Kto mieszka w zasięgu, przychodzi wieczorem do wspólnego ognia ponad połowę wieczorów, kto dalej, rzadko. Przy stawianiu domu podpowiedź mówi, czy będzie w zasięgu. Bliskie domy to więcej wspólnych wieczorów i nadziei, dalekie są bliżej pracy: to świadomy wybór.
+- **Wspólny posiłek** w południe i obrzędy (Szczodre Gody, wesela, a Noc Kupały i Dziady, dopóki nie ma świętego gaju i miejsca pamięci) odbywają się przy sercu osady. Wał grodu z epoki II otacza serce osady.
+- **Wiatrak** miele tym szybciej, im wyżej stoi ponad okolicą (od 60% do 160%), a **winnica** rodzi najlepiej na stoku od południa (do 155%), na stoku od północy marnie (55%). Podpowiedź przy stawianiu pokazuje wiatr i słońce w danym miejscu.
+
+### Napitki
+
+| Budynek | Etap serca | Pracuje | Co robi |
+|---|---|---|---|
+| Bednarnia | Wiata | cieśla | deski 2 → beczki 3; od razu przydają się w komorze kiszonek: warzywa 8 i beczka → kiszonki 10, bez naczyń |
+| Słodownia | Dom osadników | rolnik | ziarno 6 → słód 5 (ziarna na siew nie rusza) |
+| Chmielnik | Dom osadników | zbieracz | chmiel 2, latem i jesienią |
+| Browar | Dom osadników | 2 rolników | słód 4, chmiel 1, beczka i opał → piwo 10 |
+| Miodosytnia | Dom osadników | zbieracz | miód 4 i beczka → miód pitny 6 (sycenie trwa długo) |
+| Winnica | Dom rady | 2 rolników | winogrona 3, latem i jesienią |
+| Winiarnia | Dom rady | rolnik | winogrona 5 i beczka → wino 4 |
+
+Na co idą napitki:
+- **wieczerza:** od Domu osadników każdy dorosły przy wspólnym ogniu albo w izbie wypija wieczorem trochę napitku; im więcej osady przy ogniu i im pełniejsze kufle, tym więcej nadziei i zgody;
+- **uczta:** na każdym święcie i weselu przy sercu osady wypija się ponad pół porcji na uczestnika; gdy starczy przynajmniej na połowę, to uczta z napitkami (zadanie wspólnoty do Domu rady), dużo nadziei i mniej sporów;
+- **moc:** miód pitny cieszy jak 1,3 porcji piwa, wino jak 1,6;
+- **prośby:** mieszkańcy proszą o piwo na wieczór, przysiółki o piwo albo miód pitny na wesele;
+- **jarmark** w ratuszu pije się do zmroku.
+
+### Chleb, wiatrak i szpital
+
+- **Piekarnia** (Dom osadników): murowany piec i izba piekarza, dwóch piekarzy; mąka 6 i opał → chleb 12, czyli z tej samej mąki więcej chleba niż w glinianym piecu chlebowym.
+- **Wiatrak** (Dom rady): koźlak na kozłach, z obracającymi się skrzydłami; ziarno 10 → mąka 9, wyraźnie szybciej niż żarna.
+- **Szpital** (Dom rady): można go postawić albo rozbudować w niego chatę zielarki. Każdy, kto ma mniej niż 75% zdrowia albo jest ranny, codziennie zdrowieje, dzieci umierają o 40% rzadziej, a zielarka ma pełne ręce roboty. Szpital zużywa zioła i płótno; bez nich działa o połowę słabiej.
+
+### Rada osady
+
+Od Domu rady osada ma radę: trzech radnych, w ratuszu pięciu. Pierwsza rada wybiera, czym się zajmie (scena przy ukończeniu Domu rady), a potem jedną tekę można zmienić raz na porę roku.
+
+| Teka | Radny wzmacnia |
+|---|---|
+| Budowy | budowy i remonty do 16% szybciej |
+| Spiżarnia | jedzenie psuje się do 20% wolniej, przetwórnie pracują do 10% szybciej |
+| Opał i odzież | domy palą do 12% mniej opału, drewutnie i szwalnie do 10% szybciej |
+| Zdrowie | chorzy zdrowieją szybciej, dzieci rzadziej chorują |
+| Rzemiosło | warsztaty, kuźnie i garncarnie do 10% szybciej, nauka fachu do 15% szybsza |
+| Zgoda | niezgoda spada szybciej, nadzieja rośnie |
+
+- **Radnych wybiera rada sama:** ludzi z mirem i fachem pasującym do teki. Skuteczność radnego to 60–120% (radny zwykły, dobry albo biegły). Na drodze rady starszych z epoki II doświadczeni starsi są w radzie trochę lepsi.
+- **Wnioski.** Co kilka dni każdy radny zgłasza konkretne zadanie ze swojej dziedziny na 10 dni: remont budynków w ruinie, nikt w szałasie, nowy dom, jedzenie albo opał na tyle a tyle dni, zioła, nowa studnia, narzędzia, mistrz w fachu, którego brakuje, niezgoda poniżej progu, napitki na święto. Wniosek widać w karcie serca przy radnym, z postępem i liczbą dni. Spełniony daje nadzieję (+3%), mniej niezgody (−3%) i mir radnemu; niespełniony trochę niezgody. Wnioski to bieżące wskazówki, co w osadzie kuleje, a trzy spełnione to zadanie wspólnoty do ratusza.
+
+### Ratusz: jarmark, cechy i prawa miejskie
+
+- **Jarmark** odbywa się trzeciego dnia jesieni, gdy osada ma co najmniej dwa przysiółki. Każdy przysiółek przywozi podwójne dary (po wyrównanej drodze o 30% więcej), więź z przysiółkami rośnie, na rynku jest uczta z tańcem i napitkami.
+- **Cechy rzemieślników** powstają przy pełnej wyspie: gdy ratusz stoi, a w każdej krainie, do której da się dojść lądem, pali się nasz ogień. Do założenia cechu potrzeba mistrza poziomu 4 (na drodze cechów z epoki II wystarczy poziom 3), trzech czeladników z poziomem 2 i warsztatu; kosztuje deski 12, gwoździe 12 i płótno 3 (na drodze cechów połowę). Cech przyspiesza swoje warsztaty o 15%, a nauka jego fachu idzie o 30% szybciej. Nad warsztatami cechu wisi jego chorągiewka.
+
+| Cech | Warsztaty |
+|---|---|
+| Cech cieśli | pracownia cieśli, warsztat, bednarnia, szkutnia |
+| Cech murarzy i zdunów | piec do cegły, garncarnia, piec zduński |
+| Cech kowali | kuźnia, dymarka |
+| Cech krawców i tkaczy | szwalnia |
+| Cech piekarzy i piwowarów | piec chlebowy, piekarnia, browar, słodownia, żarna, wiatrak, winiarnia |
+| Bractwo rybackie | pomost rybacki, przystań łodzi |
+
+- **Prawa miejskie:** ratusz, cztery cechy i pierwszy jarmark. Scena na rynku, pieśń i wielki wpis w pamięci osady: rozbitkowie stali się gospodarzami wyspy.
+
+### Co się zmieniło w dawnych rzeczach
+
+- Chata wiecowa nie jest już osobnym budynkiem: jej rolę przejmuje Dom osadników (te same korzyści dla wiecu, sporów i nadziei). Chaty wiecowe z dawnych zapisów stoją i działają jak dotąd.
+- Epoka II zaczyna się z Domem osadników, epoka III z Domem rady i radą. Cel epoki II „Chata wiecowa za ostrokołem” to teraz „Serce osady za ostrokołem”, a wał grodu otacza serce osady. Prawo zwyczajowe i dzwon ze statku czekają na Dom osadników.
+- W starych zapisach bez serca kronika podpowiada, żeby postawić ognisko. Pakiety rozwiniętej osady spełniają się wtedy od razu, zostaje tylko rozbudowa.
+- **Kalendarz obrzędów naprawiony.** Od wersji 1.5 rok ma 20 dni, a Dziady, Szczodre Gody i Topienie Marzanny liczyły dni jeszcze po staremu: Dziady wypadały wiosną, a Gody i Marzanna nie przychodziły wcale. Teraz Dziady są w ostatni dzień jesieni, Szczodre Gody trzeciego dnia zimy, a Topienie Marzanny w pierwszy dzień wiosny.
+
 ## Łowy hodowców (od wersji 3.3.2)
 
 Zagroda nie musi już stać przy halach. Hodowca sam wyprawia się tam, gdzie pasą się dzikie kozy, choćby daleko w głębi wyspy: idzie śladem stada, oswaja jedną kozę w trzech podejściach i prowadzi ją do zagrody na postronku. Na mapie widać kozę idącą za hodowcą. Bliskie stado to krótka droga, dalekie to wyprawa na pół dnia.
@@ -972,6 +1081,7 @@ Pierze z kurnika i tokowiska idzie zimą na pierzyny: domy palą mniej opału. O
 | 1.8.3 | poprawka: rozbudowa domu (szałas w chatę, chata w dom) nie zabiera już rodzinie spiżarki; w czasie budowy zapas zostaje w starym domu w granicach jego pojemności |
 | 1.9 | budynki z charakterem: każdy budynek inny (ściany, dachy, spadek, okap), koniki, malowane okiennice, ganki, przybudówki, garnki na płocie, zioła pod okapem, szyldy rzemiosł, wyraźniejsza kuźnia, łaźnia i chata wiecowa |
 | 1.10 | wykonanie budynków: surowe, porządne i mistrzowskie, wyraźnie widoczne po rozbudowie (wielkość, podmurówka, dach, okiennice, obramienia okien, kwiaty, płotek, szyld); karta budynku pokazuje wykonanie i trwałość; odmiany szałasów, studni, zagród i spiżarni |
+| 3.4 | serce osady: ognisko rośnie w pięciu etapach (wiata, Dom osadników, Dom rady, ratusz), każdy po pakiecie sześciu zadań z filarów dach, stół, ciepło, zdrowie, rzemiosło, wspólnota, i odblokowuje budynki i urzędy; plac 5 × 5 i zasięg serca przy planowaniu domów; wieczory i posiłki przy sercu, izba zimą; napitki (bednarnia, słodownia, chmielnik, browar, miodosytnia, winnica, winiarnia), piekarnia, wiatrak, szpital; rada osady z tekami i wnioskami; jarmark, cechy rzemieślników przy pełnej wyspie i prawa miejskie; chata wiecowa staje się Domem osadników; naprawiony kalendarz Dziadów, Szczodrych Godów i Marzanny |
 | 3.3.2 | łowy hodowców: zagroda może stać przy osadzie, hodowca idzie po dzikie kozy tam, gdzie się pasą, tropi stado i prowadzi kozę na postronku (widać ją na mapie), ktoś zostaje przy kozach, karta zagrody pokazuje najbliższe stado i kto jest na łowach; bateria: klatki dopasowane do tego, co się dzieje (60 przy ruchu widoku, 30 w grze, 20 w pauzie i przy scenie, 12 pod księgą zamiast do 120), dźwięk wstrzymany po schowaniu gry, pulsowanie przycisków skończone po kilku razach, tryb „Bateria” w menu tempa |
 | 3.3.1 | cele krok po kroku: opis i podpowiedź celu wskazują następny brakujący krok (wiedza, budowa, przydział, zasięg, postęp) zamiast stałej instrukcji; przy „Oswój pierwszą kozę” nie pulsuje już budowa zagrody, gdy zagroda stoi, tylko przydział hodowcy albo informacja o kozach poza zasięgiem; „Postaw tu” proponuje budynek celu tylko wtedy, gdy trzeba go postawić; postęp „x z y” przy celach epok II i III; Osada i Wieś zaliczają się od razu |
 | 3.3 | pokolenia: ciąża (dziewięć miesięcy, zapowiedź w kronice, termin na karcie, zaokrąglona sylwetka), poród z rzadkimi bliźniętami, martwymi urodzeniami i śmiercią matki, karmienie i odstęp ok. dwóch lat między dziećmi, śmiertelność niemowląt i małych dzieci zależna od głodu, zimna i chorób, urząd baby pępowej, dwie kobiety przy nadziei na statku, zakaz ślubów tylko w bliskiej rodzinie zamiast w całym rodzie, karta „Pokolenia” z dzietnością, przeżywalnością dzieci, współczynnikiem zastępowalności i tym, co hamuje narodziny; zapasy w cichym widoku: pasek pod datą (dni jedzenia, kłody, opał, ludzie) i karta wszystkich zapasów z dobowym przybytkiem, ta sama karta na górze działu Ludzie; kożuch kobiet nie przepuszcza już fartucha |
@@ -1072,6 +1182,7 @@ Kolejność dalszej pracy. Każda wersja kończy się czymś, w co da się zagra
 | 3.1 Ludzie i zwierzęta (gotowe) | nowe modele i chód zwierząt, zimowe stroje, narzędzia w ręku |
 | 3.2 Ziemia i niebo (gotowe) | pogoda z natężeniem i nowymi zjawiskami, uprawa roli z glebą i wilgocią, odkrycia na wyspie |
 | 3.3 Pokolenia (gotowe) | ciąża, poród, karmienie, śmiertelność dzieci, baba pępowa, współczynnik zastępowalności w księdze, zapasy w cichym widoku |
+| 3.4 Serce osady (gotowe) | ognisko rosnące do ratusza po pakietach zadań, równy rozwój sześciu filarów, napitki, piekarnia, wiatrak, szpital, rada z wnioskami, jarmark, cechy i prawa miejskie |
 
 **Epoka II** (od 2.0, ukończona w 2.2): trzy drogi z trzema rozdrożami każda i 28 zakończeniami. Przez cały czas obowiązuje: klimat słowiański bez magii, brak przybyszów, decyzje gracza w scenach i na wiecu, a życie ludzi toczy się samo.
 

@@ -83,7 +83,7 @@ function ludDaily(){if(!ludReady)ludInit();const ad=S.people.filter(p=>p.age>=14
  for(const k in S.rel){S.rel[k]*=.993;if(Math.abs(S.rel[k])<2)delete S.rel[k]}
  const groups={};ad.forEach(p=>{const g=p.job==='wb'?'b'+p.wb:p.job==='wyp'?'e'+p.exp:p.job==='rob'||p.job==='bud'?'r':null;if(g)(groups[g]=groups[g]||[]).push(p)});
  Object.entries(groups).forEach(([g,arr])=>{for(let i=0;i<arr.length;i++)for(let j=i+1;j<arr.length;j++){if(g==='r'&&Math.random()>.3)continue;relAdd(arr[i],arr[j],K*(g[0]==='e'?2.4:1.1)*compat(arr[i],arr[j]))}});
- if(seasonIdx()===2&&(law('opowiesci')||hasB('domwsp')))for(let q=0;q<5;q++){const a=lpick(ad),b=lpick(ad);if(a&&b&&a!==b)relAdd(a,b,2)}
+ if(seasonIdx()===2&&(law('opowiesci')||wspOn()))for(let q=0;q<5;q++){const a=lpick(ad),b=lpick(ad);if(a&&b&&a!==b)relAdd(a,b,2)}
  if((S.dis||0)>.4&&Math.random()<(S.dis-.3)*K*.6){const a=lpick(ad),b=lpick(ad);if(a&&b&&a!==b&&a.fam!==b.fam){relAdd(a,b,-14);if(Math.random()<.5)log(`${a.name} i ${b.name} kłócą się o ${['drewno','jedzenie','pracę','miejsce przy ogniu'][(Math.random()*4)|0]}. Od tej pory omijają się szerokim łukiem.`)}}
  // spotkania przy studni, przy ogniu, w drodze: wieś się poznaje
  for(let q=0;q<6;q++){const a=lpick(ad),b=lpick(ad);if(a&&b&&a!==b)relAdd(a,b,2*compat(a,b))}

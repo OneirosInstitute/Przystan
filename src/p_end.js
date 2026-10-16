@@ -31,7 +31,7 @@ function atmosphere(rdt,Lt){
  const wfog=1+2*WX.fog+1.2*WX.dark;const mo=Math.min(.5,.11*fogA*wfog+.16*WX.dark)*(qLevel>=2?0:1);const msp=1+4*WX.wind*WX.wind;wxMistCol.setHex(0xdfe6e6).lerp(wxMistDark,WX.dark);
  mists.forEach(m=>{const u=m.userData;u.x+=WX.wx*u.sp*rdt*msp;u.z+=WX.wz*u.sp*rdt*msp;if(u.x>MW)u.x-=2*MW;else if(u.x<-MW)u.x+=2*MW;if(u.z>MW)u.z-=2*MW;else if(u.z<-MW)u.z+=2*MW;m.position.set(u.x,u.y,u.z);const ed=Math.min(1,(MW-Math.abs(u.x))/14,(MW-Math.abs(u.z))/14);m.material.opacity=mo*Math.max(0,ed);m.material.color.copy(wxMistCol);m.visible=m.material.opacity>.004});
  const cx=tcx(camp.i),cz=tcx(camp.j),cy=Hy(cx,cz);
- const chims=[[cx,cy+.6,cz]];S.bld.forEach(b=>{if(!bDone(b))return;const c=bCenter(b);if(b.kind==='laznia')chims.push([c.x-.45,Hy(c.x,c.z)+2.3,c.z]);else if(b.kind==='domwsp')chims.push([c.x,Hy(c.x,c.z)+3.4,c.z]);else if(hasExt(b,'wedzarnia'))chims.push([c.x-BD[b.kind].w*.5-.25,Hy(c.x,c.z)+1.3,c.z]);if(b.kind==='chata'||b.kind==='dom')chims.push([c.x-.95,Hy(c.x,c.z)+2.7,c.z]);else if(b.kind==='cegielnia'||b.kind==='piec')chims.push([c.x+.5,Hy(c.x,c.z)+2.3,c.z]);else if(b.kind==='szalas'&&seasonIdx()!==0)chims.push([c.x,Hy(c.x,c.z)+1.7,c.z])});
+ const chims=[[cx,cy+.6,cz]];S.bld.forEach(b=>{if(!bDone(b))return;const c=bCenter(b);if(b.kind==='laznia')chims.push([c.x-.45,Hy(c.x,c.z)+2.3,c.z]);else if(b.kind==='domwsp')chims.push([c.x,Hy(c.x,c.z)+3.4,c.z]);else if(b.kind==='serce'){const st=b.st||1;chims.push(st>=3?[c.x+(st>=5?1.2:0),Hy(c.x,c.z)+(st>=5?3.9:st>=4?3.4:3.0),c.z-1.45]:[c.x,Hy(c.x,c.z)+(st===2?2.4:.6),c.z+.5])}else if(b.kind==='browar'||b.kind==='slodownia'||b.kind==='piekarz')chims.push([c.x+(b.kind==='piekarz'?-1.55:.6),Hy(c.x,c.z)+(b.kind==='piekarz'?1.3:2.4),c.z+(b.kind==='piekarz'?-.1:-.3)]);else if(hasExt(b,'wedzarnia'))chims.push([c.x-BD[b.kind].w*.5-.25,Hy(c.x,c.z)+1.3,c.z]);if(b.kind==='chata'||b.kind==='dom')chims.push([c.x-.95,Hy(c.x,c.z)+2.7,c.z]);else if(b.kind==='cegielnia'||b.kind==='piec')chims.push([c.x+.5,Hy(c.x,c.z)+2.3,c.z]);else if(b.kind==='szalas'&&seasonIdx()!==0)chims.push([c.x,Hy(c.x,c.z)+1.7,c.z])});
  if(typeof kolChims==='function')kolChims(chims);
  smoke.forEach((s,k)=>{const u=s.userData;u.t+=rdt*.55;if(u.t>4){u.t=0;u.src=(u.src+7)}const c=chims[u.src%chims.length];const a=u.t/4;
   const wd=a*(.5+2.6*WX.wind);s.position.set(c[0]+Math.sin(u.t*1.3+k)*.3+WX.wx*wd,c[1]+a*(3.2-1.6*WX.wind),c[2]+WX.wz*wd);const sc=.4+a*1.7;s.scale.set(sc,sc,1);s.material.opacity=.3*Math.sin(a*Math.PI)});
@@ -87,14 +87,14 @@ function frame(now){requestAnimationFrame(frame);if(gfxSkip(now))return;const rd
  if(Math.abs(zoomT-zoom)>.001){zoom+=(zoomT-zoom)*Math.min(1,rdt*10);setCam()}
  if(follow&&selId!==null){const p=pById(selId);if(p){camT.x+=(p.x-camT.x)*Math.min(1,rdt*4);camT.z+=(p.z-camT.z)*Math.min(1,rdt*4);setCam()}}
  for(const p of S.people){const m=pMesh[p.id];if(!m)continue;m.position.set(p.x,Hy(p.x,p.z),p.z);if(p.dir!==undefined)m.rotation.y=p.dir;
-  m.visible=!(p.state==='sleep'&&homeOf(p)&&bDone(homeOf(p)))&&p.state!=='away';
+  m.visible=!(p.state==='sleep'&&homeOf(p)&&bDone(homeOf(p)))&&p.state!=='away'&&!(p.inHall&&p.state==='eve');
   const u=m.userData,walking=p.state==='move'&&S.speed>0,working=p.state==='work'&&S.speed>0,sw=walking?Math.sin(clock*10+p.id)*.6:0;
   u.lL.rotation.x=sw;u.lR.rotation.x=-sw;u.aL.rotation.x=working?-1.2+Math.sin(clock*9+p.id)*.7:-sw*.8;u.aR.rotation.x=working?-1.0+Math.sin(clock*9+p.id+1)*.7:sw*.8;
   u.torso.rotation.x=working?.25:0;
   u.carry.visible=!!p.carry;if(p.carry)u.carry.material.color.set({drewno:0x8a6a40,kamien:0x8c8a80,glina:0xa9683c,jagody:0x8a3a55,grzyby:0xb07a4a,ryby:0x8fa4ac,mieso:0x9a4a3a,deski:0xb08a55,gwozdzie:0x555555,plotno:0xc9bda0,narz:0x666a70}[p.carry[0].res]||0x888888)}
  drawAnimals();drawBirds(rdt);fireFxTick(rdt);bubbleTick(rdt);const wf=weatherFx(rdt);
  ripples.forEach((m,k)=>{const s=1+.3*Math.sin(clock*1.6+k);m.scale.set(s,s,s);m.material.opacity=.3+.22*Math.sin(clock*1.6+k)});
- const Lt=lighting();firelight.position.set(tcx(camp.i),Hy(tcx(camp.i),tcx(camp.j))+1.8,tcx(camp.j));atmosphere(rdt,Lt);gfxTick(rdt,Lt);
+ const Lt=lighting();firelight.position.set(campX(),Hy(campX(),campZ())+1.8,campZ());atmosphere(rdt,Lt);gfxTick(rdt,Lt);
  rangeRing.material.opacity=.4+.2*Math.sin(clock*3);
  mapTick(rdt);
  soundTick(rdt,Lt);

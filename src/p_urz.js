@@ -46,8 +46,8 @@ function sporDaily(){S.feuds=S.feuds||[];
  S.feuds=S.feuds.filter(f=>{const A=S.people.filter(p=>p.fam===f.a||p.rod===f.ra),B=S.people.filter(p=>p.fam===f.b||p.rod===f.rb);if(!A.length||!B.length)return false;
   if(S.people.some(p=>p.pair!==null&&((p.rod===f.ra&&pById(p.pair)&&pById(p.pair).rod===f.rb)||(p.rod===f.rb&&pById(p.pair)&&pById(p.pair).rod===f.ra))&&p.wedDay>f.since)){log(`Wesele połączyło zwaśnione rody. Waśń gaśnie: kto by się kłócił z własnymi wnukami.`);return false}
   S.wd=(S.wd||0)+.003;if(Math.random()<.3){const a=lpick(A),b=lpick(B);if(a&&b)relAdd(a,b,-3)}
-  const rd=Math.floor(rday());if((rd===18||rd===25)&&!S.seen['feudR'+f.id+'_'+Math.floor(S.day/YEAR)+rd]){S.seen['feudR'+f.id+'_'+Math.floor(S.day/YEAR)+rd]=1;
-   if(Math.random()<.35+(hasB('gaj')?.25:0)+(offHolder('swat')?.15:0)){log(`${rd===18?'Na Dziady':'W Szczodre Gody'} zwaśnione rody siadają przy jednym stole. Ktoś łamie chleb na pół. Waśń się kończy.`);A.forEach(a=>B.forEach(b=>relAdd(a,b,8)));return false}}
+  const rd=Math.floor(rday());if((rd===9||rd===12)&&!S.seen['feudR'+f.id+'_'+Math.floor(S.day/YEAR)+rd]){S.seen['feudR'+f.id+'_'+Math.floor(S.day/YEAR)+rd]=1;
+   if(Math.random()<.35+(hasB('gaj')?.25:0)+(offHolder('swat')?.15:0)){log(`${rd===9?'Na Dziady':'W Szczodre Gody'} zwaśnione rody siadają przy jednym stole. Ktoś łamie chleb na pół. Waśń się kończy.`);A.forEach(a=>B.forEach(b=>relAdd(a,b,8)));return false}}
   return true});
  if(S.spor||S.day<12)return;if(S.sporNext&&S.day<S.sporNext)return;
  const ad=S.people.filter(isAdult);let pair=null,why='slowo';

@@ -29,12 +29,12 @@ CHAIN.ostatni={t:'Ostatni z wraku',noRe:true,ok:s=>nearTg(pById(s.pid),s.tg,3.5)
 {const _pj=planJob;planJob=function(p){if(p.trek&&S&&!p.fireB&&isWork()&&p.state!=='away'){if(nearTg(p,p.trek,2.5)){p.act='patrzy na wyspę ze szczytu';p.wait=3;return false}const t=nearestWalk(p.trek[0],p.trek[1]);if(t&&go(p,t,'trek',null)){p.act='idzie na szczyt';return true}}return _pj(p)}}
 {const _oa=onArrive;onArrive=function(p){if(p.after!=='trek')return _oa(p);p.after=null;p.state='idle';p.wait=1}}
 // ---- epoka II: dzwon ze statku ----
-CHAIN.dzwon={t:'Dzwon ze statku',ok:()=>hasB('domwsp')&&S.res.deski>=10&&S.res.gwozdzie>=10,how:()=>{const L=[];if(!hasB('domwsp'))L.push('chata wiecowa');if(S.res.deski<10)L.push('10 desek');if(S.res.gwozdzie<10)L.push('10 gwoździ');return L.length?'Potrzeba: '+L.join(', ')+'. Dzwonnicę stawia się przy chacie wiecowej.':'Wszystko gotowe.'},
+CHAIN.dzwon={t:'Dzwon ze statku',ok:()=>wspOn()&&S.res.deski>=10&&S.res.gwozdzie>=10,how:()=>{const L=[];if(!wspOn())L.push('Dom osadników (serce osady)');if(S.res.deski<10)L.push('10 desek');if(S.res.gwozdzie<10)L.push('10 gwoździ');return L.length?'Potrzeba: '+L.join(', ')+'. Dzwonnicę stawia się przy sercu osady.':'Wszystko gotowe.'},
  say:()=>'Ten dzwon bił na wachtę tamtej nocy. Niech bije teraz na wiec.',
- fin:(s,p)=>{S.res.deski-=10;S.res.gwozdzie-=10;S.dzwon=1;dzwonVis();openEvent({ey:'Opowieść',t:'Dzwon',text:()=>`Dzwonnica stoi przy chacie wiecowej: dwa słupy, belka i daszek z gontu. ${p.name} pociąga za sznur. Dźwięk niesie się aż nad zatokę.\n\nNajstarsi stają w miejscu. Ostatni raz słyszeli go na pokładzie.`,
+ fin:(s,p)=>{S.res.deski-=10;S.res.gwozdzie-=10;S.dzwon=1;dzwonVis();openEvent({ey:'Opowieść',t:'Dzwon',text:()=>`Dzwonnica stoi obok placu przy sercu osady: dwa słupy, belka i daszek z gontu. ${p.name} pociąga za sznur. Dźwięk niesie się aż nad zatokę.\n\nNajstarsi stają w miejscu. Ostatni raz słyszeli go na pokładzie.`,
   opts:[{n:'Dalej',d:'mniej kłótni, nadzieja, pieśń',f:()=>{S.hope=clamp(S.hope+.05,0,1);pamAdd(3,'dzwon');song('Pieśń o dzwonie ze statku');return'Odtąd dzwon zwołuje wiec, bije na wesela i na pogrzeby.'}}]},{})}};
 let dzwonG=null;
-function dzwonVis(){if(!S||!S.dzwon||dzwonG)return;const b=S.bld.find(x=>x.kind==='domwsp'&&bDone(x));if(!b)return;const c=bCenter(b),d=BD[b.kind];const x=c.x+d.w*.5+1.1,z=c.z+.4;
+function dzwonVis(){if(!S||!S.dzwon||dzwonG)return;const b=S.bld.find(x=>(x.kind==='domwsp'||(x.kind==='serce'&&(x.st||1)>=3))&&bDone(x));if(!b)return;const c=bCenter(b),d=BD[b.kind];const x=c.x+d.w*.5+1.1,z=c.z+.4;
  const g=new THREE.Group(),wd=M(0x6e5236),br=M(0x9a7a3c,{metalness:.6,roughness:.45}),rf=M(0x4a4038);
  g.add(mesh(new THREE.BoxGeometry(.12,1.9,.12),wd,-.45,.95,0));g.add(mesh(new THREE.BoxGeometry(.12,1.9,.12),wd,.45,.95,0));g.add(mesh(new THREE.BoxGeometry(1.1,.12,.14),wd,0,1.85,0));
  const rr=mesh(new THREE.BoxGeometry(1.3,.06,.6),rf,0,2.05,0);g.add(rr);g.add(mesh(new THREE.CylinderGeometry(.14,.26,.36,10,1,true),br,0,1.6,0));g.add(mesh(new THREE.SphereGeometry(.05,6,4),br,0,1.42,0));
@@ -64,7 +64,7 @@ const STARTS=[
     {n:'To za daleko',d:'',f:()=>{R.ch.ostatni='x';S.hope=clamp(S.hope-.02,0,1);return`${p.name} nie nalega. Wieczorami siada na plaży i patrzy na morze stamtąd.`}}]},{})}},
  {id:'dzwon',ok:()=>S.epoch===2&&S.day>=7*YEAR+3,go:R=>{const p=anyZ(adultsZ());if(!p)return;R.ch.dzwon='intro';
   openEvent({ey:'Opowieść',t:'Dzwon w piasku',text:()=>`Po sztormie morze cofnęło się dalej niż zwykle. Dzieci przybiegają z plaży: z piasku wystaje zielony od śniedzi brąz.\n\nTo dzwon z naszego statku. Ten sam, który bił na wachtę tamtej nocy.`,
-   opts:[{n:'Zawiesić go w osadzie',d:'nowa sprawa: dzwonnica przy chacie wiecowej',f:()=>{R.ch.dzwon='szuka';R.a.push({chain:'dzwon',id:'ch_dzwon',pid:p.id,d0:S.day});return'Sześciu ludzi niesie dzwon na drągach. Na razie leży przy ognisku.'}},
+   opts:[{n:'Zawiesić go w osadzie',d:'nowa sprawa: dzwonnica przy sercu osady',f:()=>{R.ch.dzwon='szuka';R.a.push({chain:'dzwon',id:'ch_dzwon',pid:p.id,d0:S.day});return'Sześciu ludzi niesie dzwon na drągach. Na razie leży przy ognisku.'}},
     {n:'Oddać go morzu',d:'pieśń, pamięć osady',f:()=>{R.ch.dzwon='x';pamAdd(2,'dzwon');song('Pieśń o dzwonie oddanym morzu');return'Wypływają łodzią na zatokę i spuszczają dzwon w głębinę. Niech bije tym, którzy nie dopłynęli.'}}]},{})}}];
 {const _ct=chainTick;chainTick=function(){_ct();const R=S.spr;if(!R||evOpen||placing||!isWork())return;for(const st of STARTS){if(R.ch[st.id])continue;let ok=false;try{ok=st.ok()}catch(e){}if(ok){st.go(R);return}}}}
 // zwiadowcy chętniej idą do kręgu

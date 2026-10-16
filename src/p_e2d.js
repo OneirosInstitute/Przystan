@@ -35,7 +35,7 @@ const E2A={
  dom:{n:'Gospodarze',intro:'Wiec postanowił: ta wyspa jest nasza. Teraz trzeba nią gospodarzyć jak u siebie. Przysiółki mają mieć dokąd przyjść z tym, co wyhodowały i złowiły, obyczaje mają stać się prawem, a każda rodzina ma mieszkać w porządnym domu.',g:[
   ['Postaw targowisko',()=>hasDone('targ'),'Budowa → Wspólnota → Targowisko. Co pięć dni przysiółki przychodzą na targ.'],
   ['Pierwszy dzień targowy',()=>(S.e2.targN||0)>=1,'Dzień targowy przychodzi co pięć dni, gdy targowisko stoi, a osada ma choć jeden przysiółek.'],
-  ['Spisz prawo zwyczajowe',()=>!!S.e2.prawo,'Potrzebna chata wiecowa i co najmniej cztery obyczaje, które trwają od dwóch lat. Wtedy wiec sam zbierze się, żeby je spisać.'],
+  ['Spisz prawo zwyczajowe',()=>!!S.e2.prawo,'Potrzebny Dom osadników (serce osady, trzeci etap) i co najmniej cztery obyczaje, które trwają od dwóch lat. Wtedy wiec sam zbierze się, żeby je spisać.'],
   ['Każda rodzina w chacie albo domu',()=>{const f=Object.values(S.fams).filter(x=>famMembers(x.id).length);return f.length&&f.every(x=>{const h=x.home&&bById(x.home);return h&&h.kind!=='szalas'&&bDone(h)})},'Każda rodzina, także młode pary po weselu, potrzebuje chaty z bali albo domu z piecem. Szałas rozbudujesz w chatę z jego karty.']]},
  glab:{n:'W głąb wyspy',intro:'Wiec postanowił iść w głąb wyspy. Za lasami są krainy, w których nikt z nas jeszcze nie nocował. Trzeba je poznać, postawić stanicę, w której wyprawa przeczeka noc i zawieruchę, i założyć przysiółki daleko od brzegu.',g:[
   ['Poznaj wszystkie krainy',()=>e2Known()>=.95,'Wyprawy → zwiad. Krainę uznaje się za poznaną, gdy widać jej większą część.'],
@@ -62,7 +62,7 @@ const E2B={
  grod:{n:'Gród',intro:'Gród zaczyna się od bramy. Kto wybiera miejsce na bramę, wybiera, jak duży będzie gród: ostrokół pójdzie od niej dookoła wsi.',g:[
   ['Postaw bramę grodu',()=>hasDone('brama'),'Budowa → Wspólnota → Brama grodu. Ostrokół obiegnie wieś w takiej odległości od ogniska, w jakiej stoi brama.'],
   ['Osiem domów za ostrokołem',()=>S.bld.filter(b=>bDone(b)&&BD[b.kind].house&&e2InWal(b)).length>=8,'Domy stawiaj bliżej ogniska niż brama.'],
-  ['Chata wiecowa za ostrokołem',()=>S.bld.some(b=>b.kind==='domwsp'&&bDone(b)&&e2InWal(b)),'Chata wiecowa w grodzie to serce prawa.'],
+  ['Serce osady za ostrokołem',()=>S.bld.some(b=>(b.kind==='domwsp'||(b.kind==='serce'&&(b.st||1)>=3))&&bDone(b)&&e2InWal(b)),'Dom osadników (albo wyższy etap serca osady) w grodzie, za wałem. Wał otacza serce osady, tak daleko jak brama.'],
   ['Gród: 40 osób',()=>S.people.length>=40,'Więcej domów i rodzin. Dzieci rodzą się w domach.']]},
  wies:{n:'Sieć przysiółków',intro:'Bez wałów i bram. Wieś jest tam, gdzie są nasi ludzie, a drogi łączą domy na całej wyspie.',g:[
   ['Cztery przysiółki',()=>(S.hamlets||[]).length>=4,'Ludzie → Wspólnota → nowy przysiółek.'],
@@ -91,8 +91,8 @@ function e2Init(){if(!S||S.epoch!==2||!PATHS[S.path])return;if(!S.e2){S.e2={a:6,
 function e2Intro(){const A=e2Act();if(!A)return;const e=S.e2;openEvent({ey:'Epoka II · '+PATHS[S.path].n+' · Akt '+E2RN[e.a],t:A.n,text:()=>A.intro,opts:[{n:'Dalej',d:'',f:()=>{log(`Zaczyna się akt ${E2RN[e.a]}: ${A.n.toLowerCase()}.`);return A.g.map(g=>'· '+g[0]).join('\n')}}]},{})}
 function e2Roz(){const R=ROZ[S.path];const e=S.e2;openEvent({ey:'Rozstaje · pierwsze rozdroże',t:R.t,text:()=>R.x+'\n\nTej decyzji nie da się cofnąć.',
  opts:R.o.map(o=>({n:o.n,d:o.d,f:()=>{e.r1=o.id;e.a=7;e.t7=S.day;S.tech['e2_'+o.id]=1;e2Keys();pamAdd(4,'rozdroze');song(o.song);log('Rozstaje: '+o.n.toLowerCase()+'. '+o.r);e.introQ=1;e2Apply();renderPanel();return o.r}}))},{})}
-function e2Prawo(){const n=Object.keys(S.cust||{}).filter(k=>obyStage(k)>=1).length;openEvent({ey:'Chata wiecowa',t:'Prawo zwyczajowe',
- text:()=>`Wiec zbiera się w chacie wiecowej. Starsi wyliczają obyczaje, których trzymamy się od lat: ${n} ${n<5?'obyczaje':'obyczajów'}. Młodzi chcą, żeby to, co dotąd było zwyczajem, stało się prawem dla wszystkich, także w przysiółkach. Pytanie tylko, kto ma je przechowywać.`,
+function e2Prawo(){const n=Object.keys(S.cust||{}).filter(k=>obyStage(k)>=1).length;openEvent({ey:wspName(),t:'Prawo zwyczajowe',
+ text:()=>`Wiec zbiera się ${scSt()>=3?SERCE[scSt()].loc:'w chacie wiecowej'}. Starsi wyliczają obyczaje, których trzymamy się od lat: ${n} ${n<5?'obyczaje':'obyczajów'}. Młodzi chcą, żeby to, co dotąd było zwyczajem, stało się prawem dla wszystkich, także w przysiółkach. Pytanie tylko, kto ma je przechowywać.`,
  opts:[{n:'Prawo pamięta starszyzna',d:'spory gasną szybciej, starsi mają więcej do powiedzenia',f:()=>{S.e2.prawo='starsi';S.dis=Math.max(0,(S.dis||0)-.08);pamAdd(3,'prawo');song('Pieśń o prawie starszych');log('Prawo zwyczajowe: przechowuje je starszyzna. Każdy spór idzie najpierw do najstarszych.');return'Najstarsi powtarzają prawo na głos, słowo po słowie. Kto chce je znać, musi ich słuchać.'}},
   {n:'Prawo wyryte na słupie',d:'więcej pamięci i nadziei, prawo zna każdy',f:()=>{S.e2.prawo='slup';S.hope=clamp(S.hope+.05,0,1);pamAdd(5,'prawo');song('Pieśń o słupie prawa');log('Prawo zwyczajowe: wyryte znakami na słupie przed chatą wiecową.');return'Cieśle wycinają znaki na dębowym słupie. Dzieci uczą się ich jak pieśni.'}}]},{})}
 function e2GoalsTick(){if(!S||S.epoch!==2)return;e2Init();const e=S.e2;if(!e)return;const A=e2Act();
@@ -166,7 +166,7 @@ function e2Targ(){const hs=S.hamlets||[];if(!hs.length)return;const mul=e2R('wie
  S.e2.targN=(S.e2.targN||0)+1;S.hope=clamp(S.hope+.012,0,1);
  log(`Dzień targowy. Z przysiółków przyszli ludzie: ${Object.entries(got).map(([k,v])=>RN[k].toLowerCase()+' '+v).join(', ')}. Wracają z narzędziami, solą i nowinami.`);toast('Dzień targowy');if(S.e2.targN===1)song('Pieśń o pierwszym targu')}
 function e2Daily(){if(!S||S.epoch!==2||!S.e2)return;const e=S.e2,sea=seasonIdx(),d=Math.floor(S.day);
- if(S.path==='dom'&&!e.prawo&&!e.prawoQ&&hasDone('domwsp')&&e2OldCust(4))e.prawoQ=1;
+ if(S.path==='dom'&&!e.prawo&&!e.prawoQ&&wspOn()&&e2OldCust(4))e.prawoQ=1;
  if(hasDone('targ')&&d%5===0&&e.targD!==d){e.targD=d;e2Targ()}
  if(e.r1==='grod'&&e.wal){S.dis=Math.max(0,(S.dis||0)-.003);(S.hamlets||[]).forEach(h=>h.wiez=Math.max(.1,(h.wiez||0)-.002))}
  if(e.r1==='wies'){(S.hamlets||[]).forEach(h=>{h.wiez=Math.min(1,(h.wiez||0)+.003);if((h.zap||0)>.5&&Math.random()<.04){h.pop++;if(Math.random()<.4)log(`W przysiółku ${h.name} przybyło ludzi: ${h.pop} ${osb(h.pop)}.`)}})}
@@ -207,7 +207,7 @@ document.addEventListener('click',e=>{if(e.target.closest('[data-rejs]')&&S){e2R
 // ---------- gród: wał i ostrokół od bramy dookoła wsi ----------
 const walG=new THREE.Group();scene.add(walG);let walKey='';
 const mPal=TM(TX.logs,0xc4b49c);
-function e2WalSet(b){const c=bCenter(b);const cx=tcx(camp.i),cz=tcx(camp.j);S.e2.wal={x:cx,z:cz,r:Math.max(6,Math.hypot(c.x-cx,c.z-cz)),a:Math.atan2(c.z-cz,c.x-cx)};const w=S.e2.wal;
+function e2WalSet(b){const c=bCenter(b);const sf=typeof scC==='function'&&scC();const cx=sf?sf.x:tcx(camp.i),cz=sf?sf.z:tcx(camp.j);S.e2.wal={x:cx,z:cz,r:Math.max(6,Math.hypot(c.x-cx,c.z-cz)),a:Math.atan2(c.z-cz,c.x-cx)};const w=S.e2.wal;
  nodeBy.tree.forEach(n=>{if(n.amt>0&&Math.abs(Math.hypot(n.x-w.x,n.z-w.z)-w.r)<1.3){n.amt=0;const q=nodes.indexOf(n);if(q>=0)S.nodeAmt[q]=0;nodeVis(n)}});e2WalBuild()}
 function e2WalBuild(){const w=S&&S.e2&&S.e2.wal;const key=w?w.r.toFixed(2)+'|'+S.bld.length:'';if(key===walKey)return;walKey=key;
  walG.children.slice().forEach(o=>{walG.remove(o);if(o.geometry)o.geometry.dispose()});if(!w)return;

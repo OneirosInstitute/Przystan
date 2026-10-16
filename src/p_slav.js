@@ -24,18 +24,18 @@ function slavDaily(){if(!S.slav){S.slav=1;S.people.forEach(p=>{if(p.age>=7)S.see
   log(ob?`Noc Kupały. ${yr===1?'Rok':yr+' '+lata(yr)} temu morze wyrzuciło nas na ten brzeg. Płoną ogniska${krag?' pod świętym dębem':''}, młodzi skaczą przez ogień, dziewczęta puszczają wianki na wodę zatoki.`:`Najkrótsza noc w roku. ${yr===1?'Rok':yr+' '+lata(yr)} temu rozbiliśmy się o ten brzeg. Ktoś pali małe ognisko na plaży i długo patrzy w morze.`);
   toast('Noc Kupały');pamAdd(2,'obrzed');if(ob)fujarka()}
  // Dziady
- if(rd===18&&S.died>=1&&once('dziady')){if(ob)eat(K*n*.25);S.wh+=.04*f*g;S.wd-=.03*f*g;
+ if(rd===9&&S.died>=1&&once('dziady')){if(ob)eat(K*n*.25);S.wh+=.04*f*g;S.wd-=.03*f*g;
   const lud=S.seen.dziadyLud==='tak';
   log((law('morze')?'Dziady. Kaszę i chleb puszcza się na wodę zatoki, dla tych, których oddaliśmy morzu.':'Dziady. Na grobach stoją miski z kaszą i miodem, przy mogiłach płoną małe ognie. Nikt nie mówi głośno: tej nocy zmarli wracają do swoich.')+(lud?' Na kopcu w zdziczałym sadzie też płonie ogień.':'')+(S.deadNames&&S.deadNames.length?' Wspomina się imiona: '+S.deadNames.slice(-10).join(', ')+'.':''));
   toast('Dziady');pamAdd(2,'obrzed');if(lud)S.wh+=.01;
   if(ob&&S.found.includes(7)&&!S.seen.dziadyLud)S.slavQ='dziadyLud'}
  // Szczodre Gody
- if(rd===25&&once('gody')){
+ if(rd===12&&once('gody')){
   if(ob&&eat(K*n*.8)){S.wh+=.07*g;S.wd-=.05*g;log('Szczodre Gody. Najdłuższa noc. Cała osada siada do jednej wieczerzy, jedno miejsce zostaje puste dla tych, których zabrakło. Dzieci chodzą od chaty do chaty i śpiewają.');toast('Szczodre Gody');pamAdd(2,'obrzed');fujarka()}
   else if(ob){S.wh+=.02*g;S.wd-=.02;log('Szczodre Gody. Wieczerza skromna, bo zapasów mało, ale wszyscy siedzą razem.')}
   else{S.wh+=.02;log('Najdłuższa noc w roku. Ktoś cicho śpiewa kolędę z dawnych stron.')}}
  // Topienie Marzanny
- if(rd===30&&once('marzanna')){S.wh+=.06*f*g;S.wd-=.02*f;
+ if(rd===15&&once('marzanna')){S.wh+=.06*f*g;S.wd-=.02*f;
   log(ob?'Topienie Marzanny. Dzieci niosą słomianą kukłę do strumienia i wrzucają ją do wody. Zima odchodzi razem z nią. Wracają z zieloną gałązką.':'Pierwszy ciepły dzień. Ktoś mówi, że w domu topiono by dziś Marzannę.');toast('Koniec zimy');pamAdd(2,'obrzed');if(ob)fujarka()}
  // Postrzyżyny
  S.people.forEach(p=>{if(p.age<7||p.age>=12||S.seen['postr'+p.id])return;S.seen['postr'+p.id]=1;
@@ -61,7 +61,7 @@ const DZIADY_LUD={ey:'Dziady',t:'Mogiła dziadów',
 // licho przy pożarze
 {const _sf=startFire;startFire=function(b){_sf(b);if(!S)return;S.wd=(S.wd||0)+.01;const k='lichoF'+Math.floor(S.day/SD);if(!S.seen[k]&&(law('obrzedy')||Math.random()<.4)){S.seen[k]=1;log('„Licho nie śpi”, mówią starzy, patrząc na dym.')}}}
 // panel obyczajów: rok obrzędów
-const RITES=[[0,'Noc Kupały','rocznica rozbicia, ogień i wianki'],[10,'Dożynki','wieniec i uczta po żniwach'],[18,'Dziady','jadło dla zmarłych'],[25,'Szczodre Gody','wspólna wieczerza w najdłuższą noc'],[30,'Topienie Marzanny','koniec zimy']];
+const RITES=[[0,'Noc Kupały','rocznica rozbicia, ogień i wianki'],[5,'Dożynki','wieniec i uczta po żniwach'],[9,'Dziady','jadło dla zmarłych'],[12,'Szczodre Gody','wspólna wieczerza w najdłuższą noc'],[15,'Topienie Marzanny','koniec zimy']];
 function slavHTML(){if(!S||!S.cust||!S.cust.wiara)return'';const rd=rday(),ob=law('obrzedy');
  const act=RITES.filter(r=>r[1]!=='Dożynki'||law('swieto')).filter(r=>r[1]!=='Dziady'||S.died>=1);
  const nx=act.map(r=>({r,d:(r[0]-rd+YEAR)%YEAR||YEAR})).sort((a,b)=>a.d-b.d)[0];

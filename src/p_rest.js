@@ -708,7 +708,7 @@ function newDay(){
  techXp('nauka',K*S.people.filter(p=>isAdult(p)&&(p.trait==='Nauczyciel'||p.age>55)).reduce((a,p)=>a+(p.trait==='Nauczyciel'?.7:.25),0));techTick();
  const t=tierOf();if(t>S.tier){S.tier=t;log('Osada rośnie: teraz to '+TIERS[t][0].toLowerCase()+'.');toast('Nowy poziom: '+TIERS[t][0])}
  const housed=S.people.length?S.people.filter(p=>homeOf(p)).length/S.people.length:0;
- const tgt=.22+.25*Math.min(1,S.fedR)+.18*S.warm+.13*housed+.09*Math.min(1,(S.variety-1)/4)+.05*S.tier+.006*S.people.filter(p=>p.trait==='Pogodny').length-.2*(S.dis||0)+(law('wspolne')?.04:0)+(law('opowiesci')?.04:0)+(law('nauka')?.02:0)-(law('pomoc')?.04:0)+(law('u_wspolne')?.04:0)-(law('z_oszcz')?.03:0)+(hasB('cmentarz')?.02:0)+Math.min(.05,.01*anyExt('ganek'))+(hasB('laznia')&&S.bathOk?.03:0)+(hasB('domwsp')?.03:0)+slavHope();S.hope=clamp(S.hope+(tgt-S.hope)*.3,.05,1);
+ const tgt=.22+.25*Math.min(1,S.fedR)+.18*S.warm+.13*housed+.09*Math.min(1,(S.variety-1)/4)+.05*S.tier+.006*S.people.filter(p=>p.trait==='Pogodny').length-.2*(S.dis||0)+(law('wspolne')?.04:0)+(law('opowiesci')?.04:0)+(law('nauka')?.02:0)-(law('pomoc')?.04:0)+(law('u_wspolne')?.04:0)-(law('z_oszcz')?.03:0)+(hasB('cmentarz')?.02:0)+Math.min(.05,.01*anyExt('ganek'))+(hasB('laznia')&&S.bathOk?.03:0)+(wspOn()?.03:0)+slavHope();S.hope=clamp(S.hope+(tgt-S.hope)*.3,.05,1);
  // przyroda
  for(let k=0;k<N*N;k++)if(tread[k]>0)tread[k]*=.985;treadDirty=true;
  nodes.forEach((n,k)=>{if(n.type==='bush'&&n.amt<n.max&&sea!==2){n.amt=Math.min(n.max,n.amt+.35*K*(tech('u_sad')?1.5:1)*(.6+.8*Math.random()));S.nodeAmt[k]=n.amt}
@@ -986,7 +986,7 @@ function renderTop(){
  const fc=days<2?' bad':days<5?' warn':'',oc=seasonIdx()>=1&&S.res.opal<20?' warn':'';
  setH($('stats'),`<div class="st${fc}">${ico('zywnosc')}<div><b>${fmt(foodTotal())}<small> / ${days>=99?'99+':Math.floor(days)} d</small></b><span>Żywność</span></div></div><div class="st">${ico('drewno')}<div><b>${fmt(S.res.drewno)}</b><span>Drewno</span></div></div><div class="st${oc}">${ico('opal')}<div><b>${fmt(S.res.opal)}</b><span>Opał</span></div></div><div class="st">${ico('ludzie')}<div><b>${S.people.length}</b><span>Ludzie</span></div></div><div class="more">${ico('chev')}</div>`);
  const items=[['zywnosc','Żywność',foodTotal(),'/'+foodCap()],['opal','Opał',S.res.opal],['drewno','Kłody',S.res.drewno],['kamien','Kamień',S.res.kamien],['glina','Glina',S.res.glina],['narz','Narzędzia',S.res.narz+S.res.narzk],['odziez','Odzież',S.res.odziez],['skory','Skóry',S.res.skory],['deski','Deski',S.res.deski],['gwozdzie','Gwoździe',S.res.gwozdzie],['plotno','Płótno',S.res.plotno]];
- if(S.res.cegla>0||S.know.cegla==='tak')items.push(['cegla','Cegły',S.res.cegla]);['ruda','wegiel','wlokna','maka','naczynia','sol','pierze','bursztyn'].forEach(k=>{if(S.res[k]>=1)items.push([k,RN[k],S.res[k]])});
+ if(S.res.cegla>0||S.know.cegla==='tak')items.push(['cegla','Cegły',S.res.cegla]);['ruda','wegiel','wlokna','maka','naczynia','sol','pierze','bursztyn','beczki','piwo','mpitny','wino'].forEach(k=>{if(S.res[k]>=1)items.push([k,RN[k],S.res[k]])});
  setH($('res'),items.map(([k,n,v,ex])=>`<span title="${n}">${ico(k)}<em>${n}</em>${fmt(v)}${ex?`<small>${ex}</small>`:''}</span>`).join(''));
  const col=v=>v<.35?'var(--bad)':v<.65?'var(--ember)':'var(--moss)';
  const nd=[['Żywność',Math.min(1,days/10),Math.round(Math.min(1,days/10)*100)+'%',days<2?'var(--bad)':days<5?'var(--ember)':'var(--moss)'],
