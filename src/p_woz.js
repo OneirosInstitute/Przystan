@@ -26,9 +26,9 @@ function siteNeeding(p,items){const[pi,pj]=tileOf(p.x,p.z);let best=null,bd=1e9;
     s.inTr=Math.max(0,s.inTr-q);p.siteB=null;p.siteQ=0}}}
   return _ft(p,items)}}
 {const _oa=onArrive;onArrive=function(p){if(p.after!=='siteDrop')return _oa(p);p.after=null;p.wt=0;const s=bById(p.siteB);
-  deposit(p);if(s&&!bDone(s)&&s.mat){s.del=Math.min(s.mat,(s.del||0)+(p.siteQ||0));s.inTr=Math.max(0,(s.inTr||0)-(p.siteQ||0));
+  deposit(p);if(s){s.inTr=Math.max(0,(s.inTr||0)-(p.siteQ||0));if(!bDone(s)&&s.mat){s.del=Math.min(s.mat,(s.del||0)+(p.siteQ||0));
    if(!S.seen.siteDrop){S.seen.siteDrop=1;log(p.name+' niesie urobek prosto na budowę: '+BD[s.kind].n.toLowerCase()+'. Nie trzeba go potem nosić ze składu.')}}
-  p.siteB=null;p.siteQ=0;p.state='idle';p.wait=.3}}
+  }p.siteB=null;p.siteQ=0;p.state='idle';p.wait=.3}}
 // przy zmianie planu niesiony na budowę urobek trafia do zapasów, a budowa przestaje na niego czekać
 {const _pj=planJob;planJob=function(p){if(p.siteB&&p.after!=='siteDrop'){const s=bById(p.siteB);if(s)s.inTr=Math.max(0,(s.inTr||0)-(p.siteQ||0));p.siteB=null;p.siteQ=0}return _pj(p)}}
 // wóz w warsztacie
