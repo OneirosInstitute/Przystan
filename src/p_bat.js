@@ -41,3 +41,16 @@ $('speed').addEventListener('click',e=>{if(!e.target.closest('[data-bat]'))retur
  toast(batOn?'Oszczędzanie baterii: mniej klatek i niższa rozdzielczość':'Oszczędzanie baterii wyłączone')});
 batBtn();
 window.__bat={batFps,get cap(){return batCap},get on(){return batOn}};
+
+// S05: tryb oszczędny aktualizuje tylko *pozy* instancji zwierząt ~8 razy/s.
+// Same stada, polowania i ekonomia nadal są symulowane przez zwykły krok gry.
+let batAnimalAt=-Infinity,batAnimalState=null;
+const batDrawAnimals=drawAnimals;
+drawAnimals=function(){
+ if(batOn&&S){
+  const now=performance.now();
+  if(batAnimalState===S&&now-batAnimalAt<125)return;
+  batAnimalAt=now;batAnimalState=S;
+ }
+ return batDrawAnimals();
+};

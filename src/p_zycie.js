@@ -189,3 +189,26 @@ $('sel').addEventListener('click',e=>{const t=e.target.closest('[data-tloka]');i
 {const _ad=actDaily;actDaily=function(){_ad();if(!S)return;try{rytmDaily();dogDaily()}catch(e){console.warn(e)}}}
 {const _b=boot;boot=function(fresh){_b(fresh);try{dogsInit();selD=null}catch(e){console.warn(e)}}}
 window.__zy={dogAtScreen,get selD(){return selD},dogsInit,dogNew,wolfPups,dogStep,dogDaily,searchStart,tlokaStart,tlokaCan,get dogs(){return S.dogs},dogGuard,dogHunt,kidJob,eveSpot};
+
+/* S03: rodzinne przetwory, jeden rozliczany cykl na dobę.
+   Domownicy muszą rzeczywiście wrócić do domu; przetwarzanie traci część porcji. */
+function householdPreserveDaily(){
+ if(!S||!S.fams||!S.res)return 0;
+ const previousDay=dayN()-1;
+ if(S.householdBatchDay===previousDay)return 0;
+ S.householdBatchDay=previousDay;
+ const eligible=Object.values(S.fams).filter(family=>{
+  const home=family.home?bById(family.home):null;
+  return !!(home&&bDone(home)&&famMembers(family.id).some(person=>person.age>=16&&person.eveD===previousDay&&person.eveK==='dom'));
+ });
+ let batches=0;
+ for(const family of eligible){
+  if(batches>=2||(S.res.warzywa||0)<6)break;
+  S.res.warzywa-=3;S.res.kiszonki=(S.res.kiszonki||0)+2;
+  batches++;
+ }
+ if(batches){S.householdPreserved=(S.householdPreserved||0)+batches;
+  if(!S.seen.homePreserve){S.seen.homePreserve=1;log('Rodziny zaczęły kisić warzywa w domach. Trzy porcje świeżych warzyw dają dwie porcje zapasów na zimę.')}}
+ return batches;
+}
+{const previousRhythm=rytmDaily;rytmDaily=function(){previousRhythm();householdPreserveDaily()}}

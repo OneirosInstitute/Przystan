@@ -118,7 +118,7 @@ function boot(fresh){
   log('Wrak zniszczy wiosenny sztorm. Wolni robotnicy wynoszą z niego, co się da. W zakładce Praca wskaż, którą część rozpoznać: w kajucie kapitana podobno są księgi.');
   log('Każda rodzina potrzebuje domu: bez własnego dachu para nie będzie miała dzieci. Przed zimą potrzebny jest opał z drewutni.')}
  rebuildWorldFromState();wreckG.visible=!S.wreck.gone;buildPeopleMeshes();assign();assignHomes();
- camT.x=tcx(camp.i)+1;camT.z=tcx(camp.j)+2;zoom=zoomT=1.6;overview=null;setSpeed(S.speed||1);resize();regionScan(true);minimapBase();renderTop();renderCtl();
+ camT.x=tcx(camp.i)+1;camT.z=tcx(camp.j)+2;zoom=zoomT=1.6;overview=null;setSpeed(S.speed??1);resize();regionScan(true);minimapBase();renderTop();renderCtl();
  if(innerWidth>760&&innerHeight>460)openSheet('budowa');restoreDecision();if(saveStatus.blocked)saveWarning(new Error('Nie udało się odczytać zapisu. Automatyczne nadpisanie wstrzymane.'))}
 /* ===== pełny ekran i instalacja ===== */
 function fsAvail(){const d=document.documentElement;return !!(d.requestFullscreen||d.webkitRequestFullscreen)&&(document.fullscreenEnabled!==false)}
@@ -132,14 +132,14 @@ addEventListener('beforeinstallprompt',e=>{e.preventDefault();installEv=e;$('goI
 addEventListener('appinstalled',()=>{installEv=null;$('goInstall').hidden=true;try{toast('Gra zainstalowana. Znajdziesz ją na ekranie głównym.')}catch(e){}});
 $('goInstall').addEventListener('click',()=>{if(!installEv)return;installEv.prompt();installEv.userChoice.finally(()=>{installEv=null;$('goInstall').hidden=true})});
 if('serviceWorker' in navigator&&document.querySelector('link[rel=manifest]')&&/^https?:/.test(location.protocol))navigator.serviceWorker.register('sw.js').catch(()=>{});
-function startGame(fresh){if(coarse&&!isStandalone())goFull();$('intro').style.display='none';document.body.classList.remove('pre');audioStart();boot(fresh)}
+function startGame(fresh){if(coarse&&!isStandalone())goFull();$('intro').style.display='none';document.body.classList.remove('pre');audioStart();boot(fresh);if(!saveStatus.blocked)save()}
 let hasSave=false;try{hasSave=!!localStorage.getItem(SAVEKEY)}catch(e){}
 if(hasSave){$('go').textContent='Wróć do osady';$('goNew').hidden=false}
 $('go').addEventListener('click',()=>startGame(false));
 $('goNew').addEventListener('click',()=>{try{localStorage.removeItem(SAVEKEY)}catch(e){}startGame(true)});
 // Zapis awaryjny przy przejściu aplikacji w tło oraz cykliczny niezależny od upływu dni w grze.
 // Odstęp w czasie rzeczywistym działa również przy zatrzymanej symulacji.
-const autosaveIntervalMs=90000;
+const autosaveIntervalMs=15000;
 setInterval(()=>{if(S&&!document.hidden&&!saveStatus.blocked)save()},autosaveIntervalMs);
 addEventListener('pagehide',()=>{if(S)save()});
 addEventListener('beforeunload',()=>{if(S)save()});

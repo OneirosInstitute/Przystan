@@ -9,7 +9,7 @@
 - Ognisko: nowe rozgrywki korzystają z pierwotnego ogniska w miejscu lądowania jako jedynego serca Przystani; migracja starych zapisów jest bezkolizyjna i zachowuje zabudowę.
 - Epoki: dotychczasowe wieloetapowe ciągi zadań głównych I–V oraz dalszych epok pozostają aktywne, bez resetu postępów.
 - Pogoda: zorza ma kontrolę głębi, mniejszą intensywność oraz ograniczenie do odpowiedniego zbliżenia.
-- Autosave: regularnie co 90 sekund czasu rzeczywistego i przy opuszczaniu strony, bez usuwania walidacji zapisu.
+- Autosave: w 3.4.2 od razu po uruchomieniu, co 15 sekund czasu rzeczywistego i przy opuszczaniu strony, bez usuwania walidacji zapisu.
 
 ## Kontrola i ograniczenia
 - Wszystkie bramy CLI i testy automatyczne należy wykonać przed produkcyjnym wdrożeniem: `npm run build`, `npm test`, `npm run test:runtime`, `node tools/verify-package.cjs`.

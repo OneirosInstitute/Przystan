@@ -6,9 +6,15 @@ const CHORE={chrust:['zbiera chrust na opał','Chrust na opał',6],rabanie:['rą
 const isFree=p=>p.job==='rob'||p.job==='bud'||!p.job;
 function choreCands(p){const C=[],sea=seasonIdx(),fd=czNeedDays(),op=S.res.opal,pop=S.people.length,young=p.age<15,old=p.age>=55;
  const winterish=sea===1||sea===2;const add=(k,w)=>C.push([k,w]);
+ // Zapasy planowane przed mrozem: brak opału liczymy na mieszkańca i czas do zimy,
+ // bez przyspieszania każdej klatki ani odbierania graczowi prawa do przydziałów.
+ const forecastDays=sea===1?Math.max(0,YEAR/2-(S.day%YEAR)):0;
+ const winterFuelTarget=Math.max(100,pop*6);
+ const winterPreparation=sea===1&&forecastDays<=YEAR/4?Math.max(0,(winterFuelTarget-op)/winterFuelTarget):0;
  const opNeed=winterish?Math.max(0,(160-op)/160):Math.max(0,(70-op)/70)*.7;
- if(opNeed>0||op<300){add('chrust',.5+3*opNeed);if(S.res.drewno>=25&&!young&&opNeed>.2)add('rabanie',(.2+2*opNeed)*(S.res.drewno>60?1:.5))}
- const room=foodTotal()<foodCap()-20;const fNeed=room&&fd<15?(15-fd)/15:0;
+
+ if(opNeed>0||op<300){add('chrust',.5+3*opNeed+2*winterPreparation);if(S.res.drewno>=25&&!young&&(opNeed>.2||winterPreparation>.2))add('rabanie',(.2+2*opNeed+2*winterPreparation)*(S.res.drewno>60?1:.5))}
+ const room=foodTotal()<foodCap()-20;const fNeed=room?Math.max(fd<15?(15-fd)/15:0,sea===1&&fd<20?(20-fd)/20*.8:0):0;
  if(room&&sea!==2)add('zbior',.4+3*fNeed);
  if(room&&fNeed>0&&!young)add('ryby',.3+2*fNeed);
  const worn=S.bld.filter(b=>bDone(b)&&!b.proj&&!b.fire&&condOf(b)<.8);
@@ -62,15 +68,15 @@ autoJob=function(p){return choreJob(p)};
 function chLog(p,k,x){S.chLog=S.chLog||[];S.chLog.push({k,id:p.id,x:x||'',d:Math.floor(S.day)});if(S.chLog.length>12)S.chLog.shift();S.chDay=S.chDay||{};S.chDay[k]=(S.chDay[k]||0)+1}
 {const _sp=stepPerson;stepPerson=function(p,dt){
   if(p.state==='work'&&p.workKind==='chore'&&isWork()&&!p.fireB){const k=p.chK;
-   if(!k||!CHORE[k]||(!isFree(p)&&!p.limC)){p.state='idle';p.wait=.2;return}
+   if(!k||!CHORE[k]||(!isFree(p)&&!p.limC&&!waterDelivery(p))){p.state='idle';p.wait=.2;return}
    const e=eff(p);p.wt+=dt*e;const T=CHORE[k][2];
    if(k==='chrust'){gainXp(p,'drwal',dt*.3);if(p.wt>=T){p.wt=0;chLog(p,k);finishTrip(p,[{res:'opal',q:1.2}])}return}
    if(k==='rabanie'){gainXp(p,'drwal',dt*.5);if(p.wt>=T*(p.trait==='Silny'?.8:1)){p.wt=0;if(S.res.drewno>=20){S.res.drewno-=1;S.res.opal+=2;chLog(p,k)}else{p.chK=null}p.state='idle';p.wait=.3}return}
    if(k==='naprawa'){const b=bById(p.chB);if(!b||!bDone(b)||b.proj||condOf(b)>=.98){p.chK=null;p.state='idle';p.wait=.2;return}gainXp(p,'ciesla',dt*.6);
     if(p.wt>=T){p.wt=0;const wood=S.res.drewno>=.3;if(wood)S.res.drewno-=.3;b.cond=Math.min(1,condOf(b)+(wood?.06:.025)*craftEff(p,'ciesla'));const own=Object.values(S.fams).find(f=>f.home===b.id);chLog(p,k,own?gen(famName(own.id)):'');p.state='idle';p.wait=.3}return}
    if(k==='woda'){if(p.chPh!==1){if(p.wt>=T){p.wt=0;p.chPh=1;p.carry=[{res:'woda',q:0}];const h=nearHouse(p)||null;const S2=S.bld.filter(b=>bDone(b)&&BD[b.kind].house);const tgt=S2.length?S2[(Math.random()*S2.length)|0]:h;
-      const t=tgt?entryOf(tgt.kind,tgt.i,tgt.j):[camp.i,camp.j+1];p.act='niesie wodę';if(!go(p,t,'chore',null)){p.carry=null;p.state='idle'}}return}
-    if(p.wt>=1){p.wt=0;p.carry=null;p.chPh=0;S.wBonus=(S.wBonus||0)+2.5;chLog(p,k);p.state='idle';p.wait=.2}return}
+      const t=tgt?entryOf(tgt.kind,tgt.i,tgt.j):[camp.i,camp.j+1];p.chWaterTo=t?t.slice():null;p.act='niesie wodę';if(!go(p,t,'chore',null)){p.carry=null;p.chPh=0;p.chWaterTo=null;p.state='idle'}}return}
+    if(p.wt>=1){p.wt=0;p.carry=null;p.chPh=0;p.chWaterTo=null;S.wBonus=(S.wBonus||0)+2.5;chLog(p,k);p.state='idle';p.wait=.2}return}
    if(k==='opieka'){const q=pById(p.chP);if(!q||q.hp>=.85){p.chK=null;p.state='idle';p.wait=.2;return}q.hp=Math.min(1,q.hp+dt*.0035*(offHolder&&offHolder('zielarka')?1.3:1)*(S.res.ziola>0?1.2:1));if(p.wt>=T){p.wt=0;chLog(p,k,q.name);p.state='idle';p.wait=.2}return}
    p.state='idle';return}
   return _sp(p,dt)}}

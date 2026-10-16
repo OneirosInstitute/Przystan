@@ -3,11 +3,13 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {createGame} from './runtime.mjs';
 
-test('autosave has a real-time timer independent of simulated days',()=>{
- const source=fs.readFileSync(new URL('../src/p_end.js',import.meta.url),'utf8');
- assert.match(source,/autosaveIntervalMs=90000/);
- assert.match(source,/setInterval\(\(\)=>\{if\(S&&!document.hidden&&!saveStatus.blocked\)save\(\)\}/);
- assert.match(source,/addEventListener\('pagehide'/);
+test('autosave retains an open decision while simulation is paused',()=>{
+ const runtime=createGame();runtime.game.startGame(true);
+ runtime.evaluate("openEvent(EVENTS.find(event=>event.id==='swieto'),{})");
+ runtime.advanceTime(15000);
+ const state=JSON.parse(runtime.memory.get('przystan-v7'));
+ assert.equal(state.pendingDecision.id,'swieto');
+ assert.equal(state.speed,0);
 });
 test('building panel lists requirements for locked residential upgrade and household reserves',()=>{
  const runtime=createGame();

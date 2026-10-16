@@ -1,6 +1,6 @@
 
 /* ================= 1.0: szlif — wydajność, zapis odporny na wersje, nowe wyspy i wyzwania, łagodny początek, „Od ostatniego razu”, „Na co czekamy”, rytm sesji ================= */
-const GAME_VER='3.4.1';
+const GAME_VER='3.4.2';
 // ---------- wydajność: gotowe budynki scalane w jedną bryłę na materiał ----------
 const _mInv=new THREE.Matrix4(),_mM=new THREE.Matrix4(),_mN=new THREE.Matrix3(),_vP=new THREE.Vector3(),_vN=new THREE.Vector3();
 function mergeGroup(g){if(!g)return 0;g.updateMatrixWorld(true);_mInv.copy(g.matrixWorld).invert();const fireSet=new Set(fires.map(f=>f.g));const byMat=new Map();
@@ -108,5 +108,5 @@ function rhythmDaily(){if(Math.floor(rday())%SD!==0)return;const min=(performanc
 {const _ad=actDaily;actDaily=function(){_ad();chalDaily();rhythmDaily()}}
 {const _mt=mapTick;mapTick=function(rdt){_mt(rdt);hintTick(rdt)}}
 {const _kt=kronTools;kronTools=function(){return _kt()+`<div class="card"><h4>Wskazówki na początek</h4><p class="mut">Pulsujące przyciski prowadzą do najbliższego celu w pierwszych aktach.</p><button data-hints class="${hintsOn?'pri':''}">${hintsOn?'Włączone':'Wyłączone'}</button></div>`+
- `<div class="card"><h4>O grze</h4><p class="mut">Przystań, wersja ${GAME_VER}. Wyspa nr ${S?S.seed||SEED:SEED}${S&&S.chal?', wyzwanie: '+CHAL[S.chal][0].toLowerCase():''}. Gra zapisuje się sama każdego dnia, a co kilka dni zostawia kopię zapasową.</p></div>`}}
+ `<div class="card"><h4>O grze</h4><p class="mut">Przystań, wersja ${GAME_VER}. Wyspa nr ${S?S.seed||SEED:SEED}${S&&S.chal?', wyzwanie: '+CHAL[S.chal][0].toLowerCase():''}. Gra zapisuje się od razu po uruchomieniu osady, co 15 sekund, każdego dnia i przy przejściu w tło. Co kilka dni zostawia kopię zapasową.</p></div>`}}
 document.addEventListener('click',e=>{if(!e.target.closest('[data-hints]'))return;hintsOn=!hintsOn;try{localStorage.setItem('przystan-hints',hintsOn?'1':'0')}catch(er){}renderPanel()});

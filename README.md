@@ -13,6 +13,13 @@ npm run test:runtime # pełna pętla silnika i restarty; bez prawdziwego GPU/DOM
 
 Nie ma zależności do instalowania. Wystarczy Node.js 18 lub nowszy.
 
+## Wydanie 3.4.2
+
+Pełna integracja S01–S05 z naprawą autosave i wdrożeniem przez Termux:
+[docs/WYDANIE_3.4.2_TERMUX.md](docs/WYDANIE_3.4.2_TERMUX.md).
+Zapis powstaje przy starcie, co 15 sekund (także w pauzie) i przy przejściu w tło.
+Kronika pokazuje godzinę udanego zapisu i przycisk „Zapisz teraz”.
+
 ## Stabilizacja 3.4.1
 
 Opis poprawek i ograniczeń: [docs/STABILIZACJA_3.4.1.md](docs/STABILIZACJA_3.4.1.md).

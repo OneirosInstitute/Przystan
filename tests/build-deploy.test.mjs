@@ -14,7 +14,7 @@ test('package integrity detects missing, changed and out-of-root files',async()=
  const directory=await fs.mkdtemp(path.join(os.tmpdir(),'przystan-integrity-'));
  const outside=await fs.mkdtemp(path.join(os.tmpdir(),'przystan-outside-'));
  const file=path.join(directory,'game.txt');const content='expected game';
- const manifest={version:'3.4.1',files:{'game.txt':crypto.createHash('sha256').update(content).digest('hex')}};
+ const manifest={version:'3.4.2',files:{'game.txt':crypto.createHash('sha256').update(content).digest('hex')}};
  try{
   await fs.writeFile(file,content);assert.equal(verifyPackage(directory,manifest),1);
   await fs.writeFile(file,'changed');assert.throws(()=>verifyPackage(directory,manifest));

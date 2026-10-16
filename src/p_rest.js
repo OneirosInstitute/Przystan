@@ -397,7 +397,7 @@ function freshState(){
  return st}
 function packTread(){let s='';for(let k=0;k<N*N;k++)s+=String.fromCharCode(Math.round(tread[k]*15)+65);return s.replace(/A{3,}/g,m=>'~'+m.length+'~')}
 function unpackTread(str){const s=str.replace(/~(\d+)~/g,(m,n)=>'A'.repeat(+n));for(let k=0;k<N*N&&k<s.length;k++)tread[k]=(s.charCodeAt(k)-65)/15}
-function save(){try{if(saveStatus.blocked)throw new Error('Niepoprawny zapis. Automatyczne nadpisanie wstrzymane.');const text=serializeSave();if(!decodeSave(text))throw new Error('Nieprawidłowy stan osady. Poprzedni zapis zachowany.');localStorage.setItem(SAVEKEY,text);saveStatus.ok=true;saveStatus.at=Date.now();saveStatus.error='';const warning=document.getElementById('save-warning');if(warning)warning.hidden=true;return true}catch(error){saveWarning(error);return false}}
+function save(){try{if(saveStatus.blocked)throw new Error('Niepoprawny zapis. Automatyczne nadpisanie wstrzymane.');const text=serializeSave();if(!decodeSave(text))throw new Error('Nieprawidłowy stan osady. Poprzedni zapis zachowany.');localStorage.setItem(SAVEKEY,text);saveStatus.ok=true;saveStatus.at=Date.now();saveStatus.error='';updateSaveStatus();const warning=document.getElementById('save-warning');if(warning)warning.hidden=true;return true}catch(error){saveWarning(error);return false}}
 function load(raw){try{const state=decodeSave(raw===undefined?localStorage.getItem(SAVEKEY):raw);if(!state)return null;
  wildFixRes(state);state.people.forEach(person=>{person.path=null;person.tgt=null;person.after=null;person.mentor=null;person.state=person.job==='wyp'&&person.state==='away'?'away':'idle';person.workKind=null});
  state.bld.forEach(building=>{building.workers=0;building.haul=0;building.inTr=0});
@@ -591,7 +591,7 @@ function stepPerson(p,dt){
     else if(n.type==='tree')items=[{res:'drewno',q:1.5+(hasExt(b,'wiatad')?.5:0)}];else if(n.type==='rock')items=[{res:'kamien',q:1}];else items=[{res:'glina',q:1.5*(hasExt(b,'dol')?1.5:1)}];
     finishTrip(p,items)}return}
   if(k==='hunt'){const h=S.herds[p.herd];if(!h||h.n<=0){p.state='idle';return}p.wt+=dt*e*craftEff(p,'mysliwy')*(tech('h_trop')?1.2:1)*bMul(bById(p.wb))*(typeof dogHunt==='function'?dogHunt(p):1);gainXp(p,'mysliwy',dt);
-   if(p.wt>=6){p.wt=0;h.n--;const a=Math.random()*6.28;h.tx=clamp(h.x+Math.cos(a)*9,-N/2+3,N/2-3);h.tz=clamp(h.z+Math.sin(a)*9,-N/2+3,N/2-3);toastOnce('hunt','Pierwsze udane polowanie');
+   if(p.wt>=6){p.wt=0;h.n--;h.huntPressure=Math.min(1,(h.huntPressure||0)+.25);const a=Math.random()*6.28;h.tx=clamp(h.x+Math.cos(a)*9,-N/2+3,N/2-3);h.tz=clamp(h.z+Math.sin(a)*9,-N/2+3,N/2-3);toastOnce('hunt','Pierwsze udane polowanie');
     const dng={dzik:[.1,.35,'dzika'],niedzwiedz:[.25,.5,'niedźwiedzia'],lis:[.02,.1,'lisa']}[h.type];const trk=tech('h_trop')?.7:1;
     if(dng&&Math.random()<dng[0]*trk*(S.slady&&S.slady.luk?.6:1)*(p.trait==='Ostrożny'?.45:1)*(1-Math.min(.5,.08*offLv('lowczy')))){p.hp=Math.max(.1,p.hp-dng[1]);p.hurt=1;log(p.name+' ranny przez '+dng[2]+'. Wróci do sił za kilka dni.');toast(p.name+' ranny przez '+dng[2])}
     if(h.type==='niedzwiedz')log(p.name+' wraca z polowania na niedźwiedzia. Mięsa starczy na długo, a futro ogrzeje całą rodzinę.');
@@ -731,7 +731,12 @@ function newDay(){
   else if((n.type==='grzyb'||n.type==='zboze'||n.type==='len')&&n.amt<n.max&&sea!==2&&(n.type!=='grzyb'||sea<2)){n.amt=Math.min(n.max,n.amt+.3*K*(n.type==='len'&&tech('u_len')?2:1)*(.6+.8*Math.random()));S.nodeAmt[k]=n.amt}
   else if(n.type==='fish'&&n.amt<n.max){n.amt=Math.min(n.max,n.amt+1.5*K);S.nodeAmt[k]=n.amt}
   else if(n.type==='tree'&&n.grow>0&&sea!==2){n.grow+=K/60*(anyExt('szkolka')?1.5:1);if(n.grow>=1){n.grow=0;n.amt=n.max;S.nodeAmt[k]=n.amt}S.grow[k]=n.grow}});
- S.herds.forEach(h=>{if(h.n<h.max&&sea!==2&&Math.random()<K*(h.type==='wilk'?.03:.11))h.n++});
+ S.herds.forEach(herd=>{
+  herd.huntPressure=Math.max(0,(herd.huntPressure||0)-.045*K);
+  // Stada po intensywnych łowach rozmnażają się wolniej, a dłuższy odpoczynek odtwarza populację.
+  const habitat=Math.max(.25,1-.75*herd.huntPressure);
+  if(herd.n<herd.max&&sea!==2&&Math.random()<K*(herd.type==='wilk'?.03:.11)*habitat)herd.n++;
+ });
  // zagrody: mleko, przychówek, opieka, wilki
  S.bld.forEach(b=>{if(b.kind!=='zagroda'||!bDone(b))return;const a=b.animals||0;const cared=(b.care||0)>20;b.care=0;
   if(a){S.res.mleko+=K*a*(sea===2&&!hasExt(b,'obora')?.4:.9)*(cared?1:.4)*(tech('h_doj')?1.4:1);if(tech('h_siersc'))S.res.wlokna+=K*a*.12;if((sea===3||(tech('h_rozr')&&sea!==2))&&a>=2&&a+S.people.filter(person=>person.kozB===b.id).reduce((sum,person)=>sum+(person.kozN||0),0)<penCap(b)&&Math.random()<K*.06*a/2*(tech('h_rozr')?2:1)){b.animals++;log('W zagrodzie urodziło się koźlę.')}

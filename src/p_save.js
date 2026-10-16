@@ -1,6 +1,8 @@
 
 /* Trwałość zapisu: walidacja przed zmianą stanu i jawny wynik operacji. */
 const saveStatus={ok:null,at:0,error:'',blocked:false,blockedRaw:null};
+function saveStatusText(){return saveStatus.ok===true?'Zapisano w przeglądarce o '+new Date(saveStatus.at).toLocaleTimeString('pl-PL')+'.':saveStatus.ok===false?'Zapis nie działa. Pobierz plik awaryjny.':'Oczekiwanie na pierwszy zapis.'}
+function updateSaveStatus(){const element=document.getElementById('save-status');if(element)element.textContent=saveStatusText()}
 function serializeSave(){
  if(!S)throw new Error('Brak osady');
  const snapshot=Object.assign({},S,{rev:packRev(),tread:packTread(),ver:GAME_VER,saveSchema:1});
@@ -8,6 +10,7 @@ function serializeSave(){
 }
 function saveWarning(error){
  saveStatus.ok=false;saveStatus.error=String(error&&error.message||error);
+ updateSaveStatus();
  toast('Nie udało się zapisać gry. Pobierz aktualny zapis do pliku.');
  let warning=document.getElementById('save-warning');
  if(!warning||!warning.dataset.saveWarning){
@@ -66,7 +69,9 @@ function validateSave(state){
   if(!['k','m'].includes(person.sex)||!Object.hasOwn(TRAITS,person.trait)||!positive(person.hp)||person.hp>1)return false;
   if(person.job!==null&&person.job!==undefined&&!['rob','bud','wb','zwiad','zdun','czyt','wyp'].includes(person.job))return false;
   if(!object(person.sk)||!object(person.xp)||!Object.values(person.sk).every(positive)||!Object.values(person.xp).every(positive))return false;
-  if(person.carry!==null&&person.carry!==undefined&&(!Array.isArray(person.carry)||!person.carry.every(item=>object(item)&&typeof item.res==='string'&&Object.hasOwn(RN,item.res)&&positive(item.q))))return false;
+  // Woda jest znacznikiem wykonywanej pracy (q=0), a nie zasobem magazynu.
+  if(person.carry!==null&&person.carry!==undefined&&(!Array.isArray(person.carry)||!person.carry.every(item=>object(item)&&typeof item.res==='string'&&positive(item.q)&&(Object.hasOwn(RN,item.res)||waterDelivery(person)))))return false;
+  if(person.chWaterTo!==null&&person.chWaterTo!==undefined&&(!Array.isArray(person.chWaterTo)||person.chWaterTo.length!==2||!person.chWaterTo.every(coordinate=>Number.isInteger(coordinate)&&coordinate>=0&&coordinate<N)))return false;
  }
  if(!state.people.every(person=>person.pair===null||person.pair===undefined||peopleIds.has(person.pair)))return false;
  if(!Object.values(state.fams).every(family=>object(family)&&id(family.id)&&(family.sp===undefined||positive(family.sp))&&(family.home===null||family.home===undefined||buildingIds.has(family.home))))return false;
