@@ -32,7 +32,7 @@ function e3ActScene(){const a=S.e3.a,A=E3A[a];if(!A)return;S.e3.sceneQ=a}
   return{ch:`Epoka III · Akt ${E3RN[S.e3.a]} · ${A.n}`,t:x[0],d,how:x[2]}}}
 function e3Tick(){if(!S)return;
  if(!S.e3&&S.epoch===2&&S.e2&&S.e2.endName&&!S.e3Q)S.e3Q=1;
- if(S.e3Q&&!S.e3&&!evOpen&&!placing&&isWork()){S.e3Q=0;openEvent({ey:'Epoka III',t:'Cała wyspa',text:()=>`Minęło ${Math.floor(S.day/YEAR)} ${lata(Math.floor(S.day/YEAR))} od rozbicia. Osada ma już swoją nazwę w pieśniach, a przysiółki swoje drogi.\n\nAle mapa wyspy wciąż ma puste miejsca. Dzieci tych, którzy budowali przysiółki, pytają, co jest dalej.`,
+ if(S.e3Q&&!S.e3&&!evOpen&&!placing&&isWork()){S.e3Q=0;openEvent({id:'e3-start',ey:'Epoka III',t:'Cała wyspa',text:()=>`Minęło ${Math.floor(S.day/YEAR)} ${lata(Math.floor(S.day/YEAR))} od rozbicia. Osada ma już swoją nazwę w pieśniach, a przysiółki swoje drogi.\n\nAle mapa wyspy wciąż ma puste miejsca. Dzieci tych, którzy budowali przysiółki, pytają, co jest dalej.`,
    opts:[{n:'Wyspa ma być cała nasza',d:'zaczyna się epoka III',f:()=>{e3Start();return'Wiec postanawia: w każdej krainie ma się palić nasz ogień.'}}]},{});return}
  if(e3On()&&S.e3.a>=11)S.know.e3_zajazd='tak';{const on=e3On(),i=BKEYS.indexOf('zajazd');if(on&&i<0)BKEYS.push('zajazd');else if(!on&&i>=0)BKEYS.splice(i,1)}
  if(!e3On()||S.e3.done)return;

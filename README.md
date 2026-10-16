@@ -7,9 +7,31 @@ Spokojna gra o osiemnastu rozbitkach, którzy budują osadę na dzikiej, nieznan
 ```bash
 npm start          # buduje dist/ i uruchamia serwer na http://localhost:3000
 npm run build      # tylko buduje dist/
+npm test           # składnia obu skryptów i regresje logiki/API
+npm run test:runtime # pełna pętla silnika i restarty; bez prawdziwego GPU/DOM
 ```
 
 Nie ma zależności do instalowania. Wystarczy Node.js 18 lub nowszy.
+
+## Stabilizacja 3.4.1
+
+Opis poprawek i ograniczeń: [docs/STABILIZACJA_3.4.1.md](docs/STABILIZACJA_3.4.1.md).
+Testy uruchamiaj po buildzie. Czerwony build lub test zatrzymuje commit i wdrożenie.
+Scenariusze silnika używają prawdziwego kodu gry oraz atrap DOM, canvas i GPU.
+Nie zastępują testu Chrome/PWA i dotyku na telefonie.
+
+Zapis pozostaje pod kluczem `przystan-v7`. Błąd zapisu jest widoczny, a eksport
+zapisuje aktualną osadę. Import odrzuca dane nieprawidłowe i zapis innej wyspy;
+nie zastępuje nimi poprawnej osady. Przy nieodczytywalnym primary i backupie
+automatyczne nadpisanie jest wstrzymane, a plik można zachować do odzyskania.
+
+Pojemność żywności oznacza miejsce pod osłoną. Nadmiar nie znika: pozostaje
+dostępny poza osłoną i szybciej się psuje. Karta osady pokazuje tę ilość.
+
+Wyspa tygodnia publikuje **deklarowane wyniki lokalnej gry**. Serwer przelicza
+punkty z metryk i rozdziela próby podpisanym tokenem, lecz nie odtwarza przebiegu
+gry ani nie potwierdza jej uczciwości. Nazwa nie jest kontem. Dla trwałości
+tabeli oraz klucza podpisu ustaw trwały `DATA_DIR`; plik klucza pozostaje na serwerze.
 
 ## Railway
 

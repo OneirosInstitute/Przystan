@@ -87,7 +87,7 @@ const PATHS={dom:{n:'Dom',q:'„To nasza wyspa.”',d:'gospodarze: gród, prawo 
  morze:{n:'Morze',q:'„Zbudujemy statek.”',d:'łodzie, dalekie łowiska i sąsiednie bezludne wyspy',goal:'Łodzie i bezludne wyspy'}};
 function wiecPokolen(){if(S.epoch===2)return;const f=S.people.filter(p=>!p.born&&isAdult(p)).sort((a,b)=>b.age-a.age)[0];
  const teller=f?`${f.name}, ${Math.floor(f.age)} lat, ostatni${f.sex==='k'?'a':''} z tych, którzy pamiętają statek`:'najstarsza z córek rozbitków, która zna opowieść od matki';
- openEvent({ey:'Wiec pokoleń',t:'Czym mamy być dalej?',
+ openEvent({id:'campaign-route',ey:'Wiec pokoleń',t:'Czym mamy być dalej?',
   text:()=>`Cała osada przy jednym ogniu, także ludzie z przysiółków. Mówi ${teller}. Opowiada o statku, o sztormie, o pierwszej nocy na plaży i o tych, których już nie ma. Młodzi słuchają, jakby to była baśń.\n\nPotem wiec musi zdecydować, dokąd osada pójdzie dalej. Tej decyzji nie da się cofnąć.`,
   opts:Object.entries(PATHS).map(([k,p])=>({n:p.n+': '+p.q,d:p.d,f:()=>{S.epoch=2;S.path=k;S.finDay=S.day;pamAdd(5,'wiec');song('Pieśń o wiecu pokoleń');log(`Wiec pokoleń wybiera drogę: ${p.n}. ${p.q}`);setTimeout(ksiegaRozbitkow,600);return`Wiec wybrał: ${p.n}. Kończy się epoka rozbitków. Zaczyna się epoka ich dzieci.`}}))},{})}
 function ksiegaText(){if(typeof ludInit==='function')ludInit();const L=[],yrs=Math.floor(S.day/YEAR),r=S.rody||{};const nm=S.vname||'Przystań';

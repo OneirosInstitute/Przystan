@@ -49,7 +49,7 @@ function foundHamlet(m,why,rid,o){if(!m.length)return null;o=o||{};ludInit();con
 const hamM={};
 function hamVis(){if(!S||!S.hamlets)return;S.hamlets.forEach(h=>{if(!hamM[h.id]){hamClear(h);const g=new THREE.Group();const a=makeBuildingModel('szalas',null);a.position.set(-1.4,0,.2);a.rotation.y=.4;g.add(a);
   if(h.pop>=5){const b=makeBuildingModel('chata',null);b.position.set(1.5,0,-.3);b.rotation.y=-.5;g.add(b)}const x=tcx(h.i),z=tcx(h.j);g.position.set(x,Hy(x,z),z);g.scale.setScalar(.9);scene.add(g);hamM[h.id]=g;hamM[h.id].pop5=h.pop>=5}
-  else if(h.pop>=5&&!hamM[h.id].pop5){scene.remove(hamM[h.id]);delete hamM[h.id];return hamVis()}
+  else if(h.pop>=5&&!hamM[h.id].pop5){retireObjects(hamM[h.id]);delete hamM[h.id];return hamVis()}
   hamM[h.id].visible=revAt(h.i,h.j)})}
 {const _rs=regionScan;regionScan=function(q){_rs(q);if(S&&S.hamlets&&S.hamlets.length)hamVis()}}
 function wiezWord(h){return h.wiez>=.6?'bliska':h.wiez>=.4?'dobra':h.wiez>=.2?'chłodna':'prawie zerwana'}
@@ -69,7 +69,7 @@ function rodyHTML(){const ids=Object.keys(S.rody||{});if(!ids.length)return'';le
   hm.forEach(x=>lines.push(`<span class="mut">przysiółek ${x.name}: ${x.pop} osób</span>`));
   h+=`<div class="card"><h4>${S.rody[id]&&S.rody[id].znak?S.rody[id].znak+' ':''}${rodName(id).replace(/^r/,'R')}</h4>${lines.map(l=>`<p style="margin:4px 0">${l}</p>`).join('')}</div>`});return h}
 function ludCard(p){const q=p.pair!==null?pById(p.pair):null;const fr=friendsOf(p),rv=rivalsOf(p);
- return`<p class="mut">${S.rody&&S.rody[p.rod]&&S.rody[p.rod].znak?S.rody[p.rod].znak+' ':''}${rodName(p.rod)}${q?` · ${p.sex==='k'?'mąż':'żona'}: ${q.name}`:''}${p.waitHome?' · czekają na własny dom':''}</p>`+
+ return`<p class="mut">${S.rody&&S.rody[p.rod]&&S.rody[p.rod].znak?S.rody[p.rod].znak+' ':''}${escapeHtml(rodName(p.rod))}${q?` · ${p.sex==='k'?'mąż':'żona'}: ${escapeHtml(q.name)}`:''}${p.waitHome?' · czekają na własny dom':''}</p>`+
   (p.age>=14?`<p>Nastrój: <b>${zadWord(p)}</b>${p.zr&&p.zr.length?' · '+p.zr.join(', '):''}</p><p class="mut">Mir: ${mirWord(p)}${fr.length?' · przyjaciele: '+fr.map(x=>x.name).join(', '):' · bez bliskich przyjaciół'}${rv.length?' · zatarg: '+rv[0].name:''}</p>`:'')}
 // ---- rytm dnia ----
 function single(p){return p.pair===null&&p.age>=(p.sex==='m'?18:17)&&p.age<=46&&!p.waitHome&&!(p.widowT&&S.day<p.widowT)}

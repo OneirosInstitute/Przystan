@@ -11,7 +11,7 @@ const costTxt=c=>Object.keys(c).length?Object.entries(c).map(([k,v])=>RN[k].toLo
 function bldRelease(b){S.people.forEach(p=>{
   if(p.tgt===b){p.tgt=null;p.path=null;p.state='idle';p.wait=.2;p.after=null}
   if(p.haulB===b.id){haulEnd(p);if(p.state!=='away'){p.path=null;p.state='idle';p.wait=.2}}
-  if(p.siteB===b.id){if(p.carry)deposit(p);p.siteB=null;p.siteQ=0;p.path=null;p.state='idle';p.wait=.2}
+  if(p.siteB===b.id){p.siteB=null;p.siteQ=0;p.path=null;p.state='idle';p.wait=.2}
   if(p.job==='wb'&&p.wb===b.id){p.job='rob';p.wb=null;if(p.state==='work'){p.state='idle';p.wait=.2}}})}
 function bldCancel(id){const b=bById(id);if(!b||bDone(b))return;const back=cancelBack(b);Object.entries(back).forEach(([k,v])=>S.res[k]=(S.res[k]||0)+v);
  bldRelease(b);removeBuilding(b);rozbAsk=null;log(`Budowa odwołana: ${BD[b.kind].n.toLowerCase()}. Wraca do zapasów: ${costTxt(back)}.`);toast('Budowa odwołana');renderPanel()}

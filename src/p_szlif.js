@@ -1,12 +1,12 @@
 
 /* ================= 1.0: szlif — wydajność, zapis odporny na wersje, nowe wyspy i wyzwania, łagodny początek, „Od ostatniego razu”, „Na co czekamy”, rytm sesji ================= */
-const GAME_VER='3.4';
+const GAME_VER='3.4.1';
 // ---------- wydajność: gotowe budynki scalane w jedną bryłę na materiał ----------
 const _mInv=new THREE.Matrix4(),_mM=new THREE.Matrix4(),_mN=new THREE.Matrix3(),_vP=new THREE.Vector3(),_vN=new THREE.Vector3();
 function mergeGroup(g){if(!g)return 0;g.updateMatrixWorld(true);_mInv.copy(g.matrixWorld).invert();const fireSet=new Set(fires.map(f=>f.g));const byMat=new Map();
  const walk=o=>{if(o!==g&&(o.userData.noMerge||fireSet.has(o)||o.isSprite))return;for(const c of o.children.slice())walk(c);
   if(o.isMesh&&!o.isInstancedMesh&&o.visible&&o.geometry&&o.material&&!Array.isArray(o.material)&&o.geometry.attributes.position){const m=o.material;if(!byMat.has(m))byMat.set(m,[]);byMat.get(m).push(o)}};
- walk(g);let saved=0;
+ walk(g);let saved=0;const retired=[];
  byMat.forEach((list,mat)=>{if(list.length<2)return;let tot=0;const parts=list.map(o=>{const geo=o.geometry.index?o.geometry.toNonIndexed():o.geometry;tot+=geo.attributes.position.count;return[o,geo]});
   const P=new Float32Array(tot*3),Nn=new Float32Array(tot*3),U=new Float32Array(tot*2),useC=!!mat.vertexColors,C=useC?new Float32Array(tot*3):null;let off=0;
   for(const[o,geo]of parts){_mM.multiplyMatrices(_mInv,o.matrixWorld);_mN.getNormalMatrix(_mM);const pa=geo.attributes.position,na=geo.attributes.normal,ua=geo.attributes.uv,ca=geo.attributes.color;
@@ -16,8 +16,8 @@ function mergeGroup(g){if(!g)return 0;g.updateMatrixWorld(true);_mInv.copy(g.mat
    off+=pa.count;if(geo!==o.geometry)geo.dispose()}
   const mg=new THREE.BufferGeometry();mg.setAttribute('position',new THREE.BufferAttribute(P,3));mg.setAttribute('normal',new THREE.BufferAttribute(Nn,3));mg.setAttribute('uv',new THREE.BufferAttribute(U,2));if(C)mg.setAttribute('color',new THREE.BufferAttribute(C,3));mg.computeBoundingSphere();
   const mm=new THREE.Mesh(mg,mat);mm.castShadow=list.some(o=>o.castShadow);mm.receiveShadow=true;mm.userData.bid=g.userData.bid;mm.userData.merged=1;
-  list.forEach(o=>{if(o.parent)o.parent.remove(o)});g.add(mm);saved+=list.length-1});
- return saved}
+  list.forEach(o=>{if(o.parent)o.parent.remove(o)});g.add(mm);retired.push(...list);saved+=list.length-1});
+ if(retired.length)retireObjects(retired);return saved}
 {const _ab=addBuildingMesh;addBuildingMesh=function(b){const g=_ab(b);if(bDone(b)&&!g.userData.crops&&!/nomerge/.test(location.search)){g.userData.bid=b.id;g.traverse(o=>{if(o.userData&&(o===g.userData.stock))o.userData.noMerge=1});try{mergeGroup(g)}catch(e){console.warn(e)}}return g}}
 {const _sm=stockMake;stockMake=function(g,b){_sm(g,b);if(g.userData.stock)g.userData.stock.userData.noMerge=1}}
 {const _hv=hamVis;hamVis=function(){_hv();Object.values(hamM).forEach(g=>{if(!g.userData.merged0){g.userData.merged0=1;try{mergeGroup(g)}catch(e){}}})}}
@@ -28,10 +28,15 @@ function saveFix(o){if(!o||!o.people)return o;o.ver=o.ver||'0.x';
  o.hamlets=o.hamlets||[];o.lad=o.lad||{};o.bld=o.bld||[];o.exps=o.exps||[];o.found=o.found||[];o.seen=o.seen||{};o.res=o.res||{};o.toolQ=o.toolQ||{};o.kron=o.kron||[];
  ['maka','chleb','ser','kiszonki','naczynia','warzywa','miod','ziola'].forEach(k=>{if(o.res[k]===undefined)o.res[k]=0});
  Object.values(o.fams||{}).forEach(f=>{if(f.sp===undefined)f.sp=0});if(o.diff===undefined)o.diff=1;if(!o.seed)o.seed=2207;return o}
-{const _sv=save;save=function(){try{if(S){S.sess=S.sess||{};S.sess.lt=Date.now();const d=Math.floor(S.day);if(d%4===0&&S._bakD!==d){const cur=localStorage.getItem(SAVEKEY);if(cur)localStorage.setItem(SAVEKEY+'-bak',cur);S._bakD=d}}}catch(e){}_sv()}}
+{const originalSave=save;save=function(){if(S){S.sess=S.sess||{};S.sess.lt=Date.now()}
+ const day=S&&Math.floor(S.day);let previous=null;try{if(S&&day%4===0&&S._bakD!==day){const current=localStorage.getItem(SAVEKEY);if(decodeSave(current))previous=current}}catch(error){}
+ const success=originalSave();if(success&&previous){try{localStorage.setItem(SAVEKEY+'-bak',previous);S._bakD=day}catch(error){toast('Zapisano grę, ale nie udało się odświeżyć kopii zapasowej.')}}return success}}
 let loadNote='';
-{const _ld=load;load=function(){const o=_ld();if(o){if(o._fixNodes)loadNote='Zapis z dawnej wersji: zasoby przyrody na wyspie wczytane na nowo.';return o}
- try{const s=localStorage.getItem(SAVEKEY+'-bak');if(s){const cur=localStorage.getItem(SAVEKEY);localStorage.setItem(SAVEKEY,s);const o2=_ld();if(o2){loadNote='Główny zapis był uszkodzony. Wczytano kopię sprzed kilku dni.';return o2}if(cur)localStorage.setItem(SAVEKEY,cur)}}catch(e){}return null}}
+{const originalLoad=load;load=function(raw){const state=originalLoad(raw);if(state){saveStatus.blocked=false;saveStatus.blockedRaw=null;if(state._fixNodes)loadNote='Zapis z dawnej wersji: zasoby przyrody na wyspie wczytane na nowo.';return state}
+ if(raw!==undefined)return null;
+ try{const backup=originalLoad(localStorage.getItem(SAVEKEY+'-bak'));if(backup){saveStatus.blocked=false;saveStatus.blockedRaw=null;loadNote='Główny zapis był uszkodzony. Wczytano kopię sprzed kilku dni.';return backup}
+  const current=localStorage.getItem(SAVEKEY);if(current){saveStatus.blocked=true;saveStatus.blockedRaw=current}
+ }catch(error){saveStatus.blocked=true}return null}}
 
 // ---------- nowe wyspy i wyzwania (przy nowej grze) ----------
 let CHAL_SEL=0;try{CHAL_SEL=+(localStorage.getItem('przystan-chal')||0)}catch(e){}
@@ -49,7 +54,7 @@ let freshFlag=false;try{freshFlag=localStorage.getItem('przystan-fresh')==='1'}c
   if(b.dataset.isle){const s=b.dataset.isle==='known'?2207:1000+Math.floor(Math.random()*89000);try{localStorage.setItem('przystan-seed',String(s));localStorage.setItem('przystan-fresh','1')}catch(er){}location.reload()}})
  if(freshFlag)setTimeout(()=>{const go=$('go');go.textContent='Zejdź na brzeg: nowa gra';$('goNew').hidden=true},0)}
 {const _sg=startGame;startGame=function(fresh){if(freshFlag){fresh=true;freshFlag=false;try{localStorage.removeItem('przystan-fresh')}catch(e){}}
- if(!fresh){try{const o=JSON.parse(localStorage.getItem(SAVEKEY)||'null');if(o&&o.seed&&o.seed!==SEED){localStorage.setItem('przystan-seed',String(o.seed));location.reload();return}}catch(e){}}
+
  _sg(fresh)}}
 {const _fs=freshState;freshState=function(){const st=_fs();st.chal=CHAL_SEL;st.seed=SEED;if(CHAL_SEL===1){const gone=new Set(st.people.filter(p=>p.fam===3||p.fam===6).map(p=>p.id));st.people=st.people.filter(p=>!gone.has(p.id));delete st.fams[3];delete st.fams[6];st.people.forEach(p=>{if(gone.has(p.pair))p.pair=null})}st.crew0=st.people.length;return st}}
 {const _dw=diffWeather;diffWeather=function(){_dw();if(!S||S.chal!==2)return;const w=S.weather,sea=seasonIdx();if(w.adj2===Math.floor(S.day))return;w.adj2=Math.floor(S.day);

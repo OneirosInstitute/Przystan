@@ -63,7 +63,7 @@ function spawnWalker(h,dir,look,carry,delay){const P=hamPath[h.id];if(!P||walker
 function walkGift(h,res){spawnWalker(h,-1,null,1,0);if(h.pop>=6&&Math.random()<.5)spawnWalker(h,-1,null,1,3+Math.random()*4)}
 function kolFrame(rdt){if(!S||!walkers.length)return;const gdt=rdt*(S.speed||0);
  for(let w=walkers.length-1;w>=0;w--){const W=walkers[w];if(W.wait>0){W.wait-=gdt;W.m.visible=false;continue}
-  W.s+=W.dir*W.sp*gdt;if(W.s<0||W.s>W.P.len){wGroup.remove(W.m);walkers.splice(w,1);continue}
+  W.s+=W.dir*W.sp*gdt;if(W.s<0||W.s>W.P.len){retireObjects(W.m);walkers.splice(w,1);continue}
   const c=W.P.cum;let lo=0,hi=c.length-1;while(hi-lo>1){const md=(lo+hi)>>1;if(c[md]<=W.s)lo=md;else hi=md}
   const a=W.P.pts[lo],b=W.P.pts[hi],u=(W.s-c[lo])/Math.max(1e-4,c[hi]-c[lo]),x=a[0]+(b[0]-a[0])*u,z=a[1]+(b[1]-a[1])*u;
   W.m.position.set(x,Hy(x,z),z);W.m.rotation.y=Math.atan2((b[0]-a[0])*W.dir,(b[1]-a[1])*W.dir);const t=tileOf(x,z);W.m.visible=revAt(t[0],t[1]);
@@ -82,9 +82,9 @@ function ringFence(g,x0,z0,R,tall,gapA){const step=tall?.34:1.0,n=Math.floor(R*6
    for(const hy of[.35,.65]){dm.position.set((a[0]+b[0])/2,(Hy(a[0],a[1])+Hy(b[0],b[1]))/2+hy,(a[1]+b[1])/2);dm.rotation.set(0,-Math.atan2(b[1]-a[1],b[0]-a[0]),0);dm.scale.set(L,1,1);dm.updateMatrix();rm.setMatrixAt(q++,dm.matrix)}}
   rm.count=q;g.add(rm)}}
 const hamM2={};
-hamVis=function(){if(!S||!S.hamlets)return;Object.keys(hamM).forEach(id=>{if(!S.hamlets.some(h=>h.id===+id)){const g=hamM[id];if(hamRib[id]){scene.remove(hamRib[id]);delete hamRib[id]}for(let k=fires.length-1;k>=0;k--)if(fires[k].g.parent===g)fires.splice(k,1);scene.remove(g);delete hamM[id]}});
+hamVis=function(){if(!S||!S.hamlets)return;Object.keys(hamM).forEach(id=>{if(!S.hamlets.some(h=>h.id===+id)){const g=hamM[id];if(hamRib[id]){retireObjects(hamRib[id]);delete hamRib[id]}for(let k=fires.length-1;k>=0;k--)if(fires[k].g.parent===g)fires.splice(k,1);retireObjects(g);delete hamM[id]}});
  S.hamlets.forEach(h=>{if(hamPath[h.id]===undefined)kolPath(h);const key=h.st+'|'+(h.pal?1:0)+'|'+(hamPath[h.id]?1:0);let g=hamM[h.id];
-  if(g&&g.userData.key!==key){for(let k=fires.length-1;k>=0;k--)if(fires[k].g.parent===g)fires.splice(k,1);scene.remove(g);g=null;delete hamM[h.id]}
+  if(g&&g.userData.key!==key){for(let k=fires.length-1;k>=0;k--)if(fires[k].g.parent===g)fires.splice(k,1);retireObjects(g);g=null;delete hamM[h.id]}
   if(!g){g=new THREE.Group();g.userData={key,chims:[]};const x0=tcx(h.i),z0=tcx(h.j),a0=h.id*2.1;const R=3.2+h.st*.9;
    const x00=x0,z00=z0;nodeBy.tree.forEach(n=>{if(n.amt>0&&Math.hypot(n.x-x00,n.z-z00)<R+(h.pal?2:1.5)){n.amt=0;const k=nodes.indexOf(n);if(k>=0)S.nodeAmt[k]=0;nodeVis(n)}});
    const put=(m,lx,lz,ry)=>{const c=Math.cos(a0),s=Math.sin(a0),wx=x0+lx*c-lz*s,wz=z0+lx*s+lz*c;m.position.set(wx,Hy(wx,wz),wz);m.rotation.y=(ry||0)-a0;g.add(m);return[wx,wz]};

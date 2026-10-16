@@ -27,7 +27,7 @@ const ZNAKI=['◆','▲','●','✚','✦','◐','■','✿','⬟','✶'];
 function giveZnaki(){S.rody=S.rody||{};let i=0;Object.keys(S.rody).forEach(id=>{if(!S.rody[id].znak)S.rody[id].znak=ZNAKI[i%ZNAKI.length];i++})}
 function askVName(){if(!S||S.vname)return;if(evOpen||placing){setTimeout(askVName,4000);return}
  const st=offHolder('starszy')||S.people.filter(isAdult).sort((a,b)=>b.age-a.age)[0];const opts=[['Przystań','tak, jak mówimy od pierwszej nocy'],['Ostoja','miejsce, gdzie można się schronić'],['Zatocze','od zatoki, która nas przyjęła'],[st?placeName(st.name):'Nowa Wieś',st?'od '+gen(st.name)+', który nas tu prowadził':'nowa wieś na nowej ziemi']];
- openEvent({ey:'Wiec',t:'Imię dla osady',text:()=>`Domów jest już kilka, a ludzi coraz więcej. Na wiecu ktoś mówi, że osada potrzebuje imienia, żeby wnuki wiedziały, skąd są. Rody przy okazji wyrzynają swoje znaki na słupach przy domach.`,
+ openEvent({id:'village-name',ey:'Wiec',t:'Imię dla osady',text:()=>`Domów jest już kilka, a ludzi coraz więcej. Na wiecu ktoś mówi, że osada potrzebuje imienia, żeby wnuki wiedziały, skąd są. Rody przy okazji wyrzynają swoje znaki na słupach przy domach.`,
   opts:opts.map(([n,d])=>({n,d,f:()=>{S.vname=n;giveZnaki();pamAdd(5,'nazwa');setVName();return`Od dziś osada nazywa się ${n}. Każdy ród wyrzyna swój znak na słupie przy domu.`}}))},{})}
 // ---- groby z imionami i Dziady ----
 {const _kp=killPerson;killPerson=function(p,why){const nm=p.name;_kp(p,why);S.deadNames=S.deadNames||[];S.deadNames.push(nm);if(law('cmentarz'))pamAdd(1,'grob');

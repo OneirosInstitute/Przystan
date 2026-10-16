@@ -50,7 +50,7 @@ const TECH=[
  {id:'n_pamiec',d:'nauka',r:3,c:1,n:'Księga osady',xp:220,req:['n_szk'],desc:'Wszystko, co umieją mistrzowie, zapisane dla następnych.',eff:'Gdy mistrz umiera, najlepszy uczeń przejmuje jego wiedzę.'}];
 const TECH_BY={};TECH.forEach(t=>TECH_BY[t.id]=t);
 function tech(id){return !!(S&&S.tech&&S.tech[id])}
-function techAvail(t){return !S.tech[t.id]&&!t.sync&&t.req.every(r=>S.tech[r])&&(!t.gate||t.gate())}
+function techAvail(t){return !S.tech[t.id]&&!t.sync&&t.req.every(requirement=>tech(requirement))&&(!t.gate||t.gate())}
 function techTarget(d){const f=S.focus[d];const ft=f&&TECH_BY[f];if(ft&&techAvail(ft))return ft;return TECH.find(t=>t.d===d&&techAvail(t))}
 function techXp(d,v){if(!S||!d||!S.tech)return;if(S.laws&&S.laws.wymiana)v*=1.15;S.dxp[d]=(S.dxp[d]||0)+v;const t=techTarget(d);if(!t){S.bank[d]=Math.min(150,(S.bank[d]||0)+v);return}
  const add=v+(S.bank[d]||0);S.bank[d]=0;S.tp[t.id]=(S.tp[t.id]||0)+add;if(S.tp[t.id]>=t.xp)techDone(t)}
@@ -59,7 +59,7 @@ function techDone(t,quiet){if(S.tech[t.id])return;S.tech[t.id]=1;if(S.focus[t.d]
  if(t.id==='n_znaki'){tribe.forEach(s=>reveal(s.i,s.j,4));log('Znaki prowadzą do miejsc, gdzie dawny lud zostawił swoje ślady. Zaznaczono je na mapie.')}
  if(tab==='wiedza'||tab==='budowa')renderPanel()}
 function techTick(){if(!S||!S.tech)return;TECH.forEach(t=>{if(t.sync&&!S.tech[t.id]&&t.sync())techDone(t,t.id==='r_ciesla')})}
-function techState(t){if(S.tech[t.id])return'done';if(t.sync)return'sync';if(t.req.every(r=>S.tech[r]))return(!t.gate||t.gate())?'avail':'gate';return'lock'}
+function techState(t){if(S.tech[t.id])return'done';if(t.sync)return'sync';if(t.req.every(requirement=>tech(requirement)))return(!t.gate||t.gate())?'avail':'gate';return'lock'}
 let techDom='uprawa',techSel=null;
 function techHTML(){const d=techDom;const list=TECH.filter(t=>t.d===d);const rows=Math.max(...list.map(t=>t.r))+1;const RH=88,W=300;
  const cur=techTarget(d);const dd=DOMS.find(x=>x[0]===d);

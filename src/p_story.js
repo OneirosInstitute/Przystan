@@ -34,7 +34,7 @@ const EVENTS=[
   text:c=>`Morze przyniosło szalupę. W środku ${c.n} wycieńczonych ludzi z innego statku. Proszą o wodę i dach nad głową.`,
   ctx:()=>({n:2+((Math.random()*3)|0)}),
   opts:[{n:'Przyjąć ich do osady',d:'więcej rąk i więcej ust',f:c=>{const names=spawnGroup(c.n);S.hope=clamp(S.hope+.03,0,1);return`Do osady dołączają: ${names.join(', ')}. Trzeba im znaleźć miejsce do spania.`}},
-   {n:'Nakarmić i pomóc odpłynąć',d:'kosztuje 30 jedzenia',f:()=>{FOOD.forEach(k=>{S.res[k]=Math.max(0,S.res[k]-30*(S.res[k]/(foodTotal()||1)))});return'Dostają jedzenie i wodę na drogę. Odpływają wzdłuż brzegu.'}},
+   {n:'Nakarmić i pomóc odpłynąć',d:'kosztuje 30 jedzenia',f:()=>{if(!consumeFood(30))return'Za mało jedzenia na drogę.';return'Dostają jedzenie i wodę na drogę. Odpływają wzdłuż brzegu.'}},
    {n:'Odmówić',d:'osada to zapamięta',f:()=>{S.hope=clamp(S.hope-.08,0,1);return'Szalupa odpływa. Przez kilka dni nikt o tym nie mówi.'}}]},
  {id:'dziennik',w:4,cd:20,cond:()=>(S.logbook||0)<LOGBOOK.length&&S.day>3+(S.logbook||0)*9,t:'Dziennik okrętowy',
   text:()=>`${(S.people.find(p=>p.trait==='Dociekliwy'&&isAdult(p))||S.people[0]).name} czyta przy ognisku kolejną stronę dziennika kapitana:\n\n„${LOGBOOK[S.logbook||0]}”`,
@@ -62,7 +62,7 @@ const EVENTS=[
    {n:'Zabronić dzieciom chodzić tak daleko',d:'',f:()=>'Dzieci obiecują, że nie pójdą. Pewnie pójdą.'}]},
  {id:'swieto',w:2,cd:60,cond:()=>foodTotal()>350&&S.day>15,t:'Święto',
   text:()=>'Spiżarnia jest pełna, a wieczór ciepły. Ktoś proponuje, żeby po raz pierwszy od katastrofy zrobić prawdziwą ucztę.',
-  opts:[{n:'Wyprawić ucztę',d:'kosztuje 60 jedzenia',f:()=>{FOOD.forEach(k=>{S.res[k]=Math.max(0,S.res[k]-60*(S.res[k]/(foodTotal()||1)))});S.hope=clamp(S.hope+.14,0,1);return'Śpiew niesie się nad zatoką do późnej nocy. Pierwszy raz ktoś się śmieje.'}},
+  opts:[{n:'Wyprawić ucztę',d:'kosztuje 60 jedzenia',f:()=>{if(!consumeFood(60))return'Za mało jedzenia na ucztę. Zapasy zostają w spiżarni.';S.hope=clamp(S.hope+.14,0,1);return'Śpiew niesie się nad zatoką do późnej nocy. Pierwszy raz ktoś się śmieje.'}},
    {n:'Skromna kolacja przy ognisku',d:'',f:()=>{S.hope=clamp(S.hope+.04,0,1);return'Zjadają trochę więcej niż zwykle i opowiadają o dawnym życiu.'}}]},
  {id:'mistrz',w:2,cd:80,cond:()=>!!masterCtx(),t:'Stary mistrz',
   text:c=>`${c.m.name} coraz częściej siada w czasie pracy. Mówi, że ręce już nie te, i pyta, komu przekazać fach: ${CN[c.c]}.`,
@@ -77,18 +77,79 @@ const EVENTS=[
 function termCtx(){const k=S.people.find(p=>p.age>=9&&p.age<15&&!S.seen['term'+p.id]);if(!k)return null;const m=S.people.filter(p=>isAdult(p)&&p.age>25).map(p=>{const c=Object.keys(CN).sort((a,b)=>p.sk[b]-p.sk[a])[0];return{m:p,c,l:p.sk[c]}}).filter(x=>x.l>=3).sort((a,b)=>b.l-a.l)[0];if(!m)return null;S.seen['term'+k.id]=1;return{k,m:m.m,c:m.c}}
 function masterCtx(){for(const m of S.people){if(m.age<58||S.seen['mistrz'+m.id])continue;const c=Object.keys(CN).find(c=>m.sk[c]>=3&&!S.people.some(q=>q!==m&&q.sk[c]>=m.sk[c]-1));if(c){S.seen['mistrz'+m.id]=1;return{m,c}}}return null}
 let evOpen=null;
+const DECISION_RECOVERY={
+ 'campaign-route':()=>wiecPokolen(),'village-name':()=>askVName(),
+ 'e2-intro':()=>e2Intro(),'e2-first':()=>e2Roz(),'e2-second':()=>e2Roz2(),'e2-third':()=>e2Roz3(),'e2-law':()=>e2Prawo(),
+ 'e3-start':()=>{S.e3Q=1;e3Tick()}
+};
 function storyTick(){if(evOpen||placing||!S.people.length)return;if(S.evT===undefined)S.evT=S.day+1.2;if(S.day<S.evT||!isWork())return;
  S.evT=S.day+1.3+Math.random()*1.8;S.evCd=S.evCd||{};
  const pool=EVENTS.filter(e=>(S.evCd[e.id]||0)<=S.day&&!(e.once&&S.seen['ev'+e.id])&&e.cond());if(!pool.length)return;
  let tot=pool.reduce((a,e)=>a+e.w,0),x=Math.random()*tot,ev=pool[0];for(const e of pool){if(x<e.w){ev=e;break}x-=e.w}
  const ctx=ev.ctx?ev.ctx():{};if(ev.ctx&&!ctx)return;
  S.evCd[ev.id]=S.day+ev.cd/K;if(ev.once)S.seen['ev'+ev.id]=1;openEvent(ev,ctx)}
-function openEvent(ev,ctx){evOpen={ev,ctx,prev:S.speed};setSpeed(0);const el=$('ev');
- el.innerHTML=`<div class="box"><div class="eyebrow">${ev.ey||'Wydarzenie'}</div><h2>${ev.t}</h2><p>${ev.text(ctx).replace(/\n\n/g,'</p><p>')}</p><div class="opts">${ev.opts.map((o,i)=>`<button data-o="${i}"><b>${o.n}</b>${o.d?`<small>${o.d}</small>`:''}</button>`).join('')}</div></div>`;el.hidden=false;sfx('bell')}
-$('ev').addEventListener('click',e=>{const b=e.target.closest('button');if(!b||!evOpen)return;
- if(b.dataset.o!==undefined){const o=evOpen.ev.opts[+b.dataset.o];const r=o.f(evOpen.ctx)||'';log(evOpen.ev.t+': '+o.n.toLowerCase()+'. '+r);
-  $('ev').querySelector('.box').innerHTML=`<div class="eyebrow">${evOpen.ev.ey||'Wydarzenie'}</div><h2>${evOpen.ev.t}</h2><p>${r}</p><div class="opts"><button data-close="1" class="pri"><b>Dalej</b></button></div>`}
- else if(b.dataset.close){$('ev').hidden=true;setSpeed(evOpen.prev||1);evOpen=null;renderPanel()}});
+function decisionReferences(){return{person:S.people,building:S.bld,family:Object.values(S.fams),hamlet:S.hamlets||[],region:REGIONS,tribe,herd:S.herds,node:nodes}}
+function decisionReferenceId(kind,value,items){return kind==='tribe'?value.k:kind==='herd'?items.indexOf(value):value.id}
+function packDecisionContext(value,ancestors=new Set()){
+ if(!value||typeof value!=='object')return value;
+ for(const [kind,items]of Object.entries(decisionReferences()))if(items.includes(value))return{ref:kind,id:decisionReferenceId(kind,value,items)};
+ if(ancestors.has(value))throw new Error('Cykliczny kontekst decyzji bez identyfikatora');
+ const next=new Set(ancestors);next.add(value);
+ if(Array.isArray(value))return value.map(item=>packDecisionContext(item,next));
+ return Object.fromEntries(Object.entries(value).filter(([,item])=>typeof item!=='function').map(([key,item])=>[key,packDecisionContext(item,next)]));
+}
+function unpackDecisionContext(value){
+ if(!value||typeof value!=='object')return value;
+ if(value.ref){const items=decisionReferences()[value.ref];return items?.find(item=>decisionReferenceId(value.ref,item,items)===value.id)||null}
+ if(Array.isArray(value))return value.map(unpackDecisionContext);
+ return Object.fromEntries(Object.entries(value).map(([key,item])=>[key,unpackDecisionContext(item)]));
+}
+
+function openEvent(ev,ctx){
+ const registered=ev.id&&(EVENTS.includes(ev)||Object.hasOwn(DECISION_RECOVERY,ev.id));
+ evOpen={ev,ctx,prev:S.speed,phase:'choice',focus:document.activeElement};
+ if(registered)S.pendingDecision={id:ev.id,title:ev.t,ey:ev.ey||'Wydarzenie',ctx:packDecisionContext(ctx),prev:S.speed,phase:'choice'};
+ setSpeed(0);const el=$('ev');el.setAttribute('role','dialog');el.setAttribute('aria-modal','true');el.setAttribute('aria-labelledby','event-title');
+ el.innerHTML=`<div class="box"><div class="eyebrow">${ev.ey||'Wydarzenie'}</div><h2 id="event-title">${ev.t}</h2><p>${ev.text(ctx).replace(/\n\n/g,'</p><p>')}</p><div class="opts">${ev.opts.map((o,i)=>`<button data-o="${i}"><b>${o.n}</b>${o.d?`<small>${o.d}</small>`:''}</button>`).join('')}</div></div>`;el.hidden=false;el.querySelector('button')?.focus();sfx('bell');
+}
+function eventResult(current,result){
+ current.phase='result';current.result=result;
+ if(S.pendingDecision&&S.pendingDecision.id===current.ev.id){S.pendingDecision.phase='result';S.pendingDecision.result=result}
+ $('ev').querySelector('.box').innerHTML=`<div class="eyebrow">${current.ev.ey||'Wydarzenie'}</div><h2 id="event-title">${current.ev.t}</h2><p>${result}</p><div class="opts"><button data-close="1" class="pri"><b>Dalej</b></button></div>`;
+ $('ev').querySelector('button')?.focus();
+}
+function restoreDecision(){
+ const pending=S.pendingDecision;if(!pending)return;
+ if(pending.phase==='result'){
+  openEvent({id:pending.id,ey:pending.ey,t:pending.title||'Zapisana decyzja',text:()=>'',opts:[]},{});
+  evOpen.prev=pending.prev;eventResult(evOpen,pending.result||'Decyzja została zapisana.');return;
+ }
+ const definition=EVENTS.find(event=>event.id===pending.id);
+ if(!definition){const resume=DECISION_RECOVERY[pending.id];if(resume){resume();if(evOpen)evOpen.prev=pending.prev}else S.pendingDecision=null;return}
+ const context=unpackDecisionContext(pending.ctx||{});
+ if(Object.values(context).some(value=>value===null)){S.pendingDecision=null;if(definition.once)delete S.seen['ev'+definition.id];return}
+ openEvent(definition,context);evOpen.prev=pending.prev;
+}
+
+function closeEventResult(){const current=evOpen;if(!current||current.phase!=='result')return;
+ $('ev').hidden=true;if(S.pendingDecision&&S.pendingDecision.id===current.ev.id)S.pendingDecision=null;
+ evOpen=null;setSpeed(current.prev===undefined?1:current.prev);current.focus?.focus();renderPanel();
+}
+$('ev').addEventListener('click',event=>{const button=event.target.closest('button');if(!button||!evOpen)return;
+ const current=evOpen;
+ if(button.dataset.o!==undefined&&current.phase==='choice'){
+  const index=Number(button.dataset.o),option=current.ev.opts[index];if(!Number.isInteger(index)||!option)return;
+  current.phase='applying';
+  let result;try{result=option.f(current.ctx)||''}catch(error){console.warn('decyzja',current.ev.id||current.ev.t,error);result='Nie udało się dokończyć decyzji. Zachowaj zapis awaryjny; skutki nie zostaną naliczone ponownie.'}log(current.ev.t+': '+option.n.toLowerCase()+'. '+result);
+  if(evOpen===current)eventResult(current,result);
+ }else if(button.dataset.close)closeEventResult();
+});
+$('ev').addEventListener('keydown',event=>{
+ if(!evOpen)return;if(event.key==='Escape'&&evOpen.phase==='result'){event.preventDefault();closeEventResult();return}
+ if(event.key!=='Tab')return;const buttons=[...$('ev').querySelectorAll('button:not([disabled])')];if(!buttons.length)return;
+ const first=buttons[0],last=buttons[buttons.length-1];
+ if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus()}else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus()}
+});
 
 /* ================= cele osady ================= */
 const GOALS=[
