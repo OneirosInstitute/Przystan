@@ -51,14 +51,14 @@ const CEL={
     :{txt:'Najpierw trzeba poznać tropienie zwierzyny, a potem oswajanie kóz (Wiedza → Hodowla). Wiedza rośnie z pracy myśliwych i rybaków.',hint:['wiedza',null,null]}}
   const seen=S.herds.filter(h=>{if(h.type!=='koza'||h.n<=0)return false;const t=tileOf(h.x,h.z);return revAt(t[0],t[1])});
   const near=(x,z)=>seen.map(h=>[h,Math.hypot(h.x-x,h.z-z)]).sort((a,b)=>a[1]-b[1])[0];
-  const where=()=>{const c=near(tcx(camp.i),tcx(camp.j));if(!c)return'Nikt jeszcze nie widział dzikich kóz: zwiadowcy muszą odsłonić hale.';const t=tileOf(c[0].x,c[0].z),r=regionAt(t[0],t[1]);return`Dzikie kozy pasą się ${Math.round(c[1])} kroków od obozu${r&&r.known&&r.name?`, w krainie ${r.name}`:''}. Zagroda musi stać najwyżej ${BD.zagroda.r+3} kroków od nich.`};
+  const where=()=>{const c=near(tcx(camp.i),tcx(camp.j));if(!c)return'Nikt jeszcze nie widział dzikich kóz: zwiadowcy muszą odsłonić hale.';const t=tileOf(c[0].x,c[0].z),r=regionAt(t[0],t[1]);return`Dzikie kozy pasą się ${Math.round(c[1])} ${krokW(Math.round(c[1]))} od obozu${r&&r.known&&r.name?`, w krainie ${r.name}`:''}. Zagroda musi stać najwyżej ${BD.zagroda.r+3} kroków od nich.`};
   const pens=S.bld.filter(b=>b.kind==='zagroda'),done=pens.filter(bDone);
   if(!done.length){const s=celBuild('zagroda',1);if(!s.wait&&s.kind)s.txt+=' '+where();return s}
   const inR=b=>{const c=bCenter(b);return seen.filter(h=>Math.hypot(h.x-c.x,h.z-c.z)<=rOf(b)+3).reduce((a,h)=>a+h.n,0)};
   const best=done.slice().sort((a,b)=>inR(b)-inR(a)||celWorkers(b).length-celWorkers(a).length)[0],n=inR(best),ws=celWorkers(best);
   if(n<=0){if(!seen.length)return{txt:'Zagroda stoi, ale nikt jeszcze nie widział dzikich kóz. Zwiadowcy muszą odsłonić hale (Praca → Zwiadowcy).',hint:['praca',null,'[data-al="zwiad"][data-d="1"]']};
    const c=near(bCenter(best).x,bCenter(best).z);const t=tileOf(c[0].x,c[0].z),r=regionAt(t[0],t[1]);
-   return{txt:`Zagroda stoi, ale w jej zasięgu nie ma dzikich kóz. Najbliższe stado pasie się ${Math.round(c[1])} kroków od zagrody${r&&r.known&&r.name?`, w krainie ${r.name}`:''}, a zasięg to ${rOf(best)+3}. Postaw zagrodę bliżej hal albo poczekaj, aż kozy zejdą niżej.`,hint:['budowa','uprawa','[data-b="zagroda"]'],kind:'zagroda'}}
+   return{txt:`Zagroda stoi, ale w jej zasięgu nie ma dzikich kóz. Najbliższe stado pasie się ${Math.round(c[1])} ${krokW(Math.round(c[1]))} od zagrody${r&&r.known&&r.name?`, w krainie ${r.name}`:''}, a zasięg to ${rOf(best)+3}. Postaw zagrodę bliżej hal albo poczekaj, aż kozy zejdą niżej.`,hint:['budowa','uprawa','[data-b="zagroda"]'],kind:'zagroda'}}
   if(!ws.length)return{txt:`Zagroda stoi, a w pobliżu pasą się kozy (${n}). Brakuje hodowcy: przydziel kogoś do zagrody (Praca).`,hint:celAddW(best)};
   return{txt:`${ws[0].name} oswaja dzikie kozy w pobliżu zagrody (${n}). ${(best.animals||0)?'Kolejna':'Pierwsza'} będzie po trzech podejściach, teraz ${best.tame||0} z 3.`,wait:1}},
  'Zbierz pierwsze plony z pola':()=>{if(S.know.pole!=='tak')return null;const done=S.bld.filter(b=>b.kind==='pole'&&bDone(b));

@@ -513,8 +513,12 @@ function planJob(p){
   if(b.kind==='mysliwy'){const c=bCenter(b);let best=null,bd=1e9;S.herds.forEach(h=>{const ti=tileOf(h.x,h.z);if(h.n<=0||!ANIMAL[h.type][3]||!revAt(ti[0],ti[1]))return;if(h.type==='niedzwiedz'&&(p.sk.mysliwy||0)<3)return;const dd=Math.hypot(h.x-c.x,h.z-c.z);if(dd<=rOf(b)+3&&dd<bd){bd=dd;best=h}});
    if(!best){p.act='nie ma zwierzyny w zasięgu';return false}const st=nearestWalk(...tileOf(best.x,best.z));if(st&&go(p,st,'hunt',null)){p.herd=S.herds.indexOf(best);p.act='tropi: '+ANIMAL[best.type][0];return true}return false}
   if(b.kind==='zagroda'){const c=bCenter(b);const e=entryOf(b.kind,b.i,b.j);
-   if((b.animals||0)<penCap(b)){let best=null,bd=1e9;S.herds.forEach(h=>{const ti=tileOf(h.x,h.z);if(h.type!=='koza'||h.n<=0||!revAt(ti[0],ti[1]))return;const dd=Math.hypot(h.x-c.x,h.z-c.z);if(dd<=rOf(b)+3&&dd<bd){bd=dd;best=h}});
-    if(best&&Math.random()<.75){const st=nearestWalk(...tileOf(best.x,best.z));if(st&&go(p,st,'tame',null)){p.herd=S.herds.indexOf(best);p.act='oswaja kozy';return true}}}
+   // 3.3.2: łowy — hodowca idzie po kozy tam, gdzie się pasą, choćby daleko na halach, i prowadzi je do zagrody
+   const ws=S.people.filter(q=>q.job==='wb'&&q.wb===b.id),out=ws.filter(q=>q!==p&&(q.after==='tame'||(q.state==='work'&&q.workKind==='tame')||q.kozN)).length;
+   const room=(b.animals||0)+S.people.filter(q=>q.kozB===b.id&&q.kozN).length<penCap(b);
+   const may=isWork()&&room&&(!(b.animals>0)||(ws.length-out>1&&out<2)||(ws.length===1&&Math.random()<.45));
+   if(may){let best=null,bd=1e9;S.herds.forEach(h=>{const ti=tileOf(h.x,h.z);if(h.type!=='koza'||h.n<=0||!revAt(ti[0],ti[1]))return;const dd=Math.hypot(h.x-c.x,h.z-c.z);if(dd<bd){bd=dd;best=h}});
+    if(best&&Math.random()<.8){const st=nearestWalk(...tileOf(best.x,best.z));if(st&&go(p,st,'tame',null)){p.herd=S.herds.indexOf(best);p.kozB=b.id;p.act=bd<=ZAG_NEAR?'oswaja kozy':'idzie na łowy po kozy';return true}}}
    if(e&&go(p,e,'care',b)){p.act=(b.animals||0)?'doi i karmi kozy':'naprawia płot';return true}return false}
   if(d.field){const e=entryOf(b.kind,b.i,b.j);const f=b.field||(b.field={st:'puste',g:0,fert:1,q:0,left:0});
    if(f.st==='puste'){if(f.rot===2){p.act='pole leży odłogiem (ugór)';if(typeof limChore==='function'&&limChore(p,'ugór'))return true;return false}if(!inSow()){p.act='pole czeka na siew';return false}if(S.res.ziarno<10){p.act='brak ziarna do siewu';return false}}
@@ -579,7 +583,7 @@ function stepPerson(p,dt){
     finishTrip(p,[{res:'mieso',q:ANIMAL[h.type][2]},{res:'skory',q:ANIMAL[h.type][3]*(tech('h_garb')?1.5:1)*(hasExt(bById(p.wb),'garbarnia')?1.3:1)}])}return}
   if(k==='tame'){const h=S.herds[p.herd],b=bById(p.wb);if(!h||h.n<=0||!b){p.state='idle';return}p.wt+=dt*e*craftEff(p,'hodowca');gainXp(p,'hodowca',dt);
    if(Math.hypot(h.x-p.x,h.z-p.z)>6){p.state='idle';return}h.calm=S.t+3;
-   if(p.wt>=18){p.wt=0;b.tame=(b.tame||0)+1;if(b.tame>=3){b.tame=0;h.n--;b.animals=(b.animals||0)+1;if(b.animals===1)log(p.name+' sprowadza do zagrody pierwszą oswojoną kozę.');toastOnce('koza','Pierwsza oswojona koza');const e=entryOf(b.kind,b.i,b.j);if(e)go(p,e,'idle',null);else p.state='idle'}}return}
+   if(p.wt>=18){p.wt=0;b.tame=(b.tame||0)+1;if(b.tame>=3){b.tame=0;h.n--;p.kozN=1;p.kozB=b.id;const e=entryOf(b.kind,b.i,b.j);if(e&&go(p,e,'kozdom',null)){p.act='prowadzi kozę do zagrody'}else kozDeliver(p)}}return}
   if(k==='care'){const b=p.tgt;if(!b||!bById(b.id)){p.state='idle';return}gainXp(p,'hodowca',dt);b.care=(b.care||0)+dt*e*craftEff(p,'hodowca');p.wt+=dt;if(p.wt>12){p.state='idle';p.wait=1}return}
   if(k==='field'){const b=p.tgt;if(!b||!bById(b.id)){p.state='idle';return}const f=b.field;gainXp(p,'rolnik',dt);p.wt+=dt*e*craftEff(p,'rolnik');
    if(f.st==='puste'){if(p.wt>=10){p.wt=0;if(S.res.ziarno>=10&&inSow()){S.res.ziarno-=10;f.st='rosnie';f.g=0;f.q=0;log('Zasiano pole. Teraz pielenie i czekanie.');fieldVis(b)}p.state='idle'}}

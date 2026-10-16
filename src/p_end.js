@@ -102,7 +102,7 @@ function frame(now){requestAnimationFrame(frame);if(gfxSkip(now))return;const rd
  placeLabel();
  panT+=rdt;if(panT>1.5){panT=0;if(tab&&tab!=='praca'&&tab!=='budowa')renderPanel()}
  gfxRender();if(typeof photoGrab==='function')photoGrab();
- fpsAcc+=rdt;fpsN++;if(fpsN===45){const avg=fpsAcc/fpsN;if(!gfxSlow(avg)&&avg>.04&&qLevel<2&&!GFX.forced){qLevel++;
+ if(typeof batMeasure!=='function'||batMeasure()){fpsAcc+=rdt;fpsN++}if(fpsN===45){const avg=fpsAcc/fpsN;if(!gfxSlow(avg)&&avg>.04&&qLevel<2&&!GFX.forced){qLevel++;
    if(qLevel===1){renderer.shadowMap.enabled=false;sun.castShadow=false;scene.traverse(o=>{if(o.material)[].concat(o.material).forEach(mm=>mm.needsUpdate=true)})}
    if(qLevel===2){renderer.setPixelRatio(1);tufts.visible=false;resize()}}fpsAcc=0;fpsN=0}}
 function introLight(){scene.background=skyDay;scene.fog.color.copy(skyDay);wUni.uFog.value.copy(skyDay);sun.position.set(camT.x+30,45,camT.z+25);sun.intensity=1.4;hemi.intensity=.9;wUni.uDay.value=1}

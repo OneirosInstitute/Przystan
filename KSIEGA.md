@@ -730,11 +730,44 @@ Nazwa trafia do Księgi rozbitków i na kartę celu. Zdobyte zakończenia zapami
 **Koniec.** Po trzech aktach scena „Wyspa jest nasza”: ogniska na każdym wzgórzu, podsumowanie ludzi, przysiółków i lat, pieśń, rozdział „Epoka III” w Księdze rozbitków. Gra toczy się dalej.
 
 
+## Łowy hodowców (od wersji 3.3.2)
+
+Zagroda nie musi już stać przy halach. Hodowca sam wyprawia się tam, gdzie pasą się dzikie kozy, choćby daleko w głębi wyspy: idzie śladem stada, oswaja jedną kozę w trzech podejściach i prowadzi ją do zagrody na postronku. Na mapie widać kozę idącą za hodowcą. Bliskie stado to krótka droga, dalekie to wyprawa na pół dnia.
+
+- Łowy są za dnia. Gdy w zagrodzie są już kozy, ktoś zostaje przy nich: przy dwóch hodowcach na łowy idzie najwyżej jeden naraz, a samotny hodowca dzieli czas między łowy i dojenie. Bez opieki kozy uciekają, a wilki polują.
+- Stado, które zdążyło odejść, hodowca tropi i idzie za nim.
+- Karta zagrody mówi, jak daleko jest najbliższe dzikie stado i w jakiej krainie oraz kto jest na łowach i kto wraca z kozą. Zagroda nie ma już pierścienia zasięgu.
+- Kury działają tak samo od wersji 3.2: hodowca z kurnika idzie do Kurzej Gęstwiny, gdziekolwiek jest, i przynosi kury. Wilcze szczenięta przynosi ktoś wysłany do legowiska.
+
+## Bateria (od wersji 3.3.2)
+
+Przegląd techniczny zużycia baterii. Gra nie ma liczników działających w tle, nie trzyma ekranu włączonego, nie używa wątków w tle ani synchronizacji w tle; sieć to tylko wynik „Wyspy tygodnia” raz na porę roku. Symulacja i rysowanie stoją, gdy gra jest schowana. Były trzy rzeczy, które niepotrzebnie zużywały baterię:
+
+- **Klatki:** gra rysowała tyle klatek, ile pozwalał ekran (na ekranach 90–120 Hz do 120 na sekundę), także w pauzie, pod otwartą księgą i przy scenie z wyborem. Teraz rysuje 60 klatek przy przesuwaniu, obracaniu i przybliżaniu widoku (i przez półtorej sekundy potem), 30 w zwykłej grze, 20 w pauzie i przy scenie, a 12 pod otwartą księgą na telefonie.
+- **Dźwięk w tle:** szum morza, wiatr i deszcz grały dalej po schowaniu gry albo wygaszeniu ekranu, a przeglądarka uznawała wtedy grę za grającą kartę i nie usypiała jej. Teraz dźwięk staje, gdy gra znika z ekranu, i wraca, gdy wraca gra.
+- **Pulsujące przyciski:** czerwone ostrzeżenia, przycisk tempa w pauzie i podpowiedzi pulsowały bez końca cieniem, który przeglądarka musi przemalowywać w każdej klatce ekranu. Teraz pulsują kilka razy i zostają podświetlone bez ruchu. Przy ustawieniu „ogranicz ruch” w telefonie nie pulsują wcale.
+
+**Tryb „Bateria”** w menu tempa: 30 klatek przy ruchu widoku, 24 w grze, 8 w pauzie i przy scenie, 6 pod księgą, a do tego niższa rozdzielczość rysowania. Gra pamięta wybór.
+
+Pomiar (ekran 120 Hz, wieś epoki II, liczba rysowanych klatek na sekundę):
+
+| Stan | 3.3.1 | 3.3.2 |
+|---|---|---|
+| Gra 1×, bez dotykania | 119 | 31 |
+| Pauza | 122 | 20 |
+| Księga otwarta | 123 | 12 |
+| Scena z wyborem | 122 | 20 |
+| Gra 4× | 122 | 31 |
+| Przesuwanie widoku | 122 | 61 |
+| Dźwięk po schowaniu gry | gra dalej | wstrzymany |
+
+Koszt jednej klatki zależy od wsi: gotowa wieś epoki II to około 2300 wywołań rysowania. Ile klatek daje Nord 6, trzeba sprawdzić na telefonie (licznik w menu tempa).
+
 ## Cele krok po kroku (od wersji 3.3.1)
 
 Opis celu i pulsująca podpowiedź zawsze pokazują następny brakujący krok, a nie pierwszy krok z instrukcji. Wcześniej podpowiedź była stała: przy celu „Oswój pierwszą kozę” pulsował przycisk budowy zagrody także wtedy, gdy zagroda już stała, a karta „Postaw tu” podsuwała drugą zagrodę jako najważniejszy cel.
 
-- **Oswój pierwszą kozę:** najpierw wiedza „Oswajanie kóz” (z postępem w procentach), potem zagroda (z tym, gdzie pasą się dzikie kozy i jak blisko musi stać), potem hodowca (pulsuje przycisk „+” przy zagrodzie w zakładce Praca). Gdy w zasięgu zagrody nie ma kóz, cel mówi, jak daleko jest najbliższe stado i w jakiej krainie. Potem widać, kto oswaja i ile podejść zostało.
+- **Oswój pierwszą kozę:** najpierw wiedza „Oswajanie kóz” (z postępem w procentach), potem zagroda, potem hodowca (pulsuje przycisk „+” przy zagrodzie w zakładce Praca). Potem widać, dokąd hodowca idzie na łowy, kto oswaja, ile podejść zostało i kto prowadzi kozę do zagrody.
 - **Postaw drewutnię i zgromadź 80 opału:** gdy drewutnia stoi pusta, podpowiedź wskazuje przydział ludzi; gdy brakuje kłód, wskazuje drwali.
 - **Zbierz pierwsze plony z pola:** pole w budowie, czekanie na porę siewu, brak ziarna, brak rolnika, wzrost w procentach, żniwa.
 - **Każda rodzina pod własnym dachem, Osada, Wieś:** ile rodzin śpi pod gołym niebem, ile domów jest w budowie, czy młode pary czekają na dom i czy w domach jest ciasno.
@@ -831,7 +864,7 @@ Pierze z kurnika i tokowiska idzie zimą na pierzyny: domy palą mniej opału. O
   - cienie o rozdzielczości 4096, ostrzejsze po przybliżeniu;
   - wiatr w drzewach, trawie, paprociach i trzcinie, mocniejszy w sztorm;
   - blask słońca na wodzie, opadające liście jesienią, pyłki w letnim słońcu;
-  - do około 80 klatek na sekundę, żeby oszczędzać baterię.
+  - liczba klatek ograniczona jak na innych poziomach (od wersji 3.3.2: rozdział „Bateria”).
 - **Grafika 1.7 (Wysoka i Ultra):**
   - światło: złota godzina rano i wieczorem, cieplejsze słońce, chłodniejsze cienie, korekcja barw zależna od pory dnia, wilgotny świat po deszczu;
   - woda: fale z drobnymi zmarszczkami, odbicie nieba silniejsze pod kątem, odblask słońca ostry w południe i szeroki o zmierzchu; cienie chmur sięgają też otwartego morza, więc nie ma już szwu na granicy wody;
@@ -939,6 +972,7 @@ Pierze z kurnika i tokowiska idzie zimą na pierzyny: domy palą mniej opału. O
 | 1.8.3 | poprawka: rozbudowa domu (szałas w chatę, chata w dom) nie zabiera już rodzinie spiżarki; w czasie budowy zapas zostaje w starym domu w granicach jego pojemności |
 | 1.9 | budynki z charakterem: każdy budynek inny (ściany, dachy, spadek, okap), koniki, malowane okiennice, ganki, przybudówki, garnki na płocie, zioła pod okapem, szyldy rzemiosł, wyraźniejsza kuźnia, łaźnia i chata wiecowa |
 | 1.10 | wykonanie budynków: surowe, porządne i mistrzowskie, wyraźnie widoczne po rozbudowie (wielkość, podmurówka, dach, okiennice, obramienia okien, kwiaty, płotek, szyld); karta budynku pokazuje wykonanie i trwałość; odmiany szałasów, studni, zagród i spiżarni |
+| 3.3.2 | łowy hodowców: zagroda może stać przy osadzie, hodowca idzie po dzikie kozy tam, gdzie się pasą, tropi stado i prowadzi kozę na postronku (widać ją na mapie), ktoś zostaje przy kozach, karta zagrody pokazuje najbliższe stado i kto jest na łowach; bateria: klatki dopasowane do tego, co się dzieje (60 przy ruchu widoku, 30 w grze, 20 w pauzie i przy scenie, 12 pod księgą zamiast do 120), dźwięk wstrzymany po schowaniu gry, pulsowanie przycisków skończone po kilku razach, tryb „Bateria” w menu tempa |
 | 3.3.1 | cele krok po kroku: opis i podpowiedź celu wskazują następny brakujący krok (wiedza, budowa, przydział, zasięg, postęp) zamiast stałej instrukcji; przy „Oswój pierwszą kozę” nie pulsuje już budowa zagrody, gdy zagroda stoi, tylko przydział hodowcy albo informacja o kozach poza zasięgiem; „Postaw tu” proponuje budynek celu tylko wtedy, gdy trzeba go postawić; postęp „x z y” przy celach epok II i III; Osada i Wieś zaliczają się od razu |
 | 3.3 | pokolenia: ciąża (dziewięć miesięcy, zapowiedź w kronice, termin na karcie, zaokrąglona sylwetka), poród z rzadkimi bliźniętami, martwymi urodzeniami i śmiercią matki, karmienie i odstęp ok. dwóch lat między dziećmi, śmiertelność niemowląt i małych dzieci zależna od głodu, zimna i chorób, urząd baby pępowej, dwie kobiety przy nadziei na statku, zakaz ślubów tylko w bliskiej rodzinie zamiast w całym rodzie, karta „Pokolenia” z dzietnością, przeżywalnością dzieci, współczynnikiem zastępowalności i tym, co hamuje narodziny; zapasy w cichym widoku: pasek pod datą (dni jedzenia, kłody, opał, ludzie) i karta wszystkich zapasów z dobowym przybytkiem, ta sama karta na górze działu Ludzie; kożuch kobiet nie przepuszcza już fartucha |
 | 3.2.1 | poprawki po testach jakości: serwer nie pada na zniekształconym adresie (wcześniej jedno złe żądanie wyłączało grę do restartu), limit wysyłania wyników nie daje się obejść podrobionym nagłówkiem, zbyt duże żądanie dostaje odpowiedź 413; każde pole jest obsiewane raz w roku (len i kapusta nie dają już dwóch zbiorów), mokra wiosna nie hamuje wzrostu na zwykłej ziemi; psy nie zjadają mięsa poniżej zera; karta „Niebo” otwiera się pod datą; drobne poprawki tekstów i zabezpieczenia zdarzeń |
