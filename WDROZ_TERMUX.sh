@@ -6,7 +6,7 @@ MODE=publish
 if [ "${1:-}" = '--prepare-only' ]; then MODE=prepare; shift; fi
 [ "$#" -le 1 ] || { echo 'Użycie: bash WDROZ_TERMUX.sh [--prepare-only] [katalog-repo]'; exit 1; }
 PACKAGE_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-EXPECTED_COMMIT='20d185673cb48ac9a45358f3046f41ed8d34800d'
+EXPECTED_COMMIT='8cdbc74771162954d8e412c77b80a5f1f867cc17'
 REPOSITORY="${1:-}"
 if [ -z "$REPOSITORY" ]; then
  if [ -d "$HOME/Przystan/.git" ]; then REPOSITORY="$HOME/Przystan";
@@ -41,7 +41,7 @@ if [ "$MODE" = prepare ]; then
 fi
 git add -- .github .gitignore KSIEGA.md README.md WDROZ_TERMUX.sh assets build.js docs package.json railway.json release-manifest.json server.js src tests tools
 git diff --cached --quiet && { echo 'STOP: brak zmian do commitu.'; exit 1; }
-git commit -m '3.4.2: integracja S01-S05 i naprawa automatycznego zapisu'
+git commit -m '4.0.0-rc.1: Epoka IV, rody, folwarki i trwaly zapis'
 git push origin main
 git fetch origin main
 [ "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)" ]

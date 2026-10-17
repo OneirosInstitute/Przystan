@@ -1,0 +1,33 @@
+{
+  "status": "PASS",
+  "results": [
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "day": 25.899999,
+      "people": 21,
+      "settlements": 3,
+      "save": true,
+      "bytes": 201556,
+      "renderer": "WebKit WebGL",
+      "errors": [],
+      "offlineReload": true
+    },
+    {
+      "viewport": {
+        "width": 412,
+        "height": 870
+      },
+      "day": 25.9,
+      "people": 21,
+      "settlements": 3,
+      "save": true,
+      "bytes": 200969,
+      "renderer": "WebKit WebGL",
+      "errors": [],
+      "offlineReload": true
+    }
+  ]
+}

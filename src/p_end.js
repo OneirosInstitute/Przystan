@@ -111,13 +111,14 @@ gfxSetLevel(GFX.level,true);
 
 /* ================= start ================= */
 function boot(fresh){
+ nocSkip=null;nocB.hidden=true;
  evOpen=null;$('ev').hidden=true;if(fresh){saveStatus.blocked=false;saveStatus.blockedRaw=null}
  S=fresh?freshState():(load()||freshState());custInit();
  if(!S.log.length){log('Wyszliśmy na brzeg. Wrak leży na płyciźnie, w obozie płonie ognisko. Wyspa sięga dalej, niż widać.');
   log('Suchary z wraku wystarczą na mniej więcej jedną porę roku. Postaw chatę zbieracza i chatę drwala (zakładka Budowa), potem przydziel do nich ludzi.');
   log('Wrak zniszczy wiosenny sztorm. Wolni robotnicy wynoszą z niego, co się da. W zakładce Praca wskaż, którą część rozpoznać: w kajucie kapitana podobno są księgi.');
   log('Każda rodzina potrzebuje domu: bez własnego dachu para nie będzie miała dzieci. Przed zimą potrzebny jest opał z drewutni.')}
- rebuildWorldFromState();wreckG.visible=!S.wreck.gone;buildPeopleMeshes();assign();assignHomes();
+ rebuildWorldFromState();wreckG.visible=!S.wreck.gone;buildPeopleMeshes();if(S.epoch!==4){assign();assignHomes()}
  camT.x=tcx(camp.i)+1;camT.z=tcx(camp.j)+2;zoom=zoomT=1.6;overview=null;setSpeed(S.speed??1);resize();regionScan(true);minimapBase();renderTop();renderCtl();
  if(innerWidth>760&&innerHeight>460)openSheet('budowa');restoreDecision();if(saveStatus.blocked)saveWarning(new Error('Nie udało się odczytać zapisu. Automatyczne nadpisanie wstrzymane.'))}
 /* ===== pełny ekran i instalacja ===== */

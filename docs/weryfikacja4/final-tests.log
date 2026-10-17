@@ -1,0 +1,286 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> przystan@4.0.0-rc.1 test
+> node tools/check-build.cjs && node tools/run-tests-serial.cjs
+
+Compiled scripts: syntax PASS
+✔ starting a new settlement immediately persists the completed boot state (1605.330707ms)
+✔ real-time autosave persists paused play within 15 seconds and survives restart (2753.37318ms)
+✔ water hauling is saved by the timer, resumed after restart and delivered exactly once (4187.580362ms)
+✔ background and page-exit callbacks persist the current state without manual save (1434.474523ms)
+✔ autosave preserves a good snapshot on storage error and retries successfully (1473.884993ms)
+✔ automatic triggers never overwrite an unreadable existing save (1353.773016ms)
+✔ water exception accepts only the real zero-quantity chore marker (1414.306686ms)
+✔ manual save reports success only after storage accepts the snapshot (1352.903869ms)
+✔ a water carrier retains the trip overnight and finishes after reassignment (1330.985247ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 17061.942638
+✔ package integrity detects missing, changed and out-of-root files (7.140982ms)
+✔ deployment preflight checks identity, branch, base and user changes with read-only git calls (0.845332ms)
+✔ asset-only changes invalidate the PWA version; UI viewport permits zoom (200.916172ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 288.333307
+✔ building missions require a completed building and an assigned adult (1073.94227ms)
+✔ building mission cannot be dispatched twice without consuming more food (1060.025343ms)
+✔ mission payload survives validated save serialization (1036.302329ms)
+✔ returning explorer transfers one real wild goat without exceeding the pen and resumes work (1053.885689ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4358.62553
+✔ E4 migration retains living identities, kinship, possessions and all ordinary homes (1460.867195ms)
+✔ legacy hamlet residents become persistent people with unknown history explicitly marked (1322.854776ms)
+✔ all people have exactly one household, clan and settlement; duplicate or orphan references fail validation (1226.664179ms)
+✔ repeated migration and save reload preserve one balance and the same identifiers (1439.778023ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5573.579601
+✔ one shipment moves real stock and is delivered once after a save and reload (1474.195418ms)
+✔ failed transport contracts do not debit the source or allocate workers (1331.956571ms)
+✔ founding physically moves the same family, constructs an ancestral home and preserves old town houses (1293.048972ms)
+✔ transport and construction have the same result under different clock subdivisions (1384.774063ms)
+✔ wine uses grapes, a barrel, worker time and fermentation; restart cannot duplicate the batch (1343.192455ms)
+✔ a field consumes seed, requires care, grows and produces a finite harvest (1359.60396ms)
+✔ processing without inputs or workers cannot create goods (1313.190076ms)
+✔ every recipe consumes its inputs and produces one delayed result (1350.352015ms)
+✔ livestock has identities, wild capture, reproduction and irreversible slaughter (1306.003151ms)
+✔ nature is shared by region and generations advance without replacing residents (1370.827906ms)
+✔ full destination rejects transport and full store delays harvesting without losing crops (1480.892799ms)
+✔ a vineyard requires a successful trial, matures slowly and feeds actual wine production (1399.140503ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 16555.021901
+✔ Epoka IV unlocks after III, retains the settlement and saves through the real game decoder (11672.214071ms)
+✔ all estate buildings have working 3D models and every Epoka IV panel renders (3651.187903ms)
+✔ migration completes paid legacy work and carts once and preserves the remaining ripe harvest (6211.475305ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 21708.327839
+{"days":1500,"living":69,"generations":8,"births":111,"deaths":60,"succession":26,"bytes":247677}
+{"scenario":"multi","living":573,"inhabited":4,"stats":{"births":793,"deaths":262,"deliveries":5,"succession":81,"maxGeneration":8,"batches":2135,"harvests":48124,"animalBirths":262},"bytes":888117}
+✔ autonomous society survives five generations with births, kinship, learning, succession and save continuity (2111.988421ms)
+✔ several settlements retain productive descendants for five generations without manual resupply (13566.663452ms)
+✔ legacy twins survive migration even when the old save has no surviving father identity (1287.076732ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 17097.825363
+✔ E4 world has four times the map area, stable terrain and distinct functional regions (9.359085ms)
+✔ E4 core preserves old inhabited land and the landing bay remains open (1.864472ms)
+✔ roads follow land, survive world serialization and do not cut through sea (5.75773ms)
+✔ world rejects invalid imported dimensions and oversized or nonfinite core samples (0.455615ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 96.613843
+✔ reassigning builders releases reserved slots, including travel (1182.733596ms)
+✔ a saved delivery reaches its warehouse along a path after the workday ends (1067.86317ms)
+✔ midnight preserves material delivery and reserves it once after restart (1035.311317ms)
+✔ full storage conserves deliveries and represents excess consistently (1018.69475ms)
+✔ ration priorities redistribute exactly the existing food equivalent (1049.355763ms)
+✔ unfeasible workshop helps without repeatedly planning production (1028.319136ms)
+✔ food emergency policy reaches the last planner and releases active builders (990.44904ms)
+✔ unreachable and night deliveries retain ownership instead of teleporting (1012.317308ms)
+✔ feast consumes exactly 60 and insufficient food gives no feast reward (1021.47065ms)
+✔ forgotten technology cannot satisfy a new prerequisite (1091.889758ms)
+✔ led goat survives restart, full pen and removal of its destination (1050.445009ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11680.852462
+✔ autosave during skipped night persists progress and the ordinary resume speed (2866.478935ms)
+✔ the midnight save succeeds while night acceleration is active (1357.027824ms)
+✔ a paused decision opened during night skip resumes at the player speed after restart (2657.776439ms)
+✔ legacy temporary night speed is migrated while unsupported speeds are rejected (1651.652887ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8663.286261
+✔ new game preserves landing fire as its one expandable settlement heart (1373.209027ms)
+✔ legacy heart is migrated on restart without changing population or buildings (2443.498684ms)
+✔ heart migration refuses to overwrite houses near original fire (1285.840107ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5227.059702
+✔ save/load conserves a carried resource (1105.221024ms)
+✔ storage failure is returned and visible; export still contains live state (1067.433734ms)
+✔ invalid imported state is rejected without touching existing storage (1041.484527ms)
+✔ unrecoverable primary is protected from an automatic fresh-state overwrite (1353.366814ms)
+✔ a chosen decision restores its result without repeating the reward (2410.410545ms)
+✔ invalid backup never replaces the primary save; valid backup can recover (1020.808565ms)
+✔ interrupted captain chest can be offered after a fresh restart, exactly once (2037.33202ms)
+✔ one-shot registered decision is replayed after load and cannot pay twice (2307.959281ms)
+✔ the campaign council returns after restart and can choose the next epoch (2310.49173ms)
+✔ decision context restores live hamlet, region and scene-backed landmark references (6101.973613ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 20889.769353
+✔ autosave retains an open decision while simulation is paused (1363.735314ms)
+✔ building panel lists requirements for locked residential upgrade and household reserves (1046.615257ms)
+✔ distant map labels are collapsed and aurora cannot blank out island overview (0.52493ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2528.779193
+✔ rebuilding twenty times disposes retired private geometries (1393.014593ms)
+✔ shared geometry survives until its final scene user is removed (1000.145435ms)
+✔ confirmed person-name sink escapes markup even without the import boundary (1225.916417ms)
+✔ service worker deletes only own caches and never intercepts API (1.81484ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3753.693141
+✔ S01: failed routing does not overwrite the existing chore assignment (1079.6184ms)
+✔ S01: successful routing installs the new chore and clears stale targets (1006.601351ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2191.061322
+✔ S01: delivery to a completed construction releases the in-transit reservation (1111.321715ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1222.316149
+✔ S01: critical village task wins regardless of random draw or input order (1141.539846ms)
+✔ S01: balanced priorities preserve choice and invalid priorities cannot win (1120.692462ms)
+✔ S01: priority planning leaves serialized village state valid (1181.288048ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3555.354254
+✔ S02 autumn fuel shortage increases wood-gathering priority without consuming stock (1176.912108ms)
+✔ S02 before winter increases food gathering priority while reserves are low (994.427419ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2300.236812
+✔ S03 household preserves food only after real attendance and pays input cost once (1096.895028ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1210.557603
+✔ S04 hunting pressure decays and cannot become negative or exceed the cap (8000.598944ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8121.813152
+✔ S05 battery mode throttles animal pose updates without mutating herd simulation (1219.808625ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1332.52204
+✔ real HTTP: bad inputs finish, identities cannot overwrite by name and scores are derived (1188.485599ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1270.085629
+✔ a hidden document never advances simulation or the render clock (1325.582271ms)
+✔ epoch II and III starter villages remain loadable, including a heart upgrade (6070.907283ms)
+✔ legacy epoch II campaign route is recovered from its recorded knowledge (976.977082ms)
+✔ a legacy completed chest is not reset and an interrupted legacy chest recovers (1037.252339ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 9567.347323
+TEST GATE PASS: 23 suites, 93 cases

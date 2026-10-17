@@ -13,7 +13,18 @@ npm run test:runtime # pełna pętla silnika i restarty; bez prawdziwego GPU/DOM
 
 Nie ma zależności do instalowania. Wystarczy Node.js 18 lub nowszy.
 
-## Wydanie 3.4.2
+## Wydanie 4.0.0-rc.1
+
+Epoka IV: większa wyspa, rody, domy rodowe, jedenaście specjalizacji folwarków,
+rzeczywiste magazyny i transport oraz ciągłość społeczności przez pokolenia.
+Zwykłe domy zachowują swoją tożsamość i otrzymują rozbudowy. Naprawiono także
+odrzucanie zapisu podczas przewijania nocy.
+
+Instrukcja i komendy: [docs/WYDANIE_4.0.0_RC1.md](docs/WYDANIE_4.0.0_RC1.md).
+Raport rozróżnia testy logiki, Chromium/PWA i odbiór na fizycznym telefonie.
+Oznaczenie RC pozostaje do wykonania tego ostatniego odbioru.
+
+## Wydanie 3.4.2 — historia
 
 Pełna integracja S01–S05 z naprawą autosave i wdrożeniem przez Termux:
 [docs/WYDANIE_3.4.2_TERMUX.md](docs/WYDANIE_3.4.2_TERMUX.md).

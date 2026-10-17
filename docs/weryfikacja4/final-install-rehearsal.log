@@ -1,0 +1,404 @@
+Integralność paczki: PASS (152 plików)
+Kontrola repozytorium: PASS
+From https://github.com/OneirosInstitute/Przystan
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+Kontrola repozytorium: PASS
+Integralność paczki: PASS (152 plików)
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> przystan@4.0.0-rc.1 build
+> node build.js
+
+Zbudowano dist/ (wersja 3a363c13af, 1322 kB index.html)
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> przystan@4.0.0-rc.1 test
+> node tools/check-build.cjs && node tools/run-tests-serial.cjs
+
+Compiled scripts: syntax PASS
+✔ starting a new settlement immediately persists the completed boot state (1475.6583ms)
+✔ real-time autosave persists paused play within 15 seconds and survives restart (2694.639332ms)
+✔ water hauling is saved by the timer, resumed after restart and delivered exactly once (4082.299147ms)
+✔ background and page-exit callbacks persist the current state without manual save (1445.7488ms)
+✔ autosave preserves a good snapshot on storage error and retries successfully (1462.87741ms)
+✔ automatic triggers never overwrite an unreadable existing save (1368.013884ms)
+✔ water exception accepts only the real zero-quantity chore marker (1401.634532ms)
+✔ manual save reports success only after storage accepts the snapshot (1346.301804ms)
+✔ a water carrier retains the trip overnight and finishes after reassignment (1277.195014ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 16700.05941
+✔ package integrity detects missing, changed and out-of-root files (8.213417ms)
+✔ deployment preflight checks identity, branch, base and user changes with read-only git calls (0.909409ms)
+✔ asset-only changes invalidate the PWA version; UI viewport permits zoom (194.72736ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 286.832652
+✔ building missions require a completed building and an assigned adult (1156.035808ms)
+✔ building mission cannot be dispatched twice without consuming more food (1065.439079ms)
+✔ mission payload survives validated save serialization (1024.350318ms)
+✔ returning explorer transfers one real wild goat without exceeding the pen and resumes work (1083.218385ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4476.469299
+✔ E4 migration retains living identities, kinship, possessions and all ordinary homes (1398.849431ms)
+✔ legacy hamlet residents become persistent people with unknown history explicitly marked (1260.364582ms)
+✔ all people have exactly one household, clan and settlement; duplicate or orphan references fail validation (1248.603261ms)
+✔ repeated migration and save reload preserve one balance and the same identifiers (1320.211791ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5363.016985
+✔ one shipment moves real stock and is delivered once after a save and reload (1292.514195ms)
+✔ failed transport contracts do not debit the source or allocate workers (1228.587571ms)
+✔ founding physically moves the same family, constructs an ancestral home and preserves old town houses (1224.118296ms)
+✔ transport and construction have the same result under different clock subdivisions (1305.639921ms)
+✔ wine uses grapes, a barrel, worker time and fermentation; restart cannot duplicate the batch (1374.083388ms)
+✔ a field consumes seed, requires care, grows and produces a finite harvest (1238.292813ms)
+✔ processing without inputs or workers cannot create goods (1290.425189ms)
+✔ every recipe consumes its inputs and produces one delayed result (1363.0745ms)
+✔ livestock has identities, wild capture, reproduction and irreversible slaughter (4068.184692ms)
+✔ nature is shared by region and generations advance without replacing residents (1450.23874ms)
+✔ full destination rejects transport and full store delays harvesting without losing crops (1358.618653ms)
+✔ a vineyard requires a successful trial, matures slowly and feeds actual wine production (1277.334723ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 18603.449193
+✔ Epoka IV unlocks after III, retains the settlement and saves through the real game decoder (11188.76984ms)
+✔ all estate buildings have working 3D models and every Epoka IV panel renders (3396.743502ms)
+✔ migration completes paid legacy work and carts once and preserves the remaining ripe harvest (5736.637369ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 20468.464562
+{"days":1500,"living":69,"generations":8,"births":111,"deaths":60,"succession":26,"bytes":247677}
+{"scenario":"multi","living":573,"inhabited":4,"stats":{"births":793,"deaths":262,"deliveries":5,"succession":81,"maxGeneration":8,"batches":2135,"harvests":48124,"animalBirths":262},"bytes":888117}
+✔ autonomous society survives five generations with births, kinship, learning, succession and save continuity (2030.797552ms)
+✔ several settlements retain productive descendants for five generations without manual resupply (12728.281807ms)
+✔ legacy twins survive migration even when the old save has no surviving father identity (1268.947569ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 16180.473759
+✔ E4 world has four times the map area, stable terrain and distinct functional regions (4.933991ms)
+✔ E4 core preserves old inhabited land and the landing bay remains open (1.653843ms)
+✔ roads follow land, survive world serialization and do not cut through sea (4.598203ms)
+✔ world rejects invalid imported dimensions and oversized or nonfinite core samples (0.313585ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 89.71093
+✔ reassigning builders releases reserved slots, including travel (1102.230164ms)
+✔ a saved delivery reaches its warehouse along a path after the workday ends (1047.297446ms)
+✔ midnight preserves material delivery and reserves it once after restart (1013.941534ms)
+✔ full storage conserves deliveries and represents excess consistently (982.921292ms)
+✔ ration priorities redistribute exactly the existing food equivalent (953.638505ms)
+✔ unfeasible workshop helps without repeatedly planning production (1091.14748ms)
+✔ food emergency policy reaches the last planner and releases active builders (1005.643372ms)
+✔ unreachable and night deliveries retain ownership instead of teleporting (950.380931ms)
+✔ feast consumes exactly 60 and insufficient food gives no feast reward (954.556857ms)
+✔ forgotten technology cannot satisfy a new prerequisite (952.213937ms)
+✔ led goat survives restart, full pen and removal of its destination (1028.718615ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11214.052311
+✔ autosave during skipped night persists progress and the ordinary resume speed (2659.914338ms)
+✔ the midnight save succeeds while night acceleration is active (1335.260072ms)
+✔ a paused decision opened during night skip resumes at the player speed after restart (2601.297688ms)
+✔ legacy temporary night speed is migrated while unsupported speeds are rejected (1576.665821ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8302.596745
+✔ new game preserves landing fire as its one expandable settlement heart (1284.069239ms)
+✔ legacy heart is migrated on restart without changing population or buildings (2506.150765ms)
+✔ heart migration refuses to overwrite houses near original fire (1268.825093ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5177.070043
+✔ save/load conserves a carried resource (1166.683272ms)
+✔ storage failure is returned and visible; export still contains live state (1038.134721ms)
+✔ invalid imported state is rejected without touching existing storage (1073.367344ms)
+✔ unrecoverable primary is protected from an automatic fresh-state overwrite (1348.0411ms)
+✔ a chosen decision restores its result without repeating the reward (2404.215678ms)
+✔ invalid backup never replaces the primary save; valid backup can recover (1020.030989ms)
+✔ interrupted captain chest can be offered after a fresh restart, exactly once (1989.254446ms)
+✔ one-shot registered decision is replayed after load and cannot pay twice (2339.590281ms)
+✔ the campaign council returns after restart and can choose the next epoch (2329.984334ms)
+✔ decision context restores live hamlet, region and scene-backed landmark references (6055.067816ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 20914.995291
+✔ autosave retains an open decision while simulation is paused (1394.67692ms)
+✔ building panel lists requirements for locked residential upgrade and household reserves (1062.447934ms)
+✔ distant map labels are collapsed and aurora cannot blank out island overview (0.46485ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2565.121985
+✔ rebuilding twenty times disposes retired private geometries (1267.269103ms)
+✔ shared geometry survives until its final scene user is removed (1016.299804ms)
+✔ confirmed person-name sink escapes markup even without the import boundary (1208.530183ms)
+✔ service worker deletes only own caches and never intercepts API (1.813631ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3613.91231
+✔ S01: failed routing does not overwrite the existing chore assignment (1128.503401ms)
+✔ S01: successful routing installs the new chore and clears stale targets (1016.470581ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2262.372324
+✔ S01: delivery to a completed construction releases the in-transit reservation (1038.762277ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1150.70942
+✔ S01: critical village task wins regardless of random draw or input order (1073.200725ms)
+✔ S01: balanced priorities preserve choice and invalid priorities cannot win (1061.042114ms)
+✔ S01: priority planning leaves serialized village state valid (1062.852852ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3325.29588
+✔ S02 autumn fuel shortage increases wood-gathering priority without consuming stock (1144.447866ms)
+✔ S02 before winter increases food gathering priority while reserves are low (1062.201289ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2329.746416
+✔ S03 household preserves food only after real attendance and pays input cost once (1138.924045ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1264.616796
+✔ S04 hunting pressure decays and cannot become negative or exceed the cap (8063.807112ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8185.839465
+✔ S05 battery mode throttles animal pose updates without mutating herd simulation (1310.775833ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1429.934222
+✔ real HTTP: bad inputs finish, identities cannot overwrite by name and scores are derived (1186.38455ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1262.783917
+✔ a hidden document never advances simulation or the render clock (1326.117013ms)
+✔ epoch II and III starter villages remain loadable, including a heart upgrade (6270.772129ms)
+✔ legacy epoch II campaign route is recovered from its recorded knowledge (1111.847853ms)
+✔ a legacy completed chest is not reset and an interrupted legacy chest recovers (984.695731ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 9817.994255
+TEST GATE PASS: 23 suites, 93 cases
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> przystan@4.0.0-rc.1 test:runtime
+> node tools/runtime-smoke.mjs
+
+epoch 1: 1200/2400 frames; day 1.270; restart 1
+epoch 1: 2400/2400 frames; day 2.435; restart 2
+epoch 3: 1200/4800 frames; day 142.320; restart 1
+epoch 3: 2400/4800 frames; day 143.485; restart 2
+epoch 3: 3600/4800 frames; day 144.318; restart 3
+epoch 3: 4800/4800 frames; day 145.317; restart 4
+epoch 4: 1200/4800 frames; day 1.270; restart 1
+epoch 4: 2400/4800 frames; day 2.436; restart 2
+epoch 4: 3600/4800 frames; day 3.269; restart 3
+epoch 4: 4800/4800 frames; day 4.269; restart 4
+{
+  "status": "PASS",
+  "scenarios": [
+    {
+      "epoch": 1,
+      "frames": 2400,
+      "syntheticWallSeconds": 80,
+      "elapsedGameDays": 2.1651388888889986,
+      "restarts": 2,
+      "automaticSaves": 9,
+      "population": 18,
+      "tradeDeliveries": 0,
+      "unverified": [
+        "real DOM",
+        "WebGL",
+        "touch",
+        "device performance"
+      ]
+    },
+    {
+      "epoch": 3,
+      "frames": 4800,
+      "syntheticWallSeconds": 160,
+      "elapsedGameDays": 3.9973611111081198,
+      "restarts": 4,
+      "automaticSaves": 18,
+      "population": 34,
+      "tradeDeliveries": 9,
+      "unverified": [
+        "real DOM",
+        "WebGL",
+        "touch",
+        "device performance"
+      ]
+    },
+    {
+      "epoch": 4,
+      "frames": 4800,
+      "syntheticWallSeconds": 160,
+      "elapsedGameDays": 3.9988879999999996,
+      "restarts": 4,
+      "automaticSaves": 18,
+      "population": 20,
+      "tradeDeliveries": 0,
+      "unverified": [
+        "real DOM",
+        "WebGL",
+        "touch",
+        "device performance"
+      ]
+    }
+  ]
+}
+Integralność paczki: PASS (152 plików)
+ M README.md
+ M WDROZ_TERMUX.sh
+ M build.js
+ M package.json
+ M release-manifest.json
+ M src/p_bld.js
+ M src/p_end.js
+ M src/p_noc.js
+ M src/p_save.js
+ M src/p_szlif.js
+ M tests/build-deploy.test.mjs
+ M tools/deploy-check.cjs
+ M tools/runtime-smoke.mjs
+ M tools/verify-package.cjs
+?? docs/E4_INTERFEJSY.md
+?? docs/E4_KOLEJKA.md
+?? docs/EPOKA_IV_KONTRAKT.md
+?? docs/WERYFIKACJA_4.0.0_RC1.md
+?? docs/WYDANIE_4.0.0_RC1.md
+?? docs/weryfikacja4/
+?? src/p_e4_catalog.js
+?? src/p_e4_domain.js
+?? src/p_e4_economy.js
+?? src/p_e4_game.js
+?? src/p_e4_population.js
+?? src/p_e4_ui.js
+?? src/p_e4_view.js
+?? src/p_e4_world.js
+?? tests/e4-domain.test.mjs
+?? tests/e4-economy.test.mjs
+?? tests/e4-integration.test.mjs
+?? tests/e4-population.test.mjs
+?? tests/e4-world.test.mjs
+?? tests/night-save.test.mjs
+?? tools/browser-e4.cjs
+PREPARE PASS: pliki skopiowane, testy zielone; bez commitu i push.

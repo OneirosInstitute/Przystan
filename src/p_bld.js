@@ -19,12 +19,13 @@ const EXT={
  sklad:[{id:'dobud',n:'Dobudówka',d:'Skład mieści 200 więcej.',cost:{drewno:16,deski:6},work:6}],
  spizarnia:[{id:'lodownia',n:'Lodownia',d:'Żywność w osadzie psuje się o 20% wolniej.',cost:{kamien:16,deski:6},work:8}],
  studnia:[{id:'zuraw',n:'Żuraw',d:'Woda dla 8 osób więcej.',cost:{drewno:6},work:3}]};
+EXT.chata.push({id:'zielnik',n:'Zielnik rodzinny',d:'Zioła pielęgnowane przy domu.',cost:{drewno:3,kamien:2},work:6},{id:'wyroby',n:'Domowe wyroby',d:'Rodzina kisi własne warzywa.',cost:{drewno:6,deski:4},work:12});
 EXT.dom=EXT.chata;STOL.sp=1.25;
 const LEVELABLE=k=>!!(BD[k].wk||BD[k].store)&&k!=='pole'||k==='pole';
 const lvOf=b=>b.lv||1;
 const hasExt=(b,id)=>!!(b&&b.ext&&b.ext.includes(id));
 const anyExt=id=>S.bld.filter(b=>bDone(b)&&hasExt(b,id)).length;
-const extSlots=b=>(b.kind==='szalas'?0:b.kind==='chata'?2:b.kind==='dom'?3:lvOf(b))+(b.kind==='pole'&&b.ext&&b.ext.includes('plot')?1:0);
+const extSlots=b=>(b.kind==='szalas'?0:b.kind==='chata'?5:b.kind==='dom'?5:lvOf(b))+(b.kind==='pole'&&b.ext&&b.ext.includes('plot')?1:0);
 const wkOf=b=>BD[b.kind].wk?BD[b.kind].wk+lvOf(b)-1:0;
 const rOf=b=>(BD[b.kind].r||0)+2*(lvOf(b)-1)+(hasExt(b,'lodz')?6:0);
 function bMul(b){if(!b)return 1;let m=(1+.15*(lvOf(b)-1))*condMul(b);(b.ext||[]).forEach(id=>{const e=(EXT[b.kind]||[]).find(x=>x.id===id);if(e&&e.sp)m*=e.sp});return m}
@@ -48,6 +49,8 @@ function bldDaily(){const sea=seasonIdx();
  S.bld.forEach(b=>{if(!bDone(b))return;
   if(hasExt(b,'wnyki'))S.res.mieso+=1.5*K;
   if(hasExt(b,'ogrod')&&sea!==2)S.res.warzywa=(S.res.warzywa||0)+(sea===0?1.2:.8)*K;
+  if(hasExt(b,'zielnik')&&sea!==2)S.res.ziola=(S.res.ziola||0)+.4*K;
+  if(hasExt(b,'wyroby')&&S.res.warzywa>=6){S.res.warzywa-=6;S.res.kiszonki=(S.res.kiszonki||0)+4;}
   if(hasExt(b,'wedzarnia'))S.res.opal=Math.max(0,S.res.opal-.3*K);
   if(b.kind==='laznia'){if(S.res.opal>=.8*K){S.res.opal-=.8*K;S.people.forEach(p=>p.hp=Math.min(1,p.hp+.012*K));S.bathOk=1}else S.bathOk=0}});
  if(hasB('izbachorych'))S.people.forEach(p=>{if(p.hp<.6)p.hp=Math.min(1,p.hp+.025*K)});
@@ -120,6 +123,8 @@ const EXTV={
  miech:(g,W,H)=>{g.add(mesh(new THREE.SphereGeometry(.2,8,5),M(0x6a4a30),-W-.25,.35,0));g.children[g.children.length-1].scale.set(1.4,.6,1)},
  ogrod:(g,W,H)=>{garden(g,-.3,-H-.55,Math.min(1.6,W*1.6),.7)},
  piwnica:(g,W,H)=>{const m=mesh(new THREE.SphereGeometry(.55,10,6,0,6.283,0,1.5),M(0x4a5a34),W+.5,-.25,-H*.3);m.scale.set(1,.9,1.2);g.add(m);door(g,W+.5,-H*.3+.6,0,.36,.5)},
+ zielnik:(g,W,H)=>{garden(g,W+.3,-H-.5,.7,.6);for(let index=0;index<3;index++)g.add(cyl(.08,.16,M(0x987249),W+.3+index*.2,.08,-H-.8,0,0,0,7));},
+ wyroby:(g,W,H)=>{rack(g,-W-.4,0,Math.PI/2,()=>{});barrel(g,-W-.4,.5,.6);barrel(g,-W-.4,-.4,.5);},
  ganek:(g,W,H)=>{g.add(tbox(W*1.6,.1,.5,mPlank,0,.1,H+.25,0,2));g.add(tbox(.8,.07,.22,mPlank,-W*.4,.42,H+.38),tbox(.07,.36,.18,matDark,-W*.4-.32,.2,H+.38),tbox(.07,.36,.18,matDark,-W*.4+.32,.2,H+.38))},
  dobud:(g,W,H)=>{const s=new THREE.Group();shed(s,1.2,1.2,.8,mShingle);crate(s,0,0,.2);sack(s,.3,.3);s.position.set(W+.65,0,0);g.add(s)},
  lodownia:(g,W,H)=>{const m=mesh(new THREE.SphereGeometry(.5,10,6,0,6.283,0,1.5),M(0x5a6a44),-W-.45,-.2,0);m.scale.set(1,.8,1.1);g.add(m);door(g,-W-.45,.45,0,.32,.45)},

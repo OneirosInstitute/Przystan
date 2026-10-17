@@ -10,10 +10,10 @@ function answer(runtime){
  }
 }
 const results=[];
-for(const epoch of [1,3]){
+for(const epoch of [1,3,4]){
  const runtime=createGame();
  if(epoch===3)runtime.evaluate('E2START=true;E3START=true');
- runtime.game.startGame(true);runtime.game.closeSheet();answer(runtime);runtime.evaluate('setSpeed(8)');
+ runtime.game.startGame(true);runtime.game.closeSheet();answer(runtime);if(epoch===4){runtime.evaluate('ludInit();S.e3={done:1};e4Start()');assert.equal(runtime.game.S.epoch,4);runtime.game.closeSheet();}runtime.evaluate('setSpeed(8)');
  const beginning=runtime.game.S.day;let restarts=0,automaticSaves=0;
  const write=runtime.sandbox.localStorage.setItem;runtime.sandbox.localStorage.setItem=(key,value)=>{if(key==='przystan-v7')automaticSaves++;return write(key,value)};
  const frames=epoch===1?2400:4800;

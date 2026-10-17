@@ -7,7 +7,7 @@ body:not(.cz) #skipN{top:auto;bottom:calc(84px + env(safe-area-inset-bottom,0px)
 const isNight=()=>{const t=tod();return t>=T1-.01||t<T0-.015};
 let nocSkip=null;
 function nocStart(){if(!S||nocSkip||!isNight())return;nocSkip={prev:S.speed>0?S.speed:1,d0:Math.floor(S.day+(tod()>=T1-.01?1:0))};setSpeed(40);nocUI()}
-function nocEnd(){if(!nocSkip)return;const p=nocSkip.prev;nocSkip=null;if(typeof czPaused!=='undefined'&&czPaused===40)czPaused=p;if(evOpen&&evOpen.prev===40)evOpen.prev=p;if(S&&S.speed>0)setSpeed(p);nocUI()}
+function nocEnd(){if(!nocSkip)return;const p=nocSkip.prev;nocSkip=null;if(typeof czPaused!=='undefined'&&czPaused===40)czPaused=p;if(evOpen&&evOpen.prev===40)evOpen.prev=p;if(S?.pendingDecision?.prev===40)S.pendingDecision.prev=p;if(S&&S.speed>0)setSpeed(p);nocUI()}
 function nocUI(){if(!S){nocB.hidden=true;return}const show=!!nocSkip||(isNight()&&$('sheet').hidden&&!evOpen&&!placing);nocB.hidden=!show;if(!show)return;
  const h=nocSkip?`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/></svg>Świta…`
   :`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>Przewiń noc`;

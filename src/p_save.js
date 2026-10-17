@@ -3,9 +3,12 @@
 const saveStatus={ok:null,at:0,error:'',blocked:false,blockedRaw:null};
 function saveStatusText(){return saveStatus.ok===true?'Zapisano w przeglądarce o '+new Date(saveStatus.at).toLocaleTimeString('pl-PL')+'.':saveStatus.ok===false?'Zapis nie działa. Pobierz plik awaryjny.':'Oczekiwanie na pierwszy zapis.'}
 function updateSaveStatus(){const element=document.getElementById('save-status');if(element)element.textContent=saveStatusText()}
+function persistentSpeed(speed,previous=1){return speed===40?([1,2,4,8].includes(previous)?previous:1):speed}
 function serializeSave(){
  if(!S)throw new Error('Brak osady');
- const snapshot=Object.assign({},S,{rev:packRev(),tread:packTread(),ver:GAME_VER,saveSchema:1});
+ const previous=typeof nocSkip!=='undefined'&&nocSkip?nocSkip.prev:1;
+ const snapshot=Object.assign({},S,{rev:packRev(),tread:packTread(),ver:GAME_VER,saveSchema:1,speed:persistentSpeed(S.speed,previous)});
+ if(S.pendingDecision)snapshot.pendingDecision={...S.pendingDecision,prev:persistentSpeed(S.pendingDecision.prev,previous)};
  return JSON.stringify(snapshot,(key,value)=>['mentor','tgt'].includes(key)||(key==='path'&&Array.isArray(value))?undefined:value);
 }
 function saveWarning(error){
@@ -85,6 +88,8 @@ function decodeSave(text){
   let state=JSON.parse(text);
   if(!validSaveTree(state)||!state||!state.fams||!state.people||!state.nodeAmt)return null;
   state=saveFix(state);
+  state.speed=persistentSpeed(state.speed);
+  if(state.pendingDecision)state.pendingDecision.prev=persistentSpeed(state.pendingDecision.prev);
   if(state.epoch===2&&!state.path){
    const remembered=Object.keys(PATHS).filter(route=>state.tech&&state.tech['e2_'+route]);
    const branches=Object.keys(ROZ).filter(route=>ROZ[route].o.some(option=>option.id===state.e2?.r1));
