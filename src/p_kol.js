@@ -101,7 +101,7 @@ function kolChims(ch){if(!S||!S.hamlets)return;S.hamlets.forEach(h=>{const g=ham
 
 /* ---- życie przysiółków ---- */
 function hamDeath(h,why){if(h.pop<=0)return null;h.pop--;const sex=Math.random()<.5?'k':'m',nm=newName(sex);S.deadNames=S.deadNames||[];S.deadNames.push(nm);h.lost=(h.lost||0)+1;h.lostN=(h.lostN||[]).concat(nm).slice(-12);
- if(h.pop<=0)setTimeout(()=>hamGone(h),50);return nm}
+ if(h.pop<=0)gameLater(()=>hamGone(h),50);return nm}
 function hamGone(h){if(!S.hamlets.includes(h))return;S.hamlets=S.hamlets.filter(x=>x!==h);log(`Przysiółek ${h.name} opustoszał. Chaty stoją puste, ścieżka zarasta. Na Dziady wspomina się tych, którzy tam żyli.`);hamVis()}
 const NEEDS={jedzenie:[25,'jedzenia'],opal:[10,'opału'],narz:[1,'narzędzi'],odziez:[2,'ciepłej odzieży'],ziarno:[6,'ziarna na siew'],naczynia:[3,'naczyń'],plotno:[3,'płótna']};
 function genNeed(h){const sea=seasonIdx();let k;if(h.zap<.3)k=sea===2&&Math.random()<.4?'opal':'jedzenie';else if(sea===3&&hType(h)==='meadow')k='ziarno';else if(sea===2)k=Math.random()<.5?'opal':'odziez';else k=['narz','odziez','naczynia','plotno'][(Math.random()*4)|0];
@@ -129,7 +129,7 @@ function kolDaily(){if(!S.hamlets)return;kolInit();const sea=seasonIdx();
  S.people.forEach(p=>{if(p.waitHome&&!p.waitD)p.waitD=S.day;if(!p.waitHome)p.waitD=0});
  S.hamlets.slice().forEach(h=>{const T=HAM_T[hType(h)];
   const pro=T.food[sea]*(1+.05*h.st)*(h.road===2?1.06:1),need=HAM_NEED[sea]*(sea===2?dM():1);h.zap=clamp(h.zap+(pro-need)*.045,0,1);
-  if(Math.random()<K*.0004*h.pop){h.pop--;h.lost=(h.lost||0)+1;if(Math.random()<.3){const sx=Math.random()<.5?'k':'m';log(`W przysiółku ${h.name} zmarł${sx==='k'?'a':''} ${sx==='k'?'stara':'stary'} ${newName(sx)}. Pochowano ${sx==='k'?'ją':'go'} pod brzozą za chatami.`)}if(h.pop<=0){setTimeout(()=>hamGone(h),50);return}}
+  if(Math.random()<K*.0004*h.pop){h.pop--;h.lost=(h.lost||0)+1;if(Math.random()<.3){const sx=Math.random()<.5?'k':'m';log(`W przysiółku ${h.name} zmarł${sx==='k'?'a':''} ${sx==='k'?'stara':'stary'} ${newName(sx)}. Pochowano ${sx==='k'?'ją':'go'} pod brzozą za chatami.`)}if(h.pop<=0){gameLater(()=>hamGone(h),50);return}}
   if(h.zap<.08&&h.pop>1&&Math.random()<.07*dM()){const nm=hamDeath(h,'glod');if(nm)log(`W przysiółku ${h.name} głód. Zmarł${nm.slice(-1)==='a'?'a':''} ${nm}.`)}
   const nx=HST[h.st+1];if(nx&&h.pop>=nx[1]&&h.zap>.3&&S.day-(h.stD||h.day)>=SD){h.st++;h.stD=S.day;pamAdd(1,'przysiolek');
    log(['',`W przysiółku ${h.name} stanęła pierwsza chata z bali. To już nie obozowisko, tylko zagroda.`,`W przysiółku ${h.name} jest już kilka chat i ${T.n==='rybacki'?'suszarnie ryb':T.n==='leśny'?'chata drwala':T.n==='górski'?'łom kamienia':'zagroda dla kóz'}. Ludzie mówią o nim jak o prawdziwym miejscu.`,`Wokół przysiółka ${h.name} stanął płot. Osiedle ma swoje pola i swoje ścieżki.`,`${h.name} to już wieś. Druga osada na wyspie, z domem rodu i studnią.`][h.st]);toast(h.name+': '+HST[h.st][0])}
@@ -163,8 +163,8 @@ function kolGo(c,rid,eager){const r=REGIONS[rid];const sup=kolSupply();const sna
 function kolNew(){const why=kolWhyNot();if(why){toast(why);return}const rs=freeRegions().slice(0,4);
  openEvent({ey:'Wiec',t:'Nowy przysiółek',text:()=>'Ktoś rozkłada na ziemi mapę wyspy wyrysowaną węglem na korze. Wiec radzi, gdzie warto osiąść. Daleko jest więcej ziemi, ale dłuższa droga i więcej niebezpieczeństw.',
   opts:rs.map(r=>{const d=Math.round(Math.hypot(r.i-camp.i,r.j-camp.j)),dg=hamDng({rid:r.id,i:r.i,j:r.j});return{n:r.name,d:`przysiółek ${HAM_T[r.type].n}: ${HAM_T[r.type].d} · ${d<45?'blisko':d<90?'pół dnia drogi':'daleko'} · ${dg<.4?'spokojnie':dg<.6?'trzeba uważać':'groźnie'}`,
-   f:()=>{S.kolR=r.id;setTimeout(kolWho,400);return`Wiec wybiera krainę ${r.name}. Teraz trzeba zapytać, kto pójdzie.`}}}).concat([{n:'Jeszcze nie teraz',d:'',f:()=>'Mapa wraca pod belkę. Może na wiosnę.'}])},{})}
-function kolWho(){if(evOpen){setTimeout(kolWho,700);return}const rid=S.kolR;const r=REGIONS[rid];if(!r)return;const cs=kolCands();if(!cs.length){toast('Nikt nie może teraz pójść.');return}
+   f:()=>{S.kolR=r.id;gameLater(kolWho,400);return`Wiec wybiera krainę ${r.name}. Teraz trzeba zapytać, kto pójdzie.`}}}).concat([{n:'Jeszcze nie teraz',d:'',f:()=>'Mapa wraca pod belkę. Może na wiosnę.'}])},{})}
+function kolWho(){if(evOpen){gameLater(kolWho,700);return}const rid=S.kolR;const r=REGIONS[rid];if(!r)return;const cs=kolCands();if(!cs.length){toast('Nikt nie może teraz pójść.');return}
  const sup=foodTotal()>=60&&S.res.drewno>=15&&S.res.narz+S.res.narzk>=1;
  openEvent({ey:'Wiec',t:'Kto pójdzie: '+r.name,text:()=>`Do krainy ${r.name} trzeba iść z rodziną i dobytkiem. ${sup?'Osada da im na drogę 30 jedzenia, 15 kłód i narzędzia.':'Osada nie ma teraz zapasów, żeby ich wyposażyć. Pójdą z tym, co uniosą.'} Kto pójdzie niechętnie, będzie miał żal.`,
   opts:cs.map(c=>({n:c.n,d:`${c.d} · ${c.w[0]}`,f:()=>{const h=kolGo(c,rid,c.w[1]===2);return h?(c.w[1]===0?`Idą, ale bez radości. Na odchodne nikt się nie odwraca. ${h.name} będzie pamiętał, że ich wysłano.`:`Żegnają się przy ognisku. Rano idą ścieżką w głąb wyspy, a dzieci machają, dopóki ich widać.`):'Nie udało się wyruszyć.'}})).concat([{n:'Nikt, jeszcze nie teraz',d:'',f:()=>'Wiec się rozchodzi. Kraina poczeka.'}])},{})}

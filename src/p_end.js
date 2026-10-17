@@ -77,7 +77,7 @@ function weatherFx(rdt){const blowM=WX.blow>.2&&WX.rain<.01,isRain=WX.rain>.01||
   sGeo.attributes.position.needsUpdate=true;snowP.position.set(0,base,0);snowP.material.size=5-1.2*WX.blow}
  const fogK=Math.min(1,WX.fog+.35*WX.rain+.3*WX.snow+.5*WX.blow);{const sz=34/zoom,ov=sstep(.5,.25,zoom);scene.fog.near=160+lerp(.05,-.45,fogK)*sz+ov*sz*.25;scene.fog.far=160+lerp(1.7,.95,fogK)*sz+ov*sz*.6;}wUni.uFogN.value=scene.fog.near;wUni.uFogF.value=scene.fog.far;
  return fogK}
-function frame(now){requestAnimationFrame(frame);if(document.hidden){last=now;return}if(gfxSkip(now))return;const rdt=Math.min(.25,(now-last)/1000);last=now;clock+=rdt;
+function frame(now){if(!lifeCanRun()){last=now;return}lifeRequestFrame();if(gfxSkip(now))return;const rdt=Math.min(.25,(now-last)/1000);last=now;clock+=rdt;
  wUni.uT.value=clock;
  GFXU.t.value=clock;if(!S){yaw+=rdt*.04;yawT=yaw;setCam();introLight();gfxRender();return}
  if(S.speed>0&&S.people.length){let dt=rdt*S.speed;while(dt>0){const s=Math.min(.1,dt);step(s);dt-=s}storyTick()}
@@ -127,7 +127,7 @@ function isFull(){return !!(document.fullscreenElement||document.webkitFullscree
 function isStandalone(){return matchMedia('(display-mode: fullscreen)').matches||matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}
 function goFull(){const d=document.documentElement;const f=d.requestFullscreen||d.webkitRequestFullscreen;if(!f||isFull())return Promise.resolve();try{const r=f.call(d,{navigationUI:'hide'});return r&&r.catch?r.catch(()=>{}):Promise.resolve()}catch(e){return Promise.resolve()}}
 function toggleFull(){if(isFull()){(document.exitFullscreen||document.webkitExitFullscreen).call(document)}else goFull().then(()=>{if(!isFull())toast('Przeglądarka nie pozwala tu na pełny ekran. Zainstaluj grę albo otwórz ją bezpośrednio.')})}
-['fullscreenchange','webkitfullscreenchange'].forEach(ev=>document.addEventListener(ev,()=>{renderCtl();setTimeout(resize,120)}));
+['fullscreenchange','webkitfullscreenchange'].forEach(ev=>document.addEventListener(ev,()=>{renderCtl();gameLater(resize,120)}));
 let installEv=null;
 addEventListener('beforeinstallprompt',e=>{e.preventDefault();installEv=e;$('goInstall').hidden=false});
 addEventListener('appinstalled',()=>{installEv=null;$('goInstall').hidden=true;try{toast('Gra zainstalowana. Znajdziesz ją na ekranie głównym.')}catch(e){}});
@@ -141,20 +141,24 @@ $('goNew').addEventListener('click',()=>{try{localStorage.removeItem(SAVEKEY)}ca
 // Zapis awaryjny przy przejściu aplikacji w tło oraz cykliczny niezależny od upływu dni w grze.
 // Odstęp w czasie rzeczywistym działa również przy zatrzymanej symulacji.
 const autosaveIntervalMs=15000;
-setInterval(()=>{if(S&&!document.hidden&&!saveStatus.blocked)save()},autosaveIntervalMs);
-addEventListener('pagehide',()=>{if(S)save()});
-addEventListener('beforeunload',()=>{if(S)save()});
-document.addEventListener('visibilitychange',()=>{last=performance.now();batLastR=0;if(S&&document.hidden)save()});
+document.addEventListener('visibilitychange',()=>lifeSync(true));
+addEventListener('pagehide',()=>{lifeAway=true;lifeSync(true)});
+addEventListener('pageshow',()=>{lifeAway=false;lifeSync()});
+document.addEventListener('freeze',()=>{lifeFrozen=true;lifeSync(true)});
+document.addEventListener('resume',()=>{lifeFrozen=false;lifeSync()});
+addEventListener('beforeunload',()=>{if(S&&!lifeSaved)lifeSaved=save()});
+{const style=document.createElement('style');style.textContent='.game-asleep *,.game-asleep *::before,.game-asleep *::after{animation-play-state:paused!important}';document.head.appendChild(style)}
+
 reveal(camp.i,camp.j,24);curYd=6;paintBase(6);applyFog();refreshNodes();refreshDeco();buildStatic();revNew.length=0;
 camT.x=tcx(camp.i);camT.z=tcx(camp.j);zoom=zoomT=1.1;resize();
 document.body.classList.add('pre');
-try{const w0=innerWidth,h0=innerHeight;renderer.setSize(640,640,false);const asp0=1;
+if(lifeCanRun())try{const w0=innerWidth,h0=innerHeight;renderer.setSize(640,640,false);const asp0=1;
  const z0=.62;const size=34/z0;cam.left=-size/2;cam.right=size/2;cam.top=size/2;cam.bottom=-size/2;cam.updateProjectionMatrix();
  const yy=yaw;yaw=Math.PI*.18;const cx=camT.x,cz=camT.z;camT.x=tcx(camp.i)+6;camT.z=tcx(camp.j)-4;
  const h=Hy(camT.x,camT.z),r=160;cam.position.set(camT.x+Math.sin(yaw)*Math.cos(pitch)*r,h+Math.sin(pitch)*r,camT.z+Math.cos(yaw)*Math.cos(pitch)*r);cam.lookAt(camT.x,h,camT.z);
  introLight();sun.position.set(camT.x-40,38,camT.z+30);renderer.render(scene,cam);$('introPic').style.backgroundImage=`url(${cv.toDataURL('image/jpeg',.86)})`;
  yaw=yawT=yy;camT.x=cx;camT.z=cz;resize()}catch(e){}
-requestAnimationFrame(frame);
+lifeSync();
 window.__g={mapTick:r=>mapTick(r),storyTick:()=>storyTick(),get S(){return S},get fxDbg(){return{mists,dawnMist,rain,camT,walk,wreck,nodes}},ludInit,countInRange,isWorkerX:p=>isWorker(p),foodCap,renderer,czekamy,sinceLast,mergeGroup,saveFix,hintTick,save,load,buildApply,buildPrep,bMeshOf:id=>bMesh[id],rebuildMesh,completeSite,SNOWU,cerSet,cerActive,cerStart,cerEnd,flashA:()=>flashA,bolt,stormTick,zorzaMat,lifeStory,camFocus,dustPuff,setCam,assignHomes,killPerson,bById,tod,yday,entryOf,gospEat,spizCap,spizTot,wieczDaily,wieczAuto,przOn,przHost,haulSite,matOf,gospMade,qWord,gospHTML,fedOf,famMembers,lookAt,SLAD,sladDo,sladDaily,sladTick,ladPut,ladDel,ladStart,ladEnd,ladTap,ladScore,ladBuild,ladDaily,photoMode,line4,tribe,TRIBE,camp,techDone,TECH_BY,homeOf,bDone,kolNew,kolWho,hamRib,kolRibbon,kolGo,kolCands,kolDaily,kmapOpen,kmapClose,hamPath,walkers,freeRegions,settledCount,hamVis,genNeed,EVENTS,openEvent,goalsTick2:()=>goalsTick(),actDaily,wiecPokolen,ksiegaText,goalInfo2:()=>goalInfo(),rokNaWyspie,pamDaily,song,askVName,pamHTML,urzDaily,officesHTML,openSpor,obyStage,custHTML2:()=>custHTML(),ludDaily,foundHamlet,zadOf,relAdd,relGet,wedding,rodyHTML,hamletHTML,ludCard,mirWord,slowHTML,troubleHTML,kronText,FOOD,foodTotal,gfxSetLevel,get GFX(){return GFX},setYaw(v){yaw=yawT=v},get yaw(){return yaw},slavDaily,slavHTML,custHTML,get evOpen(){return evOpen},startProj,finishProj,rebuildMesh,custChange,custTick,custInit,setOffice,lawDaily,startFire,upgradeB,reqTick,disDaily,REGIONS,sendExp,tech,regionScan,toggleOverview,step,newDay,assign,nodes,startGame,setAlloc,setWant,startPlace,tryPlace,moveGhost,checkPlace,camp,wreck,tribe,rev,fogPass,openSheet,closeSheet,setCam,select,selectB,reveal,deco,BD,bById,countInRange,
  get ghostTile(){return ghostTile},get placing(){return placing},get zoom(){return zoom},setZoom(z){zoom=zoomT=z;setCam()},get qLevel(){return qLevel},setTime(t){S.day=Math.floor(S.day)+t},look(x,z){camT.x=x;camT.z=z;setCam()},
  build(kind,i,j){startPlace(kind);moveGhost(i,j);const gt=ghostTile;const ok=checkPlace(kind,gt[0],gt[1]);if(ok)tryPlace();else cancelPlace();return ok},

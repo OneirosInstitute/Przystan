@@ -60,7 +60,7 @@ function bolt(x,z){if(boltM){scene.remove(boltM);boltM.children.forEach(c=>c.geo
  scene.add(g);boltM=g;boltMat.opacity=1}
 function stormTick(rdt){if(!S)return;const k=S.weather.k;if(boltMat.opacity>0){boltMat.opacity=Math.max(0,boltMat.opacity-rdt*3.5);if(boltMat.opacity===0&&boltM){scene.remove(boltM);boltM=null}}
  flashA=Math.max(0,flashA-rdt*4);if(WX.storm<.15||!S.speed)return;boltT-=rdt*Math.min(3,S.speed);if(boltT>0)return;boltT=(2+Math.random()*7)/Math.max(.25,WX.storm);
- const a=Math.random()*6.283,r=6+Math.random()*26/Math.max(.5,zoom),x=camT.x+Math.cos(a)*r,z=camT.z+Math.sin(a)*r;flashA=1;setTimeout(()=>flashA=.8,120);bolt(x,z);thunder(Math.min(2.5,r*.06),1.2-Math.min(.8,r/40));
+ const a=Math.random()*6.283,r=6+Math.random()*26/Math.max(.5,zoom),x=camT.x+Math.cos(a)*r,z=camT.z+Math.sin(a)*r;flashA=1;gameLater(()=>flashA=.8,120);bolt(x,z);thunder(Math.min(2.5,r*.06),1.2-Math.min(.8,r/40));
  wxBoltHit(x,z);if(Math.random()<.18){const t=nodeBy.tree.filter(n=>n.amt>0&&revAt(n.i,n.j)&&Math.hypot(n.x-x,n.z-z)<8).sort((p,q)=>q.sc-p.sc)[0];if(t){t.amt=0;const q=nodes.indexOf(t);if(q>=0)S.nodeAmt[q]=0;nodeVis(t);bolt(t.x,t.z);dustPuff(t.x,Hy(t.x,t.z)+1,t.z,6,1);
    if(!S.seen['piorun'+Math.floor(S.day/4)]){S.seen['piorun'+Math.floor(S.day/4)]=1;log('Piorun trzaska w wysokie drzewo za osadą. Zostaje osmalony kikut. Starzy mówią, że Perun bił w coś złego, co się w nim ukryło.');S.wh=(S.wh||0)+.005;if(typeof placeAdd==='function')placeAdd({oak:'Spalony Dąb',birch:'Spalona Brzoza',pine:'Spalona Sosna',spruce:'Spalony Świerk'}[t.sp]||'Spalone Drzewo',t.x,t.z,'tu piorun trafił w drzewo')}}}}
 {const _l=lighting;lighting=function(){const L=_l();if(flashA>0){hemi.intensity+=flashA*2.4;renderer.toneMappingExposure+=flashA*.5;scene.background.lerp(new THREE.Color(0xc8d4ff),flashA*.45)}return L}}
@@ -89,7 +89,7 @@ function sfxAt(kind,x,z){if(typeof AUD==='undefined'||!AUD||muted)return;_v3s.se
   const noise=(len,f,q,g,type)=>{const b=AUD.createBuffer(1,Math.floor(AUD.sampleRate*len),AUD.sampleRate),d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/d.length,3);const s=AUD.createBufferSource();s.buffer=b;const fl=AUD.createBiquadFilter();fl.type=type||'bandpass';fl.frequency.value=f;fl.Q.value=q;const gn=AUD.createGain();gn.gain.value=g*vol;s.connect(fl);fl.connect(gn);gn.connect(out);s.start(t)};
   const tone=(f0,f1,dur,g,type)=>{const o=AUD.createOscillator(),gn=AUD.createGain();o.type=type||'sine';o.frequency.setValueAtTime(f0,t);o.frequency.exponentialRampToValueAtTime(f1,t+dur);gn.gain.setValueAtTime(.0001,t);gn.gain.exponentialRampToValueAtTime(g*vol,t+.005);gn.gain.exponentialRampToValueAtTime(.0001,t+dur);o.connect(gn);gn.connect(out);o.start(t);o.stop(t+dur+.02)};
   if(kind==='chop'){noise(.08,900,1.2,.09);tone(140,70,.12,.06)}
-  else if(kind==='stone'){noise(.04,2600,3,.06);setTimeout(()=>{},0)}
+  else if(kind==='stone'){noise(.04,2600,3,.06);gameLater(()=>{},0)}
   else if(kind==='hammer'){tone(240,160,.07,.05,'triangle');noise(.03,1800,2,.04)}
   else if(kind==='anvil'){tone(1350,1300,.5,.035);tone(2050,2000,.35,.02)}
   else if(kind==='saw'){noise(.25,1400,6,.035)}}catch(e){}}

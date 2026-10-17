@@ -99,7 +99,7 @@ function czThreats(){const L=[],days=czNeedDays(),sea=seasonIdx();
  const hl=S.people.filter(p=>!homeOf(p)).length;if(hl&&(sea===1||sea===2))L.push([`bez dachu: ${hl}`,1,'']);
  return L.sort((a,b)=>b[1]-a[1]).slice(0,2)}
 let czGoalT=null,czGoalTm=0;
-function czShowGoal(){const g=goalInfo();if(!g)return;setH(czGoal,`<small>${g.ch||'Cel'}</small><span>${g.t}</span>`);czGoal.classList.add('on');clearTimeout(czGoalTm);czGoalTm=setTimeout(()=>czGoal.classList.remove('on'),9000)}
+function czShowGoal(){const g=goalInfo();if(!g)return;setH(czGoal,`<small>${g.ch||'Cel'}</small><span>${g.t}</span>`);czGoal.classList.add('on');gameCancelLater(czGoalTm);czGoalTm=gameLater(()=>czGoal.classList.remove('on'),9000)}
 {const _rt=renderTop;renderTop=function(){_rt();if(!czOn||!S)return;
   const d=Math.floor(rday()),s=Math.floor(d/SD),t=tod();const part=t<.2?'noc':t<.3?'świt':t<.7?'dzień':t<.82?'zmierzch':'noc';
   setH($('cz-date'),`<b>${SEAS[s]} · ${d%SD+1}</b><small>${part} · ${wxName()}</small>`);
@@ -339,4 +339,4 @@ document.addEventListener('click',e=>{if(!e.target.closest('[data-czui]'))return
 {const _mt=mapTick;mapTick=function(rdt){_mt(rdt);try{czEdgeTick();czTalkTick()}catch(e){}}}
 window.__cz={rt:()=>renderTop(),czSuggest,selectT,czThreats,czTalkLines,czSetJob,czEdgeTick,get selT(){return selT},czSumHTML,setRot(v){}};
 // pierwsza gra: jedno zdanie o tym, jak się gra bez menu
-{const _b=boot;boot=function(fresh){_b(fresh);try{if(czOn&&S&&!S.seen.czHelp){S.seen.czHelp=1;setTimeout(()=>{if(evOpen)return;const el=$('toast');el.textContent='Dotknij ziemi, budynku, drzewa albo człowieka. Resztę znajdziesz w księdze Osada.';el.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove('on'),7000)},12000)}}catch(e){}}}
+{const _b=boot;boot=function(fresh){_b(fresh);try{if(czOn&&S&&!S.seen.czHelp){S.seen.czHelp=1;gameLater(()=>{if(evOpen)return;const el=$('toast');el.textContent='Dotknij ziemi, budynku, drzewa albo człowieka. Resztę znajdziesz w księdze Osada.';el.classList.add('on');gameCancelLater(toastT);toastT=gameLater(()=>el.classList.remove('on'),7000)},12000)}}catch(e){}}}

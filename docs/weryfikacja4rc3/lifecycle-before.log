@@ -1,0 +1,138 @@
+✖ hiding stops the render scheduler, autosave timer and simulation while retaining the exit save (2019.503348ms)
+✖ pagehide and freeze stop independently; returning starts exactly one loop without catching up time (1850.21501ms)
+✖ a hidden page cannot be restarted by pageshow/resume until it becomes visible (1557.318879ms)
+✖ delayed story retries sleep in the background and continue after return (1454.651804ms)
+✖ sound follows lifecycle even if a suspend finishes after the app has returned (1489.320116ms)
+✖ a hidden initial load does not schedule frames, timers, audio or render an intro snapshot (1134.752297ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 0
+ℹ fail 6
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 9674.686753
+
+✖ failing tests:
+
+test at tests/lifecycle.test.mjs:13:1
+✖ hiding stops the render scheduler, autosave timer and simulation while retaining the exit save (2019.503348ms)
+  AssertionError [ERR_ASSERTION]: no queued render callback
+  
+  1 !== 0
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/battery_20261017/Przystan/tests/lifecycle.test.mjs:16:9)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/lifecycle.test.mjs:23:1
+✖ pagehide and freeze stop independently; returning starts exactly one loop without catching up time (1850.21501ms)
+  AssertionError [ERR_ASSERTION]: pagehide
+  
+  1 !== 0
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/battery_20261017/Przystan/tests/lifecycle.test.mjs:26:30)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/lifecycle.test.mjs:36:1
+✖ a hidden page cannot be restarted by pageshow/resume until it becomes visible (1557.318879ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  1 !== 0
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/battery_20261017/Przystan/tests/lifecycle.test.mjs:38:57)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/lifecycle.test.mjs:42:1
+✖ delayed story retries sleep in the background and continue after return (1454.651804ms)
+  AssertionError [ERR_ASSERTION]: no outstanding native story timers
+  
+  1 !== 0
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/battery_20261017/Przystan/tests/lifecycle.test.mjs:45:56)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/lifecycle.test.mjs:50:1
+✖ sound follows lifecycle even if a suspend finishes after the app has returned (1489.320116ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'suspended'
+  - 'running'
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/battery_20261017/Przystan/tests/lifecycle.test.mjs:54:59)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'suspended',
+    expected: 'running',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/lifecycle.test.mjs:59:1
+✖ a hidden initial load does not schedule frames, timers, audio or render an intro snapshot (1134.752297ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  1 !== 0
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/battery_20261017/Przystan/tests/lifecycle.test.mjs:60:49)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

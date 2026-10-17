@@ -5,6 +5,7 @@
 let batOn=false;try{batOn=localStorage.getItem('przystan-bat')==='1'}catch(e){}
 let batAct=performance.now(),batLastR=0,batCam='',batCap=60;
 const batPoke=()=>{batAct=performance.now()};
+['pointerdown','keydown'].forEach(event=>addEventListener(event,()=>batSound(),{passive:true}));
 ['pointerdown','pointermove','wheel','keydown','touchstart','touchmove'].forEach(ev=>addEventListener(ev,batPoke,{passive:true,capture:true}));
 // ile klatek na sekundę w danej chwili
 function batFps(){if(!S)return batOn?20:30;const now=performance.now();
@@ -23,10 +24,20 @@ function batDpr(){if(!batOn)return;const cap=coarse?1.25:1.5;if(renderer.getPixe
 {const _gl=gfxSetLevel;gfxSetLevel=function(l,q){const r=_gl(l,q);try{batDpr()}catch(e){}return r}}
 try{batDpr()}catch(e){}
 // schowana gra: dźwięk wstrzymany (bez tego przeglądarka uznaje kartę za grającą i nie usypia jej)
-function batSound(){try{if(!AUD)return;if(document.hidden)AUD.suspend();else if(!muted&&AUD.state==='suspended')AUD.resume()}catch(e){}}
-document.addEventListener('visibilitychange',batSound);
-addEventListener('pagehide',()=>{try{if(AUD)AUD.suspend()}catch(e){}});
-addEventListener('pageshow',batSound);
+// Serializowane operacje zapobiegają spóźnionemu suspend po powrocie do gry.
+let batSoundPending=null;
+function batSound(){
+ const audio=AUD;if(!audio||audio.state==='closed'||batSoundPending?.audio===audio)return;
+ const awake=lifeCanRun()&&!muted;
+ if(awake&&!['suspended','interrupted'].includes(audio.state)||!awake&&audio.state==='suspended')return;
+ const operation={audio};batSoundPending=operation;
+ try{
+  Promise.resolve(awake?audio.resume():audio.suspend()).then(()=>{
+   if(batSoundPending!==operation)return;batSoundPending=null;
+   if(AUD===audio&&audio.state!=='closed'&&(lifeCanRun()&&!muted)!==awake)batSound();
+  },()=>{if(batSoundPending===operation)batSoundPending=null});
+ }catch(error){if(batSoundPending===operation)batSoundPending=null}
+}
 // pulsowanie przycisków (cień animowany w nieskończoność) zmuszało przeglądarkę do przemalowywania ekranu z pełną częstotliwością,
 // także w pauzie: teraz pulsują kilka razy i zostają podświetlone bez ruchu
 {const st=document.createElement('style');st.textContent=`.czc.bad,.cze.bad,#cz-tempo.stop{animation-iteration-count:3!important}

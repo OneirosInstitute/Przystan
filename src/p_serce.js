@@ -230,7 +230,7 @@ function scStageScene(st){const ul=SC_OPEN_N(st).concat(SC_INST[st]||[]);const t
    {n:'Spiżarnia, opał i zgoda',d:'syto, ciepło i spokojnie',f:()=>{scSetTeki(['stol','cieplo','wsp']);return scUl(ul)}},
    {n:'Rzemiosło, budowy i zgoda',d:'warsztaty, budowy i mniej sporów',f:()=>{scSetTeki(['rzem','dach','wsp']);return scUl(ul)}}]
   :[{n:'Dalej',d:'',f:()=>scUl(ul)}];
- const go=()=>{if(evOpen||placing){setTimeout(go,3000);return}openEvent({ey:'Serce osady',t:SERCE[st].n,text:()=>txt,opts},{})};go()}
+ const go=()=>{if(evOpen||placing){gameLater(go,3000);return}openEvent({ey:'Serce osady',t:SERCE[st].n,text:()=>txt,opts},{})};go()}
 const scUl=ul=>ul.length?'Odblokowano: '+ul.join(', ')+'.':'Serce osady urosło.';
 
 // ---------- rada osady (Dom rady: 3 radnych, ratusz: 5) ----------
@@ -344,7 +344,7 @@ function scJarmark(){if(scSt()<5)return;const rd=Math.floor(rday()),yr=Math.floo
  const n=S.people.filter(isAdult).length+H.length*3;const dr=scDrink(n*.4);S.hope=clamp(S.hope+.06,0,1);S.dis=Math.max(0,(S.dis||0)-.04);S.sc.jarN=(S.sc.jarN||0)+1;try{cerSet('jarmark')}catch(e){}try{pamAdd(2,'jarmark')}catch(e){}
  log(`Jarmark na rynku przed ratuszem. Z ${H.length} ${H.length<5?'przysiółków':'przysiółków'} zjeżdżają wozy: ${Object.entries(got).map(([k,v])=>RN[k].toLowerCase()+' '+v).join(', ')||'dary'}.${dr>0?' Beczki pustoszeją do zmroku.':' Szkoda tylko, że nie ma czym wznieść toastu.'}`);toast('Jarmark przed ratuszem');scMiasto()}
 function scMiasto(){if(!S.sc||S.sc.miasto||scSt()<5)return;const n=Object.keys(S.sc.cech).length;if(n<4||(S.sc.jarN||0)<1)return;S.sc.miasto=Math.floor(S.day)+1;try{song('Pieśń o mieście na wyspie');pamAdd(6,'miasto')}catch(e){}S.hope=clamp(S.hope+.1,0,1);
- const go=()=>{if(evOpen||placing){setTimeout(go,3000);return}const nm=(S.e2&&S.e2.endName)||S.vname||'Przystań';openEvent({ey:'Serce osady',t:'Prawa miejskie',text:()=>`Na rynku przed ratuszem staje cała wyspa: osada, przysiółki, cechy pod swoimi znakami. Najstarszy z rady odczytuje spisane prawa: o targu, o cechach, o radzie wybieranej co roku i o tym, że nikt na wyspie nie jest niczyim panem.\n\n${nm} jest od dziś miastem. Rozbitkowie zostali gospodarzami całej wyspy.`,opts:[{n:'Dalej',d:'',f:()=>'Rozbici na brzegu stali się mieszczanami. Wyspa żyje dalej.'}]},{})};go()}
+ const go=()=>{if(evOpen||placing){gameLater(go,3000);return}const nm=(S.e2&&S.e2.endName)||S.vname||'Przystań';openEvent({ey:'Serce osady',t:'Prawa miejskie',text:()=>`Na rynku przed ratuszem staje cała wyspa: osada, przysiółki, cechy pod swoimi znakami. Najstarszy z rady odczytuje spisane prawa: o targu, o cechach, o radzie wybieranej co roku i o tym, że nikt na wyspie nie jest niczyim panem.\n\n${nm} jest od dziś miastem. Rozbitkowie zostali gospodarzami całej wyspy.`,opts:[{n:'Dalej',d:'',f:()=>'Rozbici na brzegu stali się mieszczanami. Wyspa żyje dalej.'}]},{})};go()}
 
 // ---------- ludzie proszą o napitki, przysiółki też ----------
 REQS.piwo={w:2,make:()=>{if(scSt()<3||scNap()>=8||seasonIdx()===2)return null;const p=pickAdult(q=>q.age>25);return p?{pid:p.id}:null},t:(r,p)=>`${p.name} prosi o piwo na wieczór`,

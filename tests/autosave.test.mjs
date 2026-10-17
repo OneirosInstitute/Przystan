@@ -48,8 +48,8 @@ test('water hauling is saved by the timer, resumed after restart and delivered e
 });
 
 test('background and page-exit callbacks persist the current state without manual save',()=>{
- const runtime=createGame();runtime.game.startGame(true);
  for(const event of ['visibilitychange','pagehide','beforeunload']){
+  const runtime=createGame();runtime.game.startGame(true);
   runtime.game.S.res.drewno++;
   if(event==='visibilitychange')runtime.sandbox.document.hidden=true;
   const listeners=event==='visibilitychange'?runtime.documentListeners:runtime.windowListeners;

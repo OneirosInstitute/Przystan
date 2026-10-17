@@ -3,7 +3,7 @@ const path=require('node:path');
 const crypto=require('node:crypto');
 function verifyPackage(root=path.join(__dirname,'..'),manifest=JSON.parse(fs.readFileSync(path.join(root,'release-manifest.json'),'utf8'))){
  const directory=fs.realpathSync(path.resolve(root));
- if(!manifest||manifest.version!=='4.0.0-rc.2'||!manifest.files||typeof manifest.files!=='object'||Array.isArray(manifest.files))throw new Error('Nieprawidłowy manifest paczki');
+ if(!manifest||manifest.version!=='4.0.0-rc.3'||!manifest.files||typeof manifest.files!=='object'||Array.isArray(manifest.files))throw new Error('Nieprawidłowy manifest paczki');
  const files=Object.entries(manifest.files);if(!files.length)throw new Error('Pusty manifest');
  for(const [name,checksum]of files){
   const resolved=path.resolve(directory,name);

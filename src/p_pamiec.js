@@ -20,12 +20,12 @@ function pamDaily(){S.firsts=S.firsts||{};
  if(seasonIdx()===2&&S.hungerDays>0)S.zimaGlod=Math.floor(S.day/YEAR);
  if(Math.floor(rday())===15&&S.zimaGlod===Math.floor(S.day/YEAR)&&!S.seen['pglod'+S.zimaGlod]){S.seen['pglod'+S.zimaGlod]=1;song('Pieśń o głodnej zimie '+(S.zimaGlod+1)+'. roku')}
  // nazwa osady i znaki rodów
- if(S.tier>=1&&!S.vname&&!S.vnameQ){S.vnameQ=1;setTimeout(askVName,1500)}
+ if(S.tier>=1&&!S.vname&&!S.vnameQ){S.vnameQ=1;gameLater(askVName,1500)}
  setVName()}
 function setVName(){const sp=campLbl.querySelector('span');const n=S&&S.vname||'Przystań';if(sp&&sp.textContent!==n)sp.textContent=n}
 const ZNAKI=['◆','▲','●','✚','✦','◐','■','✿','⬟','✶'];
 function giveZnaki(){S.rody=S.rody||{};let i=0;Object.keys(S.rody).forEach(id=>{if(!S.rody[id].znak)S.rody[id].znak=ZNAKI[i%ZNAKI.length];i++})}
-function askVName(){if(!S||S.vname)return;if(evOpen||placing){setTimeout(askVName,4000);return}
+function askVName(){if(!S||S.vname)return;if(evOpen||placing){gameLater(askVName,4000);return}
  const st=offHolder('starszy')||S.people.filter(isAdult).sort((a,b)=>b.age-a.age)[0];const opts=[['Przystań','tak, jak mówimy od pierwszej nocy'],['Ostoja','miejsce, gdzie można się schronić'],['Zatocze','od zatoki, która nas przyjęła'],[st?placeName(st.name):'Nowa Wieś',st?'od '+gen(st.name)+', który nas tu prowadził':'nowa wieś na nowej ziemi']];
  openEvent({id:'village-name',ey:'Wiec',t:'Imię dla osady',text:()=>`Domów jest już kilka, a ludzi coraz więcej. Na wiecu ktoś mówi, że osada potrzebuje imienia, żeby wnuki wiedziały, skąd są. Rody przy okazji wyrzynają swoje znaki na słupach przy domach.`,
   opts:opts.map(([n,d])=>({n,d,f:()=>{S.vname=n;giveZnaki();pamAdd(5,'nazwa');setVName();return`Od dziś osada nazywa się ${n}. Każdy ród wyrzyna swój znak na słupie przy domu.`}}))},{})}

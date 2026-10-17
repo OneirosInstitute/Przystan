@@ -438,7 +438,7 @@ function removePersonMesh(id){const m=pMesh[id];if(m){retireObjects(m);delete pM
 
 /* ===== budynki ===== */
 let bMesh={};
-function addBuildingMesh(b){const g=makeBuildingModel(b.kind,b);if(g.userData.crops)setTimeout(()=>fieldVis(b),0);const c=bCenter(b);g.position.set(c.x,Hy(c.x,c.z),c.z);g.traverse(o=>{o.userData.bid=b.id});g.userData.bid=b.id;bGroup.add(g);bMesh[b.id]=g;g.scale.y=bDone(b)?1:Math.max(.12,b.prog/b.work);
+function addBuildingMesh(b){const g=makeBuildingModel(b.kind,b);if(g.userData.crops)gameLater(()=>fieldVis(b),0);const c=bCenter(b);g.position.set(c.x,Hy(c.x,c.z),c.z);g.traverse(o=>{o.userData.bid=b.id});g.userData.bid=b.id;bGroup.add(g);bMesh[b.id]=g;g.scale.y=bDone(b)?1:Math.max(.12,b.prog/b.work);
  if(!bDone(b)){const sc=scaffold(b.kind);sc.position.copy(g.position);bGroup.add(sc);g.userData.scaf=sc}return g}
 function levelFootprint(i,j,w,h){let sum=0,c=0;for(let a=0;a<=w;a++)for(let b=0;b<=h;b++){sum+=H[(j+b)*VW+i+a];c++}const m=Math.max(sum/c,.05),pos=tGeo.attributes.position.array;
  for(let a=0;a<=w;a++)for(let b=0;b<=h;b++){const k=(j+b)*VW+i+a;if(BD.pomost&&H[k]<0)continue;H[k]=m;pos[k*3+1]=m}tGeo.attributes.position.needsUpdate=true;tGeo.computeBoundingSphere()}
@@ -854,7 +854,7 @@ $('tabbar').innerHTML=TABS.map(([k,n])=>`<button data-tab="${k}">${ico(k)}<span>
 $('speed').innerHTML=[[0,ico('pause')],[1,'1×'],[2,'2×'],[4,'4×'],[8,'8×']].map(([v,l])=>`<button data-sp="${v}" aria-label="Tempo ${v}">${l}</button>`).join('')+`<i></i><button data-snd="1" aria-label="Dźwięk"></button><button data-fs="1" aria-label="Pełny ekran"></button><button data-gfx="1" aria-label="Jakość grafiki" style="font-size:11px;letter-spacing:.06em"></button>`;
 function renderCtl(){{const gb=$('speed').querySelector('[data-gfx]');if(gb)gb.textContent=['NISKA','WYS.','ULTRA'][GFX.level];}const sb=$('speed').querySelector('[data-snd]');if(sb)sb.innerHTML=ico(muted?'mute':'snd');const fb=$('speed').querySelector('[data-fs]');if(fb){fb.innerHTML=ico(isFull()?'fsx':'fs');fb.style.display=fsAvail()?'':'none'}
  $('ctl').innerHTML=`<button class="txt${overview?' on':''}" data-c="isl" aria-label="Cała wyspa">Wyspa</button><button data-c="eye" class="${document.body.classList.contains('clean')?'on':''}" aria-label="Czysty widok">${ico('eye')}</button><button data-c="rl" aria-label="Obróć w lewo">${ico('rotl')}</button><button data-c="rr" aria-label="Obróć w prawo">${ico('rotr')}</button><button data-c="zin" aria-label="Przybliż">${ico('plus')}</button><button data-c="zout" aria-label="Oddal">${ico('minus')}</button><button data-c="home" aria-label="Wróć do obozu">${ico('dom')}</button>`}
-setTimeout(renderCtl,0);
+gameLater(renderCtl,0);
 let overview=null;
 function islandZoom(){const asp=innerWidth/innerHeight;return clamp(34/Math.max(128*N/144,205*N/144/asp),.07,1)}
 function toggleOverview(on){if(on===undefined)on=!overview;
@@ -881,7 +881,7 @@ $('sclose').addEventListener('click',closeSheet);
 function openSheet(t){tab=t;const wd=t==='wiedza'||t==='natura'||t==='wyprawy';$('sheet').classList.toggle('wide',wd);document.body.classList.toggle('wide',wd);$('sheet').hidden=false;$('sheet').classList.remove('min');$('smin').innerHTML=ico('minus');$('res').classList.remove('on');document.body.classList.add('open');renderPanel()}
 function closeSheet(){$('sheet').hidden=true;document.body.classList.remove('open');tab=null;[...$('tabbar').children].forEach(b=>b.classList.remove('on'))}
 $('cancel').addEventListener('click',cancelPlace);
-let toastT=0;function toast(t){const el=$('toast');el.textContent=t;el.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove('on'),2800)}
+let toastT=0;function toast(t){const el=$('toast');el.textContent=t;el.classList.add('on');gameCancelLater(toastT);toastT=gameLater(()=>el.classList.remove('on'),2800)}
 function toastOnce(k,t){if(S.seen[k])return;S.seen[k]=1;toast(t)}
 const fmt=v=>Math.floor(v+1e-6);
 const costHave=c=>Object.entries(c).map(([k,v])=>{const h=Math.floor(S.res[k]||0);return h>=v?`<span>${RN[k].toLowerCase()} ${v}</span>`:`<span class="no">${RN[k].toLowerCase()} ${h}/${v}</span>`}).join('<span class="sep">·</span>');

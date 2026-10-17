@@ -176,10 +176,10 @@ function nextGoal(){S.goals=S.goals||{};const i=GOALS.findIndex((g,i)=>!S.goals[
 
 /* ================= dźwięk ================= */
 let AUD=null,amb=null,muted=false;try{muted=localStorage.getItem('przystan-mute')==='1'}catch(e){}
-function audioStart(){if(AUD||muted)return;try{AUD=new (window.AudioContext||window.webkitAudioContext)()}catch(e){return}
+function audioStart(){if(AUD||muted||!lifeCanRun())return;try{AUD=new (window.AudioContext||window.webkitAudioContext)()}catch(e){return}
  const len=AUD.sampleRate*4,buf=AUD.createBuffer(1,len,AUD.sampleRate),d=buf.getChannelData(0);let last=0;for(let i=0;i<len;i++){const w=Math.random()*2-1;last=(last+.02*w)/1.02;d[i]=last*3.5}
  const mk=(f,q,g)=>{const s=AUD.createBufferSource();s.buffer=buf;s.loop=true;const fl=AUD.createBiquadFilter();fl.type='lowpass';fl.frequency.value=f;fl.Q.value=q;const gn=AUD.createGain();gn.gain.value=g;s.connect(fl);fl.connect(gn);gn.connect(AUD.destination);s.start(0,Math.random()*3);return{fl,gn}};
- amb={sea:mk(420,.4,.0),wind:mk(900,.8,0),master:1};}
+ amb={sea:mk(420,.4,.0),wind:mk(900,.8,0),master:1};AUD.addEventListener('statechange',batSound);batSound();}
 function sfx(k){if(!AUD||muted)return;const t=AUD.currentTime;
  if(k==='bell'){const o=AUD.createOscillator(),g=AUD.createGain();o.type='sine';o.frequency.value=660;g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.08,t+.02);g.gain.exponentialRampToValueAtTime(.0001,t+1.4);o.connect(g);g.connect(AUD.destination);o.start(t);o.stop(t+1.5)}
  else if(k==='bird'){const o=AUD.createOscillator(),g=AUD.createGain();o.type='sine';const f=2200+Math.random()*1800;o.frequency.setValueAtTime(f,t);o.frequency.exponentialRampToValueAtTime(f*(.7+Math.random()*.6),t+.12);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.025,t+.02);g.gain.exponentialRampToValueAtTime(.0001,t+.16);o.connect(g);g.connect(AUD.destination);o.start(t);o.stop(t+.2)}

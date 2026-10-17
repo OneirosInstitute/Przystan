@@ -89,7 +89,7 @@ function wiecPokolen(){if(S.epoch===2)return;const f=S.people.filter(p=>!p.born&
  const teller=f?`${f.name}, ${Math.floor(f.age)} lat, ostatni${f.sex==='k'?'a':''} z tych, którzy pamiętają statek`:'najstarsza z córek rozbitków, która zna opowieść od matki';
  openEvent({id:'campaign-route',ey:'Wiec pokoleń',t:'Czym mamy być dalej?',
   text:()=>`Cała osada przy jednym ogniu, także ludzie z przysiółków. Mówi ${teller}. Opowiada o statku, o sztormie, o pierwszej nocy na plaży i o tych, których już nie ma. Młodzi słuchają, jakby to była baśń.\n\nPotem wiec musi zdecydować, dokąd osada pójdzie dalej. Tej decyzji nie da się cofnąć.`,
-  opts:Object.entries(PATHS).map(([k,p])=>({n:p.n+': '+p.q,d:p.d,f:()=>{S.epoch=2;S.path=k;S.finDay=S.day;pamAdd(5,'wiec');song('Pieśń o wiecu pokoleń');log(`Wiec pokoleń wybiera drogę: ${p.n}. ${p.q}`);setTimeout(ksiegaRozbitkow,600);return`Wiec wybrał: ${p.n}. Kończy się epoka rozbitków. Zaczyna się epoka ich dzieci.`}}))},{})}
+  opts:Object.entries(PATHS).map(([k,p])=>({n:p.n+': '+p.q,d:p.d,f:()=>{S.epoch=2;S.path=k;S.finDay=S.day;pamAdd(5,'wiec');song('Pieśń o wiecu pokoleń');log(`Wiec pokoleń wybiera drogę: ${p.n}. ${p.q}`);gameLater(ksiegaRozbitkow,600);return`Wiec wybrał: ${p.n}. Kończy się epoka rozbitków. Zaczyna się epoka ich dzieci.`}}))},{})}
 function ksiegaText(){if(typeof ludInit==='function')ludInit();const L=[],yrs=Math.floor(S.day/YEAR),r=S.rody||{};const nm=S.vname||'Przystań';
  L.push(`KSIĘGA ROZBITKÓW · ${nm.toUpperCase()}`,'',`Epoka rozbitków trwała ${yrs} ${lata(yrs)}. Poziom trudności: ${DIFF_N[S.diff===undefined?1:S.diff].toLowerCase()}.`,'');
  L.push(`Osiemnaścioro wyszło na brzeg. Dziś ${nm} to ${S.people.length} ${osb(S.people.length)}${(S.hamlets||[]).length?' i '+S.hamlets.reduce((x,h)=>x+h.pop,0)+' w przysiółkach: '+S.hamlets.map(h=>h.name).join(', '):''}. Urodziło się ${S.born||0}, odeszło ${S.died||0}, wesel było ${S.weds||0}.`,'');
@@ -102,7 +102,7 @@ function ksiegaText(){if(typeof ludInit==='function')ludInit();const L=[],yrs=Ma
  sec('PIEŚNI',(S.songs||[]).map(s=>'„'+s.t+'”'));sec('PIERWSZE RAZY',Object.values(S.firsts||{}).map(f=>`${dayName(f.d)}: ${f.t}.`));
  L.push(`Pamięć osady: ${pamWord()}.`,'');if(S.path)L.push(`Wiec pokoleń wybrał drogę: ${PATHS[S.path].n}. ${PATHS[S.path].q} Dalej: ${PATHS[S.path].d}.`);
  return L.filter((x,i,a)=>!(x===''&&a[i-1]==='')).join('\n')}
-function ksiegaRozbitkow(){if(evOpen){setTimeout(ksiegaRozbitkow,1500);return}const t=ksiegaText();
+function ksiegaRozbitkow(){if(evOpen){gameLater(ksiegaRozbitkow,1500);return}const t=ksiegaText();
  openEvent({ey:'Koniec epoki I',t:'Księga rozbitków',text:()=>t.split('\n').slice(2,14).join('\n'),opts:[{n:'Pobierz Księgę rozbitków',d:'plik tekstowy',f:()=>{dlFile(`ksiega-rozbitkow-${(S.vname||'przystan').toLowerCase()}.txt`,t,'text/plain;charset=utf-8');return'Księga zapisana. Osada żyje dalej.'}},{n:'Graj dalej',d:'',f:()=>'Osada żyje dalej. Epoka II dopiero się zaczyna.'}]},{})}
 function actDaily(){actInit();diffWeather();actScenes();rokNaWyspie()}
 // po wiecu pokoleń Księgę można pobrać w każdej chwili z karty pamięci

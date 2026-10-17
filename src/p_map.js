@@ -26,7 +26,7 @@ const REGIONS=[];
 })();
 const regLayer=$('labels');
 REGIONS.forEach(r=>{if(!r)return;const el=document.createElement('div');el.className='rl';el.innerHTML='<i>?</i><span>Nieznany teren</span>';el.style.opacity=0;
- el.addEventListener('click',()=>{if(!r.known)return;const title=r.el.querySelector('span');if(title){title.style.display='block';clearTimeout(r._nameTimer);r._nameTimer=setTimeout(()=>{title.style.display=''},2600)}else lookAt(tcx(r.i),tcx(r.j),1.25)});regLayer.appendChild(el);r.el=el});
+ el.addEventListener('click',()=>{if(!r.known)return;const title=r.el.querySelector('span');if(title){title.style.display='block';gameCancelLater(r._nameTimer);r._nameTimer=gameLater(()=>{title.style.display=''},2600)}else lookAt(tcx(r.i),tcx(r.j),1.25)});regLayer.appendChild(el);r.el=el});
 const campLbl=document.createElement('div');campLbl.className='rl camp';campLbl.innerHTML=`<i>${'P'}</i><span>Przystań</span>`;regLayer.appendChild(campLbl);
 campLbl.addEventListener('click',()=>lookAt(tcx(camp.i),tcx(camp.j),1.6));
 let regT=0;

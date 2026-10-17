@@ -1,0 +1,15 @@
+Integralność paczki: PASS (185 plików)
+Kontrola repozytorium: PASS
+From https://github.com/OneirosInstitute/Przystan
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+Kontrola repozytorium: PASS
+Integralność paczki: PASS (185 plików)
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> przystan@4.0.0-rc.3 build
+> node build.js
+
+Zbudowano dist/ (wersja 17f0c39c6b, 1352 kB index.html)
+Integralność paczki: PASS (185 plików)
+PACKAGE REHEARSAL PASS: exact tested bytes, clean-base preflight, copy, deterministic rebuild and integrity; no commit/push

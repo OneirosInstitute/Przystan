@@ -3,7 +3,7 @@ const {chromium}=require(process.env.PRZYSTAN_PLAYWRIGHT_MODULE||'playwright');
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 (async()=>{
  const binary=process.env.PRZYSTAN_CHROMIUM_MODULE?require(process.env.PRZYSTAN_CHROMIUM_MODULE):null;
- const options={headless:true,executablePath:binary?await binary.executablePath():process.env.CHROMIUM_PATH,args:binary?binary.args:[]};
+ const options={headless:true,executablePath:binary?await binary.executablePath():process.env.CHROMIUM_PATH,args:binary?binary.args:JSON.parse(process.env.PRZYSTAN_CHROMIUM_ARGS||'[]')};
  const output=process.env.PRZYSTAN_BROWSER_OUTPUT||path.resolve('browser-evidence');fs.mkdirSync(output,{recursive:true});
  const results=[];let server,browser;
  try{
@@ -50,7 +50,7 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
    assert.equal(await page.evaluate(()=>window.__g.save()),false);await page.evaluate(()=>window.__g.openSheet('kronika'));
    assert.match(await page.locator('#save-status').innerText(),/people\[0\].hp/);
    const downloadEvent=page.waitForEvent('download');await page.locator('[data-kron="diagnostic"]').click();const download=await downloadEvent;const diagnosticPath=path.join(output,'save-diagnostic-'+viewport.width+'.json');await download.saveAs(diagnosticPath);const diagnostic=JSON.parse(fs.readFileSync(diagnosticPath,'utf8'));
-   assert.equal(diagnostic.version,'4.0.0-rc.2');assert.equal(diagnostic.ok,false);assert.match(diagnostic.error,/people\[0\].hp/);
+   assert.equal(diagnostic.version,'4.0.0-rc.3');assert.equal(diagnostic.ok,false);assert.match(diagnostic.error,/people\[0\].hp/);
    await page.evaluate(()=>{window.__g.S.people[0].hp=1;if(!window.__g.save())throw new Error('recovery save');});assert.equal(await page.locator('#save-warning').isHidden(),true);
    await page.evaluate(()=>navigator.serviceWorker.ready);await context.setOffline(true);await page.reload({waitUntil:'domcontentloaded'});await page.waitForFunction(()=>!!window.__g,{timeout:60000});await page.locator('#go').click();
    assert.equal(await page.evaluate(()=>window.__g.S.res.drewno),73);assert.equal(await page.evaluate(()=>window.__g.S.tasksUI.dismissed[77]!==undefined),true);

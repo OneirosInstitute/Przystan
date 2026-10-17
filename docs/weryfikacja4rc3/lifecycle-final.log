@@ -1,0 +1,25 @@
+✔ starting a new settlement immediately persists the completed boot state (1662.692208ms)
+✔ real-time autosave persists paused play within 15 seconds and survives restart (3000.464634ms)
+✔ water hauling is saved by the timer, resumed after restart and delivered exactly once (5487.791131ms)
+✔ background and page-exit callbacks persist the current state without manual save (6379.88126ms)
+✔ autosave preserves a good snapshot on storage error and retries successfully (1820.120603ms)
+✔ automatic triggers never overwrite an unreadable existing save (2001.320451ms)
+✔ water exception accepts only the real zero-quantity chore marker (1957.752452ms)
+✔ manual save reports success only after storage accepts the snapshot (1668.059178ms)
+✔ a water carrier retains the trip overnight and finishes after reassignment (1530.487633ms)
+✔ hiding stops the render scheduler, autosave timer and simulation while retaining the exit save (1730.700689ms)
+✔ pagehide and freeze stop independently; returning starts exactly one loop without catching up time (3672.523637ms)
+✔ a hidden page cannot be restarted by pageshow/resume until it becomes visible (1597.850056ms)
+✔ delayed story retries sleep in the background and continue after return (2095.816615ms)
+✔ sound follows lifecycle even if a suspend finishes after the app has returned (1822.767726ms)
+✔ a hidden initial load does not schedule frames, timers, audio or render an intro snapshot (1591.551037ms)
+✔ one successful exit save covers visibility/pagehide/freeze; a failed exit save can retry (2189.831525ms)
+✔ hiding aborts an outstanding weekly request and prevents new background requests (1792.800933ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 25688.155102

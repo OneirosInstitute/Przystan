@@ -57,7 +57,7 @@ function sporDaily(){S.feuds=S.feuds||[];
  if(riv.length){pair=lpick(riv);why='slowo'}
  else{const a=lpick(ad),b=lpick(ad.filter(q=>a&&q.fam!==a.fam));if(!a||!b)return;pair=[a,b];why=S.hungerDays>0?'kradziez':law('lup')&&S.seen.zbior1&&Math.random()<.5?'lup':S.bld.filter(x=>x.field).length>=2&&Math.random()<.5?'miedza':Math.random()<.5?'krzywda':'slowo'}
  const[a,b]=pair;S.spor={a:a.id,b:b.id,why,day:S.day};S.sporNext=S.day+8+Math.random()*6;openSpor()}
-function openSpor(){if(!ludReady)ludInit();if(evOpen||placing){setTimeout(openSpor,4000);return}const s=S.spor;if(!s)return;const a=pById(s.a),b=pById(s.b);if(!a||!b){S.spor=null;return}
+function openSpor(){if(!ludReady)ludInit();if(evOpen||placing){gameLater(openSpor,4000);return}const s=S.spor;if(!s)return;const a=pById(s.a),b=pById(s.b);if(!a||!b){S.spor=null;return}
  const accBase=.5+(offHolder('starszy')?Math.min(.25,mirOf(offHolder('starszy'))/200):0)+(hasB('gaj')?.15:0)+(law('sad')?.1:law('s_wiec')?.05:0);
  const verdict=(win,lose,txt)=>{const acc=clamp(accBase+(win&&lose?(mirOf(win)-mirOf(lose))/250:.08),.15,.95);S.spor=null;
   if(Math.random()<acc){if(lose){famMembers(lose.fam).filter(isAdult).forEach(x=>famMembers(win.fam).filter(isAdult).forEach(y=>relAdd(x,y,-3)));lose.mirX=(lose.mirX||0)-2}

@@ -13,6 +13,12 @@ npm run test:runtime # pełna pętla silnika i restarty; bez prawdziwego GPU/DOM
 
 Nie ma zależności do instalowania. Wystarczy Node.js 18 lub nowszy.
 
+## Wydanie 4.0.0-rc.3
+
+Zminimalizowana gra anuluje pętlę klatek i interwał zapisu, usypia audio oraz timery dialogów, przerywa żądania wyspy tygodnia i wstrzymuje animacje CSS. Powrót uruchamia jeden zegar bez nadrabiania czasu w tle. Format zapisów i zawartość Epoki IV pozostają zgodne.
+
+[Audyt baterii i ograniczenia pomiaru](docs/AUDYT_BATERII_4.0.0_RC3.md) · [ZIP i Termux](docs/WYDANIE_4.0.0_RC3.md) · [Weryfikacja](docs/WERYFIKACJA_4.0.0_RC3.md)
+
 ## Wydanie 4.0.0-rc.2
 
 Dział Zadania: prośby z akcją pomocy, ukrywanie przeczytanych znaczników,

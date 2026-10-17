@@ -141,7 +141,7 @@ function zadHTML(){if(!S)return'';const g=goalInfo();const R=sprInit();let h='<d
 #cz-goal em{display:block;font-style:normal;font-size:12.5px;color:var(--mut);margin-top:3px;line-height:1.3}`;document.head.appendChild(st)}
 {const _cs=czSumHTML;czSumHTML=function(){return _cs()+zadHTML()}}
 {const _th=troubleHTML;troubleHTML=function(){return(!czOn&&S?zadHTML():'')+_th()}}
-czShowGoal=function(){const g=goalInfo();if(!g)return;setH(czGoal,`<small>${g.ch||'Cel'}</small><span>${g.t}</span>${g.d&&g.d!==g.how?`<em>${g.d}</em>`:''}`);czGoal.classList.add('on');clearTimeout(czGoalTm);czGoalTm=setTimeout(()=>czGoal.classList.remove('on'),11000)};
+czShowGoal=function(){const g=goalInfo();if(!g)return;setH(czGoal,`<small>${g.ch||'Cel'}</small><span>${g.t}</span>${g.d&&g.d!==g.how?`<em>${g.d}</em>`:''}`);czGoal.classList.add('on');gameCancelLater(czGoalTm);czGoalTm=gameLater(()=>czGoal.classList.remove('on'),11000)};
 {const _gt=goalsTick;goalsTick=function(){_gt();try{sprTick()}catch(e){console.warn(e)}}}
 // ---------- 2.5: ślepe uliczki ----------
 // kajuta: gdy sztorm zabrał wrak, zanim ktoś się do niej dostał, cel nie blokuje aktu
