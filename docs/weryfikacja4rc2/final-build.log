@@ -1,0 +1,5 @@
+
+> przystan@4.0.0-rc.2 build
+> node build.js
+
+Zbudowano dist/ (wersja 744284579f, 1349 kB index.html)

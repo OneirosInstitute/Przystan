@@ -1,0 +1,17 @@
+✔ a hamlet request exposes its exact cost, actionable help and map location in Tasks (1425.365372ms)
+✔ help spends only requested goods and cannot pay twice; completion survives restart (2529.037706ms)
+✔ insufficient stock has an explicit reason and preserves the request and inventory (1297.288992ms)
+✔ help guidance opens the missing knowledge instead of an unavailable building (1346.917817ms)
+✔ dismissed request marker stays hidden after reload, while a new need is visible (2730.198757ms)
+✔ tracking resolves live builders, activity and current coordinates rather than stale assignments (1484.201967ms)
+✔ expedition and reading tasks name actual workers and navigate to their relevant area (1360.285619ms)
+✔ ordinary requests can be fulfilled from Tasks and retain a single completion record (1333.265234ms)
+✔ Epoka IV projects, batches and transports appear in Tasks using actual crew and route positions (5832.71143ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 19485.282559

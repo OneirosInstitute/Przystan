@@ -108,6 +108,22 @@ function genNeed(h){const sea=seasonIdx();let k;if(h.zap<.3)k=sea===2&&Math.rand
  h.need={k,q:NEEDS[k][0],until:S.day+SD};log(`${h.head} z przysiółka ${h.name} przysyła wieść: brakuje im ${NEEDS[k][1]}. Proszą o ${NEEDS[k][0]}.`)}
 function needHave(k,q){if(k==='jedzenie')return foodTotal()>=q+20;if(k==='narz')return S.res.narz+S.res.narzk>=q;return(S.res[k]||0)>=q}
 function needTake(k,q){if(k==='jedzenie'){const t=foodTotal();FOOD.forEach(x=>S.res[x]=Math.max(0,S.res[x]-q*(S.res[x]/t)));return}if(k==='narz'){const a=Math.min(S.res.narzk,q);S.res.narzk-=a;S.res.narz-=q-a;return}S.res[k]-=q}
+function hamletNeedReason(hamlet){
+ if(!hamlet?.need||!NEEDS[hamlet.need.k])return 'Ta prośba nie jest już aktywna.';
+ const {k,q,until}=hamlet.need;if(!Number.isFinite(q)||q<=0)return 'Nieprawidłowa ilość w prośbie.';
+ if(S.day>until)return 'Termin tej prośby już minął.';
+ const available=k==='jedzenie'?foodTotal():k==='narz'?(S.res.narz||0)+(S.res.narzk||0):(S.res[k]||0);
+ if(!needHave(k,q))return `Brakuje ${NEEDS[k][1]}: masz ${Math.floor(available)}, potrzeba ${q}${k==='jedzenie'?' oraz 20 porcji rezerwy dla osady':''}.`;
+ return '';
+}
+function answerHamletNeed(hamletId){
+ const hamlet=S?.hamlets?.find(candidate=>candidate.id===hamletId),reason=hamletNeedReason(hamlet);
+ if(reason){toast(reason);return {ok:false,reason}}
+ const {k,q}=hamlet.need;needTake(k,q);hamlet.zap=Math.min(1,hamlet.zap+(k==='jedzenie'?.25:.1));hamlet.wiez=Math.min(1,hamlet.wiez+.15);hamlet.need=null;
+ spawnWalker(hamlet,1,null,1,0);log(`Do przysiółka ${hamlet.name} poszło: ${NEEDS[k][1]} (${q}). Więź jest ${wiezWord(hamlet)}.`);
+ if(typeof taskRecord==='function')taskRecord('ham:'+hamletId,'Pomoc dla: '+hamlet.name,'Przekazano '+q+' '+NEEDS[k][1]);
+ save();toast('Pomoc przekazana: '+hamlet.name);renderPanel();return {ok:true};
+}
 function roadCost(h){const P=hamPath[h.id],L=P?P.len:60;return{drewno:Math.round(8+L*.2),kamien:Math.round(4+L*.1),dni:Math.max(2,Math.round(L/20))}}
 function kolDaily(){if(!S.hamlets)return;kolInit();const sea=seasonIdx();
  S.people.forEach(p=>{if(p.waitHome&&!p.waitD)p.waitD=S.day;if(!p.waitHome)p.waitD=0});
@@ -227,7 +243,7 @@ document.addEventListener('click',e=>{if(!S)return;const t=e.target.closest('[da
  if(t.dataset.kmap!==undefined){kmapOpen();return}if(t.dataset.knew!==undefined){kolNew();return}
  const h=S.hamlets.find(x=>x.id===+(t.dataset.kneed||t.dataset.kroad||t.dataset.klook||t.dataset.kdar));if(!h)return;
  if(t.dataset.klook){closeSheet();lookAt(tcx(h.i),tcx(h.j),1.5);return}
- if(t.dataset.kneed&&h.need){const{k,q}=h.need;if(!needHave(k,q)){toast('Za mało.');return}needTake(k,q);h.zap=Math.min(1,h.zap+(k==='jedzenie'?.25:.1));h.wiez=Math.min(1,h.wiez+.15);h.need=null;spawnWalker(h,1,null,1,0);log(`Do przysiółka ${h.name} poszło: ${NEEDS[k][1]} (${q}). Więź jest ${wiezWord(h)}.`);toast('Wysłane');}
+ if(t.dataset.kneed){answerHamletNeed(h.id);return}
  if(t.dataset.kdar){if(foodTotal()<40||S.res.opal<6){toast('Za mało zapasów, żeby się dzielić.');return}needTake('jedzenie',20);S.res.opal-=6;h.wiez=Math.min(1,h.wiez+.15);h.zap=Math.min(1,h.zap+.2);spawnWalker(h,1,null,1,0);log(`Do przysiółka ${h.name} poszły dary: jedzenie i opał. Więź jest ${wiezWord(h)}.`);toast('Dary wysłane')}
  if(t.dataset.kroad){const c=roadCost(h);if(S.res.drewno<c.drewno||S.res.kamien<c.kamien){toast('Za mało kłód albo kamienia.');return}S.res.drewno-=c.drewno;S.res.kamien-=c.kamien;h.rb={p:0,n:c.dni};log(`Osada wytycza drogę do przysiółka ${h.name}: karczowanie, kładki, kamienie w błoto. Potrwa około ${c.dni} dni.`);toast('Droga w budowie')}
  renderPanel()});

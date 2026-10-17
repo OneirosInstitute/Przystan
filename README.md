@@ -13,7 +13,16 @@ npm run test:runtime # pełna pętla silnika i restarty; bez prawdziwego GPU/DOM
 
 Nie ma zależności do instalowania. Wystarczy Node.js 18 lub nowszy.
 
-## Wydanie 4.0.0-rc.1
+## Wydanie 4.0.0-rc.2
+
+Dział Zadania: prośby z akcją pomocy, ukrywanie przeczytanych znaczników,
+wykonawcy i lokalizowanie na mapie. Odzyskiwanie miejsca zajętego przez
+dodatkową kopię zapasu oraz jawna diagnostyka zapisu. Dokładna przyczyna
+awarii osady ze zrzutu wymaga jej pliku JSON.
+
+Instrukcja: [docs/WYDANIE_4.0.0_RC2.md](docs/WYDANIE_4.0.0_RC2.md).
+
+## Wydanie 4.0.0-rc.1 — zawarte w paczce
 
 Epoka IV: większa wyspa, rody, domy rodowe, jedenaście specjalizacji folwarków,
 rzeczywiste magazyny i transport oraz ciągłość społeczności przez pokolenia.

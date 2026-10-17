@@ -397,7 +397,7 @@ function freshState(){
  return st}
 function packTread(){let s='';for(let k=0;k<N*N;k++)s+=String.fromCharCode(Math.round(tread[k]*15)+65);return s.replace(/A{3,}/g,m=>'~'+m.length+'~')}
 function unpackTread(str){const s=str.replace(/~(\d+)~/g,(m,n)=>'A'.repeat(+n));for(let k=0;k<N*N&&k<s.length;k++)tread[k]=(s.charCodeAt(k)-65)/15}
-function save(){try{if(saveStatus.blocked)throw new Error('Niepoprawny zapis. Automatyczne nadpisanie wstrzymane.');const text=serializeSave();if(!decodeSave(text))throw new Error('Nieprawidłowy stan osady. Poprzedni zapis zachowany.');localStorage.setItem(SAVEKEY,text);saveStatus.ok=true;saveStatus.at=Date.now();saveStatus.error='';updateSaveStatus();const warning=document.getElementById('save-warning');if(warning)warning.hidden=true;return true}catch(error){saveWarning(error);return false}}
+function save(){try{if(saveStatus.blocked)throw new Error('Niepoprawny zapis. Automatyczne nadpisanie wstrzymane.');const text=serializeSave();if(!decodeSave(text))throw new Error(saveDecodeError||'Nieprawidłowy stan osady. Poprzedni zapis zachowany.');storeSave(text);saveStatus.ok=true;saveStatus.at=Date.now();saveStatus.error='';updateSaveStatus();const warning=document.getElementById('save-warning');if(warning)warning.hidden=true;return true}catch(error){saveWarning(error);return false}}
 function load(raw){try{const state=decodeSave(raw===undefined?localStorage.getItem(SAVEKEY):raw);if(!state)return null;
  wildFixRes(state);state.people.forEach(person=>{person.path=null;person.tgt=null;person.after=null;person.mentor=null;person.state=person.job==='wyp'&&person.state==='away'?'away':'idle';person.workKind=null});
  state.bld.forEach(building=>{building.workers=0;building.haul=0;building.inTr=0});

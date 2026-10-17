@@ -47,7 +47,7 @@ function e4Daily(state){
 {const previousPlanner=planJob;planJob=function(person){if(S?.e4Preparing&&!pendingDelivery(person)){person.state='idle';person.wait=1;person.act='czeka na Wiec Rodów';return false}return previousPlanner(person)}}
 {const previousStory=storyTick;storyTick=function(){if(S?.epoch===4)return;if(S?.e4Preparing&&e4Ready()){e4Start();return}previousStory()}}
 {const previousEvent=openEvent;openEvent=function(){if(S?.epoch!==4)return previousEvent.apply(this,arguments)}}
-{const previousValidate=validateSave;validateSave=function(state){return previousValidate(state)&&(state.epoch!==4||E4Domain.validate(state))}}
+{const previousValidate=validateSave;validateSave=function(state){return previousValidate(state)&&(state.epoch!==4||E4Domain.validate(state)||saveInvalid('e4: nieprawidłowe dane rodów, folwarków lub transportu'))}}
 {const previousMap=mapTick;mapTick=function(delta){if(S?.epoch!==4)return previousMap(delta);e4Draw(delta);wxFrame(delta);if(nocSkip&&Math.floor(S.day)>=nocSkip.d0&&tod()>=T0&&tod()<T1-.05)nocEnd();nocUI()}}
 {const previousPan=panBy;panBy=function(dx,dy){if(S?.epoch!==4)return previousPan(dx,dy);const size=34/zoom,unit=size/innerHeight;camT.x=clamp(camT.x-dx*Math.cos(yaw)*unit-dy*Math.sin(yaw)*unit/Math.sin(pitch),-188,188);camT.z=clamp(camT.z+dx*Math.sin(yaw)*unit-dy*Math.cos(yaw)*unit/Math.sin(pitch),-188,188);follow=false;setCam()}}
 {const previousHeight=Hy;Hy=function(x,z){return S?.epoch===4?E4World.height(S.e4.world,x,z):previousHeight(x,z)}}

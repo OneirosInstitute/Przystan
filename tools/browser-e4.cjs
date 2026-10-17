@@ -29,7 +29,7 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
   assert.deepEqual(await page.evaluate(()=>window.__g.S.e4.transports.filter(transport=>transport.founding).map(transport=>({id:transport.id,items:transport.items,peopleIds:transport.peopleIds}))),moving);
   await page.evaluate(()=>{for(let day=0;day<25;day++)window.__g.step(240);window.__g.S.speed=0;window.__g.openSheet('osada');});
   assert.ok(await page.evaluate(()=>Object.values(window.__g.S.e4.settlements).some(settlement=>settlement.id!=='przystan'&&settlement.buildings.dom_rodowy)));
-  for(const tab of ['osada','budowa','praca','wyprawy','wiedza','natura','kronika']){await page.evaluate(tab=>window.__g.openSheet(tab),tab);assert.ok((await page.locator('#body').innerText()).length>100,tab);}
+  for(const tab of ['osada','zadania','budowa','praca','wyprawy','wiedza','natura','kronika']){await page.evaluate(tab=>window.__g.openSheet(tab),tab);assert.ok((await page.locator('#body').innerText()).length>100,tab);}
   await page.evaluate(()=>{window.__g.closeSheet();window.__g.setZoom(1.15);const place=Object.values(window.__g.S.e4.settlements).find(place=>place.id!=='przystan'&&place.buildings.dom_rodowy)||window.__g.S.e4.settlements.przystan;window.__g.look(place.x,place.z);window.__g.S.speed=0;});await page.screenshot({path:path.join(output,'epoka4-'+viewport.width+'.png')});
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false,'viewport does not overflow');assert.deepEqual(errors,[]);
   await page.evaluate(()=>{const game=window.__g;game.step(((.9-game.S.day%1+1)%1)*240);window.__noc.nocStart();if(!game.save())throw new Error('night save failed');});

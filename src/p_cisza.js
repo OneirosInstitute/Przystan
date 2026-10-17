@@ -263,16 +263,29 @@ const czEl={},czV=new THREE.Vector3();
 const CZ_CERN={kupala:'Noc Kupały',wesele:'Wesele',dziady:'Dziady',gody:'Szczodre Gody',marzanna:'Topienie Marzanny'};
 function czTargets(){const T=[];S.bld.forEach(b=>{if(b.fire){const c=bCenter(b);T.push({k:'f'+b.id,x:c.x,z:c.z,t:'Pożar: '+BD[b.kind].n.toLowerCase(),c:'bad',ic:CZ_FIRE,b:b.id})}});
  const C=S.cer;if(C&&C.c&&typeof cerActive==='function'&&cerActive())T.push({k:'cer',x:C.c.x,z:C.c.z,t:CZ_CERN[C.k]||'Obrzęd',c:''});
- (S.hamlets||[]).forEach(h=>{if(h.need&&revAt(h.i,h.j))T.push({k:'h'+h.id,x:tcx(h.i),z:tcx(h.j),t:`${h.name} prosi o pomoc`,c:'warn',ham:1})});return T}
+ (S.hamlets||[]).forEach(h=>{if(h.need&&revAt(h.i,h.j)&&!(typeof taskNeedHidden==='function'&&taskNeedHidden(h)))T.push({k:'h'+h.id,x:tcx(h.i),z:tcx(h.j),t:`Pomoc dla: ${h.name}`,c:'warn',ham:h.id})});return T}
 function czEdgeTick(){if(!S||!czOn)return;const r=cv.getBoundingClientRect(),W=r.width,H=r.height,seen={};
  const T=czTargets();
- for(const t of T){seen[t.k]=1;let e=czEl[t.k];if(!e){e=document.createElement('button');e.className='cze';e.addEventListener('click',()=>{lookAt(e._t.x,e._t.z,Math.max(zoomT,1.3));if(e._t.b!==undefined)selectB(e._t.b);if(e._t.ham)openSheet('osada')});czEdge.appendChild(e);czEl[t.k]=e}
-  e._t=t;e.className='cze '+t.c;czV.set(t.x,Hy(t.x,t.z)+1,t.z).project(cam);let sx=(czV.x+1)/2*W,sy=(1-czV.y)/2*H;const behind=czV.z>1;
-  const m=36,top=78,bot=H-110;const inside=!behind&&sx>m&&sx<W-m&&sy>top&&sy<bot;if(inside){e.style.display='none';continue}
-  let dx=sx-W/2,dy=sy-H/2;if(behind){dx=-dx;dy=-dy}const s=Math.min((W/2-m-60)/Math.max(1e-3,Math.abs(dx)),((bot-top)/2-10)/Math.max(1e-3,Math.abs(dy)));
-  const px=W/2+dx*s,py=(top+bot)/2+dy*s;const ang=Math.atan2(dy,dx)*180/Math.PI;
-  const h=`${t.ic||''}${t.t}<span style="display:inline-flex;transform:rotate(${Math.round(ang)}deg)">${CZ_ARR}</span>`;if(e._h!==h){e._h=h;e.innerHTML=h}
-  e.style.display='flex';e.style.left=Math.round(clamp(px,110,W-110))+'px';e.style.top=Math.round(py)+'px'}
+ for(const target of T){seen[target.k]=1;let element=czEl[target.k];
+  if(!element){element=document.createElement(target.ham?'div':'button');element.className='cze';
+   if(target.ham){element.setAttribute('role','group');element.setAttribute('aria-label','Prośba o pomoc');}
+   element.addEventListener('click',event=>{const current=element._t;
+    if(current.ham){event.stopPropagation();if(event.target.closest('[data-request-close]'))taskDismissNeed(current.ham);else taskOpen('ham:'+current.ham);return}
+    lookAt(current.x,current.z,Math.max(zoomT,1.3));if(current.b!==undefined)selectB(current.b);
+   });czEdge.appendChild(element);czEl[target.k]=element;
+  }
+  element._t=target;element.className='cze '+target.c+(target.ham?' cze-request':'');czV.set(target.x,Hy(target.x,target.z)+1,target.z).project(cam);
+  const screenX=(czV.x+1)/2*W,screenY=(1-czV.y)/2*H,behind=czV.z>1,margin=36,top=78,bottom=H-110;
+  if(!behind&&screenX>margin&&screenX<W-margin&&screenY>top&&screenY<bottom){element.style.display='none';continue}
+  let deltaX=screenX-W/2,deltaY=screenY-H/2;if(behind){deltaX=-deltaX;deltaY=-deltaY}
+  const scale=Math.min((W/2-margin-60)/Math.max(.001,Math.abs(deltaX)),((bottom-top)/2-10)/Math.max(.001,Math.abs(deltaY)));
+  const positionX=W/2+deltaX*scale,positionY=(top+bottom)/2+deltaY*scale,angle=Math.atan2(deltaY,deltaX)*180/Math.PI;
+  const label=`${target.ic||''}${escapeHtml(target.t)}<span style="display:inline-flex;transform:rotate(${Math.round(angle)}deg)">${CZ_ARR}</span>`;
+  const markup=target.ham?`<button type="button" class="cze-open">${label}</button><button type="button" class="cze-close" data-request-close="1" aria-label="Schowaj przeczytany znacznik pomocy">×</button>`:label;
+  if(element._h!==markup){element._h=markup;element.innerHTML=markup}
+  element.style.display='flex';const halfWidth=Math.min(W/2-10,(element.offsetWidth||220)/2);
+  element.style.left=Math.round(clamp(positionX,halfWidth+10,W-halfWidth-10))+'px';element.style.top=Math.round(positionY)+'px';
+ }
  for(const k in czEl)if(!seen[k]){czEl[k].remove();delete czEl[k]}}
 
 // ---------- przy ognisku: co mówią we wsi ----------
