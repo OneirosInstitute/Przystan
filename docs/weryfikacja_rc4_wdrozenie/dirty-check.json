@@ -1,0 +1,7 @@
+{
+  "status": "PASS",
+  "installerRejectsDirtyRepository": true,
+  "exitCode": 1,
+  "existingFilesUnchanged": true,
+  "userNotesPreserved": true
+}

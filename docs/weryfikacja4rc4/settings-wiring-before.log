@@ -1,0 +1,30 @@
+✖ battery and photo controls never write an invalid simulation speed or break saving (1341.492382ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1467.557353
+
+✖ failing tests:
+
+test at tests/menu-workspace.test.mjs:43:1
+✖ battery and photo controls never write an invalid simulation speed or break saving (1341.492382ms)
+  AssertionError [ERR_ASSERTION]: bat
+  
+  NaN !== 2
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/overhaul_20261017/Przystan/tests/menu-workspace.test.mjs:48:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: NaN,
+    expected: 2,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

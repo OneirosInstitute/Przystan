@@ -1,0 +1,155 @@
+✖ an ore-starved smith collects real ore instead of unrelated village chores (1681.693531ms)
+✖ supply work is slower than professional gathering and conserves the source and delivery (1514.86166ms)
+✖ meeting every configured output target returns the crew to village help even with empty inputs (1412.376315ms)
+✖ inaccessible, hidden, claimed or exhausted sources are not invented or replaced by social work (1334.060261ms)
+✖ suppliers relinquish the source and return to production when another delivery resolves the shortage (1247.173115ms)
+✖ upstream charcoal shortage targets wood only through an existing charcoal kiln (1284.985694ms)
+✖ a supply delivery survives restart and returns to the original workshop without double harvest (1196.870015ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 0
+ℹ fail 7
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 9902.836856
+
+✖ failing tests:
+
+test at tests/production-supply.test.mjs:15:1
+✖ an ore-starved smith collects real ore instead of unrelated village chores (1681.693531ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  'grzyb' !== 'ruda'
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/overhaul_20261017/Przystan/tests/production-supply.test.mjs:17:9)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'grzyb',
+    expected: 'ruda',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/production-supply.test.mjs:21:1
+✖ supply work is slower than professional gathering and conserves the source and delivery (1514.86166ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(Math.abs(effort/professional-.55)<1e-8)
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/overhaul_20261017/Przystan/tests/production-supply.test.mjs:26:9)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests/production-supply.test.mjs:34:1
+✖ meeting every configured output target returns the crew to village help even with empty inputs (1412.376315ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /zapas pełny/. Input:
+  
+  'brak zasobów lub warunków do produkcji: zbiera jagody i grzyby'
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/overhaul_20261017/Przystan/tests/production-supply.test.mjs:37:50)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'brak zasobów lub warunków do produkcji: zbiera jagody i grzyby',
+    expected: /zapas pełny/,
+    operator: 'match',
+    diff: 'simple'
+  }
+
+test at tests/production-supply.test.mjs:40:1
+✖ inaccessible, hidden, claimed or exhausted sources are not invented or replaced by social work (1334.060261ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /brak.*źródła|brak.*rudy/i. Input:
+  
+  'brak zasobów lub warunków do produkcji: zbiera jagody i grzyby'
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/overhaul_20261017/Przystan/tests/production-supply.test.mjs:42:49)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'brak zasobów lub warunków do produkcji: zbiera jagody i grzyby',
+    expected: /brak.*źródła|brak.*rudy/i,
+    operator: 'match',
+    diff: 'simple'
+  }
+
+test at tests/production-supply.test.mjs:46:1
+✖ suppliers relinquish the source and return to production when another delivery resolves the shortage (1247.173115ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  1 !== 0
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/overhaul_20261017/Przystan/tests/production-supply.test.mjs:50:9)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/production-supply.test.mjs:54:1
+✖ upstream charcoal shortage targets wood only through an existing charcoal kiln (1284.985694ms)
+  ReferenceError: productionSupplyState is not defined
+      at eval (eval at window.__przystan.window.__testEvaluate (assembled-game.js:9920:35), <anonymous>:1:1)
+      at window.__przystan.window.__testEvaluate (assembled-game.js:9920:35)
+      at Object.evaluate (file:///workspace/scratch/9e1bb3f2c27d/overhaul_20261017/Przystan/tests/runtime.mjs:42:83)
+      at TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/overhaul_20261017/Przystan/tests/production-supply.test.mjs:56:25)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at tests/production-supply.test.mjs:61:1
+✖ a supply delivery survives restart and returns to the original workshop without double harvest (1196.870015ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  0 !== 1.5
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/overhaul_20261017/Przystan/tests/production-supply.test.mjs:65:9)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 1.5,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

@@ -16,6 +16,7 @@ function restSpot(p){const h=homeOf(p);let t;if(h&&bDone(h)){t=entryOf(h.kind,h.
   for(const k of ['zbior','chrust','ryby'])if(choreDo(p,k))return true;p.act='odpoczywa, nic pilnego';return false}}
 // pracownicy warsztatu bez roboty (brak zasobów, pole czeka) też idą do prac we wsi
 {const _pj=planJob;planJob=function(p){const r=_pj(p);if(r||!S||p.job!=='wb'||!isAdult(p)||!isWork()||p.fireB||restNow(p))return r;
+  const building=bById(p.wb);if(building&&BD[building.kind].prod)return productionSupportJob(p);
   const why=p.act||'';if(!/brak zasobów|czeka na siew|brak ziarna|w ruinie|ugór/.test(why))return r;
   const C=choreCands(p);for(const k of C.map(c=>c[0]).concat(['zbior','chrust','ryby'])){p.limC=true;if(choreDo(p,k)){p.act=why.split(',')[0]+': '+p.act;return true}}p.limC=false;return r}}
 

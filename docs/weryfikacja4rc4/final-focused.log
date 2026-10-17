@@ -1,0 +1,33 @@
+✔ both modes expose the same five primary destinations and preserve pause semantics (1419.691159ms)
+✔ all sections, including save and settings, are reachable through a grouped directory (1356.873684ms)
+✔ goals use current act predicates and progress instead of the stale legacy checklist (1312.946924ms)
+✔ pinning produces an actionable map tracker and survives save/reload (1784.507442ms)
+✔ production blockers appear as tasks linked to real assigned suppliers and building (1501.815256ms)
+✔ all new views render in Epoka IV and preserve its existing production and transport controls (3656.677189ms)
+✔ battery and photo controls never write an invalid simulation speed or break saving (1536.930938ms)
+✔ an ore-starved smith collects real ore instead of unrelated village chores (1116.232476ms)
+✔ supply work is slower than professional gathering and conserves the source and delivery (1081.803212ms)
+✔ meeting every configured output target returns the crew to village help even with empty inputs (1078.457196ms)
+✔ exhausted sources are not invented or replaced by social work (1087.748501ms)
+✔ hidden, claimed and unreachable deposits are excluded without creating resources (1111.472915ms)
+✔ manual reassignment releases the claimed source and abandons the supply role (1093.281818ms)
+✔ suppliers relinquish the source and return to production when another delivery resolves the shortage (1133.910946ms)
+✔ upstream charcoal shortage targets wood only through an existing charcoal kiln (1179.516716ms)
+✔ a supply delivery survives restart and returns to the original workshop without double harvest (1130.334185ms)
+✔ a hamlet request exposes its exact cost, actionable help and map location in Tasks (1469.025625ms)
+✔ help spends only requested goods and cannot pay twice; completion survives restart (2779.24937ms)
+✔ insufficient stock has an explicit reason and preserves the request and inventory (1449.149546ms)
+✔ help guidance opens the missing knowledge instead of an unavailable building (1298.65725ms)
+✔ dismissed request marker stays hidden after reload, while a new need is visible (2958.821123ms)
+✔ tracking resolves live builders, activity and current coordinates rather than stale assignments (1420.248858ms)
+✔ expedition and reading tasks name actual workers and navigate to their relevant area (1458.117888ms)
+✔ ordinary requests can be fulfilled from Tasks and retain a single completion record (1272.319106ms)
+✔ Epoka IV projects, batches and transports appear in Tasks using actual crew and route positions (5857.041758ms)
+ℹ tests 25
+ℹ suites 0
+ℹ pass 25
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 20091.718574

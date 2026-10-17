@@ -1,0 +1,32 @@
+✖ RC4 deployment targets the verified RC3 checkpoint in every release guard (2.259644ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 83.64145
+
+✖ failing tests:
+
+test at tests/build-deploy.test.mjs:13:1
+✖ RC4 deployment targets the verified RC3 checkpoint in every release guard (2.259644ms)
+  AssertionError [ERR_ASSERTION]: preflight must accept the deployed RC3 checkpoint
+  + actual - expected
+  
+  + 'dbb965e6d76148daf06c3bad002708d03b780763'
+  - 'aec87a056e7b52e580f9e923b524cb8212334e46'
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/deploy_rc4_fix_20261017/Przystan/tests/build-deploy.test.mjs:15:9)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'dbb965e6d76148daf06c3bad002708d03b780763',
+    expected: 'aec87a056e7b52e580f9e923b524cb8212334e46',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

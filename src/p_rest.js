@@ -868,7 +868,13 @@ $('ctl').addEventListener('click',e=>{const b=e.target.closest('button');if(!b||
  if(c==='zin'){zoomT=clamp(zoomT*1.3,ZMIN,ZMAX);if(overview&&zoomT>.6){overview=null;renderCtl()}}
  if(c==='zout')zoomT=clamp(zoomT/1.3,overview?.1:ZMIN,ZMAX);if(c==='rl')yawT+=Math.PI/2;if(c==='rr')yawT-=Math.PI/2;
  if(c==='home'){lookAt(tcx(camp.i),tcx(camp.j),Math.max(zoomT,1.4));if(placing)moveGhost(camp.i+2,camp.j+2)}});
-$('speed').addEventListener('click',e=>{const b=e.target.closest('button');if(!b||!S)return;if(b.dataset.snd){toggleMute();renderCtl();return}if(b.dataset.fs){toggleFull();return}if(b.dataset.gfx){gfxSetLevel((GFX.level+2)%3);return}setSpeed(+b.dataset.sp)});
+$('speed').addEventListener('click',event=>{
+ const button=event.target.closest('button');if(!button||!S)return;
+ if(button.dataset.snd){toggleMute();renderCtl();return}
+ if(button.dataset.fs){toggleFull();return}
+ if(button.dataset.gfx){gfxSetLevel((GFX.level+2)%3);return}
+ if(button.dataset.sp!==undefined)setSpeed(Number(button.dataset.sp));
+});
 function setSpeed(v){S.speed=v;[...$('speed').querySelectorAll('[data-sp]')].forEach(b=>b.classList.toggle('on',+b.dataset.sp===v))}
 $('stats').addEventListener('click',()=>{$('res').classList.toggle('on')});
 $('res').addEventListener('click',()=>$('res').classList.remove('on'));

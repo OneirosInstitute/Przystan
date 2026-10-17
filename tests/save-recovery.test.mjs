@@ -33,7 +33,7 @@ test('invalid state reports the responsible field and version without replacing 
  runtime.game.S.people[0].hp=NaN;assert.equal(runtime.game.save(),false);
  assert.equal(runtime.memory.get(key),previous);
  assert.match(runtime.evaluate('saveStatusText()'),/people\[0\].*hp/);
- assert.match(runtime.evaluate('saveStatusText()'),/4\.0\.0-rc\.3/);
+ assert.match(runtime.evaluate('saveStatusText()'),/4\.0\.0-rc\.4/);
  const diagnostic=runtime.evaluate('saveDiagnostics()');assert.equal(diagnostic.ok,false);assert.ok(diagnostic.error);
 });
 

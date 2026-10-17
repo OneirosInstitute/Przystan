@@ -1,0 +1,45 @@
+{
+  "status": "PASS",
+  "results": [
+    {
+      "viewport": {
+        "width": 412,
+        "height": 870
+      },
+      "status": "PASS",
+      "helpOnce": true,
+      "dismissalPersists": true,
+      "peopleLocated": true,
+      "quota": {
+        "realQuotaExceeded": true,
+        "recovered": true,
+        "backupRemoved": true,
+        "paddingPreserved": true,
+        "savedWood": 73
+      },
+      "diagnosticExport": true,
+      "offlineReload": true,
+      "errors": []
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "status": "PASS",
+      "helpOnce": true,
+      "dismissalPersists": true,
+      "peopleLocated": true,
+      "quota": {
+        "realQuotaExceeded": true,
+        "recovered": true,
+        "backupRemoved": true,
+        "paddingPreserved": true,
+        "savedWood": 73
+      },
+      "diagnosticExport": true,
+      "offlineReload": true,
+      "errors": []
+    }
+  ]
+}

@@ -1,18 +1,4 @@
-// ================= 1.7.1 Księga: działy w jednym rzędzie, wyższy arkusz, place budowy z powodem =================
-{const st=document.createElement('style');st.textContent=`
-body.cz #stitle{display:none}
-body.cz #shead{padding:8px 6px 8px 10px;gap:4px;justify-content:flex-start}
-body.cz #shead #cz-chips{flex:1;min-width:0;display:flex;flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden;padding:2px 0;border:0;gap:6px;scrollbar-width:none;overscroll-behavior-x:contain;touch-action:pan-x}
-body.cz #shead #cz-chips::-webkit-scrollbar{display:none}
-body.cz #shead #cz-chips button{flex-shrink:0;width:auto;height:38px;padding:0 14px;border-radius:19px;display:block;color:var(--fg)}
-body.cz #shead #cz-chips button.on{color:var(--hi)}
-body.cz #shead .b{flex-shrink:0;border-left:1px solid var(--line);padding-left:4px}
-body.cz #shead .b button{width:38px;height:38px}
-@media (max-width:760px){body.cz #sheet{height:auto;top:calc(58px + env(safe-area-inset-top,0px))}body.cz #sheet.min{top:auto}}
-`;document.head.appendChild(st)}
-{const sh=$('shead'),ch=$('cz-chips');if(sh&&ch)sh.insertBefore(ch,sh.querySelector('.b'))}
-{const _cc=czChips;czChips=function(){_cc();const el=$('cz-chips'),a=el&&el.querySelector('.on');if(!a||el._on===a.dataset.czt)return;el._on=a.dataset.czt;
-  const l=a.offsetLeft-el.offsetLeft,r=l+a.offsetWidth;if(l<el.scrollLeft+8)el.scrollLeft=Math.max(0,l-24);else if(r>el.scrollLeft+el.clientWidth-8)el.scrollLeft=r-el.clientWidth+24}}
+// Księga: nawigację obsługuje p_menu.js. Tutaj pozostają informacje o budowach.
 
 // ---------- place budowy: co się dzieje i dlaczego ----------
 function siteWhy(s){

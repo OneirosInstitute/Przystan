@@ -1,7 +1,7 @@
 /* Zadania są widokiem bieżącej symulacji. Utrwalamy tylko wybór, odczyt i historię. */
 function taskState(){
  const state=S.tasksUI||(S.tasksUI={});
- for(const key of ['dismissed','read'])if(!state[key]||typeof state[key]!=='object'||Array.isArray(state[key]))state[key]={};
+ for(const key of ['dismissed','read','expanded'])if(!state[key]||typeof state[key]!=='object'||Array.isArray(state[key]))state[key]={};
  if(!Array.isArray(state.history))state.history=[];
  return state;
 }

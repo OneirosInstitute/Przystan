@@ -1,0 +1,91 @@
+✖ both modes expose the same five primary destinations and preserve pause semantics (1334.678137ms)
+✖ all sections, including save and settings, are reachable through a grouped directory (1240.395989ms)
+✖ goals use current act predicates and progress instead of the stale legacy checklist (1169.775681ms)
+✖ pinning produces an actionable map tracker and survives save/reload (1275.421268ms)
+✖ production blockers appear as tasks linked to real assigned suppliers and building (1322.488426ms)
+✔ all new views render in Epoka IV and preserve its existing production and transport controls (3385.628172ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 1
+ℹ fail 5
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 9862.053682
+
+✖ failing tests:
+
+test at tests/menu-workspace.test.mjs:6:1
+✖ both modes expose the same five primary destinations and preserve pause semantics (1334.678137ms)
+  ReferenceError: MENU_PRIMARY is not defined
+      at eval (eval at window.__przystan.window.__testEvaluate (assembled-game.js:9983:35), <anonymous>:1:1)
+      at window.__przystan.window.__testEvaluate (assembled-game.js:9983:35)
+      at Object.evaluate (file:///workspace/scratch/9e1bb3f2c27d/overhaul_20261017/Przystan/tests/runtime.mjs:42:83)
+      at TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/overhaul_20261017/Przystan/tests/menu-workspace.test.mjs:8:38)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17)
+
+test at tests/menu-workspace.test.mjs:16:1
+✖ all sections, including save and settings, are reachable through a grouped directory (1240.395989ms)
+  TypeError: Cannot read properties of undefined (reading '1')
+      at renderPanel (assembled-game.js:1244:50)
+      at renderPanel (assembled-game.js:4185:47)
+      at renderPanel (assembled-game.js:4811:47)
+      at renderPanel (assembled-game.js:8632:47)
+      at renderPanel (assembled-game.js:9705:285)
+      at renderPanel (assembled-game.js:9807:149)
+      at openSheet (assembled-game.js:1229:321)
+      at openSheet (assembled-game.js:4176:70)
+      at Object.openSheet (assembled-game.js:4183:72)
+      at TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/overhaul_20261017/Przystan/tests/menu-workspace.test.mjs:17:39)
+
+test at tests/menu-workspace.test.mjs:21:1
+✖ goals use current act predicates and progress instead of the stale legacy checklist (1169.775681ms)
+  ReferenceError: taskMilestones is not defined
+      at eval (eval at window.__przystan.window.__testEvaluate (assembled-game.js:9983:35), <anonymous>:1:1)
+      at window.__przystan.window.__testEvaluate (assembled-game.js:9983:35)
+      at Object.evaluate (file:///workspace/scratch/9e1bb3f2c27d/overhaul_20261017/Przystan/tests/runtime.mjs:42:83)
+      at TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/overhaul_20261017/Przystan/tests/menu-workspace.test.mjs:23:22)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at tests/menu-workspace.test.mjs:26:1
+✖ pinning produces an actionable map tracker and survives save/reload (1275.421268ms)
+  ReferenceError: taskTrackerTick is not defined
+      at eval (eval at window.__przystan.window.__testEvaluate (assembled-game.js:9983:35), <anonymous>:1:31)
+      at window.__przystan.window.__testEvaluate (assembled-game.js:9983:35)
+      at Object.evaluate (file:///workspace/scratch/9e1bb3f2c27d/overhaul_20261017/Przystan/tests/runtime.mjs:42:83)
+      at TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/overhaul_20261017/Przystan/tests/menu-workspace.test.mjs:27:34)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at tests/menu-workspace.test.mjs:31:1
+✖ production blockers appear as tasks linked to real assigned suppliers and building (1322.488426ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(task)
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/overhaul_20261017/Przystan/tests/menu-workspace.test.mjs:33:90)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

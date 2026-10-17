@@ -1,5 +1,7 @@
 # Przystań
 
+Naprawa instalacji RC4 po RC3: **Przystan_4.0.0_RC4_OSADA_TERMUX_FIX.zip**. [Instrukcja i raport](docs/WDROZENIE_RC4_PO_RC3_2026-10-17.md).
+
 Spokojna gra o osiemnastu rozbitkach, którzy budują osadę na dzikiej, nieznanej wyspie. Izometryczny widok 3D (Three.js), czas rzeczywisty, pory roku, pokolenia i wiedza przekazywana od mistrza do ucznia. Gra działa w przeglądarce i instaluje się na telefonie jako aplikacja na pełnym ekranie (PWA), także bez internetu.
 
 ## Uruchomienie
@@ -12,6 +14,18 @@ npm run test:runtime # pełna pętla silnika i restarty; bez prawdziwego GPU/DOM
 ```
 
 Nie ma zależności do instalowania. Wystarczy Node.js 18 lub nowszy.
+
+## Wydanie 4.0.0-rc.4
+
+Pracownicy warsztatów pozyskują brakujące składniki, zachowując przydział do
+produkcji. Zadania pokazują postęp, blokady, wykonawców i lokalizację, a wybraną
+sprawę można śledzić na mapie. Cicha wyspa i Pełne menu mają pięć stałych wejść:
+Pulpit, Zadania, Praca, Budowa i Działy. Duże sekcje rozwijają się na żądanie.
+
+Naprawiono także obsługę przycisków Bateria/Fotografia, która mogła ustawić
+nieprawidłowe tempo i uniemożliwić zapis. Paczka zawiera RC3 oraz Epokę IV.
+
+[Projekt obu trybów menu](docs/MENU_4.0.0_RC4.md) · [ZIP i Termux](docs/WYDANIE_4.0.0_RC4.md) · [Weryfikacja](docs/WERYFIKACJA_4.0.0_RC4.md)
 
 ## Wydanie 4.0.0-rc.3
 

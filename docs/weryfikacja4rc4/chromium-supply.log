@@ -1,0 +1,40 @@
+{
+  "status": "PASS",
+  "viewport": {
+    "width": 412,
+    "height": 870
+  },
+  "nativeWorldNodes": true,
+  "nativePathfinding": true,
+  "selectedBuildingPolicy": true,
+  "restartDuringDelivery": true,
+  "start": {
+    "nodeId": 6179,
+    "sourceBefore": 10,
+    "after": null,
+    "target": "ruda",
+    "job": "wb",
+    "workplace": 501
+  },
+  "carrying": {
+    "cargo": [
+      {
+        "res": "ruda",
+        "q": 1.5
+      }
+    ],
+    "ore": 0,
+    "source": 9,
+    "job": "wb",
+    "workplace": 501
+  },
+  "delivered": {
+    "ore": 1.5,
+    "cargo": null,
+    "source": 9,
+    "job": "wb",
+    "workplace": 501,
+    "saved": true
+  },
+  "errors": []
+}

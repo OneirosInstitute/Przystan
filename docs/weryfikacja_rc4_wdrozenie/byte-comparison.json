@@ -1,0 +1,20 @@
+{
+  "status": "PASS",
+  "base": "aec87a056e7b52e580f9e923b524cb8212334e46",
+  "build": "607d90d0e4",
+  "checkedExecutableFiles": 138,
+  "gameplayMatchesOriginalRC4": true,
+  "rehearsalMatchesPackage": true,
+  "changedExistingFiles": [
+    "README.md",
+    "WDROZ_TERMUX.sh",
+    "docs/KONTRAKT_4.0.0_RC4.md",
+    "docs/WERYFIKACJA_4.0.0_RC4.md",
+    "docs/WYDANIE_4.0.0_RC4.md",
+    "release-manifest.json",
+    "tests/build-deploy.test.mjs",
+    "tools/deploy-check.cjs"
+  ],
+  "installerPrepareOnly": true,
+  "commitOrPushPerformed": false
+}
