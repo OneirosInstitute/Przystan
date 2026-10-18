@@ -1,0 +1,68 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> przystan@4.0.0-rc.5 test:runtime
+> node tools/runtime-smoke.mjs
+
+epoch 1: 1200/2400 frames; day 1.270; restart 1
+epoch 1: 2400/2400 frames; day 2.435; restart 2
+epoch 3: 1200/4800 frames; day 142.320; restart 1
+epoch 3: 2400/4800 frames; day 143.485; restart 2
+epoch 3: 3600/4800 frames; day 144.318; restart 3
+epoch 3: 4800/4800 frames; day 145.317; restart 4
+epoch 4: 1200/4800 frames; day 1.270; restart 1
+epoch 4: 2400/4800 frames; day 2.436; restart 2
+epoch 4: 3600/4800 frames; day 3.269; restart 3
+epoch 4: 4800/4800 frames; day 4.269; restart 4
+{
+  "status": "PASS",
+  "scenarios": [
+    {
+      "epoch": 1,
+      "frames": 2400,
+      "syntheticWallSeconds": 80,
+      "elapsedGameDays": 2.1651388888889986,
+      "restarts": 2,
+      "automaticSaves": 9,
+      "population": 18,
+      "tradeDeliveries": 0,
+      "unverified": [
+        "real DOM",
+        "WebGL",
+        "touch",
+        "device performance"
+      ]
+    },
+    {
+      "epoch": 3,
+      "frames": 4800,
+      "syntheticWallSeconds": 160,
+      "elapsedGameDays": 3.9973611111081198,
+      "restarts": 4,
+      "automaticSaves": 18,
+      "population": 34,
+      "tradeDeliveries": 4,
+      "unverified": [
+        "real DOM",
+        "WebGL",
+        "touch",
+        "device performance"
+      ]
+    },
+    {
+      "epoch": 4,
+      "frames": 4800,
+      "syntheticWallSeconds": 160,
+      "elapsedGameDays": 3.9988879999999996,
+      "restarts": 4,
+      "automaticSaves": 18,
+      "population": 20,
+      "tradeDeliveries": 0,
+      "unverified": [
+        "real DOM",
+        "WebGL",
+        "touch",
+        "device performance"
+      ]
+    }
+  ]
+}

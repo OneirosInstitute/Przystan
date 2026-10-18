@@ -7,7 +7,7 @@ const E4Population=(()=>{
  const ancestors=person=>new Set([person.id,...person.par||[],...person.gp||[]]);
  function related(first,second){const kin=ancestors(first);return[...ancestors(second)].some(id=>kin.has(id))||first.fam===second.fam;}
  function marry(state,first,second){
-  if(first.settlementId!==second.settlementId)return economy.join(state,first.id,second.id).ok;
+  if(first.settlementId!==second.settlementId)return economy.join(state,first.id,second.id).ok||economy.join(state,second.id,first.id).ok;
   const family=domain.household(state,{clanId:first.rod,settlementId:first.settlementId,homeId:first.settlementId+':dom'});first.fam=second.fam=family.id;first.pair=second.id;second.pair=first.id;
   domain.record(state,'marriage',first.name+' i '+second.name+' zakładają nową gałąź rodu.',{clanId:first.rod,settlementId:first.settlementId});return true;
  }
@@ -37,7 +37,7 @@ const E4Population=(()=>{
   economy.ensure(state);const deceased=[];
   for(const person of state.people){person.age=Math.round((person.age+.1)*1e8)/1e8;if(person.ciaza&&!person.e4Pregnancy)person.e4Pregnancy={father:person.pair??null,unknownFather:person.pair==null,due:person.ciaza.d,count:person.ciaza.n||1};
    if(!person.e4Transport&&(person.hp<=0||person.age>90||person.age>68&&domain.random(state)<.001+(person.age-68)*.0004))deceased.push(person);
-   if(person.age>=8&&person.age<18){const mentors=domain.residents(state,person.settlementId).filter(candidate=>candidate.age>=18&&candidate.hp>.5),settlement=state.e4.settlements[person.settlementId],skill=economy.catalog.specialties[settlement.specialization]?.skill||'rolnik',mentor=mentors.sort((first,second)=>(second.sk[skill]||0)-(first.sk[skill]||0)||first.id-second.id)[0];if(mentor){person.e4MentorId=mentor.id;person.sk[skill]=Math.min(mentor.sk[skill]||0,(person.sk[skill]||0)+.006);person.act='uczy się od: '+mentor.name;}}
+
   }
   for(const person of deceased){domain.archivePerson(state,person,person.hp<=0?'głód lub wychłodzenie':'starość');state.e4.stats.deaths++;}
   for(const settlement of Object.values(state.e4.settlements)){const head=state.people.find(person=>person.id===settlement.headId);if(!head){const successor=domain.residents(state,settlement.id).filter(person=>person.age>=16&&!person.e4Transport).sort((first,second)=>second.age-first.age||first.id-second.id)[0];if(successor){settlement.headId=successor.id;state.e4.stats.succession++;domain.record(state,'succession',successor.name+' przejmuje opiekę nad '+settlement.name+'.',{personId:successor.id,settlementId:settlement.id,clanId:successor.rod});}}}
@@ -47,7 +47,7 @@ const E4Population=(()=>{
   }
   const singles=state.people.filter(person=>person.age>=18&&person.age<48&&person.pair==null&&!person.betrothed&&!person.e4Transport&&person.hp>.7);
   for(const first of singles){if(first.pair!=null||first.betrothed)continue;const settlement=state.e4.settlements[first.settlementId];if(settlement.fed<.99)continue;const second=singles.find(candidate=>candidate!==first&&candidate.pair==null&&!candidate.betrothed&&candidate.sex!==first.sex&&Math.abs(candidate.age-first.age)<15&&!related(first,candidate));if(second)marry(state,first,second);}
-  sharing(state);state.hope=Math.max(.1,Math.min(1,Object.values(state.e4.settlements).reduce((total,settlement)=>total+(settlement.fed??1),0)/Object.keys(state.e4.settlements).length));state.fedR=state.e4.settlements.przystan.fed??1;
+  sharing(state);state.hope=Math.max(.1,Math.min(1,Object.values(state.e4.settlements).reduce((total,settlement)=>total+Math.min(1,(settlement.fed??1)+.015*((settlement.comfort?.wyroby_drewniane||0)+(settlement.comfort?.bursztyn||0))),0)/Object.keys(state.e4.settlements).length));state.fedR=state.e4.settlements.przystan.fed??1;
  }
  return{daily,related,marry};
 })();

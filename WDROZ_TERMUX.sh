@@ -6,7 +6,7 @@ MODE=publish
 if [ "${1:-}" = '--prepare-only' ]; then MODE=prepare; shift; fi
 [ "$#" -le 1 ] || { echo 'Użycie: bash WDROZ_TERMUX.sh [--prepare-only] [katalog-repo]'; exit 1; }
 PACKAGE_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-EXPECTED_COMMIT='aec87a056e7b52e580f9e923b524cb8212334e46'
+EXPECTED_COMMIT='fb2d75a9186737126c55ad365dab1f78266256ec'
 REPOSITORY="${1:-}"
 if [ -z "$REPOSITORY" ]; then
  if [ -d "$HOME/Przystan/.git" ]; then REPOSITORY="$HOME/Przystan";
@@ -30,7 +30,7 @@ node "$PACKAGE_DIR/tools/deploy-check.cjs"
 cp -r "$PACKAGE_DIR"/. "$REPOSITORY"/
 node tools/verify-package.cjs
 npm run build
-npm test
+npm run test:install
 npm run test:runtime
 node tools/verify-package.cjs
 git diff --check
@@ -41,7 +41,7 @@ if [ "$MODE" = prepare ]; then
 fi
 git add -- .github .gitignore KSIEGA.md README.md WDROZ_TERMUX.sh assets build.js docs package.json railway.json release-manifest.json server.js src tests tools
 git diff --cached --quiet && { echo 'STOP: brak zmian do commitu.'; exit 1; }
-git commit -m '4.0.0-rc.4: zaopatrzenie produkcji, zadania i nowe menu'
+git commit -m '4.0.0-rc.5: spojna SI, zycie mieszkancow i gospodarka'
 git push origin main
 git fetch origin main
 [ "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)" ]

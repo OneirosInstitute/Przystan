@@ -1,0 +1,12 @@
+✔ RC5 deployment targets the verified RC4 checkpoint in every release guard (5.693263ms)
+✔ package integrity detects missing, changed and out-of-root files (6.384561ms)
+✔ deployment preflight checks identity, branch, base and user changes with read-only git calls (2.195262ms)
+✔ asset-only changes invalidate the PWA version; UI viewport permits zoom (200.556112ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 296.482877

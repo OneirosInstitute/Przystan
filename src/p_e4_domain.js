@@ -80,6 +80,7 @@ const E4Domain=(()=>{
   const peopleIds=new Set();for(const person of state.people){
    if(!identity(person.id)||peopleIds.has(person.id)||!state.rody[person.rod]||!state.fams[person.fam]||!model.households[person.fam]||!model.settlements[person.settlementId])return false;peopleIds.add(person.id);
    if(model.households[person.fam].settlementId!==person.settlementId||!finite(person.age)||person.age<0||!finite(person.x)||!finite(person.z)||Math.abs(person.x)>192||Math.abs(person.z)>192||!['m','k'].includes(person.sex)||!identity(person.generation)||person.generation<1)return false;
+   const action=person.e4Action;if(action&&(!object(action)||!['build','forge','sew','craft','field','care','chop','gather','mine','rest','sleep','wash','meal','family','teach','learn'].includes(action.kind)||!model.settlements[action.settlementId]||!['start','arrival','end','accounted','length'].every(key=>finite(action[key]))||action.end<=action.start||action.arrival<action.start||action.length<0||!Array.isArray(action.route)||action.route.length>2000||!action.route.every(point=>object(point)&&finite(point.x)&&finite(point.z)&&Math.abs(point.x)<=192&&Math.abs(point.z)<=192)))return false;
    const parents=person.par||[];if(!Array.isArray(parents)||parents.length>2||!parents.every(identity)||parents.includes(person.id))return false;
   }
   for(const [key,family]of Object.entries(model.households))if(String(family.id)!==key||!identity(family.id)||!state.fams[family.id]||!state.rody[family.clanId]||!model.settlements[family.settlementId])return false;

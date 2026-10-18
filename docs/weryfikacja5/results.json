@@ -1,0 +1,489 @@
+{
+  "version": "4.0.0-rc.5",
+  "base_commit": "fb2d75a9186737126c55ad365dab1f78266256ec",
+  "suites": 32,
+  "cases": 156,
+  "failures": 0,
+  "node": "v24.19.0",
+  "runtime": {
+    "status": "PASS",
+    "scenarios": [
+      {
+        "epoch": 1,
+        "frames": 2400,
+        "syntheticWallSeconds": 80,
+        "elapsedGameDays": 2.1651388888889986,
+        "restarts": 2,
+        "automaticSaves": 9,
+        "population": 18,
+        "tradeDeliveries": 0,
+        "unverified": [
+          "real DOM",
+          "WebGL",
+          "touch",
+          "device performance"
+        ]
+      },
+      {
+        "epoch": 3,
+        "frames": 4800,
+        "syntheticWallSeconds": 160,
+        "elapsedGameDays": 3.9973611111081198,
+        "restarts": 4,
+        "automaticSaves": 18,
+        "population": 34,
+        "tradeDeliveries": 4,
+        "unverified": [
+          "real DOM",
+          "WebGL",
+          "touch",
+          "device performance"
+        ]
+      },
+      {
+        "epoch": 4,
+        "frames": 4800,
+        "syntheticWallSeconds": 160,
+        "elapsedGameDays": 3.9988879999999996,
+        "restarts": 4,
+        "automaticSaves": 18,
+        "population": 20,
+        "tradeDeliveries": 0,
+        "unverified": [
+          "real DOM",
+          "WebGL",
+          "touch",
+          "device performance"
+        ]
+      }
+    ]
+  },
+  "browser_workspace": {
+    "status": "PASS",
+    "results": [
+      {
+        "viewport": {
+          "width": 412,
+          "height": 870
+        },
+        "status": "PASS",
+        "classicLayout": true,
+        "quietAndFull": true,
+        "sections": 8,
+        "helpOnce": true,
+        "pinning": true,
+        "locating": true,
+        "peopleLocations": true,
+        "pauseSemantics": true,
+        "offlineReload": true,
+        "epoka4": true,
+        "errors": []
+      },
+      {
+        "viewport": {
+          "width": 870,
+          "height": 412
+        },
+        "status": "PASS",
+        "classicLayout": true,
+        "quietAndFull": true,
+        "sections": 8,
+        "helpOnce": true,
+        "pinning": true,
+        "locating": true,
+        "peopleLocations": true,
+        "pauseSemantics": true,
+        "offlineReload": true,
+        "epoka4": true,
+        "errors": []
+      },
+      {
+        "viewport": {
+          "width": 1280,
+          "height": 800
+        },
+        "status": "PASS",
+        "classicLayout": true,
+        "quietAndFull": true,
+        "sections": 8,
+        "helpOnce": true,
+        "pinning": true,
+        "locating": true,
+        "peopleLocations": true,
+        "pauseSemantics": true,
+        "offlineReload": true,
+        "epoka4": true,
+        "errors": []
+      }
+    ],
+    "unverified": [
+      "physical Android touch",
+      "phone performance",
+      "battery power"
+    ]
+  },
+  "browser_lifecycle": {
+    "status": "PASS",
+    "results": [
+      {
+        "viewport": {
+          "width": 412,
+          "height": 870
+        },
+        "status": "PASS",
+        "hiddenSeconds": 16,
+        "visibility": "document visibility overridden in isolated QA page",
+        "nativeFreezeResume": true,
+        "foreground": {
+          "frames": 12,
+          "draws": 3284,
+          "queuedFrames": 1,
+          "intervals": 1,
+          "timeouts": 2,
+          "audio": [
+            "running"
+          ],
+          "day": 0.27125000000000005,
+          "stored": 22
+        },
+        "hidden": {
+          "frames": 12,
+          "draws": 3284,
+          "queuedFrames": 0,
+          "intervals": 0,
+          "timeouts": 0,
+          "audio": [
+            "suspended"
+          ],
+          "day": 0.27125000000000005,
+          "stored": 61
+        },
+        "afterHidden": {
+          "frames": 12,
+          "draws": 3284,
+          "queuedFrames": 0,
+          "intervals": 0,
+          "timeouts": 0,
+          "audio": [
+            "suspended"
+          ],
+          "day": 0.27125000000000005,
+          "stored": 61
+        },
+        "returned": {
+          "frames": 25,
+          "draws": 5378,
+          "queuedFrames": 1,
+          "intervals": 1,
+          "timeouts": 2,
+          "audio": [
+            "running"
+          ],
+          "day": 0.27125000000000005,
+          "stored": 61
+        },
+        "rapid": {
+          "frames": 42,
+          "draws": 7880,
+          "queuedFrames": 1,
+          "intervals": 1,
+          "timeouts": 2,
+          "audio": [
+            "running"
+          ],
+          "day": 0.27125000000000005,
+          "stored": 61
+        },
+        "saveSurvivesReload": true,
+        "errors": []
+      },
+      {
+        "viewport": {
+          "width": 1280,
+          "height": 800
+        },
+        "status": "PASS",
+        "hiddenSeconds": 16,
+        "visibility": "document visibility overridden in isolated QA page",
+        "nativeFreezeResume": true,
+        "foreground": {
+          "frames": 11,
+          "draws": 1384,
+          "queuedFrames": 1,
+          "intervals": 1,
+          "timeouts": 2,
+          "audio": [
+            "running"
+          ],
+          "day": 0.27,
+          "stored": 22
+        },
+        "hidden": {
+          "frames": 11,
+          "draws": 1384,
+          "queuedFrames": 0,
+          "intervals": 0,
+          "timeouts": 0,
+          "audio": [
+            "suspended"
+          ],
+          "day": 0.27,
+          "stored": 61
+        },
+        "afterHidden": {
+          "frames": 11,
+          "draws": 1384,
+          "queuedFrames": 0,
+          "intervals": 0,
+          "timeouts": 0,
+          "audio": [
+            "suspended"
+          ],
+          "day": 0.27,
+          "stored": 61
+        },
+        "returned": {
+          "frames": 24,
+          "draws": 3679,
+          "queuedFrames": 1,
+          "intervals": 1,
+          "timeouts": 2,
+          "audio": [
+            "running"
+          ],
+          "day": 0.27,
+          "stored": 61
+        },
+        "rapid": {
+          "frames": 27,
+          "draws": 4597,
+          "queuedFrames": 1,
+          "intervals": 1,
+          "timeouts": 2,
+          "audio": [
+            "running"
+          ],
+          "day": 0.27,
+          "stored": 61
+        },
+        "saveSurvivesReload": true,
+        "errors": []
+      }
+    ],
+    "unverified": [
+      "physical Android lifecycle",
+      "battery discharge",
+      "GPU power",
+      "temperature",
+      "Android process eviction"
+    ]
+  },
+  "browser_people": {
+    "status": "PASS",
+    "results": [
+      {
+        "viewport": {
+          "width": 412,
+          "height": 870
+        },
+        "status": "PASS",
+        "models": {
+          "detail": true,
+          "knees": true,
+          "elbows": true
+        },
+        "fieldLayout": {
+          "fields": 200,
+          "error": 2.784377656347607e-06
+        },
+        "speeds": [
+          {
+            "speed": 1,
+            "frames": 7,
+            "milliseconds": 1041
+          },
+          {
+            "speed": 2,
+            "frames": 4,
+            "milliseconds": 703
+          },
+          {
+            "speed": 4,
+            "frames": 6,
+            "milliseconds": 1176
+          },
+          {
+            "speed": 8,
+            "frames": 5,
+            "milliseconds": 836
+          }
+        ],
+        "epoka4Canonical": true,
+        "pauseStable": true,
+        "bothMenus": true,
+        "save": true,
+        "errors": [],
+        "device": "software WebGL; not Android battery/FPS evidence"
+      },
+      {
+        "viewport": {
+          "width": 1280,
+          "height": 800
+        },
+        "status": "PASS",
+        "models": {
+          "detail": true,
+          "knees": true,
+          "elbows": true
+        },
+        "fieldLayout": {
+          "fields": 200,
+          "error": 2.784377656347607e-06
+        },
+        "speeds": [
+          {
+            "speed": 1,
+            "frames": 1,
+            "milliseconds": 1070
+          },
+          {
+            "speed": 2,
+            "frames": 3,
+            "milliseconds": 775
+          },
+          {
+            "speed": 4,
+            "frames": 2,
+            "milliseconds": 727
+          },
+          {
+            "speed": 8,
+            "frames": 1,
+            "milliseconds": 720
+          }
+        ],
+        "epoka4Canonical": true,
+        "pauseStable": true,
+        "bothMenus": true,
+        "save": true,
+        "errors": [],
+        "device": "software WebGL; not Android battery/FPS evidence"
+      }
+    ]
+  },
+  "long_scenarios": [
+    {
+      "scenario": "11-town-specialties",
+      "days": 200,
+      "resupply": 0,
+      "results": [
+        {
+          "specialty": "rolniczy",
+          "product": "chleb",
+          "quantity": 768,
+          "living": 30
+        },
+        {
+          "specialty": "winiarski",
+          "product": "wino",
+          "quantity": 64,
+          "living": 30
+        },
+        {
+          "specialty": "browarniczy",
+          "product": "piwo",
+          "quantity": 156,
+          "living": 30
+        },
+        {
+          "specialty": "miesny",
+          "product": "wedliny",
+          "quantity": 32,
+          "living": 29
+        },
+        {
+          "specialty": "hodowlany",
+          "product": "ser",
+          "quantity": 70,
+          "living": 30
+        },
+        {
+          "specialty": "hutniczy",
+          "product": "narz",
+          "quantity": 74,
+          "living": 30
+        },
+        {
+          "specialty": "drzewny",
+          "product": "wyroby_drewniane",
+          "quantity": 112,
+          "living": 31
+        },
+        {
+          "specialty": "tkacki",
+          "product": "odziez",
+          "quantity": 60,
+          "living": 33
+        },
+        {
+          "specialty": "garncarski",
+          "product": "naczynia",
+          "quantity": 60,
+          "living": 30
+        },
+        {
+          "specialty": "sadowniczy",
+          "product": "jablka",
+          "quantity": 577.17,
+          "living": 32
+        },
+        {
+          "specialty": "zielarski",
+          "product": "leki",
+          "quantity": 70,
+          "living": 33
+        }
+      ]
+    },
+    {
+      "days": 1500,
+      "living": 125,
+      "generations": 9,
+      "births": 168,
+      "deaths": 61,
+      "succession": 27,
+      "bytes": 444847
+    },
+    {
+      "scenario": "multi",
+      "living": 635,
+      "inhabited": 4,
+      "stats": {
+        "births": 818,
+        "deaths": 225,
+        "deliveries": 62,
+        "succession": 81,
+        "maxGeneration": 8,
+        "batches": 4445,
+        "harvests": 56263,
+        "animalBirths": 259
+      },
+      "bytes": 1787465
+    }
+  ],
+  "classic_menu": {
+    "cases": 7,
+    "failures": 0
+  },
+  "physical_android": "unverified",
+  "installer": {
+    "status": "PASS",
+    "mode": "prepare-only",
+    "suites": 32,
+    "cases": 154,
+    "commit": false,
+    "push": false,
+    "release_source_matches_rehearsal": true,
+    "extended_generation_cases_executed_before_packaging": 2
+  }
+}

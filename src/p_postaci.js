@@ -23,7 +23,7 @@ function winterExtra(p){const k=p.sex==='k',adult=p.age>=12,id=p.id;const koz=md
 const isWinterNow=()=>!!S&&(seasonIdx()===2||['frost','snow','zamiec'].includes(S.weather.k));
 // narzędzia w prawej ręce (w układzie ręki: dłoń w (0,−.355,.045), trzonek biegnie dalej w dół ramienia)
 const TOOL={};
-function toolGeo(t){if(TOOL[t])return TOOL[t];const T=[];const wood=mdCol(0x6a4a2c),iron=mdCol(0x5a5e64),lt=mdCol(0x9a7a50);const HX=0,HY=-.355,HZ=.05;
+function toolGeo(t){if(TOOL[t])return TOOL[t];const T=[];const wood=mdCol(0x6a4a2c),iron=mdCol(0x5a5e64),lt=mdCol(0x9a7a50);const HX=0,HY=-.175,HZ=.05;
  const handle=(len,r)=>T.push([new THREE.CylinderGeometry(r||.011,r||.011,len,6),wood,mdM(HX,HY-len/2+.06,HZ)]);
  if(t==='siekiera'){handle(.38);T.push([new THREE.BoxGeometry(.016,.06,.08),iron,mdM(HX,HY-.28,HZ+.03)])}
  else if(t==='kilof'){handle(.38);T.push([new THREE.BoxGeometry(.016,.022,.22),iron,mdM(HX,HY-.29,HZ,.15)])}
@@ -37,7 +37,7 @@ function toolGeo(t){if(TOOL[t])return TOOL[t];const T=[];const wood=mdCol(0x6a4a
  TOOL[t]=mdMerge(T);return TOOL[t]}
 const TOOL_B={drwal:'siekiera',lesnik:'lopata',kamien:'kilof',ruda:'kilof',sztolnia:'kilof',torfowisko:'lopata',glinianka:'lopata',zbieracz:'kosz',pomost:'wedka',mysliwy:'luk',ptasznik:'kosz',pasieka:'kosz',drewutnia:'siekiera',kuznia:'mlot',dymarka:'mlot',warsztat:'mlot',pracownia:'mlot',szkutnia:'mlot',zagroda:'kij'};
 const TOOL_N={tree:'siekiera',rock:'kilof',ruda:'kilof',clay:'lopata',fish:'wedka',bush:'kosz',grzyb:'kosz',ziola:'kosz',zboze:'sierp',len:'sierp',ul:'kosz'};
-function toolFor(p){if(p.state==='work'){const wk=p.workKind;const b=p.wb?bById(p.wb):null;
+function toolFor(p){if(S?.epoch===4&&p.e4Action?.phase==='doing')return {chop:'siekiera',mine:'kilof',gather:'kosz',field:'sierp',build:'mlot',forge:'mlot',care:'kij'}[p.e4Action.kind]||null;if(p.state==='work'){const wk=p.workKind;const b=p.wb?bById(p.wb):null;
   if(wk==='build'||wk==='wreck'||wk==='haul')return'mlot';if(wk==='field')return'sierp';if(wk==='plant')return'lopata';if(wk==='hunt')return'luk';if(wk==='care'||wk==='tame')return'kij';
   if(wk==='mark'&&p.tgt&&p.tgt.type)return TOOL_N[p.tgt.type]||null;if(wk==='chore')return'kosz';
   if((wk==='work'||wk==='prod')&&b)return TOOL_B[b.kind]||null;return null}
@@ -49,6 +49,6 @@ function personWinter(m,on){const u=m.userData;if(!u.gS||u.win===on)return;const
 let postT=0;
 {const _mt=mapTick;mapTick=function(rdt){_mt(rdt);if(!S)return;postT+=rdt;const slow=postT>1;if(slow)postT=0;const W=slow?isWinterNow():null;
   for(const p of S.people){const m=pMesh[p.id];if(!m||!m.visible)continue;const u=m.userData;if(!u.p18)continue;if(slow&&u.win!==W)personWinter(m,W);
-   const t=toolFor(p);if(t){if(!u.tool){u.tool=new THREE.Mesh(toolGeo(t),MD.mat);u.tool.castShadow=true;u.aR.add(u.tool)}if(u.toolK!==t){u.tool.geometry=toolGeo(t);u.toolK=t}u.tool.visible=true;
+   const t=toolFor(p);if(t){if(!u.tool){u.tool=new THREE.Mesh(toolGeo(t),MD.mat);u.tool.castShadow=true;(u.elbowR||u.aR).add(u.tool)}if(u.toolK!==t){u.tool.geometry=toolGeo(t);u.toolK=t}u.tool.visible=true;
     if(t==='laska'){u.aR.rotation.x=-.35+Math.sin(clock*10+p.id)*.08}}else if(u.tool)u.tool.visible=false}}}
 window.__post={toolGeo,winterExtra,personWinter,toolFor,makeP:p=>makePersonMesh(p)};

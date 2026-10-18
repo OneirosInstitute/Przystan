@@ -1,16 +1,11 @@
 /* Pracownik zachowuje warsztat; brak składników uruchamia fizyczne zaopatrzenie. */
 const SUPPLY_NODES={drewno:['tree'],kamien:['rock'],glina:['clay'],ruda:['ruda'],ziarno:['zboze'],wlokna:['len'],ziola:['ziola'],jagody:['bush'],grzyby:['grzyb'],ryby:['fish'],miod:['ul']};
 function productionSupplyRecipes(building){
- return [].concat(BD[building.kind].prod||[]).filter(recipe=>{
-  if(limHit(building,recipe))return false;
-  // Żarna chronią ziarno na siew: uzupełniamy ten zapas, nie obchodzimy rezerwy.
-  if(building.kind==='zarna'&&S.res.maka<60)return true;
-  return !recipe.when||recipe.when();
- });
+ return [].concat(BD[building.kind].prod||[]).filter(recipe=>['ready','shortage'].includes(productionPolicy(building,recipe).mode));
 }
 function productionSupplyState(building){
  const recipes=productionSupplyRecipes(building),needs=[],blockers=[];let requiredBuilding=null;
- if(!recipes.length)return {mode:'covered',needs,reason:'Zapas pełny lub produkcja wstrzymana warunkami przepisu.'};
+ if(!recipes.length){const policies=[].concat(BD[building.kind].prod||[]).map(recipe=>productionPolicy(building,recipe)),blocked=policies.find(policy=>policy.mode==='blocked');return {mode:blocked?'blocked':'covered',needs,reason:blocked?.reason||'Osiągnięty docelowy zapas.'};}
  if(productionReady(building))return {mode:'ready',needs,reason:'Składniki gotowe do produkcji.'};
  const resolve=(resource,quantity,chain=[])=>{
   if((S.res[resource]||0)>=quantity)return;
@@ -24,7 +19,7 @@ function productionSupplyState(building){
   for(const [key,amount]of shortages)resolve(key,amount,[...chain,resource]);
  };
  const recipe=recipes[0];
- for(const [resource,quantity]of Object.entries(recipe.in))resolve(resource,resource==='ziarno'&&building.kind==='zarna'?quantity+10*S.bld.filter(candidate=>candidate.field).length:quantity);
+ for(const [resource,quantity]of Object.entries(recipe.in))resolve(resource,quantity+(recipe.reserve?.()[resource]||0));
  return {mode:'shortage',needs,requiredBuilding,reason:needs.length?'Brakuje: '+needs.map(need=>RN[need.resource].toLowerCase()).join(', ')+'.':blockers.join(' ')||'Warunki produkcji jeszcze niespełnione.'};
 }
 function productionSupportJob(person){
@@ -32,6 +27,7 @@ function productionSupportJob(person){
  const state=productionSupplyState(building);delete person.supply;person.chK=null;person.limC=false;
  if(state.mode==='ready')return false;
  if(state.mode==='covered')return limChore(person,'zapas');
+ if(state.mode==='blocked'){person.state='idle';person.wait=4;person.act=state.reason;return true;}
  const center=bCenter(building),candidates=[];
  for(const need of state.needs)for(const type of SUPPLY_NODES[need.resource])for(const node of nodeBy[type]||[]){
   if(!mkUsable(node)||node.claim>=1||node.bad>S.t||mkWhy(node)||seasonYield(type)<=0)continue;
@@ -61,7 +57,7 @@ function supplyShouldReturn(person){const building=bById(person.wb);return perso
  return previousStep(person,delta);
 }}
 function productionPolicyHTML(building){const state=productionSupplyState(building),workers=S.people.filter(person=>person.job==='wb'&&person.wb===building.id),gathering=workers.filter(person=>person.supply).length;
- return '<small style="color:var(--gold);text-transform:uppercase;letter-spacing:.08em">Rytm pracowni</small><p><b>'+({ready:'Produkcja',shortage:'Zaopatrzenie',covered:'Prace wspólne'}[state.mode])+'</b>'+ (gathering?' · '+gathering+' osób pozyskuje składniki':'')+'</p><p class="mut">'+escapeHtml(state.reason)+'</p>'+(state.needs.length?'<p class="mut">'+state.needs.map(need=>RN[need.resource]+': '+fmt(S.res[need.resource]||0)+' / '+need.quantity).join(' · ')+'</p>':'')+'<p class="mut">Brak składników → pozyskiwanie i dowóz. Pełny zapas → pomoc osadzie. Zaopatrzenie: 55% zwykłego tempa zbioru przy tych samych umiejętnościach.</p>';
+ return '<p class="mut">Cele: '+[].concat(BD[building.kind].prod).map(recipe=>Object.keys(recipe.out).map(key=>RN[key]).join(' i ')+': '+(recipeTarget(building,recipe)||'bez limitu')).join(' · ')+'</p><small style="color:var(--gold);text-transform:uppercase;letter-spacing:.08em">Rytm pracowni</small><p><b>'+({ready:'Produkcja',shortage:'Zaopatrzenie',covered:'Prace wspólne',blocked:'Produkcja wstrzymana'}[state.mode])+'</b>'+ (gathering?' · '+gathering+' osób pozyskuje składniki':'')+'</p><p class="mut">'+escapeHtml(state.reason)+'</p>'+(state.needs.length?'<p class="mut">'+state.needs.map(need=>RN[need.resource]+': '+fmt(S.res[need.resource]||0)+' / '+need.quantity).join(' · ')+'</p>':'')+'<p class="mut">Brak składników → pozyskiwanie i dowóz. Pełny zapas → pomoc osadzie. Zaopatrzenie: 55% zwykłego tempa zbioru przy tych samych umiejętnościach.</p>';
 }
 {const previousSelection=renderSel;renderSel=function(){previousSelection();if(!S||S.epoch===4||selB===null)return;const building=bById(selB);if(!building||!bDone(building)||!BD[building.kind].prod)return;
  const selection=$('sel');let policy=selection.querySelector('.production-policy');if(!policy){policy=document.createElement('div');policy.className='production-policy';selection.querySelector('h4')?.insertAdjacentElement('afterend',policy)}if(policy)setH(policy,productionPolicyHTML(building));

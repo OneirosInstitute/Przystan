@@ -51,6 +51,7 @@ const E4Catalog=(()=>{
  };
  const recipes={
   woz:{name:'Budowa wozu',building:'stolarnia',input:{deski:12,gwozdzie:8,zelazo:1},output:{woz:1},labor:16,days:0,skill:'ciesla'},
+  narzk:{name:'Wyrób narzędzi kamiennych',building:'schronienie',input:{kamien:3,drewno:2},output:{narzk:1},labor:5,days:0,skill:'ciesla'},
   deski_reczne:{name:'Ręczne ciosanie desek',building:'schronienie',input:{drewno:10},output:{deski:5},labor:12,days:0,skill:'ciesla'},
   opal:{name:'Rąbanie opału',building:'schronienie',input:{drewno:6},output:{opal:12},labor:2,days:0,skill:'drwal'},
   sol:{name:'Odparowanie soli morskiej',building:'schronienie',input:{opal:4},output:{sol:6},labor:4,days:2,skill:'murarz'},
@@ -73,10 +74,12 @@ const E4Catalog=(()=>{
   beczki:{name:'Bednarstwo',building:'stolarnia',input:{deski:4,zelazo:.25},output:{beczki:2},labor:2,days:0,skill:'ciesla'},
   plotno:{name:'Przędzenie i tkanie',building:'przasnia',input:{wlokna:10},output:{plotno:5},labor:4,days:0,skill:'krawiec'},
   odziez:{name:'Szycie ubrań',building:'szwalnia',input:{plotno:4},output:{odziez:2},labor:3,days:0,skill:'krawiec'},
+  odziez_skory:{name:'Szycie kożuchów',building:'szwalnia',input:{skory:3},output:{odziez:2},labor:4,days:0,skill:'krawiec'},
   naczynia:{name:'Wypał naczyń',building:'garncarnia',input:{glina:8,opal:2},output:{naczynia:6},labor:3,days:1,skill:'murarz'},
   cegla:{name:'Wypał cegieł',building:'cegielnia',input:{glina:12,opal:3},output:{cegla:10},labor:3,days:1,skill:'murarz'},
   leki:{name:'Suszenie i przygotowanie ziół',building:'zielarnia',input:{ziola:8,naczynia:.5},output:{leki:5},labor:3,days:1,skill:'zbieracz'}
  };
+ const householdUse={wyroby_drewniane:{daily:.012,effect:'Wyposażenie domów — wygoda i trwałe meble'},wosk:{daily:.006,effect:'Świece i konserwacja — zużycie narzędzi mniejsze do 20%'},pierze:{daily:.006,effect:'Ciepłe posłania — mniej zużywanej odzieży'},bursztyn:{daily:.0005,effect:'Rodowe ozdoby i obrzędy — pamięć i nadzieja'}};
  const specialties={
   rolniczy:{name:'Pola, młyn i cech piekarzy',buildings:['pole','mlyn','piekarnia','magazyn'],crops:['zboze'],recipes:['maka','chleb'],skill:'rolnik'},
   winiarski:{name:'Winnica i winiarnia',buildings:['winnica','winiarnia','piwnica','stolarnia'],crops:['winogrona'],recipes:['wino','beczki'],skill:'rolnik'},
@@ -91,6 +94,6 @@ const E4Catalog=(()=>{
   zielarski:{name:'Zielnik i wyroby zielarskie',buildings:['zielnik','zielarnia','wyroby'],crops:['ziola'],recipes:['leki','kiszonki'],skill:'zbieracz'}
  };
  const animals={koza:{name:'Koza',building:'zagroda',feed:.2,milk:.7,gestation:25,adult:20,capacity:16,meat:7,skin:1},kura:{name:'Kura',building:'kurnik',feed:.07,eggs:.3,gestation:7,adult:8,capacity:32,meat:2,skin:0},swinia:{name:'Świnia',building:'chlew',feed:.5,gestation:20,adult:18,capacity:12,meat:18,skin:2}};
- return{resources,food,spoil,crops,buildings,recipes,specialties,animals};
+ return{resources,food,spoil,crops,buildings,recipes,specialties,animals,householdUse};
 })();
 if(typeof module!=='undefined'&&module.exports)module.exports=E4Catalog;

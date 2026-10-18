@@ -1,0 +1,8 @@
+{
+  "status": "PASS",
+  "scenario": "dirty repository rejected before copy",
+  "exit": 1,
+  "tracked_files_unchanged": 211,
+  "user_note_unchanged": true,
+  "head_unchanged": true
+}

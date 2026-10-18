@@ -15,15 +15,15 @@ const isSobota=()=>dayN()%7===5;
    if(S.search&&S.day<S.search.until&&searchJob(p))return true;
    if(S.tloka&&tlokaJob(p))return true;
    if(isWorker(p)&&p.job!=='wyp'&&isWork()){const t=tod(),d=dayN();
-    if(!ZYOFF.includes('m')&&t>=.49&&t<.52&&p.mealD!==d&&Math.hypot(p.x-campX(),p.z-campZ())>=9){p.mealD=d;p.ryK='field';p.state='work';p.workKind='rytm';p.wt=0;p.act='je chleb w polu';return true}
-    if(!ZYOFF.includes('m')&&t>=.49&&t<.52&&p.mealD!==d){p.mealD=d;const ad=S.people.filter(isWorker);const k=ad.indexOf(p);const s=ringSpot(k,ad.length,2.4+(k%3)*.7);
+    if(!ZYOFF.includes('m')&&t>=.49&&t<.52&&p.mealD!==d&&Math.hypot(p.x-campX(),p.z-campZ())>=9){p.mealIntentD=d;p.ryK='field';p.state='work';p.workKind='rytm';p.wt=0;p.act='je chleb w polu';return true}
+    if(!ZYOFF.includes('m')&&t>=.49&&t<.52&&p.mealD!==d){p.mealIntentD=d;p.ryK='meal';const ad=S.people.filter(isWorker);const k=ad.indexOf(p);const s=ringSpot(k,ad.length,2.4+(k%3)*.7);
      if(s&&go(p,s,'rytm',null)){p.ryK='meal';p.act='idzie na wspólny posiłek';return true}}
-    if(!ZYOFF.includes('w')&&t<.265&&p.washD!==d){p.washD=d;if(Math.random()<.3){const w=waterNear(p.x,p.z);if(w&&Math.hypot(w.x-p.x,w.z-p.z)<9){const s=nearestWalk(...tileOf(w.x,w.z));if(s&&go(p,s,'rytm',null)){p.ryK='wash';p.act='myje się w strumieniu';return true}}}}}
+    if(!ZYOFF.includes('w')&&t<.265&&p.washD!==d&&p.washTryD!==d){p.washTryD=d;if(Math.random()<.3){const w=waterNear(p.x,p.z);if(w&&Math.hypot(w.x-p.x,w.z-p.z)<9){const s=nearestWalk(...tileOf(w.x,w.z));p.ryK='wash';if(s&&go(p,s,'rytm',null)){p.act='myje się w strumieniu';return true}}}}}
    if(!ZYOFF.includes('k')&&!isWorker(p)&&p.age>=5&&isWork()&&kidJob(p))return true}
   return _pj(p)}}
 {const _oa=onArrive;onArrive=function(p){const a=p.after;
   if(a==='rytm'){p.after=null;p.wt=0;p.state='work';p.workKind='rytm';if(p.ryK==='meal')p.act='je wspólny posiłek przy ognisku';return}
-  if(a==='eve'){p.after=null;p.state='eve';p.wt=0;return}
+  if(a==='eve'){p.after=null;p.state='eve';p.wt=0;p.eveArrivedD=dayN();return}
   if(a==='kid'){p.after=null;p.wt=0;if(p.kidK==='berek'&&S.t<(p.kidUntil||0)){const c=S.play;if(c){const a2=Math.random()*6.28,r=1+Math.random()*2.6;const s=nearestWalk(...tileOf(c.x+Math.cos(a2)*r,c.z+Math.sin(a2)*r));if(s&&go(p,s,'kid',null))return}}
    p.state=p.kidK==='berek'?'idle':'work';p.workKind='kid';if(p.state==='idle')p.wait=.5;return}
   if(a==='srch'){p.after=null;p.state='idle';p.wait=.3;return}
@@ -37,25 +37,26 @@ const EVE_ACT={dom:'siedzi przed domem',ogien:'siedzi przy ognisku',bania:'w ban
   // wieczór: zanim pójdą spać
   const t=tod();
   if(!ZYOFF.includes('e')&&S&&p.age>=3&&t>=T1&&t<.9&&!isWork()&&p.job!=='wyp'&&p.state!=='away'&&!p.fireB&&!p.lost&&!cerOn()){
-   if(p.state==='eve'){if(p.eveK==='bania'){p.bathD=dayN()}return}
+   if(p.state==='eve'){p.wt=(p.wt||0)+dt;if(p.wt>=3&&p.eveArrivedD===dayN()){p.eveD=dayN();if(p.eveK==='bania')p.bathD=dayN()}return}
    if(p.state==='move'&&p.after==='eve')return _sp(p,dt);
-   if(p.eveD!==dayN()){p.eveD=dayN();if(p.state==='work'&&p.workKind==='build'&&p.tgt&&p.tgt.workers)p.tgt.workers--;release(p);if(p.haulB&&typeof haulEnd==='function')haulEnd(p);if(p.carry)deposit(p);
+   if(p.eveD!==dayN()){p.eveIntentD=dayN();if(p.state==='work'&&p.workKind==='build'&&p.tgt&&p.tgt.workers)p.tgt.workers--;release(p);if(p.haulB&&typeof haulEnd==='function')haulEnd(p);if(p.carry)deposit(p);
     const s=eveSpot(p);if(s&&go(p,s,'eve',null)){p.act=EVE_ACT[p.eveK]||'odpoczywa';return}}}
   if(p.state==='eve'&&(t<T1||t>=.9)){p.state='idle';p.wait=.2}
   if(p.lost){p.state='away';return}
   if(p.state==='work'&&p.workKind==='rytm'){if(!isWork()){p.state='idle';return _sp(p,dt)}
-   if(p.ryK==='field'){if(t>=.525){p.state='idle';p.wait=.1;p.mealBuff=S.day+.28}return}
-   if(p.ryK==='meal'){if(t>=.535){p.state='idle';p.wait=Math.random()*.6;p.mealBuff=S.day+.28}return}
-   p.wt+=dt;if(p.wt>=2.5){p.hp=Math.min(1,p.hp+.004);p.state='idle';p.wait=.2}return}
+   if(p.ryK==='field'||p.ryK==='meal'){
+    p.wt+=dt;if(p.wt>=3){const snack=K*.06,available=foodTotal();if(available>=snack){for(const key of FOOD)S.res[key]=Math.max(0,(S.res[key]||0)-snack*((S.res[key]||0)/available));p.mealD=dayN();p.mealBuff=S.day+.28;}p.state='idle';p.wait=.5;}return;
+   }
+   p.wt+=dt;if(p.wt>=2.5){p.washD=dayN();p.hp=Math.min(1,p.hp+.004);p.state='idle';p.wait=.2}return}
   if(p.state==='work'&&p.workKind==='kid'){if(!isWork()){p.state='idle';return _sp(p,dt)}p.wt+=dt;
-   if(p.kidK==='follow'){const q=pById(p.kidP);const c=q&&jobCraft(q);if(c){p.xp[c]=(p.xp[c]||0)+dt*.05}if(p.wt>=6||!q){p.state='idle';p.wait=.3}}
+   if(p.kidK==='follow'){const q=pById(p.kidP);const c=q&&jobCraft(q);if(c&&q.state==='work'&&q.hp>.5&&Math.hypot(q.x-p.x,q.z-p.z)<=3){p.xp[c]=(p.xp[c]||0)+dt*.05}if(p.wt>=6||!q){p.state='idle';p.wait=.3}}
    else if(p.wt>=5){p.state='idle';p.wait=.4}return}
   return _sp(p,dt)}}
 {const _e=eff;eff=function(p){return _e(p)*(p.mealBuff>S.day?1.12:1)}}
 function rytmDaily(){const d=dayN()-1;const ad=S.people.filter(isWorker);if(!ad.length)return;
  const ate=ad.filter(p=>p.mealD===d).length/ad.length;if(ate>.4){S.hope=clamp(S.hope+.012*ate*KF,0,1);S.dis=Math.max(0,(S.dis||0)-.008*ate*KF);
-  // wspólny kocioł: gotuje się raz dla wszystkich, nic się nie marnuje
-  const tot=foodTotal(),back=K*S.people.length*.12*ate;if(tot>0)FOOD.forEach(k=>S.res[k]+=back*(S.res[k]/tot));S.kociol=(S.kociol||0)+back}
+  // Wspólny posiłek daje odpoczynek; nie tworzy żywności w magazynie.
+ }
  const eve=S.people.filter(p=>p.eveD===d).length/Math.max(1,S.people.length);if(eve>.5){S.hope=clamp(S.hope+.008*KF,0,1);S.dis=Math.max(0,(S.dis||0)-.01*KF)}
  const bath=S.people.filter(p=>p.bathD===d);if(bath.length>=3){bath.forEach(p=>p.hp=Math.min(1,p.hp+.04));S.hope=clamp(S.hope+.02,0,1);S.banD=d;if(!S.seen.bania1){S.seen.bania1=1;log('Pierwsza sobota w bani. Para, kamienie, zimna woda po wszystkim. Ludzie wracają czerwoni i weseli.')}}}
 

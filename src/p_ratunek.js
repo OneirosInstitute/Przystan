@@ -21,7 +21,7 @@ function restSpot(p){const h=homeOf(p);let t;if(h&&bDone(h)){t=entryOf(h.kind,h.
   const C=choreCands(p);for(const k of C.map(c=>c[0]).concat(['zbior','chrust','ryby'])){p.limC=true;if(choreDo(p,k)){p.act=why.split(',')[0]+': '+p.act;return true}}p.limC=false;return r}}
 
 // karta człowieka: dlaczego słabnie
-function weakWhy(p){const W=[];if(p.ill)W.push('choroba');if(fedOf(p)<.999)W.push('głód');if(p.warm!==undefined&&p.warm<.6)W.push('zimno');if((S.thirst||0)>0)W.push('brak czystej wody');if(p.hurt)W.push('rana');if((S.variety||0)<=1)W.push('jednostajne jedzenie');return W}
+function weakWhy(p){const W=[];if(p.ill)W.push('choroba');if(fedOf(p)<.999)W.push('głód');if(p.warm!==undefined&&p.warm<.6)W.push('zimno');if(S.epoch!==4&&(S.thirst||0)>0)W.push('brak czystej wody');if(p.hurt)W.push('rana');if(S.epoch!==4&&(S.variety||0)<=1)W.push('jednostajne jedzenie');return W}
 {const _lc=ludCard;ludCard=function(p){let h=_lc(p);if(p.hp<.6){const w=weakWhy(p);h=`<p class="no">Słabnie (zdrowie ${Math.round(p.hp*100)}%)${w.length?': '+w.join(', '):''}.${restNow(p)?' Leży, bo chorzy odpoczywają.':''}</p>`+h}return h}}
 // górna linia: zamiast ogólnych „chorób” liczba słabych
 {const _ct=czThreats;czThreats=function(){return _ct().map(x=>x[0]==='choroby'?[`słabi: ${S.people.filter(p=>p.hp<.45).length}`,x[1],x[2]]:x)}}

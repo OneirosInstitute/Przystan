@@ -131,7 +131,8 @@ const ocean=new THREE.Mesh(oGeo,wMat);ocean.position.y=-.09;ocean.renderOrder=1;
 
 /* ================= siatka chodzenia i A* (kopiec) ================= */
 const walk=new Uint8Array(N*N);
-function recomputeWalk(){for(let k=0;k<N*N;k++)walk[k]=(land[k]&&occ[k]<0)?1:0}
+let walkRevision=0;
+function recomputeWalk(){walkRevision++;for(let k=0;k<N*N;k++)walk[k]=(land[k]&&occ[k]<0)?1:0}
 const tileOf=(x,z)=>[clamp(Math.floor(x+N/2),0,N-1),clamp(Math.floor(z+N/2),0,N-1)];
 const AG=new Float32Array(N*N),AF=new Float32Array(N*N),AC=new Int32Array(N*N),AS=new Uint32Array(N*N),AX=new Uint32Array(N*N);let stamp=1;
 const heap=[];

@@ -1,0 +1,10 @@
+{"scenario":"large-farm-commute","workers":200,"fields":200,"harvested":196}
+✔ a large farm keeps its fields within a real working day instead of losing harvests to commuting (3242.335189ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3377.536481

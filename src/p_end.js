@@ -86,12 +86,8 @@ function frame(now){if(!lifeCanRun()){last=now;return}lifeRequestFrame();if(gfxS
  if(Math.abs(yawT-yaw)>.001){yaw+=(yawT-yaw)*Math.min(1,rdt*8);setCam()}
  if(Math.abs(zoomT-zoom)>.001){zoom+=(zoomT-zoom)*Math.min(1,rdt*10);setCam()}
  if(follow&&selId!==null){const p=pById(selId);if(p){camT.x+=(p.x-camT.x)*Math.min(1,rdt*4);camT.z+=(p.z-camT.z)*Math.min(1,rdt*4);setCam()}}
- for(const p of S.people){const m=pMesh[p.id];if(!m)continue;m.position.set(p.x,Hy(p.x,p.z),p.z);if(p.dir!==undefined)m.rotation.y=p.dir;
-  m.visible=!(p.state==='sleep'&&homeOf(p)&&bDone(homeOf(p)))&&p.state!=='away'&&!(p.inHall&&p.state==='eve');
-  const u=m.userData,walking=p.state==='move'&&S.speed>0,working=p.state==='work'&&S.speed>0,sw=walking?Math.sin(clock*10+p.id)*.6:0;
-  u.lL.rotation.x=sw;u.lR.rotation.x=-sw;u.aL.rotation.x=working?-1.2+Math.sin(clock*9+p.id)*.7:-sw*.8;u.aR.rotation.x=working?-1.0+Math.sin(clock*9+p.id+1)*.7:sw*.8;
-  u.torso.rotation.x=working?.25:0;
-  u.carry.visible=!!p.carry;if(p.carry)u.carry.material.color.set({drewno:0x8a6a40,kamien:0x8c8a80,glina:0xa9683c,jagody:0x8a3a55,grzyby:0xb07a4a,ryby:0x8fa4ac,mieso:0x9a4a3a,deski:0xb08a55,gwozdzie:0x555555,plotno:0xc9bda0,narz:0x666a70}[p.carry[0].res]||0x888888)}
+ for(const p of S.people){const m=ensurePersonProfile(p);if(!m)continue;m.position.set(p.x,Hy(p.x,p.z),p.z);m.visible=!(p.state==='sleep'&&homeOf(p)&&bDone(homeOf(p)))&&p.state!=='away'&&!(p.inHall&&p.state==='eve');animatePerson(p,m,rdt);}
+
  drawAnimals();drawBirds(rdt);fireFxTick(rdt);bubbleTick(rdt);const wf=weatherFx(rdt);
  ripples.forEach((m,k)=>{const s=1+.3*Math.sin(clock*1.6+k);m.scale.set(s,s,s);m.material.opacity=.3+.22*Math.sin(clock*1.6+k)});
  const Lt=lighting();firelight.position.set(campX(),Hy(campX(),campZ())+1.8,campZ());atmosphere(rdt,Lt);gfxTick(rdt,Lt);

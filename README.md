@@ -1,3 +1,14 @@
+# Przystań — 4.0.0-rc.5
+
+Aktualna paczka: **Przystan_4.0.0_RC5_SI_TERMUX.zip**.
+
+Opis zmian i komendy: [docs/WYDANIE_4.0.0_RC5.md](docs/WYDANIE_4.0.0_RC5.md).
+Raport odbioru: [docs/WERYFIKACJA_4.0.0_RC5.md](docs/WERYFIKACJA_4.0.0_RC5.md).
+
+Menu RC5 wraca do klasycznego widoku sprzed RC4 z dodaną zakładką Zadania. [Układ i obsługa](docs/MENU_4.0.0_RC5.md).
+
+Poniżej zachowano dokumentację poprzedniego wydania; opis przebudowanego menu RC4 jest historyczny.
+
 # Przystań
 
 Naprawa instalacji RC4 po RC3: **Przystan_4.0.0_RC4_OSADA_TERMUX_FIX.zip**. [Instrukcja i raport](docs/WDROZENIE_RC4_PO_RC3_2026-10-17.md).
@@ -9,7 +20,8 @@ Spokojna gra o osiemnastu rozbitkach, którzy budują osadę na dzikiej, nieznan
 ```bash
 npm start          # buduje dist/ i uruchamia serwer na http://localhost:3000
 npm run build      # tylko buduje dist/
-npm test           # składnia obu skryptów i regresje logiki/API
+npm test           # pełny odbiór, łącznie z dwiema symulacjami po 1500 dni
+npm run test:install # regresje instalacyjne, bez powtarzania dwóch długich symulacji
 npm run test:runtime # pełna pętla silnika i restarty; bez prawdziwego GPU/DOM
 ```
 

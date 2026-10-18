@@ -9,7 +9,7 @@ Object.assign(BD,{
  lawa:{cat:'wsp',n:'Ława starszych',w:2,h:2,cost:{kamien:24,drewno:12},work:8,e2:'rada',d:'Kamienne ławy w kręgu pod starą lipą. Tu zasiada rada starszych i tu rozsądza spory.'},
  plac:{cat:'wsp',n:'Plac wiecowy',w:3,h:3,cost:{drewno:24,kamien:16,plotno:6},work:10,e2:'wiec',d:'Ubity plac z kamieniem mówcy, ławami w półkolu i chorągwiami rodów. Tu każdy dorosły ma głos.'},
  dwor:{cat:'dom',n:'Dwór rodu',w:3,h:2,cost:{drewno:40,deski:24,cegla:16,gwozdzie:30,kamien:16},work:24,house:10,fuel:.5,e2:'rod',d:'Duży dom z bali z wieżyczką i rzeźbionym szczytem, siedziba rodu, który prowadzi osadę. Mieści 10 osób.'},
- ptasznik:{cat:'jedzenie',n:'Chata ptaszników',w:2,h:2,cost:{drewno:16,deski:6,wlokna:4},work:7,wk:2,c:'zbieracz',shore:1,e2:'skaly',prod:{in:{},out:{jaja:2,pierze:1},t:22,when:()=>{const s=seasonIdx();return(s===0||s===3)&&(S.res.jaja||0)<160}},d:'Ptasznicy schodzą na linach po skałach nad morzem i zbierają jaja mew, a z gniazd pierze. Jaja wiosną i latem, pierze na ciepłe posłania. Stawia się ją na brzegu.'}});
+ ptasznik:{cat:'jedzenie',n:'Chata ptaszników',w:2,h:2,cost:{drewno:16,deski:6,wlokna:4},work:7,wk:2,c:'zbieracz',shore:1,e2:'skaly',prod:{in:{},out:{jaja:2,pierze:1},t:22,target:160,when:()=>{const s=seasonIdx();return s===0||s===3}},d:'Ptasznicy schodzą na linach po skałach nad morzem i zbierają jaja mew, a z gniazd pierze. Jaja wiosną i latem, pierze na ciepłe posłania. Stawia się ją na brzegu.'}});
 E2_WHERE.ptasznik='chata ptaszników musi stać na brzegu, przy wodzie';
 Object.assign(E2ACT,{lawa:'zasiada w radzie',plac:'przemawia na wiecu',ptasznik:'zbiera jaja na skałach'});
 Object.assign(SIGNK,{ptasznik:'zywnosc'});

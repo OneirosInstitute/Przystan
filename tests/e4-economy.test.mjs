@@ -62,7 +62,7 @@ test('a field consumes seed, requires care, grows and produces a finite harvest'
  const state=fixture(),town=state.e4.settlements.przystan;town.autonomy=false;
  const original=state.res.ziarno;
  assert.equal(economy.project(state,'przystan','pole').ok,true);assert.equal(state.res.ziarno,original-2);
- economy.advance(state,2);assert.equal(town.fields.length,1);assert.ok(town.fields[0].progress>0);
+ economy.advance(state,3);assert.equal(town.fields.length,1);assert.ok(town.fields[0].progress>0,'care starts after builders finish and workers reach the new field');
  const harvestsBefore=state.e4.stats.harvests||0;economy.advance(state,8);
  assert.ok((state.e4.stats.harvests||0)>harvestsBefore);
  assert.ok(Number.isFinite(state.res.ziarno)&&state.res.ziarno>=0);
@@ -80,9 +80,9 @@ test('every recipe consumes its inputs and produces one delayed result',()=>{
  const source=fixture();source.e4.settlements.przystan.autonomy=false;
  for(const [recipeId,recipe]of Object.entries(economy.catalog.recipes)){
   const state=JSON.parse(JSON.stringify(source)),town=state.e4.settlements.przystan;town.buildings[recipe.building]=1;town.capacity=100000;
-  for(const key of Object.keys(state.res))state.res[key]=0;state.res.suchary=10000;Object.assign(state.res,recipe.input);
+  for(const key of Object.keys(state.res))state.res[key]=0;state.res.suchary=10000;Object.assign(state.res,recipe.input);if(recipe.input.ziarno)state.res.ziarno+=2;
   assert.equal(economy.batch(state,'przystan',recipeId).ok,true,recipeId);
-  for(const key of Object.keys(recipe.input))assert.equal(state.res[key],0,recipeId+' reserves '+key);
+  for(const key of Object.keys(recipe.input))assert.equal(state.res[key],key==='ziarno'?2:0,recipeId+' reserves '+key);
   economy.advance(state,recipe.days+2);
   for(const key of Object.keys(recipe.output))assert.ok(town.output[key]>=recipe.output[key],recipeId+' produces '+key);
   assert.equal(town.batches.length,0,recipeId);

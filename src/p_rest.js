@@ -431,10 +431,13 @@ function makePersonMesh(p){const g=new THREE.Group();
  g.traverse(o=>{o.userData.pid=p.id});
  g.userData={pid:p.id,carry,torso,lL,lR,aL,aR,ring,sc:0};return g}
 let pMesh={};
+function personDetail(p){return GFX.level>0&&zoom>=.65&&Math.hypot(p.x-camT.x,p.z-camT.z)<45}
+function personProfile(p){return [p.age<12?'child':p.age<24?'young':p.age>55?'old':'adult',p.sex,p.cloth,p.rod||p.fam||p.id,personDetail(p)?1:0].join(':')}
+function ensurePersonProfile(p){const current=pMesh[p.id];if(current&&current.userData.profile!==personProfile(p)){removePersonMesh(p.id);addPersonMesh(p);return pMesh[p.id]}return current}
 function personScale(p){return(p.age<12?(.42+p.age*.045):(p.age>55?.95:1))*1.55}
 function buildPeopleMeshes(){retireObjects(pGroup.children.slice());pMesh={};S.people.forEach(addPersonMesh)}
-function addPersonMesh(p){const m=makePersonMesh(p);pMesh[p.id]=m;pGroup.add(m);m.scale.setScalar(personScale(p))}
-function removePersonMesh(id){const m=pMesh[id];if(m){retireObjects(m);delete pMesh[id]}}
+function addPersonMesh(p){const m=personDetail(p)?makePersonMesh(p):makePersonLow(p);pMesh[p.id]=m;pGroup.add(m);m.scale.setScalar(personScale(p));m.userData.profile=personProfile(p)}
+function removePersonMesh(id){const m=pMesh[id];if(m){retireObjects(m);for(const geometry of new Set([...Object.values(m.userData.gS||{}),...Object.values(m.userData.gW||{})]))geometry.dispose();delete pMesh[id]}}
 
 /* ===== budynki ===== */
 let bMesh={};
@@ -472,7 +475,7 @@ function eff(p){const tool=p.tool.t===2?1:p.tool.t===1?.8:.55;const w=WEATHER[S.
 function craftEff(p,c){return(1+0.18*(p.sk[c]||0)+(S.bonus[c]||0))*[1.15,1,.94][S.diff===undefined?1:S.diff]}
 function seasonYield(kind){const s=seasonIdx();if(kind==='bush')return[1,.6,0,.7][s];if(kind==='grzyb')return[.8,1.3,0,.4][s];if(kind==='zboze')return[.7,1,0,0][s];if(kind==='len')return[1,.8,0,.4][s];if(kind==='ziola')return[1,.7,0,.6][s];if(kind==='ul')return[1,.8,0,.3][s];if(kind==='fish')return[1,.9,.7,.9][s];return 1}
 function gainXp(p,c,dt){let m=1;p.mentor=null;p.worked=1;
- for(const q of S.people){if(q!==p&&q.wb===p.wb&&q.job===p.job&&isAdult(q)&&q.sk[c]>p.sk[c]&&q.sk[c]>=2&&(!p.mentor||q.sk[c]>p.mentor.sk[c]))p.mentor=q}
+ for(const q of S.people){if(q!==p&&q.wb===p.wb&&q.job===p.job&&isAdult(q)&&q.state==='work'&&q.hp>.5&&Math.hypot(q.x-p.x,q.z-p.z)<=3&&q.sk[c]>p.sk[c]&&q.sk[c]>=2&&(!p.mentor||q.sk[c]>p.mentor.sk[c]))p.mentor=q}
  if(p.mentor)m=(p.mentor.trait==='Nauczyciel'?2.6:2)*(tech('n_kron')?1.25:1);if(law('npracy'))m*=1.2;if(p.trait==='Dociekliwy')m*=1.25;if(S.offCraft===c&&offHolder('mistrz')&&offHolder('mistrz')!==p)m*=1.25;techXp(DOMC[c],dt*.09);
  const Lv=p.sk[c];const masterOf=Object.keys(CN).filter(q=>p.sk[q]>=3).length;if(Lv===2&&masterOf>=3){p.xp[c]=Math.min(p.xp[c]+dt*m,LVL[2]-1);if(!p.capLog){p.capLog=1;log(p.name+' jest mistrzem w trzech fachach. Na czwarty nie starczy już życia.')}return}
  p.xp[c]+=dt*m;if(Lv<5&&p.xp[c]>=LVL[Lv]){p.sk[c]=Lv+1;log(p.name+' awansuje: '+CN[c]+' '+(Lv+1)+'.');
@@ -490,14 +493,22 @@ function countInRange(kind,i,j){const d=BD[kind];if(!d.r)return null;const c={x:
  else if(kind==='lesnik'){for(const q of nodeBy.tree){if(!q.gone&&q.amt<=0&&!(q.grow>0)&&Math.hypot(q.x-c.x,q.z-c.z)<=d.r)n++}}
  return n}
 function rangeLabel(kind,n){if(n===null)return'';if(kind==='mysliwy')return`zwierzyny w pobliżu: ${n}`;if(kind==='zagroda')return`dzikich kóz w pobliżu: ${n}`;if(kind==='lesnik')return`pniaków do obsadzenia: ${n}`;const nm={ruda:'złóż rudy',zbieracz:'krzewów, grzybów, zbóż, lnu i ziół',pomost:'łowisk',drwal:'drzew',kamien:'odkrywek kamienia',glinianka:'odsłonięć gliny'}[kind];return`w zasięgu ${nm}: ${n}`}
-function go(p,tile,after,tgt){const[sx,sy]=tileOf(p.x,p.z);const path=astar(sx,sy,tile[0],tile[1]);
- if(!path){if(tgt&&tgt.type)tgt.bad=S.t+40;return false}
- release(p);p.path=path.map(([i,j])=>({x:tcx(i)+(Math.random()-.5)*.35,z:tcx(j)+(Math.random()-.5)*.35}));p.after=after;p.tgt=tgt||null;p.state='move';if(!p.path.length){p.path=null;onArrive(p)}return true}
+function go(p,tile,after,tgt){if(!tile)return false;if(!walk[tile[1]*N+tile[0]]){tile=nearestWalk(tile[0],tile[1]);if(!tile)return false;}if(tgt?.kind&&['prod','work','build','care','field'].includes(after)){const taken=S.people.filter(q=>q!==p&&q.tgt===tgt&&['move','work'].includes(q.state)).map(q=>q.routeGoal||tileOf(q.x,q.z));const slot=[[0,0],[1,0],[0,1],[-1,0],[0,-1],[1,1],[-1,-1]].map(([x,z])=>[tile[0]+x,tile[1]+z]).find(([x,z])=>x>=0&&z>=0&&x<N&&z<N&&walk[z*N+x]&&!taken.some(([a,b])=>a===x&&b===z));if(slot)tile=slot;}const[sx,sy]=tileOf(p.x,p.z);const path=astar(sx,sy,tile[0],tile[1]);
+ if(!path){if(tgt&&tgt.type)tgt.bad=S.t+40;p.blocked={reason:'Brak drogi do celu',since:p.blocked?.since??S.t,attempts:(p.blocked?.attempts||0)+1};return false}
+ release(p);delete p.blocked;p.routeGoal=tile.slice();p.routeRevision=walkRevision;p.path=path.map(([i,j])=>({x:tcx(i)+(Math.random()-.5)*.35,z:tcx(j)+(Math.random()-.5)*.35}));p.after=after;p.tgt=tgt||null;p.state='move';if(!p.path.length){p.path=null;onArrive(p)}return true}
 function storeTile(p,food){const cands=[[camp.i,camp.j+1]];S.bld.forEach(b=>{const d=BD[b.kind];if(bDone(b)&&d.store&&(d.store==='all'||food)){const e=entryOf(b.kind,b.i,b.j);if(e)cands.push(e)}});
  const[pi,pj]=tileOf(p.x,p.z);let best=cands[0],bd=1e9;cands.forEach(c=>{const d=Math.hypot(c[0]-pi,c[1]-pj);if(d<bd&&astar(pi,pj,c[0],c[1])){bd=d;best=c}});return bd<1e9?nearestWalk(best[0],best[1]):null}
 function release(p){const target=p.tgt;if(target&&target.claim>0&&target.type)target.claim--;p.tgt=null;p.after=null;p.workKind=null;
  if(target&&target.kind&&S)target.workers=S.people.filter(person=>person!==p&&person.tgt===target&&((person.state==='move'&&person.after==='build')||(person.state==='work'&&person.workKind==='build'))).length}
-function productionReady(building){const definition=BD[building.kind];return[].concat(definition.prod||[]).some(recipe=>Object.entries(recipe.in).every(([key,value])=>(S.res[key]||0)>=value)&&(!recipe.when||recipe.when())&&!limHit(building,recipe))}
+function productionPolicy(building,recipe){
+ if((building.cond??1)<=.15)return {mode:'blocked',reason:'Zły stan budynku — potrzebny remont.'};
+ if(limHit(building,recipe))return {mode:'covered',reason:'Osiągnięty docelowy zapas.'};
+ if(recipe.when&&!recipe.when())return {mode:'blocked',reason:seasonIdx()===2?'Produkcja sezonowa zatrzymana zimą.':'Produkcja czeka na właściwy sezon lub warunki.'};
+ const reserve=recipe.reserve?recipe.reserve():{},missing=Object.entries(recipe.in).filter(([key,value])=>(S.res[key]||0)<value+(reserve[key]||0)).map(([resource,quantity])=>({resource,quantity:quantity+(reserve[resource]||0)}));
+ return missing.length?{mode:'shortage',missing,reason:'Brakuje składników lub rezerwy siewnej.'}:{mode:'ready',reason:'Składniki gotowe do produkcji.'};
+}
+function productionReady(building){return[].concat(BD[building.kind].prod||[]).some(recipe=>productionPolicy(building,recipe).mode==='ready')}
+
 function scoutTarget(p){let best=null,bd=1e9;const i0=tileOf(p.x,p.z);
  for(let t=0;t<16;t++){const a=Math.random()*6.28;
   for(let r=4;r<N;r+=2){const i=Math.round(i0[0]+Math.cos(a)*r),j=Math.round(i0[1]+Math.sin(a)*r);if(i<1||j<1||i>=N-1||j>=N-1)break;const k=j*N+i;
@@ -562,8 +573,16 @@ function onArrive(p){const a=p.after;p.after=null;p.wt=0;
  else if(a==='gasic'){p.state='work';p.workKind='gasic';p.act='gasi pożar'}
  else p.state='idle'}
 function movePerson(p,dt){
- if(p.state==='move'&&p.path&&p.path.length){const sp=(isChild(p)?1.6:2.3)*(p.carry?.85:1)*(typeof ladSpeed==='function'?ladSpeed(p):1);let st=sp*dt;
-  while(st>0&&p.path.length){const w=p.path[0],dx=w.x-p.x,dz=w.z-p.z,d=Math.hypot(dx,dz);if(d<=st){p.x=w.x;p.z=w.z;p.path.shift();st-=d}else{p.x+=dx/d*st;p.z+=dz/d*st;p.dir=Math.atan2(dx,dz);st=0}}
+ if(p.state==='move'&&p.path&&p.path.length){
+  const validSegment=(from,to)=>{const [i,j]=tileOf(from.x,from.z),[x,z]=tileOf(to.x,to.z);return x>=0&&z>=0&&x<N&&z<N&&walk[z*N+x]&&(i===x||j===z||(walk[j*N+x]&&walk[z*N+i]));};
+  if(!validSegment(p,p.path[0])||(p.routeRevision!==walkRevision&&p.path.some((point,index)=>index>0&&!validSegment(p.path[index-1],point)))){
+   const goal=p.routeGoal||tileOf(p.path.at(-1).x,p.path.at(-1).z),start=tileOf(p.x,p.z),replacement=astar(start[0],start[1],goal[0],goal[1]);
+   if(!replacement){release(p);p.path=null;p.state='idle';p.wait=3;p.blocked={reason:'Droga zamknięta — odblokuj przejście',since:p.blocked?.since??S.t,attempts:(p.blocked?.attempts||0)+1};p.act=p.blocked.reason;return true;}
+   p.path=replacement.map(([i,j])=>({x:tcx(i),z:tcx(j)}));delete p.blocked;
+  }
+  p.routeRevision=walkRevision;
+  const sp=(isChild(p)?1.6:2.3)*(p.age>60?.8:1)*(.6+.4*p.hp)*(p.carry?.8:1)*(typeof ladSpeed==='function'?ladSpeed(p):1);let st=sp*dt;
+  while(st>0&&p.path.length){const w=p.path[0];if(!validSegment(p,w))break;const dx=w.x-p.x,dz=w.z-p.z,d=Math.hypot(dx,dz);if(d<=st){p.x=w.x;p.z=w.z;p.path.shift();st-=d}else{p.x+=dx/d*st;p.z+=dz/d*st;p.dir=Math.atan2(dx,dz);st=0}}
   {const tk=tileOf(p.x,p.z),kk=tk[1]*N+tk[0];if(kk!==p.lt){p.lt=kk;tread[kk]=Math.min(1,tread[kk]+(isChild(p)?.012:.03));treadDirty=true}}
   p.rvT=(p.rvT||0)+dt;if(p.rvT>.6){p.rvT=0;const[i,j]=tileOf(p.x,p.z);if(p.job==='zwiad')reveal(i,j,3);else if(!rev[j*N+i])reveal(i,j,3)}
   if(!p.path.length){p.path=null;onArrive(p)}return true}
@@ -624,9 +643,8 @@ function stepPerson(p,dt){
   if(k==='zdun'){const kn=S.know;if(!kn.active){p.state='idle';return}const T=TRIAL[kn.active];gainXp(p,T.c,dt);techXp('nauka',dt*.04);kn[kn.active+'_p']+=dt*e*craftEff(p,T.c);
    if(kn[kn.active+'_p']>=T.need)finishTrial(p);return}
   if(k==='prod'){const b=p.tgt;if(!b||!bById(b.id)){p.state='idle';return}const d=BD[b.kind];const list=[].concat(d.prod);const has=pr=>Object.entries(pr.in).every(([r,v])=>(S.res[r]||0)>=v);
-   const pr=list.find(x=>has(x)&&(!x.when||x.when())&&!(typeof limHit==='function'&&limHit(b,x)));
-   if(!pr&&list.some(has)){if(typeof limChore==='function'&&list.some(x=>limHit(b,x))&&limChore(p,'zapas'))return;p.act='zapas wystarczy, odpoczywa';p.wt=0;p.wait=6;p.state='idle';return}
-   if(!pr){const p0=list[0];p.act='czeka na: '+Object.keys(p0.in).filter(r=>(S.res[r]||0)<p0.in[r]).map(r=>RN[r].toLowerCase()).join(', ');p.wt=0;p.wait=3;p.state='idle';return}
+   const pr=list.find(x=>productionPolicy(b,x).mode==='ready');
+   if(!pr){release(p);p.state='idle';p.wt=0;productionSupportJob(p);return}
    p.wt+=dt*e*craftEff(p,d.c)*bMul(b);gainXp(p,d.c,dt);if(p.wt>=pr.t*(pr.out.plotno&&tech('r_tkac')?.6:1)){p.wt=0;Object.entries(pr.in).forEach(([r,v])=>S.res[r]-=v);if(b.kind==='drewutnia'&&hasExt(b,'wiata'))S.res.opal+=1;Object.entries(pr.out).forEach(([r,v])=>{if(typeof gospMade==='function')gospMade(b,r,v);S.res[r]=(S.res[r]||0)+v;if(r==='narz'||r==='narzk'||r==='odziez'){const q=.7+.12*Math.max(...S.people.filter(x=>x.wb===b.id).map(x=>x.sk[d.c]||0),0);S.toolQ=S.toolQ||{};const o=S.toolQ[r]||1,st=Math.max(0,S.res[r]-v);S.toolQ[r]=(o*st+q*v)/(st+v)}});if(b.kind==='cegielnia')toastOnce('cegla','Pierwsze cegły wyjęte z pieca')}return}}}
 function fieldVis(b){const m=bMesh[b.id];if(!m||!m.userData.crops)return;const f=b.field||{st:'puste',g:0};const g=f.st==='puste'?0:f.st==='dojrzale'?1:f.g;const col=new THREE.Color().setRGB(L(lerp(.42,.86,g)),L(lerp(.6,.7,g)),L(lerp(.25,.3,g)));
  m.userData.crops.children.forEach((c,i)=>{const s=g<=0?0:.25+.75*g;c.scale.set(s,s*(.85+((i*7)%5)*.06),s);c.material.color.copy(col)})}
@@ -905,7 +923,7 @@ function renderPanel(){
   const houses=S.bld.filter(b=>bDone(b)&&BD[b.kind].house).length;const homeless=S.people.filter(p=>!homeOf(p)).length;const nt=TIERS[S.tier+1];
   h+=`<div class="card"><h4>${TIERS[S.tier][0]}</h4><p>${pop} osób: ${pop-kids-old} dorosłych, ${kids} dzieci, ${old} starszych. Domów: ${houses}, bez dachu: ${homeless}.</p><p class="mut">Urodzeni: ${S.born} · zmarli: ${S.died}${nt?` · następny poziom (${nt[0].toLowerCase()}): ${nt[1]} domów i ${nt[2]} osób`:''}</p></div>`;
   if(!czOn)h+='<h3>Zapasy</h3>'+zapCard();
-  S.goals=S.goals||{};h+='<h3>Cele</h3><div class="card">'+GOALS.map((g,i)=>`<p>${S.goals[i]?'<span class="ok">✓</span>':'<span class="mut">○</span>'} ${g[0]}</p>`).join('')+'</div>';
+  h+='<h3>Cele</h3>'+taskGoalsHTML();
   h+=pamHTML()+rodyHTML()+hamletHTML();h+='<h3>Rodziny</h3>';
   Object.values(S.fams).forEach(f=>{const mem=famMembers(f.id);if(!mem.length)return;const hm=f.home?bById(f.home):null;
    h+=`<div class="card"><h4>Rodzina ${famName(f.id)}</h4><p class="mut">${hm?BD[hm.kind].n:'bez domu, śpi w obozie'}${typeof spizWord==='function'?spizWord(f):''}</p>`+mem.sort((a,b)=>b.age-a.age).map(p=>`<div class="row" data-p="${p.id}" style="cursor:pointer;padding:5px 0"><div class="n"><b style="color:var(--hi)">${escapeHtml(p.name)}</b> <span class="mut">${Math.floor(p.age)} l. · ${traitN(p).toLowerCase()}</span><small>${jobLabel(p)} · ${p.act}${p.mentor?' · uczy się od: '+p.mentor.name:''}</small><div>${skillTags(p,3)}</div></div></div>`).join('')+`</div>`})}

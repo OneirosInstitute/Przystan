@@ -8,7 +8,7 @@ test('autonomous society survives five generations with births, kinship, learnin
  let state=domain.migrate(JSON.parse(runtime.evaluate('serializeSave()')),{world:world.create({seed:2207,town:{x:0,z:50}})});
  Object.assign(state.res,{suchary:12000,drewno:3000,deski:3000,kamien:3000,ziarno:3000,opal:3000});economy.ensure(state);
  const originalIds=new Set(state.people.map(person=>person.id));
- for(let day=0;day<1500;day++){economy.advance(state,1,life.daily);if(day%100===0){assert.equal(domain.validate(state),true);state=JSON.parse(JSON.stringify(state));}}
+ for(let day=0;day<1500;day++){economy.advance(state,1,life.daily);if(day%100===0){assert.equal(domain.validate(state),true);state=JSON.parse(JSON.stringify(state));}if((day+1)%250===0)console.log(JSON.stringify({progress:'single',day:day+1,living:state.people.length}));}
  assert.ok(state.people.length>=12,'society remains alive: '+state.people.length);
  assert.ok(state.e4.stats.maxGeneration>=5,'generation '+state.e4.stats.maxGeneration);
  assert.ok(state.e4.stats.births>0);assert.ok(state.e4.stats.succession>0);
@@ -23,7 +23,7 @@ test('several settlements retain productive descendants for five generations wit
  const source=JSON.parse(runtime.evaluate('serializeSave()'));source.hamlets=[{id:1,name:'Podlesie',i:120,j:90,pop:8,zap:1,rod:1},{id:2,name:'Zagórze',i:70,j:80,pop:8,zap:1,rod:2},{id:3,name:'Miodowa',i:150,j:110,pop:8,zap:1,rod:3}];
  let state=domain.migrate(source,{world:world.create({seed:2207,town:{x:0,z:50}})});Object.assign(state.res,{suchary:12000,drewno:3000,deski:3000,kamien:3000,ziarno:3000,opal:3000});
  for(const settlement of Object.values(state.e4.settlements)){settlement.homeCapacity=Math.max(12,settlement.homeCapacity);settlement.specialization=settlement.id==='przystan'?'drzewny':settlement.id.endsWith('1')?'rolniczy':settlement.id.endsWith('2')?'garncarski':'hodowlany';}
- for(let day=0;day<1500;day++){economy.advance(state,1,life.daily);if(day%50===0){assert.equal(domain.validate(state),true);state=JSON.parse(JSON.stringify(state));}}
+ for(let day=0;day<1500;day++){economy.advance(state,1,life.daily);if(day%50===0){assert.equal(domain.validate(state),true);state=JSON.parse(JSON.stringify(state));}if((day+1)%250===0)console.log(JSON.stringify({progress:'multi',day:day+1,living:state.people.length}));}
  const inhabited=Object.values(state.e4.settlements).filter(settlement=>domain.residents(state,settlement.id).length>=4);
  console.log(JSON.stringify({scenario:'multi',living:state.people.length,inhabited:inhabited.length,stats:state.e4.stats,bytes:JSON.stringify(state).length}));
  assert.ok(inhabited.length>=3);assert.ok(state.e4.stats.maxGeneration>=5);assert.ok(state.e4.stats.deliveries>0);

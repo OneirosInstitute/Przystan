@@ -114,7 +114,7 @@ $('cz-top').addEventListener('click',e=>{if(e.target.closest('[data-czthr]'))ope
 $('cz-isl').addEventListener('click',()=>{if(S)toggleOverview()});
 $('cz-home').addEventListener('click',()=>{if(S)lookAt(tcx(camp.i),tcx(camp.j),Math.max(zoomT,1.4))});
 let czLastTab='osada';
-$('cz-osada').addEventListener('click',()=>{if(S)openSheet('pulpit')});
+$('cz-osada').addEventListener('click',()=>{if(S)openSheet(czLastTab)});
 cv.addEventListener('pointerdown',()=>document.body.classList.remove('czpop'));
 
 // ---------- 3.3 zapasy pod palcem: pasek pod datą i karta wszystkich zapasów ----------
@@ -333,7 +333,7 @@ hintTick=function(rdt){hintT+=rdt;if(hintT<.6)return;hintT=0;hintEl.forEach(e=>e
  if(el){el.classList.add('hintp');hintEl.push(el)}};
 
 // ---------- przełącznik w Kronice ----------
-{const _kt=kronTools;kronTools=function(){return _kt()+`<div class="card"><h4>Wygląd ekranu</h4><p class="mut">Cicha wyspa: na ekranie tylko świat, pora roku i przycisk Osada. Pełne menu: stała nawigacja i zarządzanie podczas symulacji. Oba widoki mają te same działy.</p><button data-czui="1" class="pri">${czOn?'Cicha wyspa (włączona)':'Pełne menu (włączone)'}</button></div>`}}
+{const _kt=kronTools;kronTools=function(){return _kt()+classicModeTools()}}
 document.addEventListener('click',e=>{if(e.target.closest('[data-czui]'))menuSetMode(!czOn)});
 
 {const _mt=mapTick;mapTick=function(rdt){_mt(rdt);try{czEdgeTick();czTalkTick()}catch(e){}}}

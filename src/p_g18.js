@@ -150,7 +150,7 @@ function mdLathe(pts,seg){return new THREE.LatheGeometry(pts.map(([r,y])=>new TH
 const MDG={};function mdG(k,f){return MDG[k]||(MDG[k]=f())}
 const EMB=[0x8a2a22,0x6a2a1a,0x2a3a6a,0x7a5a1a];
 function makePerson18(p){const g=new THREE.Group();const k=p.sex==='k',adult=p.age>=12,old=p.age>55,id=p.id;
- const skin=mdCol(skinC[id%4]),cloth=mdCol(p.cloth),hair=mdCol(old?hairC[4]:hairC[id%4]);
+ const skin=mdCol(skinC[(p.rod||p.fam||id)%4]),cloth=mdCol(p.cloth),hair=mdCol(old?hairC[4]:hairC[id%4]);
  const linen=mdCol(0xd8ccb0),pants=mdCol(k?0x5a4a3e:(id%3?0x4a463c:0x6a5a44)),emb=mdCol(EMB[id%4]),shoe=mdCol(id%2?0x8a6a44:0x5a4630),belt=mdCol(id%3===0?0x8a2a22:0x3a2c1e);
  // tułów z głową (jedna bryła), punkt obrotu w biodrach
  const T=[];const h0=.5;
@@ -164,7 +164,7 @@ function makePerson18(p){const g=new THREE.Group();const k=p.sex==='k',adult=p.a
  [-1,1].forEach(s=>T.push([new THREE.SphereGeometry(.056,10,8),cloth,mdM(s*.15,.755-h0,0,0,0,0,1,.85,1)]));
  // szyja i głowa
  T.push([new THREE.CylinderGeometry(.04,.046,.07,10),skin,mdM(0,.84-h0,0)]);
- const hy=.935-h0;T.push([new THREE.SphereGeometry(.098,16,12),skin,mdM(0,hy,0,0,0,0,1,1.1,1)]);
+ const hy=.935-h0;T.push([new THREE.SphereGeometry(.098,16,12),skin,mdM(0,hy,0,0,0,0,.94+(id%5)*.03,adult?1.08+(id%3)*.035:1.2,.95+(id%4)*.025)]);
  T.push([new THREE.SphereGeometry(.02,8,6),skin,mdM(0,hy-.012,.095,0,0,0,1,1.2,1.1)]);
  [-1,1].forEach(s=>{T.push([new THREE.SphereGeometry(.0125,6,5),mdCol(0x1c1612),mdM(s*.034,hy+.018,.086)]);T.push([new THREE.SphereGeometry(.02,6,5),skin,mdM(s*.097,hy,0,0,0,0,.6,1,1)])});
  T.push([new THREE.SphereGeometry(.022,6,4),mdCol(0x9a5a4a),mdM(0,hy-.05,.082,0,0,0,1.3,.4,.6)]);
@@ -179,34 +179,22 @@ function makePerson18(p){const g=new THREE.Group();const k=p.sex==='k',adult=p.a
  if(adult&&id%4===2){T.push([new THREE.BoxGeometry(.03,.42,.02),mdCol(0x5a4026),mdM(.03,.62-h0,.125,0,0,.62)]);T.push([new THREE.BoxGeometry(.14,.13,.07),mdCol(0x7a5a3a),mdM(.14,.46-h0,.1)])}
  const torso=new THREE.Mesh(mdMerge(T),MD.mat);torso.position.y=h0;
  // ręce: rękaw, łokieć lekko zgięty, dłoń
- const arm=s=>{const A=[];A.push([new THREE.CylinderGeometry(.044,.038,.18,10),cloth,mdM(0,-.09,0)]);A.push([new THREE.SphereGeometry(.039,10,6),cloth,mdM(0,-.18,0)]);
-  A.push([new THREE.CylinderGeometry(.037,.032,.15,10),cloth,mdM(0,-.255,.018,-.25)]);A.push([new THREE.CylinderGeometry(.04,.04,.02,10,1,true),emb,mdM(0,-.32,.035,-.25)]);
-  A.push([new THREE.SphereGeometry(.033,10,8),skin,mdM(0,-.355,.045,0,0,0,.9,1.15,.8)]);const m=new THREE.Mesh(mdMerge(A),MD.mat);m.position.set(s*.168,.76,0);return m};
- const aL=arm(-1),aR=arm(1);
+ const arm=s=>{const upper=new THREE.Mesh(mdMerge([[new THREE.CylinderGeometry(.044,.038,.18,8),cloth,mdM(0,-.09,0)],[new THREE.SphereGeometry(.039,8,6),cloth,mdM(0,-.18,0)]]),MD.mat);
+ const lower=new THREE.Mesh(mdMerge([[new THREE.CylinderGeometry(.037,.032,.15,8),cloth,mdM(0,-.075,.018,-.15)],[new THREE.CylinderGeometry(.04,.04,.02,8,1,true),emb,mdM(0,-.14,.035)],[new THREE.SphereGeometry(.033,8,6),skin,mdM(0,-.175,.045,0,0,0,.9,1.15,.8)]]),MD.mat);lower.position.y=-.18;upper.add(lower);upper.userData.joint=lower;upper.position.set(s*(.158+(id%5)*.005),.76,0);return upper};
+ const aL=arm(-1),aR=arm(1),bodyWidth=.94+((p.rod||p.fam||id)%5)*.035;torso.scale.x=bodyWidth;aL.position.x*=bodyWidth;aR.position.x*=bodyWidth;
  // nogi: udo, łydka w onucach, łapcie
- const leg=s=>{const L=[];L.push([new THREE.CylinderGeometry(.06,.05,.25,10),pants,mdM(0,-.125,0)]);L.push([new THREE.SphereGeometry(.05,10,6),pants,mdM(0,-.25,0)]);
-  L.push([new THREE.CylinderGeometry(.049,.04,.21,10),k?pants:linen,mdM(0,-.355,0)]);if(!k)[.31,.37,.43].forEach(y=>L.push([new THREE.CylinderGeometry(.052-(y-.31)*.05,.052-(y-.31)*.05,.012,10,1,true),mdCol(0x5a4630),mdM(0,-y,0,.25*(y>.35?1:-1))]));
-  L.push([new THREE.SphereGeometry(.05,10,6),shoe,mdM(0,-.47,.03,0,0,0,.95,.6,1.55)]);const m=new THREE.Mesh(mdMerge(L),MD.mat);m.position.set(s*.066,.5,0);return m};
+ const leg=s=>{const upper=new THREE.Mesh(mdMerge([[new THREE.CylinderGeometry(.06,.05,.25,8),pants,mdM(0,-.125,0)],[new THREE.SphereGeometry(.05,8,6),pants,mdM(0,-.25,0)]]),MD.mat),parts=[[new THREE.CylinderGeometry(.049,.04,.21,8),k?pants:linen,mdM(0,-.105,0)],[new THREE.SphereGeometry(.05,8,6),shoe,mdM(0,-.22,.03,0,0,0,.95,.6,1.55)]];
+ if(!k)[.06,.12,.18].forEach(y=>parts.push([new THREE.CylinderGeometry(.05,.05,.012,8,1,true),belt,mdM(0,-y,0)]));const lower=new THREE.Mesh(mdMerge(parts),MD.mat);lower.position.y=-.25;upper.add(lower);upper.userData.joint=lower;upper.position.set(s*.066,.5,0);return upper};
  const lL=leg(-1),lR=leg(1);
- [torso,aL,aR,lL,lR].forEach(m=>{m.castShadow=true;m.receiveShadow=true});
+ [torso,aL,aR,lL,lR].forEach(m=>m.traverse(part=>{part.castShadow=true;part.receiveShadow=true}));
  g.add(torso,aL,aR,lL,lR);
  const carry=new THREE.Mesh(mdG('carry',()=>new THREE.BoxGeometry(.24,.16,.22)),M(0x8a6a40));carry.position.set(0,.72,.2);carry.visible=false;carry.castShadow=true;g.add(carry);
  const sh=new THREE.Mesh(mdG('psh',()=>new THREE.PlaneGeometry(.8,.8)),shadowMat);sh.rotation.x=-Math.PI/2;sh.position.y=.03;g.add(sh);
  const ring=new THREE.Mesh(mdG('pring',()=>new THREE.RingGeometry(.32,.4,24)),new THREE.MeshBasicMaterial({color:0xf4ead0,transparent:true,opacity:.95,depthWrite:false,toneMapped:false}));ring.rotation.x=-Math.PI/2;ring.position.y=.05;ring.visible=false;g.add(ring);
  g.traverse(o=>{o.userData.pid=p.id});
- g.userData={pid:p.id,carry,torso,lL,lR,aL,aR,ring,sc:0,p18:1};return g}
+ g.userData={pid:p.id,carry,torso,lL,lR,aL,aR,ring,elbowL:aL.userData.joint,elbowR:aR.userData.joint,kneeL:lL.userData.joint,kneeR:lR.userData.joint,sc:0,p18:1};return g}
+const makePersonLow=makePersonMesh;
 {const _mp=makePersonMesh;makePersonMesh=function(p){if(GFX.level===0&&!window.__p18)return _mp(p);try{return makePerson18(p)}catch(e){console.warn(e);return _mp(p)}}}
-// ruch: kołysanie przy chodzie, ręce przy noszeniu, siedzenie przy ogniu
-const ANI={sit:/siedzi|je wspólny|odpoczywa|leży|bawi się w berka|^słucha/};
-{const _mt=mapTick;mapTick=function(rdt){_mt(rdt);if(!S)return;const run=S.speed>0;
-  for(const p of S.people){const m=pMesh[p.id];if(!m||!m.visible)continue;const u=m.userData;if(!u.p18)continue;
-   const walk=p.state==='move'&&run,sit=!walk&&p.state!=='work'&&ANI.sit.test(p.act||'')&&p.age>=6;
-   const by=walk?Math.abs(Math.sin(clock*10+p.id))*.022:0;const sy=sit?-.2:0;
-   u.torso.position.y=.5+by+sy;u.aL.position.y=u.aR.position.y=.76+by+sy;u.lL.position.y=u.lR.position.y=.5+sy;
-   if(sit){u.lL.rotation.x=u.lR.rotation.x=-1.35;u.aL.rotation.x=-.5;u.aR.rotation.x=-.45;u.torso.rotation.x=-.05}
-   else if(p.carry&&!(p.state==='work')){u.aL.rotation.x=u.aR.rotation.x=-1.05+(walk?Math.sin(clock*10+p.id)*.06:0);u.aL.rotation.z=-.25;u.aR.rotation.z=.25;u.carry.position.set(0,.74+by,.24)}
-   else{u.aL.rotation.z=-.06;u.aR.rotation.z=.06;if(walk)u.torso.rotation.z=Math.sin(clock*10+p.id)*.035;else u.torso.rotation.z=0}}}}
-
 // ================= KROK 5b: drzewa — sosna z koroną w górze, świerk z postrzępionymi piętrami, dęby i brzozy z kępami liści =================
 function t3n(x,y,z){const s=Math.sin(x*12.9898+y*78.233+z*37.719)*43758.5453;return s-Math.floor(s)}
 function sn3(x,y,z){const ix=Math.floor(x),iy=Math.floor(y),iz=Math.floor(z),fx=x-ix,fy=y-iy,fz=z-iz;const u=fx*fx*(3-2*fx),v=fy*fy*(3-2*fy),w=fz*fz*(3-2*fz);

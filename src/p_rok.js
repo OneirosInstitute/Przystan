@@ -91,10 +91,11 @@ const racjeOn=m=>S.racje&&S.racje.until>S.day&&S.racje.m===m;
 
 // ---------- progi zapasów w warsztatach ----------
 function limOut(b){const d=BD[b.kind];if(!d.prod)return null;return Object.keys([].concat(d.prod)[0].out)[0]}
-function limHit(b,x){if(!b.lim)return false;return Object.keys(x.out).every(r=>(S.res[r]||0)>=b.lim)}
+function recipeTarget(b,recipe){return Object.hasOwn(b,'lim')?(b.lim||0):(recipe.target||0)}
+function limHit(b,x){const target=recipeTarget(b,x);return target>0&&Object.keys(x.out).every(r=>(S.res[r]||0)>=target)}
 function limChore(p,why){if(typeof choreCands!=='function')return false;const C=choreCands(p);for(const c of C.slice(0,3)){p.limC=true;if(choreDo(p,c[0])){p.act=(why==='ugór'?'pole odpoczywa: ':'zapas pełny: ')+p.act;return true}}p.limC=false;return false}
 {const _pj=planJob;planJob=function(p){if(p.job==='wb')p.limC=false;return _pj(p)}}
-function limCard(b){const d=BD[b.kind];if(!d.prod||!bDone(b))return'';const r=limOut(b);return`<div class="lim-box" style="display:flex;align-items:center;gap:8px;margin-top:6px"><div style="flex:1"><b style="color:var(--hi)">Rób do</b><br><span class="mut" style="font-size:13px">${RN[r]?RN[r].toLowerCase():r}: teraz ${fmt(S.res[r]||0)}${b.lim?'. Potem pracownicy pomagają w pracach we wsi.':''}</span></div><button class="mini" data-lim="-10" aria-label="Mniej">−</button><span class="cnt" style="min-width:58px;text-align:center">${b.lim?b.lim:'bez limitu'}</span><button class="mini" data-lim="10" aria-label="Więcej">+</button></div>`}
+function limCard(b){const d=BD[b.kind];if(!d.prod||!bDone(b))return'';const r=limOut(b),target=recipeTarget(b,[].concat(d.prod)[0]);return`<div class="lim-box" style="display:flex;align-items:center;gap:8px;margin-top:6px"><div style="flex:1"><b style="color:var(--hi)">Rób do</b><br><span class="mut" style="font-size:13px">${RN[r]?RN[r].toLowerCase():r}: teraz ${fmt(S.res[r]||0)}${target?'. Potem pracownicy pomagają w pracach we wsi.':''}</span></div><button class="mini" data-lim="-10" aria-label="Mniej">−</button><span class="cnt" style="min-width:58px;text-align:center">${target||'bez limitu'}</span><button class="mini" data-lim="10" aria-label="Więcej">+</button></div>`}
 
 // ---------- pogoda ze znaków przyrody ----------
 const SIGN={storm:['Jaskółki latają nisko nad wodą, a mewy siedzą na piasku.','idzie sztorm'],frost:['Wieczorem niebo czyste, gwiazdy jasne i ostre jak lód.','idzie mróz'],rain:['Mrówki zamykają kopce, żaby rechoczą od południa.','będzie padać'],
@@ -121,7 +122,7 @@ function signDaily(){const nx=S.weather.next;if(!nx||!SIGN[nx]||S.signFor===nx+'
   if(BD[b.kind].prod&&bDone(b)&&!el.querySelector('.lim-box'))el.insertAdjacentHTML('beforeend',limCard(b))}}
 $('sel').addEventListener('click',e=>{if(!S||selB===null)return;const b=bById(selB);if(!b)return;const t=e.target.closest('[data-frot],[data-lim]');if(!t)return;
  if(t.dataset.frot){fieldInit(b.field);b.field.mode=t.dataset.frot;if(b.field.mode==='zboze')b.field.rot=0}
- if(t.dataset.lim){const v=+t.dataset.lim;b.lim=Math.max(0,(b.lim||0)+v*(b.lim||v>0?1:0));if(b.lim===0)b.lim=null;else if(b.lim<10)b.lim=10;if(!b.lim&&v>0)b.lim=Math.max(10,Math.ceil((S.res[limOut(b)]||0)/10)*10)}
+ if(t.dataset.lim){const current=recipeTarget(b,[].concat(BD[b.kind].prod)[0]);b.lim=Math.max(0,current+Number(t.dataset.lim));}
  $('sel')._h=null;renderSel()});
 {const _ad=actDaily;actDaily=function(){_ad();if(!S)return;try{fieldDaily();illDaily();signDaily();if(S.rush&&S.rush.until<=S.day)S.rush=null}catch(e){console.warn(e)}}}
 {const _b=boot;boot=function(fresh){_b(fresh);if(S&&S._v15note){delete S._v15note;log('Od tej wersji doba trwa dwa razy dłużej, a rok ma dwadzieścia dni. Twoja osada została przeliczona: pory roku i wiek ludzi się nie zmieniły.')}}}
