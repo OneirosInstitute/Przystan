@@ -1,0 +1,145 @@
+Integralność paczki: PASS (316 plików)
+Kontrola repozytorium: PASS
+From https://github.com/OneirosInstitute/Przystan
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+Kontrola repozytorium: PASS
+Integralność paczki: PASS (316 plików)
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> przystan@4.0.0-rc.7 build
+> node build.js
+
+Zbudowano dist/ (wersja b69803c392, 1424 kB index.html)
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> przystan@4.0.0-rc.7 test:install
+> node tools/check-build.cjs && node tools/run-tests-serial.cjs --install
+
+Compiled scripts: syntax PASS
+TEST PLAN: 38 suites, 2 worker(s), install
+TEST SUITE: ai-life.test.mjs
+TEST SUITE: ai-movement.test.mjs
+[ai-movement.test.mjs] ✔ a new construction invalidates a live route before entering its footprint (1252.591304ms)
+[ai-movement.test.mjs] ✔ a disconnected meal and evening do not earn attendance or preserves (1197.266012ms)
+[ai-movement.test.mjs] ✔ completed meal requires time and consumes real food without making new stock (1073.452461ms)
+[ai-movement.test.mjs] ✔ a distant sleeping master cannot teach; a present working master can (1272.933634ms)
+[ai-movement.test.mjs] ℹ tests 4
+[ai-movement.test.mjs] ℹ suites 0
+[ai-movement.test.mjs] ℹ pass 4
+[ai-movement.test.mjs] ℹ fail 0
+[ai-movement.test.mjs] ℹ cancelled 0
+[ai-movement.test.mjs] ℹ skipped 0
+[ai-movement.test.mjs] ℹ todo 0
+[ai-movement.test.mjs] ℹ duration_ms 4947.268716
+TEST SUITE PASS: ai-movement.test.mjs (1/38)
+TEST SUITE: ai-policy.test.mjs
+[ai-policy.test.mjs] ✔ a configured target replaces the recipe default (1271.655512ms)
+[ai-policy.test.mjs] ✔ all grain processors expose shortages while protecting seed (1101.021988ms)
+[ai-policy.test.mjs] ✔ winter and damaged workshops give an explicit non-shortage blocker (1100.620594ms)
+[ai-policy.test.mjs] ℹ tests 3
+[ai-policy.test.mjs] ℹ suites 0
+[ai-policy.test.mjs] ℹ pass 3
+[ai-policy.test.mjs] ℹ fail 0
+[ai-policy.test.mjs] ℹ cancelled 0
+[ai-policy.test.mjs] ℹ skipped 0
+[ai-policy.test.mjs] ℹ todo 0
+[ai-policy.test.mjs] ℹ duration_ms 3608.780796
+TEST SUITE PASS: ai-policy.test.mjs (2/38)
+TEST SUITE: ai-specialties.test.mjs
+[ai-specialties.test.mjs] {"scenario":"11-town-specialties","days":200,"resupply":0,"results":[{"specialty":"rolniczy","product":"chleb","quantity":768,"living":30},{"specialty":"winiarski","product":"wino","quantity":64,"living":30},{"specialty":"browarniczy","product":"piwo","quantity":156,"living":30},{"specialty":"miesny","product":"wedliny","quantity":32,"living":29},{"specialty":"hodowlany","product":"ser","quantity":70,"living":30},{"specialty":"hutniczy","product":"narz","quantity":74,"living":30},{"specialty":"drzewny","product":"wyroby_drewniane","quantity":112,"living":31},{"specialty":"tkacki","product":"odziez","quantity":60,"living":33},{"specialty":"garncarski","product":"naczynia","quantity":60,"living":30},{"specialty":"sadowniczy","product":"jablka","quantity":577.17,"living":32},{"specialty":"zielarski","product":"leki","quantity":70,"living":33}]}
+[ai-specialties.test.mjs] ✔ all eleven specialties bootstrap their main product from settlement supplies without resupply (14138.864874ms)
+[ai-specialties.test.mjs] ✔ grain reserves, exhausted ore and stone-tool substitution have explicit outcomes (1250.374727ms)
+[ai-specialties.test.mjs] ℹ tests 2
+[ai-specialties.test.mjs] ℹ suites 0
+[ai-specialties.test.mjs] ℹ pass 2
+[ai-specialties.test.mjs] ℹ fail 0
+[ai-specialties.test.mjs] ℹ cancelled 0
+[ai-specialties.test.mjs] ℹ skipped 0
+[ai-specialties.test.mjs] ℹ todo 0
+[ai-specialties.test.mjs] ℹ duration_ms 15543.553918
+TEST SUITE PASS: ai-specialties.test.mjs (3/38)
+TEST SUITE: autosave.test.mjs
+[ai-life.test.mjs] {"scenario":"large-farm-commute","workers":200,"fields":200,"harvested":196}
+[ai-life.test.mjs] ✔ the map cannot move Epoka IV people and pause preserves model positions (4283.934426ms)
+[ai-life.test.mjs] ✔ an unreachable Epoka IV workplace earns no work or production (1485.021577ms)
+[ai-life.test.mjs] ✔ recovery reconciles legacy hunger, fever, injury and warmth (3807.942879ms)
+[ai-life.test.mjs] ✔ autonomy counts owned carts and does not consume materials for a seventy-first cart (1434.330328ms)
+[ai-life.test.mjs] ✔ mastery produces more per hour while conserving source and hours (1363.610167ms)
+[ai-life.test.mjs] ✔ household goods are consumed with finite stocks and measurable household effects (1622.075034ms)
+[ai-life.test.mjs] ✔ visual stage updates without reloading and joints remain part of the same identity (1700.777095ms)
+[ai-life.test.mjs] ✔ gait advances with distance; pausing freezes the pose (1892.032414ms)
+[ai-life.test.mjs] ✔ the action route and phase survive a real save and restart without moving during rendering (6089.37036ms)
+[ai-life.test.mjs] ✔ a scheduled lesson requires an available teacher and actual arrival (1354.548559ms)
+[ai-life.test.mjs] ✔ recorded hours cannot be reassigned from mining to another production chain (1365.295641ms)
+[ai-life.test.mjs] ✔ processing reserves protect milk when other food is sufficient and release it during hunger (1435.946505ms)
+[ai-life.test.mjs] ✔ marriage migration reserves housing and food and cannot empty a working community (1484.273491ms)
+[ai-life.test.mjs] ✔ a fully tended cereal crop matures in six growing days despite clock rounding (1415.493207ms)
+[ai-life.test.mjs] ✔ a large farm keeps its fields within a real working day instead of losing harvests to commuting (3125.555532ms)
+[ai-life.test.mjs] ✔ autonomy expands housing only after completed grain fields and eight days of edible food (1700.79567ms)
+[ai-life.test.mjs] ℹ tests 16
+[ai-life.test.mjs] ℹ suites 0
+[ai-life.test.mjs] ℹ pass 16
+[ai-life.test.mjs] ℹ fail 0
+[ai-life.test.mjs] ℹ cancelled 0
+[ai-life.test.mjs] ℹ skipped 0
+[ai-life.test.mjs] ℹ todo 0
+[ai-life.test.mjs] ℹ duration_ms 35721.444961
+TEST SUITE PASS: ai-life.test.mjs (4/38)
+TEST SUITE: build-deploy.test.mjs
+[build-deploy.test.mjs] ✖ RC7 deployment targets the verified RC5 checkpoint in every release guard (1.499612ms)
+[build-deploy.test.mjs] ✔ package integrity detects missing, changed and out-of-root files (9.982433ms)
+[build-deploy.test.mjs] ✔ deployment preflight checks identity, branch, base and user changes with read-only git calls (0.83448ms)
+[build-deploy.test.mjs] ✔ asset-only changes invalidate the PWA version; UI viewport permits zoom (365.895015ms)
+[build-deploy.test.mjs] ℹ tests 4
+[build-deploy.test.mjs] ℹ suites 0
+[build-deploy.test.mjs] ℹ pass 3
+[build-deploy.test.mjs] ℹ fail 1
+[build-deploy.test.mjs] ℹ cancelled 0
+[build-deploy.test.mjs] ℹ skipped 0
+[build-deploy.test.mjs] ℹ todo 0
+[build-deploy.test.mjs] ℹ duration_ms 452.901372
+[build-deploy.test.mjs] 
+[build-deploy.test.mjs] ✖ failing tests:
+[build-deploy.test.mjs] 
+[build-deploy.test.mjs] test at tests/build-deploy.test.mjs:13:1
+[build-deploy.test.mjs] ✖ RC7 deployment targets the verified RC5 checkpoint in every release guard (1.499612ms)
+[build-deploy.test.mjs]   AssertionError [ERR_ASSERTION]: preflight must accept the deployed RC5 checkpoint
+[build-deploy.test.mjs]   + actual - expected
+[build-deploy.test.mjs]   
+[build-deploy.test.mjs]   + 'eb38cf5cce165aedaf13d57d711da3d63d640911'
+[build-deploy.test.mjs]   - '2ad9ac443492552da5690146b734c4600b295db7'
+[build-deploy.test.mjs]   
+[build-deploy.test.mjs]       at TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/ui_rc7_20261018/rehearsal-positive-final/tests/build-deploy.test.mjs:15:9)
+[build-deploy.test.mjs]       at Test.runInAsyncScope (node:async_hooks:227:14)
+[build-deploy.test.mjs]       at Test.run (node:internal/test_runner/test:1382:25)
+[build-deploy.test.mjs]       at Test.start (node:internal/test_runner/test:1242:17)
+[build-deploy.test.mjs]       at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+[build-deploy.test.mjs]     generatedMessage: false,
+[build-deploy.test.mjs]     code: 'ERR_ASSERTION',
+[build-deploy.test.mjs]     actual: 'eb38cf5cce165aedaf13d57d711da3d63d640911',
+[build-deploy.test.mjs]     expected: '2ad9ac443492552da5690146b734c4600b295db7',
+[build-deploy.test.mjs]     operator: 'strictEqual',
+[build-deploy.test.mjs]     diff: 'simple'
+[build-deploy.test.mjs]   }
+[autosave.test.mjs] 
+[autosave.test.mjs] Interrupted while running:
+[autosave.test.mjs] 
+[autosave.test.mjs] ⚠ /workspace/scratch/9e1bb3f2c27d/ui_rc7_20261018/rehearsal-positive-final/tests/autosave.test.mjs (tests/autosave.test.mjs:1:1)
+[autosave.test.mjs] ✖ /workspace/scratch/9e1bb3f2c27d/ui_rc7_20261018/rehearsal-positive-final/tests/autosave.test.mjs (11930.15468ms)
+[autosave.test.mjs] ℹ tests 1
+[autosave.test.mjs] ℹ suites 0
+[autosave.test.mjs] ℹ pass 0
+[autosave.test.mjs] ℹ fail 0
+[autosave.test.mjs] ℹ cancelled 1
+[autosave.test.mjs] ℹ skipped 0
+[autosave.test.mjs] ℹ todo 0
+[autosave.test.mjs] ℹ duration_ms 11935.845917
+[autosave.test.mjs] 
+[autosave.test.mjs] ✖ failing tests:
+[autosave.test.mjs] 
+[autosave.test.mjs] test at tests/autosave.test.mjs:1:1
+[autosave.test.mjs] ✖ /workspace/scratch/9e1bb3f2c27d/ui_rc7_20261018/rehearsal-positive-final/tests/autosave.test.mjs (11930.15468ms)
+[autosave.test.mjs]   'Promise resolution is still pending but the event loop has already resolved'
+TEST GATE FAILED: build-deploy.test.mjs: exit=1, signal=null
+STOP: wdrożenie zatrzymane. Nie pomijaj czerwonej bramki.

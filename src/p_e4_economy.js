@@ -1,5 +1,6 @@
 /* Epoka IV: własność zasobów, projekty, konwoje i deterministyczny zegar. */
 const E4Economy=(()=>{
+ const flow=typeof ResourceFlow==='undefined'?require('./p_flow.js'):ResourceFlow;
  const domain=typeof E4Domain==='undefined'?require('./p_e4_domain.js'):E4Domain;
  const worldApi=typeof E4World==='undefined'?require('./p_e4_world.js'):E4World;
  const catalog=typeof E4Catalog==='undefined'?require('./p_e4_catalog.js'):E4Catalog;
@@ -280,6 +281,11 @@ const E4Economy=(()=>{
   }
   return state;
  }
+ // Te same funkcje i argumenty; obserwacja nie zmienia komend ani bilansu.
+ function observed(operation,mode,completedDay=false){return function(state,...args){return flow.run(state,mode,()=>operation(state,...args),completedDay?Math.max(0,Math.floor(state.day)-1):undefined)}}
+ ship=observed(ship,'other');found=observed(found,'other');join=observed(join,'other');arrive=observed(arrive,'other');
+ project=observed(project,'economy');extendHouse=observed(extendHouse,'economy');batch=observed(batch,'economy');trial=observed(trial,'economy');capture=observed(capture,'economy');slaughter=observed(slaughter,'economy');gather=observed(gather,'economy');
+ daily=observed(daily,'economy',true);advance=observed(advance,'economy');
  return{recordedLabor,catalog,ensure,foodTotal,foodItems,add,take,has,workers,project,extendHouse,batch,trial,capture,slaughter,nature,gather,ship,found,join,advance,daily,positionOnRoute,ticksPerDay};
 })();
 if(typeof module!=='undefined'&&module.exports)module.exports=E4Economy;

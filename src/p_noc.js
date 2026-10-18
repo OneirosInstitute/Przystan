@@ -1,9 +1,9 @@
 
 /* ================= 2.6: przewiń noc ================= */
 const nocB=document.createElement('button');nocB.id='skipN';nocB.type='button';nocB.hidden=true;document.body.appendChild(nocB);
-{const st=document.createElement('style');st.textContent=`#skipN{position:absolute;right:12px;top:calc(60px + env(safe-area-inset-top,0px));z-index:4;height:38px;padding:0 14px;border-radius:19px;border:1px solid #c9a66b88;background:#18201cd9;color:var(--hi);font:600 14px var(--sans);display:flex;align-items:center;gap:7px;box-shadow:0 2px 10px #0006}
+{const st=document.createElement('style');st.textContent=`#skipN{position:absolute;right:12px;top:calc(60px + var(--safe-top));z-index:4;height:38px;padding:0 14px;border-radius:19px;border:1px solid #c9a66b88;background:#18201cd9;color:var(--hi);font:600 14px var(--sans);display:flex;align-items:center;gap:7px;box-shadow:0 2px 10px #0006}
 #skipN svg{width:16px;height:16px}#skipN.on{border-color:var(--gold);color:var(--gold)}#skipN[hidden]{display:none}
-body:not(.cz) #skipN{top:auto;bottom:calc(84px + env(safe-area-inset-bottom,0px))}body.placing #skipN{display:none}`;document.head.appendChild(st)}
+body:not(.cz) #skipN{top:auto;bottom:calc(84px + var(--safe-bottom))}body.placing #skipN{display:none}`;document.head.appendChild(st)}
 const isNight=()=>{const t=tod();return t>=T1-.01||t<T0-.015};
 let nocSkip=null;
 function nocStart(){if(!S||nocSkip||!isNight())return;nocSkip={prev:S.speed>0?S.speed:1,d0:Math.floor(S.day+(tod()>=T1-.01?1:0))};setSpeed(40);nocUI()}

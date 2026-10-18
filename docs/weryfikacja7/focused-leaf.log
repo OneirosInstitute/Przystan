@@ -1,0 +1,26 @@
+✔ real E4 deliveries do not inflate production at either warehouse (1532.221391ms)
+✔ observation preserves every gameplay result across an E4 simulation (1462.021225ms)
+✔ actual legacy gathering, wreck recovery and pantry transfers have distinct accounting (1403.708269ms)
+✔ touch launch requests immersive fullscreen even in an installed standalone app (1409.941209ms)
+✔ game options expand in the current panel and expose version and fullscreen controls (1312.155416ms)
+✔ stock views retain separate live daily production, use and balance columns (1354.645459ms)
+✔ live measurements survive a real save and restore without changing resources (1747.928907ms)
+✔ service worker updates checkpoint before reload and preserve a failed save (2696.153694ms)
+✔ first worker activation does not reload and hidden updates wait for visibility (1347.747467ms)
+✔ gross production and consumption stay separate even when net stock is unchanged (1.35527ms)
+✔ deliveries and pantry transfers are movements and never create production (0.297703ms)
+✔ an input consumed and refunded is not counted as a new product (0.188611ms)
+✔ nested contexts recover after exceptions and preserve outer classification (0.313697ms)
+✔ midnight consumption is accounted to the completed day and old bins remain bounded (0.430261ms)
+✔ serialized measurements survive attaching twice without double counting (0.351383ms)
+✔ malformed optional measurements are reset without touching stock (0.221731ms)
+✔ headless models remain ordinary cloneable objects when observation is not enabled (0.592664ms)
+✔ a daily charge represents a whole completed day even after a late first observation (0.318505ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10026.273038

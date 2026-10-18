@@ -1,0 +1,37 @@
+✔ daily phases retain their existing order and capture fuel before the core (1574.983025ms)
+✔ the daily checkpoint includes every completed daily phase (1470.828253ms)
+✔ core failure restores temporary spoilage settings and does not save a partial day (1332.162014ms)
+✔ a failed optional daily phase is reported and later phases still run (1514.185433ms)
+✔ real E4 deliveries do not inflate production at either warehouse (1618.581422ms)
+✔ observation preserves every gameplay result across an E4 simulation (1641.514024ms)
+✔ actual legacy gathering, wreck recovery and pantry transfers have distinct accounting (1464.889413ms)
+✔ classic navigation retains the original sections and adds Tasks in both modes (1671.477663ms)
+✔ classic Chronicle retains save and mode controls (1596.373764ms)
+✔ goals use current act predicates and progress instead of the stale legacy checklist (1548.292139ms)
+✔ pinning produces an actionable map tracker and survives save/reload (1718.178276ms)
+✔ production blockers appear as tasks linked to real assigned suppliers and building (1486.618466ms)
+✔ classic views render in Epoka IV and preserve production and transport controls (3458.150314ms)
+✔ battery and photo controls never write an invalid simulation speed or break saving (1393.502144ms)
+✔ touch launch requests immersive fullscreen even in an installed standalone app (1520.796691ms)
+✔ game options expand in the current panel and expose version and fullscreen controls (1381.205258ms)
+✔ stock views retain separate live daily production, use and balance columns (1362.315871ms)
+✔ live measurements survive a real save and restore without changing resources (1719.622415ms)
+✔ service worker updates checkpoint before reload and preserve a failed save (2832.13491ms)
+✔ first worker activation does not reload and hidden updates wait for visibility (1338.516134ms)
+✔ gross production and consumption stay separate even when net stock is unchanged (1.407996ms)
+✔ deliveries and pantry transfers are movements and never create production (0.33753ms)
+✔ an input consumed and refunded is not counted as a new product (0.195119ms)
+✔ nested contexts recover after exceptions and preserve outer classification (0.328897ms)
+✔ midnight consumption is accounted to the completed day and old bins remain bounded (0.462235ms)
+✔ serialized measurements survive attaching twice without double counting (0.456255ms)
+✔ malformed optional measurements are reset without touching stock (0.240236ms)
+✔ headless models remain ordinary cloneable objects when observation is not enabled (0.63451ms)
+✔ a daily charge represents a whole completed day even after a late first observation (0.565948ms)
+ℹ tests 29
+ℹ suites 0
+ℹ pass 29
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13051.090745

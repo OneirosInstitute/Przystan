@@ -123,13 +123,13 @@ function isFull(){return !!(document.fullscreenElement||document.webkitFullscree
 function isStandalone(){return matchMedia('(display-mode: fullscreen)').matches||matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}
 function goFull(){const d=document.documentElement;const f=d.requestFullscreen||d.webkitRequestFullscreen;if(!f||isFull())return Promise.resolve();try{const r=f.call(d,{navigationUI:'hide'});return r&&r.catch?r.catch(()=>{}):Promise.resolve()}catch(e){return Promise.resolve()}}
 function toggleFull(){if(isFull()){(document.exitFullscreen||document.webkitExitFullscreen).call(document)}else goFull().then(()=>{if(!isFull())toast('Przeglądarka nie pozwala tu na pełny ekran. Zainstaluj grę albo otwórz ją bezpośrednio.')})}
-['fullscreenchange','webkitfullscreenchange'].forEach(ev=>document.addEventListener(ev,()=>{renderCtl();gameLater(resize,120)}));
+['fullscreenchange','webkitfullscreenchange'].forEach(ev=>document.addEventListener(ev,()=>{renderCtl();renderPanel();gameLater(resize,120)}));
 let installEv=null;
 addEventListener('beforeinstallprompt',e=>{e.preventDefault();installEv=e;$('goInstall').hidden=false});
 addEventListener('appinstalled',()=>{installEv=null;$('goInstall').hidden=true;try{toast('Gra zainstalowana. Znajdziesz ją na ekranie głównym.')}catch(e){}});
 $('goInstall').addEventListener('click',()=>{if(!installEv)return;installEv.prompt();installEv.userChoice.finally(()=>{installEv=null;$('goInstall').hidden=true})});
-if('serviceWorker' in navigator&&document.querySelector('link[rel=manifest]')&&/^https?:/.test(location.protocol))navigator.serviceWorker.register('sw.js').catch(()=>{});
-function startGame(fresh){if(coarse&&!isStandalone())goFull();$('intro').style.display='none';document.body.classList.remove('pre');audioStart();boot(fresh);if(!saveStatus.blocked)save()}
+gameRegisterWorker();
+function startGame(fresh){if(coarse)goFull();$('intro').style.display='none';document.body.classList.remove('pre');audioStart();boot(fresh);if(!saveStatus.blocked)save()}
 let hasSave=false;try{hasSave=!!localStorage.getItem(SAVEKEY)}catch(e){}
 if(hasSave){$('go').textContent='Wróć do osady';$('goNew').hidden=false}
 $('go').addEventListener('click',()=>startGame(false));

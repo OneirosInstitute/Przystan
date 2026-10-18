@@ -5,11 +5,11 @@ document.body.classList.toggle('cz',czOn);
 {const st=document.createElement('style');st.textContent=`
 body.cz #date,body.cz #stats,body.cz #res,body.cz #goal,body.cz #needs,body.cz #tabbar,body.cz #brand{display:none!important}
 body.cz #speed{display:none!important}
-body.cz.czpop #speed{display:flex!important;position:absolute;right:10px;left:auto;top:58px;bottom:auto;height:auto;flex-wrap:wrap;justify-content:flex-end;max-width:min(340px,calc(100% - 20px));padding:6px;gap:4px;z-index:6}
+body.cz.czpop #speed{display:flex!important;position:absolute;right:10px;left:auto;top:calc(58px + var(--safe-top));bottom:auto;height:auto;flex-wrap:wrap;justify-content:flex-end;max-width:min(340px,calc(100% - 20px));padding:6px;gap:4px;z-index:6}
 body.cz.czpop #speed button{width:auto;min-width:44px;height:44px;padding:0 10px;font-size:15px}
 body.cz.czpop #speed i{display:none}
 #cz-top,#cz-bot,#cz-goal,#cz-edge,#cz-talk{display:none}
-body.cz #cz-top{display:flex;position:absolute;left:0;right:0;top:0;padding:10px 12px 18px;padding-top:calc(10px + env(safe-area-inset-top,0px));align-items:center;justify-content:space-between;gap:8px;z-index:3;pointer-events:none;background:linear-gradient(#141b18aa,#141b1800)}
+body.cz #cz-top{display:flex;position:absolute;left:0;right:0;top:0;padding:10px 12px 18px;padding-top:calc(10px + var(--safe-top));align-items:center;justify-content:space-between;gap:8px;z-index:3;pointer-events:none;background:linear-gradient(#141b18aa,#141b1800)}
 #cz-top>*{pointer-events:auto}
 #cz-l{display:flex;align-items:center;gap:7px;flex-wrap:wrap;min-width:0}
 #cz-date{background:none;border:0;padding:4px 2px;color:var(--hi);text-align:left;text-shadow:0 1px 3px #000a;cursor:pointer}
@@ -20,11 +20,11 @@ body.cz #cz-top{display:flex;position:absolute;left:0;right:0;top:0;padding:10px
 @keyframes czp{0%{box-shadow:0 0 0 0 #d4746a88}80%{box-shadow:0 0 0 9px #d4746a00}}
 #cz-tempo{height:40px;min-width:56px;padding:0 12px;border-radius:20px;border:1px solid #c9a66b88;background:#18201cc7;color:var(--hi);font:600 15px var(--sans);display:flex;align-items:center;gap:6px;flex-shrink:0}
 #cz-tempo svg{width:15px;height:15px}
-body.cz #cz-goal{display:block;position:absolute;left:12px;top:calc(56px + env(safe-area-inset-top,0px));max-width:min(78%,360px);padding:7px 12px;border-radius:12px;background:var(--panel);border:1px solid var(--line);z-index:3;opacity:0;transform:translateY(-6px);transition:opacity .5s,transform .5s;pointer-events:none}
+body.cz #cz-goal{display:block;position:absolute;left:12px;top:calc(56px + var(--safe-top));max-width:min(78%,360px);padding:7px 12px;border-radius:12px;background:var(--panel);border:1px solid var(--line);z-index:3;opacity:0;transform:translateY(-6px);transition:opacity .5s,transform .5s;pointer-events:none}
 body.cz #cz-goal.on{opacity:1;transform:none;pointer-events:auto}
 #cz-goal small{display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
 #cz-goal span{font-family:var(--serif);font-size:16px;color:var(--hi)}
-body.cz #cz-bot{display:flex;position:absolute;left:0;right:0;bottom:calc(20px + env(safe-area-inset-bottom,0px));justify-content:center;align-items:center;gap:12px;z-index:3;pointer-events:none}
+body.cz #cz-bot{display:flex;position:absolute;left:0;right:0;bottom:calc(20px + var(--safe-bottom));justify-content:center;align-items:center;gap:12px;z-index:3;pointer-events:none}
 #cz-bot button{pointer-events:auto}
 .czr{width:48px;height:48px;border-radius:24px;border:1px solid var(--line);background:#18201cd9;display:flex;align-items:center;justify-content:center;color:var(--fg);padding:0}
 .czr svg{width:22px;height:22px}.czr.on{border-color:var(--gold);color:var(--gold)}
@@ -36,7 +36,7 @@ body.cz #cz-edge{display:block;position:absolute;inset:0;pointer-events:none;z-i
 .cze.bad{border-color:var(--bad);background:#30140ff0;color:#f4d6cf;animation:czp 1.6s ease-out infinite}
 .cze.warn{border-color:var(--ember)}
 .cze svg{width:16px;height:16px;flex-shrink:0}
-body.cz #cz-talk{display:flex;flex-direction:column;gap:8px;position:absolute;left:18px;right:18px;bottom:calc(92px + env(safe-area-inset-bottom,0px));z-index:2;pointer-events:none;opacity:0;transition:opacity 1.2s}
+body.cz #cz-talk{display:flex;flex-direction:column;gap:8px;position:absolute;left:18px;right:18px;bottom:calc(92px + var(--safe-bottom));z-index:2;pointer-events:none;opacity:0;transition:opacity 1.2s}
 body.cz #cz-talk.on{opacity:1}
 body.cz.open #cz-talk,body.cz.selon #cz-talk{opacity:0}
 #cz-talk small{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);text-shadow:0 1px 3px #000}
@@ -47,7 +47,7 @@ body.cz #cz-chips{display:flex;gap:6px;flex-wrap:nowrap;overflow-x:auto;overscro
 body.cz #cz-chips::-webkit-scrollbar{display:none}
 #cz-chips button{height:36px;flex-shrink:0;white-space:nowrap;padding:0 13px;border-radius:18px;border:1px solid var(--line);background:transparent;color:var(--fg);font:500 14.5px var(--sans)}
 #cz-chips button.on{border-color:var(--gold);background:#2c2a20;color:var(--hi);font-weight:700}
-body.cz #sel{padding:14px 14px 12px;border-radius:14px;width:340px;bottom:calc(20px + env(safe-area-inset-bottom,0px))}
+body.cz #sel{padding:14px 14px 12px;border-radius:14px;width:340px;bottom:calc(20px + var(--safe-bottom))}
 body.cz #sel h4{font-size:20px;padding-right:46px}
 body.cz #sel p{font-size:14.5px;line-height:1.4}
 body.cz #sel button{min-height:40px}
@@ -63,13 +63,13 @@ body.cz #sel button{min-height:40px}
 .cz-row button{flex-shrink:0;min-width:84px}
 .cz-ey{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
 .cz-jobs button{display:block;width:100%;text-align:left;margin:4px 0}
-body.cz #toast{top:calc(64px + env(safe-area-inset-top,0px))}
+body.cz #toast{top:calc(64px + var(--safe-top))}
 body.cz #sheet{top:60px}
 @media (max-width:760px){
  body.cz #sheet{left:0;right:0;bottom:0;top:auto;width:auto;height:calc(100% - 118px);border-radius:16px 16px 0 0;border:0;border-top:1px solid var(--gold)}
- body.cz #sel{left:8px;right:8px;width:auto;max-width:none;bottom:calc(10px + env(safe-area-inset-bottom,0px));max-height:64%}
- body.cz #cancel{bottom:calc(24px + env(safe-area-inset-bottom,0px))}
- body.cz #pinfo{bottom:calc(76px + env(safe-area-inset-bottom,0px))}
+ body.cz #sel{left:8px;right:8px;width:auto;max-width:none;bottom:calc(10px + var(--safe-bottom));max-height:64%}
+ body.cz #cancel{bottom:calc(24px + var(--safe-bottom))}
+ body.cz #pinfo{bottom:calc(76px + var(--safe-bottom))}
 }
 @media (hover:none),(pointer:coarse){body.cz #ctl,body.cz #mini{display:none!important}}
 @media (max-height:460px) and (min-width:600px){body.cz #sheet{top:8px;height:auto;bottom:8px;left:auto;right:8px;width:360px;border-radius:12px}body.cz #cz-talk{bottom:76px}}
@@ -127,8 +127,8 @@ body.cz #cz-res{display:inline-flex;align-items:center;gap:10px;height:32px;padd
 #cz-res svg{width:16px;height:16px;color:var(--gold)}#cz-res .chv{width:14px;height:14px;color:#c9c3ad;margin-left:-4px}
 #cz-res span.warn{color:#f6c48e}#cz-res span.warn svg{color:var(--ember)}#cz-res span.bad{color:#f4b3aa}#cz-res span.bad svg{color:var(--bad)}
 #cz-res small{font-weight:500;color:#c9c3ad;font-size:12.5px}
-body.cz #cz-goal{top:calc(94px + env(safe-area-inset-top,0px))}
-body.cz #toast{top:calc(98px + env(safe-area-inset-top,0px))}
+body.cz #cz-goal{top:calc(94px + var(--safe-top))}
+body.cz #toast{top:calc(98px + var(--safe-top))}
 #zappop{position:absolute;z-index:30;left:10px;top:96px;width:min(360px,calc(100vw - 20px));max-height:calc(100% - 120px);overflow-y:auto;box-sizing:border-box;padding:12px 14px 10px;border-radius:14px;background:#141b18f4;border:1px solid #c9a66b55;color:var(--txt,#e8e2d0);font:14px var(--sans);box-shadow:0 6px 24px #000a}
 #zappop[hidden]{display:none}
 .zph{display:flex;gap:10px;align-items:center;margin-bottom:4px}.zph svg{width:28px;height:28px;color:var(--gold);flex:none}
@@ -150,25 +150,41 @@ function zapRate(k){if(!S||!zapH.length)return null;let s=zapH[0];for(const x of
 function zapRateH(k){const v=zapRate(k);if(v===null||Math.abs(v)<.5)return'';const a=Math.round(Math.abs(v));return`<i class="${v>0?'up':'dn'}">${v>0?'+':'−'}${a}/d</i>`}
 function zapItems(g){if(g===null)return FOOD.filter(k=>(S.res[k]||0)>=.5);const sea=seasonIdx();
  return g.filter(k=>(S.res[k]||0)>=.5||ZAP_CORE[k]||(k==='narz'&&S.res.narz<.5&&S.res.narzk<.5)||(k==='cegla'&&S.know.cegla==='tak'))}
-function zapBody(){let h='';const sea=seasonIdx();
- ZAP_G.forEach(([n,g])=>{const it=zapItems(g);if(!it.length)return;h+=`<h5>${n}</h5>`;
-  it.forEach(k=>{const v=S.res[k]||0;const low=(k==='opal'&&(sea===1||sea===2)&&v<20)||(k==='odziez'&&sea>=1&&sea<=2&&v<1&&S.people.some(p=>p.coat<=0));
-   h+=`<div class="zpr${low?' low':''}${ZAP_WIDE[k]?' wide':''}"><span>${ZAP_N[k]||RN[k]||k}</span><b>${fmt(v)}${zapRateH(k)}</b></div>`})});
- return`<div class="zpg">${h}</div>`}
-function zapHead(){const days=czNeedDays(),tot=foodTotal(),sp=typeof spizTot==='function'?spizTot():0;
- const dw=days>=99?'na długo':days<1?'na mniej niż dzień':`na ${Math.floor(days)} ${dniW(Math.floor(days))}`;
- const fr=zapRate('_f');const tr=fr===null||Math.abs(fr)<.5?'':`${fr>0?'przybywa':'ubywa'} <i class="${fr>0?'up':'dn'}">${Math.round(Math.abs(fr))}</i> dziennie · `;
- return`<div class="zph">${ico('zapasy')}<div><b>Zapasy</b><small>Żywność ${fmt(tot)} / ${foodCap()} · ${dw}<br>${tr}rodzajów ${S.variety||0}${sp>=1?` · w spiżarkach rodzin ${fmt(sp)}`:''}</small></div></div>`}
-function zapCard(){return`<div class="card zapc">${zapHead()}${zapBody()}</div>`}
+function zapScope(){
+ const settlement=S.epoch===4?(S.e4.settlements[e4Selected]||S.e4.settlements.przystan):null;
+ return {id:settlement?.id||'przystan',stock:settlement?E4Domain.stock(S,settlement.id):S.res,settlement,food:S.epoch===4?E4Catalog.food:FOOD};
+}
+function zapNeed(){const scope=zapScope(),people=scope.settlement?E4Domain.residents(S,scope.id):S.people.filter(person=>person.job!=='wyp');return scope.settlement?people.reduce((sum,person)=>sum+E4Domain.need(person),0)*S.e4.dailyFactor:K*people.reduce((sum,person)=>sum+pNeed(person),0)*(law('oszczedne')?.8:1)*[.85,1,1.08][S.diff===undefined?1:S.diff];}
+function zapNumber(value,signed=false){const absolute=Math.abs(value),number=absolute>=10000?(absolute/1000).toFixed(1)+'k':absolute>=10?String(Math.round(absolute)):absolute<.05?'0':absolute.toFixed(1).replace('.',',');return (signed&&absolute>=.05?(value<0?'−':'+'):'')+number;}
+function zapBody(){
+ ResourceFlow.watch(S);const scope=zapScope(),known=new Set(),groups=[];
+ for(const [name,selection]of ZAP_G){const items=(selection===null?scope.food:selection).filter(key=>{const flow=ResourceFlow.stats(S,scope.id,key);return (scope.stock[key]||0)>=.05||ZAP_CORE[key]||flow.produced||flow.used||flow.other});for(const key of items)known.add(key);if(items.length)groups.push([name,items])}
+ const remaining=Object.keys(scope.stock).filter(key=>!known.has(key)&&(scope.stock[key]||0)>=.05);if(remaining.length)groups.push(['Pozostałe wyroby',remaining]);
+ return groups.map(([name,items],index)=>{
+  const rows=items.map(key=>{const flow=ResourceFlow.stats(S,scope.id,key),label=ZAP_N[key]||RN[key]||(S.epoch===4?E4Catalog.resources[key]:null)||key;
+   return `<tr data-flow-resource="${escapeHtml(key)}"><th scope="row">${escapeHtml(label)}</th><td>${zapNumber(scope.stock[key]||0)}</td><td class="flow-gain">${zapNumber(flow.productionRate,true)}</td><td class="flow-use">${zapNumber(-flow.useRate,true)}</td><td class="${flow.netRate<0?'flow-use':'flow-gain'}">${zapNumber(flow.netRate,true)}</td></tr>`}).join('');
+  const table=`<table class="flow-table"><thead><tr><th>Zasób</th><th>Zapas</th><th title="Produkcja na dobę" aria-label="Produkcja na dobę">Prod.<br><small>/dobę</small></th><th>Zużycie<br><small>/dobę</small></th><th>Bilans<br><small>/dobę</small></th></tr></thead><tbody>${rows}</tbody></table>`;
+  return uiDisclosure('stock:'+scope.id+':'+name,name,table,index===0,items.length+' '+(items.length===1?'rodzaj':items.length%100<12||items.length%100>14?([2,3,4].includes(items.length%10)?'rodzaje':'rodzajów'):'rodzajów'));
+ }).join('');
+}
+function zapHead(){
+ ResourceFlow.watch(S);const scope=zapScope(),need=zapNeed(),total=scope.food.reduce((sum,key)=>sum+(scope.stock[key]||0),0),days=need?total/need:99,flow=ResourceFlow.stats(S,scope.id,scope.food);
+ const period=flow.elapsed>0?'Średnia z '+flow.elapsed.toFixed(2).replace('.',',')+' doby gry':'Pomiar rozpoczyna się w tej wersji';
+ return `<div class="zph">${ico('zapasy')}<div><b>Zapasy${scope.settlement?' · '+escapeHtml(scope.settlement.name):''}</b><small>Żywność ${zapNumber(total)}${scope.settlement?'':' / '+foodCap()} · na ${Math.min(99,Math.floor(days))}${days>=99?'+':''} dni${!scope.settlement&&spizTot()>=1?' · w spiżarkach rodzin '+zapNumber(spizTot()):''}<br>Zapotrzebowanie na posiłki: ${zapNumber(need)} /dobę</small></div></div><div class="flow-overview" aria-label="Bieżący bilans żywności"><span>Produkcja /d<b class="flow-gain" data-food-flow="production">${zapNumber(flow.productionRate,true)}</b></span><span>Zużycie /d<b class="flow-use" data-food-flow="use">${zapNumber(-flow.useRate,true)}</b></span><span>Bilans /d<b data-food-flow="balance">${zapNumber(flow.netRate,true)}</b></span></div><p class="flow-period">${period} · dane aktualizowane na bieżąco</p>`;
+}
+function zapLegend(){const scope=zapScope(),keys=Object.keys(scope.stock),other=keys.map(key=>[key,ResourceFlow.stats(S,scope.id,key).otherRate]).filter(([,value])=>Math.abs(value)>.05);
+ return uiDisclosure('stock:legend','Jak czytać bilans?',`<p>Produkcja obejmuje wyroby i pozyskanie dostarczone do magazynu. Zużycie obejmuje posiłki, składniki, straty i utrzymanie. Bilans uwzględnia również dostawy, handel, ręczne wydatki i przesunięcia zapasów, wykazywane jako pozostałe zmiany.</p><p>Wartości /dobę wynikają z rzeczywistych operacji od początku zachowanego pomiaru (bieżąca i poprzednia doba). Zapotrzebowanie to osobna potrzeba mieszkańców. Spiżarki rodzin i ładunki w drodze są poza tym magazynem.</p>${other.length?'<p>Pozostałe zmiany /dobę: '+other.map(([key,value])=>escapeHtml(ZAP_N[key]||RN[key]||key)+' '+zapNumber(value,true)).join(' · ')+'</p>':''}`);
+}
+function zapCard(){return `<div class="card zapc">${zapHead()}${zapBody()}${zapLegend()}</div>`}
 const zapPop=document.createElement('div');zapPop.id='zappop';zapPop.hidden=true;document.body.appendChild(zapPop);
-zapPop.innerHTML='<div class="zpc"></div><div class="zpb"><button data-zapgo="osada">Ludzie i rodziny</button><button data-zapgo="praca">Kto pracuje</button></div>';
-let zapFT=0;function zapFill(force){if(!S)return;const t=performance.now();if(!force&&t-zapFT<900)return;zapFT=t;setH(zapPop.firstChild,zapHead()+zapBody())}
-function zapShow(){if(!S)return;if(!zapPop.hidden){zapPop.hidden=true;return}const wp=$('wxpop');if(wp)wp.hidden=true;zapFill(true);zapPop.hidden=false;
- try{const r=$('cz-res').getBoundingClientRect();zapPop.style.top=(r.bottom+6)+'px';zapPop.style.left=Math.max(10,Math.min(r.left,innerWidth-zapPop.offsetWidth-10))+'px'}catch(e){}}
+zapPop.innerHTML='<div class="zpc"></div><button class="zap-close" data-zapclose="1" aria-label="Zamknij zapasy" title="Zamknij zapasy">×</button><div class="zpb"><button data-zapclose="1">Zamknij zapasy</button></div>';
+let zapFT=0;function zapFill(force){if(!S)return;const t=performance.now();if(!force&&t-zapFT<900)return;zapFT=t;setH(zapPop.firstChild,zapHead()+zapBody()+zapLegend())}
+function zapShow(){if(!S)return;if(!zapPop.hidden){zapPop.hidden=true;return}const wp=$('wxpop');if(wp)wp.hidden=true;zapFill(true);zapPop.hidden=false;zapPop.scrollTop=0;
+ try{const r=$(czOn?'cz-res':'stats').getBoundingClientRect();zapPop.style.top=(r.bottom+6)+'px';const css=getComputedStyle(document.documentElement),safeLeft=parseFloat(css.getPropertyValue('--safe-left'))||0,safeRight=parseFloat(css.getPropertyValue('--safe-right'))||0;zapPop.style.left=Math.max(10+safeLeft,Math.min(r.left,innerWidth-zapPop.offsetWidth-10-safeRight))+'px'}catch(e){}}
 {const l=$('cz-l');l.insertAdjacentHTML('beforeend','<i class="czbr"></i><button id="cz-res" type="button" aria-label="Zapasy"></button>');
  $('cz-res').addEventListener('click',e=>{e.stopPropagation();zapShow()})}
-zapPop.addEventListener('click',e=>{const b=e.target.closest('[data-zapgo]');if(!b||!S)return;zapPop.hidden=true;openSheet(b.dataset.zapgo)});
-document.addEventListener('pointerdown',e=>{if(zapPop.hidden)return;if(e.target.closest('#zappop,#cz-res'))return;zapPop.hidden=true},true);
+zapPop.addEventListener('click',event=>{if(event.target.closest('[data-zapclose]'))zapPop.hidden=true});
+document.addEventListener('pointerdown',e=>{if(zapPop.hidden)return;if(e.target.closest('#zappop,#cz-res,#stats'))return;zapPop.hidden=true},true);
 // Dzienna aktualizacja: p_daily.js (jedna jawna kolejność).
 {const _rt=renderTop;renderTop=function(){_rt();if(!czOn||!S)return;const days=czNeedDays(),sea=seasonIdx();
   const fc=days<2?'bad':days<5?'warn':'',oc=(sea===1||sea===2)&&S.res.opal<10?'bad':(sea>=1&&sea<=2&&S.res.opal<30)||S.res.opal<5?'warn':'';
@@ -195,7 +211,7 @@ function czSumHTML(){const pop=S.people.length,houses=S.bld.filter(b=>bDone(b)&&
  if((S.dis||0)>.6)s+=' Ludzie się kłócą.';else if(S.hope>.75)s+=' Ludzie mają nadzieję.';
  const g=goalInfo();const pc=v=>Math.round(v*100)+'%';
  return`<div class="card"><p style="font-family:var(--serif);font-size:17px;color:var(--hi);margin:0 0 6px;line-height:1.35">${s}</p><p class="mut" style="margin:4px 0 0">Ciepło ${pc(S.warm)} · zdrowie ${pc(S.health)} · nadzieja ${pc(S.hope)} · niezgoda ${pc(S.dis||0)}</p></div>`}
-{const _th=troubleHTML;troubleHTML=function(){return(czOn&&S?czSumHTML()+zapCard():'')+_th()}}
+{const _th=troubleHTML;troubleHTML=function(){return(czOn&&S?czSumHTML():'')+_th()}}
 
 // ---------- karty: zamknij, człowiek, teren ----------
 let selT=null,czJobs=false;

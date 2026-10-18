@@ -121,7 +121,7 @@ function lifeStory(p){const L=[];const bd=Math.max(1,Math.floor(S.day-p.age*YEAR
 // ---------- codziennie, co klatkę, ustawienia ----------
 {const _ad=actDaily;actDaily=function(){_ad();cerDaily();zorzaDaily()}}
 {const _mt=mapTick;mapTick=function(rdt){_mt(rdt);if(!S)return;camTick(rdt);cerFrame(rdt);stormTick(rdt)}}
-{const _kt=kronTools;kronTools=function(){return _kt()+`<div class="card"><h4>Kamera przy ważnych chwilach</h4><p class="mut">Przy obrzędach, weselach i pożarach kamera sama płynie w to miejsce, jeśli nie przesuwasz widoku.</p><button data-autocam class="${autoCam?'pri':''}">${autoCam?'Włączona':'Wyłączona'}</button></div>`}}
+{const _kt=kronTools;kronTools=function(){return _kt()+uiDisclosure('game:camera','Kamera',`<div class="card"><h4>Kamera przy ważnych chwilach</h4><p class="mut">Przy obrzędach, weselach i pożarach kamera sama płynie w to miejsce, jeśli nie przesuwasz widoku.</p><button data-autocam class="${autoCam?'pri':''}">${autoCam?'Włączona':'Wyłączona'}</button></div>`)}}
 document.addEventListener('click',e=>{if(!e.target.closest('[data-autocam]'))return;autoCam=!autoCam;try{localStorage.setItem('przystan-autocam',autoCam?'1':'0')}catch(er){}renderPanel()});
 
 {const _sT=storyTick;storyTick=function(){if(cerActive())return;_sT()}}

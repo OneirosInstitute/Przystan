@@ -20,5 +20,5 @@ function sitesHTML(){const sites=S.bld.filter(b=>!bDone(b));if(!sites.length)ret
  const stuck=sites.some(s=>{const w=siteWhy(s)[1];return w==='warn'||w==='bad'});
  return`<div class="card sites"><h4>Budowy<small>dotknij, żeby zobaczyć</small></h4>${rows}<div class="sbud"><span>Budowniczowie${stuck&&!bs?'<br>bez nich budują tylko wolne ręce':''}</span><button class="mini" data-al="bud" data-d="-1" aria-label="Mniej budowniczych">−</button><span class="cnt">${want}</span><button class="mini" data-al="bud" data-d="1" aria-label="Więcej budowniczych">+</button></div></div>`}
 $('body').addEventListener('click',e=>{const r=e.target.closest('[data-site]');if(!r||!S)return;const b=bById(+r.dataset.site);if(!b)return;const c=bCenter(b);closeSheet();lookAt(c.x,c.z,Math.max(zoomT,1.6));selectB(b.id)});
-{const st=document.createElement('style');st.textContent=`body.cz.open #toast{top:auto;bottom:calc(18px + env(safe-area-inset-bottom,0px))}`;document.head.appendChild(st)}
+{const st=document.createElement('style');st.textContent=`body.cz.open #toast{top:auto;bottom:calc(18px + var(--safe-bottom))}`;document.head.appendChild(st)}
 {const st=document.createElement('style');st.textContent=`body.cz.open #cz-goal{display:none}`;document.head.appendChild(st)}

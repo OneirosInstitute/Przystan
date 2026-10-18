@@ -21,7 +21,7 @@ function saveWarning(error){
  if(!warning||!warning.dataset.saveWarning){
   warning=document.createElement('button');warning.id='save-warning';warning.dataset.saveWarning='1';
   warning.setAttribute('role','alert');
-  warning.style.cssText='position:fixed;top:calc(8px + env(safe-area-inset-top,0px));left:8px;right:8px;z-index:20000;padding:12px;background:#702f27;color:#fff;border:2px solid #f0c88c';
+  warning.style.cssText='position:fixed;top:calc(8px + var(--safe-top));left:8px;right:8px;z-index:20000;padding:12px;background:#702f27;color:#fff;border:2px solid #f0c88c';
   warning.textContent='Zapis nie działa — dotknij, aby pobrać plik awaryjny';
   warning.addEventListener('click',()=>{try{dlFile('przystan-zapis-awaryjny.json',saveStatus.blockedRaw||serializeSave(),'application/json')}catch(error){toast('Nie udało się przygotować pliku zapisu')}});
   document.body.appendChild(warning);

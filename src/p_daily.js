@@ -4,7 +4,7 @@
 function dailyPhase(name,callback){
  try{callback()}catch(error){console.warn('Doba ['+name+']',error)}
 }
-function newDay(){
+function newDay(){return ResourceFlow.run(S,'economy',()=>{
  const fuelBefore=S?(S.res.opal||0):0;
  const spoilMeat=SPOIL.mieso,spoilFish=SPOIL.ryby;
  const salted=S&&(S.res.sol||0)>=1;
@@ -22,4 +22,4 @@ function newDay(){
  dailyPhase('hodowla',kozDaily);
  dailyPhase('serce osady',()=>{scFuelBack(fuelBefore);scDaily();scTick()});
  save();
-}
+ },Math.max(0,Math.floor(S.day)-1))}

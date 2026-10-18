@@ -1,3 +1,13 @@
+# Przystań — 4.0.0-rc.7
+
+Aktualna paczka: **Przystan_4.0.0_RC7_UI_TERMUX.zip**.
+
+[Wdrożenie i zmiany](docs/WYDANIE_4.0.0_RC7.md) · [Weryfikacja](docs/WERYFIKACJA_4.0.0_RC7.md).
+
+Pełny ekran również przy starcie standalone, rozwijane opcje w klasycznym menu oraz trwały bilans live: produkcja, zużycie i saldo. Po pierwszym wdrożeniu zamknij aplikację całkowicie, otwórz ponownie i sprawdź RC7 w Opcjach gry.
+
+Poniżej dokumentacja wcześniejszych wydań.
+
 # Przystań — 4.0.0-rc.6
 
 Aktualna paczka: **Przystan_4.0.0_RC6_HARDENING_TERMUX.zip**.

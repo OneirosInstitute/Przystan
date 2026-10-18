@@ -18,7 +18,7 @@ function e4Panel(){
   markup+='<h3>Rozwój gospodarstwa</h3>';for(const [kind,definition]of Object.entries(catalog.buildings)){if(kind==='dom_rodowy'&&settlement.id==='przystan')continue;markup+=`<div class="card"><h4>${definition.name}${settlement.buildings[kind]?' · '+settlement.buildings[kind]:''}</h4><p>${e4Resources(definition.cost)} · ${definition.labor} godz. pracy${definition.crop?' · sadzonki: '+(settlement.land.seeds[definition.crop]||0):''}</p><button data-e4-project="${kind}">Zleć budowę</button></div>`;}
  }
  if(tab==='praca'){
-  markup+='<h3>Magazyn</h3><p>'+e4Resources(stock)+'</p><h3>Partie w pracowniach</h3>';
+  markup+='<h3>Magazyn i bilans</h3>'+zapCard()+'<h3>Partie w pracowniach</h3>';
   markup+=settlement.batches.map(batch=>`<div class="card"><b>${catalog.recipes[batch.recipe].name}</b><p>${batch.readyAt===null?'Praca: '+Math.floor(batch.progress/batch.work*100)+'%':'Dojrzewa jeszcze '+Math.max(0,(batch.readyAt-S.e4.simTicks)/1000000).toFixed(1)+' dni'}</p><small>Składniki w partii: ${e4Resources(batch.materials)}</small></div>`).join('')||'<p class="mut">Brak rozpoczętych partii.</p>';
   markup+='<h3>Zleć wyrób</h3>';for(const [recipeId,recipe]of Object.entries(catalog.recipes)){if(!settlement.buildings[recipe.building])continue;markup+=`<div class="card"><h4>${recipe.name}</h4><p>${e4Resources(recipe.input)} → ${e4Resources(recipe.output)}</p><p class="mut">${recipe.labor} godz. pracy${recipe.days?' · '+recipe.days+' dni dojrzewania':''}</p><button data-e4-batch="${recipeId}">Rozpocznij partię</button></div>`;}
   markup+='<p class="mut">Najpierw ziarno na siew. Przy dostatecznym zapasie żywności składniki kolejnej partii pozostają dla pracowni: '+e4Resources(settlement.processingReserve)+'.</p>';
@@ -42,7 +42,8 @@ function e4Panel(){
   markup+='<h3>Hodowla</h3>';for(const [species,definition]of Object.entries(catalog.animals))markup+=`<div class="card"><h4>${definition.name}: ${settlement.animals[species]||0}</h4><p>Dzikie w krainie: ${Math.floor(pool.wild[species])} · oswojenie: 2 ziarna i 12 godz. pracy.</p><button data-e4-capture="${species}">Oswój zwierzę</button></div>`;
   for(const animal of settlement.herd)markup+=`<p>${catalog.animals[animal.species].name} #${animal.id} · ${animal.sex==='k'?'samica':'samiec'} · ${animal.age} dni${animal.pregnant?' · oczekuje potomstwa':''} <button data-e4-slaughter="${animal.id}">Ubój</button></p>`;
  }
- if(tab==='kronika'){markup+=classicModeTools();markup+='<button data-kron="load">Wczytaj zapis z pliku</button><button data-kron="now">Zapisz teraz</button><button data-e4-export="1">Pobierz zapis do pliku</button><button data-e4-book="1">Pobierz historię rodów</button><p id="save-status">'+saveStatusText()+'</p><h3>Kronika rodów</h3>'+S.e4.events.slice().reverse().map(event=>`<p><b>Dzień ${Math.floor(event.day)}</b> · ${e4Escape(event.text)}</p>`).join('');}
+ if(tab==='kronika'){markup+=classicModeTools();markup+='<h3>Zapis i kopie</h3><button data-kron="load">Wczytaj zapis z pliku</button><button data-kron="now">Zapisz teraz</button><button data-e4-export="1">Pobierz zapis do pliku</button><button data-e4-book="1">Pobierz historię rodów</button><p id="save-status">'+saveStatusText()+'</p><h3>Kronika rodów</h3>'+S.e4.events.slice().reverse().map(event=>`<p><b>Dzień ${Math.floor(event.day)}</b> · ${e4Escape(event.text)}</p>`).join('');}
+ markup=uiFoldHeadings(markup,'e4:'+settlement.id+':'+tab);
  if(body._e4Markup===markup)return;body._e4Markup=markup;body.innerHTML=markup;body.scrollTop=scroll;
 }
 const e4UnlockButton=document.createElement('button');e4UnlockButton.textContent='Epoka IV — zwołaj Wiec Rodów';e4UnlockButton.dataset.e4Begin='1';e4UnlockButton.hidden=true;$('sheet').insertBefore(e4UnlockButton,$('body'));

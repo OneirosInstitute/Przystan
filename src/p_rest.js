@@ -833,6 +833,7 @@ function setCam(){const size=34/zoom,asp=innerWidth/innerHeight;cam.left=-size*a
  sun.target.position.set(camT.x,0,camT.z);sun.target.updateMatrixWorld()}
 function resize(){renderer.setSize(innerWidth,innerHeight,false);setCam();gfxResize()}
 addEventListener('resize',resize);
+window.visualViewport?.addEventListener('resize',()=>{if(lifeCanRun())resize()});
 const ray=new THREE.Raycaster(),mv=new THREE.Vector2();
 function pick(cx,cy,objs){const r=cv.getBoundingClientRect();mv.set((cx-r.left)/r.width*2-1,-((cy-r.top)/r.height)*2+1);ray.setFromCamera(mv,cam);return ray.intersectObjects(objs,true)}
 const pts=new Map();let drag=null,pinch=null,follow=false;
@@ -893,7 +894,7 @@ $('speed').addEventListener('click',event=>{
  if(button.dataset.sp!==undefined)setSpeed(Number(button.dataset.sp));
 });
 function setSpeed(v){S.speed=v;[...$('speed').querySelectorAll('[data-sp]')].forEach(b=>b.classList.toggle('on',+b.dataset.sp===v))}
-$('stats').addEventListener('click',()=>{$('res').classList.toggle('on')});
+$('stats').addEventListener('click',()=>{if(S)zapShow()});
 $('res').addEventListener('click',()=>$('res').classList.remove('on'));
 let goalMin=innerWidth<=760||innerHeight<=460;
 $('goal').addEventListener('click',()=>{goalMin=!goalMin;$('goal')._h=null;renderTop()});
@@ -918,14 +919,20 @@ function renderPanel(){
  [...$('tabbar').children].forEach(b=>b.classList.toggle('on',b.dataset.tab===tab));
  $('stitle').textContent=TABS.find(t=>t[0]===tab)[1];
  const el=$('body'),st=el.scrollTop;let h='';
- if(tab==='osada'){h+=troubleHTML()+reqHTML();h+=`<div class="card"><h4>Niezgoda ${Math.round((S.dis||0)*100)}%</h4><p>${(S.dis||0)<.35?'Ludzie trzymają się razem.':(S.dis||0)<.6?'Słychać szemranie. Ludzie pracują trochę wolniej.':(S.dis||0)<.85?'Kłótnie co wieczór. Praca idzie wyraźnie wolniej.':'Osada się rozpada. Ktoś może odejść w głąb wyspy.'}</p><p class="mut">Rośnie przez głód, zimno, brak wody, śmierć, pożary, surowe prawa i niespełnione prośby. Spada, gdy prośby są spełniane, przy wieczorach przy ognisku i wspólnych posiłkach.</p></div>`+custHTML();h+='<h3>Osada</h3>';const pop=S.people.length,kids=S.people.filter(isChild).length,old=S.people.filter(p=>p.age>55).length;
-  const houses=S.bld.filter(b=>bDone(b)&&BD[b.kind].house).length;const homeless=S.people.filter(p=>!homeOf(p)).length;const nt=TIERS[S.tier+1];
-  h+=`<div class="card"><h4>${TIERS[S.tier][0]}</h4><p>${pop} osób: ${pop-kids-old} dorosłych, ${kids} dzieci, ${old} starszych. Domów: ${houses}, bez dachu: ${homeless}.</p><p class="mut">Urodzeni: ${S.born} · zmarli: ${S.died}${nt?` · następny poziom (${nt[0].toLowerCase()}): ${nt[1]} domów i ${nt[2]} osób`:''}</p></div>`;
-  if(!czOn)h+='<h3>Zapasy</h3>'+zapCard();
-  h+='<h3>Cele</h3>'+taskGoalsHTML();
-  h+=pamHTML()+rodyHTML()+hamletHTML();h+='<h3>Rodziny</h3>';
+ if(tab==='osada'){
+  h+=uiDisclosure('osada:needs','Potrzeby i sprawy',troubleHTML()+reqHTML(),true);
+  const pop=S.people.length,kids=S.people.filter(isChild).length,old=S.people.filter(p=>p.age>55).length,houses=S.bld.filter(b=>bDone(b)&&BD[b.kind].house).length,homeless=S.people.filter(p=>!homeOf(p)).length,nt=TIERS[S.tier+1];
+  const overview=`<div class="card"><h4>${TIERS[S.tier][0]}</h4><p>${pop} osób: ${pop-kids-old} dorosłych, ${kids} dzieci, ${old} starszych. Domów: ${houses}, bez dachu: ${homeless}.</p><p class="mut">Urodzeni: ${S.born} · zmarli: ${S.died}${nt?` · następny poziom: ${nt[1]} domów i ${nt[2]} osób`:''}</p></div>`;
+  h+=uiDisclosure('osada:stock','Zapasy i bilans',zapCard(),false,'Stan, produkcja i zużycie na dobę');
+  let familyCards='';
   Object.values(S.fams).forEach(f=>{const mem=famMembers(f.id);if(!mem.length)return;const hm=f.home?bById(f.home):null;
-   h+=`<div class="card"><h4>Rodzina ${famName(f.id)}</h4><p class="mut">${hm?BD[hm.kind].n:'bez domu, śpi w obozie'}${typeof spizWord==='function'?spizWord(f):''}</p>`+mem.sort((a,b)=>b.age-a.age).map(p=>`<div class="row" data-p="${p.id}" style="cursor:pointer;padding:5px 0"><div class="n"><b style="color:var(--hi)">${escapeHtml(p.name)}</b> <span class="mut">${Math.floor(p.age)} l. · ${traitN(p).toLowerCase()}</span><small>${jobLabel(p)} · ${p.act}${p.mentor?' · uczy się od: '+p.mentor.name:''}</small><div>${skillTags(p,3)}</div></div></div>`).join('')+`</div>`})}
+   familyCards+=`<div class="card"><h4>Rodzina ${famName(f.id)}</h4><p class="mut">${hm?BD[hm.kind].n:'bez domu, śpi w obozie'}${typeof spizWord==='function'?spizWord(f):''}</p>`+mem.sort((a,b)=>b.age-a.age).map(p=>`<div class="row" data-p="${p.id}" style="cursor:pointer;padding:5px 0"><div class="n"><b style="color:var(--hi)">${escapeHtml(p.name)}</b> <span class="mut">${Math.floor(p.age)} l. · ${traitN(p).toLowerCase()}</span><small>${jobLabel(p)} · ${p.act}${p.mentor?' · uczy się od: '+p.mentor.name:''}</small><div>${skillTags(p,3)}</div></div></div>`).join('')+`</div>`})
+  h+=uiDisclosure('osada:people','Rodziny i mieszkańcy',overview+familyCards,false,pop+' osób · '+houses+' domów');
+  const community=`<div class="card"><h4>Niezgoda ${Math.round((S.dis||0)*100)}%</h4><p>${(S.dis||0)<.35?'Ludzie trzymają się razem.':(S.dis||0)<.6?'Słychać szemranie. Ludzie pracują trochę wolniej.':(S.dis||0)<.85?'Kłótnie co wieczór. Praca idzie wyraźnie wolniej.':'Osada się rozpada. Ktoś może odejść w głąb wyspy.'}</p><p class="mut">Niezgoda rośnie przez głód, zimno, brak wody, śmierć, pożary, surowe prawa i niespełnione prośby. Spada przy wspólnych posiłkach, wieczorach i spełnionych prośbach.</p></div>`+custHTML()+rodyHTML()+hamletHTML();
+  h+=uiDisclosure('osada:community','Wspólnota i rody',community);
+  h+=uiDisclosure('osada:goals','Cele i rozwój',taskGoalsHTML());
+  h+=uiDisclosure('osada:memory','Pamięć osady',pamHTML());
+ }
  else if(tab==='praca'){const wbs=workBuildings();
   h+=`<p class="lead">Wolne ręce: <b style="color:var(--hi)">${freeCount()}</b> z ${adultsPool().length}. Wolni pracują jako robotnicy: najpierw biorą to, co zaznaczysz na mapie, potem pomagają przy budowie i rozbierają wrak.</p>`;if(typeof budRowHTML==='function')h+='<h3>Budowa i mapa</h3>'+budRowHTML()+mkCardHTML()+'<h3>Budynki robocze</h3>';
   if(!wbs.length)h+='<p class="lead">Nie ma jeszcze budynków roboczych. Postaw chatę zbieracza i chatę drwala w zakładce Budowa.</p>';
@@ -951,7 +958,7 @@ function renderPanel(){
   if(buildCat==='lad'&&typeof ladBuildHTML==='function'){h+=ladBuildHTML()}else if(buildCat==='remont'){h+=`<div class="card"><h4>Remonty</h4><p>Budynki zużywają się co roku: szybciej nad morzem, na mokradłach i w górach, wolniej, gdy są wyżej ulepszone. Remont potrzebny jest zwykle co 2–3 lata.</p><p class="mut">${need.length?'Wymaga remontu: '+need.map(b=>BD[b.kind].n.toLowerCase()+' '+Math.round(condOf(b)*100)+'%').join(', ')+'.':'Wszystko w dobrym stanie.'}</p><button data-autorep="1" class="${S.autoRep!==false?'pri':''}">${S.autoRep!==false?'Remonty automatyczne: włączone':'Remonty automatyczne: wyłączone'}</button></div>`}
   else{const ks=BKEYS.filter(k=>BD[k].cat===buildCat);const kn=ks.filter(bAvail).sort((a,b)=>(canAfford(BD[b].cost)?1:0)-(canAfford(BD[a].cost)?1:0)),unk=ks.filter(k=>!bAvail(k));
    kn.forEach(k=>{const d=BD[k],cnt=S.bld.filter(b=>b.kind===k).length,ok=canAfford(d.cost);const miss=Object.entries(d.cost).filter(([r,v])=>(S.res[r]||0)<v).map(([r,v])=>RN[r].toLowerCase()+' '+Math.ceil(v-(S.res[r]||0)));
-    h+=`<div class="card bk"><div class="bkh"><h4>${d.n}</h4>${cnt?`<span class="mut">masz ${cnt}</span>`:''}</div><p>${d.d}</p><div class="cost">${costHave(d.cost)}<span class="sep">·</span>${d.work} osobodni${d.wk?`<span class="sep">·</span>${d.wk} prac.`:''}${d.r?`<span class="sep">·</span>zasięg ${d.r}`:''}</div>${ok?`<button class="pri bkb" data-b="${k}">Postaw</button>`:`<button class="bkb" disabled>Brakuje: ${miss.join(', ')}</button>`}</div>`});
+    h+=uiDisclosure('build:'+k,d.n,`<p>${d.d}</p><div class="cost">${costHave(d.cost)}<span class="sep">·</span>${d.work} osobodni${d.wk?`<span class="sep">·</span>${d.wk} prac.`:''}${d.r?`<span class="sep">·</span>zasięg ${d.r}`:''}</div>${ok?`<button class="pri bkb" data-b="${k}">Postaw</button>`:`<button class="bkb" disabled>Brakuje: ${miss.join(', ')}</button>`}`,false,`${cnt?'Masz '+cnt+' · ':''}${ok?'Dostępny do budowy':'Potrzebne zasoby'}`)});
    if(!kn.length&&!unk.length)h+='<p class="mut">Nic tu jeszcze nie ma.</p>';
    if(unk.length)h+=`<div class="card unkc"><h4>Jeszcze nie umiecie</h4>${unk.map(k=>{const d=BD[k];return`<p><b>${d.n}</b><span>${TECH_BY[d.need]?'„'+TECH_BY[d.need].n+'” w Wiedzy':{kury:'coś, co trzeba najpierw znaleźć na wyspie',wegiel_k:'coś, co trzeba najpierw znaleźć na wyspie',sol:'coś, co trzeba najpierw znaleźć na wyspie',pole:'uprawa pola (Wiedza)',piec:'budowa pieca (Wiedza, próby)',cegla:'wypał cegły (Wiedza, próby)',kuznia:'wytop żelaza (Wiedza, próby)'}[d.need]||'potrzebna wiedza'}</span></p>`}).join('')}</div>`}}
  else if(tab==='wiedza'){const k=S.know;const mason=adultsPool().sort((a,b)=>b.sk.murarz-a.sk.murarz)[0]||S.people[0];
@@ -969,7 +976,7 @@ function renderPanel(){
   h+=`<div class="card"><h4>Uczniowie i dzieci</h4><p>Kto pracuje obok mistrza swojego fachu, uczy się dwa razy szybciej. Dzieci od szóstego roku podpatrują rodziców. Gdy mistrz umiera bez następcy, jego wiedza ginie.</p><p>${Object.keys(S.bonus).length?'Ulepszenia uczniów: '+Object.entries(S.bonus).map(([c,v])=>`${CN[c]} +${Math.round(v*100)}%`).join(', '):'Ulepszeń uczniów jeszcze nie ma.'}</p></div>`;
   h+=`<div class="card"><h4>Księgi</h4>${Object.keys(BOOKS).map(b=>`<p>„${BOOKS[b]}”: ${S.books[b]===2?'<span class="ok">przeczytana</span>':S.books[b]===1?'do przeczytania':'<span class="mut">na wraku</span>'}</p>`).join('')}</div>`;
   h+=typeof sladHTML==='function'?sladHTML():''}
- else{h+=kronTools()+'<div class="log">'+S.log.map(l=>`<p><small>doba ${l.d}</small>${l.t}</p>`).join('')+'</div>'}
+ else{h+=kronTools()+uiDisclosure('game:journal','Kronika osady','<div class="log">'+S.log.map(l=>`<p><small>doba ${l.d}</small>${l.t}</p>`).join('')+'</div>')}
  if(h!==el._h){el._h=h;el.innerHTML=h;el.scrollTop=st}}
 let buildCat=null;
 function onPanelClick(e){const t=e.target.closest('button,[data-p],[data-rg]');if(!t)return;

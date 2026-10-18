@@ -1,6 +1,6 @@
 {
   "name": "przystan",
-  "version": "4.0.0-rc.6",
+  "version": "4.0.0-rc.7",
   "description": "Przystań – spokojna gra o rozbitkach budujących osadę na dzikiej wyspie (PWA, Three.js)",
   "private": true,
   "scripts": {
