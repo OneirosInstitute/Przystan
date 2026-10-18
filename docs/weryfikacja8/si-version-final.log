@@ -1,0 +1,34 @@
+✔ one waiting cause is shared by person, workshop and production task (1269.76033ms)
+✔ workshop task navigation selects the exact building among duplicates (1358.807312ms)
+✔ recovery has priority over emergency field work and village routines (1270.053849ms)
+✔ cargo delivery remains first during recovery and preparations for the next epoch (1168.47991ms)
+✔ death releases a station without an orphan reservation (1101.108423ms)
+✔ restart clears transient positions and replans without manufacturing goods (1165.70115ms)
+✔ urgent harvest helpers can earn real work at a reached field station (1135.901722ms)
+✔ epoch IV rest actions retain their own phase instead of appearing as production (1341.665825ms)
+✔ RC8 deployment targets the verified RC7 checkpoint in every release guard (6.991847ms)
+✔ package integrity detects missing, changed and out-of-root files (6.417538ms)
+✔ deployment preflight checks identity, branch, base and user changes with read-only git calls (1.267804ms)
+✔ asset-only changes invalidate the PWA version; UI viewport permits zoom (315.945036ms)
+✔ touch launch requests immersive fullscreen even in an installed standalone app (1820.687558ms)
+✔ game options expand in the current panel and expose version and fullscreen controls (1513.802548ms)
+✔ stock views retain separate live daily production, use and balance columns (1479.665229ms)
+✔ live measurements survive a real save and restore without changing resources (1772.950907ms)
+✔ service worker updates checkpoint before reload and preserve a failed save (3050.438648ms)
+✔ first worker activation does not reload and hidden updates wait for visibility (1742.582863ms)
+✔ a fully occupied workshop waits instead of assigning its last station twice (1341.42381ms)
+✔ another side of a workshop remains usable when the preferred entrance is disconnected (1330.2915ms)
+✔ a distant or stale production pose earns no materials before reaching the workshop (1187.97156ms)
+✔ a critically ill worker releases production before earning more work (1067.796468ms)
+✔ a changed job cannot complete an old workshop operation (1148.124247ms)
+✔ field work waits if its worker has lost access to every work position (1134.132142ms)
+✔ workers use distinct positions on all three managed worksites (3767.998302ms)
+✔ a blocked attempt keeps its existing cargo and does not teleport (1171.487166ms)
+ℹ tests 26
+ℹ suites 0
+ℹ pass 26
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12311.453377

@@ -1,0 +1,57 @@
+✖ one waiting cause is shared by person, workshop and production task (1414.889418ms)
+✔ workshop task navigation selects the exact building among duplicates (1484.950075ms)
+✔ recovery has priority over emergency field work and village routines (1095.795651ms)
+✔ cargo delivery remains first during recovery and preparations for the next epoch (1048.08423ms)
+✔ death releases a station without an orphan reservation (1106.623003ms)
+✔ restart clears transient positions and replans without manufacturing goods (1061.996191ms)
+✔ urgent harvest helpers can earn real work at a reached field station (1030.515972ms)
+✔ epoch IV rest actions retain their own phase instead of appearing as production (1031.06612ms)
+✔ a configured target replaces the recipe default (1445.900926ms)
+✔ all grain processors expose shortages while protecting seed (1180.766088ms)
+✔ winter and damaged workshops give an explicit non-shortage blocker (1041.545962ms)
+✔ an ore-starved smith collects real ore instead of unrelated village chores (1505.352372ms)
+✔ supply work is slower than professional gathering and conserves the source and delivery (1200.194036ms)
+✔ meeting every configured output target returns the crew to village help even with empty inputs (1118.524324ms)
+✔ exhausted sources are not invented or replaced by social work (1136.406854ms)
+✔ hidden, claimed and unreachable deposits are excluded without creating resources (1085.126784ms)
+✔ manual reassignment releases the claimed source and abandons the supply role (1139.850576ms)
+✔ suppliers relinquish the source and return to production when another delivery resolves the shortage (1078.04927ms)
+✔ upstream charcoal shortage targets wood only through an existing charcoal kiln (1162.581848ms)
+✔ a supply delivery survives restart and returns to the original workshop without double harvest (1129.939462ms)
+✔ a fully occupied workshop waits instead of assigning its last station twice (1379.942243ms)
+✔ another side of a workshop remains usable when the preferred entrance is disconnected (1519.29189ms)
+✔ a distant or stale production pose earns no materials before reaching the workshop (1196.042647ms)
+✔ a critically ill worker releases production before earning more work (1084.164282ms)
+✔ a changed job cannot complete an old workshop operation (1161.712991ms)
+✔ field work waits if its worker has lost access to every work position (1149.587416ms)
+✔ workers use distinct positions on all three managed worksites (3233.28762ms)
+✔ a blocked attempt keeps its existing cargo and does not teleport (1041.272337ms)
+ℹ tests 28
+ℹ suites 0
+ℹ pass 27
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11911.707354
+
+✖ failing tests:
+
+test at tests/ai-contract.test.mjs:3:1
+✖ one waiting cause is shared by person, workshop and production task (1414.889418ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /drog|stanowisk/i. Input:
+  
+  'odpoczywa'
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/ai_rc8_20261018/source/Przystan_4.0.0_RC8_SI/tests/ai-contract.test.mjs:3:565)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'odpoczywa',
+    expected: /drog|stanowisk/i,
+    operator: 'match',
+    diff: 'simple'
+  }

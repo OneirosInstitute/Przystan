@@ -1,0 +1,6 @@
+Integralność paczki: PASS (340 plików)
+Kontrola repozytorium: PASS
+From https://github.com/OneirosInstitute/Przystan
+ * branch            main       -> FETCH_HEAD
+   eb38cf5..09b977a  main       -> origin/main
+STOP: main zmienił się od przygotowania paczki. Potrzebne ponowne scalenie.

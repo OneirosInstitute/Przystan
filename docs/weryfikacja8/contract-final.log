@@ -1,0 +1,36 @@
+✔ one waiting cause is shared by person, workshop and production task (1347.231767ms)
+✔ workshop task navigation selects the exact building among duplicates (1316.771793ms)
+✔ recovery has priority over emergency field work and village routines (1088.600693ms)
+✔ cargo delivery remains first during recovery and preparations for the next epoch (1141.979812ms)
+✔ death releases a station without an orphan reservation (1103.007166ms)
+✔ restart clears transient positions and replans without manufacturing goods (1175.551133ms)
+✔ urgent harvest helpers can earn real work at a reached field station (1061.018931ms)
+✔ epoch IV rest actions retain their own phase instead of appearing as production (1066.453161ms)
+✔ a configured target replaces the recipe default (1301.740279ms)
+✔ all grain processors expose shortages while protecting seed (1118.358142ms)
+✔ winter and damaged workshops give an explicit non-shortage blocker (1157.746894ms)
+✔ an ore-starved smith collects real ore instead of unrelated village chores (1288.508736ms)
+✔ supply work is slower than professional gathering and conserves the source and delivery (1100.484866ms)
+✔ meeting every configured output target returns the crew to village help even with empty inputs (1186.567282ms)
+✔ exhausted sources are not invented or replaced by social work (1279.93381ms)
+✔ hidden, claimed and unreachable deposits are excluded without creating resources (1076.885495ms)
+✔ manual reassignment releases the claimed source and abandons the supply role (1155.538947ms)
+✔ suppliers relinquish the source and return to production when another delivery resolves the shortage (1052.827136ms)
+✔ upstream charcoal shortage targets wood only through an existing charcoal kiln (1078.930052ms)
+✔ a supply delivery survives restart and returns to the original workshop without double harvest (1070.637564ms)
+✔ a fully occupied workshop waits instead of assigning its last station twice (1334.984563ms)
+✔ another side of a workshop remains usable when the preferred entrance is disconnected (1354.927475ms)
+✔ a distant or stale production pose earns no materials before reaching the workshop (1126.883822ms)
+✔ a critically ill worker releases production before earning more work (1146.394391ms)
+✔ a changed job cannot complete an old workshop operation (1020.614194ms)
+✔ field work waits if its worker has lost access to every work position (1082.098611ms)
+✔ workers use distinct positions on all three managed worksites (3110.965458ms)
+✔ a blocked attempt keeps its existing cargo and does not teleport (1064.994068ms)
+ℹ tests 28
+ℹ suites 0
+ℹ pass 28
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11402.974297

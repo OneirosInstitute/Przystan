@@ -1,0 +1,38 @@
+{
+  "status": "PASS",
+  "results": [
+    {
+      "viewport": {
+        "width": 412,
+        "height": 870
+      },
+      "status": "PASS",
+      "distinctStations": true,
+      "modelsAtSimulationPositions": true,
+      "recoveryStopsProduction": true,
+      "sharedWaitingReason": true,
+      "bothMenus": true,
+      "taskFindsCrewAndBuilding": true,
+      "saveRestart": true,
+      "errors": []
+    },
+    {
+      "viewport": {
+        "width": 870,
+        "height": 412
+      },
+      "status": "PASS",
+      "distinctStations": true,
+      "modelsAtSimulationPositions": true,
+      "recoveryStopsProduction": true,
+      "sharedWaitingReason": true,
+      "bothMenus": true,
+      "taskFindsCrewAndBuilding": true,
+      "saveRestart": true,
+      "errors": []
+    }
+  ],
+  "limits": [
+    "Software WebGL; no physical Android touch, frame-time or battery measurement."
+  ]
+}

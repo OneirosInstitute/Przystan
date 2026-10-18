@@ -45,10 +45,6 @@ function productionSupportJob(person){
  return true;
 }
 function supplyShouldReturn(person){const building=bById(person.wb);return person.job!=='wb'||!building||person.supply?.building!==building.id||productionSupplyState(building).mode!=='shortage'}
-{const previousPlanner=planJob;planJob=function(person){
- if(person.supply&&!pendingDelivery(person))delete person.supply;
- return previousPlanner(person);
-}}
 {const previousStep=stepPerson;stepPerson=function(person,delta){
  if(person.supply&&!pendingDelivery(person)&&S?.epoch!==4){
   if(supplyShouldReturn(person)){release(person);person.path=null;person.state='idle';person.wait=0;delete person.supply;return previousStep(person,delta)}
@@ -56,8 +52,8 @@ function supplyShouldReturn(person){const building=bById(person.wb);return perso
  }
  return previousStep(person,delta);
 }}
-function productionPolicyHTML(building){const state=productionSupplyState(building),workers=S.people.filter(person=>person.job==='wb'&&person.wb===building.id),gathering=workers.filter(person=>person.supply).length;
- return '<p class="mut">Cele: '+[].concat(BD[building.kind].prod).map(recipe=>Object.keys(recipe.out).map(key=>RN[key]).join(' i ')+': '+(recipeTarget(building,recipe)||'bez limitu')).join(' · ')+'</p><small style="color:var(--gold);text-transform:uppercase;letter-spacing:.08em">Rytm pracowni</small><p><b>'+({ready:'Produkcja',shortage:'Zaopatrzenie',covered:'Prace wspólne',blocked:'Produkcja wstrzymana'}[state.mode])+'</b>'+ (gathering?' · '+gathering+' osób pozyskuje składniki':'')+'</p><p class="mut">'+escapeHtml(state.reason)+'</p>'+(state.needs.length?'<p class="mut">'+state.needs.map(need=>RN[need.resource]+': '+fmt(S.res[need.resource]||0)+' / '+need.quantity).join(' · ')+'</p>':'')+'<p class="mut">Brak składników → pozyskiwanie i dowóz. Pełny zapas → pomoc osadzie. Zaopatrzenie: 55% zwykłego tempa zbioru przy tych samych umiejętnościach.</p>';
+function productionPolicyHTML(building){const activity=workshopActivity(building),state=activity.policy,workers=S.people.filter(person=>person.job==='wb'&&person.wb===building.id),gathering=workers.filter(person=>person.supply).length;
+ return '<p class="mut">Cele: '+[].concat(BD[building.kind].prod).map(recipe=>Object.keys(recipe.out).map(key=>RN[key]).join(' i ')+': '+(recipeTarget(building,recipe)||'bez limitu')).join(' · ')+'</p><small style="color:var(--gold);text-transform:uppercase;letter-spacing:.08em">Rytm pracowni</small><p><b>'+escapeHtml(activity.label)+'</b>'+ (gathering?' · '+gathering+' osób pozyskuje składniki':'')+'</p><p class="mut">'+escapeHtml(activity.reason)+'</p>'+(state.needs.length?'<p class="mut">'+state.needs.map(need=>RN[need.resource]+': '+fmt(S.res[need.resource]||0)+' / '+need.quantity).join(' · ')+'</p>':'')+workshopPeopleHTML(building)+'<p class="mut">Brak składników → pozyskiwanie i dowóz. Pełny zapas → pomoc osadzie. Zaopatrzenie: 55% zwykłego tempa zbioru przy tych samych umiejętnościach.</p>';
 }
 {const previousSelection=renderSel;renderSel=function(){previousSelection();if(!S||S.epoch===4||selB===null)return;const building=bById(selB);if(!building||!bDone(building)||!BD[building.kind].prod)return;
  const selection=$('sel');let policy=selection.querySelector('.production-policy');if(!policy){policy=document.createElement('div');policy.className='production-policy';selection.querySelector('h4')?.insertAdjacentElement('afterend',policy)}if(policy)setH(policy,productionPolicyHTML(building));

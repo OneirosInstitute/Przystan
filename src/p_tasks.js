@@ -24,14 +24,6 @@ function resumeDelivery(person){
  person.state='idle';person.path=null;person.after=null;person.wait=2;
  person.act='brak drogi do dostawy — zachowuje ładunek';return true;
 }
-{const previousPlanner=planJob;planJob=function(person){
- if(pendingDelivery(person))return resumeDelivery(person);
- if(S&&racjeOn('zbior')&&!person.fireB&&isWorker(person)&&isWork()&&!restNow(person)){
-  if(choreDo(person,'zbior')||choreDo(person,'ryby'))return true;
-  person.act='szuka jedzenia — brak dostępnego zbioru';person.wait=3;return false;
- }
- return previousPlanner(person);
-}}
 {const previousStep=stepPerson;stepPerson=function(person,dt){
  if(waterDelivery(person)){
   if(person.state==='move'&&person.after==='chore'&&person.path?.length){movePerson(person,dt);return}

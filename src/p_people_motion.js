@@ -31,4 +31,11 @@ function animatePerson(p,m,rdt){
  if(u.kneeL&&walking){const half=.14*Math.cos(m.rotation.y),left=Hy(p.x-half,p.z),right=Hy(p.x+half,p.z),base=Hy(p.x,p.z);u.lL.position.y=.5+clamp((left-base)/m.scale.y,-.06,.06);u.lR.position.y=.5+clamp((right-base)/m.scale.y,-.06,.06);}
  u.motionMode=mode;u.poseReady=true;
 }
-{const previousCard=ludCard;ludCard=function(p){const action=p.e4Action,location=taskPersonLocation(p),detail=p.blocked?.reason||(action?.blocked?'Brak drogi do celu':'');return '<div class="card"><h4>Teraz</h4><p>'+escapeHtml(p.act||'odpoczywa')+'</p><p class="mut">'+escapeHtml(location.label)+(action?' · '+({travel:'w drodze',doing:'na miejscu',blocked:'oczekuje'}[action.phase]||'planuje'):'')+'</p>'+(p.carry?'<p>Niesie: '+p.carry.map(item=>escapeHtml(RN[item.res]||item.res)+' '+fmt(item.q)).join(', ')+'</p>':'')+(detail?'<p class="no">'+escapeHtml(detail)+'</p>':'')+(S.epoch===4?'<details><summary>Dobowy przydział gospodarczy</summary><p class="mut">'+escapeHtml(p.e4LastWork?.activity||'Jeszcze bez rozliczonej pracy')+' · '+(p.e4Labor||0).toFixed(1)+' h. Gospodarstwo rozlicza produkcję na koniec doby.</p></details>':'')+'</div>'+previousCard(p);};}
+{const previousCard=ludCard;ludCard=function(person){
+ const activity=personActivity(person),location=taskPersonLocation(person);
+ const cargo=activity.cargo.length?'<p>Niesie: '+activity.cargo.map(item=>escapeHtml(RN[item.res]||item.res)+' '+fmt(item.q)).join(', ')+'</p>':'';
+ const assignment=activity.building?'<p class="mut">Przydział: '+escapeHtml(activity.building)+'</p>':'';
+ const station=activity.station?'<p class="mut">'+(activity.phase==='travel'?'Stanowisko zarezerwowane; jest w drodze.':'Jest przy stanowisku pracy.')+'</p>':'';
+ const daily=S.epoch===4?'<details><summary>Dobowy przydział gospodarczy</summary><p class="mut">'+escapeHtml(person.e4LastWork?.activity||'Jeszcze bez rozliczonej pracy')+' · '+(person.e4Labor||0).toFixed(1)+' h. Gospodarstwo rozlicza produkcję na koniec doby.</p></details>':'';
+ return '<div class="card"><h4>Teraz · '+escapeHtml(activity.label)+'</h4><p>'+escapeHtml(activity.reason)+'</p><p class="mut">Miejsce: '+escapeHtml(location.label)+'</p>'+assignment+station+cargo+daily+'</div>'+previousCard(person);
+};}

@@ -1,0 +1,462 @@
+{
+  "status": "PASS",
+  "version": "4.0.0-rc.8",
+  "base": "09b977acc293785f24de77fb8cb2d8224f0833b6",
+  "node": "v24.19.0",
+  "install": {
+    "suites": 40,
+    "cases": 208,
+    "status": "PASS",
+    "base": "09b977acc293785f24de77fb8cb2d8224f0833b6",
+    "prepareExit": 0,
+    "headUnchanged": true,
+    "noPush": true,
+    "dirtyRejectedBeforeCopy": true,
+    "userReadmeUnchanged": true,
+    "seconds": 238.84524645699958
+  },
+  "newAICases": 16,
+  "reproducedBefore": {
+    "cases": 8,
+    "failed": 6,
+    "passed": 2
+  },
+  "plannerWrappers": {
+    "before": 17,
+    "after": 15
+  },
+  "runtime": {
+    "status": "PASS",
+    "scenarios": [
+      {
+        "epoch": 1,
+        "frames": 2400,
+        "syntheticWallSeconds": 80,
+        "elapsedGameDays": 2.1651388888889986,
+        "restarts": 2,
+        "automaticSaves": 9,
+        "population": 18,
+        "tradeDeliveries": 0,
+        "unverified": [
+          "real DOM",
+          "WebGL",
+          "touch",
+          "device performance"
+        ]
+      },
+      {
+        "epoch": 3,
+        "frames": 4800,
+        "syntheticWallSeconds": 160,
+        "elapsedGameDays": 3.9973611111081198,
+        "restarts": 4,
+        "automaticSaves": 18,
+        "population": 35,
+        "tradeDeliveries": 6,
+        "unverified": [
+          "real DOM",
+          "WebGL",
+          "touch",
+          "device performance"
+        ]
+      },
+      {
+        "epoch": 4,
+        "frames": 4800,
+        "syntheticWallSeconds": 160,
+        "elapsedGameDays": 3.9988879999999996,
+        "restarts": 4,
+        "automaticSaves": 18,
+        "population": 20,
+        "tradeDeliveries": 0,
+        "unverified": [
+          "real DOM",
+          "WebGL",
+          "touch",
+          "device performance"
+        ]
+      }
+    ]
+  },
+  "browser": {
+    "ai-results.json": {
+      "status": "PASS",
+      "results": [
+        {
+          "viewport": {
+            "width": 412,
+            "height": 870
+          },
+          "status": "PASS",
+          "distinctStations": true,
+          "modelsAtSimulationPositions": true,
+          "recoveryStopsProduction": true,
+          "sharedWaitingReason": true,
+          "bothMenus": true,
+          "taskFindsCrewAndBuilding": true,
+          "saveRestart": true,
+          "errors": []
+        },
+        {
+          "viewport": {
+            "width": 870,
+            "height": 412
+          },
+          "status": "PASS",
+          "distinctStations": true,
+          "modelsAtSimulationPositions": true,
+          "recoveryStopsProduction": true,
+          "sharedWaitingReason": true,
+          "bothMenus": true,
+          "taskFindsCrewAndBuilding": true,
+          "saveRestart": true,
+          "errors": []
+        }
+      ],
+      "limits": [
+        "Software WebGL; no physical Android touch, frame-time or battery measurement."
+      ]
+    },
+    "mobile-ui-results.json": {
+      "status": "PASS",
+      "results": [
+        {
+          "viewport": {
+            "width": 352,
+            "height": 768
+          },
+          "fullscreen": {
+            "active": true,
+            "standalone": true,
+            "app": {
+              "x": 0,
+              "y": 0,
+              "width": 352,
+              "height": 768
+            },
+            "viewport": {
+              "width": 352,
+              "height": 768
+            }
+          },
+          "inlineSections": true,
+          "liveRates": {
+            "production": 40,
+            "use": 16
+          },
+          "disclosuresSurviveRefresh": true,
+          "noHorizontalOverflow": true,
+          "reopenStartsAtTop": true,
+          "topCloseButton": true,
+          "safeInsetOnce": true,
+          "errors": []
+        },
+        {
+          "viewport": {
+            "width": 768,
+            "height": 352
+          },
+          "fullscreen": {
+            "active": true,
+            "standalone": true,
+            "app": {
+              "x": 0,
+              "y": 0,
+              "width": 768,
+              "height": 352
+            },
+            "viewport": {
+              "width": 768,
+              "height": 352
+            }
+          },
+          "inlineSections": true,
+          "liveRates": {
+            "production": 40,
+            "use": 16
+          },
+          "disclosuresSurviveRefresh": true,
+          "noHorizontalOverflow": true,
+          "reopenStartsAtTop": true,
+          "topCloseButton": true,
+          "safeInsetOnce": true,
+          "errors": []
+        },
+        {
+          "viewport": {
+            "width": 412,
+            "height": 870
+          },
+          "fullscreen": {
+            "active": true,
+            "standalone": true,
+            "app": {
+              "x": 0,
+              "y": 0,
+              "width": 412,
+              "height": 870
+            },
+            "viewport": {
+              "width": 412,
+              "height": 870
+            }
+          },
+          "inlineSections": true,
+          "liveRates": {
+            "production": 40,
+            "use": 16
+          },
+          "disclosuresSurviveRefresh": true,
+          "noHorizontalOverflow": true,
+          "reopenStartsAtTop": true,
+          "topCloseButton": true,
+          "safeInsetOnce": true,
+          "errors": []
+        }
+      ],
+      "serviceWorker": {
+        "realControllerChange": true,
+        "oneReload": true,
+        "savedBeforeReload": true,
+        "failedSavePreservesGame": true,
+        "retryPreservesGame": true
+      },
+      "limits": [
+        "Physical Android system bars and touch feel require device verification."
+      ]
+    },
+    "chromium-workspace.json": {
+      "status": "PASS",
+      "results": [
+        {
+          "viewport": {
+            "width": 412,
+            "height": 870
+          },
+          "status": "PASS",
+          "classicLayout": true,
+          "quietAndFull": true,
+          "sections": 8,
+          "helpOnce": true,
+          "pinning": true,
+          "locating": true,
+          "peopleLocations": true,
+          "pauseSemantics": true,
+          "offlineReload": true,
+          "epoka4": true,
+          "errors": []
+        },
+        {
+          "viewport": {
+            "width": 870,
+            "height": 412
+          },
+          "status": "PASS",
+          "classicLayout": true,
+          "quietAndFull": true,
+          "sections": 8,
+          "helpOnce": true,
+          "pinning": true,
+          "locating": true,
+          "peopleLocations": true,
+          "pauseSemantics": true,
+          "offlineReload": true,
+          "epoka4": true,
+          "errors": []
+        },
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 800
+          },
+          "status": "PASS",
+          "classicLayout": true,
+          "quietAndFull": true,
+          "sections": 8,
+          "helpOnce": true,
+          "pinning": true,
+          "locating": true,
+          "peopleLocations": true,
+          "pauseSemantics": true,
+          "offlineReload": true,
+          "epoka4": true,
+          "errors": []
+        }
+      ],
+      "unverified": [
+        "physical Android touch",
+        "phone performance",
+        "battery power"
+      ]
+    },
+    "chromium-lifecycle.json": {
+      "status": "PASS",
+      "results": [
+        {
+          "viewport": {
+            "width": 412,
+            "height": 870
+          },
+          "status": "PASS",
+          "hiddenSeconds": 16,
+          "visibility": "document visibility overridden in isolated QA page",
+          "nativeFreezeResume": true,
+          "foreground": {
+            "frames": 8,
+            "draws": 1661,
+            "queuedFrames": 1,
+            "intervals": 1,
+            "timeouts": 2,
+            "audio": [
+              "running"
+            ],
+            "day": 0.2711804166666667,
+            "stored": 22
+          },
+          "hidden": {
+            "frames": 8,
+            "draws": 1661,
+            "queuedFrames": 0,
+            "intervals": 0,
+            "timeouts": 0,
+            "audio": [
+              "suspended"
+            ],
+            "day": 0.2711804166666667,
+            "stored": 61
+          },
+          "afterHidden": {
+            "frames": 8,
+            "draws": 1661,
+            "queuedFrames": 0,
+            "intervals": 0,
+            "timeouts": 0,
+            "audio": [
+              "suspended"
+            ],
+            "day": 0.2711804166666667,
+            "stored": 61
+          },
+          "returned": {
+            "frames": 20,
+            "draws": 3373,
+            "queuedFrames": 1,
+            "intervals": 1,
+            "timeouts": 2,
+            "audio": [
+              "running"
+            ],
+            "day": 0.2711804166666667,
+            "stored": 61
+          },
+          "rapid": {
+            "frames": 21,
+            "draws": 3801,
+            "queuedFrames": 1,
+            "intervals": 1,
+            "timeouts": 2,
+            "audio": [
+              "running"
+            ],
+            "day": 0.2711804166666667,
+            "stored": 61
+          },
+          "saveSurvivesReload": true,
+          "errors": []
+        },
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 800
+          },
+          "status": "PASS",
+          "hiddenSeconds": 16,
+          "visibility": "document visibility overridden in isolated QA page",
+          "nativeFreezeResume": true,
+          "foreground": {
+            "frames": 6,
+            "draws": 389,
+            "queuedFrames": 1,
+            "intervals": 1,
+            "timeouts": 2,
+            "audio": [
+              "running"
+            ],
+            "day": 0.27,
+            "stored": 22
+          },
+          "hidden": {
+            "frames": 6,
+            "draws": 389,
+            "queuedFrames": 0,
+            "intervals": 0,
+            "timeouts": 0,
+            "audio": [
+              "suspended"
+            ],
+            "day": 0.27,
+            "stored": 61
+          },
+          "afterHidden": {
+            "frames": 6,
+            "draws": 389,
+            "queuedFrames": 0,
+            "intervals": 0,
+            "timeouts": 0,
+            "audio": [
+              "suspended"
+            ],
+            "day": 0.27,
+            "stored": 61
+          },
+          "returned": {
+            "frames": 7,
+            "draws": 848,
+            "queuedFrames": 1,
+            "intervals": 1,
+            "timeouts": 2,
+            "audio": [
+              "running"
+            ],
+            "day": 0.27,
+            "stored": 61
+          },
+          "rapid": {
+            "frames": 11,
+            "draws": 2648,
+            "queuedFrames": 1,
+            "intervals": 1,
+            "timeouts": 2,
+            "audio": [
+              "running"
+            ],
+            "day": 0.27,
+            "stored": 61
+          },
+          "saveSurvivesReload": true,
+          "errors": []
+        }
+      ],
+      "unverified": [
+        "physical Android lifecycle",
+        "battery discharge",
+        "GPU power",
+        "temperature",
+        "Android process eviction"
+      ]
+    }
+  },
+  "acceptance": {
+    "reservations": "Occupied positions are not assigned twice; another reachable side can be used. Illness, reassignment and closed positions interrupt work before accounting. Physical cargo survives blocked routes and restart.",
+    "activity": "Person card, workshop and production task share activity and the current blocking reason. Task opens the exact building and locates assigned people.",
+    "compatibility": "Full RC7 retained; both menu modes, Tasks/help, offline reload, fullscreen, measured rates, safe update and background suspension checked again."
+  },
+  "limits": [
+    "Two 1500-day E4 generation scenarios were not rerun; RC6 evidence is preserved and not counted as fresh RC8 results. E4 model/economy rules were not changed.",
+    "Legacy planning behavior intentionally changes at the managed worksites; RC6 legacy parity is not claimed for RC8.",
+    "Not a rewrite of all 15 remaining planner wrappers or all navigation. Managed positions cover smithy, carpentry workshop and field. Other work entrances, expedition exits and local collision avoidance remain queued.",
+    "Browser fixtures first encountered story dialogs after an artificial 15-day jump and a detached element screenshot during refresh. Fixture now uses the normal first workday, real dialog choices and viewport screenshots; save verification uses the serialized persistence boundary, because the hydrated live state legitimately contains undefined transient properties such as bld.proj; final browser assertions all passed.",
+    "Local Node 24 and Chromium 133 with software WebGL. Physical Android battery, temperature, FPS/touch and OS process eviction not measured; remote Node 18/24 CI not executed.",
+    "No external commit or push here. Final installer rehearsal uses --prepare-only; Termux publishes after local checks."
+  ]
+}

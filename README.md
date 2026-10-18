@@ -1,6 +1,16 @@
+# Przystań 4.0.0-rc.8
+
+Aktualna paczka: **Przystan_4.0.0_RC8_SI_TERMUX.zip**.
+
+[Wdrożenie](docs/WYDANIE_4.0.0_RC8.md) · [Audyt SI](docs/AUDYT_SI_RC8.md) · [Weryfikacja](docs/WERYFIKACJA_4.0.0_RC8.md).
+
+RC8 zawiera całe RC7: klasyczne menu, rozwijane sekcje, pełny ekran i bilans live. Dodaje stanowiska kuźni, pracowni i pola, przerywanie nieaktualnej pracy oraz wspólny opis wykonawców w osobie, budynku i Zadaniach.
+
+Poniżej archiwalna dokumentacja wcześniejszych wydań.
+
 # Przystań — 4.0.0-rc.7
 
-Aktualna paczka: **Przystan_4.0.0_RC7_UI_TERMUX.zip**.
+Paczka tego wydania: **Przystan_4.0.0_RC7_UI_TERMUX.zip**.
 
 [Wdrożenie i zmiany](docs/WYDANIE_4.0.0_RC7.md) · [Weryfikacja](docs/WERYFIKACJA_4.0.0_RC7.md).
 
@@ -10,7 +20,7 @@ Poniżej dokumentacja wcześniejszych wydań.
 
 # Przystań — 4.0.0-rc.6
 
-Aktualna paczka: **Przystan_4.0.0_RC6_HARDENING_TERMUX.zip**.
+Paczka tego wydania: **Przystan_4.0.0_RC6_HARDENING_TERMUX.zip**.
 
 [Wdrożenie](docs/WYDANIE_4.0.0_RC6.md) · [Audyt i poprawki](docs/AUDYT_HARDENING_RC6.md) · [Odbiór](docs/WERYFIKACJA_4.0.0_RC6.md) · [Dalszy plan](docs/PLAN_ROZWOJU_PO_RC6.md).
 
@@ -22,7 +32,7 @@ Poniżej dokumentacja wcześniejszych wydań.
 
 # Przystań — 4.0.0-rc.5
 
-Aktualna paczka: **Przystan_4.0.0_RC5_SI_TERMUX.zip**.
+Paczka tego wydania: **Przystan_4.0.0_RC5_SI_TERMUX.zip**.
 
 Opis zmian i komendy: [docs/WYDANIE_4.0.0_RC5.md](docs/WYDANIE_4.0.0_RC5.md).
 Raport odbioru: [docs/WERYFIKACJA_4.0.0_RC5.md](docs/WERYFIKACJA_4.0.0_RC5.md).

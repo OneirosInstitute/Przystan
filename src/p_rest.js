@@ -493,9 +493,26 @@ function countInRange(kind,i,j){const d=BD[kind];if(!d.r)return null;const c={x:
  else if(kind==='lesnik'){for(const q of nodeBy.tree){if(!q.gone&&q.amt<=0&&!(q.grow>0)&&Math.hypot(q.x-c.x,q.z-c.z)<=d.r)n++}}
  return n}
 function rangeLabel(kind,n){if(n===null)return'';if(kind==='mysliwy')return`zwierzyny w pobliżu: ${n}`;if(kind==='zagroda')return`dzikich kóz w pobliżu: ${n}`;if(kind==='lesnik')return`pniaków do obsadzenia: ${n}`;const nm={ruda:'złóż rudy',zbieracz:'krzewów, grzybów, zbóż, lnu i ziół',pomost:'łowisk',drwal:'drzew',kamien:'odkrywek kamienia',glinianka:'odsłonięć gliny'}[kind];return`w zasięgu ${nm}: ${n}`}
-function go(p,tile,after,tgt){if(!tile)return false;if(!walk[tile[1]*N+tile[0]]){tile=nearestWalk(tile[0],tile[1]);if(!tile)return false;}if(tgt?.kind&&['prod','work','build','care','field'].includes(after)){const taken=S.people.filter(q=>q!==p&&q.tgt===tgt&&['move','work'].includes(q.state)).map(q=>q.routeGoal||tileOf(q.x,q.z));const slot=[[0,0],[1,0],[0,1],[-1,0],[0,-1],[1,1],[-1,-1]].map(([x,z])=>[tile[0]+x,tile[1]+z]).find(([x,z])=>x>=0&&z>=0&&x<N&&z<N&&walk[z*N+x]&&!taken.some(([a,b])=>a===x&&b===z));if(slot)tile=slot;}const[sx,sy]=tileOf(p.x,p.z);const path=astar(sx,sy,tile[0],tile[1]);
- if(!path){if(tgt&&tgt.type)tgt.bad=S.t+40;p.blocked={reason:'Brak drogi do celu',since:p.blocked?.since??S.t,attempts:(p.blocked?.attempts||0)+1};return false}
- release(p);delete p.blocked;p.routeGoal=tile.slice();p.routeRevision=walkRevision;p.path=path.map(([i,j])=>({x:tcx(i)+(Math.random()-.5)*.35,z:tcx(j)+(Math.random()-.5)*.35}));p.after=after;p.tgt=tgt||null;p.state='move';if(!p.path.length){p.path=null;onArrive(p)}return true}
+function go(person,tile,after,target){
+ const managed=workSiteManaged(target,after);let route;
+ if(managed){
+  const station=workSiteRoute(person,target,tile);
+  if(!station.ok){person.blocked={code:station.code,reason:station.reason,buildingId:target.id,since:person.blocked?.since??S.t,attempts:(person.blocked?.attempts||0)+1};return false;}
+  tile=station.tile;route=station.path;
+ }else{
+  if(!tile)return false;
+  if(!walk[tile[1]*N+tile[0]]){tile=nearestWalk(tile[0],tile[1]);if(!tile)return false;}
+  if(target?.kind&&['prod','work','build','care','field'].includes(after)){
+   const taken=S.people.filter(peer=>peer!==person&&peer.tgt===target&&['move','work'].includes(peer.state)).map(peer=>peer.routeGoal||tileOf(peer.x,peer.z));
+   const slot=[[0,0],[1,0],[0,1],[-1,0],[0,-1],[1,1],[-1,-1]].map(([x,z])=>[tile[0]+x,tile[1]+z]).find(([x,z])=>x>=0&&z>=0&&x<N&&z<N&&walk[z*N+x]&&!taken.some(([a,b])=>a===x&&b===z));if(slot)tile=slot;
+  }
+  const start=tileOf(person.x,person.z);route=astar(start[0],start[1],tile[0],tile[1]);
+  if(!route){if(target?.type)target.bad=S.t+40;person.blocked={code:'route',reason:'Brak drogi do celu',since:person.blocked?.since??S.t,attempts:(person.blocked?.attempts||0)+1};return false;}
+ }
+ release(person);delete person.blocked;person.routeGoal=tile.slice();person.routeRevision=walkRevision;
+ person.path=route.map(([i,j])=>({x:tcx(i)+(managed?0:(Math.random()-.5)*.35),z:tcx(j)+(managed?0:(Math.random()-.5)*.35)}));person.after=after;person.tgt=target||null;person.state='move';
+ if(!person.path.length){person.path=null;onArrive(person);}return true;
+}
 function storeTile(p,food){const cands=[[camp.i,camp.j+1]];S.bld.forEach(b=>{const d=BD[b.kind];if(bDone(b)&&d.store&&(d.store==='all'||food)){const e=entryOf(b.kind,b.i,b.j);if(e)cands.push(e)}});
  const[pi,pj]=tileOf(p.x,p.z);let best=cands[0],bd=1e9;cands.forEach(c=>{const d=Math.hypot(c[0]-pi,c[1]-pj);if(d<bd&&astar(pi,pj,c[0],c[1])){bd=d;best=c}});return bd<1e9?nearestWalk(best[0],best[1]):null}
 function release(p){const target=p.tgt;if(target&&target.claim>0&&target.type)target.claim--;p.tgt=null;p.after=null;p.workKind=null;
@@ -541,10 +558,10 @@ function planJob(p){
   if(d.field){const e=entryOf(b.kind,b.i,b.j);const f=b.field||(b.field={st:'puste',g:0,fert:1,q:0,left:0});
    if(f.st==='puste'){if(f.rot===2){p.act='pole leży odłogiem (ugór)';if(typeof limChore==='function'&&limChore(p,'ugór'))return true;return false}if(!inSow()){p.act='pole czeka na siew';return false}if(S.res.ziarno<10){p.act='brak ziarna do siewu';return false}}
    if(f.st==='rosnie'&&f.q>=1){p.act='zboże rośnie';return false}
-   if(e&&go(p,e,'field',b)){p.act={puste:'sieje',rosnie:'pieli',dojrzale:'żnie zboże'}[f.st];return true}return false}
+   if((e||workSiteManaged(b,'field'))&&go(p,e,'field',b)){p.act={puste:'sieje',rosnie:'pieli',dojrzale:'żnie zboże'}[f.st];return true}return false}
   if(b.kind==='lesnik'){const c=bCenter(b);let best=null,bd=1e9;for(const n of nodeBy.tree){if(n.gone||n.amt>0||n.grow>0||n.claim>0||!revAt(n.i,n.j))continue;const dd=Math.hypot(n.x-c.x,n.z-c.z);if(dd<=rOf(b)&&dd<bd){bd=dd;best=n}}
    if(!best){p.act='nie ma gdzie sadzić';return false}const st=nearestWalk(best.i,best.j);if(st&&go(p,st,'plant',best)){best.claim++;p.act='sadzi drzewo';return true}return false}
-  if(d.prod){if(!productionReady(b)){p.act='brak zasobów lub warunków do produkcji';return false}const e=entryOf(b.kind,b.i,b.j);if(e&&go(p,e,'prod',b)){p.act={drewutnia:'rąbie opał',warsztat:'robi narzędzia',szwalnia:'szyje i tka',cegielnia:'wypala cegły',pracownia:'piłuje deski',mielerz:'pilnuje mielerza',kuznia:'kuje żelazo',zarna:'miele ziarno',piekarnia:'piecze chleb',serownia:'robi ser',garncarnia:'lepi garnki',kiszarnia:'kisi kapustę i grzyby'}[b.kind]||(typeof E2ACT!=='undefined'&&E2ACT[b.kind])||'pracuje';return true}return false}
+  if(d.prod){if(!productionReady(b)){p.act='brak zasobów lub warunków do produkcji';return false}const e=entryOf(b.kind,b.i,b.j);if((e||workSiteManaged(b,'prod'))&&go(p,e,'prod',b)){p.act={drewutnia:'rąbie opał',warsztat:'robi narzędzia',szwalnia:'szyje i tka',cegielnia:'wypala cegły',pracownia:'piłuje deski',mielerz:'pilnuje mielerza',kuznia:'kuje żelazo',zarna:'miele ziarno',piekarnia:'piecze chleb',serownia:'robi ser',garncarnia:'lepi garnki',kiszarnia:'kisi kapustę i grzyby'}[b.kind]||(typeof E2ACT!=='undefined'&&E2ACT[b.kind])||'pracuje';return true}return false}
   return false}
  if(p.job==='wyp'){const e=S.exps.find(x=>x.id===p.exp);if(!e){p.job='rob';p.exp=null;return false}if(go(p,e.exit,'away',null)){p.act='wyrusza na wyprawę';return true}p.state='away';return true}
  if(p.job==='zwiad'){const t=scoutTarget(p);if(!t){p.act='cała okolica odkryta';return false}if(go(p,t,'scout',null)){p.act='idzie w nieznane';return true}return false}
@@ -597,7 +614,7 @@ function stepPerson(p,dt){
   if(p.state!=='sleep'){if(p.carry)deposit(p);const t=homeSpot(p);if(t&&go(p,t,'sleep',null)){p.act='wraca do domu'}else{p.state='sleep'}}
   return}
  if(p.state==='sleep'){p.state='idle';p.wait=Math.random()*2}
- if(p.state==='idle'){p.wait-=dt;if(p.wait>0)return;if(!planJob(p)){p.wait=2.5;if(Math.random()<.3)wanderNear(p)}else if(isChild(p))p.wait=2+Math.random()*4;return}
+ if(p.state==='idle'){p.wait-=dt;if(p.wait>0)return;if(!planJob(p)){p.wait=2.5;if(!p.blocked&&Math.random()<.3)wanderNear(p)}else if(isChild(p))p.wait=2+Math.random()*4;return}
  if(p.state==='work'){const k=p.workKind;const e=eff(p);
   if(k==='work'){const n=p.tgt,b=bById(p.wb);if(!n||n.amt<1-1e-6||!b){release(p);p.state='idle';p.wait=.2;return}const d=BD[b.kind];const c=d.c;
    p.wt+=dt*e*craftEff(p,c)*bMul(b);gainXp(p,c,dt);const T={zbieracz:n.type==='ul'?9:5,pomost:8,drwal:7,kamien:9,glinianka:7,ruda:9}[b.kind];

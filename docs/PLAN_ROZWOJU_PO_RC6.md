@@ -35,3 +35,9 @@ Priorytetem są poprawne dojścia, przeszkody, zbocza, wejścia, kolejki do stan
 ## Zasady świata
 
 Domy z bali pozostają domami rodzinnymi i rozwijają zaplecze. Dom rodowy powstaje później, po rzeczywistej przeprowadzce rodziny do przysiółka. Folwarki mogą rozwijać winnicę i winiarnię, browar i karczmę, mięso i wędzarnie, hodowlę, hutnictwo i narzędzia, pola i młyn z piekarnią, tartak i wyroby drewniane oraz pasiekę. Różnorodność ma wynikać z miejsca, rodu i powiązań gospodarczych.
+
+## Checkpoint RC8
+
+Pierwszy przekrój etapów 2–3 jest wykonany: jedna zewnętrzna bramka priorytetów zamiast trzech nakładek, wspólny kontrakt bieżącej czynności, rezerwacje i dojście do kuźni, pracowni cieśli i pola. Pracownie mają wykonawców i lokalizacje w Zadaniach. Szczegóły i pozostałe ryzyka: `AUDYT_SI_RC8.md`.
+
+Następny zakres: pozostałe wejścia i transport, dojście do wyjścia wyprawy, bezpieczne wyjście z zabudowanego terenu, lekkie unikanie w drodze. Następnie widoczne dziedzińce, stanowiska i narzędzia oraz detale wyspy i codzienności. Nie oznaczamy całych etapów 2–7 jako ukończonych.

@@ -1,0 +1,16 @@
+✔ a fully occupied workshop waits instead of assigning its last station twice (1143.345318ms)
+✔ another side of a workshop remains usable when the preferred entrance is disconnected (1026.838731ms)
+✔ a distant or stale production pose earns no materials before reaching the workshop (991.438879ms)
+✔ a critically ill worker releases production before earning more work (1026.349767ms)
+✔ a changed job cannot complete an old workshop operation (1026.390615ms)
+✔ field work waits if its worker has lost access to every work position (1039.513733ms)
+✔ workers use distinct positions on all three managed worksites (3109.624296ms)
+✔ a blocked attempt keeps its existing cargo and does not teleport (1078.752359ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10590.286166

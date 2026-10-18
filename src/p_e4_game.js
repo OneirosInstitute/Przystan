@@ -50,7 +50,7 @@ function e4Daily(state){
  E4Population.daily(state);state.people.forEach(person=>{person.job=null;person.wb=null});curYd=yday();paintBase(curYd);e4Sync();save();
 }
 {const previousStep=step;step=function(dt){if(S?.epoch===4){E4Economy.advance(S,dt/DAY,e4Daily);return}previousStep(dt)}}
-{const previousPlanner=planJob;planJob=function(person){if(S?.e4Preparing&&!pendingDelivery(person)){person.state='idle';person.wait=1;person.act='czeka na Wiec Rodów';return false}return previousPlanner(person)}}
+// Priorytet przygotowania Wiecu jest w jednej bramce p_ai.js.
 {const previousStory=storyTick;storyTick=function(){if(S?.epoch===4)return;if(S?.e4Preparing&&e4Ready()){e4Start();return}previousStory()}}
 {const previousEvent=openEvent;openEvent=function(){if(S?.epoch!==4)return previousEvent.apply(this,arguments)}}
 {const previousValidate=validateSave;validateSave=function(state){return previousValidate(state)&&(state.epoch!==4||E4Domain.validate(state)||saveInvalid('e4: nieprawidłowe dane rodów, folwarków lub transportu'))}}

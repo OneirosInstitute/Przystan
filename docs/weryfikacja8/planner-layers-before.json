@@ -1,0 +1,87 @@
+[
+  {
+    "file": "p_gosp.js",
+    "line": 73,
+    "assignment": "{const _pj=planJob;planJob=function(p){if(p.haulB)haulEnd(p);{const[ti,tj]=tileOf(p.x,p.z);if(!walk[tj*N+ti]){const t=nearestWalk(ti,tj);if("
+  },
+  {
+    "file": "p_mapa.js",
+    "line": 40,
+    "assignment": "{const _pj=planJob;planJob0=_pj;planJob=function(p){"
+  },
+  {
+    "file": "p_zycie.js",
+    "line": 13,
+    "assignment": "{const _pj=planJob;planJob=function(p){"
+  },
+  {
+    "file": "p_rok.js",
+    "line": 97,
+    "assignment": "{const _pj=planJob;planJob=function(p){if(p.job==='wb')p.limC=false;return _pj(p)}}"
+  },
+  {
+    "file": "p_rok.js",
+    "line": 110,
+    "assignment": "{const _pj=planJob;planJob=function(p){if(S&&S.rush&&S.rush.until>S.day&&isWork()&&isWorker(p)&&(p.job==='rob'||p.job==='bud')&&!p.fireB){co"
+  },
+  {
+    "file": "p_ratunek.js",
+    "line": 18,
+    "assignment": "{const _pj=planJob;planJob=function(p){const r=_pj(p);if(r||!S||p.job!=='wb'||!isAdult(p)||!isWork()||p.fireB||restNow(p))return r;"
+  },
+  {
+    "file": "p_ratunek.js",
+    "line": 50,
+    "assignment": "{const _pj=planJob;planJob=function(p){"
+  },
+  {
+    "file": "p_woz.js",
+    "line": 33,
+    "assignment": "{const _pj=planJob;planJob=function(p){if(p.siteB&&p.after!=='siteDrop'){const s=bById(p.siteB);if(s)s.inTr=Math.max(0,(s.inTr||0)-(p.siteQ|"
+  },
+  {
+    "file": "p_zad.js",
+    "line": 165,
+    "assignment": "{const _pj=planJob;planJob=function(p){const r=_pj(p);if(r||!S||!isWorker(p)||p.fireB||restNow(p)||!isWork())return r;const j=p.job;"
+  },
+  {
+    "file": "p_rozb.js",
+    "line": 28,
+    "assignment": "{const _pj=planJob;planJob=function(p){const r=_pj(p);if(r&&p.tgt&&p.tgt.proj&&p.tgt.proj.t==='rozb'&&p.after==='build')p.act='rozbiera: '+B"
+  },
+  {
+    "file": "p_opow.js",
+    "line": 29,
+    "assignment": "{const _pj=planJob;planJob=function(p){if(p.trek&&S&&!p.fireB&&isWork()&&p.state!=='away'){if(nearTg(p,p.trek,2.5)){p.act='patrzy na wyspę z"
+  },
+  {
+    "file": "p_rola.js",
+    "line": 66,
+    "assignment": "{const _pj=planJob;planJob=function(p){const b=p.job==='wb'&&p.wb?bById(p.wb):null;if(b&&b.field&&bDone(b)&&b.field.st==='puste'&&rolaSown(b"
+  },
+  {
+    "file": "p_odkr.js",
+    "line": 74,
+    "assignment": "{const _pj=planJob;planJob=function(p){if(p.odkT!=null&&S&&!p.fireB&&isWork()&&p.state!=='away'&&isAdult(p)){const o=ODK[p.odkT];if(o){const"
+  },
+  {
+    "file": "p_odkr.js",
+    "line": 150,
+    "assignment": "{const _pj=planJob;planJob=function(p){if(p.job==='wb'&&S){const b=bById(p.wb);if(b&&b.kind==='odkrywka'&&bDone(b)){const o=odkVein(b);if(!o"
+  },
+  {
+    "file": "p_tasks.js",
+    "line": 27,
+    "assignment": "{const previousPlanner=planJob;planJob=function(person){"
+  },
+  {
+    "file": "p_supply.js",
+    "line": 48,
+    "assignment": "{const previousPlanner=planJob;planJob=function(person){"
+  },
+  {
+    "file": "p_e4_game.js",
+    "line": 53,
+    "assignment": "{const previousPlanner=planJob;planJob=function(person){if(S?.e4Preparing&&!pendingDelivery(person)){person.state='idle';person.wait=1;perso"
+  }
+]

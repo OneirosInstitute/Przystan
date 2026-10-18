@@ -1,0 +1,142 @@
+✖ a fully occupied workshop waits instead of assigning its last station twice (1188.251026ms)
+✖ another side of a workshop remains usable when the preferred entrance is disconnected (1131.176479ms)
+✖ a distant or stale production pose earns no materials before reaching the workshop (1041.949374ms)
+✖ a critically ill worker releases production before earning more work (1025.642707ms)
+✖ a changed job cannot complete an old workshop operation (1040.546652ms)
+✖ field work waits if its worker has lost access to every work position (1141.974037ms)
+✔ workers use distinct positions on all three managed worksites (3303.743864ms)
+✔ a blocked attempt keeps its existing cargo and does not teleport (1073.023058ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 2
+ℹ fail 6
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11100.772725
+
+✖ failing tests:
+
+test at tests/work-sites.test.mjs:12:1
+✖ a fully occupied workshop waits instead of assigning its last station twice (1188.251026ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/ai_rc8_20261018/source/Przystan_4.0.0_RC8_SI/tests/work-sites.test.mjs:14:42)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/work-sites.test.mjs:16:1
+✖ another side of a workshop remains usable when the preferred entrance is disconnected (1131.176479ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  false !== true
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/ai_rc8_20261018/source/Przystan_4.0.0_RC8_SI/tests/work-sites.test.mjs:18:9)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/work-sites.test.mjs:20:1
+✖ a distant or stale production pose earns no materials before reaching the workshop (1041.949374ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  97 !== 100
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/ai_rc8_20261018/source/Przystan_4.0.0_RC8_SI/tests/work-sites.test.mjs:22:9)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 97,
+    expected: 100,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/work-sites.test.mjs:24:1
+✖ a critically ill worker releases production before earning more work (1025.642707ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  2 !== 0
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/ai_rc8_20261018/source/Przystan_4.0.0_RC8_SI/tests/work-sites.test.mjs:26:9)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 2,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/work-sites.test.mjs:28:1
+✖ a changed job cannot complete an old workshop operation (1040.546652ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  2 !== 0
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/ai_rc8_20261018/source/Przystan_4.0.0_RC8_SI/tests/work-sites.test.mjs:30:9)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 2,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/work-sites.test.mjs:32:1
+✖ field work waits if its worker has lost access to every work position (1141.974037ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  24 !== 30
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/ai_rc8_20261018/source/Przystan_4.0.0_RC8_SI/tests/work-sites.test.mjs:34:9)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 24,
+    expected: 30,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

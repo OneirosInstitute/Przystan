@@ -1,0 +1,408 @@
+{
+  "go": [
+    {
+      "file": "src/p_gosp.js",
+      "line": 72
+    },
+    {
+      "file": "src/p_gosp.js",
+      "line": 77
+    },
+    {
+      "file": "src/p_hod.js",
+      "line": 15
+    },
+    {
+      "file": "src/p_hod.js",
+      "line": 30
+    },
+    {
+      "file": "src/p_mapa.js",
+      "line": 36
+    },
+    {
+      "file": "src/p_mapa.js",
+      "line": 164
+    },
+    {
+      "file": "src/p_odkr.js",
+      "line": 74
+    },
+    {
+      "file": "src/p_odkr.js",
+      "line": 77
+    },
+    {
+      "file": "src/p_odkr.js",
+      "line": 93
+    },
+    {
+      "file": "src/p_odkr.js",
+      "line": 94
+    },
+    {
+      "file": "src/p_odkr.js",
+      "line": 99
+    },
+    {
+      "file": "src/p_opow.js",
+      "line": 29
+    },
+    {
+      "file": "src/p_opow.js",
+      "line": 69
+    },
+    {
+      "file": "src/p_ratunek.js",
+      "line": 6
+    },
+    {
+      "file": "src/p_ratunek.js",
+      "line": 45
+    },
+    {
+      "file": "src/p_ratunek.js",
+      "line": 46
+    },
+    {
+      "file": "src/p_ratunek.js",
+      "line": 48
+    },
+    {
+      "file": "src/p_rest.js",
+      "line": 496
+    },
+    {
+      "file": "src/p_rest.js",
+      "line": 537
+    },
+    {
+      "file": "src/p_rest.js",
+      "line": 542
+    },
+    {
+      "file": "src/p_rest.js",
+      "line": 545
+    },
+    {
+      "file": "src/p_rest.js",
+      "line": 547
+    },
+    {
+      "file": "src/p_rest.js",
+      "line": 549
+    },
+    {
+      "file": "src/p_rest.js",
+      "line": 556
+    },
+    {
+      "file": "src/p_rest.js",
+      "line": 557
+    },
+    {
+      "file": "src/p_rest.js",
+      "line": 561
+    },
+    {
+      "file": "src/p_rest.js",
+      "line": 563
+    },
+    {
+      "file": "src/p_rest.js",
+      "line": 564
+    },
+    {
+      "file": "src/p_rest.js",
+      "line": 566
+    },
+    {
+      "file": "src/p_rest.js",
+      "line": 567
+    },
+    {
+      "file": "src/p_rest.js",
+      "line": 568
+    },
+    {
+      "file": "src/p_rest.js",
+      "line": 569
+    },
+    {
+      "file": "src/p_rest.js",
+      "line": 572
+    },
+    {
+      "file": "src/p_rest.js",
+      "line": 576
+    },
+    {
+      "file": "src/p_rest.js",
+      "line": 614
+    },
+    {
+      "file": "src/p_rest.js",
+      "line": 637
+    },
+    {
+      "file": "src/p_rok.js",
+      "line": 111
+    },
+    {
+      "file": "src/p_rola.js",
+      "line": 68
+    },
+    {
+      "file": "src/p_serce.js",
+      "line": 233
+    },
+    {
+      "file": "src/p_serce.js",
+      "line": 347
+    },
+    {
+      "file": "src/p_sluzba.js",
+      "line": 40
+    },
+    {
+      "file": "src/p_sluzba.js",
+      "line": 51
+    },
+    {
+      "file": "src/p_sluzba.js",
+      "line": 78
+    },
+    {
+      "file": "src/p_supply.js",
+      "line": 39
+    },
+    {
+      "file": "src/p_tasks.js",
+      "line": 7
+    },
+    {
+      "file": "src/p_tasks.js",
+      "line": 16
+    },
+    {
+      "file": "src/p_tasks.js",
+      "line": 22
+    },
+    {
+      "file": "src/p_zycie.js",
+      "line": 20
+    },
+    {
+      "file": "src/p_zycie.js",
+      "line": 21
+    },
+    {
+      "file": "src/p_zycie.js",
+      "line": 27
+    },
+    {
+      "file": "src/p_zycie.js",
+      "line": 43
+    },
+    {
+      "file": "src/p_zycie.js",
+      "line": 68
+    },
+    {
+      "file": "src/p_zycie.js",
+      "line": 69
+    },
+    {
+      "file": "src/p_zycie.js",
+      "line": 70
+    },
+    {
+      "file": "src/p_zycie.js",
+      "line": 86
+    },
+    {
+      "file": "src/p_zycie.js",
+      "line": 174
+    }
+  ],
+  "planJob": [
+    {
+      "file": "src/p_rest.js",
+      "line": 541
+    },
+    {
+      "file": "src/p_rest.js",
+      "line": 617
+    }
+  ],
+  "stepPerson": [
+    {
+      "file": "src/p_rest.js",
+      "line": 608
+    },
+    {
+      "file": "src/p_rest.js",
+      "line": 801
+    }
+  ],
+  "release": [
+    {
+      "file": "src/p_ai.js",
+      "line": 7
+    },
+    {
+      "file": "src/p_ai.js",
+      "line": 17
+    },
+    {
+      "file": "src/p_cisza.js",
+      "line": 249
+    },
+    {
+      "file": "src/p_e21.js",
+      "line": 41
+    },
+    {
+      "file": "src/p_e2d.js",
+      "line": 189
+    },
+    {
+      "file": "src/p_exp.js",
+      "line": 64
+    },
+    {
+      "file": "src/p_mapa.js",
+      "line": 58
+    },
+    {
+      "file": "src/p_mapa.js",
+      "line": 61
+    },
+    {
+      "file": "src/p_mapa.js",
+      "line": 152
+    },
+    {
+      "file": "src/p_misje.js",
+      "line": 30
+    },
+    {
+      "file": "src/p_misje.js",
+      "line": 47
+    },
+    {
+      "file": "src/p_rest.js",
+      "line": 512
+    },
+    {
+      "file": "src/p_rest.js",
+      "line": 518
+    },
+    {
+      "file": "src/p_rest.js",
+      "line": 597
+    },
+    {
+      "file": "src/p_rest.js",
+      "line": 613
+    },
+    {
+      "file": "src/p_rest.js",
+      "line": 619
+    },
+    {
+      "file": "src/p_rest.js",
+      "line": 621
+    },
+    {
+      "file": "src/p_rest.js",
+      "line": 646
+    },
+    {
+      "file": "src/p_rest.js",
+      "line": 664
+    },
+    {
+      "file": "src/p_rest.js",
+      "line": 679
+    },
+    {
+      "file": "src/p_rest.js",
+      "line": 684
+    },
+    {
+      "file": "src/p_rest.js",
+      "line": 698
+    },
+    {
+      "file": "src/p_rok.js",
+      "line": 75
+    },
+    {
+      "file": "src/p_supply.js",
+      "line": 50
+    },
+    {
+      "file": "src/p_tasks.js",
+      "line": 31
+    },
+    {
+      "file": "src/p_tasks.js",
+      "line": 35
+    },
+    {
+      "file": "src/p_v8.js",
+      "line": 34
+    },
+    {
+      "file": "src/p_v8.js",
+      "line": 152
+    },
+    {
+      "file": "src/p_zycie.js",
+      "line": 42
+    }
+  ],
+  "personActivity": [
+    {
+      "file": "src/p_ai.js",
+      "line": 22
+    },
+    {
+      "file": "src/p_ai.js",
+      "line": 43
+    },
+    {
+      "file": "src/p_ai.js",
+      "line": 50
+    },
+    {
+      "file": "src/p_ai.js",
+      "line": 55
+    },
+    {
+      "file": "src/p_people_motion.js",
+      "line": 35
+    }
+  ],
+  "workSiteRoute": [
+    {
+      "file": "src/p_rest.js",
+      "line": 499
+    },
+    {
+      "file": "src/p_worksites.js",
+      "line": 18
+    }
+  ],
+  "workSiteCheck": [
+    {
+      "file": "src/p_ai.js",
+      "line": 16
+    },
+    {
+      "file": "src/p_worksites.js",
+      "line": 32
+    }
+  ]
+}

@@ -1,0 +1,108 @@
+{
+  "status": "PASS",
+  "results": [
+    {
+      "viewport": {
+        "width": 352,
+        "height": 768
+      },
+      "fullscreen": {
+        "active": true,
+        "standalone": true,
+        "app": {
+          "x": 0,
+          "y": 0,
+          "width": 352,
+          "height": 768
+        },
+        "viewport": {
+          "width": 352,
+          "height": 768
+        }
+      },
+      "inlineSections": true,
+      "liveRates": {
+        "production": 40,
+        "use": 16
+      },
+      "disclosuresSurviveRefresh": true,
+      "noHorizontalOverflow": true,
+      "reopenStartsAtTop": true,
+      "topCloseButton": true,
+      "safeInsetOnce": true,
+      "errors": []
+    },
+    {
+      "viewport": {
+        "width": 768,
+        "height": 352
+      },
+      "fullscreen": {
+        "active": true,
+        "standalone": true,
+        "app": {
+          "x": 0,
+          "y": 0,
+          "width": 768,
+          "height": 352
+        },
+        "viewport": {
+          "width": 768,
+          "height": 352
+        }
+      },
+      "inlineSections": true,
+      "liveRates": {
+        "production": 40,
+        "use": 16
+      },
+      "disclosuresSurviveRefresh": true,
+      "noHorizontalOverflow": true,
+      "reopenStartsAtTop": true,
+      "topCloseButton": true,
+      "safeInsetOnce": true,
+      "errors": []
+    },
+    {
+      "viewport": {
+        "width": 412,
+        "height": 870
+      },
+      "fullscreen": {
+        "active": true,
+        "standalone": true,
+        "app": {
+          "x": 0,
+          "y": 0,
+          "width": 412,
+          "height": 870
+        },
+        "viewport": {
+          "width": 412,
+          "height": 870
+        }
+      },
+      "inlineSections": true,
+      "liveRates": {
+        "production": 40,
+        "use": 16
+      },
+      "disclosuresSurviveRefresh": true,
+      "noHorizontalOverflow": true,
+      "reopenStartsAtTop": true,
+      "topCloseButton": true,
+      "safeInsetOnce": true,
+      "errors": []
+    }
+  ],
+  "serviceWorker": {
+    "realControllerChange": true,
+    "oneReload": true,
+    "savedBeforeReload": true,
+    "failedSavePreservesGame": true,
+    "retryPreservesGame": true
+  },
+  "limits": [
+    "Physical Android system bars and touch feel require device verification."
+  ]
+}
