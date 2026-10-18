@@ -1,0 +1,750 @@
+Integralność paczki: PASS (370 plików)
+Kontrola repozytorium: PASS
+From https://github.com/OneirosInstitute/Przystan
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+Kontrola repozytorium: PASS
+Integralność paczki: PASS (370 plików)
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> przystan@4.0.0-rc.9 build
+> node build.js
+
+Zbudowano dist/ (wersja c0609e5291, 1435 kB index.html)
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> przystan@4.0.0-rc.9 test:install
+> node tools/check-build.cjs && node tools/run-tests-serial.cjs --install
+
+Compiled scripts: syntax PASS
+TEST PLAN: 41 suites, 2 worker(s), install
+TEST SUITE: ai-contract.test.mjs
+TEST SUITE: ai-life.test.mjs
+[ai-contract.test.mjs] ✔ one waiting cause is shared by person, workshop and production task (1511.255588ms)
+[ai-contract.test.mjs] ✔ workshop task navigation selects the exact building among duplicates (1586.597102ms)
+[ai-contract.test.mjs] ✔ recovery has priority over emergency field work and village routines (1686.257299ms)
+[ai-contract.test.mjs] ✔ cargo delivery remains first during recovery and preparations for the next epoch (1481.893573ms)
+[ai-contract.test.mjs] ✔ death releases a station without an orphan reservation (1392.023694ms)
+[ai-contract.test.mjs] ✔ restart clears transient positions and replans without manufacturing goods (1386.181712ms)
+[ai-contract.test.mjs] ✔ urgent harvest helpers can earn real work at a reached field station (1595.763537ms)
+[ai-contract.test.mjs] ✔ epoch IV rest actions retain their own phase instead of appearing as production (1444.451412ms)
+[ai-contract.test.mjs] ℹ tests 8
+[ai-contract.test.mjs] ℹ suites 0
+[ai-contract.test.mjs] ℹ pass 8
+[ai-contract.test.mjs] ℹ fail 0
+[ai-contract.test.mjs] ℹ cancelled 0
+[ai-contract.test.mjs] ℹ skipped 0
+[ai-contract.test.mjs] ℹ todo 0
+[ai-contract.test.mjs] ℹ duration_ms 12263.246987
+TEST SUITE PASS: ai-contract.test.mjs (1/41)
+TEST SUITE: ai-movement.test.mjs
+[ai-movement.test.mjs] ✔ a new construction invalidates a live route before entering its footprint (1664.495858ms)
+[ai-movement.test.mjs] ✔ a disconnected meal and evening do not earn attendance or preserves (1486.92666ms)
+[ai-movement.test.mjs] ✔ completed meal requires time and consumes real food without making new stock (1324.974899ms)
+[ai-movement.test.mjs] ✔ a distant sleeping master cannot teach; a present working master can (1223.652037ms)
+[ai-movement.test.mjs] ℹ tests 4
+[ai-movement.test.mjs] ℹ suites 0
+[ai-movement.test.mjs] ℹ pass 4
+[ai-movement.test.mjs] ℹ fail 0
+[ai-movement.test.mjs] ℹ cancelled 0
+[ai-movement.test.mjs] ℹ skipped 0
+[ai-movement.test.mjs] ℹ todo 0
+[ai-movement.test.mjs] ℹ duration_ms 5886.329329
+TEST SUITE PASS: ai-movement.test.mjs (2/41)
+TEST SUITE: ai-policy.test.mjs
+[ai-policy.test.mjs] ✔ a configured target replaces the recipe default (1374.427025ms)
+[ai-policy.test.mjs] ✔ all grain processors expose shortages while protecting seed (1615.495382ms)
+[ai-policy.test.mjs] ✔ winter and damaged workshops give an explicit non-shortage blocker (1571.992649ms)
+[ai-policy.test.mjs] ℹ tests 3
+[ai-policy.test.mjs] ℹ suites 0
+[ai-policy.test.mjs] ℹ pass 3
+[ai-policy.test.mjs] ℹ fail 0
+[ai-policy.test.mjs] ℹ cancelled 0
+[ai-policy.test.mjs] ℹ skipped 0
+[ai-policy.test.mjs] ℹ todo 0
+[ai-policy.test.mjs] ℹ duration_ms 4759.60205
+TEST SUITE PASS: ai-policy.test.mjs (3/41)
+TEST SUITE: ai-specialties.test.mjs
+[ai-specialties.test.mjs] {"scenario":"11-town-specialties","days":200,"resupply":0,"results":[{"specialty":"rolniczy","product":"chleb","quantity":768,"living":30},{"specialty":"winiarski","product":"wino","quantity":64,"living":30},{"specialty":"browarniczy","product":"piwo","quantity":156,"living":30},{"specialty":"miesny","product":"wedliny","quantity":32,"living":29},{"specialty":"hodowlany","product":"ser","quantity":70,"living":30},{"specialty":"hutniczy","product":"narz","quantity":74,"living":30},{"specialty":"drzewny","product":"wyroby_drewniane","quantity":112,"living":31},{"specialty":"tkacki","product":"odziez","quantity":60,"living":33},{"specialty":"garncarski","product":"naczynia","quantity":60,"living":30},{"specialty":"sadowniczy","product":"jablka","quantity":577.17,"living":32},{"specialty":"zielarski","product":"leki","quantity":70,"living":33}]}
+[ai-life.test.mjs] {"scenario":"large-farm-commute","workers":200,"fields":200,"harvested":196}
+[ai-specialties.test.mjs] ✔ all eleven specialties bootstrap their main product from settlement supplies without resupply (16688.548016ms)
+[ai-specialties.test.mjs] ✔ grain reserves, exhausted ore and stone-tool substitution have explicit outcomes (1510.648931ms)
+[ai-specialties.test.mjs] ℹ tests 2
+[ai-specialties.test.mjs] ℹ suites 0
+[ai-specialties.test.mjs] ℹ pass 2
+[ai-specialties.test.mjs] ℹ fail 0
+[ai-specialties.test.mjs] ℹ cancelled 0
+[ai-specialties.test.mjs] ℹ skipped 0
+[ai-specialties.test.mjs] ℹ todo 0
+[ai-specialties.test.mjs] ℹ duration_ms 18442.800689
+TEST SUITE PASS: ai-specialties.test.mjs (4/41)
+TEST SUITE: autosave.test.mjs
+[ai-life.test.mjs] ✔ the map cannot move Epoka IV people and pause preserves model positions (5392.716075ms)
+[ai-life.test.mjs] ✔ an unreachable Epoka IV workplace earns no work or production (1631.917335ms)
+[ai-life.test.mjs] ✔ recovery reconciles legacy hunger, fever, injury and warmth (4688.793419ms)
+[ai-life.test.mjs] ✔ autonomy counts owned carts and does not consume materials for a seventy-first cart (2024.115782ms)
+[ai-life.test.mjs] ✔ mastery produces more per hour while conserving source and hours (1844.216826ms)
+[ai-life.test.mjs] ✔ household goods are consumed with finite stocks and measurable household effects (1769.049089ms)
+[ai-life.test.mjs] ✔ visual stage updates without reloading and joints remain part of the same identity (1764.863828ms)
+[ai-life.test.mjs] ✔ gait advances with distance; pausing freezes the pose (1745.450077ms)
+[ai-life.test.mjs] ✔ the action route and phase survive a real save and restart without moving during rendering (8245.341051ms)
+[ai-life.test.mjs] ✔ a scheduled lesson requires an available teacher and actual arrival (1735.017988ms)
+[ai-life.test.mjs] ✔ recorded hours cannot be reassigned from mining to another production chain (1652.002071ms)
+[ai-life.test.mjs] ✔ processing reserves protect milk when other food is sufficient and release it during hunger (1627.784584ms)
+[ai-life.test.mjs] ✔ marriage migration reserves housing and food and cannot empty a working community (1521.174046ms)
+[ai-life.test.mjs] ✔ a fully tended cereal crop matures in six growing days despite clock rounding (1709.425873ms)
+[ai-life.test.mjs] ✔ a large farm keeps its fields within a real working day instead of losing harvests to commuting (3212.145629ms)
+[ai-life.test.mjs] ✔ autonomy expands housing only after completed grain fields and eight days of edible food (1493.624568ms)
+[ai-life.test.mjs] ℹ tests 16
+[ai-life.test.mjs] ℹ suites 0
+[ai-life.test.mjs] ℹ pass 16
+[ai-life.test.mjs] ℹ fail 0
+[ai-life.test.mjs] ℹ cancelled 0
+[ai-life.test.mjs] ℹ skipped 0
+[ai-life.test.mjs] ℹ todo 0
+[ai-life.test.mjs] ℹ duration_ms 42242.651395
+TEST SUITE PASS: ai-life.test.mjs (5/41)
+TEST SUITE: build-deploy.test.mjs
+[build-deploy.test.mjs] ✔ RC9 deployment targets the verified RC8 checkpoint in every release guard (8.612778ms)
+[build-deploy.test.mjs] ✔ package integrity detects missing, changed and out-of-root files (8.244671ms)
+[build-deploy.test.mjs] ✔ deployment preflight checks identity, branch, base and user changes with read-only git calls (0.99263ms)
+[build-deploy.test.mjs] ✔ asset-only changes invalidate the PWA version; UI viewport permits zoom (251.396675ms)
+[build-deploy.test.mjs] ℹ tests 4
+[build-deploy.test.mjs] ℹ suites 0
+[build-deploy.test.mjs] ℹ pass 4
+[build-deploy.test.mjs] ℹ fail 0
+[build-deploy.test.mjs] ℹ cancelled 0
+[build-deploy.test.mjs] ℹ skipped 0
+[build-deploy.test.mjs] ℹ todo 0
+[build-deploy.test.mjs] ℹ duration_ms 360.095726
+TEST SUITE PASS: build-deploy.test.mjs (6/41)
+TEST SUITE: building-missions.test.mjs
+[building-missions.test.mjs] ✔ building missions require a completed building and an assigned adult (1231.07371ms)
+[building-missions.test.mjs] ✔ building mission cannot be dispatched twice without consuming more food (1218.874178ms)
+[building-missions.test.mjs] ✔ mission payload survives validated save serialization (1118.923791ms)
+[building-missions.test.mjs] ✔ returning explorer transfers one real wild goat without exceeding the pen and resumes work (1246.078263ms)
+[building-missions.test.mjs] ℹ tests 4
+[building-missions.test.mjs] ℹ suites 0
+[building-missions.test.mjs] ℹ pass 4
+[building-missions.test.mjs] ℹ fail 0
+[building-missions.test.mjs] ℹ cancelled 0
+[building-missions.test.mjs] ℹ skipped 0
+[building-missions.test.mjs] ℹ todo 0
+[building-missions.test.mjs] ℹ duration_ms 4944.810148
+TEST SUITE PASS: building-missions.test.mjs (7/41)
+TEST SUITE: daily-pipeline.test.mjs
+[daily-pipeline.test.mjs] ✔ daily phases retain their existing order and capture fuel before the core (1661.730565ms)
+[daily-pipeline.test.mjs] ✔ the daily checkpoint includes every completed daily phase (1632.605942ms)
+[daily-pipeline.test.mjs] ✔ core failure restores temporary spoilage settings and does not save a partial day (1652.838446ms)
+[daily-pipeline.test.mjs] ✔ a failed optional daily phase is reported and later phases still run (1469.987169ms)
+[daily-pipeline.test.mjs] ℹ tests 4
+[daily-pipeline.test.mjs] ℹ suites 0
+[daily-pipeline.test.mjs] ℹ pass 4
+[daily-pipeline.test.mjs] ℹ fail 0
+[daily-pipeline.test.mjs] ℹ cancelled 0
+[daily-pipeline.test.mjs] ℹ skipped 0
+[daily-pipeline.test.mjs] ℹ todo 0
+[daily-pipeline.test.mjs] ℹ duration_ms 6599.751254
+TEST SUITE PASS: daily-pipeline.test.mjs (8/41)
+TEST SUITE: deploy-runner.test.mjs
+[deploy-runner.test.mjs] ✔ deployment runner validates options, resource limits and complete successful reports (1.877098ms)
+[deploy-runner.test.mjs] ✔ public install CLI runs every independent suite once with at most two overlapping processes (2809.491174ms)
+[deploy-runner.test.mjs] ✔ a red suite cancels active work and prevents the next suite and a green gate (814.386766ms)
+[deploy-runner.test.mjs] ✔ timeout terminates the test process group including a resource-writing descendant (2462.429953ms)
+[deploy-runner.test.mjs] ✔ test discovery rejects empty plans and symlinks before starting a child (5.645265ms)
+[deploy-runner.test.mjs] ✔ install mode preserves the legacy migration test and full mode retains both extended scenarios (553.449433ms)
+[deploy-runner.test.mjs] ℹ tests 6
+[deploy-runner.test.mjs] ℹ suites 0
+[deploy-runner.test.mjs] ℹ pass 6
+[deploy-runner.test.mjs] ℹ fail 0
+[deploy-runner.test.mjs] ℹ cancelled 0
+[deploy-runner.test.mjs] ℹ skipped 0
+[deploy-runner.test.mjs] ℹ todo 0
+[deploy-runner.test.mjs] ℹ duration_ms 6743.114812
+TEST SUITE PASS: deploy-runner.test.mjs (9/41)
+TEST SUITE: e4-domain.test.mjs
+[autosave.test.mjs] ✔ starting a new settlement immediately persists the completed boot state (1638.196313ms)
+[autosave.test.mjs] ✔ real-time autosave persists paused play within 15 seconds and survives restart (2984.792909ms)
+[autosave.test.mjs] ✔ water hauling is saved by the timer, resumed after restart and delivered exactly once (4721.402259ms)
+[autosave.test.mjs] ✔ background and page-exit callbacks persist the current state without manual save (5083.371171ms)
+[autosave.test.mjs] ✔ autosave preserves a good snapshot on storage error and retries successfully (2023.363089ms)
+[autosave.test.mjs] ✔ automatic triggers never overwrite an unreadable existing save (1849.644798ms)
+[autosave.test.mjs] ✔ water exception accepts only the real zero-quantity chore marker (1623.681618ms)
+[autosave.test.mjs] ✔ manual save reports success only after storage accepts the snapshot (1702.936345ms)
+[autosave.test.mjs] ✔ a water carrier retains the trip overnight and finishes after reassignment (1815.854637ms)
+[autosave.test.mjs] ℹ tests 9
+[autosave.test.mjs] ℹ suites 0
+[autosave.test.mjs] ℹ pass 9
+[autosave.test.mjs] ℹ fail 0
+[autosave.test.mjs] ℹ cancelled 0
+[autosave.test.mjs] ℹ skipped 0
+[autosave.test.mjs] ℹ todo 0
+[autosave.test.mjs] ℹ duration_ms 23623.692031
+TEST SUITE PASS: autosave.test.mjs (10/41)
+TEST SUITE: e4-economy.test.mjs
+[e4-domain.test.mjs] ✔ E4 migration retains living identities, kinship, possessions and all ordinary homes (1620.736503ms)
+[e4-domain.test.mjs] ✔ legacy hamlet residents become persistent people with unknown history explicitly marked (1633.138193ms)
+[e4-domain.test.mjs] ✔ all people have exactly one household, clan and settlement; duplicate or orphan references fail validation (1681.05862ms)
+[e4-domain.test.mjs] ✔ repeated migration and save reload preserve one balance and the same identifiers (1793.63989ms)
+[e4-domain.test.mjs] ℹ tests 4
+[e4-domain.test.mjs] ℹ suites 0
+[e4-domain.test.mjs] ℹ pass 4
+[e4-domain.test.mjs] ℹ fail 0
+[e4-domain.test.mjs] ℹ cancelled 0
+[e4-domain.test.mjs] ℹ skipped 0
+[e4-domain.test.mjs] ℹ todo 0
+[e4-domain.test.mjs] ℹ duration_ms 6917.38443
+TEST SUITE PASS: e4-domain.test.mjs (11/41)
+TEST SUITE: e4-integration.test.mjs
+[e4-economy.test.mjs] ✔ one shipment moves real stock and is delivered once after a save and reload (2394.788223ms)
+[e4-economy.test.mjs] ✔ failed transport contracts do not debit the source or allocate workers (1938.691498ms)
+[e4-economy.test.mjs] ✔ founding physically moves the same family, constructs an ancestral home and preserves old town houses (2144.816345ms)
+[e4-economy.test.mjs] ✔ transport and construction have the same result under different clock subdivisions (1993.062909ms)
+[e4-economy.test.mjs] ✔ wine uses grapes, a barrel, worker time and fermentation; restart cannot duplicate the batch (1955.13349ms)
+[e4-economy.test.mjs] ✔ a field consumes seed, requires care, grows and produces a finite harvest (1835.562841ms)
+[e4-economy.test.mjs] ✔ processing without inputs or workers cannot create goods (1687.408955ms)
+[e4-economy.test.mjs] ✔ every recipe consumes its inputs and produces one delayed result (2181.05841ms)
+[e4-economy.test.mjs] ✔ livestock has identities, wild capture, reproduction and irreversible slaughter (5153.083574ms)
+[e4-economy.test.mjs] ✔ nature is shared by region and generations advance without replacing residents (1444.874857ms)
+[e4-economy.test.mjs] ✔ full destination rejects transport and full store delays harvesting without losing crops (1594.644972ms)
+[e4-economy.test.mjs] ✔ a vineyard requires a successful trial, matures slowly and feeds actual wine production (1894.520324ms)
+[e4-economy.test.mjs] ℹ tests 12
+[e4-economy.test.mjs] ℹ suites 0
+[e4-economy.test.mjs] ℹ pass 12
+[e4-economy.test.mjs] ℹ fail 0
+[e4-economy.test.mjs] ℹ cancelled 0
+[e4-economy.test.mjs] ℹ skipped 0
+[e4-economy.test.mjs] ℹ todo 0
+[e4-economy.test.mjs] ℹ duration_ms 26481.500427
+TEST SUITE PASS: e4-economy.test.mjs (12/41)
+TEST SUITE: e4-population.test.mjs
+[e4-population.test.mjs] ✔ legacy twins survive migration even when the old save has no surviving father identity (1873.957068ms)
+[e4-population.test.mjs] ℹ tests 1
+[e4-population.test.mjs] ℹ suites 0
+[e4-population.test.mjs] ℹ pass 1
+[e4-population.test.mjs] ℹ fail 0
+[e4-population.test.mjs] ℹ cancelled 0
+[e4-population.test.mjs] ℹ skipped 0
+[e4-population.test.mjs] ℹ todo 0
+[e4-population.test.mjs] ℹ duration_ms 2042.887642
+TEST SUITE PASS: e4-population.test.mjs (13/41)
+TEST SUITE: e4-world.test.mjs
+[e4-world.test.mjs] ✔ E4 world has four times the map area, stable terrain and distinct functional regions (10.414089ms)
+[e4-world.test.mjs] ✔ E4 core preserves old inhabited land and the landing bay remains open (2.772832ms)
+[e4-world.test.mjs] ✔ roads follow land, survive world serialization and do not cut through sea (7.55666ms)
+[e4-world.test.mjs] ✔ world rejects invalid imported dimensions and oversized or nonfinite core samples (0.61751ms)
+[e4-world.test.mjs] ℹ tests 4
+[e4-world.test.mjs] ℹ suites 0
+[e4-world.test.mjs] ℹ pass 4
+[e4-world.test.mjs] ℹ fail 0
+[e4-world.test.mjs] ℹ cancelled 0
+[e4-world.test.mjs] ℹ skipped 0
+[e4-world.test.mjs] ℹ todo 0
+[e4-world.test.mjs] ℹ duration_ms 126.479703
+TEST SUITE PASS: e4-world.test.mjs (14/41)
+TEST SUITE: flow-integration.test.mjs
+[e4-integration.test.mjs] ✔ Epoka IV unlocks after III, retains the settlement and saves through the real game decoder (15286.594758ms)
+[e4-integration.test.mjs] ✔ all estate buildings have working 3D models and every Epoka IV panel renders (4574.582157ms)
+[e4-integration.test.mjs] ✔ migration completes paid legacy work and carts once and preserves the remaining ripe harvest (7396.612937ms)
+[e4-integration.test.mjs] ℹ tests 3
+[e4-integration.test.mjs] ℹ suites 0
+[e4-integration.test.mjs] ℹ pass 3
+[e4-integration.test.mjs] ℹ fail 0
+[e4-integration.test.mjs] ℹ cancelled 0
+[e4-integration.test.mjs] ℹ skipped 0
+[e4-integration.test.mjs] ℹ todo 0
+[e4-integration.test.mjs] ℹ duration_ms 27517.44362
+TEST SUITE PASS: e4-integration.test.mjs (15/41)
+TEST SUITE: lifecycle.test.mjs
+[flow-integration.test.mjs] ✔ real E4 deliveries do not inflate production at either warehouse (1890.567484ms)
+[flow-integration.test.mjs] ✔ observation preserves every gameplay result across an E4 simulation (1601.851412ms)
+[flow-integration.test.mjs] ✔ actual legacy gathering, wreck recovery and pantry transfers have distinct accounting (1465.611024ms)
+[flow-integration.test.mjs] ℹ tests 3
+[flow-integration.test.mjs] ℹ suites 0
+[flow-integration.test.mjs] ℹ pass 3
+[flow-integration.test.mjs] ℹ fail 0
+[flow-integration.test.mjs] ℹ cancelled 0
+[flow-integration.test.mjs] ℹ skipped 0
+[flow-integration.test.mjs] ℹ todo 0
+[flow-integration.test.mjs] ℹ duration_ms 5148.139731
+TEST SUITE PASS: flow-integration.test.mjs (16/41)
+TEST SUITE: mechanics.test.mjs
+[lifecycle.test.mjs] ✔ hiding stops the render scheduler, autosave timer and simulation while retaining the exit save (1961.97643ms)
+[lifecycle.test.mjs] ✔ pagehide and freeze stop independently; returning starts exactly one loop without catching up time (3785.4564ms)
+[lifecycle.test.mjs] ✔ a hidden page cannot be restarted by pageshow/resume until it becomes visible (1649.789235ms)
+[lifecycle.test.mjs] ✔ delayed story retries sleep in the background and continue after return (1725.144318ms)
+[lifecycle.test.mjs] ✔ sound follows lifecycle even if a suspend finishes after the app has returned (1818.923916ms)
+[lifecycle.test.mjs] ✔ a hidden initial load does not schedule frames, timers, audio or render an intro snapshot (1316.879524ms)
+[lifecycle.test.mjs] ✔ one successful exit save covers visibility/pagehide/freeze; a failed exit save can retry (1686.760322ms)
+[lifecycle.test.mjs] ✔ hiding aborts an outstanding weekly request and prevents new background requests (1877.441596ms)
+[lifecycle.test.mjs] ℹ tests 8
+[lifecycle.test.mjs] ℹ suites 0
+[lifecycle.test.mjs] ℹ pass 8
+[lifecycle.test.mjs] ℹ fail 0
+[lifecycle.test.mjs] ℹ cancelled 0
+[lifecycle.test.mjs] ℹ skipped 0
+[lifecycle.test.mjs] ℹ todo 0
+[lifecycle.test.mjs] ℹ duration_ms 15994.103783
+TEST SUITE PASS: lifecycle.test.mjs (17/41)
+TEST SUITE: menu-workspace.test.mjs
+[mechanics.test.mjs] ✔ reassigning builders releases reserved slots, including travel (1731.542087ms)
+[mechanics.test.mjs] ✔ a saved delivery reaches its warehouse along a path after the workday ends (1156.566925ms)
+[mechanics.test.mjs] ✔ midnight preserves material delivery and reserves it once after restart (1055.0844ms)
+[mechanics.test.mjs] ✔ full storage conserves deliveries and represents excess consistently (1152.621592ms)
+[mechanics.test.mjs] ✔ ration priorities redistribute exactly the existing food equivalent (1315.666833ms)
+[mechanics.test.mjs] ✔ unfeasible workshop helps without repeatedly planning production (1230.669818ms)
+[mechanics.test.mjs] ✔ food emergency policy reaches the last planner and releases active builders (1398.584502ms)
+[mechanics.test.mjs] ✔ unreachable and night deliveries retain ownership instead of teleporting (1167.388957ms)
+[mechanics.test.mjs] ✔ feast consumes exactly 60 and insufficient food gives no feast reward (1331.164121ms)
+[mechanics.test.mjs] ✔ forgotten technology cannot satisfy a new prerequisite (1160.817133ms)
+[mechanics.test.mjs] ✔ led goat survives restart, full pen and removal of its destination (1494.07206ms)
+[mechanics.test.mjs] ℹ tests 11
+[mechanics.test.mjs] ℹ suites 0
+[mechanics.test.mjs] ℹ pass 11
+[mechanics.test.mjs] ℹ fail 0
+[mechanics.test.mjs] ℹ cancelled 0
+[mechanics.test.mjs] ℹ skipped 0
+[mechanics.test.mjs] ℹ todo 0
+[mechanics.test.mjs] ℹ duration_ms 14394.510876
+TEST SUITE PASS: mechanics.test.mjs (18/41)
+TEST SUITE: mobile-ui.test.mjs
+[mobile-ui.test.mjs] ✔ touch launch requests immersive fullscreen even in an installed standalone app (1854.420929ms)
+[mobile-ui.test.mjs] ✔ game options expand in the current panel and expose version and fullscreen controls (1698.002395ms)
+[mobile-ui.test.mjs] ✔ stock views retain separate live daily production, use and balance columns (1775.492555ms)
+[mobile-ui.test.mjs] ✔ live measurements survive a real save and restore without changing resources (2238.748859ms)
+[mobile-ui.test.mjs] ✔ service worker updates checkpoint before reload and preserve a failed save (3465.268381ms)
+[mobile-ui.test.mjs] ✔ first worker activation does not reload and hidden updates wait for visibility (1782.34503ms)
+[mobile-ui.test.mjs] ℹ tests 6
+[mobile-ui.test.mjs] ℹ suites 0
+[mobile-ui.test.mjs] ℹ pass 6
+[mobile-ui.test.mjs] ℹ fail 0
+[mobile-ui.test.mjs] ℹ cancelled 0
+[mobile-ui.test.mjs] ℹ skipped 0
+[mobile-ui.test.mjs] ℹ todo 0
+[mobile-ui.test.mjs] ℹ duration_ms 12994.560149
+TEST SUITE PASS: mobile-ui.test.mjs (19/41)
+TEST SUITE: navigation-contract.test.mjs
+[menu-workspace.test.mjs] ✔ classic navigation retains the original sections and adds Tasks in both modes (1729.023843ms)
+[menu-workspace.test.mjs] ✔ classic Chronicle retains save and mode controls (1932.377436ms)
+[menu-workspace.test.mjs] ✔ goals use current act predicates and progress instead of the stale legacy checklist (1554.408319ms)
+[menu-workspace.test.mjs] ✔ pinning produces an actionable map tracker and survives save/reload (2455.220124ms)
+[menu-workspace.test.mjs] ✔ production blockers appear as tasks linked to real assigned suppliers and building (1708.219598ms)
+[menu-workspace.test.mjs] ✔ classic views render in Epoka IV and preserve production and transport controls (4978.261447ms)
+[menu-workspace.test.mjs] ✔ battery and photo controls never write an invalid simulation speed or break saving (1708.134716ms)
+[menu-workspace.test.mjs] ℹ tests 7
+[menu-workspace.test.mjs] ℹ suites 0
+[menu-workspace.test.mjs] ℹ pass 7
+[menu-workspace.test.mjs] ℹ fail 0
+[menu-workspace.test.mjs] ℹ cancelled 0
+[menu-workspace.test.mjs] ℹ skipped 0
+[menu-workspace.test.mjs] ℹ todo 0
+[menu-workspace.test.mjs] ℹ duration_ms 16267.741127
+TEST SUITE PASS: menu-workspace.test.mjs (20/41)
+TEST SUITE: night-save.test.mjs
+[night-save.test.mjs] ✔ autosave during skipped night persists progress and the ordinary resume speed (3210.391107ms)
+[night-save.test.mjs] ✔ the midnight save succeeds while night acceleration is active (1768.04965ms)
+[night-save.test.mjs] ✔ a paused decision opened during night skip resumes at the player speed after restart (3528.279941ms)
+[night-save.test.mjs] ✔ legacy temporary night speed is migrated while unsupported speeds are rejected (2104.872517ms)
+[night-save.test.mjs] ℹ tests 4
+[night-save.test.mjs] ℹ suites 0
+[night-save.test.mjs] ℹ pass 4
+[night-save.test.mjs] ℹ fail 0
+[night-save.test.mjs] ℹ cancelled 0
+[night-save.test.mjs] ℹ skipped 0
+[night-save.test.mjs] ℹ todo 0
+[night-save.test.mjs] ℹ duration_ms 10776.762629
+TEST SUITE PASS: night-save.test.mjs (21/41)
+TEST SUITE: origin-heart.test.mjs
+[navigation-contract.test.mjs] ✔ an expedition cannot leave or advance through a closed exit (1453.136828ms)
+[navigation-contract.test.mjs] ✔ an adjacent delivery cannot deposit across a blocked tile (1182.324817ms)
+[navigation-contract.test.mjs] ✔ a failed transport route cannot snap a stranded carrier to distant walkable land (1142.031245ms)
+[navigation-contract.test.mjs] ✔ the ordinary planner cannot teleport a stranded person (1257.628685ms)
+[navigation-contract.test.mjs] ✔ construction under a person is rejected before paying or changing the map (1207.092446ms)
+[navigation-contract.test.mjs] ✔ unreachable expedition dispatch does not consume provisions or reassign the crew (1207.962899ms)
+[navigation-contract.test.mjs] ✔ expeditions never take a person away from a pending delivery (1180.963679ms)
+[navigation-contract.test.mjs] ✔ construction cargo can reach another side when the preferred entrance is disconnected (1202.655625ms)
+[navigation-contract.test.mjs] ✔ an adjacent delivery consumes travel time before it deposits (1364.814777ms)
+[navigation-contract.test.mjs] ✔ blocked construction cargo survives restart and is delivered once after reopening (1383.644974ms)
+[navigation-contract.test.mjs] ✔ a reachable expedition departs only on arrival, then its elapsed days advance (1192.754985ms)
+[navigation-contract.test.mjs] ✔ all thirty production workshops reject stale remote work and allocate distinct stations (1187.705671ms)
+[navigation-contract.test.mjs] ✔ a person at the corner of a station tile walks to its working position without getting stuck (1140.650322ms)
+[navigation-contract.test.mjs] ℹ tests 13
+[navigation-contract.test.mjs] ℹ suites 0
+[navigation-contract.test.mjs] ℹ pass 13
+[navigation-contract.test.mjs] ℹ fail 0
+[navigation-contract.test.mjs] ℹ cancelled 0
+[navigation-contract.test.mjs] ℹ skipped 0
+[navigation-contract.test.mjs] ℹ todo 0
+[navigation-contract.test.mjs] ℹ duration_ms 16290.025739
+TEST SUITE PASS: navigation-contract.test.mjs (22/41)
+TEST SUITE: persistence.test.mjs
+[origin-heart.test.mjs] ✔ new game preserves landing fire as its one expandable settlement heart (1774.663955ms)
+[origin-heart.test.mjs] ✔ legacy heart is migrated on restart without changing population or buildings (3037.326486ms)
+[origin-heart.test.mjs] ✔ heart migration refuses to overwrite houses near original fire (2126.484998ms)
+[origin-heart.test.mjs] ℹ tests 3
+[origin-heart.test.mjs] ℹ suites 0
+[origin-heart.test.mjs] ℹ pass 3
+[origin-heart.test.mjs] ℹ fail 0
+[origin-heart.test.mjs] ℹ cancelled 0
+[origin-heart.test.mjs] ℹ skipped 0
+[origin-heart.test.mjs] ℹ todo 0
+[origin-heart.test.mjs] ℹ duration_ms 7124.984504
+TEST SUITE PASS: origin-heart.test.mjs (23/41)
+TEST SUITE: production-supply.test.mjs
+[production-supply.test.mjs] ✔ an ore-starved smith collects real ore instead of unrelated village chores (1507.743403ms)
+[production-supply.test.mjs] ✔ supply work is slower than professional gathering and conserves the source and delivery (1449.394081ms)
+[production-supply.test.mjs] ✔ meeting every configured output target returns the crew to village help even with empty inputs (1413.757011ms)
+[production-supply.test.mjs] ✔ exhausted sources are not invented or replaced by social work (1101.680903ms)
+[production-supply.test.mjs] ✔ hidden, claimed and unreachable deposits are excluded without creating resources (1303.224342ms)
+[production-supply.test.mjs] ✔ manual reassignment releases the claimed source and abandons the supply role (1297.526605ms)
+[production-supply.test.mjs] ✔ suppliers relinquish the source and return to production when another delivery resolves the shortage (1505.775025ms)
+[production-supply.test.mjs] ✔ upstream charcoal shortage targets wood only through an existing charcoal kiln (1554.6055ms)
+[production-supply.test.mjs] ✔ a supply delivery survives restart and returns to the original workshop without double harvest (1393.647836ms)
+[production-supply.test.mjs] ℹ tests 9
+[production-supply.test.mjs] ℹ suites 0
+[production-supply.test.mjs] ℹ pass 9
+[production-supply.test.mjs] ℹ fail 0
+[production-supply.test.mjs] ℹ cancelled 0
+[production-supply.test.mjs] ℹ skipped 0
+[production-supply.test.mjs] ℹ todo 0
+[production-supply.test.mjs] ℹ duration_ms 12700.109756
+TEST SUITE PASS: production-supply.test.mjs (24/41)
+TEST SUITE: repair-regression.test.mjs
+[repair-regression.test.mjs] ✔ autosave retains an open decision while simulation is paused (2062.209228ms)
+[repair-regression.test.mjs] ✔ building panel lists requirements for locked residential upgrade and household reserves (1376.639355ms)
+[repair-regression.test.mjs] ✔ distant map labels are collapsed and aurora cannot blank out island overview (0.694855ms)
+[repair-regression.test.mjs] ℹ tests 3
+[repair-regression.test.mjs] ℹ suites 0
+[repair-regression.test.mjs] ℹ pass 3
+[repair-regression.test.mjs] ℹ fail 0
+[repair-regression.test.mjs] ℹ cancelled 0
+[repair-regression.test.mjs] ℹ skipped 0
+[repair-regression.test.mjs] ℹ todo 0
+[repair-regression.test.mjs] ℹ duration_ms 3629.214974
+TEST SUITE PASS: repair-regression.test.mjs (25/41)
+TEST SUITE: resource-flow.test.mjs
+[resource-flow.test.mjs] ✔ gross production and consumption stay separate even when net stock is unchanged (1.590119ms)
+[resource-flow.test.mjs] ✔ deliveries and pantry transfers are movements and never create production (0.740633ms)
+[resource-flow.test.mjs] ✔ an input consumed and refunded is not counted as a new product (0.232417ms)
+[resource-flow.test.mjs] ✔ nested contexts recover after exceptions and preserve outer classification (0.536569ms)
+[resource-flow.test.mjs] ✔ midnight consumption is accounted to the completed day and old bins remain bounded (1.294518ms)
+[resource-flow.test.mjs] ✔ serialized measurements survive attaching twice without double counting (0.518292ms)
+[resource-flow.test.mjs] ✔ malformed optional measurements are reset without touching stock (0.250464ms)
+[resource-flow.test.mjs] ✔ headless models remain ordinary cloneable objects when observation is not enabled (0.995974ms)
+[resource-flow.test.mjs] ✔ a daily charge represents a whole completed day even after a late first observation (0.350943ms)
+[resource-flow.test.mjs] ℹ tests 9
+[resource-flow.test.mjs] ℹ suites 0
+[resource-flow.test.mjs] ℹ pass 9
+[resource-flow.test.mjs] ℹ fail 0
+[resource-flow.test.mjs] ℹ cancelled 0
+[resource-flow.test.mjs] ℹ skipped 0
+[resource-flow.test.mjs] ℹ todo 0
+[resource-flow.test.mjs] ℹ duration_ms 142.13153
+TEST SUITE PASS: resource-flow.test.mjs (26/41)
+TEST SUITE: resources.test.mjs
+[resources.test.mjs] ✔ rebuilding twenty times disposes retired private geometries (1759.703815ms)
+[resources.test.mjs] ✔ shared geometry survives until its final scene user is removed (1513.996161ms)
+[resources.test.mjs] ✔ confirmed person-name sink escapes markup even without the import boundary (2089.864503ms)
+[resources.test.mjs] ✔ service worker deletes only own caches and never intercepts API (2.921611ms)
+[resources.test.mjs] ℹ tests 4
+[resources.test.mjs] ℹ suites 0
+[resources.test.mjs] ℹ pass 4
+[resources.test.mjs] ℹ fail 0
+[resources.test.mjs] ℹ cancelled 0
+[resources.test.mjs] ℹ skipped 0
+[resources.test.mjs] ℹ todo 0
+[resources.test.mjs] ℹ duration_ms 5559.034194
+TEST SUITE PASS: resources.test.mjs (27/41)
+TEST SUITE: s01-assignments.test.mjs
+[s01-assignments.test.mjs] ✔ S01: failed routing does not overwrite the existing chore assignment (1515.118707ms)
+[s01-assignments.test.mjs] ✔ S01: successful routing installs the new chore and clears stale targets (1300.69251ms)
+[s01-assignments.test.mjs] ℹ tests 2
+[s01-assignments.test.mjs] ℹ suites 0
+[s01-assignments.test.mjs] ℹ pass 2
+[s01-assignments.test.mjs] ℹ fail 0
+[s01-assignments.test.mjs] ℹ cancelled 0
+[s01-assignments.test.mjs] ℹ skipped 0
+[s01-assignments.test.mjs] ℹ todo 0
+[s01-assignments.test.mjs] ℹ duration_ms 2958.302462
+TEST SUITE PASS: s01-assignments.test.mjs (28/41)
+TEST SUITE: s01-logistics.test.mjs
+[s01-logistics.test.mjs] ✔ S01: delivery to a completed construction releases the in-transit reservation (1396.192427ms)
+[s01-logistics.test.mjs] ℹ tests 1
+[s01-logistics.test.mjs] ℹ suites 0
+[s01-logistics.test.mjs] ℹ pass 1
+[s01-logistics.test.mjs] ℹ fail 0
+[s01-logistics.test.mjs] ℹ cancelled 0
+[s01-logistics.test.mjs] ℹ skipped 0
+[s01-logistics.test.mjs] ℹ todo 0
+[s01-logistics.test.mjs] ℹ duration_ms 1552.173363
+TEST SUITE PASS: s01-logistics.test.mjs (29/41)
+TEST SUITE: s01-priority.test.mjs
+[persistence.test.mjs] ✔ save/load conserves a carried resource (1609.110586ms)
+[persistence.test.mjs] ✔ storage failure is returned and visible; export still contains live state (1638.947603ms)
+[persistence.test.mjs] ✔ invalid imported state is rejected without touching existing storage (1201.329984ms)
+[persistence.test.mjs] ✔ unrecoverable primary is protected from an automatic fresh-state overwrite (1625.850244ms)
+[persistence.test.mjs] ✔ a chosen decision restores its result without repeating the reward (3187.934192ms)
+[persistence.test.mjs] ✔ invalid backup never replaces the primary save; valid backup can recover (1402.703281ms)
+[persistence.test.mjs] ✔ interrupted captain chest can be offered after a fresh restart, exactly once (3351.754526ms)
+[persistence.test.mjs] ✔ one-shot registered decision is replayed after load and cannot pay twice (3728.582648ms)
+[persistence.test.mjs] ✔ the campaign council returns after restart and can choose the next epoch (3299.313516ms)
+[persistence.test.mjs] ✔ decision context restores live hamlet, region and scene-backed landmark references (9102.412786ms)
+[persistence.test.mjs] ℹ tests 10
+[persistence.test.mjs] ℹ suites 0
+[persistence.test.mjs] ℹ pass 10
+[persistence.test.mjs] ℹ fail 0
+[persistence.test.mjs] ℹ cancelled 0
+[persistence.test.mjs] ℹ skipped 0
+[persistence.test.mjs] ℹ todo 0
+[persistence.test.mjs] ℹ duration_ms 30362.309935
+TEST SUITE PASS: persistence.test.mjs (30/41)
+TEST SUITE: s02-forecast.test.mjs
+[s02-forecast.test.mjs] ✔ S02 autumn fuel shortage increases wood-gathering priority without consuming stock (1919.672554ms)
+[s02-forecast.test.mjs] ✔ S02 before winter increases food gathering priority while reserves are low (1225.934638ms)
+[s02-forecast.test.mjs] ℹ tests 2
+[s02-forecast.test.mjs] ℹ suites 0
+[s02-forecast.test.mjs] ℹ pass 2
+[s02-forecast.test.mjs] ℹ fail 0
+[s02-forecast.test.mjs] ℹ cancelled 0
+[s02-forecast.test.mjs] ℹ skipped 0
+[s02-forecast.test.mjs] ℹ todo 0
+[s02-forecast.test.mjs] ℹ duration_ms 3343.537084
+TEST SUITE PASS: s02-forecast.test.mjs (31/41)
+TEST SUITE: s03-households.test.mjs
+[s01-priority.test.mjs] ✔ S01: critical village task wins regardless of random draw or input order (1770.76451ms)
+[s01-priority.test.mjs] ✔ S01: balanced priorities preserve choice and invalid priorities cannot win (1492.872041ms)
+[s01-priority.test.mjs] ✔ S01: priority planning leaves serialized village state valid (1207.774705ms)
+[s01-priority.test.mjs] ℹ tests 3
+[s01-priority.test.mjs] ℹ suites 0
+[s01-priority.test.mjs] ℹ pass 3
+[s01-priority.test.mjs] ℹ fail 0
+[s01-priority.test.mjs] ℹ cancelled 0
+[s01-priority.test.mjs] ℹ skipped 0
+[s01-priority.test.mjs] ℹ todo 0
+[s01-priority.test.mjs] ℹ duration_ms 4628.772658
+TEST SUITE PASS: s01-priority.test.mjs (32/41)
+TEST SUITE: s04-ecology.test.mjs
+[s03-households.test.mjs] ✔ S03 household preserves food only after real attendance and pays input cost once (1228.593378ms)
+[s03-households.test.mjs] ℹ tests 1
+[s03-households.test.mjs] ℹ suites 0
+[s03-households.test.mjs] ℹ pass 1
+[s03-households.test.mjs] ℹ fail 0
+[s03-households.test.mjs] ℹ cancelled 0
+[s03-households.test.mjs] ℹ skipped 0
+[s03-households.test.mjs] ℹ todo 0
+[s03-households.test.mjs] ℹ duration_ms 1411.845335
+TEST SUITE PASS: s03-households.test.mjs (33/41)
+TEST SUITE: s05-battery.test.mjs
+[s05-battery.test.mjs] ✔ S05 battery mode throttles animal pose updates without mutating herd simulation (1398.047885ms)
+[s05-battery.test.mjs] ℹ tests 1
+[s05-battery.test.mjs] ℹ suites 0
+[s05-battery.test.mjs] ℹ pass 1
+[s05-battery.test.mjs] ℹ fail 0
+[s05-battery.test.mjs] ℹ cancelled 0
+[s05-battery.test.mjs] ℹ skipped 0
+[s05-battery.test.mjs] ℹ todo 0
+[s05-battery.test.mjs] ℹ duration_ms 1531.596275
+TEST SUITE PASS: s05-battery.test.mjs (34/41)
+TEST SUITE: save-recovery.test.mjs
+[s04-ecology.test.mjs] ✔ S04 hunting pressure decays and cannot become negative or exceed the cap (9644.47436ms)
+[s04-ecology.test.mjs] ℹ tests 1
+[s04-ecology.test.mjs] ℹ suites 0
+[s04-ecology.test.mjs] ℹ pass 1
+[s04-ecology.test.mjs] ℹ fail 0
+[s04-ecology.test.mjs] ℹ cancelled 0
+[s04-ecology.test.mjs] ℹ skipped 0
+[s04-ecology.test.mjs] ℹ todo 0
+[s04-ecology.test.mjs] ℹ duration_ms 9810.804277
+TEST SUITE PASS: s04-ecology.test.mjs (35/41)
+TEST SUITE: server.test.mjs
+[save-recovery.test.mjs] ✔ quota occupied by the secondary backup is recovered without clearing unrelated storage (3250.060698ms)
+[save-recovery.test.mjs] ✔ a failed quota retry restores the secondary backup and preserves the primary (1364.384987ms)
+[save-recovery.test.mjs] ✔ invalid state reports the responsible field and version without replacing a good save (1702.850487ms)
+[save-recovery.test.mjs] ✔ text validation identifies unsafe nested input without accepting it (1491.841659ms)
+[save-recovery.test.mjs] ℹ tests 4
+[save-recovery.test.mjs] ℹ suites 0
+[save-recovery.test.mjs] ℹ pass 4
+[save-recovery.test.mjs] ℹ fail 0
+[save-recovery.test.mjs] ℹ cancelled 0
+[save-recovery.test.mjs] ℹ skipped 0
+[save-recovery.test.mjs] ℹ todo 0
+[save-recovery.test.mjs] ℹ duration_ms 7974.482226
+TEST SUITE PASS: save-recovery.test.mjs (36/41)
+TEST SUITE: session.test.mjs
+[server.test.mjs] ✔ real HTTP: bad inputs finish, identities cannot overwrite by name and scores are derived (1252.718774ms)
+[server.test.mjs] ℹ tests 1
+[server.test.mjs] ℹ suites 0
+[server.test.mjs] ℹ pass 1
+[server.test.mjs] ℹ fail 0
+[server.test.mjs] ℹ cancelled 0
+[server.test.mjs] ℹ skipped 0
+[server.test.mjs] ℹ todo 0
+[server.test.mjs] ℹ duration_ms 1365.753642
+TEST SUITE PASS: server.test.mjs (37/41)
+TEST SUITE: state-hardening.test.mjs
+[state-hardening.test.mjs] ✔ a rejected clock step never initializes or mutates the simulation (15.257045ms)
+[state-hardening.test.mjs] ✔ a persisted E4 clock must have a coherent finite origin and elapsed time (9.787038ms)
+[state-hardening.test.mjs] ✔ a transport checkpoint cannot contain an arrival at or before its current clock (6.229098ms)
+[state-hardening.test.mjs] ✔ route length agrees with geometry and corrupt action targets or labor ledgers are rejected (17.216735ms)
+[state-hardening.test.mjs] ✔ valid RC5 snapshots, blocked actions and long walks remain loadable after repeated restarts (23.951326ms)
+[state-hardening.test.mjs] ✔ invalid clock origins and safe-integer overflow are rejected before runtime mutation (7.916012ms)
+[state-hardening.test.mjs] ✔ the sub-decimeter arrival tolerance remains compatible with existing action snapshots (3.870816ms)
+[state-hardening.test.mjs] ✔ the real save decoder rejects a corrupt E4 clock without touching the running colony (50.589554ms)
+[state-hardening.test.mjs] ✔ catalog validation accepts only declared resources, buildings, crops, recipes and animals (10.773077ms)
+[state-hardening.test.mjs] ✔ a legitimate one-point transport route remains valid and delivers its cargo once (8.481033ms)
+[state-hardening.test.mjs] ℹ tests 10
+[state-hardening.test.mjs] ℹ suites 0
+[state-hardening.test.mjs] ℹ pass 10
+[state-hardening.test.mjs] ℹ fail 0
+[state-hardening.test.mjs] ℹ cancelled 0
+[state-hardening.test.mjs] ℹ skipped 0
+[state-hardening.test.mjs] ℹ todo 0
+[state-hardening.test.mjs] ℹ duration_ms 1928.498779
+TEST SUITE PASS: state-hardening.test.mjs (38/41)
+TEST SUITE: task-tracking.test.mjs
+[session.test.mjs] ✔ a hidden document never advances simulation or the render clock (1531.483149ms)
+[session.test.mjs] ✔ epoch II and III starter villages remain loadable, including a heart upgrade (8613.759413ms)
+[session.test.mjs] ✔ legacy epoch II campaign route is recovered from its recorded knowledge (1158.774741ms)
+[session.test.mjs] ✔ a legacy completed chest is not reset and an interrupted legacy chest recovers (1350.019689ms)
+[session.test.mjs] ℹ tests 4
+[session.test.mjs] ℹ suites 0
+[session.test.mjs] ℹ pass 4
+[session.test.mjs] ℹ fail 0
+[session.test.mjs] ℹ cancelled 0
+[session.test.mjs] ℹ skipped 0
+[session.test.mjs] ℹ todo 0
+[session.test.mjs] ℹ duration_ms 12842.77415
+TEST SUITE PASS: session.test.mjs (39/41)
+TEST SUITE: work-sites.test.mjs
+[work-sites.test.mjs] ✔ a fully occupied workshop waits instead of assigning its last station twice (1701.740989ms)
+[work-sites.test.mjs] ✔ another side of a workshop remains usable when the preferred entrance is disconnected (1230.425396ms)
+[work-sites.test.mjs] ✔ a distant or stale production pose earns no materials before reaching the workshop (1416.791233ms)
+[work-sites.test.mjs] ✔ a critically ill worker releases production before earning more work (1385.724269ms)
+[work-sites.test.mjs] ✔ a changed job cannot complete an old workshop operation (1318.175028ms)
+[work-sites.test.mjs] ✔ field work waits if its worker has lost access to every work position (1178.648546ms)
+[work-sites.test.mjs] ✔ workers use distinct positions on all three managed worksites (4598.775547ms)
+[work-sites.test.mjs] ✔ a blocked attempt keeps its existing cargo and does not teleport (1552.704254ms)
+[work-sites.test.mjs] ℹ tests 8
+[work-sites.test.mjs] ℹ suites 0
+[work-sites.test.mjs] ℹ pass 8
+[work-sites.test.mjs] ℹ fail 0
+[work-sites.test.mjs] ℹ cancelled 0
+[work-sites.test.mjs] ℹ skipped 0
+[work-sites.test.mjs] ℹ todo 0
+[work-sites.test.mjs] ℹ duration_ms 14582.99911
+TEST SUITE PASS: work-sites.test.mjs (40/41)
+[task-tracking.test.mjs] ✔ a hamlet request exposes its exact cost, actionable help and map location in Tasks (1990.233371ms)
+[task-tracking.test.mjs] ✔ help spends only requested goods and cannot pay twice; completion survives restart (3429.789944ms)
+[task-tracking.test.mjs] ✔ insufficient stock has an explicit reason and preserves the request and inventory (1648.203796ms)
+[task-tracking.test.mjs] ✔ help guidance opens the missing knowledge instead of an unavailable building (1695.225159ms)
+[task-tracking.test.mjs] ✔ dismissed request marker stays hidden after reload, while a new need is visible (3932.004692ms)
+[task-tracking.test.mjs] ✔ tracking resolves live builders, activity and current coordinates rather than stale assignments (1959.2749ms)
+[task-tracking.test.mjs] ✔ expedition and reading tasks name actual workers and navigate to their relevant area (1800.96606ms)
+[task-tracking.test.mjs] ✔ ordinary requests can be fulfilled from Tasks and retain a single completion record (2000.279165ms)
+[task-tracking.test.mjs] ✔ Epoka IV projects, batches and transports appear in Tasks using actual crew and route positions (8456.100646ms)
+[task-tracking.test.mjs] ℹ tests 9
+[task-tracking.test.mjs] ℹ suites 0
+[task-tracking.test.mjs] ℹ pass 9
+[task-tracking.test.mjs] ℹ fail 0
+[task-tracking.test.mjs] ℹ cancelled 0
+[task-tracking.test.mjs] ℹ skipped 0
+[task-tracking.test.mjs] ℹ todo 0
+[task-tracking.test.mjs] ℹ duration_ms 27117.894568
+TEST SUITE PASS: task-tracking.test.mjs (41/41)
+TEST GATE PASS: 41 suites, 221 cases
+INSTALL MODE: 2 extended 1500-day generation scenarios are release gates; see docs/weryfikacja9/results.json.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> przystan@4.0.0-rc.9 test:runtime
+> node tools/runtime-smoke.mjs
+
+epoch 1: 1200/2400 frames; day 1.270; restart 1
+epoch 1: 2400/2400 frames; day 2.435; restart 2
+epoch 3: 1200/4800 frames; day 142.320; restart 1
+epoch 3: 2400/4800 frames; day 143.485; restart 2
+epoch 3: 3600/4800 frames; day 144.318; restart 3
+epoch 3: 4800/4800 frames; day 145.317; restart 4
+epoch 4: 1200/4800 frames; day 1.270; restart 1
+epoch 4: 2400/4800 frames; day 2.436; restart 2
+epoch 4: 3600/4800 frames; day 3.269; restart 3
+epoch 4: 4800/4800 frames; day 4.269; restart 4
+{
+  "status": "PASS",
+  "scenarios": [
+    {
+      "epoch": 1,
+      "frames": 2400,
+      "syntheticWallSeconds": 80,
+      "elapsedGameDays": 2.1651388888889986,
+      "restarts": 2,
+      "automaticSaves": 9,
+      "population": 18,
+      "tradeDeliveries": 0,
+      "unverified": [
+        "real DOM",
+        "WebGL",
+        "touch",
+        "device performance"
+      ]
+    },
+    {
+      "epoch": 3,
+      "frames": 4800,
+      "syntheticWallSeconds": 160,
+      "elapsedGameDays": 3.9973611111081198,
+      "restarts": 4,
+      "automaticSaves": 18,
+      "population": 35,
+      "tradeDeliveries": 6,
+      "unverified": [
+        "real DOM",
+        "WebGL",
+        "touch",
+        "device performance"
+      ]
+    },
+    {
+      "epoch": 4,
+      "frames": 4800,
+      "syntheticWallSeconds": 160,
+      "elapsedGameDays": 3.9988879999999996,
+      "restarts": 4,
+      "automaticSaves": 18,
+      "population": 20,
+      "tradeDeliveries": 0,
+      "unverified": [
+        "real DOM",
+        "WebGL",
+        "touch",
+        "device performance"
+      ]
+    }
+  ]
+}
+Integralność paczki: PASS (370 plików)
+ M README.md
+ M WDROZ_TERMUX.sh
+ M package.json
+ M release-manifest.json
+ M src/p_exp.js
+ M src/p_gosp.js
+ M src/p_misje.js
+ M src/p_rest.js
+ M src/p_szlif.js
+ M src/p_tasks.js
+ M src/p_tracking.js
+ M src/p_worksites.js
+ M src/p_woz.js
+ M tests/build-deploy.test.mjs
+ M tests/mobile-ui.test.mjs
+ M tools/browser-ai.cjs
+ M tools/browser-mobile-ui.cjs
+ M tools/deploy-check.cjs
+ M tools/run-tests-serial.cjs
+ M tools/verify-package.cjs
+?? docs/AUDYT_DROGI_RC9.md
+?? docs/KONTRAKT_RC9_DROGI.md
+?? docs/WYDANIE_4.0.0_RC9.md
+?? tests/navigation-contract.test.mjs
+?? tools/browser-navigation.cjs
+PREPARE PASS: pliki skopiowane, testy zielone; bez commitu i push.

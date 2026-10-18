@@ -1,0 +1,601 @@
+{
+  "status": "PASS",
+  "version": "4.0.0-rc.9",
+  "build": "c0609e5291",
+  "base": "fd11ce669488ef4e3a698f16ec737a7390b1147b",
+  "node": "v24.19.0",
+  "install": {
+    "suites": 41,
+    "cases": 221,
+    "status": "PASS",
+    "base": "fd11ce669488ef4e3a698f16ec737a7390b1147b",
+    "prepareExit": 0,
+    "headUnchanged": true,
+    "noPush": true,
+    "dirtyRejectedBeforeCopy": true,
+    "userReadmeUnchanged": true,
+    "seconds": 295.3033520629997
+  },
+  "newNavigationCases": 13,
+  "reproducedBefore": {
+    "cases": 8,
+    "failed": 8,
+    "passed": 0
+  },
+  "additionalCornerReproduction": {
+    "cases": 1,
+    "failed": 1
+  },
+  "workshopDefinitionsChecked": 30,
+  "runtime": {
+    "status": "PASS",
+    "scenarios": [
+      {
+        "epoch": 1,
+        "frames": 2400,
+        "syntheticWallSeconds": 80,
+        "elapsedGameDays": 2.1651388888889986,
+        "restarts": 2,
+        "automaticSaves": 9,
+        "population": 18,
+        "tradeDeliveries": 0,
+        "unverified": [
+          "real DOM",
+          "WebGL",
+          "touch",
+          "device performance"
+        ]
+      },
+      {
+        "epoch": 3,
+        "frames": 4800,
+        "syntheticWallSeconds": 160,
+        "elapsedGameDays": 3.9973611111081198,
+        "restarts": 4,
+        "automaticSaves": 18,
+        "population": 35,
+        "tradeDeliveries": 6,
+        "unverified": [
+          "real DOM",
+          "WebGL",
+          "touch",
+          "device performance"
+        ]
+      },
+      {
+        "epoch": 4,
+        "frames": 4800,
+        "syntheticWallSeconds": 160,
+        "elapsedGameDays": 3.9988879999999996,
+        "restarts": 4,
+        "automaticSaves": 18,
+        "population": 20,
+        "tradeDeliveries": 0,
+        "unverified": [
+          "real DOM",
+          "WebGL",
+          "touch",
+          "device performance"
+        ]
+      }
+    ]
+  },
+  "browser": {
+    "navigation-results.json": {
+      "status": "PASS",
+      "results": [
+        {
+          "viewport": {
+            "width": 412,
+            "height": 870
+          },
+          "status": "PASS",
+          "blockedExpedition": {
+            "state": "idle",
+            "left": 4,
+            "task": {
+              "peopleIds": [
+                0
+              ],
+              "urgent": false,
+              "progress": 0,
+              "id": "exp:501",
+              "category": "Wyprawy",
+              "title": "Wyprawa: zwiad",
+              "detail": "Brak drogi do wyjścia wyprawy — odblokuj przejście",
+              "status": "Droga zamknięta",
+              "location": {
+                "type": "point",
+                "x": 6.5,
+                "z": 84.5,
+                "label": "Wyjście wyprawy"
+              },
+              "action": {
+                "tab": "wyprawy",
+                "label": "Otwórz wyprawy"
+              }
+            }
+          },
+          "transport": {
+            "early": 0,
+            "distance": 0.0919999999999996,
+            "delivered": 6,
+            "stationary": true,
+            "cargo": 6,
+            "saved": true
+          },
+          "restart": {
+            "retained": 6,
+            "delivered": 12,
+            "again": 12,
+            "reserve": 0,
+            "cargo": null,
+            "saved": true
+          },
+          "bothMenus": true,
+          "taskLocatesExit": true,
+          "errors": []
+        },
+        {
+          "viewport": {
+            "width": 870,
+            "height": 412
+          },
+          "status": "PASS",
+          "blockedExpedition": {
+            "state": "idle",
+            "left": 4,
+            "task": {
+              "peopleIds": [
+                0
+              ],
+              "urgent": false,
+              "progress": 0,
+              "id": "exp:501",
+              "category": "Wyprawy",
+              "title": "Wyprawa: zwiad",
+              "detail": "Brak drogi do wyjścia wyprawy — odblokuj przejście",
+              "status": "Droga zamknięta",
+              "location": {
+                "type": "point",
+                "x": 6.5,
+                "z": 84.5,
+                "label": "Wyjście wyprawy"
+              },
+              "action": {
+                "tab": "wyprawy",
+                "label": "Otwórz wyprawy"
+              }
+            }
+          },
+          "transport": {
+            "early": 0,
+            "distance": 0.09200000000000089,
+            "delivered": 6,
+            "stationary": true,
+            "cargo": 6,
+            "saved": true
+          },
+          "restart": {
+            "retained": 6,
+            "delivered": 12,
+            "again": 12,
+            "reserve": 0,
+            "cargo": null,
+            "saved": true
+          },
+          "bothMenus": true,
+          "taskLocatesExit": true,
+          "errors": []
+        }
+      ],
+      "limits": [
+        "Software WebGL; no physical Android touch, frame-time or battery measurement."
+      ]
+    },
+    "ai-results.json": {
+      "status": "PASS",
+      "results": [
+        {
+          "viewport": {
+            "width": 412,
+            "height": 870
+          },
+          "status": "PASS",
+          "distinctStations": true,
+          "offCenterApproach": true,
+          "modelsAtSimulationPositions": true,
+          "recoveryStopsProduction": true,
+          "sharedWaitingReason": true,
+          "bothMenus": true,
+          "taskFindsCrewAndBuilding": true,
+          "saveRestart": true,
+          "errors": []
+        },
+        {
+          "viewport": {
+            "width": 870,
+            "height": 412
+          },
+          "status": "PASS",
+          "distinctStations": true,
+          "offCenterApproach": true,
+          "modelsAtSimulationPositions": true,
+          "recoveryStopsProduction": true,
+          "sharedWaitingReason": true,
+          "bothMenus": true,
+          "taskFindsCrewAndBuilding": true,
+          "saveRestart": true,
+          "errors": []
+        }
+      ],
+      "limits": [
+        "Software WebGL; no physical Android touch, frame-time or battery measurement."
+      ]
+    },
+    "mobile-ui-results.json": {
+      "status": "PASS",
+      "results": [
+        {
+          "viewport": {
+            "width": 352,
+            "height": 768
+          },
+          "fullscreen": {
+            "active": true,
+            "standalone": true,
+            "app": {
+              "x": 0,
+              "y": 0,
+              "width": 352,
+              "height": 768
+            },
+            "viewport": {
+              "width": 352,
+              "height": 768
+            }
+          },
+          "inlineSections": true,
+          "liveRates": {
+            "production": 40,
+            "use": 16
+          },
+          "disclosuresSurviveRefresh": true,
+          "noHorizontalOverflow": true,
+          "reopenStartsAtTop": true,
+          "topCloseButton": true,
+          "safeInsetOnce": true,
+          "errors": []
+        },
+        {
+          "viewport": {
+            "width": 768,
+            "height": 352
+          },
+          "fullscreen": {
+            "active": true,
+            "standalone": true,
+            "app": {
+              "x": 0,
+              "y": 0,
+              "width": 768,
+              "height": 352
+            },
+            "viewport": {
+              "width": 768,
+              "height": 352
+            }
+          },
+          "inlineSections": true,
+          "liveRates": {
+            "production": 40,
+            "use": 16
+          },
+          "disclosuresSurviveRefresh": true,
+          "noHorizontalOverflow": true,
+          "reopenStartsAtTop": true,
+          "topCloseButton": true,
+          "safeInsetOnce": true,
+          "errors": []
+        },
+        {
+          "viewport": {
+            "width": 412,
+            "height": 870
+          },
+          "fullscreen": {
+            "active": true,
+            "standalone": true,
+            "app": {
+              "x": 0,
+              "y": 0,
+              "width": 412,
+              "height": 870
+            },
+            "viewport": {
+              "width": 412,
+              "height": 870
+            }
+          },
+          "inlineSections": true,
+          "liveRates": {
+            "production": 40,
+            "use": 16
+          },
+          "disclosuresSurviveRefresh": true,
+          "noHorizontalOverflow": true,
+          "reopenStartsAtTop": true,
+          "topCloseButton": true,
+          "safeInsetOnce": true,
+          "errors": []
+        }
+      ],
+      "serviceWorker": {
+        "realControllerChange": true,
+        "oneReload": true,
+        "savedBeforeReload": true,
+        "failedSavePreservesGame": true,
+        "retryPreservesGame": true
+      },
+      "limits": [
+        "Physical Android system bars and touch feel require device verification."
+      ]
+    },
+    "chromium-workspace.json": {
+      "status": "PASS",
+      "results": [
+        {
+          "viewport": {
+            "width": 412,
+            "height": 870
+          },
+          "status": "PASS",
+          "classicLayout": true,
+          "quietAndFull": true,
+          "sections": 8,
+          "helpOnce": true,
+          "pinning": true,
+          "locating": true,
+          "peopleLocations": true,
+          "pauseSemantics": true,
+          "offlineReload": true,
+          "epoka4": true,
+          "errors": []
+        },
+        {
+          "viewport": {
+            "width": 870,
+            "height": 412
+          },
+          "status": "PASS",
+          "classicLayout": true,
+          "quietAndFull": true,
+          "sections": 8,
+          "helpOnce": true,
+          "pinning": true,
+          "locating": true,
+          "peopleLocations": true,
+          "pauseSemantics": true,
+          "offlineReload": true,
+          "epoka4": true,
+          "errors": []
+        },
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 800
+          },
+          "status": "PASS",
+          "classicLayout": true,
+          "quietAndFull": true,
+          "sections": 8,
+          "helpOnce": true,
+          "pinning": true,
+          "locating": true,
+          "peopleLocations": true,
+          "pauseSemantics": true,
+          "offlineReload": true,
+          "epoka4": true,
+          "errors": []
+        }
+      ],
+      "unverified": [
+        "physical Android touch",
+        "phone performance",
+        "battery power"
+      ]
+    },
+    "chromium-lifecycle.json": {
+      "status": "PASS",
+      "results": [
+        {
+          "viewport": {
+            "width": 412,
+            "height": 870
+          },
+          "status": "PASS",
+          "hiddenSeconds": 16,
+          "visibility": "document visibility overridden in isolated QA page",
+          "nativeFreezeResume": true,
+          "foreground": {
+            "frames": 8,
+            "draws": 1658,
+            "queuedFrames": 1,
+            "intervals": 1,
+            "timeouts": 2,
+            "audio": [
+              "running"
+            ],
+            "day": 0.27118083333333337,
+            "stored": 22
+          },
+          "hidden": {
+            "frames": 8,
+            "draws": 1658,
+            "queuedFrames": 0,
+            "intervals": 0,
+            "timeouts": 0,
+            "audio": [
+              "suspended"
+            ],
+            "day": 0.27118083333333337,
+            "stored": 61
+          },
+          "afterHidden": {
+            "frames": 8,
+            "draws": 1658,
+            "queuedFrames": 0,
+            "intervals": 0,
+            "timeouts": 0,
+            "audio": [
+              "suspended"
+            ],
+            "day": 0.27118083333333337,
+            "stored": 61
+          },
+          "returned": {
+            "frames": 18,
+            "draws": 3370,
+            "queuedFrames": 1,
+            "intervals": 1,
+            "timeouts": 2,
+            "audio": [
+              "running"
+            ],
+            "day": 0.27118083333333337,
+            "stored": 61
+          },
+          "rapid": {
+            "frames": 18,
+            "draws": 3370,
+            "queuedFrames": 1,
+            "intervals": 1,
+            "timeouts": 2,
+            "audio": [
+              "running"
+            ],
+            "day": 0.27118083333333337,
+            "stored": 61
+          },
+          "saveSurvivesReload": true,
+          "errors": []
+        },
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 800
+          },
+          "status": "PASS",
+          "hiddenSeconds": 16,
+          "visibility": "document visibility overridden in isolated QA page",
+          "nativeFreezeResume": true,
+          "foreground": {
+            "frames": 9,
+            "draws": 1844,
+            "queuedFrames": 1,
+            "intervals": 1,
+            "timeouts": 2,
+            "audio": [
+              "running"
+            ],
+            "day": 0.27,
+            "stored": 22
+          },
+          "hidden": {
+            "frames": 9,
+            "draws": 1844,
+            "queuedFrames": 0,
+            "intervals": 0,
+            "timeouts": 0,
+            "audio": [
+              "suspended"
+            ],
+            "day": 0.27,
+            "stored": 61
+          },
+          "afterHidden": {
+            "frames": 9,
+            "draws": 1844,
+            "queuedFrames": 0,
+            "intervals": 0,
+            "timeouts": 0,
+            "audio": [
+              "suspended"
+            ],
+            "day": 0.27,
+            "stored": 61
+          },
+          "returned": {
+            "frames": 21,
+            "draws": 3680,
+            "queuedFrames": 1,
+            "intervals": 1,
+            "timeouts": 2,
+            "audio": [
+              "running"
+            ],
+            "day": 0.27,
+            "stored": 61
+          },
+          "rapid": {
+            "frames": 21,
+            "draws": 3680,
+            "queuedFrames": 1,
+            "intervals": 1,
+            "timeouts": 2,
+            "audio": [
+              "running"
+            ],
+            "day": 0.27,
+            "stored": 61
+          },
+          "saveSurvivesReload": true,
+          "errors": []
+        }
+      ],
+      "unverified": [
+        "physical Android lifecycle",
+        "battery discharge",
+        "GPU power",
+        "temperature",
+        "Android process eviction"
+      ]
+    }
+  },
+  "baseUpdate": {
+    "base": "fd11ce669488ef4e3a698f16ec737a7390b1147b",
+    "canonical": "RC8",
+    "trackedFiles": 366,
+    "different": []
+  },
+  "retained": {
+    "p_e4_catalog.js": true,
+    "p_e4_economy.js": true,
+    "p_e4_game.js": true,
+    "p_e4_ui.js": true,
+    "p_flow.js": true,
+    "p_flow_bridge.js": true,
+    "p_lifecycle.js": true,
+    "p_menu.js": true,
+    "p_head.html": true,
+    "p_save.js": true,
+    "p_update.js": true
+  },
+  "acceptance": {
+    "departures": "Failed paths keep the participant in the settlement and do not advance expedition days. Land dispatch checks reachability and pending deliveries before taking provisions. Tasks show the blocked exit in both menus.",
+    "delivery": "Transport has no adjacent-arrival shortcut or snap fallback. All reachable sides are considered; blocked cargo and its reservations survive save/reload and are delivered once after reopening.",
+    "placement": "Construction directly under a present person is rejected before costs or map mutation.",
+    "production": "All 30 legacy production definitions receive distinct physical positions; stale remote work gives neither products, XP nor cart progress.",
+    "compatibility": "Classic menus, inline options, live production/use, fullscreen, update checkpoint, offline restart and background suspension rechecked."
+  },
+  "limits": [
+    "Two 1500-day E4 generation scenarios were not rerun; RC6 results remain historical and are not counted in the 221 fresh cases. E4 model/economy sources are unchanged.",
+    "This does not implement local pedestrian collision avoidance, queues or new character models. A construction closing an entire corridor is still possible; only placement directly under a person is prevented.",
+    "An already stranded person waits with cargo until a passage is reopened. Existing false away flags from older releases are not retroactively guessed or rewarded again.",
+    "Return positions from abstract expeditions, maritime dispatch and cancellation/refund need a separate review. New preflight provision checks cover ordinary land expeditions and building missions.",
+    "New navigation Chromium uses controlled blocked walk grids; it proves execution/UI/persistence boundaries, not every natural island topology.",
+    "Raw hydrated state has transient undefined values and scene references. Actual serialization, save and decode boundaries pass; no claim that validateSave(S) accepts the unstripped live graph.",
+    "Node 24 and Chromium 133 with software WebGL. Physical Android battery, temperature, frame time, touch and process eviction unmeasured; remote Node 18/24 CI not run.",
+    "No external commit or push. Installer was rehearsed with --prepare-only; final commit/push occurs only when the user runs Termux."
+  ]
+}

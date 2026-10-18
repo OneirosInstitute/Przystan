@@ -1,5 +1,5 @@
 /* Stanowiska są geometrią i aktywnymi celami osób, bez drugiej tabeli rezerwacji. */
-function workSiteManaged(building,action){return !!building&&((building.kind==='pole'&&action==='field')||(['kuznia','pracownia'].includes(building.kind)&&action==='prod'))}
+function workSiteManaged(building,action){return !!building&&((building.kind==='pole'&&action==='field')||(BD[building.kind]?.prod&&action==='prod'))}
 function workSiteContains(building,tile){
  if(!Array.isArray(tile)||tile.length!==2||!tile.every(Number.isInteger))return false;
  const [x,z]=tile,definition=BD[building.kind],column=x-building.i,row=z-building.j;
@@ -13,6 +13,11 @@ function workSiteTiles(building){
   if(workSiteContains(building,[x,z]))positions.push([x,z]);
  }
  return positions;
+}
+function buildingEntryFor(person,building){
+ const start=tileOf(person.x,person.z),preferred=entryOf(building.kind,building.i,building.j),positions=workSiteTiles(building);
+ positions.sort((a,b)=>(preferred&&a[0]===preferred[0]&&a[1]===preferred[1]?-1:preferred&&b[0]===preferred[0]&&b[1]===preferred[1]?1:Math.hypot(a[0]-start[0],a[1]-start[1])-Math.hypot(b[0]-start[0],b[1]-start[1])));
+ return positions.find(tile=>astar(start[0],start[1],tile[0],tile[1]))||null;
 }
 function workSiteActive(person){return !!person.tgt?.kind&&((person.state==='move'&&['prod','field','build','care'].includes(person.after))||(person.state==='work'&&['prod','field','build','care'].includes(person.workKind)))}
 function workSiteRoute(person,building,preferred){

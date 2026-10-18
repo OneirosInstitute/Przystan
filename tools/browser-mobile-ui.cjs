@@ -41,7 +41,7 @@ const fs=require('node:fs'),path=require('node:path'),http=require('node:http'),
     await dismiss(page);const section=page.locator('[data-ui-section="osada:people"]');assert.equal(await section.evaluate(element=>element.open),false);await section.locator(':scope > summary').click();
     await page.evaluate(()=>window.__qaEval('renderPanel()'));assert.equal(await section.evaluate(element=>element.open),true);await section.locator(':scope > summary').click();
     await page.evaluate(()=>window.__qaEval("openSheet('kronika')"));const options=page.locator('[data-ui-section="game:options"]');await options.evaluate(element=>{if(!element.open)element.querySelector('summary').click()});
-    assert.equal(await options.locator('a').count(),0);assert.match(await options.innerText(),/4\.0\.0-rc\.8/);assert.ok(await options.locator('[data-ui-fullscreen]').isVisible());
+    assert.equal(await options.locator('a').count(),0);assert.match(await options.innerText(),/4\.0\.0-rc\.9/);assert.ok(await options.locator('[data-ui-fullscreen]').isVisible());
     await page.evaluate(()=>window.__qaEval("closeSheet();zapShow()"));const woodGroup=page.locator('[data-ui-section="stock:przystan:Opał i budulec"]');await woodGroup.evaluate(element=>{if(!element.open)element.querySelector('summary').click()});
     await page.evaluate(()=>window.__qaEval("ResourceFlow.attach(S,{reset:true});ResourceFlow.run(S,'economy',()=>{S.res.drewno+=10;S.res.drewno-=4});S.day+=.25;S.t+=60;zapFill(true)"));
     const row=page.locator('[data-flow-resource="drewno"]');await page.waitForFunction(()=>document.querySelector('[data-flow-resource="drewno"]')?.innerText.includes('+40'));assert.ok((await row.innerText()).includes('−16'));

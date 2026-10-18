@@ -1,0 +1,34 @@
+TAP version 13
+# Subtest: a person at the corner of a station tile walks to its working position without getting stuck
+not ok 1 - a person at the corner of a station tile walks to its working position without getting stuck
+  ---
+  duration_ms: 1157.462346
+  type: 'test'
+  location: '/workspace/scratch/9e1bb3f2c27d/nav_rc9_20261018/source/Przystan_4.0.0_RC9_DROGI/tests/navigation-contract.test.mjs:53:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    'work' !== 'move'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'move'
+  actual: 'work'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/nav_rc9_20261018/source/Przystan_4.0.0_RC9_DROGI/tests/navigation-contract.test.mjs:55:9)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1382:25)
+    Test.start (node:internal/test_runner/test:1242:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17)
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 0
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1287.269208

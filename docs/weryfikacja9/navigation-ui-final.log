@@ -1,0 +1,202 @@
+TAP version 13
+# Subtest: RC9 deployment targets the verified RC8 checkpoint in every release guard
+ok 1 - RC9 deployment targets the verified RC8 checkpoint in every release guard
+  ---
+  duration_ms: 13.841256
+  type: 'test'
+  ...
+# Subtest: package integrity detects missing, changed and out-of-root files
+ok 2 - package integrity detects missing, changed and out-of-root files
+  ---
+  duration_ms: 6.820867
+  type: 'test'
+  ...
+# Subtest: deployment preflight checks identity, branch, base and user changes with read-only git calls
+ok 3 - deployment preflight checks identity, branch, base and user changes with read-only git calls
+  ---
+  duration_ms: 1.001054
+  type: 'test'
+  ...
+# Subtest: asset-only changes invalidate the PWA version; UI viewport permits zoom
+ok 4 - asset-only changes invalidate the PWA version; UI viewport permits zoom
+  ---
+  duration_ms: 363.106259
+  type: 'test'
+  ...
+# Subtest: touch launch requests immersive fullscreen even in an installed standalone app
+ok 5 - touch launch requests immersive fullscreen even in an installed standalone app
+  ---
+  duration_ms: 1715.132
+  type: 'test'
+  ...
+# Subtest: game options expand in the current panel and expose version and fullscreen controls
+ok 6 - game options expand in the current panel and expose version and fullscreen controls
+  ---
+  duration_ms: 1598.782637
+  type: 'test'
+  ...
+# Subtest: stock views retain separate live daily production, use and balance columns
+ok 7 - stock views retain separate live daily production, use and balance columns
+  ---
+  duration_ms: 1617.567316
+  type: 'test'
+  ...
+# Subtest: live measurements survive a real save and restore without changing resources
+ok 8 - live measurements survive a real save and restore without changing resources
+  ---
+  duration_ms: 2106.953907
+  type: 'test'
+  ...
+# Subtest: service worker updates checkpoint before reload and preserve a failed save
+ok 9 - service worker updates checkpoint before reload and preserve a failed save
+  ---
+  duration_ms: 3282.613446
+  type: 'test'
+  ...
+# Subtest: first worker activation does not reload and hidden updates wait for visibility
+ok 10 - first worker activation does not reload and hidden updates wait for visibility
+  ---
+  duration_ms: 1590.484779
+  type: 'test'
+  ...
+# Subtest: an expedition cannot leave or advance through a closed exit
+ok 11 - an expedition cannot leave or advance through a closed exit
+  ---
+  duration_ms: 1717.870075
+  type: 'test'
+  ...
+# Subtest: an adjacent delivery cannot deposit across a blocked tile
+ok 12 - an adjacent delivery cannot deposit across a blocked tile
+  ---
+  duration_ms: 1182.34638
+  type: 'test'
+  ...
+# Subtest: a failed transport route cannot snap a stranded carrier to distant walkable land
+ok 13 - a failed transport route cannot snap a stranded carrier to distant walkable land
+  ---
+  duration_ms: 1320.586494
+  type: 'test'
+  ...
+# Subtest: the ordinary planner cannot teleport a stranded person
+ok 14 - the ordinary planner cannot teleport a stranded person
+  ---
+  duration_ms: 1467.079318
+  type: 'test'
+  ...
+# Subtest: construction under a person is rejected before paying or changing the map
+ok 15 - construction under a person is rejected before paying or changing the map
+  ---
+  duration_ms: 1289.617866
+  type: 'test'
+  ...
+# Subtest: unreachable expedition dispatch does not consume provisions or reassign the crew
+ok 16 - unreachable expedition dispatch does not consume provisions or reassign the crew
+  ---
+  duration_ms: 1387.553798
+  type: 'test'
+  ...
+# Subtest: expeditions never take a person away from a pending delivery
+ok 17 - expeditions never take a person away from a pending delivery
+  ---
+  duration_ms: 1376.682215
+  type: 'test'
+  ...
+# Subtest: construction cargo can reach another side when the preferred entrance is disconnected
+ok 18 - construction cargo can reach another side when the preferred entrance is disconnected
+  ---
+  duration_ms: 1451.900849
+  type: 'test'
+  ...
+# Subtest: an adjacent delivery consumes travel time before it deposits
+ok 19 - an adjacent delivery consumes travel time before it deposits
+  ---
+  duration_ms: 1187.768217
+  type: 'test'
+  ...
+# Subtest: blocked construction cargo survives restart and is delivered once after reopening
+ok 20 - blocked construction cargo survives restart and is delivered once after reopening
+  ---
+  duration_ms: 1350.088572
+  type: 'test'
+  ...
+# Subtest: a reachable expedition departs only on arrival, then its elapsed days advance
+ok 21 - a reachable expedition departs only on arrival, then its elapsed days advance
+  ---
+  duration_ms: 1502.477958
+  type: 'test'
+  ...
+# Subtest: all thirty production workshops reject stale remote work and allocate distinct stations
+ok 22 - all thirty production workshops reject stale remote work and allocate distinct stations
+  ---
+  duration_ms: 1218.023838
+  type: 'test'
+  ...
+# Subtest: a person at the corner of a station tile walks to its working position without getting stuck
+ok 23 - a person at the corner of a station tile walks to its working position without getting stuck
+  ---
+  duration_ms: 1113.293892
+  type: 'test'
+  ...
+# Subtest: a hamlet request exposes its exact cost, actionable help and map location in Tasks
+ok 24 - a hamlet request exposes its exact cost, actionable help and map location in Tasks
+  ---
+  duration_ms: 1868.586222
+  type: 'test'
+  ...
+# Subtest: help spends only requested goods and cannot pay twice; completion survives restart
+ok 25 - help spends only requested goods and cannot pay twice; completion survives restart
+  ---
+  duration_ms: 3318.502617
+  type: 'test'
+  ...
+# Subtest: insufficient stock has an explicit reason and preserves the request and inventory
+ok 26 - insufficient stock has an explicit reason and preserves the request and inventory
+  ---
+  duration_ms: 1700.304137
+  type: 'test'
+  ...
+# Subtest: help guidance opens the missing knowledge instead of an unavailable building
+ok 27 - help guidance opens the missing knowledge instead of an unavailable building
+  ---
+  duration_ms: 1606.920222
+  type: 'test'
+  ...
+# Subtest: dismissed request marker stays hidden after reload, while a new need is visible
+ok 28 - dismissed request marker stays hidden after reload, while a new need is visible
+  ---
+  duration_ms: 3547.418475
+  type: 'test'
+  ...
+# Subtest: tracking resolves live builders, activity and current coordinates rather than stale assignments
+ok 29 - tracking resolves live builders, activity and current coordinates rather than stale assignments
+  ---
+  duration_ms: 1651.047506
+  type: 'test'
+  ...
+# Subtest: expedition and reading tasks name actual workers and navigate to their relevant area
+ok 30 - expedition and reading tasks name actual workers and navigate to their relevant area
+  ---
+  duration_ms: 1565.312412
+  type: 'test'
+  ...
+# Subtest: ordinary requests can be fulfilled from Tasks and retain a single completion record
+ok 31 - ordinary requests can be fulfilled from Tasks and retain a single completion record
+  ---
+  duration_ms: 1590.59605
+  type: 'test'
+  ...
+# Subtest: Epoka IV projects, batches and transports appear in Tasks using actual crew and route positions
+ok 32 - Epoka IV projects, batches and transports appear in Tasks using actual crew and route positions
+  ---
+  duration_ms: 7157.854917
+  type: 'test'
+  ...
+1..32
+# tests 32
+# suites 0
+# pass 32
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 24260.412433

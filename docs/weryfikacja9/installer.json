@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "base": "fd11ce669488ef4e3a698f16ec737a7390b1147b",
+  "prepareExit": 0,
+  "headUnchanged": true,
+  "noPush": true,
+  "dirtyRejectedBeforeCopy": true,
+  "userReadmeUnchanged": true,
+  "seconds": 295.3033520629997
+}

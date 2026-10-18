@@ -4,12 +4,12 @@
 const WOZ_FAR=22,WOZ_NEAR=18,WOZ_T=90,WOZ_CAP=4,WOZ_COST={deski:8,drewno:6,gwozdzie:10};
 TECH.push({id:'r_woz',d:'rzemioslo',r:3,c:0,n:'Koło i oś',xp:150,req:['r_zrab'],gate:()=>hasB('warsztat'),desc:'Koło z jednej deski, oś z twardego drewna, smarowana łojem.',eff:'Warsztat może zrobić wóz. Wozem dowozi się na dalekie budowy cztery razy więcej materiału.'});
 TECH_BY.r_woz=TECH[TECH.length-1];TCRAFT.r_woz=['ciesla'];
-function storeSpots(){const L=[[camp.i,camp.j+1]];S.bld.forEach(b=>{if(bDone(b)&&BD[b.kind].store==='all'){const e=entryOf(b.kind,b.i,b.j);if(e)L.push(e)}});return L}
+function storeSpots(){const L=[[camp.i,camp.j+1]];S.bld.forEach(b=>{if(bDone(b)&&BD[b.kind].store==='all'){L.push(...workSiteTiles(b))}});return L}
 function siteDist(s){let d=1e9;for(const c of storeSpots())d=Math.min(d,Math.hypot(c[0]-s.i,c[1]-s.j));return d}
 function siteFar(s){return siteDist(s)>WOZ_FAR}
 const wozN=()=>S.wozy||0,wozUsed=()=>S.people.filter(p=>p.woz).length,wozFree=()=>Math.max(0,wozN()-wozUsed());
 // skąd brać materiał na budowę: ze składu najbliższego budowie
-function haulFrom(p,s){let best=null,bd=1e9;for(const c of storeSpots()){const d=Math.hypot(c[0]-s.i,c[1]-s.j);if(d<bd){bd=d;best=c}}
+function haulFrom(p,s){let best=null,bd=1e9;for(const c of storeSpots()){const d=Math.hypot(c[0]-s.i,c[1]-s.j),[i,j]=tileOf(p.x,p.z);if(d<bd&&walk[c[1]*N+c[0]]&&astar(i,j,c[0],c[1])){bd=d;best=c}}
  if(tech('r_woz')&&!p.woz&&bd>WOZ_FAR&&wozFree()>0){p.woz=1;if(!S.seen.wozJ){S.seen.wozJ=1;log(p.name+' zaprzęga się do wozu i jedzie po materiał na daleką budowę.')}}
  return(best&&nearestWalk(best[0],best[1]))||storeTile(p,false)}
 {const _he=haulEnd;haulEnd=function(p){_he(p);p.woz=0}}
@@ -20,7 +20,7 @@ function siteNeeding(p,items){const[pi,pj]=tileOf(p.x,p.z);let best=null,bd=1e9;
   const c=BD[s.kind].cost||{};if(!items.some(x=>c[x.res]&&x.q>0))continue;const d=Math.hypot(s.i-pi,s.j-pj);if(d>WOZ_NEAR||d>=bd||siteFar(s))continue;bd=d;best=s}
  return best}
 {const _ft=finishTrip;finishTrip=function(p,items){
-  if(S&&items&&items.length&&!p.haulB&&!p.siteB){const s=siteNeeding(p,items);if(s){const e=entryOf(s.kind,s.i,s.j),c=BD[s.kind].cost||{};
+  if(S&&items&&items.length&&!p.haulB&&!p.siteB){const s=siteNeeding(p,items);if(s){const e=buildingEntryFor(p,s),c=BD[s.kind].cost||{};
    const w=items.reduce((a,x)=>a+(c[x.res]?x.q*(MATW[x.res]===undefined?.5:MATW[x.res]):0),0),q=Math.min(w,s.mat-(s.del||0)-(s.inTr||0));
    if(e&&q>0){p.carry=items;s.inTr=(s.inTr||0)+q;p.siteB=s.id;p.siteQ=q;if(goNow(p,e,'siteDrop')){p.act='niesie prosto na budowę: '+items.map(x=>RN[x.res].toLowerCase()).join(', ');return}
     s.inTr=Math.max(0,s.inTr-q);p.siteB=null;p.siteQ=0}}}

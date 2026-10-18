@@ -1,0 +1,184 @@
+TAP version 13
+# Subtest: building missions require a completed building and an assigned adult
+ok 1 - building missions require a completed building and an assigned adult
+  ---
+  duration_ms: 1326.93817
+  type: 'test'
+  ...
+# Subtest: building mission cannot be dispatched twice without consuming more food
+ok 2 - building mission cannot be dispatched twice without consuming more food
+  ---
+  duration_ms: 1432.235554
+  type: 'test'
+  ...
+# Subtest: mission payload survives validated save serialization
+ok 3 - mission payload survives validated save serialization
+  ---
+  duration_ms: 1512.651559
+  type: 'test'
+  ...
+# Subtest: returning explorer transfers one real wild goat without exceeding the pen and resumes work
+ok 4 - returning explorer transfers one real wild goat without exceeding the pen and resumes work
+  ---
+  duration_ms: 1303.403417
+  type: 'test'
+  ...
+# Subtest: an expedition cannot leave or advance through a closed exit
+ok 5 - an expedition cannot leave or advance through a closed exit
+  ---
+  duration_ms: 1551.152585
+  type: 'test'
+  ...
+# Subtest: an adjacent delivery cannot deposit across a blocked tile
+ok 6 - an adjacent delivery cannot deposit across a blocked tile
+  ---
+  duration_ms: 1277.733289
+  type: 'test'
+  ...
+# Subtest: a failed transport route cannot snap a stranded carrier to distant walkable land
+ok 7 - a failed transport route cannot snap a stranded carrier to distant walkable land
+  ---
+  duration_ms: 1623.225047
+  type: 'test'
+  ...
+# Subtest: the ordinary planner cannot teleport a stranded person
+ok 8 - the ordinary planner cannot teleport a stranded person
+  ---
+  duration_ms: 1261.497687
+  type: 'test'
+  ...
+# Subtest: construction under a person is rejected before paying or changing the map
+ok 9 - construction under a person is rejected before paying or changing the map
+  ---
+  duration_ms: 1271.371513
+  type: 'test'
+  ...
+# Subtest: unreachable expedition dispatch does not consume provisions or reassign the crew
+ok 10 - unreachable expedition dispatch does not consume provisions or reassign the crew
+  ---
+  duration_ms: 1113.87668
+  type: 'test'
+  ...
+# Subtest: expeditions never take a person away from a pending delivery
+ok 11 - expeditions never take a person away from a pending delivery
+  ---
+  duration_ms: 1061.978734
+  type: 'test'
+  ...
+# Subtest: construction cargo can reach another side when the preferred entrance is disconnected
+ok 12 - construction cargo can reach another side when the preferred entrance is disconnected
+  ---
+  duration_ms: 1142.65908
+  type: 'test'
+  ...
+# Subtest: an ore-starved smith collects real ore instead of unrelated village chores
+ok 13 - an ore-starved smith collects real ore instead of unrelated village chores
+  ---
+  duration_ms: 1494.439772
+  type: 'test'
+  ...
+# Subtest: supply work is slower than professional gathering and conserves the source and delivery
+ok 14 - supply work is slower than professional gathering and conserves the source and delivery
+  ---
+  duration_ms: 1526.817601
+  type: 'test'
+  ...
+# Subtest: meeting every configured output target returns the crew to village help even with empty inputs
+ok 15 - meeting every configured output target returns the crew to village help even with empty inputs
+  ---
+  duration_ms: 1464.039975
+  type: 'test'
+  ...
+# Subtest: exhausted sources are not invented or replaced by social work
+ok 16 - exhausted sources are not invented or replaced by social work
+  ---
+  duration_ms: 1166.80765
+  type: 'test'
+  ...
+# Subtest: hidden, claimed and unreachable deposits are excluded without creating resources
+ok 17 - hidden, claimed and unreachable deposits are excluded without creating resources
+  ---
+  duration_ms: 1183.654903
+  type: 'test'
+  ...
+# Subtest: manual reassignment releases the claimed source and abandons the supply role
+ok 18 - manual reassignment releases the claimed source and abandons the supply role
+  ---
+  duration_ms: 1107.53087
+  type: 'test'
+  ...
+# Subtest: suppliers relinquish the source and return to production when another delivery resolves the shortage
+ok 19 - suppliers relinquish the source and return to production when another delivery resolves the shortage
+  ---
+  duration_ms: 1297.794021
+  type: 'test'
+  ...
+# Subtest: upstream charcoal shortage targets wood only through an existing charcoal kiln
+ok 20 - upstream charcoal shortage targets wood only through an existing charcoal kiln
+  ---
+  duration_ms: 1264.253978
+  type: 'test'
+  ...
+# Subtest: a supply delivery survives restart and returns to the original workshop without double harvest
+ok 21 - a supply delivery survives restart and returns to the original workshop without double harvest
+  ---
+  duration_ms: 1307.54827
+  type: 'test'
+  ...
+# Subtest: a fully occupied workshop waits instead of assigning its last station twice
+ok 22 - a fully occupied workshop waits instead of assigning its last station twice
+  ---
+  duration_ms: 1629.439035
+  type: 'test'
+  ...
+# Subtest: another side of a workshop remains usable when the preferred entrance is disconnected
+ok 23 - another side of a workshop remains usable when the preferred entrance is disconnected
+  ---
+  duration_ms: 1511.249894
+  type: 'test'
+  ...
+# Subtest: a distant or stale production pose earns no materials before reaching the workshop
+ok 24 - a distant or stale production pose earns no materials before reaching the workshop
+  ---
+  duration_ms: 1412.815366
+  type: 'test'
+  ...
+# Subtest: a critically ill worker releases production before earning more work
+ok 25 - a critically ill worker releases production before earning more work
+  ---
+  duration_ms: 1281.875708
+  type: 'test'
+  ...
+# Subtest: a changed job cannot complete an old workshop operation
+ok 26 - a changed job cannot complete an old workshop operation
+  ---
+  duration_ms: 1230.984321
+  type: 'test'
+  ...
+# Subtest: field work waits if its worker has lost access to every work position
+ok 27 - field work waits if its worker has lost access to every work position
+  ---
+  duration_ms: 1116.771978
+  type: 'test'
+  ...
+# Subtest: workers use distinct positions on all three managed worksites
+ok 28 - workers use distinct positions on all three managed worksites
+  ---
+  duration_ms: 3635.138896
+  type: 'test'
+  ...
+# Subtest: a blocked attempt keeps its existing cargo and does not teleport
+ok 29 - a blocked attempt keeps its existing cargo and does not teleport
+  ---
+  duration_ms: 1029.710018
+  type: 'test'
+  ...
+1..29
+# tests 29
+# suites 0
+# pass 29
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 13045.012189

@@ -12,7 +12,7 @@ function resumeDelivery(person){
  if(person.kozN)return kozResume(person);
  const site=person.haulB?bById(person.haulB):person.siteB?bById(person.siteB):null;
  if(site&&!bDone(site)&&((person.haulQ||0)>0||(person.siteQ||0)>0)){
-  const entry=entryOf(site.kind,site.i,site.j),arrival=person.haulB?'haulDrop':'siteDrop';
+  const entry=buildingEntryFor(person,site),arrival=person.haulB?'haulDrop':'siteDrop';
   if(entry&&go(person,entry,arrival,null)){person.act='niesie materiał na budowę';return true}
  }else{
   if(person.haulB)haulEnd(person);

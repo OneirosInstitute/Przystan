@@ -1,0 +1,188 @@
+✖ an expedition cannot leave or advance through a closed exit (1236.269884ms)
+✖ an adjacent delivery cannot deposit across a blocked tile (1128.339878ms)
+✖ a failed transport route cannot snap a stranded carrier to distant walkable land (1254.515233ms)
+✖ the ordinary planner cannot teleport a stranded person (1149.956154ms)
+✖ construction under a person is rejected before paying or changing the map (1143.198768ms)
+✖ unreachable expedition dispatch does not consume provisions or reassign the crew (1106.384285ms)
+✖ expeditions never take a person away from a pending delivery (1103.716469ms)
+✖ construction cargo can reach another side when the preferred entrance is disconnected (1085.688569ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 0
+ℹ fail 8
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 9377.182511
+
+✖ failing tests:
+
+test at tests/navigation-contract.test.mjs:5:1
+✖ an expedition cannot leave or advance through a closed exit (1236.269884ms)
+  AssertionError [ERR_ASSERTION]: Expected "actual" to be strictly unequal to:
+  
+  'away'
+      at TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/nav_rc9_20261018/source/Przystan_4.0.0_RC9_DROGI/tests/navigation-contract.test.mjs:7:9)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'away',
+    expected: 'away',
+    operator: 'notStrictEqual',
+    diff: 'simple'
+  }
+
+test at tests/navigation-contract.test.mjs:9:1
+✖ an adjacent delivery cannot deposit across a blocked tile (1128.339878ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/nav_rc9_20261018/source/Przystan_4.0.0_RC9_DROGI/tests/navigation-contract.test.mjs:11:9)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/navigation-contract.test.mjs:13:1
+✖ a failed transport route cannot snap a stranded carrier to distant walkable land (1254.515233ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/nav_rc9_20261018/source/Przystan_4.0.0_RC9_DROGI/tests/navigation-contract.test.mjs:15:9)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/navigation-contract.test.mjs:17:1
+✖ the ordinary planner cannot teleport a stranded person (1149.956154ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+  +   19.5,
+  -   14.5,
+      4.5
+    ]
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/nav_rc9_20261018/source/Przystan_4.0.0_RC9_DROGI/tests/navigation-contract.test.mjs:19:9)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 19.5, 4.5 ],
+    expected: [ 14.5, 4.5 ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at tests/navigation-contract.test.mjs:21:1
+✖ construction under a person is rejected before paying or changing the map (1143.198768ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  1 !== 0
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/nav_rc9_20261018/source/Przystan_4.0.0_RC9_DROGI/tests/navigation-contract.test.mjs:23:9)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/navigation-contract.test.mjs:25:1
+✖ unreachable expedition dispatch does not consume provisions or reassign the crew (1106.384285ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  1 !== 0
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/nav_rc9_20261018/source/Przystan_4.0.0_RC9_DROGI/tests/navigation-contract.test.mjs:27:9)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/navigation-contract.test.mjs:29:1
+✖ expeditions never take a person away from a pending delivery (1103.716469ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  1 !== 0
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/nav_rc9_20261018/source/Przystan_4.0.0_RC9_DROGI/tests/navigation-contract.test.mjs:31:9)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/navigation-contract.test.mjs:33:1
+✖ construction cargo can reach another side when the preferred entrance is disconnected (1085.688569ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  0 !== 6
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/nav_rc9_20261018/source/Przystan_4.0.0_RC9_DROGI/tests/navigation-contract.test.mjs:35:9)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 6,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

@@ -9,7 +9,7 @@ test('touch launch requests immersive fullscreen even in an installed standalone
 });
 test('game options expand in the current panel and expose version and fullscreen controls',()=>{
  const runtime=createGame();runtime.game.startGame(true);const markup=runtime.evaluate('classicModeTools()');
- assert.match(markup,/<details[^>]*data-ui-section/);assert.match(markup,/<summary/);assert.match(markup,/data-ui-fullscreen/);assert.match(markup,/4\.0\.0-rc\.8/);assert.doesNotMatch(markup,/<a\b/);
+ assert.match(markup,/<details[^>]*data-ui-section/);assert.match(markup,/<summary/);assert.match(markup,/data-ui-fullscreen/);assert.match(markup,/4\.0\.0-rc\.9/);assert.doesNotMatch(markup,/<a\b/);
 });
 test('stock views retain separate live daily production, use and balance columns',()=>{
  const runtime=createGame();runtime.game.startGame(true);const markup=runtime.evaluate('zapBody()');

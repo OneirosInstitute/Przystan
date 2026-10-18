@@ -1,0 +1,34 @@
+TAP version 13
+# Subtest: RC9 deployment targets the verified RC8 checkpoint in every release guard
+ok 1 - RC9 deployment targets the verified RC8 checkpoint in every release guard
+  ---
+  duration_ms: 7.363134
+  type: 'test'
+  ...
+# Subtest: package integrity detects missing, changed and out-of-root files
+ok 2 - package integrity detects missing, changed and out-of-root files
+  ---
+  duration_ms: 8.050255
+  type: 'test'
+  ...
+# Subtest: deployment preflight checks identity, branch, base and user changes with read-only git calls
+ok 3 - deployment preflight checks identity, branch, base and user changes with read-only git calls
+  ---
+  duration_ms: 1.102735
+  type: 'test'
+  ...
+# Subtest: asset-only changes invalidate the PWA version; UI viewport permits zoom
+ok 4 - asset-only changes invalidate the PWA version; UI viewport permits zoom
+  ---
+  duration_ms: 319.333637
+  type: 'test'
+  ...
+1..4
+# tests 4
+# suites 0
+# pass 4
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 446.095228

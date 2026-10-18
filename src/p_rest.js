@@ -501,7 +501,10 @@ function go(person,tile,after,target){
   tile=station.tile;route=station.path;
  }else{
   if(!tile)return false;
-  if(!walk[tile[1]*N+tile[0]]){tile=nearestWalk(tile[0],tile[1]);if(!tile)return false;}
+  if(!walk[tile[1]*N+tile[0]]){
+   if(['deposit','haulPick','haulDrop','siteDrop','away'].includes(after)){person.blocked={code:'destination_closed',reason:'Cel drogi jest zamknięty — odblokuj dojście',since:person.blocked?.since??S.t,attempts:(person.blocked?.attempts||0)+1};return false;}
+   tile=nearestWalk(tile[0],tile[1]);if(!tile)return false;
+  }
   if(target?.kind&&['prod','work','build','care','field'].includes(after)){
    const taken=S.people.filter(peer=>peer!==person&&peer.tgt===target&&['move','work'].includes(peer.state)).map(peer=>peer.routeGoal||tileOf(peer.x,peer.z));
    const slot=[[0,0],[1,0],[0,1],[-1,0],[0,-1],[1,1],[-1,-1]].map(([x,z])=>[tile[0]+x,tile[1]+z]).find(([x,z])=>x>=0&&z>=0&&x<N&&z<N&&walk[z*N+x]&&!taken.some(([a,b])=>a===x&&b===z));if(slot)tile=slot;
@@ -509,12 +512,13 @@ function go(person,tile,after,target){
   const start=tileOf(person.x,person.z);route=astar(start[0],start[1],tile[0],tile[1]);
   if(!route){if(target?.type)target.bad=S.t+40;person.blocked={code:'route',reason:'Brak drogi do celu',since:person.blocked?.since??S.t,attempts:(person.blocked?.attempts||0)+1};return false;}
  }
+ if(managed&&!route.length&&Math.hypot(person.x-tcx(tile[0]),person.z-tcx(tile[1]))>.01)route=[tile];
  release(person);delete person.blocked;person.routeGoal=tile.slice();person.routeRevision=walkRevision;
  person.path=route.map(([i,j])=>({x:tcx(i)+(managed?0:(Math.random()-.5)*.35),z:tcx(j)+(managed?0:(Math.random()-.5)*.35)}));person.after=after;person.tgt=target||null;person.state='move';
  if(!person.path.length){person.path=null;onArrive(person);}return true;
 }
-function storeTile(p,food){const cands=[[camp.i,camp.j+1]];S.bld.forEach(b=>{const d=BD[b.kind];if(bDone(b)&&d.store&&(d.store==='all'||food)){const e=entryOf(b.kind,b.i,b.j);if(e)cands.push(e)}});
- const[pi,pj]=tileOf(p.x,p.z);let best=cands[0],bd=1e9;cands.forEach(c=>{const d=Math.hypot(c[0]-pi,c[1]-pj);if(d<bd&&astar(pi,pj,c[0],c[1])){bd=d;best=c}});return bd<1e9?nearestWalk(best[0],best[1]):null}
+function storeTile(p,food){const cands=[[camp.i,camp.j+1]];S.bld.forEach(b=>{const d=BD[b.kind];if(bDone(b)&&d.store&&(d.store==='all'||food)){cands.push(...workSiteTiles(b))}});
+ const[pi,pj]=tileOf(p.x,p.z);let best=cands[0],bd=1e9;cands.forEach(c=>{const d=Math.hypot(c[0]-pi,c[1]-pj);if(walk[c[1]*N+c[0]]&&d<bd&&astar(pi,pj,c[0],c[1])){bd=d;best=c}});return bd<1e9?nearestWalk(best[0],best[1]):null}
 function release(p){const target=p.tgt;if(target&&target.claim>0&&target.type)target.claim--;p.tgt=null;p.after=null;p.workKind=null;
  if(target&&target.kind&&S)target.workers=S.people.filter(person=>person!==p&&person.tgt===target&&((person.state==='move'&&person.after==='build')||(person.state==='work'&&person.workKind==='build'))).length}
 function productionPolicy(building,recipe){
@@ -563,7 +567,7 @@ function planJob(p){
    if(!best){p.act='nie ma gdzie sadzić';return false}const st=nearestWalk(best.i,best.j);if(st&&go(p,st,'plant',best)){best.claim++;p.act='sadzi drzewo';return true}return false}
   if(d.prod){if(!productionReady(b)){p.act='brak zasobów lub warunków do produkcji';return false}const e=entryOf(b.kind,b.i,b.j);if((e||workSiteManaged(b,'prod'))&&go(p,e,'prod',b)){p.act={drewutnia:'rąbie opał',warsztat:'robi narzędzia',szwalnia:'szyje i tka',cegielnia:'wypala cegły',pracownia:'piłuje deski',mielerz:'pilnuje mielerza',kuznia:'kuje żelazo',zarna:'miele ziarno',piekarnia:'piecze chleb',serownia:'robi ser',garncarnia:'lepi garnki',kiszarnia:'kisi kapustę i grzyby'}[b.kind]||(typeof E2ACT!=='undefined'&&E2ACT[b.kind])||'pracuje';return true}return false}
   return false}
- if(p.job==='wyp'){const e=S.exps.find(x=>x.id===p.exp);if(!e){p.job='rob';p.exp=null;return false}if(go(p,e.exit,'away',null)){p.act='wyrusza na wyprawę';return true}p.state='away';return true}
+ if(p.job==='wyp'){const e=S.exps.find(x=>x.id===p.exp);if(!e){p.job='rob';p.exp=null;return false}if(go(p,e.exit,'away',null)){p.act='wyrusza na wyprawę';return true}p.path=null;p.state='idle';p.wait=3;p.act='Brak drogi do wyjścia wyprawy — odblokuj przejście';p.blocked={code:'exp_exit',reason:p.act,since:p.blocked?.since??S.t,attempts:(p.blocked?.attempts||0)+1};return true}
  if(p.job==='zwiad'){const t=scoutTarget(p);if(!t){p.act='cała okolica odkryta';return false}if(go(p,t,'scout',null)){p.act='idzie w nieznane';return true}return false}
  if(p.job==='zdun'){const k=S.know;if(!k.active){p.act='czeka na próbę';return false}if(go(p,[camp.i,camp.j+1],'zdun',null)){p.act='próba: '+TRIAL[k.active].n.toLowerCase();return true}return false}
  if(p.job==='czyt'){const bk=Object.keys(S.books).find(k=>S.books[k]===1);if(!bk){p.act='nie ma nic do czytania';return false}const t=homeSpot(p)||[camp.i,camp.j+1];if(go(p,[camp.i,camp.j+1],'read',null)){p.book=bk;p.act='czyta: '+BOOKS[bk];return true}return false}
@@ -817,7 +821,8 @@ const rangeRing=new THREE.Mesh(new THREE.RingGeometry(.94,1,96),ringMat);rangeRi
 function showRing(kind,x,z){const r=BD[kind]&&BD[kind].r;if(!r){rangeRing.visible=false;return}rangeRing.visible=true;rangeRing.scale.set(r,r,r);rangeRing.position.set(x,Hy(x,z)+.4,z)}
 const canAfford=c=>Object.entries(c).every(([k,v])=>(S.res[k]||0)>=v);
 const bAvail=k=>{const d=BD[k];return !d.need||(TECH_BY[d.need]?tech(d.need):S.know[d.need]==='tak')};
-function checkPlace(kind,i,j){const d=BD[kind];if(i<0||j<0||i+d.w>N||j+d.h>N)return false;let mn=1e9,mx=-1e9;
+function placementPeople(kind,i,j){const d=BD[kind];return S.people.some(person=>{if(person.state==='away')return false;const [x,z]=tileOf(person.x,person.z);return x>=i&&x<i+d.w&&z>=j&&z<j+d.h})}
+function checkPlace(kind,i,j){const d=BD[kind];if(placementPeople(kind,i,j))return false;if(i<0||j<0||i+d.w>N||j+d.h>N)return false;let mn=1e9,mx=-1e9;
  for(let a=0;a<d.w;a++)for(let b=0;b<d.h;b++){const k=(j+b)*N+i+a;if(!land[k]||occ[k]>=0||!rev[k]||tileHH(i+a,j+b)<.04)return false}
  for(let a=0;a<=d.w;a++)for(let b=0;b<=d.h;b++){const h=H[(j+b)*VW+i+a];mn=Math.min(mn,h);mx=Math.max(mx,h)}
  if(mx-mn>1.3)return false;
@@ -833,6 +838,7 @@ function moveGhost(i,j){if(!placing)return;const d=BD[placing];i=clamp(i-((d.w-1
  const n=countInRange(placing,i,j);const el=$('pinfo');el.style.display='block';
  el.innerHTML=`<b>${d.n}</b> · ${costHTML(d.cost)}${n!==null?'<br>'+rangeLabel(placing,n):''}${ok?'':'<br><span class="no">Tu nie da się budować'+(d.shore?': pomost musi stać przy wodzie':'')+'</span>'}`}
 function tryPlace(){if(!placing||!ghostTile)return;const kind=placing,[i,j]=ghostTile,d=BD[kind];
+ if(placementPeople(kind,i,j)){toast('Tu stoi mieszkaniec — poczekaj, aż odejdzie, albo wybierz inne miejsce.');return}
  if(!checkPlace(kind,i,j)){toast(d.shore?'Pomost musi stać na brzegu, przy wodzie':'Tu nie da się budować: woda, stromizna, nieodkryty teren albo zajęte');return}
  if(!canAfford(d.cost)){toast('Brakuje: '+Object.entries(d.cost).filter(([k,v])=>(S.res[k]||0)<v).map(([k,v])=>RN[k].toLowerCase()+' '+Math.ceil(v-(S.res[k]||0))).join(', '));return}
  Object.entries(d.cost).forEach(([k,v])=>S.res[k]-=v);

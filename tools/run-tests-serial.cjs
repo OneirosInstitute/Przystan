@@ -105,7 +105,7 @@ async function runTests({root=path.resolve(__dirname,'..'),installMode=false,req
  if(failure)throw failure;
  if(completed!==suites.length)throw new Error('Incomplete test plan');
  output.stdout('TEST GATE PASS: '+completed+' suites, '+passed+' cases\n');
- if(installMode)output.stdout('INSTALL MODE: 2 extended 1500-day generation scenarios are release gates; see docs/weryfikacja8/results.json.\n');
+ if(installMode)output.stdout('INSTALL MODE: 2 extended 1500-day generation scenarios are release gates; see docs/weryfikacja9/results.json.\n');
  return {suites:completed,cases:passed,workers};
 }
 if(require.main===module){let options;try{options=parseOptions(process.argv.slice(2))}catch(error){console.error('TEST GATE FAILED:',error.message);process.exitCode=1}

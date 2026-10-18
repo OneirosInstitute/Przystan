@@ -1,0 +1,112 @@
+{
+  "status": "PASS",
+  "results": [
+    {
+      "viewport": {
+        "width": 412,
+        "height": 870
+      },
+      "status": "PASS",
+      "blockedExpedition": {
+        "state": "idle",
+        "left": 4,
+        "task": {
+          "peopleIds": [
+            0
+          ],
+          "urgent": false,
+          "progress": 0,
+          "id": "exp:501",
+          "category": "Wyprawy",
+          "title": "Wyprawa: zwiad",
+          "detail": "Brak drogi do wyjścia wyprawy — odblokuj przejście",
+          "status": "Droga zamknięta",
+          "location": {
+            "type": "point",
+            "x": 6.5,
+            "z": 84.5,
+            "label": "Wyjście wyprawy"
+          },
+          "action": {
+            "tab": "wyprawy",
+            "label": "Otwórz wyprawy"
+          }
+        }
+      },
+      "transport": {
+        "early": 0,
+        "distance": 0.0919999999999996,
+        "delivered": 6,
+        "stationary": true,
+        "cargo": 6,
+        "saved": true
+      },
+      "restart": {
+        "retained": 6,
+        "delivered": 12,
+        "again": 12,
+        "reserve": 0,
+        "cargo": null,
+        "saved": true
+      },
+      "bothMenus": true,
+      "taskLocatesExit": true,
+      "errors": []
+    },
+    {
+      "viewport": {
+        "width": 870,
+        "height": 412
+      },
+      "status": "PASS",
+      "blockedExpedition": {
+        "state": "idle",
+        "left": 4,
+        "task": {
+          "peopleIds": [
+            0
+          ],
+          "urgent": false,
+          "progress": 0,
+          "id": "exp:501",
+          "category": "Wyprawy",
+          "title": "Wyprawa: zwiad",
+          "detail": "Brak drogi do wyjścia wyprawy — odblokuj przejście",
+          "status": "Droga zamknięta",
+          "location": {
+            "type": "point",
+            "x": 6.5,
+            "z": 84.5,
+            "label": "Wyjście wyprawy"
+          },
+          "action": {
+            "tab": "wyprawy",
+            "label": "Otwórz wyprawy"
+          }
+        }
+      },
+      "transport": {
+        "early": 0,
+        "distance": 0.09200000000000089,
+        "delivered": 6,
+        "stationary": true,
+        "cargo": 6,
+        "saved": true
+      },
+      "restart": {
+        "retained": 6,
+        "delivered": 12,
+        "again": 12,
+        "reserve": 0,
+        "cargo": null,
+        "saved": true
+      },
+      "bothMenus": true,
+      "taskLocatesExit": true,
+      "errors": []
+    }
+  ],
+  "limits": [
+    "Software WebGL; no physical Android touch, frame-time or battery measurement."
+  ]
+}

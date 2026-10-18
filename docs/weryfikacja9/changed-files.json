@@ -1,0 +1,98 @@
+[
+  {
+    "path": "README.md",
+    "kind": "changed"
+  },
+  {
+    "path": "WDROZ_TERMUX.sh",
+    "kind": "changed"
+  },
+  {
+    "path": "docs/AUDYT_DROGI_RC9.md",
+    "kind": "added"
+  },
+  {
+    "path": "docs/KONTRAKT_RC9_DROGI.md",
+    "kind": "added"
+  },
+  {
+    "path": "docs/WYDANIE_4.0.0_RC9.md",
+    "kind": "added"
+  },
+  {
+    "path": "package.json",
+    "kind": "changed"
+  },
+  {
+    "path": "src/p_exp.js",
+    "kind": "changed"
+  },
+  {
+    "path": "src/p_gosp.js",
+    "kind": "changed"
+  },
+  {
+    "path": "src/p_misje.js",
+    "kind": "changed"
+  },
+  {
+    "path": "src/p_rest.js",
+    "kind": "changed"
+  },
+  {
+    "path": "src/p_szlif.js",
+    "kind": "changed"
+  },
+  {
+    "path": "src/p_tasks.js",
+    "kind": "changed"
+  },
+  {
+    "path": "src/p_tracking.js",
+    "kind": "changed"
+  },
+  {
+    "path": "src/p_worksites.js",
+    "kind": "changed"
+  },
+  {
+    "path": "src/p_woz.js",
+    "kind": "changed"
+  },
+  {
+    "path": "tests/build-deploy.test.mjs",
+    "kind": "changed"
+  },
+  {
+    "path": "tests/mobile-ui.test.mjs",
+    "kind": "changed"
+  },
+  {
+    "path": "tests/navigation-contract.test.mjs",
+    "kind": "added"
+  },
+  {
+    "path": "tools/browser-ai.cjs",
+    "kind": "changed"
+  },
+  {
+    "path": "tools/browser-mobile-ui.cjs",
+    "kind": "changed"
+  },
+  {
+    "path": "tools/browser-navigation.cjs",
+    "kind": "added"
+  },
+  {
+    "path": "tools/deploy-check.cjs",
+    "kind": "changed"
+  },
+  {
+    "path": "tools/run-tests-serial.cjs",
+    "kind": "changed"
+  },
+  {
+    "path": "tools/verify-package.cjs",
+    "kind": "changed"
+  }
+]

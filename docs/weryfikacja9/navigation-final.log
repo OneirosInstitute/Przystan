@@ -1,0 +1,88 @@
+TAP version 13
+# Subtest: an expedition cannot leave or advance through a closed exit
+ok 1 - an expedition cannot leave or advance through a closed exit
+  ---
+  duration_ms: 1102.247287
+  type: 'test'
+  ...
+# Subtest: an adjacent delivery cannot deposit across a blocked tile
+ok 2 - an adjacent delivery cannot deposit across a blocked tile
+  ---
+  duration_ms: 1247.047478
+  type: 'test'
+  ...
+# Subtest: a failed transport route cannot snap a stranded carrier to distant walkable land
+ok 3 - a failed transport route cannot snap a stranded carrier to distant walkable land
+  ---
+  duration_ms: 1192.539574
+  type: 'test'
+  ...
+# Subtest: the ordinary planner cannot teleport a stranded person
+ok 4 - the ordinary planner cannot teleport a stranded person
+  ---
+  duration_ms: 1086.405351
+  type: 'test'
+  ...
+# Subtest: construction under a person is rejected before paying or changing the map
+ok 5 - construction under a person is rejected before paying or changing the map
+  ---
+  duration_ms: 1267.652052
+  type: 'test'
+  ...
+# Subtest: unreachable expedition dispatch does not consume provisions or reassign the crew
+ok 6 - unreachable expedition dispatch does not consume provisions or reassign the crew
+  ---
+  duration_ms: 1115.955027
+  type: 'test'
+  ...
+# Subtest: expeditions never take a person away from a pending delivery
+ok 7 - expeditions never take a person away from a pending delivery
+  ---
+  duration_ms: 1241.677866
+  type: 'test'
+  ...
+# Subtest: construction cargo can reach another side when the preferred entrance is disconnected
+ok 8 - construction cargo can reach another side when the preferred entrance is disconnected
+  ---
+  duration_ms: 1177.604736
+  type: 'test'
+  ...
+# Subtest: an adjacent delivery consumes travel time before it deposits
+ok 9 - an adjacent delivery consumes travel time before it deposits
+  ---
+  duration_ms: 1283.719894
+  type: 'test'
+  ...
+# Subtest: blocked construction cargo survives restart and is delivered once after reopening
+ok 10 - blocked construction cargo survives restart and is delivered once after reopening
+  ---
+  duration_ms: 1253.225755
+  type: 'test'
+  ...
+# Subtest: a reachable expedition departs only on arrival, then its elapsed days advance
+ok 11 - a reachable expedition departs only on arrival, then its elapsed days advance
+  ---
+  duration_ms: 1564.595368
+  type: 'test'
+  ...
+# Subtest: all thirty production workshops reject stale remote work and allocate distinct stations
+ok 12 - all thirty production workshops reject stale remote work and allocate distinct stations
+  ---
+  duration_ms: 1589.848439
+  type: 'test'
+  ...
+# Subtest: a person at the corner of a station tile walks to its working position without getting stuck
+ok 13 - a person at the corner of a station tile walks to its working position without getting stuck
+  ---
+  duration_ms: 1615.858497
+  type: 'test'
+  ...
+1..13
+# tests 13
+# suites 0
+# pass 13
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 16906.811066
