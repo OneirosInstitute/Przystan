@@ -1,0 +1,10 @@
+✔ S01: failed routing does not overwrite the existing chore assignment (1209.295054ms)
+✔ S01: successful routing installs the new chore and clears stale targets (1030.637152ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2364.304992

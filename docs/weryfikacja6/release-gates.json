@@ -1,0 +1,183 @@
+{
+  "status": "PASS",
+  "suites": 35,
+  "cases": 176,
+  "initialFullInvocation": "exit 1 without a final summary after 13 completed suites; not counted as a passing npm test invocation",
+  "batches": [
+    {
+      "name": "ai-life.test.mjs",
+      "cases": 16,
+      "batch": "initial-full"
+    },
+    {
+      "name": "ai-movement.test.mjs",
+      "cases": 4,
+      "batch": "initial-full"
+    },
+    {
+      "name": "ai-policy.test.mjs",
+      "cases": 3,
+      "batch": "initial-full"
+    },
+    {
+      "name": "ai-specialties.test.mjs",
+      "cases": 2,
+      "batch": "initial-full"
+    },
+    {
+      "name": "autosave.test.mjs",
+      "cases": 9,
+      "batch": "initial-full"
+    },
+    {
+      "name": "build-deploy.test.mjs",
+      "cases": 4,
+      "batch": "initial-full"
+    },
+    {
+      "name": "building-missions.test.mjs",
+      "cases": 4,
+      "batch": "initial-full"
+    },
+    {
+      "name": "daily-pipeline.test.mjs",
+      "cases": 4,
+      "batch": "initial-full"
+    },
+    {
+      "name": "deploy-runner.test.mjs",
+      "cases": 6,
+      "batch": "initial-full"
+    },
+    {
+      "name": "e4-domain.test.mjs",
+      "cases": 4,
+      "batch": "initial-full"
+    },
+    {
+      "name": "e4-economy.test.mjs",
+      "cases": 12,
+      "batch": "initial-full"
+    },
+    {
+      "name": "e4-integration.test.mjs",
+      "cases": 3,
+      "batch": "initial-full"
+    },
+    {
+      "name": "e4-population.test.mjs",
+      "cases": 3,
+      "batch": "initial-full"
+    },
+    {
+      "name": "e4-world.test.mjs",
+      "cases": 4,
+      "batch": "remaining"
+    },
+    {
+      "name": "lifecycle.test.mjs",
+      "cases": 8,
+      "batch": "remaining"
+    },
+    {
+      "name": "mechanics.test.mjs",
+      "cases": 11,
+      "batch": "remaining"
+    },
+    {
+      "name": "menu-workspace.test.mjs",
+      "cases": 7,
+      "batch": "remaining"
+    },
+    {
+      "name": "night-save.test.mjs",
+      "cases": 4,
+      "batch": "remaining"
+    },
+    {
+      "name": "origin-heart.test.mjs",
+      "cases": 3,
+      "batch": "remaining"
+    },
+    {
+      "name": "persistence.test.mjs",
+      "cases": 10,
+      "batch": "remaining"
+    },
+    {
+      "name": "production-supply.test.mjs",
+      "cases": 9,
+      "batch": "remaining"
+    },
+    {
+      "name": "repair-regression.test.mjs",
+      "cases": 3,
+      "batch": "remaining"
+    },
+    {
+      "name": "resources.test.mjs",
+      "cases": 4,
+      "batch": "remaining"
+    },
+    {
+      "name": "s01-assignments.test.mjs",
+      "cases": 2,
+      "batch": "remaining"
+    },
+    {
+      "name": "s01-logistics.test.mjs",
+      "cases": 1,
+      "batch": "remaining"
+    },
+    {
+      "name": "s01-priority.test.mjs",
+      "cases": 3,
+      "batch": "remaining"
+    },
+    {
+      "name": "s02-forecast.test.mjs",
+      "cases": 2,
+      "batch": "remaining"
+    },
+    {
+      "name": "s03-households.test.mjs",
+      "cases": 1,
+      "batch": "remaining"
+    },
+    {
+      "name": "s04-ecology.test.mjs",
+      "cases": 1,
+      "batch": "remaining"
+    },
+    {
+      "name": "s05-battery.test.mjs",
+      "cases": 1,
+      "batch": "remaining"
+    },
+    {
+      "name": "save-recovery.test.mjs",
+      "cases": 4,
+      "batch": "remaining"
+    },
+    {
+      "name": "server.test.mjs",
+      "cases": 1,
+      "batch": "remaining"
+    },
+    {
+      "name": "session.test.mjs",
+      "cases": 4,
+      "batch": "remaining"
+    },
+    {
+      "name": "state-hardening.test.mjs",
+      "cases": 10,
+      "batch": "remaining"
+    },
+    {
+      "name": "task-tracking.test.mjs",
+      "cases": 9,
+      "batch": "remaining"
+    }
+  ]
+}

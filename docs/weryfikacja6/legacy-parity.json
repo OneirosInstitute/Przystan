@@ -1,0 +1,32 @@
+{
+  "status": "PASS",
+  "results": [
+    {
+      "epoch": 1,
+      "days": 40,
+      "identical": true,
+      "warnings": [
+        [],
+        []
+      ]
+    },
+    {
+      "epoch": 2,
+      "days": 40,
+      "identical": true,
+      "warnings": [
+        [],
+        []
+      ]
+    },
+    {
+      "epoch": 3,
+      "days": 40,
+      "identical": true,
+      "warnings": [
+        [],
+        []
+      ]
+    }
+  ]
+}

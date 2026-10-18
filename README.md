@@ -1,3 +1,15 @@
+# Przystań — 4.0.0-rc.6
+
+Aktualna paczka: **Przystan_4.0.0_RC6_HARDENING_TERMUX.zip**.
+
+[Wdrożenie](docs/WYDANIE_4.0.0_RC6.md) · [Audyt i poprawki](docs/AUDYT_HARDENING_RC6.md) · [Odbiór](docs/WERYFIKACJA_4.0.0_RC6.md) · [Dalszy plan](docs/PLAN_ROZWOJU_PO_RC6.md).
+
+RC6 konsoliduje przebieg doby, przesuwa zapis po dziennych aktualizacjach i wzmacnia kontrakty stanu epoki IV. Zachowuje klasyczny układ menu z Zadaniami oraz szybszy harmonogram kontroli instalacyjnych.
+
+Poniżej dokumentacja wcześniejszych wydań.
+
+> **RC5 FAST1:** szybsze kontrole instalacyjne przy niezmienionych plikach gry RC5. Opis i pomiary: `docs/WDROZENIE_RC5_FAST.md`.
+
 # Przystań — 4.0.0-rc.5
 
 Aktualna paczka: **Przystan_4.0.0_RC5_SI_TERMUX.zip**.

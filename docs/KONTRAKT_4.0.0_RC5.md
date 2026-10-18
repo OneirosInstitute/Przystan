@@ -15,4 +15,6 @@ Zakres zatwierdzony: A1–A7 z audytu 2026-10-17. Paczka kumuluje RC4 FIX.
 
 Hierarchia I–III: zagrożenie/zdrowie → bezpieczne rozliczenie ładunku → potrzeby → przydział → zaopatrzenie → prace wspólne. E4: podróż/zdrowie → posiłek/sen → zobowiązanie i zaopatrzenie → nauka/rodzina.
 
-Testy wydania `npm test` obejmują wszystkie 156 przypadków, w tym dwie symulacje po 1500 dni. `npm run test:install` zachowuje pozostałe 154 przypadki (także migrację dawnych bliźniąt), a instalator dodatkowo uruchamia 12 000 klatek próby silnika. Nie pomija się ciężkich scenariuszy przed spakowaniem wydania.
+Testy wydania `npm test` obejmują wszystkie 162 przypadki, w tym dwie symulacje po 1500 dni. `npm run test:install` zachowuje pozostałe 160 przypadków (także migrację dawnych bliźniąt), a instalator dodatkowo uruchamia 12 000 klatek próby silnika. Nie pomija się ciężkich scenariuszy przed spakowaniem wydania.
+
+FAST1: sześć nowych przypadków sprawdza sterownik testów. Pełne testy pozostają szeregowe; instalacja uruchamia najwyżej dwa niezależne zestawy równolegle, gdy pozwalają procesor i pamięć. Żadna nowa kontrola nie jest pomijana. Szczegóły dowodów oraz zachowane wyniki niezmienionej gry: `WDROZENIE_RC5_FAST.md`.

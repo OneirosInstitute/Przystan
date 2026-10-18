@@ -175,7 +175,7 @@ function e2Daily(){if(!S||S.epoch!==2||!S.e2)return;const e=S.e2,sea=seasonIdx()
   if(n)log(`${n>1?'Zachorowały '+n+' osoby':'Ktoś zachorował'}: gorączka bagienna. Przyczyna: komary i wilgoć mokradeł.`)}
  if(hasDone('piwnica'))FOOD.forEach(k=>{const v=S.res[k]||0;if(v>0)S.res[k]=v+v*SPOIL[k]*K*.2});
  e2BigTick()}
-{const _nd=newDay;newDay=function(){_nd();try{e2Daily()}catch(er){console.warn(er)}}}
+// Dzienna aktualizacja: p_daily.js (jedna jawna kolejność).
 {const _dg=dogGuard;dogGuard=function(){const v=_dg();return e2R('grod')&&S.e2.wal?v*.15:v}}
 
 // ---------- rejsy wzdłuż brzegu ----------

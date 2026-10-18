@@ -24,18 +24,20 @@ Domy z bali pozostają domami. Domy rodowe i folwarki powstają po przeprowadzce
 
 ## Wdrożenie z Termux
 
-Pobierz `Przystan_4.0.0_RC5_SI_TERMUX.zip` do folderu Pobrane. Następnie:
+Pobierz `Przystan_4.0.0_RC5_SI_TERMUX_FAST.zip` do folderu Pobrane. Następnie:
 
 ```bash
 STAGING="$(mktemp -d "$HOME/przystan-rc5-XXXXXX")"
-unzip -q "$HOME/storage/downloads/Przystan_4.0.0_RC5_SI_TERMUX.zip" -d "$STAGING"
+unzip -q "$HOME/storage/downloads/Przystan_4.0.0_RC5_SI_TERMUX_FAST.zip" -d "$STAGING"
 bash "$STAGING/Przystan_4.0.0_RC5_SI/WDROZ_TERMUX.sh"
 ```
 
-Instalator sprawdzi integralność, tożsamość repo, gałąź, czysty stan i bazę. Zbuduje grę, uruchomi 154 kontrole instalacyjne oraz próbę silnika. Dwie ciężkie symulacje po 1500 dni są bramką wydania wykonaną przed utworzeniem ZIP-a; ich wyniki są w raporcie. Dopiero po zielonych kontrolach wykona commit i push. Testy instalacyjne mogą potrwać kilka minut. Instalator wypisuje nazwę bieżącego zestawu. Na końcu musi pojawić się `CHECKPOINT PASS: working tree clean, HEAD == origin/main`.
+Instalator sprawdzi integralność, tożsamość repo, gałąź, czysty stan i bazę. Zbuduje grę, uruchomi 160 kontroli instalacyjnych oraz próbę silnika. Dwie ciężkie symulacje po 1500 dni są bramką wydania wykonaną przed utworzeniem ZIP-a; ich wyniki są w raporcie. Dopiero po zielonych kontrolach wykona commit i push. Testy instalacyjne mogą potrwać kilka minut. Instalator wypisuje nazwę bieżącego zestawu. Na końcu musi pojawić się `CHECKPOINT PASS: working tree clean, HEAD == origin/main`.
 
 Nie rozpakowuj paczki bezpośrednio do repozytorium przed uruchomieniem instalatora. Własne zmiany i nieznana nowsza baza zatrzymują instalację przed kopiowaniem.
 
 ## Odbiór
 
 Wyniki i ograniczenia opisuje `docs/WERYFIKACJA_4.0.0_RC5.md`. To kandydat do wydania: sprawdzenie fizycznego telefonu i odczucia animacji podczas dłuższej gry pozostają testem użytkowym.
+
+FAST1 zmienia sterownik uruchamiania kontroli. Maksymalnie dwa procesy testowe pracują równolegle; build, próba silnika, integralność i operacje Git pozostają osobnymi bramkami. Grupa procesów nieudanego lub przerwanego testu jest zatrzymywana. Pełny opis: `WDROZENIE_RC5_FAST.md`.

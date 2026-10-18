@@ -1,0 +1,10 @@
+{
+  "head": "2ad9ac443492552da5690146b734c4600b295db7",
+  "differencesFromRc5Fast": [
+    "README.md",
+    "docs/KONTRAKT_4.0.0_RC5.md",
+    "docs/WYDANIE_4.0.0_RC5.md",
+    "release-manifest.json",
+    "tools/run-tests-serial.cjs"
+  ]
+}

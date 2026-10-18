@@ -1,0 +1,12 @@
+✔ E4 world has four times the map area, stable terrain and distinct functional regions (5.148222ms)
+✔ E4 core preserves old inhabited land and the landing bay remains open (2.350585ms)
+✔ roads follow land, survive world serialization and do not cut through sea (5.683223ms)
+✔ world rejects invalid imported dimensions and oversized or nonfinite core samples (0.56757ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 104.625886

@@ -1,0 +1,12 @@
+✔ autosave during skipped night persists progress and the ordinary resume speed (3149.18957ms)
+✔ the midnight save succeeds while night acceleration is active (1688.553807ms)
+✔ a paused decision opened during night skip resumes at the player speed after restart (2897.343339ms)
+✔ legacy temporary night speed is migrated while unsupported speeds are rejected (1590.149519ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 9487.810823

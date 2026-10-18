@@ -1,0 +1,22 @@
+{
+  "baseline": {
+    "command": "npm run test:install",
+    "exit": 0,
+    "wall_seconds": 267.96260316000007,
+    "node": "v24.19.0"
+  },
+  "optimized": {
+    "command": "npm run test:install",
+    "exit": 0,
+    "wall_seconds": 150.49511138200023,
+    "node": "v24.19.0"
+  },
+  "same_cases": 154,
+  "same_suites": 32,
+  "speedup": 1.78054024944261,
+  "wall_time_reduction_percent": 43.83727072089242,
+  "physical_phone": "unmeasured",
+  "new_runner_regressions": 6,
+  "game_build": "cca61713bd",
+  "game_files_unchanged": 90
+}

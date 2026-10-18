@@ -1,0 +1,12 @@
+✔ quota occupied by the secondary backup is recovered without clearing unrelated storage (2892.151432ms)
+✔ a failed quota retry restores the secondary backup and preserves the primary (1406.89003ms)
+✔ invalid state reports the responsible field and version without replacing a good save (1317.455779ms)
+✔ text validation identifies unsafe nested input without accepting it (1385.895834ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7141.189114

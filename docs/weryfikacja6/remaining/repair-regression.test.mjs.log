@@ -1,0 +1,11 @@
+✔ autosave retains an open decision while simulation is paused (1446.21507ms)
+✔ building panel lists requirements for locked residential upgrade and household reserves (1116.885901ms)
+✔ distant map labels are collapsed and aurora cannot blank out island overview (0.871029ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2712.030459

@@ -1,0 +1,6 @@
+{
+  "command": "npm run test:install",
+  "exit": 0,
+  "wall_seconds": 267.96260316000007,
+  "node": "v24.19.0"
+}

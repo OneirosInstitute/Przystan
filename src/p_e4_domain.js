@@ -70,6 +70,30 @@ const E4Domain=(()=>{
   record(state,'epoch','Rody rozpoczynają wspólną historię folwarków.');
   if(!validate(state))throw new Error('Migracja nie spełnia kontraktu tożsamości');return state;
  }
+ // Wspólny kontrakt zegara dla importu i wykonywania symulacji.
+ function clockIssue(state){
+  const model=state.e4;
+  if(!object(model)||!finite(state.day)||state.day<0||!finite(state.t)||state.t<0||!Array.isArray(model.transports))return 'Nieprawidłowy czas osady';
+  if(model.simTicks===undefined)return Number.isSafeInteger(Math.round(state.day*1000000))&&!model.transports.length?'':'Niepełny zegar transportu';
+  if(!identity(model.simTicks)||Math.abs(model.simTicks/1000000-state.day)>1e-6||!finite(model.fraction)||model.fraction<0||model.fraction>=1.000001)return 'Niespójny zegar symulacji';
+  if(!identity(model.startTicks)||model.startTicks>model.simTicks||!finite(model.startTime)||model.startTime<0||!finite(model.elapsed)||model.elapsed<0)return 'Nieprawidłowy początek zegara';
+  const elapsed=(model.simTicks-model.startTicks)/1000000;
+  if(Math.abs(model.elapsed-elapsed)>1e-6||Math.abs(state.t-(model.startTime+elapsed*240))>1e-6)return 'Niespójny czas od rozpoczęcia epoki';
+  if(model.transports.some(transport=>!object(transport)||!identity(transport.started)||transport.started>model.simTicks||!identity(transport.arrival)||transport.arrival<=model.simTicks))return 'Przeterminowany lub przyszły start transportu';
+  return '';
+ }
+ function validPoint(point){return object(point)&&finite(point.x)&&finite(point.z)&&Math.abs(point.x)<=192&&Math.abs(point.z)<=192;}
+ function validPath(points,length,minimum=0,arrivalTolerance=0){
+  if(!Array.isArray(points)||points.length<minimum||points.length>10000||!finite(length)||length<0||!points.every(validPoint))return false;
+  let measured=0;for(let index=1;index<points.length;index++)measured+=Math.hypot(points[index].x-points[index-1].x,points[index].z-points[index-1].z);
+  return length===0&&measured<arrivalTolerance||Math.abs(measured-length)<=1e-6*Math.max(1,measured);
+ }
+ function validLabor(person){
+  for(const key of ['e4Credits','e4UsedCredits'])if(person[key]!==undefined&&(!object(person[key])||!Object.values(person[key]).every(value=>finite(value)&&value>=0&&(key!=='e4Credits'||identity(value)))))return false;
+  if(person.e4AttendanceTicks!==undefined&&!identity(person.e4AttendanceTicks))return false;
+  if(person.e4AttendanceDay!==undefined&&!identity(person.e4AttendanceDay))return false;
+  return true;
+ }
  function validate(state){try{
   const model=state.e4;if(state.epoch!==4||!object(model)||model.schema!==1||!object(model.world)||model.world.version!==1||model.world.size!==384||!identity(model.world.seed)||model.world.seed!==state.seed||!Array.isArray(model.world.regions)||!model.world.regions.length||model.world.regions.length>144)return false;
   if(model.world.core&&(model.world.core.size!==192||model.world.core.step!==2||model.world.core.heights?.length!==9409||!model.world.core.heights.every(finite)))return false;
@@ -80,18 +104,19 @@ const E4Domain=(()=>{
   const peopleIds=new Set();for(const person of state.people){
    if(!identity(person.id)||peopleIds.has(person.id)||!state.rody[person.rod]||!state.fams[person.fam]||!model.households[person.fam]||!model.settlements[person.settlementId])return false;peopleIds.add(person.id);
    if(model.households[person.fam].settlementId!==person.settlementId||!finite(person.age)||person.age<0||!finite(person.x)||!finite(person.z)||Math.abs(person.x)>192||Math.abs(person.z)>192||!['m','k'].includes(person.sex)||!identity(person.generation)||person.generation<1)return false;
-   const action=person.e4Action;if(action&&(!object(action)||!['build','forge','sew','craft','field','care','chop','gather','mine','rest','sleep','wash','meal','family','teach','learn'].includes(action.kind)||!model.settlements[action.settlementId]||!['start','arrival','end','accounted','length'].every(key=>finite(action[key]))||action.end<=action.start||action.arrival<action.start||action.length<0||!Array.isArray(action.route)||action.route.length>2000||!action.route.every(point=>object(point)&&finite(point.x)&&finite(point.z)&&Math.abs(point.x)<=192&&Math.abs(point.z)<=192)))return false;
+   const action=person.e4Action;if(action&&(!object(action)||!['build','forge','sew','craft','field','care','chop','gather','mine','rest','sleep','wash','meal','family','teach','learn'].includes(action.kind)||!model.settlements[action.settlementId]||!['start','arrival','end','accounted','length'].every(key=>finite(action[key]))||action.end<=action.start||action.arrival<action.start||!validPoint(action.target)||!finite(action.plannedHours)||action.plannedHours<0||action.plannedHours>2||action.accounted<action.start-1e-9||action.accounted>action.end+1e-9||!validPath(action.route,action.length,0,.1)||action.route.length>2000))return false;
+   if(!validLabor(person))return false;
    const parents=person.par||[];if(!Array.isArray(parents)||parents.length>2||!parents.every(identity)||parents.includes(person.id))return false;
   }
   for(const [key,family]of Object.entries(model.households))if(String(family.id)!==key||!identity(family.id)||!state.fams[family.id]||!state.rody[family.clanId]||!model.settlements[family.settlementId])return false;
   for(const settlement of Object.values(model.settlements)){
    if(!finite(settlement.x)||!finite(settlement.z)||Math.abs(settlement.x)>192||Math.abs(settlement.z)>192||!finite(settlement.capacity)||settlement.capacity<0||!Array.isArray(settlement.projects)||!Array.isArray(settlement.fields)||!object(settlement.buildings)||!object(settlement.animals))return false;
    const resources=settlement.id==='przystan'?state.res:settlement.stock;if(!validResources(resources))return false;
-   if(!Object.entries(settlement.buildings).every(([kind,count])=>(kind==='schronienie'||catalog.buildings[kind])&&identity(count)))return false;
-   if(!settlement.projects.every(project=>catalog.buildings[project.kind]&&finite(project.progress)&&project.progress>=0&&finite(project.work)&&project.work>0&&project.progress<=project.work+1e-6&&validResources(project.materials)))return false;
-   if(!settlement.fields.every(field=>catalog.crops[field.crop]&&finite(field.age)&&field.age>=0&&finite(field.progress)&&field.progress>=0&&finite(field.soil)&&field.soil>=0&&field.soil<=1))return false;
-   if(!settlement.batches.every(batch=>catalog.recipes[batch.recipe]&&validResources(batch.materials)&&finite(batch.progress)&&batch.progress>=0&&finite(batch.work)&&batch.work>0&&(batch.readyAt===null||identity(batch.readyAt))))return false;
-   if(settlement.herd&&!settlement.herd.every(animal=>identity(animal.id)&&catalog.animals[animal.species]&&['k','m'].includes(animal.sex)&&finite(animal.age)&&animal.age>=0&&finite(animal.hp)&&animal.hp>0&&animal.hp<=1))return false;
+   if(!Object.entries(settlement.buildings).every(([kind,count])=>(kind==='schronienie'||Object.hasOwn(catalog.buildings,kind))&&identity(count)))return false;
+   if(!settlement.projects.every(project=>Object.hasOwn(catalog.buildings,project.kind)&&finite(project.progress)&&project.progress>=0&&finite(project.work)&&project.work>0&&project.progress<=project.work+1e-6&&validResources(project.materials)))return false;
+   if(!settlement.fields.every(field=>Object.hasOwn(catalog.crops,field.crop)&&finite(field.age)&&field.age>=0&&finite(field.progress)&&field.progress>=0&&finite(field.soil)&&field.soil>=0&&field.soil<=1))return false;
+   if(!settlement.batches.every(batch=>Object.hasOwn(catalog.recipes,batch.recipe)&&validResources(batch.materials)&&finite(batch.progress)&&batch.progress>=0&&finite(batch.work)&&batch.work>0&&(batch.readyAt===null||identity(batch.readyAt))))return false;
+   if(settlement.herd&&!settlement.herd.every(animal=>identity(animal.id)&&Object.hasOwn(catalog.animals,animal.species)&&['k','m'].includes(animal.sex)&&finite(animal.age)&&animal.age>=0&&finite(animal.hp)&&animal.hp>0&&animal.hp<=1))return false;
   }
   const transportIds=new Set();for(const transport of model.transports){if(!identity(transport.id)||transportIds.has(transport.id)||!model.settlements[transport.from]||!model.settlements[transport.to]||!validResources(transport.items)||!validResources(transport.travelFood)||!['outbound','returning'].includes(transport.phase)||!identity(transport.started)||!identity(transport.arrival)||transport.arrival<=transport.started||!finite(transport.duration)||transport.duration<=0||!Array.isArray(transport.peopleIds)||!transport.peopleIds.length||!transport.peopleIds.every(id=>peopleIds.has(id))||!validRoute(transport.route))return false;transportIds.add(transport.id);}
   const crew=new Set();for(const transport of model.transports)for(const personId of transport.peopleIds){if(crew.has(personId)||state.people.find(person=>person.id===personId).e4Transport!==transport.id)return false;crew.add(personId);}
@@ -99,11 +124,11 @@ const E4Domain=(()=>{
   if(model.vehicles){const ids=new Set();for(const vehicle of model.vehicles){if(!identity(vehicle.id)||ids.has(vehicle.id)||!model.settlements[vehicle.owner]||vehicle.transportId!==null&&!transportIds.has(vehicle.transportId))return false;ids.add(vehicle.id);}}
   if(model.nature)for(const pool of Object.values(model.nature)){if(!object(pool)||!['timber','maxTimber','ore','clay','stone','fish','maxFish','forage','maxForage','herbs','wildGrain'].every(key=>finite(pool[key])&&pool[key]>=0)||!object(pool.wild)||!Object.values(pool.wild).every(quantity=>finite(quantity)&&quantity>=0))return false;}
   for(const person of state.people)if(person.e4Transport!==undefined&&!transportIds.has(person.e4Transport))return false;
-  if(model.simTicks!==undefined&&(!identity(model.simTicks)||Math.abs(model.simTicks/1000000-state.day)>1e-6||!finite(model.fraction)||model.fraction<0||model.fraction>=1.000001))return false;
+  if(clockIssue(state))return false;
   return true;
  }catch(error){return false}}
- function validResources(resources){return object(resources)&&Object.entries(resources).every(([resource,quantity])=>catalog.resources[resource]&&finite(quantity)&&quantity>=0);}
- function validRoute(route){return object(route)&&finite(route.length)&&route.length>=0&&Array.isArray(route.points)&&route.points.length>=2&&route.points.length<10000&&route.points.every(point=>finite(point.x)&&finite(point.z)&&Math.abs(point.x)<=192&&Math.abs(point.z)<=192);}
- return{migrate,validate,random,record,stock,need,residents,members,household,addPerson,archivePerson,createSettlement,clone};
+ function validResources(resources){return object(resources)&&Object.entries(resources).every(([resource,quantity])=>Object.hasOwn(catalog.resources,resource)&&finite(quantity)&&quantity>=0);}
+ function validRoute(route){return object(route)&&validPath(route.points,route.length,1);}
+ return{migrate,validate,clockIssue,random,record,stock,need,residents,members,household,addPerson,archivePerson,createSettlement,clone};
 })();
 if(typeof module!=='undefined'&&module.exports)module.exports=E4Domain;

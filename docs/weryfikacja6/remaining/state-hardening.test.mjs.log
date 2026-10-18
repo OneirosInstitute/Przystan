@@ -1,0 +1,18 @@
+✔ a rejected clock step never initializes or mutates the simulation (14.405736ms)
+✔ a persisted E4 clock must have a coherent finite origin and elapsed time (8.547224ms)
+✔ a transport checkpoint cannot contain an arrival at or before its current clock (6.535855ms)
+✔ route length agrees with geometry and corrupt action targets or labor ledgers are rejected (13.535759ms)
+✔ valid RC5 snapshots, blocked actions and long walks remain loadable after repeated restarts (25.646348ms)
+✔ invalid clock origins and safe-integer overflow are rejected before runtime mutation (9.211521ms)
+✔ the sub-decimeter arrival tolerance remains compatible with existing action snapshots (3.586509ms)
+✔ the real save decoder rejects a corrupt E4 clock without touching the running colony (54.121437ms)
+✔ catalog validation accepts only declared resources, buildings, crops, recipes and animals (12.815132ms)
+✔ a legitimate one-point transport route remains valid and delivers its cargo once (11.753564ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1887.606414

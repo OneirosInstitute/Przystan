@@ -1,0 +1,64 @@
+{
+  "status": "PASS",
+  "rows": [
+    {
+      "id": "clock-origin",
+      "beforeAccepted": true,
+      "afterAccepted": false
+    },
+    {
+      "id": "action-target",
+      "beforeAccepted": true,
+      "afterAccepted": false
+    },
+    {
+      "id": "action-length",
+      "beforeAccepted": true,
+      "afterAccepted": false
+    },
+    {
+      "id": "negative-labor",
+      "beforeAccepted": true,
+      "afterAccepted": false
+    },
+    {
+      "id": "catalog-resource",
+      "beforeAccepted": true,
+      "afterAccepted": false
+    },
+    {
+      "id": "catalog-building",
+      "beforeAccepted": true,
+      "afterAccepted": false
+    },
+    {
+      "id": "catalog-project",
+      "beforeAccepted": true,
+      "afterAccepted": false
+    },
+    {
+      "id": "catalog-crop",
+      "beforeAccepted": true,
+      "afterAccepted": false
+    },
+    {
+      "id": "catalog-recipe",
+      "beforeAccepted": true,
+      "afterAccepted": false
+    },
+    {
+      "id": "catalog-animal",
+      "beforeAccepted": true,
+      "afterAccepted": false
+    }
+  ],
+  "transport": {
+    "beforeRewinds": [
+      {
+        "from": 2.669209,
+        "to": 2.668209
+      }
+    ],
+    "afterRejectsBeforeMutation": true
+  }
+}

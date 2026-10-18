@@ -1,0 +1,2999 @@
+✔ daily phases retain their existing order and capture fuel before the core (2335.511299ms)
+✖ the daily checkpoint includes every completed daily phase (1695.784625ms)
+✔ core failure restores temporary spoilage settings and does not save a partial day (1264.558205ms)
+✔ a failed optional daily phase is reported and later phases still run (1519.566609ms)
+✖ a rejected clock step never initializes or mutates the simulation (666.210346ms)
+✖ a persisted E4 clock must have a coherent finite origin and elapsed time (23.65163ms)
+✖ a transport checkpoint cannot contain an arrival at or before its current clock (9.705338ms)
+✖ route length agrees with geometry and corrupt action targets or labor ledgers are rejected (11.378415ms)
+✔ valid RC5 snapshots, blocked actions and long walks remain loadable after repeated restarts (23.167244ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 4
+ℹ fail 5
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7022.685212
+
+✖ failing tests:
+
+test at tests/daily-pipeline.test.mjs:24:1
+✖ the daily checkpoint includes every completed daily phase (1695.784625ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  'goals' !== 'save:7'
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/hardening_rc6_20261018/source/Przystan_4.0.0_RC5_SI/tests/daily-pipeline.test.mjs:25:39)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'goals',
+    expected: 'save:7',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/state-hardening.test.mjs:10:1
+✖ a rejected clock step never initializes or mutates the simulation (666.210346ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  ... Skipped lines
+  
+    {
+      act: 1,
+      agoals: {},
+      alloc: {
+        bud: 3,
+  ...
+        ],
+  +     fieldLayoutVersion: 1,
+  +     fraction: 0,
+        households: {
+          '1': {
+            clanId: 1,
+            created: 0.27,
+            homeId: null,
+  ...
+        },
+  +     nature: {
+  +       'kraina:0:3': {
+  +         clay: 2369.2399232155167,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 1500,
+  +         forage: 567.1814533779591,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 1500,
+  +         maxForage: 567.1814533779591,
+  +         maxTimber: 2282.4459161091663,
+  +         ore: 485.4310569939947,
+  +         stone: 4000,
+  +         timber: 2282.4459161091663,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:0:4': {
+  +         clay: 910.948983364298,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 150,
+  +         forage: 417.7444485530335,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 150,
+  +         maxForage: 417.7444485530335,
+  +         maxTimber: 2305.522922831352,
+  +         ore: 791.5775307102198,
+  +         stone: 4000,
+  +         timber: 2305.522922831352,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:0:5': {
+  +         clay: 847.1376101717318,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 1500,
+  +         forage: 417.3832260239033,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 1500,
+  +         maxForage: 417.3832260239033,
+  +         maxTimber: 4763.250704814349,
+  +         ore: 918.0710413858284,
+  +         stone: 4000,
+  +         timber: 4763.250704814349,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:0:6': {
+  +         clay: 1741.9792248448596,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 150,
+  +         forage: 491.68948929861676,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 150,
+  +         maxForage: 491.68948929861676,
+  +         maxTimber: 3215.938868113503,
+  +         ore: 1187.29505897049,
+  +         stone: 4000,
+  +         timber: 3215.938868113503,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:0:7': {
+  +         clay: 2721.507322935172,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 1500,
+  +         forage: 587.5403171746362,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 1500,
+  +         maxForage: 587.5403171746362,
+  +         maxTimber: 6207.898822462925,
+  +         ore: 1216.0758926880137,
+  +         stone: 4000,
+  +         timber: 6207.898822462925,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:0:8': {
+  +         clay: 1136.819113316594,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 1500,
+  +         forage: 455.6759667192575,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 1500,
+  +         maxForage: 455.6759667192575,
+  +         maxTimber: 6175.247882832629,
+  +         ore: 1259.0557640600337,
+  +         stone: 4000,
+  +         timber: 6175.247882832629,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:10:3': {
+  +         clay: 1193.5548606224254,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 1500,
+  +         forage: 459.31129219092554,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 1500,
+  +         maxForage: 459.31129219092554,
+  +         maxTimber: 2703.8067053718273,
+  +         ore: 931.7933723591942,
+  +         stone: 4000,
+  +         timber: 2703.8067053718273,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:10:4': {
+  +         clay: 1646.3797828293837,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 150,
+  +         forage: 467.2993550328308,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 150,
+  +         maxForage: 467.2993550328308,
+  +         maxTimber: 4413.814297254524,
+  +         ore: 599.5366872854836,
+  +         stone: 4000,
+  +         timber: 4413.814297254524,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:10:5': {
+  +         clay: 1913.8093823231313,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 150,
+  +         forage: 479.1788505266647,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 150,
+  +         maxForage: 479.1788505266647,
+  +         maxTimber: 3487.0253039335266,
+  +         ore: 1021.8988955886432,
+  +         stone: 4000,
+  +         timber: 3487.0253039335266,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:10:6': {
+  +         clay: 2507.6831313341345,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 150,
+  +         forage: 533.6205426074641,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 150,
+  +         maxForage: 533.6205426074641,
+  +         maxTimber: 5263.709587726508,
+  +         ore: 905.5867354900993,
+  +         stone: 4000,
+  +         timber: 5263.709587726508,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:10:7': {
+  +         clay: 3260.91722642756,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 900,
+  +         forage: 602.1310372912047,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 900,
+  +         maxForage: 602.1310372912047,
+  +         maxTimber: 3655.4355349103835,
+  +         ore: 719.6650776578464,
+  +         stone: 4000,
+  +         timber: 3655.4355349103835,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:10:8': {
+  +         clay: 3280.8472042476246,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 1500,
+  +         forage: 639.1657186146931,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 1500,
+  +         maxForage: 639.1657186146931,
+  +         maxTimber: 4829.751085236296,
+  +         ore: 719.0524734176597,
+  +         stone: 4000,
+  +         timber: 4829.751085236296,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:10:9': {
+  +         clay: 2619.4117493304316,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 1500,
+  +         forage: 588.9271920786175,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 1500,
+  +         maxForage: 588.9271920786175,
+  +         maxTimber: 6864.332936286109,
+  +         ore: 1420.1110320802345,
+  +         stone: 4000,
+  +         timber: 6864.332936286109,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:11:3': {
+  +         clay: 777.0787425385471,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 1500,
+  +         forage: 422.1380150104028,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 1500,
+  +         maxForage: 422.1380150104028,
+  +         maxTimber: 2679.0288915225005,
+  +         ore: 907.0916834744787,
+  +         stone: 4000,
+  +         timber: 2679.0288915225005,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:11:5': {
+  +         clay: 2699.7707481185766,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 1500,
+  +         forage: 594.4783642654385,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 1500,
+  +         maxForage: 594.4783642654385,
+  +         maxTimber: 2914.3972373354713,
+  +         ore: 537.7313099068439,
+  +         stone: 4000,
+  +         timber: 2914.3972373354713,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:11:6': {
+  +         clay: 2274.9968603728717,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 1500,
+  +         forage: 551.075520918852,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 1500,
+  +         maxForage: 551.075520918852,
+  +         maxTimber: 4461.7019956679405,
+  +         ore: 268.51133086755544,
+  +         stone: 4000,
+  +         timber: 4461.7019956679405,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:11:7': {
+  +         clay: 2549.6589282735345,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 1500,
+  +         forage: 574.9475082772964,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 1500,
+  +         maxForage: 574.9475082772964,
+  +         maxTimber: 3117.9414317755995,
+  +         ore: 460.30370644071223,
+  +         stone: 4000,
+  +         timber: 3117.9414317755995,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:11:8': {
+  +         clay: 3713.3171482598805,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 1500,
+  +         forage: 675.3217557891713,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 1500,
+  +         maxForage: 675.3217557891713,
+  +         maxTimber: 3822.683694920669,
+  +         ore: 874.670529597348,
+  +         stone: 4000,
+  +         timber: 3822.683694920669,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:1:2': {
+  +         clay: 804.5029727217384,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 1500,
+  +         forage: 421.16304077930664,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 1500,
+  +         maxForage: 421.16304077930664,
+  +         maxTimber: 3061.3312881002644,
+  +         ore: 692.8225364564203,
+  +         stone: 4000,
+  +         timber: 3061.3312881002644,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:1:3': {
+  +         clay: 2734.8652494053154,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 150,
+  +         forage: 573.7890383962163,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 150,
+  +         maxForage: 573.7890383962163,
+  +         maxTimber: 3999.3457097261316,
+  +         ore: 908.4547866790217,
+  +         stone: 4000,
+  +         timber: 3999.3457097261316,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:1:4': {
+  +         clay: 1437.601343947357,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 150,
+  +         forage: 435.1761174268848,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 150,
+  +         maxForage: 435.1761174268848,
+  +         maxTimber: 5867.7524211050695,
+  +         ore: 1148.9903894440858,
+  +         stone: 4000,
+  +         timber: 5867.7524211050695,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:1:5': {
+  +         clay: 927.9145192267464,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 150,
+  +         forage: 393.14406913079563,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 150,
+  +         maxForage: 393.14406913079563,
+  +         maxTimber: 4325.696831672148,
+  +         ore: 754.9047223980596,
+  +         stone: 4000,
+  +         timber: 4325.696831672148,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:1:6': {
+  +         clay: 1689.3618148688495,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 150,
+  +         forage: 460.7325596808898,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 150,
+  +         maxForage: 460.7325596808898,
+  +         maxTimber: 2549.0086618206583,
+  +         ore: 871.2156075503143,
+  +         stone: 4000,
+  +         timber: 2549.0086618206583,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:1:7': {
+  +         clay: 2695.208461810545,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 150,
+  +         forage: 551.5251885114372,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 150,
+  +         maxForage: 551.5251885114372,
+  +         maxTimber: 2414.387829191248,
+  +         ore: 895.8312329199509,
+  +         stone: 4000,
+  +         timber: 2414.387829191248,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:1:8': {
+  +         clay: 519.0080140785753,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 150,
+  +         forage: 377.0264015197941,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 150,
+  +         maxForage: 377.0264015197941,
+  +         maxTimber: 5118.045976196626,
+  +         ore: 1259.202405750465,
+  +         stone: 4000,
+  +         timber: 5118.045976196626,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:1:9': {
+  +         clay: 757.0626474844247,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 1500,
+  +         forage: 421.10753855274794,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 1500,
+  +         maxForage: 421.10753855274794,
+  +         maxTimber: 2911.0515042727543,
+  +         ore: 1339.8071036376618,
+  +         stone: 4000,
+  +         timber: 2911.0515042727543,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:2:0': {
+  +         clay: 3020.6200768673375,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 1500,
+  +         forage: 622.0218868241863,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 1500,
+  +         maxForage: 622.0218868241863,
+  +         maxTimber: 5528.808984806358,
+  +         ore: 1158.3711682811738,
+  +         stone: 4000,
+  +         timber: 5528.808984806358,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:2:1': {
+  +         clay: 3581.002709602682,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 900,
+  +         forage: 659.8671240360289,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 900,
+  +         maxForage: 659.8671240360289,
+  +         maxTimber: 5987.316017191546,
+  +         ore: 902.3268091828719,
+  +         stone: 4000,
+  +         timber: 5987.316017191546,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:2:2': {
+  +         clay: 489.0733859034876,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 150,
+  +         forage: 366.38632319531615,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 150,
+  +         maxForage: 366.38632319531615,
+  +         maxTimber: 1123.6903748280388,
+  +         ore: 1294.3798359769683,
+  +         stone: 4000,
+  +         timber: 1123.6903748280388,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:2:3': {
+  +         clay: 2136.778126522425,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 150,
+  +         forage: 505.80351766388196,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 150,
+  +         maxForage: 505.80351766388196,
+  +         maxTimber: 6034.84272976819,
+  +         ore: 1021.8617528562762,
+  +         stone: 4000,
+  +         timber: 6034.84272976819,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:2:4': {
+  +         clay: 1401.6237080204041,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 150,
+  +         forage: 402.80828459916347,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 150,
+  +         maxForage: 402.80828459916347,
+  +         maxTimber: 3702.3468157335137,
+  +         ore: 986.072523781608,
+  +         stone: 4000,
+  +         timber: 3702.3468157335137,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:2:5': {
+  +         clay: 1061.6707034708988,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 150,
+  +         forage: 378.07965981398183,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 150,
+  +         maxForage: 378.07965981398183,
+  +         maxTimber: 3901.0623542578833,
+  +         ore: 475.9234767193961,
+  +         stone: 4000,
+  +         timber: 3901.0623542578833,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:2:6': {
+  +         clay: 1882.2366957548957,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 150,
+  +         forage: 446.0002636847764,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 150,
+  +         maxForage: 446.0002636847764,
+  +         maxTimber: 1349.6739416265364,
+  +         ore: 398.68044879330586,
+  +         stone: 4000,
+  +         timber: 1349.6739416265364,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:2:7': {
+  +         clay: 2927.5289511225915,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 900,
+  +         forage: 547.0125689884665,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 900,
+  +         maxForage: 547.0125689884665,
+  +         maxTimber: 4274.532461779066,
+  +         ore: 807.9119388455347,
+  +         stone: 4000,
+  +         timber: 4274.532461779066,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:2:8': {
+  +         clay: 701.9871618204891,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 150,
+  +         forage: 369.4862076828705,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 150,
+  +         maxForage: 369.4862076828705,
+  +         maxTimber: 6226.2942020292585,
+  +         ore: 1204.084804282826,
+  +         stone: 4000,
+  +         timber: 6226.2942020292585,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:2:9': {
+  +         clay: 103.40906736803167,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 1500,
+  +         forage: 352.6724670350047,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 1500,
+  +         maxForage: 352.6724670350047,
+  +         maxTimber: 444.5364554816173,
+  +         ore: 488.1456439797846,
+  +         stone: 4000,
+  +         timber: 444.5364554816173,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:3:0': {
+  +         clay: 3283.7661931246544,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 1500,
+  +         forage: 637.6783368001494,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 1500,
+  +         maxForage: 637.6783368001494,
+  +         maxTimber: 3608.5141909105705,
+  +         ore: 1319.3165625085055,
+  +         stone: 4000,
+  +         timber: 3608.5141909105705,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:3:1': {
+  +         clay: 1742.1169425549542,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 150,
+  +         forage: 471.30729151045665,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 150,
+  +         maxForage: 471.30729151045665,
+  +         maxTimber: 2197.4838460971714,
+  +         ore: 790.3014923682432,
+  +         stone: 4000,
+  +         timber: 2197.4838460971714,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:3:10': {
+  +         clay: 908.0292448193438,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 1500,
+  +         forage: 429.01175205729254,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 1500,
+  +         maxForage: 429.01175205729254,
+  +         maxTimber: 1545.4680088781176,
+  +         ore: 832.4933539040416,
+  +         stone: 4000,
+  +         timber: 1545.4680088781176,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:3:2': {
+  +         clay: 125.54891841196479,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 150,
+  +         forage: 310.80172308577323,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 150,
+  +         maxForage: 310.80172308577323,
+  +         maxTimber: 4782.152968621963,
+  +         ore: 1320.525905050494,
+  +         stone: 4000,
+  +         timber: 4782.152968621963,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:3:5': {
+  +         clay: 3560.497834633922,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 1500,
+  +         forage: 665.4448051170531,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 1500,
+  +         maxForage: 665.4448051170531,
+  +         maxTimber: 4125.233997216346,
+  +         ore: 1003.3540069761947,
+  +         stone: 4000,
+  +         timber: 4125.233997216346,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:3:6': {
+  +         clay: 2949.6060564110776,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 1500,
+  +         forage: 610.4645450769971,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 1500,
+  +         maxForage: 610.4645450769971,
+  +         maxTimber: 1825.0051912446067,
+  +         ore: 970.8969075198612,
+  +         stone: 4000,
+  +         timber: 1825.0051912446067,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:3:9': {
+  +         clay: 3074.3430633324333,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 900,
+  +         forage: 598.9655413739706,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 900,
+  +         maxForage: 598.9655413739706,
+  +         maxTimber: 4604.576660357713,
+  +         ore: 623.3780236616554,
+  +         stone: 4000,
+  +         timber: 4604.576660357713,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:4:0': {
+  +         clay: 3349.4166186362163,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 1500,
+  +         forage: 646.4357713298725,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 1500,
+  +         maxForage: 646.4357713298725,
+  +         maxTimber: 5772.172523058043,
+  +         ore: 1453.035900638575,
+  +         stone: 4000,
+  +         timber: 5772.172523058043,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:4:1': {
+  +         clay: 2995.243541544275,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 900,
+  +         forage: 596.8294790806741,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 900,
+  +         maxForage: 596.8294790806741,
+  +         maxTimber: 2442.187734504477,
+  +         ore: 1307.4307335395868,
+  +         stone: 4000,
+  +         timber: 2442.187734504477,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:4:10': {
+  +         clay: 1707.6818963854187,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 150,
+  +         forage: 473.35985643719096,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 150,
+  +         maxForage: 473.35985643719096,
+  +         maxTimber: 2362.3966438269854,
+  +         ore: 821.4787702345714,
+  +         stone: 4000,
+  +         timber: 2362.3966438269854,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:4:11': {
+  +         clay: 2428.5977881631284,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 150,
+  +         forage: 548.9420710595851,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 150,
+  +         maxForage: 548.9420710595851,
+  +         maxTimber: 3064.6411030251197,
+  +         ore: 955.1251737269109,
+  +         stone: 4000,
+  +         timber: 3064.6411030251197,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:4:2': {
+  +         clay: 3180.290844930007,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 900,
+  +         forage: 593.0337476033329,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 900,
+  +         maxForage: 593.0337476033329,
+  +         maxTimber: 3934.8314686555295,
+  +         ore: 1084.1047382719714,
+  +         stone: 4000,
+  +         timber: 3934.8314686555295,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:4:4': {
+  +         clay: 903.5152533012529,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 150,
+  +         forage: 413.3163727971128,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 150,
+  +         maxForage: 413.3163727971128,
+  +         maxTimber: 6912.845599565103,
+  +         ore: 1355.6260192556822,
+  +         stone: 4000,
+  +         timber: 6912.845599565103,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:4:5': {
+  +         clay: 2738.6360039695974,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 150,
+  +         forage: 546.4772403572638,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 150,
+  +         maxForage: 546.4772403572638,
+  +         maxTimber: 4959.791507985401,
+  +         ore: 1252.3165894260442,
+  +         stone: 4000,
+  +         timber: 4959.791507985401,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:4:6': {
+  +         clay: 3643.924286855849,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 900,
+  +         forage: 627.9531858170265,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 900,
+  +         maxForage: 627.9531858170265,
+  +         maxTimber: 2884.3701027971115,
+  +         ore: 926.5960963024141,
+  +         stone: 4000,
+  +         timber: 2884.3701027971115,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:4:7': {
+  +         clay: 3230.1215284757677,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 900,
+  +         forage: 622.7109375628193,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 900,
+  +         maxForage: 622.7109375628193,
+  +         maxTimber: 4207.100180204708,
+  +         ore: 716.1321653096667,
+  +         stone: 4000,
+  +         timber: 4207.100180204708,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:4:9': {
+  +         clay: 1778.3716425083012,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 150,
+  +         forage: 469.08111907724026,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 150,
+  +         maxForage: 469.08111907724026,
+  +         maxTimber: 1205.331263473782,
+  +         ore: 924.7252669131848,
+  +         stone: 4000,
+  +         timber: 1205.331263473782,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:5:0': {
+  +         clay: 2437.263607648696,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 150,
+  +         forage: 554.266849857507,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 150,
+  +         maxForage: 554.266849857507,
+  +         maxTimber: 3791.4421453675986,
+  +         ore: 1202.2143733301398,
+  +         stone: 4000,
+  +         timber: 3791.4421453675986,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:5:1': {
+  +         clay: 3307.138165787604,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 900,
+  +         forage: 622.6387842082715,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 900,
+  +         maxForage: 622.6387842082715,
+  +         maxTimber: 3412.424849002971,
+  +         ore: 891.7363518006355,
+  +         stone: 4000,
+  +         timber: 3412.424849002971,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:5:10': {
+  +         clay: 2682.276196406792,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 150,
+  +         forage: 562.235361120408,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 150,
+  +         maxForage: 562.235361120408,
+  +         maxTimber: 2781.694808135155,
+  +         ore: 726.1179290195957,
+  +         stone: 4000,
+  +         timber: 2781.694808135155,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:5:11': {
+  +         clay: 1994.276643350017,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 1500,
+  +         forage: 528.3376217571657,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 1500,
+  +         maxForage: 528.3376217571657,
+  +         maxTimber: 3978.297712416732,
+  +         ore: 1175.0487778960187,
+  +         stone: 4000,
+  +         timber: 3978.297712416732,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:5:2': {
+  +         clay: 2915.7133293187258,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 900,
+  +         forage: 572.9163713153924,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 900,
+  +         maxForage: 572.9163713153924,
+  +         maxTimber: 4192.070713113506,
+  +         ore: 767.9296723811053,
+  +         stone: 4000,
+  +         timber: 4192.070713113506,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:5:3': {
+  +         clay: 1174.555727500034,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 1500,
+  +         forage: 450.7100154750031,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 1500,
+  +         maxForage: 450.7100154750031,
+  +         maxTimber: 4580.494118740691,
+  +         ore: 896.5751826446235,
+  +         stone: 4000,
+  +         timber: 4580.494118740691,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:5:4': {
+  +         clay: 2313.6301678649497,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 150,
+  +         forage: 508.22671510784545,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 150,
+  +         maxForage: 508.22671510784545,
+  +         maxTimber: 4586.073594315315,
+  +         ore: 1220.115687045157,
+  +         stone: 4000,
+  +         timber: 4586.073594315315,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:5:5': {
+  +         clay: 1927.8582620205827,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 150,
+  +         forage: 441.5072435818525,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 150,
+  +         maxForage: 441.5072435818525,
+  +         maxTimber: 3924.0319102722096,
+  +         ore: 1267.5800962089907,
+  +         stone: 4000,
+  +         timber: 3924.0319102722096,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:5:6': {
+  +         clay: 1670.6123001418932,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 150,
+  +         forage: 418.3551070127704,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 150,
+  +         maxForage: 418.3551070127704,
+  +         maxTimber: 3712.4301944169097,
+  +         ore: 810.8099190078049,
+  +         stone: 4000,
+  +         timber: 3712.4301944169097,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:5:7': {
+  +         clay: 1991.7001549754893,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 150,
+  +         forage: 479.253013947794,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 150,
+  +         maxForage: 479.253013947794,
+  +         maxTimber: 3066.0334535959128,
+  +         ore: 760.549676318201,
+  +         stone: 4000,
+  +         timber: 3066.0334535959128,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:5:8': {
+  +         clay: 2484.900488646706,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 1500,
+  +         forage: 568.6410439782036,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 1500,
+  +         maxForage: 568.6410439782036,
+  +         maxTimber: 1640.6654956566535,
+  +         ore: 839.8546465191125,
+  +         stone: 4000,
+  +         timber: 1640.6654956566535,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:5:9': {
+  +         clay: 1722.561754964328,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 150,
+  +         forage: 450.0867996537189,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 150,
+  +         maxForage: 450.0867996537189,
+  +         maxTimber: 6966.717761267996,
+  +         ore: 791.5774987993457,
+  +         stone: 4000,
+  +         timber: 6966.717761267996,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:6:0': {
+  +         clay: 2308.930511465598,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 1500,
+  +         forage: 548.7046617393808,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 1500,
+  +         maxForage: 548.7046617393808,
+  +         maxTimber: 4088.867274318673,
+  +         ore: 816.6084156016558,
+  +         stone: 4000,
+  +         timber: 4088.867274318673,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:6:1': {
+  +         clay: 3071.5725692746464,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 900,
+  +         forage: 607.9099022354039,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 900,
+  +         maxForage: 607.9099022354039,
+  +         maxTimber: 3374.796545615965,
+  +         ore: 706.6231027873572,
+  +         stone: 4000,
+  +         timber: 3374.796545615965,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:6:10': {
+  +         clay: 2917.865744608264,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 900,
+  +         forage: 591.1612565158531,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 900,
+  +         maxForage: 591.1612565158531,
+  +         maxTimber: 2819.3410568830204,
+  +         ore: 1175.7605030195796,
+  +         stone: 4000,
+  +         timber: 2819.3410568830204,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:6:11': {
+  +         clay: 2495.92087439495,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 1500,
+  +         forage: 576.8604847055674,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 1500,
+  +         maxForage: 576.8604847055674,
+  +         maxTimber: 3524.9006937669574,
+  +         ore: 1004.6280821721328,
+  +         stone: 4000,
+  +         timber: 3524.9006937669574,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:6:2': {
+  +         clay: 2019.5595209926284,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 150,
+  +         forage: 488.5930919163682,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 150,
+  +         maxForage: 488.5930919163682,
+  +         maxTimber: 3700.611141843337,
+  +         ore: 1071.7313034828624,
+  +         stone: 4000,
+  +         timber: 3700.611141843337,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:6:3': {
+  +         clay: 1322.5172881625708,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 1500,
+  +         forage: 464.02655593463146,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 1500,
+  +         maxForage: 464.02655593463146,
+  +         maxTimber: 2446.601177232444,
+  +         ore: 537.5475667376711,
+  +         stone: 4000,
+  +         timber: 2446.601177232444,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:6:4': {
+  +         clay: 3353.0620754225306,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 900,
+  +         forage: 601.7755867880277,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 900,
+  +         maxForage: 601.7755867880277,
+  +         maxTimber: 4790.446285657507,
+  +         ore: 638.0264920922904,
+  +         stone: 4000,
+  +         timber: 4790.446285657507,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:6:5': {
+  +         clay: 2368.1399625518243,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 150,
+  +         forage: 481.1325966296642,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 150,
+  +         maxForage: 481.1325966296642,
+  +         maxTimber: 3228.4444589849363,
+  +         ore: 696.564887197288,
+  +         stone: 4000,
+  +         timber: 3228.4444589849363,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:6:6': {
+  +         clay: 1169.1332329072957,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 150,
+  +         forage: 373.22199096165656,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 150,
+  +         maxForage: 373.22199096165656,
+  +         maxTimber: 4288.247839012709,
+  +         ore: 998.5354778078374,
+  +         stone: 4000,
+  +         timber: 4288.247839012709,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:6:7': {
+  +         clay: 952.2646887007694,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 150,
+  +         forage: 385.7038219830692,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 150,
+  +         maxForage: 385.7038219830692,
+  +         maxTimber: 2861.7015866531024,
+  +         ore: 817.6077816208082,
+  +         stone: 4000,
+  +         timber: 2861.7015866531024,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:6:8': {
+  +         clay: 2336.9187962455944,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 1500,
+  +         forage: 555.3226916621036,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 1500,
+  +         maxForage: 555.3226916621036,
+  +         maxTimber: 3774.570549898783,
+  +         ore: 506.3437463669494,
+  +         stone: 4000,
+  +         timber: 3774.570549898783,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:6:9': {
+  +         clay: 2618.715396712177,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 150,
+  +         forage: 527.9752667708759,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 150,
+  +         maxForage: 527.9752667708759,
+  +         maxTimber: 2662.2915938887745,
+  +         ore: 1099.1400566873494,
+  +         stone: 4000,
+  +         timber: 2662.2915938887745,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:7:1': {
+  +         clay: 2435.2180522573085,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 150,
+  +         forage: 547.5561745414701,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 150,
+  +         maxForage: 547.5561745414701,
+  +         maxTimber: 4574.792586886648,
+  +         ore: 605.7461391796518,
+  +         stone: 4000,
+  +         timber: 4574.792586886648,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:7:10': {
+  +         clay: 2282.3781365336763,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 150,
+  +         forage: 532.6646479952612,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 150,
+  +         maxForage: 532.6646479952612,
+  +         maxTimber: 4441.617871616633,
+  +         ore: 870.3774144013006,
+  +         stone: 4000,
+  +         timber: 4441.617871616633,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:7:11': {
+  +         clay: 3081.2367853904652,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 1500,
+  +         forage: 631.0225092236462,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 1500,
+  +         maxForage: 631.0225092236462,
+  +         maxTimber: 5528.859423298821,
+  +         ore: 790.5211856081635,
+  +         stone: 4000,
+  +         timber: 5528.859423298821,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:7:2': {
+  +         clay: 1486.1483827401044,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 150,
+  +         forage: 428.7867160008231,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 150,
+  +         maxForage: 428.7867160008231,
+  +         maxTimber: 2037.7487803590207,
+  +         ore: 960.2230064973116,
+  +         stone: 4000,
+  +         timber: 2037.7487803590207,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:7:4': {
+  +         clay: 3124.1409895800643,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 900,
+  +         forage: 613.1726890622058,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 900,
+  +         maxForage: 613.1726890622058,
+  +         maxTimber: 5253.942249746619,
+  +         ore: 207.8535033254693,
+  +         stone: 4000,
+  +         timber: 5253.942249746619,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:7:5': {
+  +         clay: 3523.1323635389185,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 900,
+  +         forage: 617.0819127185027,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 900,
+  +         maxForage: 617.0819127185027,
+  +         maxTimber: 5023.425205040723,
+  +         ore: 560.0148613271579,
+  +         stone: 4000,
+  +         timber: 5023.425205040723,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:7:6': {
+  +         clay: 2355.703987213932,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 150,
+  +         forage: 512.0133588492539,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 150,
+  +         maxForage: 512.0133588492539,
+  +         maxTimber: 2643.7902854788,
+  +         ore: 885.7444222688703,
+  +         stone: 4000,
+  +         timber: 2643.7902854788,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:7:7': {
+  +         clay: 903.5061645282043,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 150,
+  +         forage: 413.31555480753843,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 150,
+  +         maxForage: 413.31555480753843,
+  +         maxTimber: 6030.664179524515,
+  +         ore: 927.2992853756922,
+  +         stone: 4000,
+  +         timber: 6030.664179524515,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:7:9': {
+  +         clay: 3599.362345183277,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 900,
+  +         forage: 617.9308127320598,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 900,
+  +         maxForage: 617.9308127320598,
+  +         maxTimber: 2490.1276680087976,
+  +         ore: 608.109361175446,
+  +         stone: 4000,
+  +         timber: 2490.1276680087976,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:8:1': {
+  +         clay: 1392.6771660080608,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 150,
+  +         forage: 449.3386091508479,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 150,
+  +         maxForage: 449.3386091508479,
+  +         maxTimber: 2395.2584541992587,
+  +         ore: 789.8204746189961,
+  +         stone: 4000,
+  +         timber: 2395.2584541992587,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:8:10': {
+  +         clay: 1340.168948258342,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 150,
+  +         forage: 452.720587807584,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 150,
+  +         maxForage: 452.720587807584,
+  +         maxTimber: 3432.7921257202006,
+  +         ore: 256.1742989095378,
+  +         stone: 4000,
+  +         timber: 3432.7921257202006,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:8:11': {
+  +         clay: 1973.2917861837025,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 1500,
+  +         forage: 531.0721260566013,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 1500,
+  +         maxForage: 531.0721260566013,
+  +         maxTimber: 6288.124243811395,
+  +         ore: 1078.498494907318,
+  +         stone: 4000,
+  +         timber: 6288.124243811395,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:8:2': {
+  +         clay: 1510.8451979291522,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 150,
+  +         forage: 435.2877483844305,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 150,
+  +         maxForage: 435.2877483844305,
+  +         maxTimber: 164.1449455508117,
+  +         ore: 879.4237032812027,
+  +         stone: 4000,
+  +         timber: 164.1449455508117,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:8:5': {
+  +         clay: 2638.767843085487,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 1500,
+  +         forage: 582.4891058776939,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 1500,
+  +         maxForage: 582.4891058776939,
+  +         maxTimber: 3446.221704549103,
+  +         ore: 703.9336884297093,
+  +         stone: 4000,
+  +         timber: 3446.221704549103,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:8:6': {
+  +         clay: 1766.7275352766164,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 1500,
+  +         forage: 504.0054781748956,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 1500,
+  +         maxForage: 504.0054781748956,
+  +         maxTimber: 4424.620611968581,
+  +         ore: 736.4027487268436,
+  +         stone: 4000,
+  +         timber: 4424.620611968581,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:8:9': {
+  +         clay: 2406.632016797833,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 150,
+  +         forage: 529.7613975389386,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 150,
+  +         maxForage: 529.7613975389386,
+  +         maxTimber: 1729.0627730796034,
+  +         ore: 440.7586372842445,
+  +         stone: 4000,
+  +         timber: 1729.0627730796034,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:9:1': {
+  +         clay: 1396.0325526602305,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 1500,
+  +         forage: 468.7816171038933,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 1500,
+  +         maxForage: 468.7816171038933,
+  +         maxTimber: 4349.728668851176,
+  +         ore: 879.9235564908552,
+  +         stone: 4000,
+  +         timber: 4349.728668851176,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:9:10': {
+  +         clay: 2804.512581647273,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 1500,
+  +         forage: 601.6775593612474,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 1500,
+  +         maxForage: 601.6775593612474,
+  +         maxTimber: 1325.629777646349,
+  +         ore: 619.8215646365289,
+  +         stone: 4000,
+  +         timber: 1325.629777646349,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:9:2': {
+  +         clay: 103.40822146929101,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 1500,
+  +         forage: 350.08583184057665,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 1500,
+  +         maxForage: 350.08583184057665,
+  +         maxTimber: 361.2003962744685,
+  +         ore: 488.15671502510133,
+  +         stone: 4000,
+  +         timber: 361.2003962744685,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:9:3': {
+  +         clay: 2265.3827701593245,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 150,
+  +         forage: 534.5430859469905,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 150,
+  +         maxForage: 534.5430859469905,
+  +         maxTimber: 3184.6783017437547,
+  +         ore: 560.7636465916725,
+  +         stone: 4000,
+  +         timber: 3184.6783017437547,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:9:4': {
+  +         clay: 3214.773348235338,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 900,
+  +         forage: 585.1717054972939,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 900,
+  +         maxForage: 585.1717054972939,
+  +         maxTimber: 6411.220738795824,
+  +         ore: 594.8871489324679,
+  +         stone: 4000,
+  +         timber: 6411.220738795824,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:9:5': {
+  +         clay: 3000.1932682710735,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 900,
+  +         forage: 565.4696404114796,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 900,
+  +         maxForage: 565.4696404114796,
+  +         maxTimber: 6499.250959955562,
+  +         ore: 833.4412696180727,
+  +         stone: 4000,
+  +         timber: 6499.250959955562,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:9:6': {
+  +         clay: 2167.356888634625,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 150,
+  +         forage: 490.38403092378076,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 150,
+  +         maxForage: 490.38403092378076,
+  +         maxTimber: 4254.678428134847,
+  +         ore: 910.6813509653513,
+  +         stone: 4000,
+  +         timber: 4254.678428134847,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:9:7': {
+  +         clay: 1109.4159930233993,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 150,
+  +         forage: 389.54961095424426,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 150,
+  +         maxForage: 389.54961095424426,
+  +         maxTimber: 4551.744539642637,
+  +         ore: 835.3822361649,
+  +         stone: 4000,
+  +         timber: 4551.744539642637,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:9:8': {
+  +         clay: 573.5535944057801,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 150,
+  +         forage: 378.2266478442772,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 150,
+  +         maxForage: 378.2266478442772,
+  +         maxTimber: 2991.5331586434086,
+  +         ore: 1142.9654827792945,
+  +         stone: 4000,
+  +         timber: 2991.5331586434086,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       },
+  +       'kraina:9:9': {
+  +         clay: 495.0117106591053,
+  +         cuttings: {
+  +           chmiel: 8,
+  +           jablka: 8,
+  +           len: 12,
+  +           winogrona: 8
+  +         },
+  +         fish: 150,
+  +         forage: 380.77215003990915,
+  +         herbs: 180,
+  +         lastDay: 0,
+  +         maxFish: 150,
+  +         maxForage: 380.77215003990915,
+  +         maxTimber: 957.0116399825906,
+  +         ore: 1221.793154833501,
+  +         stone: 4000,
+  +         timber: 957.0116399825906,
+  +         wild: {
+  +           koza: 8,
+  +           kura: 12,
+  +           swinia: 6
+  +         },
+  +         wildGrain: 80
+  +       }
+  +     },
+  +     natureInitialized: true,
+  +     nextAnimal: 1,
+  +     nextBatch: 1,
+        nextEstate: 1,
+        nextEvent: 2,
+        nextTransport: 1,
+        policy: {
+          autoExpand: false,
+  ...
+        },
+  +     simTicks: 270000,
+  +     startTicks: 270000,
+  +     startTime: 0,
+        started: 0.27,
+        stats: {
+          births: 0,
+          deaths: 0,
+          deliveries: 0,
+  ...
+        },
+  +     vehicles: [
+  +       {
+  +         id: 1,
+  +         owner: 'przystan',
+  +         transportId: null
+  +       },
+  +       {
+  +         id: 2,
+  +         owner: 'przystan',
+  +         transportId: null
+  +       }
+  +     ],
+        world: {
+          core: null,
+          regions: [
+            {
+              biome: 'coast',
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/hardening_rc6_20261018/source/Przystan_4.0.0_RC5_SI/tests/state-hardening.test.mjs:11:150)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: {
+      t: 0,
+      day: 0.27,
+      res: { miod: 0, ziola: 0, warzywa: 0, maka: 0, chleb: 0, ser: 0, kiszonki: 0, naczynia: 0, suchary: 420, jagody: 0, grzyby: 0, ryby: 0, mieso: 0, ziarno: 0, mleko: 0, drewno: 22, opal: 45, kamien: 0, glina: 0, deski: 0, gwozdzie: 0, plotno: 0, skory: 0, odziez: 4, narz: 8, narzk: 0, cegla: 0, ruda: 0, wegiel: 0, wlokna: 0, jaja: 0, pierze: 0, sol: 0, bursztyn: 0, slod: 0, chmiel: 0, beczki: 0, piwo: 0, mpitny: 0, winogrona: 0, wino: 0 },
+      wreck: { parts: [Array], target: -1, gone: 0 },
+      books: { ciesla: 2, zdun: 2, dziennik: 2, kowal: 0, siew: 0 },
+      readP: {},
+      weather: { k: 'clear', left: 2, i: 0.7 },
+      zbozeTot: 0,
+      people: [
+        [Object], [Object], [Object],
+        [Object], [Object], [Object],
+        [Object], [Object], [Object],
+        [Object], [Object], [Object],
+        [Object], [Object], [Object],
+        [Object], [Object], [Object]
+      ],
+      pid: 18,
+      fams: { '1': [Object], '2': [Object], '3': [Object], '4': [Object], '5': [Object], '6': [Object] },
+      fid: 7,
+      alloc: { zwiad: 1, zdun: 0, czyt: 0, bud: 3 },
+      bld: [ [Object] ],
+      nid: 2,
+      know: { cegla: 'nie', piec: 'nie', kuznia: 'nie', pole: 'nie', cegla_p: 0, piec_p: 0, kuznia_p: 0, cegla_f: 0, piec_f: 0, kuznia_f: 0, active: null, sc2: 'nie', sc3: 'nie', sc4: 'nie', sc5: 'nie' },
+      bonus: {},
+      hope: 0.55,
+      health: 1,
+      warm: 1,
+      hungerDays: 0,
+      log: [
+        [Object], [Object],
+        [Object], [Object],
+        [Object], [Object],
+        [Object]
+      ],
+      nodeAmt: [
+        5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+        5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+        5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+        5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+        5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+        5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+        5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+        5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+        5, 5, 5, 5,
+        ... 7297 more items
+      ],
+      grow: {},
+      speed: 0,
+      seen: { czHelp: 1, originHeart: 1 },
+      found: [],
+      rev: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAADg/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAD8/wcAAAAAAAAAAAAAAAAAAAAAAAAAAAD+/w8AAAAAAAAAAAAAAAAAAAAAAAAAAID//z8AAAAAAAAAAAAAAAAAAAAAAAAAAMD//38AAAAAAAAAAAAAAAAAAAAAAAAAAOD///8AAAAAAAAAAAAAAAAAAAAAAAAAAPD///8BAAAAAAAAAAAAAAAAAAAAAAAAAPD///8BAAAAAAAAAAAAAAAAAAAAAAAAAPj///8DAAAAAAAAAAAAAAAAAAAAAAAAAPz///8HAAAAAAAAAAAAAAAAAAAAAAAAAPz///8HAAAAAAAAAAAAAAAAAAAAAAAAAPz///8HAAAAAAAAAAAAAAAAAAAAAAAAAP7///8PAAAAAAAAAAAAAAAAAAAAAAAAAP7///8PAAAAAAAAAAAAAAAAAAAAAAAAAP7///8PAAAAAAAAAAAAAAAAAAAAAAAAAP7///8PAAAAAAAAAAAAAAAAAAAAAAAAAP7///8PAAAAAAAAAAAAAAAAAAAAAAAAAP////8fAAAAAAAAAAAAAAAAAAAAAAAAAP7///8PAAAAAAAAAAAAAAAAAAAAAAAAAP7///8PAAAAAAAAAAAAAAAAAAAAAAAAAP7///8PAAAAAAAAAAAAAAAAAAAAAAAAAP7///8PAAAAAAAAAAAAAAAAAAAAAAAAAP7///8PAAAAAAAAAAAAAAAAAAAAAAAAAPz///8HAAAAAAAAAAAAAAAAAAAAAAAAAPz///8HAAAAAAAAAAAAAAAAAAAAAAAAAPz///8HAAAAAAAAAAAAAAAAAAAAAAAAAPj///8DAAAAAAAAAAAAAAAAAAAAAAAAAPD///8BAAAAAAAAAAAAAAAAAAAAAAAAAPD///8BAAAAAAAAAAAAAAAAAAAAAAAAAOD///8AAAAAAAAAAAAAAAAAAAAAAAAAAMD//38AAAAAAAAAAAAA',
+      tier: 0,
+      laws: {},
+      cust: {},
+      custQ: [],
+      custLog: {},
+      offices: {},
+      dis: 0.08,
+      reqs: [],
+      reqNext: 4,
+      toolQ: {},
+      thirst: 0,
+      tech: {},
+      tp: {},
+      focus: {},
+      bank: {},
+      dxp: {},
+      atlas: { sosna: 1, swierk: 1, dab: 1, brzoza: 1, borowka: 1, borowik: 1, zboze: 1, len: 1, ziola: 1, paproc: 1, sarna: 1, koza: 1, dzik: 1, zajac: 1, ryby: 1, mewa: 1, kruk: 1 },
+      exps: [],
+      expSize: 2,
+      herds: [
+        [Object], [Object], [Object], [Object], [Object],
+        [Object], [Object], [Object], [Object], [Object],
+        [Object], [Object], [Object], [Object], [Object],
+        [Object], [Object], [Object], [Object], [Object],
+        [Object], [Object], [Object], [Object], [Object],
+        [Object], [Object], [Object], [Object], [Object],
+        [Object], [Object], [Object], [Object], [Object],
+        [Object], [Object], [Object], [Object], [Object],
+        [Object], [Object], [Object], [Object], [Object],
+        [Object], [Object], [Object], [Object], [Object],
+        [Object], [Object], [Object], [Object], [Object],
+        [Object], [Object], [Object], [Object], [Object],
+        [Object], [Object], [Object], [Object], [Object],
+        [Object], [Object], [Object], [Object], [Object],
+        [Object], [Object]
+      ],
+      born: 0,
+      died: 0,
+      variety: 1,
+      fedR: 1,
+      diff: 1,
+      seed: 2207,
+      chal: 0,
+      ver: '4.0.0-rc.5',
+      crew0: 18,
+      v15: 1,
+      kron: [
+        [Array], [Array],
+        [Array], [Array],
+        [Array], [Array],
+        [Array]
+      ],
+      regs: { '0': 1 },
+      agoals: {},
+      act: 1,
+      sess: { d0: 0.27, lt: 1792317287771 },
+      mark: {},
+      dogs: [ [Object] ],
+      dogId: 1,
+      wind: { a: 0.35, s: 0.22 },
+      odk: {},
+      demo: { y: {} },
+      sc: { done: {}, ev: 0, ucz: 0, wn: [], wnOk: 0, wnCd: {}, cech: {}, rada: [], jarN: 0 },
+      rel: {},
+      hamlets: [],
+      rody: { '1': [Object], '2': [Object], '3': [Object], '4': [Object], '5': [Object], '6': [Object] },
+      wozy: 2,
+      tread: '~33504~CCDCC~186~CDEFEDC~184~CDJJJJJDC~183~CEJJJJJEC~183~DFJJKJJFD~183~CEJJJJJEC~183~CDJJJJJDC~184~CDEFEDC~186~CCDCC~1819~',
+      saveSchema: 1,
+      epoch: 4,
+      e4: { schema: 1, world: [Object], dailyFactor: 4.8, randomState: 1313823451, started: 0.27, lastDay: 0, elapsed: 0, households: [Object], settlements: [Object], archive: {}, events: [Array], transports: [], nextTransport: 1, nextEstate: 1, nextEvent: 2, policy: [Object], migration: [Object], unlocks: [Object], stats: [Object], simTicks: 270000, startTicks: 270000, startTime: 0, fraction: 0, vehicles: [Array], nextBatch: 1, nextAnimal: 1, nature: [Object], fieldLayoutVersion: 1, natureInitialized: true }
+    },
+    expected: {
+      t: 0,
+      day: 0.27,
+      res: { miod: 0, ziola: 0, warzywa: 0, maka: 0, chleb: 0, ser: 0, kiszonki: 0, naczynia: 0, suchary: 420, jagody: 0, grzyby: 0, ryby: 0, mieso: 0, ziarno: 0, mleko: 0, drewno: 22, opal: 45, kamien: 0, glina: 0, deski: 0, gwozdzie: 0, plotno: 0, skory: 0, odziez: 4, narz: 8, narzk: 0, cegla: 0, ruda: 0, wegiel: 0, wlokna: 0, jaja: 0, pierze: 0, sol: 0, bursztyn: 0, slod: 0, chmiel: 0, beczki: 0, piwo: 0, mpitny: 0, winogrona: 0, wino: 0 },
+      wreck: { parts: [Array], target: -1, gone: 0 },
+      books: { ciesla: 2, zdun: 2, dziennik: 2, kowal: 0, siew: 0 },
+      readP: {},
+      weather: { k: 'clear', left: 2, i: 0.7 },
+      zbozeTot: 0,
+      people: [
+        [Object], [Object], [Object],
+        [Object], [Object], [Object],
+        [Object], [Object], [Object],
+        [Object], [Object], [Object],
+        [Object], [Object], [Object],
+        [Object], [Object], [Object]
+      ],
+      pid: 18,
+      fams: { '1': [Object], '2': [Object], '3': [Object], '4': [Object], '5': [Object], '6': [Object] },
+      fid: 7,
+      alloc: { zwiad: 1, zdun: 0, czyt: 0, bud: 3 },
+      bld: [ [Object] ],
+      nid: 2,
+      know: { cegla: 'nie', piec: 'nie', kuznia: 'nie', pole: 'nie', cegla_p: 0, piec_p: 0, kuznia_p: 0, cegla_f: 0, piec_f: 0, kuznia_f: 0, active: null, sc2: 'nie', sc3: 'nie', sc4: 'nie', sc5: 'nie' },
+      bonus: {},
+      hope: 0.55,
+      health: 1,
+      warm: 1,
+      hungerDays: 0,
+      log: [
+        [Object], [Object],
+        [Object], [Object],
+        [Object], [Object],
+        [Object]
+      ],
+      nodeAmt: [
+        5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+        5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+        5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+        5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+        5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+        5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+        5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+        5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+        5, 5, 5, 5,
+        ... 7297 more items
+      ],
+      grow: {},
+      speed: 0,
+      seen: { czHelp: 1, originHeart: 1 },
+      found: [],
+      rev: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAADg/wAAAAAAAAAAAAAAAAAAAAAAAAAAAAD8/wcAAAAAAAAAAAAAAAAAAAAAAAAAAAD+/w8AAAAAAAAAAAAAAAAAAAAAAAAAAID//z8AAAAAAAAAAAAAAAAAAAAAAAAAAMD//38AAAAAAAAAAAAAAAAAAAAAAAAAAOD///8AAAAAAAAAAAAAAAAAAAAAAAAAAPD///8BAAAAAAAAAAAAAAAAAAAAAAAAAPD///8BAAAAAAAAAAAAAAAAAAAAAAAAAPj///8DAAAAAAAAAAAAAAAAAAAAAAAAAPz///8HAAAAAAAAAAAAAAAAAAAAAAAAAPz///8HAAAAAAAAAAAAAAAAAAAAAAAAAPz///8HAAAAAAAAAAAAAAAAAAAAAAAAAP7///8PAAAAAAAAAAAAAAAAAAAAAAAAAP7///8PAAAAAAAAAAAAAAAAAAAAAAAAAP7///8PAAAAAAAAAAAAAAAAAAAAAAAAAP7///8PAAAAAAAAAAAAAAAAAAAAAAAAAP7///8PAAAAAAAAAAAAAAAAAAAAAAAAAP////8fAAAAAAAAAAAAAAAAAAAAAAAAAP7///8PAAAAAAAAAAAAAAAAAAAAAAAAAP7///8PAAAAAAAAAAAAAAAAAAAAAAAAAP7///8PAAAAAAAAAAAAAAAAAAAAAAAAAP7///8PAAAAAAAAAAAAAAAAAAAAAAAAAP7///8PAAAAAAAAAAAAAAAAAAAAAAAAAPz///8HAAAAAAAAAAAAAAAAAAAAAAAAAPz///8HAAAAAAAAAAAAAAAAAAAAAAAAAPz///8HAAAAAAAAAAAAAAAAAAAAAAAAAPj///8DAAAAAAAAAAAAAAAAAAAAAAAAAPD///8BAAAAAAAAAAAAAAAAAAAAAAAAAPD///8BAAAAAAAAAAAAAAAAAAAAAAAAAOD///8AAAAAAAAAAAAAAAAAAAAAAAAAAMD//38AAAAAAAAAAAAA',
+      tier: 0,
+      laws: {},
+      cust: {},
+      custQ: [],
+      custLog: {},
+      offices: {},
+      dis: 0.08,
+      reqs: [],
+      reqNext: 4,
+      toolQ: {},
+      thirst: 0,
+      tech: {},
+      tp: {},
+      focus: {},
+      bank: {},
+      dxp: {},
+      atlas: { sosna: 1, swierk: 1, dab: 1, brzoza: 1, borowka: 1, borowik: 1, zboze: 1, len: 1, ziola: 1, paproc: 1, sarna: 1, koza: 1, dzik: 1, zajac: 1, ryby: 1, mewa: 1, kruk: 1 },
+      exps: [],
+      expSize: 2,
+      herds: [
+        [Object], [Object], [Object], [Object], [Object],
+        [Object], [Object], [Object], [Object], [Object],
+        [Object], [Object], [Object], [Object], [Object],
+        [Object], [Object], [Object], [Object], [Object],
+        [Object], [Object], [Object], [Object], [Object],
+        [Object], [Object], [Object], [Object], [Object],
+        [Object], [Object], [Object], [Object], [Object],
+        [Object], [Object], [Object], [Object], [Object],
+        [Object], [Object], [Object], [Object], [Object],
+        [Object], [Object], [Object], [Object], [Object],
+        [Object], [Object], [Object], [Object], [Object],
+        [Object], [Object], [Object], [Object], [Object],
+        [Object], [Object], [Object], [Object], [Object],
+        [Object], [Object], [Object], [Object], [Object],
+        [Object], [Object]
+      ],
+      born: 0,
+      died: 0,
+      variety: 1,
+      fedR: 1,
+      diff: 1,
+      seed: 2207,
+      chal: 0,
+      ver: '4.0.0-rc.5',
+      crew0: 18,
+      v15: 1,
+      kron: [
+        [Array], [Array],
+        [Array], [Array],
+        [Array], [Array],
+        [Array]
+      ],
+      regs: { '0': 1 },
+      agoals: {},
+      act: 1,
+      sess: { d0: 0.27, lt: 1792317287771 },
+      mark: {},
+      dogs: [ [Object] ],
+      dogId: 1,
+      wind: { a: 0.35, s: 0.22 },
+      odk: {},
+      demo: { y: {} },
+      sc: { done: {}, ev: 0, ucz: 0, wn: [], wnOk: 0, wnCd: {}, cech: {}, rada: [], jarN: 0 },
+      rel: {},
+      hamlets: [],
+      rody: { '1': [Object], '2': [Object], '3': [Object], '4': [Object], '5': [Object], '6': [Object] },
+      wozy: 2,
+      tread: '~33504~CCDCC~186~CDEFEDC~184~CDJJJJJDC~183~CEJJJJJEC~183~DFJJKJJFD~183~CEJJJJJEC~183~CDJJJJJDC~184~CDEFEDC~186~CCDCC~1819~',
+      saveSchema: 1,
+      epoch: 4,
+      e4: { schema: 1, world: [Object], dailyFactor: 4.8, randomState: 1313823451, started: 0.27, lastDay: 0, elapsed: 0, households: [Object], settlements: [Object], archive: {}, events: [Array], transports: [], nextTransport: 1, nextEstate: 1, nextEvent: 2, policy: [Object], migration: [Object], unlocks: [Object], stats: [Object] }
+    },
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at tests/state-hardening.test.mjs:13:1
+✖ a persisted E4 clock must have a coherent finite origin and elapsed time (23.65163ms)
+  AssertionError [ERR_ASSERTION]: startTime:bad
+  
+  true !== false
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/hardening_rc6_20261018/source/Przystan_4.0.0_RC5_SI/tests/state-hardening.test.mjs:15:203)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/state-hardening.test.mjs:18:1
+✖ a transport checkpoint cannot contain an arrival at or before its current clock (9.705338ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/hardening_rc6_20261018/source/Przystan_4.0.0_RC5_SI/tests/state-hardening.test.mjs:22:9)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/state-hardening.test.mjs:24:1
+✖ route length agrees with geometry and corrupt action targets or labor ledgers are rejected (11.378415ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/hardening_rc6_20261018/source/Przystan_4.0.0_RC5_SI/tests/state-hardening.test.mjs:27:249)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

@@ -31,7 +31,7 @@ function kozDeliver(person){if(!person.kozN){person.state='idle';return}
   return _oa(p)}}
 // koza na postronku nie może zostać przy człowieku, którego odwołano do innej pracy
 function kozDaily(){S.people.forEach(person=>{if(person.kozN&&person.after!=='kozdom')kozResume(person)})}
-{const _nd=newDay;newDay=function(){const r=_nd.apply(this,arguments);try{kozDaily()}catch(e){}return r}}
+// Dzienna aktualizacja: p_daily.js (jedna jawna kolejność).
 // widać, jak koza idzie za hodowcą
 {const _da=drawAnimals;drawAnimals=function(){_da();if(!S||typeof zMeshes!=='function')return;const L=S.people.filter(p=>p.kozN&&pMesh[p.id]&&pMesh[p.id].visible);if(!L.length)return;
   const P=zMeshes('koza_z',80);let a=P.walkA.count,b=P.walkB.count;

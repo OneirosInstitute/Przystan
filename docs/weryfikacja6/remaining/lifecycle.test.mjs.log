@@ -1,0 +1,16 @@
+✔ hiding stops the render scheduler, autosave timer and simulation while retaining the exit save (1592.306188ms)
+✔ pagehide and freeze stop independently; returning starts exactly one loop without catching up time (2931.964552ms)
+✔ a hidden page cannot be restarted by pageshow/resume until it becomes visible (1282.710697ms)
+✔ delayed story retries sleep in the background and continue after return (1252.985934ms)
+✔ sound follows lifecycle even if a suspend finishes after the app has returned (1532.87809ms)
+✔ a hidden initial load does not schedule frames, timers, audio or render an intro snapshot (972.913437ms)
+✔ one successful exit save covers visibility/pagehide/freeze; a failed exit save can retry (1374.008949ms)
+✔ hiding aborts an outstanding weekly request and prevents new background requests (1400.72096ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12495.753626

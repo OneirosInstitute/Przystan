@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "cases": 160,
+  "suites": 33,
+  "wall_seconds": 205.45494881800005,
+  "mode": "prepare-only",
+  "commit": false,
+  "push": false,
+  "checked_package_files": 255
+}

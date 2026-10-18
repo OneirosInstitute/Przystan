@@ -265,7 +265,11 @@ const E4Economy=(()=>{
  }finally{accountingState=previousAccounting}
  }
  function advance(state,days,onDay=null){
-  const model=ensure(state);if(!Number.isFinite(days)||days<0||days>10000)throw new Error('Nieprawidłowy krok czasu');
+  if(!Number.isFinite(days)||days<0||days>10000)throw new Error('Nieprawidłowy krok czasu');
+  const issue=domain.clockIssue(state);if(issue)throw new Error(issue);
+  const currentTicks=state.e4.simTicks??Math.round(state.day*ticksPerDay);
+  if(!Number.isSafeInteger(currentTicks+Math.floor(days*ticksPerDay+(state.e4.fraction||0)+1e-9)))throw new Error('Przepełnienie zegara symulacji');
+  const model=ensure(state);
   const exact=days*ticksPerDay+model.fraction,delta=Math.floor(exact+1e-9);model.fraction=Math.max(0,exact-delta);const target=model.simTicks+delta;
   while(model.simTicks<target){
    const previousTicks=model.simTicks,midnight=(Math.floor(model.simTicks/ticksPerDay)+1)*ticksPerDay,arrival=Math.min(Infinity,...model.transports.map(transport=>transport.arrival));model.simTicks=Math.min(target,midnight,arrival);state.day=model.simTicks/ticksPerDay;state.t=model.startTime+(model.simTicks-model.startTicks)/ticksPerDay*240;model.elapsed=(model.simTicks-model.startTicks)/ticksPerDay;

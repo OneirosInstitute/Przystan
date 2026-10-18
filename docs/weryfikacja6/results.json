@@ -1,0 +1,716 @@
+{
+  "status": "PASS",
+  "version": "4.0.0-rc.6",
+  "base": "2ad9ac443492552da5690146b734c4600b295db7",
+  "node": "v24.19.0",
+  "coverage": {
+    "status": "PASS",
+    "suites": 35,
+    "cases": 176,
+    "initialFullInvocation": "exit 1 without a final summary after 13 completed suites; not counted as a passing npm test invocation",
+    "batches": [
+      {
+        "name": "ai-life.test.mjs",
+        "cases": 16,
+        "batch": "initial-full"
+      },
+      {
+        "name": "ai-movement.test.mjs",
+        "cases": 4,
+        "batch": "initial-full"
+      },
+      {
+        "name": "ai-policy.test.mjs",
+        "cases": 3,
+        "batch": "initial-full"
+      },
+      {
+        "name": "ai-specialties.test.mjs",
+        "cases": 2,
+        "batch": "initial-full"
+      },
+      {
+        "name": "autosave.test.mjs",
+        "cases": 9,
+        "batch": "initial-full"
+      },
+      {
+        "name": "build-deploy.test.mjs",
+        "cases": 4,
+        "batch": "initial-full"
+      },
+      {
+        "name": "building-missions.test.mjs",
+        "cases": 4,
+        "batch": "initial-full"
+      },
+      {
+        "name": "daily-pipeline.test.mjs",
+        "cases": 4,
+        "batch": "initial-full"
+      },
+      {
+        "name": "deploy-runner.test.mjs",
+        "cases": 6,
+        "batch": "initial-full"
+      },
+      {
+        "name": "e4-domain.test.mjs",
+        "cases": 4,
+        "batch": "initial-full"
+      },
+      {
+        "name": "e4-economy.test.mjs",
+        "cases": 12,
+        "batch": "initial-full"
+      },
+      {
+        "name": "e4-integration.test.mjs",
+        "cases": 3,
+        "batch": "initial-full"
+      },
+      {
+        "name": "e4-population.test.mjs",
+        "cases": 3,
+        "batch": "initial-full"
+      },
+      {
+        "name": "e4-world.test.mjs",
+        "cases": 4,
+        "batch": "remaining"
+      },
+      {
+        "name": "lifecycle.test.mjs",
+        "cases": 8,
+        "batch": "remaining"
+      },
+      {
+        "name": "mechanics.test.mjs",
+        "cases": 11,
+        "batch": "remaining"
+      },
+      {
+        "name": "menu-workspace.test.mjs",
+        "cases": 7,
+        "batch": "remaining"
+      },
+      {
+        "name": "night-save.test.mjs",
+        "cases": 4,
+        "batch": "remaining"
+      },
+      {
+        "name": "origin-heart.test.mjs",
+        "cases": 3,
+        "batch": "remaining"
+      },
+      {
+        "name": "persistence.test.mjs",
+        "cases": 10,
+        "batch": "remaining"
+      },
+      {
+        "name": "production-supply.test.mjs",
+        "cases": 9,
+        "batch": "remaining"
+      },
+      {
+        "name": "repair-regression.test.mjs",
+        "cases": 3,
+        "batch": "remaining"
+      },
+      {
+        "name": "resources.test.mjs",
+        "cases": 4,
+        "batch": "remaining"
+      },
+      {
+        "name": "s01-assignments.test.mjs",
+        "cases": 2,
+        "batch": "remaining"
+      },
+      {
+        "name": "s01-logistics.test.mjs",
+        "cases": 1,
+        "batch": "remaining"
+      },
+      {
+        "name": "s01-priority.test.mjs",
+        "cases": 3,
+        "batch": "remaining"
+      },
+      {
+        "name": "s02-forecast.test.mjs",
+        "cases": 2,
+        "batch": "remaining"
+      },
+      {
+        "name": "s03-households.test.mjs",
+        "cases": 1,
+        "batch": "remaining"
+      },
+      {
+        "name": "s04-ecology.test.mjs",
+        "cases": 1,
+        "batch": "remaining"
+      },
+      {
+        "name": "s05-battery.test.mjs",
+        "cases": 1,
+        "batch": "remaining"
+      },
+      {
+        "name": "save-recovery.test.mjs",
+        "cases": 4,
+        "batch": "remaining"
+      },
+      {
+        "name": "server.test.mjs",
+        "cases": 1,
+        "batch": "remaining"
+      },
+      {
+        "name": "session.test.mjs",
+        "cases": 4,
+        "batch": "remaining"
+      },
+      {
+        "name": "state-hardening.test.mjs",
+        "cases": 10,
+        "batch": "remaining"
+      },
+      {
+        "name": "task-tracking.test.mjs",
+        "cases": 9,
+        "batch": "remaining"
+      }
+    ]
+  },
+  "install": {
+    "suites": 35,
+    "cases": 174,
+    "status": "PASS",
+    "base": "2ad9ac443492552da5690146b734c4600b295db7",
+    "prepareExit": 0,
+    "headUnchanged": true,
+    "noPush": true,
+    "dirtyRejectedBeforeCopy": true,
+    "userReadmeUnchanged": true,
+    "seconds": 215.13137451300008
+  },
+  "longScenarios": [
+    {
+      "days": 1500,
+      "living": 125,
+      "generations": 9,
+      "births": 168,
+      "deaths": 61,
+      "succession": 27,
+      "bytes": 444847
+    },
+    {
+      "scenario": "multi",
+      "living": 635,
+      "inhabited": 4,
+      "stats": {
+        "births": 818,
+        "deaths": 225,
+        "deliveries": 62,
+        "succession": 81,
+        "maxGeneration": 8,
+        "batches": 4445,
+        "harvests": 56263,
+        "animalBirths": 259
+      },
+      "bytes": 1787465
+    }
+  ],
+  "legacyParity": {
+    "status": "PASS",
+    "results": [
+      {
+        "epoch": 1,
+        "days": 40,
+        "identical": true,
+        "warnings": [
+          [],
+          []
+        ]
+      },
+      {
+        "epoch": 2,
+        "days": 40,
+        "identical": true,
+        "warnings": [
+          [],
+          []
+        ]
+      },
+      {
+        "epoch": 3,
+        "days": 40,
+        "identical": true,
+        "warnings": [
+          [],
+          []
+        ]
+      }
+    ]
+  },
+  "runtime": {
+    "status": "PASS",
+    "scenarios": [
+      {
+        "epoch": 1,
+        "frames": 2400,
+        "syntheticWallSeconds": 80,
+        "elapsedGameDays": 2.1651388888889986,
+        "restarts": 2,
+        "automaticSaves": 9,
+        "population": 18,
+        "tradeDeliveries": 0,
+        "unverified": [
+          "real DOM",
+          "WebGL",
+          "touch",
+          "device performance"
+        ]
+      },
+      {
+        "epoch": 3,
+        "frames": 4800,
+        "syntheticWallSeconds": 160,
+        "elapsedGameDays": 3.9973611111081198,
+        "restarts": 4,
+        "automaticSaves": 18,
+        "population": 34,
+        "tradeDeliveries": 4,
+        "unverified": [
+          "real DOM",
+          "WebGL",
+          "touch",
+          "device performance"
+        ]
+      },
+      {
+        "epoch": 4,
+        "frames": 4800,
+        "syntheticWallSeconds": 160,
+        "elapsedGameDays": 3.9988879999999996,
+        "restarts": 4,
+        "automaticSaves": 18,
+        "population": 20,
+        "tradeDeliveries": 0,
+        "unverified": [
+          "real DOM",
+          "WebGL",
+          "touch",
+          "device performance"
+        ]
+      }
+    ]
+  },
+  "browser": {
+    "chromium-workspace.json": {
+      "status": "PASS",
+      "results": [
+        {
+          "viewport": {
+            "width": 412,
+            "height": 870
+          },
+          "status": "PASS",
+          "classicLayout": true,
+          "quietAndFull": true,
+          "sections": 8,
+          "helpOnce": true,
+          "pinning": true,
+          "locating": true,
+          "peopleLocations": true,
+          "pauseSemantics": true,
+          "offlineReload": true,
+          "epoka4": true,
+          "errors": []
+        },
+        {
+          "viewport": {
+            "width": 870,
+            "height": 412
+          },
+          "status": "PASS",
+          "classicLayout": true,
+          "quietAndFull": true,
+          "sections": 8,
+          "helpOnce": true,
+          "pinning": true,
+          "locating": true,
+          "peopleLocations": true,
+          "pauseSemantics": true,
+          "offlineReload": true,
+          "epoka4": true,
+          "errors": []
+        },
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 800
+          },
+          "status": "PASS",
+          "classicLayout": true,
+          "quietAndFull": true,
+          "sections": 8,
+          "helpOnce": true,
+          "pinning": true,
+          "locating": true,
+          "peopleLocations": true,
+          "pauseSemantics": true,
+          "offlineReload": true,
+          "epoka4": true,
+          "errors": []
+        }
+      ],
+      "unverified": [
+        "physical Android touch",
+        "phone performance",
+        "battery power"
+      ]
+    },
+    "people-results.json": {
+      "status": "PASS",
+      "results": [
+        {
+          "viewport": {
+            "width": 412,
+            "height": 870
+          },
+          "status": "PASS",
+          "models": {
+            "detail": true,
+            "knees": true,
+            "elbows": true
+          },
+          "fieldLayout": {
+            "fields": 200,
+            "error": 2.784377656347607e-06
+          },
+          "speeds": [
+            {
+              "speed": 1,
+              "frames": 6,
+              "milliseconds": 806
+            },
+            {
+              "speed": 2,
+              "frames": 1,
+              "milliseconds": 1041
+            },
+            {
+              "speed": 4,
+              "frames": 3,
+              "milliseconds": 808
+            },
+            {
+              "speed": 8,
+              "frames": 7,
+              "milliseconds": 1497
+            }
+          ],
+          "epoka4Canonical": true,
+          "pauseStable": true,
+          "bothMenus": true,
+          "save": true,
+          "errors": [],
+          "device": "software WebGL; not Android battery/FPS evidence"
+        },
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 800
+          },
+          "status": "PASS",
+          "models": {
+            "detail": true,
+            "knees": true,
+            "elbows": true
+          },
+          "fieldLayout": {
+            "fields": 200,
+            "error": 2.784377656347607e-06
+          },
+          "speeds": [
+            {
+              "speed": 1,
+              "frames": 1,
+              "milliseconds": 1367
+            },
+            {
+              "speed": 2,
+              "frames": 1,
+              "milliseconds": 752
+            },
+            {
+              "speed": 4,
+              "frames": 1,
+              "milliseconds": 774
+            },
+            {
+              "speed": 8,
+              "frames": 2,
+              "milliseconds": 2495
+            }
+          ],
+          "epoka4Canonical": true,
+          "pauseStable": true,
+          "bothMenus": true,
+          "save": true,
+          "errors": [],
+          "device": "software WebGL; not Android battery/FPS evidence"
+        }
+      ]
+    },
+    "chromium-hardening.json": {
+      "status": "PASS",
+      "result": {
+        "daily": {
+          "saved": true,
+          "loadable": true,
+          "spoilRestored": true,
+          "saveOk": true
+        },
+        "migrated": true,
+        "rejected": true,
+        "unchanged": true,
+        "validSave": true
+      },
+      "errors": [],
+      "environment": "Chromium with software WebGL; no physical Android performance measurement"
+    },
+    "chromium-lifecycle.json": {
+      "status": "PASS",
+      "results": [
+        {
+          "viewport": {
+            "width": 412,
+            "height": 870
+          },
+          "status": "PASS",
+          "hiddenSeconds": 16,
+          "visibility": "document visibility overridden in isolated QA page",
+          "nativeFreezeResume": true,
+          "foreground": {
+            "frames": 9,
+            "draws": 1654,
+            "queuedFrames": 1,
+            "intervals": 1,
+            "timeouts": 2,
+            "audio": [
+              "running"
+            ],
+            "day": 0.27125000000000005,
+            "stored": 22
+          },
+          "hidden": {
+            "frames": 9,
+            "draws": 1654,
+            "queuedFrames": 0,
+            "intervals": 0,
+            "timeouts": 0,
+            "audio": [
+              "suspended"
+            ],
+            "day": 0.27125000000000005,
+            "stored": 61
+          },
+          "afterHidden": {
+            "frames": 9,
+            "draws": 1654,
+            "queuedFrames": 0,
+            "intervals": 0,
+            "timeouts": 0,
+            "audio": [
+              "suspended"
+            ],
+            "day": 0.27125000000000005,
+            "stored": 61
+          },
+          "returned": {
+            "frames": 21,
+            "draws": 3358,
+            "queuedFrames": 1,
+            "intervals": 1,
+            "timeouts": 2,
+            "audio": [
+              "running"
+            ],
+            "day": 0.27125000000000005,
+            "stored": 61
+          },
+          "rapid": {
+            "frames": 22,
+            "draws": 3775,
+            "queuedFrames": 1,
+            "intervals": 1,
+            "timeouts": 2,
+            "audio": [
+              "running"
+            ],
+            "day": 0.27125000000000005,
+            "stored": 61
+          },
+          "saveSurvivesReload": true,
+          "errors": []
+        },
+        {
+          "viewport": {
+            "width": 1280,
+            "height": 800
+          },
+          "status": "PASS",
+          "hiddenSeconds": 16,
+          "visibility": "document visibility overridden in isolated QA page",
+          "nativeFreezeResume": true,
+          "foreground": {
+            "frames": 11,
+            "draws": 1843,
+            "queuedFrames": 1,
+            "intervals": 1,
+            "timeouts": 2,
+            "audio": [
+              "running"
+            ],
+            "day": 0.27,
+            "stored": 22
+          },
+          "hidden": {
+            "frames": 11,
+            "draws": 1843,
+            "queuedFrames": 0,
+            "intervals": 0,
+            "timeouts": 0,
+            "audio": [
+              "suspended"
+            ],
+            "day": 0.27,
+            "stored": 61
+          },
+          "afterHidden": {
+            "frames": 11,
+            "draws": 1843,
+            "queuedFrames": 0,
+            "intervals": 0,
+            "timeouts": 0,
+            "audio": [
+              "suspended"
+            ],
+            "day": 0.27,
+            "stored": 61
+          },
+          "returned": {
+            "frames": 23,
+            "draws": 4138,
+            "queuedFrames": 1,
+            "intervals": 1,
+            "timeouts": 2,
+            "audio": [
+              "running"
+            ],
+            "day": 0.27,
+            "stored": 61
+          },
+          "rapid": {
+            "frames": 23,
+            "draws": 4138,
+            "queuedFrames": 1,
+            "intervals": 1,
+            "timeouts": 2,
+            "audio": [
+              "running"
+            ],
+            "day": 0.27,
+            "stored": 61
+          },
+          "saveSurvivesReload": true,
+          "errors": []
+        }
+      ],
+      "unverified": [
+        "physical Android lifecycle",
+        "battery discharge",
+        "GPU power",
+        "temperature",
+        "Android process eviction"
+      ]
+    }
+  },
+  "reproductions": {
+    "status": "PASS",
+    "rows": [
+      {
+        "id": "clock-origin",
+        "beforeAccepted": true,
+        "afterAccepted": false
+      },
+      {
+        "id": "action-target",
+        "beforeAccepted": true,
+        "afterAccepted": false
+      },
+      {
+        "id": "action-length",
+        "beforeAccepted": true,
+        "afterAccepted": false
+      },
+      {
+        "id": "negative-labor",
+        "beforeAccepted": true,
+        "afterAccepted": false
+      },
+      {
+        "id": "catalog-resource",
+        "beforeAccepted": true,
+        "afterAccepted": false
+      },
+      {
+        "id": "catalog-building",
+        "beforeAccepted": true,
+        "afterAccepted": false
+      },
+      {
+        "id": "catalog-project",
+        "beforeAccepted": true,
+        "afterAccepted": false
+      },
+      {
+        "id": "catalog-crop",
+        "beforeAccepted": true,
+        "afterAccepted": false
+      },
+      {
+        "id": "catalog-recipe",
+        "beforeAccepted": true,
+        "afterAccepted": false
+      },
+      {
+        "id": "catalog-animal",
+        "beforeAccepted": true,
+        "afterAccepted": false
+      }
+    ],
+    "transport": {
+      "beforeRewinds": [
+        {
+          "from": 2.669209,
+          "to": 2.668209
+        }
+      ],
+      "afterRejectsBeforeMutation": true
+    }
+  },
+  "limits": [
+    "The original npm test invocation ended without a final summary after 13 completed suites; remaining 22 suites were completed as separate serial processes. It is not reported as a passing single npm test invocation.",
+    "Catalog validation and deployment metadata were tightened during verification; targeted tests and the final installer ran again against the final source.",
+    "Physical Android battery, temperature, touch feel, FPS and OS process eviction were not measured.",
+    "Local Node 24 verification; Node 18 and 24 CI is configured but not executed remotely in this task.",
+    "No external commit or push in this task; Termux installer publishes after its own checks."
+  ]
+}

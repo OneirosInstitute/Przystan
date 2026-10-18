@@ -1,0 +1,12 @@
+✔ a hidden document never advances simulation or the render clock (1561.647185ms)
+✔ epoch II and III starter villages remain loadable, including a heart upgrade (7023.914648ms)
+✔ legacy epoch II campaign route is recovered from its recorded knowledge (1191.976081ms)
+✔ a legacy completed chest is not reset and an interrupted legacy chest recovers (1100.749686ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11041.972587

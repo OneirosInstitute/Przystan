@@ -84,7 +84,7 @@ function e2ShipTick(){const e=S.e2;if(!e||e.r3!=='statek'||(e.ship||0)>=3)return
 function e2Daily22(){if(!S||S.epoch!==2||!S.e2||!S.e2.r3)return;const e=S.e2;
  if(e.r3==='gosp'){const hh=S.bld.filter(b=>bDone(b)&&BD[b.kind].house).length;const sea=seasonIdx();if(sea!==2){S.res.warzywa=(S.res.warzywa||0)+K*.15*hh;S.res.jaja=(S.res.jaja||0)+K*.1*hh}e.fedD=(S.hungerDays||0)===0?(e.fedD||0)+1:0}
  e2ShipTick()}
-{const _nd3=newDay;newDay=function(){_nd3();try{e2Daily22()}catch(er){console.warn(er)}}}
+// Dzienna aktualizacja: p_daily.js (jedna jawna kolejność).
 // karta
 function e2HTML22(){const e=S.e2;if(!e||!e.r3)return'';let h='';
  if(e.r3==='cechy'){const miss=Object.keys(CN).filter(c=>!S.people.some(p=>p.sk[c]>=3)).map(c=>CN[c]);h+=`<p class="mut">Cechy z mistrzem: ${e2Masters()} z ${Object.keys(CN).length}${miss.length?' · bez mistrza: '+miss.join(', '):''} · wyroby: ${e.cechN||0}.</p>`}

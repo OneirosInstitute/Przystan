@@ -169,7 +169,7 @@ function zapShow(){if(!S)return;if(!zapPop.hidden){zapPop.hidden=true;return}con
  $('cz-res').addEventListener('click',e=>{e.stopPropagation();zapShow()})}
 zapPop.addEventListener('click',e=>{const b=e.target.closest('[data-zapgo]');if(!b||!S)return;zapPop.hidden=true;openSheet(b.dataset.zapgo)});
 document.addEventListener('pointerdown',e=>{if(zapPop.hidden)return;if(e.target.closest('#zappop,#cz-res'))return;zapPop.hidden=true},true);
-{const _nd=newDay;newDay=function(){const r=_nd.apply(this,arguments);try{zapSnap()}catch(e){}return r}}
+// Dzienna aktualizacja: p_daily.js (jedna jawna kolejność).
 {const _rt=renderTop;renderTop=function(){_rt();if(!czOn||!S)return;const days=czNeedDays(),sea=seasonIdx();
   const fc=days<2?'bad':days<5?'warn':'',oc=(sea===1||sea===2)&&S.res.opal<10?'bad':(sea>=1&&sea<=2&&S.res.opal<30)||S.res.opal<5?'warn':'';
   const b=$('cz-res');if(!b._ok){b._ok=1;b.innerHTML=`<span data-k="f">${ico('zywnosc')}<b></b><small></small></span><span data-k="d">${ico('drewno')}<b></b></span><span data-k="o">${ico('opal')}<b></b></span><span data-k="l">${ico('ludzie')}<b></b></span>${ico('chev','chv')}`}

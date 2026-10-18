@@ -183,7 +183,7 @@ function scDaily(){if(!S||!S.sc)return;const st=scSt();if(!st)return;const d=day
 // wypić: zwraca, ile „mocy” udało się podać (wino mocniejsze niż piwo)
 function scDrink(want){if(want<=0)return 0;let got=0;const tot=NAPK.reduce((a,k)=>a+(S.res[k]||0)*NAPM[k],0);if(tot<=0)return 0;const f=Math.min(1,want/tot);
  NAPK.forEach(k=>{const v=(S.res[k]||0)*f;S.res[k]=Math.max(0,(S.res[k]||0)-v);got+=v*NAPM[k]});return got}
-{const _nd=newDay;newDay=function(){const op=S?(S.res.opal||0):0;const r=_nd.apply(this,arguments);try{scFuelBack(op);scDaily();scTick()}catch(e){console.warn('serce',e)}return r}}
+// Dzienna aktualizacja: p_daily.js (jedna jawna kolejność).
 // uczty: święta i wesela z napitkami
 {const _cs=cerStart;cerStart=function(){_cs();try{const C=S.cer;if(!C||C.napD)return;C.napD=1;if(scSt()<3&&scNap()<1)return;const n=(C.slots||[]).length;if(n<3)return;
   const want=n*.6,got=scDrink(want);if(got<=0)return;const f=Math.min(1,got/want);S.hope=clamp(S.hope+.03*f,0,1);S.dis=Math.max(0,(S.dis||0)-.03*f);

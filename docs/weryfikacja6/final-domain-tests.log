@@ -1,0 +1,24 @@
+✔ E4 migration retains living identities, kinship, possessions and all ordinary homes (1459.345843ms)
+✔ legacy hamlet residents become persistent people with unknown history explicitly marked (1374.594063ms)
+✔ all people have exactly one household, clan and settlement; duplicate or orphan references fail validation (1244.184384ms)
+✔ repeated migration and save reload preserve one balance and the same identifiers (1334.837743ms)
+✔ Epoka IV unlocks after III, retains the settlement and saves through the real game decoder (12475.685631ms)
+✔ all estate buildings have working 3D models and every Epoka IV panel renders (3690.687722ms)
+✔ migration completes paid legacy work and carts once and preserves the remaining ripe harvest (5969.415746ms)
+✔ a rejected clock step never initializes or mutates the simulation (14.151201ms)
+✔ a persisted E4 clock must have a coherent finite origin and elapsed time (13.579682ms)
+✔ a transport checkpoint cannot contain an arrival at or before its current clock (5.768689ms)
+✔ route length agrees with geometry and corrupt action targets or labor ledgers are rejected (15.620784ms)
+✔ valid RC5 snapshots, blocked actions and long walks remain loadable after repeated restarts (20.811248ms)
+✔ invalid clock origins and safe-integer overflow are rejected before runtime mutation (6.813584ms)
+✔ the sub-decimeter arrival tolerance remains compatible with existing action snapshots (3.635415ms)
+✔ the real save decoder rejects a corrupt E4 clock without touching the running colony (49.161973ms)
+✔ catalog validation accepts only declared resources, buildings, crops, recipes and animals (10.817402ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 22306.733256

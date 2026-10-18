@@ -130,7 +130,7 @@ function odkDaily(){if(!S)return;odkInit();const sea=seasonIdx(),k=S.weather.k,y
  kurDaily()}
 {const _ad=actDaily;actDaily=function(){_ad();if(!S)return;try{odkDaily()}catch(e){console.warn(e)}}}
 // sól w spiżarni: mięso i ryby psują się wolniej
-{const _nd=newDay;newDay=function(){const salt=S&&(S.res.sol||0)>=1;if(salt){SPOIL.mieso*=.55;SPOIL.ryby*=.55}try{_nd()}finally{if(salt){SPOIL.mieso/=.55;SPOIL.ryby/=.55}}}}
+// Dzienna aktualizacja: p_daily.js (jedna jawna kolejność).
 // ---------- nowe budowle ----------
 Object.assign(BD,{kurnik:{cat:'uprawa',n:'Kurnik',w:2,h:2,cost:{drewno:14,deski:4},work:6,wk:1,c:'hodowca',need:'kury',d:'Kurnik na palach z grzędami i wybiegiem. Hodowca łapie w gęstwinie zdziczałe kury i trzyma je tu: jaja przez większą część roku, pierze na pierzyny. Zimą kury jedzą ziarno. Lisy podchodzą nocą.'},
  odkrywka:{cat:'surowce',n:'Odkrywka węgla',w:2,h:2,cost:{drewno:16,deski:6,narz:1},work:8,wk:2,c:'kamieniarz',need:'wegiel_k',site:'wegiel',prod:[{in:{},out:{wegiel:2},t:14,target:80},{in:{},out:{opal:3},t:12,target:260}],d:'Wykop w czarnej skale. Węgiel kamienny dla kuźni, a gdy go dość, na opał: pali się dłużej niż drewno. Żyła kiedyś się wyczerpie. Stawia się ją przy odkrytej wychodni węgla.'},

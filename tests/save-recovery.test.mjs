@@ -1,7 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
 import {createGame} from './runtime.mjs';
-const key='przystan-v7';
+const key='przystan-v7',version=JSON.parse(fs.readFileSync(new URL('../package.json',import.meta.url),'utf8')).version;
 
 test('quota occupied by the secondary backup is recovered without clearing unrelated storage',()=>{
  const runtime=createGame();runtime.game.startGame(true);runtime.game.closeSheet();
@@ -33,7 +34,7 @@ test('invalid state reports the responsible field and version without replacing 
  runtime.game.S.people[0].hp=NaN;assert.equal(runtime.game.save(),false);
  assert.equal(runtime.memory.get(key),previous);
  assert.match(runtime.evaluate('saveStatusText()'),/people\[0\].*hp/);
- assert.match(runtime.evaluate('saveStatusText()'),/4\.0\.0-rc\.5/);
+ assert.ok(runtime.evaluate('saveStatusText()').includes('Przystań '+version));
  const diagnostic=runtime.evaluate('saveDiagnostics()');assert.equal(diagnostic.ok,false);assert.ok(diagnostic.error);
 });
 

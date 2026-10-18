@@ -1,0 +1,17 @@
+✔ an ore-starved smith collects real ore instead of unrelated village chores (1202.152448ms)
+✔ supply work is slower than professional gathering and conserves the source and delivery (1138.188403ms)
+✔ meeting every configured output target returns the crew to village help even with empty inputs (1218.9098ms)
+✔ exhausted sources are not invented or replaced by social work (1120.955677ms)
+✔ hidden, claimed and unreachable deposits are excluded without creating resources (987.896193ms)
+✔ manual reassignment releases the claimed source and abandons the supply role (1125.672475ms)
+✔ suppliers relinquish the source and return to production when another delivery resolves the shortage (1038.193638ms)
+✔ upstream charcoal shortage targets wood only through an existing charcoal kiln (1001.028503ms)
+✔ a supply delivery survives restart and returns to the original workshop without double harvest (1129.297756ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10130.080381

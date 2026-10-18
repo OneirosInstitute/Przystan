@@ -138,7 +138,7 @@ function e2Daily21(){if(!S||S.epoch!==2||!S.e2||!S.e2.r2)return;const e=S.e2,sea
  if(e.r2==='lancuch')(S.hamlets||[]).forEach(h=>h.wiez=Math.min(1,(h.wiez||0)+.002));
  if(e.r2==='wyspy')e2IslDaily();
  if(e.r2==='skaly'&&sea===2&&(S.res.pierze||0)>=30){const hh=S.bld.filter(b=>bDone(b)&&BD[b.kind].house).length;S.res.opal+=K*.08*hh}}
-{const _nd2=newDay;newDay=function(){_nd2();try{e2Daily21()}catch(er){console.warn(er)}}}
+// Dzienna aktualizacja: p_daily.js (jedna jawna kolejność).
 // karta: druga osada, wyspy
 function e2HTML21(){const e=S.e2;if(!e||!e.r2)return'';let h='';
  if(e.r2==='druga'){const s=e2Second();if(s){const why=e2WozWhy();h+=`<p class="mut">Druga osada: <b>${s.name}</b>, ${s.pop} ${osb(s.pop)}, zapasy ${zapWord(s.zap||0)}, ${s.road===2?'droga':'ścieżka'}. Wozy: ${e.wypN||0}.</p>${why?`<p class="no" style="font-size:12.5px">${why}</p>`:`<button class="pri" data-e2woz="1">Wyślij wóz: kłody 40, kamień 20, narzędzia 2, jedzenie 60</button>`}`}}

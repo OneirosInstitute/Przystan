@@ -1,0 +1,12 @@
+✔ rebuilding twenty times disposes retired private geometries (1322.387588ms)
+✔ shared geometry survives until its final scene user is removed (1130.143063ms)
+✔ confirmed person-name sink escapes markup even without the import boundary (1315.243084ms)
+✔ service worker deletes only own caches and never intercepts API (2.064916ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3918.921305

@@ -1,0 +1,11 @@
+✔ S01: critical village task wins regardless of random draw or input order (1158.465413ms)
+✔ S01: balanced priorities preserve choice and invalid priorities cannot win (1122.188727ms)
+✔ S01: priority planning leaves serialized village state valid (1082.803008ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3488.446559

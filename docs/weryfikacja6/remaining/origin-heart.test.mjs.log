@@ -1,0 +1,11 @@
+✔ new game preserves landing fire as its one expandable settlement heart (1529.914765ms)
+✔ legacy heart is migrated on restart without changing population or buildings (2777.796838ms)
+✔ heart migration refuses to overwrite houses near original fire (1333.74749ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5785.164139

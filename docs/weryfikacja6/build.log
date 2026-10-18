@@ -1,0 +1,6 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> przystan@4.0.0-rc.6 build
+> node build.js
+
+Zbudowano dist/ (wersja 3bac9cb911, 1405 kB index.html)

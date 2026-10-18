@@ -1,0 +1,19 @@
+✔ daily phases retain their existing order and capture fuel before the core (1786.427001ms)
+✔ the daily checkpoint includes every completed daily phase (1553.692716ms)
+✔ core failure restores temporary spoilage settings and does not save a partial day (1353.684624ms)
+✔ a failed optional daily phase is reported and later phases still run (1551.867979ms)
+✔ a rejected clock step never initializes or mutates the simulation (20.456918ms)
+✔ a persisted E4 clock must have a coherent finite origin and elapsed time (11.699902ms)
+✔ a transport checkpoint cannot contain an arrival at or before its current clock (6.505505ms)
+✔ route length agrees with geometry and corrupt action targets or labor ledgers are rejected (13.924373ms)
+✔ valid RC5 snapshots, blocked actions and long walks remain loadable after repeated restarts (30.961003ms)
+✔ invalid clock origins and safe-integer overflow are rejected before runtime mutation (9.723256ms)
+✔ the sub-decimeter arrival tolerance remains compatible with existing action snapshots (5.218803ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6382.029812

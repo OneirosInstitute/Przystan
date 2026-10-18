@@ -1,0 +1,19 @@
+✔ reassigning builders releases reserved slots, including travel (1158.540228ms)
+✔ a saved delivery reaches its warehouse along a path after the workday ends (1112.554223ms)
+✔ midnight preserves material delivery and reserves it once after restart (1041.159709ms)
+✔ full storage conserves deliveries and represents excess consistently (980.509301ms)
+✔ ration priorities redistribute exactly the existing food equivalent (1015.031404ms)
+✔ unfeasible workshop helps without repeatedly planning production (1041.219258ms)
+✔ food emergency policy reaches the last planner and releases active builders (971.116238ms)
+✔ unreachable and night deliveries retain ownership instead of teleporting (975.764123ms)
+✔ feast consumes exactly 60 and insufficient food gives no feast reward (988.289413ms)
+✔ forgotten technology cannot satisfy a new prerequisite (1162.768296ms)
+✔ led goat survives restart, full pen and removal of its destination (1023.106765ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11607.306615

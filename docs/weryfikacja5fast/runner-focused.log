@@ -1,0 +1,14 @@
+✔ deployment runner validates options, resource limits and complete successful reports (1.66944ms)
+✔ public install CLI runs every independent suite once with at most two overlapping processes (2505.661433ms)
+✔ a red suite cancels active work and prevents the next suite and a green gate (688.969575ms)
+✔ timeout terminates the test process group including a resource-writing descendant (2455.881864ms)
+✔ test discovery rejects empty plans and symlinks before starting a child (2.158179ms)
+✔ install mode preserves the legacy migration test and full mode retains both extended scenarios (438.889542ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6169.534206

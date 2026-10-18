@@ -714,7 +714,7 @@ function dailyPeople(cold,fuelHeated){
  S.health=S.people.length?S.people.reduce((a,p)=>a+p.hp,0)/S.people.length:0;
  S.warm=S.people.length?S.people.reduce((a,p)=>a+(p.warm===undefined?1:p.warm),0)/S.people.length:1}
 function tierOf(){const houses=S.bld.filter(b=>bDone(b)&&BD[b.kind].house).length,pop=S.people.length;let t=0;TIERS.forEach((x,i)=>{if(houses>=x[1]&&pop>=x[2])t=i});return t}
-function newDay(){
+function legacyDayCore(){
  expTick();
  const need=K*S.people.filter(p=>p.job!=='wyp').reduce((a,p)=>a+(p.age<3?.3:p.age<12?.6:p.age>55?.8:1),0)*(law('oszczedne')?.8:1)*[.85,1,1.08][S.diff===undefined?1:S.diff];
  // jedzenie: każdy rodzaj po trochu
@@ -780,8 +780,7 @@ function newDay(){
  if(S.bld.some(b=>!bDone(b))&&freeCount()===0)toastOnce('nobuild'+Math.floor(S.day/6),'Budowy stoją: nikt nie jest wolny. Zdejmij kogoś z pracy w zakładce Praca.');
  if(d===SD){const need=K*S.people.reduce((a,p)=>a+(p.age<12?.6:1),0);if(foodTotal()<need*8)log('Przed nami zima, a zapasów jest na mniej niż 8 dób. Trzeba więcej zbieraczy, rybaków i myśliwych.')}
  if(!S.people.length){log('Osada wymarła. Wyspa znów należy do lasu.');toast('Osada wymarła')}
- if(tab)renderPanel();
- save()}
+ if(tab)renderPanel()}
 function step(dt){const before=Math.floor(S.day);S.day+=dt/DAY;S.t+=dt;for(const p of S.people)stepPerson(p,dt);stepHerds(dt);fireStep(dt);if(Math.floor(S.day)>before)newDay()}
 function stepHerds(dt){S.herds.forEach((h,k)=>{if(h.calm>S.t)return;const dx=h.tx-h.x,dz=h.tz-h.z,d=Math.hypot(dx,dz);
  if(d<.3){if(Math.random()<dt*.15){const def=herdsDef[k];const a=Math.random()*6.28,r=Math.random()*(h.type==='wilk'?16:9);const tx=tcx(def.i)+Math.cos(a)*r*(h.type==='foka'?.35:1),tz=tcx(def.j)+Math.sin(a)*r*(h.type==='foka'?.35:1);const ti=tileOf(tx,tz),tk=ti[1]*N+ti[0];if(walk[tk]&&(h.type!=='foka'||beach[tk])){h.tx=tx;h.tz=tz}}}

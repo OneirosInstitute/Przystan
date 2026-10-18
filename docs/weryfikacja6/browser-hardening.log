@@ -1,0 +1,1 @@
+{"status":"PASS","result":{"daily":{"saved":true,"loadable":true,"spoilRestored":true,"saveOk":true},"migrated":true,"rejected":true,"unchanged":true,"validSave":true},"errors":[],"environment":"Chromium with software WebGL; no physical Android performance measurement"}

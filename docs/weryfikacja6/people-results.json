@@ -1,0 +1,93 @@
+{
+  "status": "PASS",
+  "results": [
+    {
+      "viewport": {
+        "width": 412,
+        "height": 870
+      },
+      "status": "PASS",
+      "models": {
+        "detail": true,
+        "knees": true,
+        "elbows": true
+      },
+      "fieldLayout": {
+        "fields": 200,
+        "error": 0.000002784377656347607
+      },
+      "speeds": [
+        {
+          "speed": 1,
+          "frames": 6,
+          "milliseconds": 806
+        },
+        {
+          "speed": 2,
+          "frames": 1,
+          "milliseconds": 1041
+        },
+        {
+          "speed": 4,
+          "frames": 3,
+          "milliseconds": 808
+        },
+        {
+          "speed": 8,
+          "frames": 7,
+          "milliseconds": 1497
+        }
+      ],
+      "epoka4Canonical": true,
+      "pauseStable": true,
+      "bothMenus": true,
+      "save": true,
+      "errors": [],
+      "device": "software WebGL; not Android battery/FPS evidence"
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "status": "PASS",
+      "models": {
+        "detail": true,
+        "knees": true,
+        "elbows": true
+      },
+      "fieldLayout": {
+        "fields": 200,
+        "error": 0.000002784377656347607
+      },
+      "speeds": [
+        {
+          "speed": 1,
+          "frames": 1,
+          "milliseconds": 1367
+        },
+        {
+          "speed": 2,
+          "frames": 1,
+          "milliseconds": 752
+        },
+        {
+          "speed": 4,
+          "frames": 1,
+          "milliseconds": 774
+        },
+        {
+          "speed": 8,
+          "frames": 2,
+          "milliseconds": 2495
+        }
+      ],
+      "epoka4Canonical": true,
+      "pauseStable": true,
+      "bothMenus": true,
+      "save": true,
+      "errors": [],
+      "device": "software WebGL; not Android battery/FPS evidence"
+    }
+  ]
+}

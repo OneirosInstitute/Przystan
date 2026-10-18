@@ -1,0 +1,15 @@
+✔ classic navigation retains the original sections and adds Tasks in both modes (1330.713008ms)
+✔ classic Chronicle retains save and mode controls (1320.959363ms)
+✔ goals use current act predicates and progress instead of the stale legacy checklist (1266.586709ms)
+✔ pinning produces an actionable map tracker and survives save/reload (1676.794913ms)
+✔ production blockers appear as tasks linked to real assigned suppliers and building (1334.646741ms)
+✔ classic views render in Epoka IV and preserve production and transport controls (3889.112616ms)
+✔ battery and photo controls never write an invalid simulation speed or break saving (1581.407791ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12549.541569

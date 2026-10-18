@@ -1,0 +1,10 @@
+✔ S02 autumn fuel shortage increases wood-gathering priority without consuming stock (1160.868064ms)
+✔ S02 before winter increases food gathering priority while reserves are low (1086.774531ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2363.500107

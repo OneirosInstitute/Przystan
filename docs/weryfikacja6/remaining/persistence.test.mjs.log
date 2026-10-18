@@ -1,0 +1,18 @@
+✔ save/load conserves a carried resource (1158.272166ms)
+✔ storage failure is returned and visible; export still contains live state (1091.178761ms)
+✔ invalid imported state is rejected without touching existing storage (1119.645122ms)
+✔ unrecoverable primary is protected from an automatic fresh-state overwrite (1271.315762ms)
+✔ a chosen decision restores its result without repeating the reward (2750.478101ms)
+✔ invalid backup never replaces the primary save; valid backup can recover (1077.390165ms)
+✔ interrupted captain chest can be offered after a fresh restart, exactly once (2078.819908ms)
+✔ one-shot registered decision is replayed after load and cannot pay twice (2464.50854ms)
+✔ the campaign council returns after restart and can choose the next epoch (2433.533217ms)
+✔ decision context restores live hamlet, region and scene-backed landmark references (6546.165492ms)
+ℹ tests 10
+ℹ suites 0
+ℹ pass 10
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 22161.293296
