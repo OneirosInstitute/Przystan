@@ -997,6 +997,29 @@ Wyspa kryje miejsca, które zawsze leżą w tym samym miejscu dla danej wyspy. G
 
 Pierze z kurnika i tokowiska idzie zimą na pierzyny: domy palą mniej opału. Odkryte miejsca są w Naturze, w rozdziale „Miejsca na wyspie”, razem z tymi, które widziano tylko z daleka.
 
+### Złoża (od wersji 4.1.0-rc.1)
+
+Kamienie, glina i ruda leżące luzem przy osadzie wystarczają na początek. Na lata osada sięga do złóż: dużych, skupionych w jednym miejscu i skończonych. Złoże leży zawsze w tym samym miejscu dla danej wyspy, z daleka widać je jako zagadkę („Rdzawa woda w potoku”, „Szare ściany skalne”, „Biała maź nad wodą”), a rozpoznaje je dopiero ten, kto do niego dojdzie. Odkrycie złoża daje wiedzę o budowlach, które z niego czerpią.
+
+Każde złoże ma warstwy: płytką, głębszą i najgłębszą. Budynek stoi na złożu (do 9 pól od jego środka) i czerpie z warstw, do których sięga. Gdy te warstwy się wyczerpią, ludzie przestają tam pracować, kronika o tym mówi, a jeśli głębiej jest jeszcze surowiec, podpowiada szyb. Odkryte złoże otaczają paliki w kolorze surowca, a jego karta pokazuje każdą warstwę z paskiem, kto tam kopie i przyciski budowli, które można na nim postawić.
+
+| Złoże | Gdzie leży | Warstwy (porcje) | Budowle i warstwy |
+|---|---|---|---|
+| Węgiel (Zagłębie) | wychodnia węgla | 2000 / 6000 / 12000 węgla | odkrywka: płytka; szyb węglowy: głębsza i najgłębsza |
+| Torfowisko | mokradła | 1500 / 3500 opału | kopanka torfu: obie |
+| Rudne Wzgórze | wyżyny, strome stoki, 25–90 pól od obozu | 1500 / 5000 / 9000 rudy | kopalnia rudy: wszystkie |
+| Kamienne Łomy | przy skałach, 14–75 pól od obozu | 4000 / 12000 / 30000 kamienia | łom kamienia: wszystkie |
+| Gliniska | nad wodą, przy odsłonięciach gliny, 10–75 pól | 2000 / 5000 gliny | gliniak: obie |
+
+| Budowla | Koszt | Robotnicy | Daje |
+|---|---|---|---|
+| Kopalnia rudy | 24 drewna, 10 desek, 12 kamienia, 2 narzędzia | 3 | 6 rudy na 30 s, zużywa 1 drewno na obudowę |
+| Szyb węglowy | 30 drewna, 14 desek, 16 kamienia, 3 narzędzia | 3 | 6 węgla na 28 s albo 8 opału na 24 s, zużywa drewno |
+| Łom kamienia | 14 drewna, 1 narzędzie | 3 | 4 kamienie na 12 s |
+| Gliniak | 10 drewna | 2 | 3 gliny na 10 s |
+
+Każda wyspa ma po dwa złoża rudy, łomów i glinisk, rozłożone daleko od siebie, więc osada rośnie w kierunku złóż, a drogi do nich się opłacają. Stare zapisy: odkrywka zachowuje to, co już wykopano z żyły, a budynki postawione wcześniej przy złożu rozpoznają je od razu.
+
 # 13. Grafika i dźwięk
 
 - **Styl:** trójwymiarowe, niskopoligonowe modele w ściszonej, chłodnej palecie północy. Mgła nieznanego, pory dnia i roku, deszcz, śnieg, mgły, dym z kominów, świetliki latem, ptaki.
@@ -1114,6 +1137,7 @@ Pierze z kurnika i tokowiska idzie zimą na pierzyny: domy palą mniej opału. O
 | 1.8.3 | poprawka: rozbudowa domu (szałas w chatę, chata w dom) nie zabiera już rodzinie spiżarki; w czasie budowy zapas zostaje w starym domu w granicach jego pojemności |
 | 1.9 | budynki z charakterem: każdy budynek inny (ściany, dachy, spadek, okap), koniki, malowane okiennice, ganki, przybudówki, garnki na płocie, zioła pod okapem, szyldy rzemiosł, wyraźniejsza kuźnia, łaźnia i chata wiecowa |
 | 1.10 | wykonanie budynków: surowe, porządne i mistrzowskie, wyraźnie widoczne po rozbudowie (wielkość, podmurówka, dach, okiennice, obramienia okien, kwiaty, płotek, szyld); karta budynku pokazuje wykonanie i trwałość; odmiany szałasów, studni, zagród i spiżarni |
+| 4.1.0-rc.1 | złoża: węgiel, torf, ruda, kamień i glina w dużych, skupionych złożach z warstwami, które się wyczerpują; złoża rozpoznaje ten, kto do nich dojdzie; nowe budowle na złożach: kopalnia rudy, szyb węglowy, łom kamienia, gliniak; paliki wokół odkrytego złoża i karta z warstwami |
 | 4.0.0-rc.11 | zatory i drogi: ludzie ustępują sobie bez zakleszczeń (w RC9–RC10 pierwszego dnia stali w kolejkach przy wraku i obozie, osada traciła jedzenie), ekipa wraku pracuje na kilku stanowiskach; ścieżki wydeptują się same i przyspieszają o 10%, nowa zakładka Budowa → Drogi: ścieżka utwardzona, droga kamienna i bruk wytyczane od sieci dróg do wskazanego budynku po śladach ludzi, układane przez budowniczych; rozbudowa domu zawsze z przyciskiem i listą wymagań ✓/✗, karta zapasów domu; okap i dymnik w wiacie nad ogniskiem; zorza zakotwiczona w świecie (poświata na ziemi i morzu, kurtyny nad morzem za wyspą); zadania główne po trzy na epokę w zakładce Zadania, bez nich epoka nie idzie dalej |
 | 4.0.0-rc.1–rc.10 | epoka IV (rody, folwarki, wyspa 384×384), nowe menu i zakładka Zadania, zapasy z bilansem, misje budynków, autozapis i odzyskiwanie zapisu, transport i stanowiska pracy (szczegóły w docs/) |
 | 3.4 | serce osady: ognisko rośnie w pięciu etapach (wiata, Dom osadników, Dom rady, ratusz), każdy po pakiecie sześciu zadań z filarów dach, stół, ciepło, zdrowie, rzemiosło, wspólnota, i odblokowuje budynki i urzędy; plac 5 × 5 i zasięg serca przy planowaniu domów; wieczory i posiłki przy sercu, izba zimą; napitki (bednarnia, słodownia, chmielnik, browar, miodosytnia, winnica, winiarnia), piekarnia, wiatrak, szpital; rada osady z tekami i wnioskami; jarmark, cechy rzemieślników przy pełnej wyspie i prawa miejskie; chata wiecowa staje się Domem osadników; naprawiony kalendarz Dziadów, Szczodrych Godów i Marzanny |

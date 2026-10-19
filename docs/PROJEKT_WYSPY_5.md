@@ -22,6 +22,14 @@ Status: projekt docelowy. Część „Wdrożone w RC11” opisuje, co już dzia�
 | Zorza | Zorza jest przypięta do świata: zielona poświata na ziemi, śniegu i morzu oraz fałdowane kurtyny nad morzem za wyspą. Nigdy nie zasłania lądu i nie pływa z kamerą. |
 | Zadania główne | Po trzy na epokę, na górze zakładki Zadania. Epoka idzie dalej dopiero po ich wykonaniu (wiec pokoleń, koniec epoki II, koniec epoki III, wejście w epokę IV). Wątek: ogień na cyplu i światło na zachodzie, przybysz z Wysp Kręgu i zimny rok, rejs na zachód i ognie na wzgórzach. Wyprawy zadań można pokazać i śledzić. |
 
+### Wdrożone w 4.1.0-rc.1
+
+| Obszar | Co działa |
+|---|---|
+| Złoża | Węgiel, torf, ruda, kamień i glina w dużych złożach z warstwami (płytka, głębsza, najgłębsza). Po dwa złoża rudy, kamienia i gliny na każdej wyspie, z ziarna wyspy, daleko od siebie i od obozu. Złoże rozpoznaje ten, kto do niego dojdzie. |
+| Wydobycie | Kopalnia rudy, szyb węglowy, łom kamienia i gliniak stoją na złożu i czerpią z warstw, do których sięgają. Odkrywka bierze tylko płytką warstwę węgla, szyb głębsze. Po wyczerpaniu ludzie przestają pracować, a kronika podpowiada szyb. |
+| Widok | Paliki w kolorze surowca wokół odkrytego złoża, karta z paskami warstw i przyciskami budowli. |
+
 ## 2. Wyspa: jedna, większa, odkrywana stopniowo
 
 ### 2.1 Rozmiar
@@ -202,7 +210,7 @@ Pięć sekcji. Każda ma tę samą budowę: nagłówek z liczbami, filtr, lista 
 | Wydanie | Zakres | Odbiór |
 |---|---|---|
 | **RC11** | Zatory, drogi z wydeptywania, karta rozbudowy domów, dymnik, zorza w świecie, zadania główne | Testy RC10 + `crowd-flow`, próby w przeglądarce, telefon |
-| **4.1 Złoża** | Charaktery krain w rdzeniu 192, złoża skupione z warstwami, ślady i poszukiwania, odkrywka i szyb, hałdy, wyczerpywanie | Każdy seed ma komplet złóż w zasięgu; symulacja 20 lat bez braku kamienia i rudy przy rozsądnej grze |
+| **4.1 Złoża** (rc.1 wdrożone: złoża z warstwami, odkrywanie, kopalnia, szyb, łom, gliniak, wyczerpywanie; zostają charaktery krain, poszukiwania i hałdy) | Charaktery krain w rdzeniu 192, złoża skupione z warstwami, ślady i poszukiwania, odkrywka i szyb, hałdy, wyczerpywanie | Każdy seed ma komplet złóż w zasięgu; symulacja 20 lat bez braku kamienia i rudy przy rozsądnej grze |
 | **4.2 Menu** | Pięć sekcji, wzornik karty, wyszukiwarka, Zapasy w Osadzie | Test na 360×740 i 768×352; brak trzech rzędów przycisków |
 | **4.3 Wyspa 384** | Jedna wyspa od startu, sektory i poziomy szczegółów, krainy zewnętrzne, przysiółki w pierścieniu od epoki II | FPS i bateria na telefonie nie gorsze niż RC11 w rdzeniu |
 | **4.4 Folwarki ze złóż** | Specjalizacja folwarku z charakteru krainy i złoża, wozy zależne od nawierzchni, napięcia (woda, łąki, barcie) | Pięć pokoleń autonomii bez sztucznych dopisków zasobów |
