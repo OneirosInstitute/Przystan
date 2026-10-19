@@ -1,9 +1,9 @@
-# Przystań 4.0.0-rc.10
+# Przystań 4.0.0-rc.11
 
-Aktualna paczka: **Przystan_4.0.0_RC10_MASTER_TERMUX.zip**.
+Spokojna gra o rozbitkach, którzy budują osadę na dzikiej wyspie (PWA, Three.js).
 
-[Wdrożenie](docs/WYDANIE_4.0.0_RC10.md) · [Audyt](docs/AUDYT_MASTER_RC10.md) · [Weryfikacja](docs/WERYFIKACJA_4.0.0_RC10.md).
+RC11 naprawia zatory ludzi z RC9–RC10 i dodaje: drogi wydeptywane z ruchu i utwardzane przez budowniczych (Budowa → Drogi), rozbudowę domów zawsze z przyciskiem i listą wymagań, dymnik nad wiatą, zorzę zakotwiczoną w świecie oraz po trzy zadania główne na epokę w zakładce Zadania.
 
-Kumulatywne RC10 zachowuje klasyczne menu i wszystkie poprawki RC9. Budynki od razu pokazują opis, koszt i akcję. Zapasy mają podpisany zielony/czerwony bilans produkcji oraz rozwijane szczegóły. Nowe zmiany obejmują lokalne ustępowanie postaci, ochronę korytarzy przy budowie, odprawy i bezpieczne powroty wypraw, odwoływanie niewyruszonej załogi ze zwrotem udokumentowanych kosztów, ruch i wygląd mieszkańców, ograniczone budżetem detale świata oraz wyjaśnienia braków gospodarki IV. Istniejące rody i specjalizacje są zachowane. Starsze niejednoznaczne flagi away nie dostają odtworzonych nagród ani fikcyjnego zwrotu.
+[Wydanie RC11](docs/WYDANIE_4.0.0_RC11.md) · [Projekt wyspy, złóż i menu](docs/PROJEKT_WYSPY_5.md) · [Księga gry](KSIEGA.md)
 
-Budowanie: `npm run build`. Kontrole instalacyjne: `npm run test:install`, `npm run test:runtime`. Pełna pula z długimi scenariuszami pokoleń: `npm test`. Sprawdzenie paczki: `node tools/verify-package.cjs`.
+Budowanie: `npm run build`. Testy: `npm run test:install`, `npm run test:runtime`, pełna pula `npm test`. Sprawdzenie paczki: `node tools/verify-package.cjs`.

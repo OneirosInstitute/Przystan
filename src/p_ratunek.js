@@ -42,7 +42,12 @@ window.__rat={restNow,foodEmerg,weakWhy};
 
 // ---------- wrak: dojście z innej strony, gdy stanowisko zastawione; pierwszeństwo przed oznaczeniami ----------
 let wreckAlt=null;
-function goWreck(p){if(go(p,wreck.stand,'wreck',null))return true;
+// RC11: ekipa wraku rozkłada się na kilka stanowisk przy mieliźnie zamiast stać na jednym kaflu
+function wreckSpots(){const out=[];for(let dy=-2;dy<=2;dy++)for(let dx=-2;dx<=2;dx++){const x=wreck.stand[0]+dx,y=wreck.stand[1]+dy;if(x<0||y<0||x>=N||y>=N||!walk[y*N+x])continue;out.push([x,y])}return out}
+function wreckSpotLoad(t,p){return S.people.filter(q=>q!==p&&((q.routeGoal&&q.routeGoal[0]===t[0]&&q.routeGoal[1]===t[1]&&q.after==='wreck')||(q.state==='work'&&q.workKind==='wreck'&&Math.hypot(q.x-tcx(t[0]),q.z-tcx(t[1]))<.6))).length}
+function goWreck(p){const sp=wreckSpots().map(t=>[t,wreckSpotLoad(t,p)*3+Math.hypot(t[0]-wreck.stand[0],t[1]-wreck.stand[1])]).sort((a,b)=>a[1]-b[1]);
+ for(const[t]of sp.slice(0,6))if(go(p,t,'wreck',null))return true;
+ if(go(p,wreck.stand,'wreck',null))return true;
  if(wreckAlt&&walk[wreckAlt[1]*N+wreckAlt[0]]&&go(p,wreckAlt,'wreck',null))return true;
  const c=[];for(let r=1;r<=7;r++)for(let dy=-r;dy<=r;dy++)for(let dx=-r;dx<=r;dx++){if(Math.max(Math.abs(dx),Math.abs(dy))!==r)continue;const x=wreck.stand[0]+dx,y=wreck.stand[1]+dy;if(x<0||y<0||x>=N||y>=N||!walk[y*N+x])continue;c.push([x,y,Math.hypot(x-wreck.i,y-wreck.j)])}
  c.sort((a,b)=>a[2]-b[2]);for(const t of c.slice(0,10)){if(go(p,[t[0],t[1]],'wreck',null)){wreckAlt=[t[0],t[1]];return true}}return false}

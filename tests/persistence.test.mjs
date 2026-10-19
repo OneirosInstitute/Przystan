@@ -98,7 +98,8 @@ test('one-shot registered decision is replayed after load and cannot pay twice',
 
 test('the campaign council returns after restart and can choose the next epoch',()=>{
  const before=createGame();
- before.evaluate('S=freshState();S.actDone=1;S.finQ=0;wiecPokolen();save()');
+ // RC11: wiec pokoleń zbiera się dopiero po zadaniach głównych epoki I, więc zaliczamy je w przygotowaniu
+ before.evaluate('S=freshState();S.actDone=1;S.finQ=0;mqSkip(1);wiecPokolen();save()');
  const after=createGame({storage:{'przystan-v7':before.memory.get('przystan-v7')}});
  after.game.startGame(false);
  assert.equal(after.evaluate('evOpen?.ev.id'),'campaign-route');

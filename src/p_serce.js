@@ -416,7 +416,12 @@ function scBuild(g,b){const st=b?(b.st||1):1;const pr=b&&b.proj&&b.proj.t==='ser
  if(st===2){const cz=.6;for(const sx of[-1,1])for(const sz of[-1,1])g.add(cyl(.075,1.6,matLog2,sx*1.45,.8,cz+sz*1.15,0,0,0,7));
   const rf=gable(2.5,3.1,1.0,mThatch,1.58,.34);rf.rotation.y=Math.PI/2;rf.position.z=cz;g.add(rf);
   for(const sz of[-1,1])g.add(tbox(3.0,.08,.1,matLog2,0,1.55,cz+sz*1.15));
-  g.add(cyl(.006,1.0,matDark,0,2.08,fz,0,0,0,3));g.add(cyl(.16,.2,mIronSc,0,1.05,fz,0,0,0,10));
+  // RC11: okap z gliny nad paleniskiem i dymnik nad strzechą — bez nich iskry podpaliłyby dach
+  {const daub=M(0x9b8466),hood=new THREE.Mesh(new THREE.CylinderGeometry(.2,.62,.5,9,1,true),daub);hood.material.side=THREE.DoubleSide;hood.position.set(0,1.33,fz);hood.castShadow=true;g.add(hood);
+   g.add(cyl(.2,1.55,daub,0,2.3,fz,0,0,0,9));g.add(cyl(.235,.12,matStone,0,3.04,fz,0,0,0,9));
+   for(const a of[0,Math.PI/2,Math.PI,Math.PI*1.5])g.add(cyl(.02,.22,matDark,Math.cos(a)*.17,3.2,fz+Math.sin(a)*.17,0,0,0,4));
+   const cap=new THREE.Mesh(new THREE.ConeGeometry(.36,.22,4),mThatch);cap.rotation.y=Math.PI/4;cap.position.set(0,3.42,fz);cap.castShadow=true;g.add(cap)}
+  g.add(cyl(.006,.34,matDark,0,.95,fz,0,0,0,3));g.add(cyl(.16,.2,mIronSc,0,.7,fz,0,0,0,10));
   scTable(g,0,-.65,2.2);scTable(g,0,1.85,2.2);woodpile(g,-2.0,-1.6,12,.2);barrel(g,1.95,-1.7);barrel(g,2.15,-1.35,.85);scStakes(g)}
  if(st>=3){const H=scHall(g,st);
   for(let k=0;k<3;k++){const a=Math.PI*(.18+k*.32);scBenchLog(g,Math.cos(a)*1.05,fz+Math.sin(a)*1.05,a,1.0)}

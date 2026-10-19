@@ -66,19 +66,45 @@ function stormTick(rdt){if(!S)return;const k=S.weather.k;if(boltMat.opacity>0){b
 {const _l=lighting;lighting=function(){const L=_l();if(flashA>0){hemi.intensity+=flashA*2.4;renderer.toneMappingExposure+=flashA*.5;scene.background.lerp(new THREE.Color(0xc8d4ff),flashA*.45)}return L}}
 
 // ---------- zorza ----------
-const zorzaMat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,depthTest:true,blending:THREE.AdditiveBlending,uniforms:{uT:{value:0},uA:{value:0}},
- vertexShader:'varying vec2 vU;void main(){vU=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
+// 3.5: zorza przypięta do świata, nie do ekranu. Dwie warstwy:
+// 1) zielona poświata na ziemi, śniegu i morzu (w shaderach terenu i wody) — widać ją przy każdym przybliżeniu, niczego nie zasłania;
+// 2) fałdowane kurtyny nad morzem za wyspą, po przeciwnej stronie niż patrzący — widać je z daleka i przy brzegu, nigdy nad lądem.
+const AUR_GL=`float a_hs(vec2 p){return fract(sin(dot(p,vec2(41.3,289.1)))*43758.5453);}
+float a_vn(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*f*(f*(f*6.-15.)+10.);return mix(mix(a_hs(i),a_hs(i+vec2(1,0)),f.x),mix(a_hs(i+vec2(0,1)),a_hs(i+vec2(1,1)),f.x),f.y);}
+vec3 aurGround(vec2 p,float t){vec2 q=p*.011;float w=a_vn(q*vec2(1.,.7)+vec2(t*.011,-t*.007))*2.2+a_vn(q*2.3-vec2(t*.006,0.))*.8;float b=.5+.5*sin(q.y*3.2+q.x*.9+w*2.4+t*.03);b=b*b*b;b*=smoothstep(.2,.7,a_vn(q*.8+vec2(7.,-t*.005)));
+ float fl=.55+.45*a_vn(p*.045+vec2(t*.02,0.));vec3 c=mix(vec3(.12,.95,.55),vec3(.45,.32,.95),smoothstep(.35,.8,a_vn(q*.6+vec2(3.,t*.004))));return c*b*fl;}`;
+const AUR={a:0},aurV=new THREE.Vector3();
+const aurMat=new THREE.ShaderMaterial({transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,fog:false,side:THREE.DoubleSide,uniforms:{uT:{value:0},uA:{value:0}},
+ vertexShader:`varying vec2 vU;uniform float uT;
+ float h1(float x){return fract(sin(x*127.1)*43758.5);}float s1(float x){float i=floor(x),f=fract(x);f=f*f*(3.-2.*f);return mix(h1(i),h1(i+1.),f);}
+ void main(){vU=uv;vec3 p=position;float u=uv.x;float fold=(s1(u*5.+uT*.02)-.5)*16.+sin(u*13.+uT*.05)*3.;vec2 d=normalize(p.xz);p.xz+=d*fold;
+  p.y+=sin(u*9.+uT*.03)*1.4*uv.y;gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.);}`,
  fragmentShader:`varying vec2 vU;uniform float uT,uA;
- float h(float x){return fract(sin(x*127.1)*43758.5);}float n1(float x){float i=floor(x),f=fract(x);return mix(h(i),h(i+1.),f*f*(3.-2.*f));}
- void main(){float x=vU.x,y=vU.y;float c=0.;for(int k=0;k<3;k++){float fk=float(k);float wave=.45+.055*sin(x*(3.+fk)+uT*(.018+.008*fk)+fk*2.)+.018*sin(x*11.+uT*.035+fk);
-  float d=y-wave;float band=smoothstep(.0,.05,d+.02)*exp(-max(d,0.)*(5.+fk*2.));float rays=.55+.45*n1(x*60.+uT*.025+fk*13.);c+=band*rays*(1.-.25*fk);}
- c*=smoothstep(0.,.25,y)*smoothstep(1.,.75,y)*uA;vec3 col=mix(vec3(.15,1.,.55),vec3(.55,.3,.95),smoothstep(.55,.95,y));gl_FragColor=vec4(col*c*.85,c);}`});
-const zorza=new THREE.Mesh(new THREE.PlaneGeometry(1,1),zorzaMat);zorza.renderOrder=999;zorza.frustumCulled=false;zorza.visible=false;cam.add(zorza);if(!cam.parent)scene.add(cam);
+ float h1(float x){return fract(sin(x*127.1)*43758.5);}float s1(float x){float i=floor(x),f=fract(x);f=f*f*f*(f*(f*6.-15.)+10.);return mix(h1(i),h1(i+1.),f);}
+ void main(){float u=vU.x,v=vU.y;float r=s1(u*70.+uT*.05)*.55+s1(u*170.-uT*.08)*.3+s1(u*23.+uT*.03)*.35;r=smoothstep(.25,1.05,r);
+  float edge=smoothstep(0.,.16,v)*exp(-v*2.4);float top=smoothstep(.25,1.,v)*(1.-smoothstep(.75,1.,v));
+  float side=smoothstep(0.,.18,u)*smoothstep(1.,.82,u);float pul=.75+.25*s1(u*3.+uT*.04);
+  vec3 c=vec3(.15,1.,.6)*edge*(.45+.75*r)+vec3(.55,.25,.9)*top*.45*(.5+.5*r);
+  float a=(edge*(.4+.6*r)+top*.25)*side*pul*uA;gl_FragColor=vec4(c*side*pul*uA,a);}`});
+const aurGeo=(()=>{const n=96,R=N*.5+14,H=46,y0=3,span=2.3;const P=[],U=[],I=[];for(let k=0;k<=n;k++){const u=k/n,a=(u-.5)*span;for(let r=0;r<2;r++){P.push(Math.cos(a)*R,y0+r*H,Math.sin(a)*R);U.push(u,r)}}
+ for(let k=0;k<n;k++){const a=k*2;I.push(a,a+1,a+2,a+1,a+3,a+2)}const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(P,3));g.setAttribute('uv',new THREE.Float32BufferAttribute(U,2));g.setIndex(I);return g})();
+const zorza=new THREE.Mesh(aurGeo,aurMat);zorza.renderOrder=4;zorza.frustumCulled=false;zorza.visible=false;scene.add(zorza);
+// poświata w wodzie: woda odbija niebo mocniej niż ziemia
+wUni.uAur={value:0};
+wMat.fragmentShader=wMat.fragmentShader.replace('uniform float uGlint;','uniform float uGlint;uniform float uAur;\n'+AUR_GL+'\n').replace('gl_FragColor=vec4(c,a);','if(uAur>.001)c+=aurGround(vW.xz,uT)*uAur*.13*(.5+.5*smoothstep(.2,2.,d));\n  gl_FragColor=vec4(c,a);');wMat.needsUpdate=true;
+// poświata na ziemi i śniegu
+const AURU={uAur:{value:0},uAurT:{value:0}};
+{const tm=terrain.material;const prev=tm.onBeforeCompile;tm.onBeforeCompile=(sh,r)=>{if(prev)prev(sh,r);Object.assign(sh.uniforms,AURU);
+  if(!/varying vec3 vAW;/.test(sh.vertexShader))sh.vertexShader=sh.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 vAW;').replace('#include <begin_vertex>','#include <begin_vertex>\nvAW=(modelMatrix*vec4(transformed,1.)).xyz;');
+  sh.fragmentShader=sh.fragmentShader.replace('#include <common>','#include <common>\nvarying vec3 vAW;uniform float uAur;uniform float uAurT;\n'+AUR_GL)
+   .replace('#include <emissivemap_fragment>','#include <emissivemap_fragment>\n if(uAur>.001)totalEmissiveRadiance+=aurGround(vAW.xz,uAurT)*diffuseColor.rgb*uAur*.55*smoothstep(-.05,.3,vAW.y);')};tm.needsUpdate=true}
 function zorzaDaily(){const sea=seasonIdx(),w=S.weather.k;if(sea===2&&(w==='clear'||w==='frost')&&Math.random()<.3){S.zorzaN=Math.floor(S.day);
   if(!S.seen.zorza1){S.seen.zorza1=1;log('Nocą nad morzem tańczą zorze: zielone i fioletowe zasłony na całe niebo. Dzieci nie chcą iść spać. Starzy mówią, że to dusze przodków tańczą na niebie, bo jest im dobrze, że o nich pamiętamy.');if(typeof song==='function')song('Pieśń o zorzy nad morzem');S.hope=clamp(S.hope+.02,0,1)}
   else if(Math.random()<.35)log('Znowu zorze nad morzem. Ludzie stoją przed chatami z zadartymi głowami.')}}
-function zorzaFrame(rdt,Lt){const on=S&&S.zorzaN===Math.floor(S.day)&&Lt&&Lt.night>.4&&(S.weather.k==='clear'||S.weather.k==='frost');const tgt=on&&zoom>.9?Math.min(.38,(Lt.night-.4)*.65):0;zorzaMat.uniforms.uA.value+=(tgt-zorzaMat.uniforms.uA.value)*Math.min(1,rdt*.5);
- zorza.visible=zorzaMat.uniforms.uA.value>.01;if(!zorza.visible)return;zorzaMat.uniforms.uT.value=clock;const w=cam.right-cam.left,h=(cam.top-cam.bottom)*.55;zorza.scale.set(w,h,1);zorza.position.set(0,cam.top-h/2,-Math.min(300,cam.far*.8))}
+function zorzaFrame(rdt,Lt){const on=S&&S.zorzaN===Math.floor(S.day+(tod()<.3?-1:0))&&Lt&&Lt.night>.4&&(S.weather.k==='clear'||S.weather.k==='frost');const tgt=on?Math.min(1,(Lt.night-.4)*2):0;AUR.a+=(tgt-AUR.a)*Math.min(1,rdt*.35);if(AUR.a<.004)AUR.a=tgt?AUR.a:0;
+ const a=AUR.a;wUni.uAur.value=a;AURU.uAur.value=a;zorza.visible=a>.01;if(!a)return;const t=clock;AURU.uAurT.value=t;aurMat.uniforms.uT.value=t;aurMat.uniforms.uA.value=a;
+ // kurtyny po drugiej stronie wyspy niż patrzący: obracają się z kamerą, nie jeżdżą za nią
+ cam.getWorldDirection(aurV);zorza.rotation.y=-Math.atan2(aurV.z,aurV.x)}
 {const _at=atmosphere;atmosphere=function(rdt,Lt){_at(rdt,Lt);zorzaFrame(rdt,Lt)}}
 
 // ---------- dźwięk w przestrzeni: praca słychać tam, gdzie się dzieje ----------

@@ -985,7 +985,7 @@ function renderPanel(){
   if(!buildCat)buildCat=S.bld.some(b=>b.kind==='zbieracz')?'dom':'jedzenie';
   h+=`<div class="bchips">${CATS.map(([c,cn])=>{const ks=BKEYS.filter(k=>BD[k].cat===c);const av=ks.filter(bAvail).length;return`<button data-bcat="${c}" class="${buildCat===c?'on':''}${av?'':' dim'}">${cn}</button>`}).join('')}<button data-bcat="remont" class="${buildCat==='remont'?'on':''}">Remonty${need.length?`<small class="no">${need.length}</small>`:''}</button>${typeof ladChip==='function'?ladChip():''}</div>`;
   if(typeof sitesHTML==='function')h+=sitesHTML();
-  if(buildCat==='lad'&&typeof ladBuildHTML==='function'){h+=ladBuildHTML()}else if(buildCat==='remont'){h+=`<div class="card"><h4>Remonty</h4><p>Budynki zużywają się co roku: szybciej nad morzem, na mokradłach i w górach, wolniej, gdy są wyżej ulepszone. Remont potrzebny jest zwykle co 2–3 lata.</p><p class="mut">${need.length?'Wymaga remontu: '+need.map(b=>BD[b.kind].n.toLowerCase()+' '+Math.round(condOf(b)*100)+'%').join(', ')+'.':'Wszystko w dobrym stanie.'}</p><button data-autorep="1" class="${S.autoRep!==false?'pri':''}">${S.autoRep!==false?'Remonty automatyczne: włączone':'Remonty automatyczne: wyłączone'}</button></div>`}
+  if(buildCat==='lad'&&typeof ladBuildHTML==='function'){h+=ladBuildHTML()}else if(buildCat==='drogi'&&typeof roadsHTML==='function'){h+=roadsHTML()}else if(buildCat==='remont'){h+=`<div class="card"><h4>Remonty</h4><p>Budynki zużywają się co roku: szybciej nad morzem, na mokradłach i w górach, wolniej, gdy są wyżej ulepszone. Remont potrzebny jest zwykle co 2–3 lata.</p><p class="mut">${need.length?'Wymaga remontu: '+need.map(b=>BD[b.kind].n.toLowerCase()+' '+Math.round(condOf(b)*100)+'%').join(', ')+'.':'Wszystko w dobrym stanie.'}</p><button data-autorep="1" class="${S.autoRep!==false?'pri':''}">${S.autoRep!==false?'Remonty automatyczne: włączone':'Remonty automatyczne: wyłączone'}</button></div>`}
   else{const ks=BKEYS.filter(k=>BD[k].cat===buildCat);const kn=ks.filter(bAvail).sort((a,b)=>(canAfford(BD[b].cost)?1:0)-(canAfford(BD[a].cost)?1:0)),unk=ks.filter(k=>!bAvail(k));
    kn.forEach(k=>{const d=BD[k],cnt=S.bld.filter(b=>b.kind===k).length,ok=canAfford(d.cost);const miss=Object.entries(d.cost).filter(([r,v])=>(S.res[r]||0)<v).map(([r,v])=>RN[r].toLowerCase()+' '+Math.ceil(v-(S.res[r]||0)));
     h+=`<div class="card bk" data-build-card="${k}"><h4>${d.n}</h4><p class="mut">${cnt?'Masz '+cnt+' · ':''}${ok?'Dostępny do budowy':'Potrzebne zasoby'}</p><p>${d.d}</p><div class="cost">${costHave(d.cost)}<span class="sep">·</span>${d.work} osobodni${d.wk?`<span class="sep">·</span>${d.wk} prac.`:''}${d.r?`<span class="sep">·</span>zasięg ${d.r}`:''}</div>${ok?`<button class="pri bkb" data-b="${k}">Postaw</button>`:`<button class="bkb" disabled>Brakuje: ${miss.join(', ')}</button>`}</div>`});
@@ -1047,20 +1047,9 @@ function renderSel(){const el=$('sel');
   if(bDone(b)&&d.field){const f=b.field||{st:'puste',g:0,fert:1};h+=`<p>${{puste:'Pole czeka na siew',rosnie:'Rośnie: '+Math.round(f.g*100)+'%, plewienie '+Math.round((f.q||0)*100)+'%',dojrzale:'Dojrzałe, do zebrania: '+f.left}[f.st]} · żyzność ${Math.round(f.fert*100)}% · odmiana wyspowa ${Math.round((S.adapt||0)*100)}%</p>`}
   h+=bldPanelHTML(b);
   if(b.fire)h+=`<p class="no">Pali się! Zostało ${Math.round(b.fire.hp*100)}%. Gaszenie: ${Math.round((1-b.fire.s)*100)}%.</p>`;
-  if(bDone(b)&&UPG[b.kind]){const to=UPG[b.kind],av=bAvail(to);h+=av?`<p class="mut">Rozbudowa: ${BD[to].n.toLowerCase()} · ${costHTML(upCost(b.kind,to))}</p><button class="pri" data-up="${b.id}" style="margin:2px 0 6px">Rozbuduj</button>`:`<p class="mut">Rozbudowa w ${BD[to].n.toLowerCase()}: najpierw ${to==='dom'?'piec zduński (Wiedza)':'wiedza'}.</p>`}
+  if(bDone(b)&&(UPG[b.kind]||d.house))h+=upgCardHTML(b);
   if(d.house&&bDone(b)){
-    const nextKind=UPG[b.kind];
-    if(nextKind){const requirements=[];
-      if(!bAvail(nextKind))requirements.push(nextKind==='dom'?'Odkryj piec zduński w Wiedzy.':'Odblokuj technologię kolejnego domu w Wiedzy.');
-      if(!upFree(b,nextKind))requirements.push('Zwolnij sąsiednie pola na większy budynek.');
-      for(const [resource,quantity] of Object.entries(upCost(b.kind,nextKind))){const missing=quantity-(S.res[resource]||0);if(missing>0)requirements.push(RN[resource]+': brakuje '+Math.ceil(missing))}
-      h+=`<p><b>Kolejny poziom: ${BD[nextKind].n}</b></p>`;
-      if(requirements.length)h+=`<p class="mut">Wymagania: ${requirements.map(escapeHtml).join(' · ')}</p>`;
-      else h+=`<p class="ok">Wszystkie warunki rozbudowy spełnione.</p>`;
-    }else h+='<p class="mut">To ostatni dostępny typ domu w tej epoce.</p>';
-    const members=Object.values(S.fams).find(family=>family.home===b.id);
-    const storage=members?Math.round(members.sp||0):0;
-    h+=`<p><b>Zapasy domu:</b> ${storage} porcji żywności rodzinnej${hasExt(b,'piwnica')?' · piwniczka +80 pojemności':''}. Pozostałe surowce znajdują się w zapasach wspólnych osady.</p>`;
+    h+=homeStockHTML(b);
   }
   if(d.house){const f=Object.values(S.fams).find(x=>x.home===b.id);h+=f?`<p>Rodzina ${famName(f.id)}: ${famMembers(f.id).map(p=>p.name).join(', ')}.</p>`:'<p>Wolny dom. Zamieszka w nim rodzina bez dachu albo młoda para.</p>'}
   if(d.store)h+=`<p>Mieści ${d.cap} żywności${d.store==='all'?' i dowolne surowce':''}.</p>`;
@@ -1071,6 +1060,30 @@ function renderSel(){const el=$('sel');
 const v3=new THREE.Vector3();
 function placeLabel(){const el=$('lbl');if(selId===null||!S){el.style.display='none';return}const p=pById(selId);if(!p){el.style.display='none';return}v3.set(p.x,Hy(p.x,p.z)+2.1,p.z).project(cam);
  if(Math.abs(v3.x)>1||Math.abs(v3.y)>1){el.style.display='none';return}el.style.display='block';el.textContent=p.name;el.style.left=((v3.x+1)/2*innerWidth)+'px';el.style.top=((1-v3.y)/2*innerHeight)+'px'}
+// RC11: zapasy domu — spiżarka, ciepło, odzież, zdrowie rodziny
+function homeStockHTML(b){const f=Object.values(S.fams).find(x=>x.home===b.id&&famMembers(x.id).length);
+ if(!f)return'<div class="upgc"><b>Zapasy domu</b><p class="mut">Dom stoi pusty.</p></div>';
+ const mem=famMembers(f.id),cap=spizCap(f),sp=f.sp||0,need=famNeed(f.id),days=need>0?sp/need:0;
+ const warm=mem.reduce((a,p)=>a+(p.warm===undefined?1:p.warm),0)/mem.length,coats=mem.filter(p=>p.coat>0).length,hp=mem.reduce((a,p)=>a+p.hp,0)/mem.length;
+ const bar=(v,c)=>`<div class="pbar" style="height:5px;margin-top:3px"><div style="width:${Math.round(clamp(v,0,1)*100)}%;background:${c}"></div></div>`,col=v=>v<.35?'var(--bad)':v<.65?'var(--ember)':'var(--moss)';
+ let h=`<div class="upgc"><b>Zapasy domu</b>`;
+ if(cap)h+=`<div class="hsr"><span>Spiżarka</span><em>${Math.round(sp)} z ${cap} porcji${need>0?` · na ${Math.floor(days)} ${dniW(Math.floor(days))}`:''}</em></div>${bar(sp/cap,col(Math.min(1,days/4)))}`;
+ if(cap&&sp<1)h+=`<p class="mut">Rodzina odkłada jedzenie do spiżarki, gdy we wspólnym zapasie jest go na więcej niż 6 dni.</p>`;
+ h+=`<div class="hsr"><span>Ciepło</span><em>${Math.round(warm*100)}%</em></div>${bar(warm,col(warm))}<div class="hsr"><span>Ciepłe ubrania</span><em>${coats} z ${mem.length}</em></div><div class="hsr"><span>Zdrowie rodziny</span><em>${Math.round(hp*100)}%</em></div>${bar(hp,col(hp))}`;
+ h+=`<p class="mut" style="margin-top:5px">Pozostałe surowce są we wspólnych zapasach osady.</p></div>`;return h}
+// RC11: rozbudowa zawsze z przyciskiem; gdy jeszcze nie można, przycisk jest wyłączony, a lista mówi, czego brakuje
+function upgCardHTML(b){const to=UPG[b.kind],d=BD[b.kind];
+ if(!to)return d.house?'<div class="upgc"><b>Rozbudowa</b><p class="mut">To najlepszy dom, jaki osada umie teraz postawić.</p></div>':'';
+ const R=[],av=bAvail(to);
+ R.push([av,av?'wiedza: jest':to==='dom'?'wiedza: piec zduński — zduni robią próby (Praca → zduni, potem Wiedza → próby)':'wiedza: '+((TECH_BY[BD[to].need]||{}).n||'jeszcze nieznana')]);
+ const fr=upFree(b,to);R.push([fr,fr?'miejsce: wystarczy':`miejsce: obok musi być wolne pole na ${BD[to].w} × ${BD[to].h} (bez drzew, ścieżek i budynków)`]);
+ const c=upCost(b.kind,to);Object.entries(c).forEach(([r,q])=>{const have=Math.floor(S.res[r]||0);R.push([have>=q,`${RN[r].toLowerCase()}: ${Math.min(have,q)} z ${q}`])});
+ if(b.proj)R.push([false,'przy domu trwają inne prace']);
+ const miss=R.filter(r=>!r[0]).length,ok=!miss;
+ return`<div class="upgc${ok?' ok':''}"><b>Rozbudowa: ${BD[to].n}</b><p class="mut">${({chata:'Chata z bali: ciepła, dla 6 osób, pali o połowę mniej opału, więcej rozbudów przy domu.',dom:'Dom z piecem: dla 8 osób, pali najmniej opału, rzadko się zapala, najwięcej rozbudów.'})[to]||BD[to].d}</p>${R.map(([o,t])=>`<div class="upq ${o?'y':'n'}"><i>${o?'✓':'✗'}</i><span>${t}</span></div>`).join('')}
+  <button class="${ok?'pri':''}" data-up="${b.id}"${ok?'':' disabled'} style="margin-top:7px;width:100%">${ok?'Rozbuduj':`Rozbuduj — brakuje: ${miss}`}</button></div>`}
+{const st=document.createElement('style');st.textContent=`.upgc{margin:8px 0;padding:9px 11px;border:1px solid #c9a66b40;border-radius:10px;background:#ffffff06}.upgc>b{display:block;font-size:14.5px;margin-bottom:2px}.upgc.ok{border-color:#a8d09066}
+.hsr{display:flex;justify-content:space-between;gap:8px;font-size:13px;margin-top:6px}.hsr em{font-style:normal;color:#d8d2bf}.upq{display:flex;gap:7px;font-size:13px;margin-top:4px;line-height:1.3}.upq i{font-style:normal;width:14px;flex:none}.upq.y i{color:#a8d090}.upq.y span{color:#c9c8b8}.upq.n i,.upq.n span{color:#f0b8a8}`;document.head.appendChild(st)}
 function setH(el,h){if(el&&el._h!==h){el._h=h;el.innerHTML=h}}
 function renderTop(){
  const d=Math.floor(rday()),s=Math.floor(d/SD),t=tod();const part=t<.2?'noc':t<.3?'świt':t<.7?'dzień':t<.82?'zmierzch':'noc';

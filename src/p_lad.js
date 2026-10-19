@@ -8,7 +8,7 @@ const LAD={sciezka:{n:'Ścieżka',line:1,cost:{},d:'Wytyczona i wydeptana. Ludzi
  grzadka:{n:'Grządka',cost:{drewno:1},d:'Warzywa i zioła przy domu. Od wiosny do jesieni daje trochę warzyw.'},
  kwiaty:{n:'Kwiaty',cost:{},d:'Dzikie kwiaty przesadzone z łąki pod okna. Nic nie dają poza tym, że jest ładniej.'},
  slup:{n:'Słup rodowy',cost:{drewno:6},d:'Rzeźbiony słup ze znakiem rodu. Każdy ród stawia jeden. Wzmacnia mir i pamięć rodu.',need:()=>!!S.vname&&!!ladFreeRod(),why:'Najpierw osada musi mieć imię, a rody znaki. Każdy ród stawia tylko jeden słup.'}};
-const LAD_K=Object.keys(LAD);
+const LAD_K=Object.keys(LAD).filter(k=>k!=='sciezka'&&k!=='bruk');// RC11: ścieżki i drogi mają własną zakładkę Drogi
 function ladInit(){S.lad=S.lad||{};}
 function ladFreeRod(){S.rody=S.rody||{};const has=new Set(Object.values(S.lad||{}).filter(x=>x.t==='slup').map(x=>String(x.rod)));const c={};S.people.forEach(p=>{if(p.rod!==undefined&&!has.has(String(p.rod))&&S.rody[p.rod])c[p.rod]=(c[p.rod]||0)+1});
  const ids=Object.keys(c).sort((a,b)=>c[b]-c[a]);return ids[0]||null}
@@ -63,12 +63,12 @@ function ladBuild(){ladDirty=0;ladSea=seasonIdx();ladG.children.slice().forEach(
  // słupy rodowe
  by('slup').forEach(([k,v])=>{const p=pos(k),g=new THREE.Group();g.add(mesh(LG.pole,LM.pole,0,1.05,0));[.6,1.2,1.75].forEach(h=>g.add(mesh(LG.ring,matDark,0,h,0)));
   const z=(S.rody[v.rod]||{}).znak;const sp=new THREE.Sprite(znakMat(z));sp.scale.set(.6,.6,1);sp.position.y=2.45;g.add(sp);g.position.set(p[0],p[1],p[2]);ladG.add(g)})}
-function ladTread(){if(!S||!S.lad)return;Object.entries(S.lad).forEach(([k,v])=>{if(v.t==='sciezka'&&tread[k]<.9)tread[k]=.9;if(v.t==='bruk'&&tread[k]<1)tread[k]=1});treadDirty=true}
+function ladTread(){if(!S||!S.lad)return;Object.entries(S.lad).forEach(([k,v])=>{if(v.t==='sciezka'&&tread[k]<.9)tread[k]=.9;if((v.t==='bruk'||v.t==='kostka')&&tread[k]<1)tread[k]=1});treadDirty=true}
 
 /* ---- ład: ocena i skutki ---- */
 function ladScore(){const c={};Object.values(S.lad||{}).forEach(v=>c[v.t]=(c[v.t]||0)+(v.t==='drzewo'&&S.day-v.d<YEAR?.5:1));
  const rep=S.bld.filter(b=>typeof condOf==='function'&&condOf(b)<.5).length,homeless=S.people.filter(p=>!homeOf(p)).length;
- const raw=Math.min(25,((c.sciezka||0)+(c.bruk||0)*1.5)*.6)+Math.min(12,(c.plot||0)*.4)+Math.min(10,(c.lawa||0)*2.5)+Math.min(15,(c.drzewo||0)*2)+Math.min(12,(c.grzadka||0)*1.5)+Math.min(8,(c.kwiaty||0))+Math.min(10,(c.slup||0)*4)-rep*3-homeless*1.5;
+ const raw=Math.min(25,((c.sciezka||0)+(c.bruk||0)*1.5+(c.kostka||0)*2)*.6)+Math.min(12,(c.plot||0)*.4)+Math.min(10,(c.lawa||0)*2.5)+Math.min(15,(c.drzewo||0)*2)+Math.min(12,(c.grzadka||0)*1.5)+Math.min(8,(c.kwiaty||0))+Math.min(10,(c.slup||0)*4)-rep*3-homeless*1.5;
  return{sc:Math.max(0,Math.min(100,Math.round(raw/92*100))),c,rep,homeless}}
 function ladWord(s){return s<10?'bezład':s<30?'obozowisko':s<50?'schludnie':s<75?'ładna wieś':'piękny ład'}
 function ladDaily(){ladInit();ladTread();const L=ladScore(),sc=L.sc,sea=seasonIdx();S.ladSc=sc;
@@ -84,14 +84,14 @@ function ladDaily(){ladInit();ladTread();const L=ladScore(),sc=L.sc,sea=seasonId
 {const _mt=mapTick;mapTick=function(rdt){_mt(rdt);if(S&&ladDirty)ladBuild()}}
 function ladHTML(){if(!S.lad)ladInit();const L=ladScore();const c=L.c;
  return`<div class="card"><h4>Ład wsi: ${ladWord(L.sc)} <span class="mut" style="font-size:13px">${L.sc}/100</span></h4><div class="pbar"><div style="width:${L.sc}%"></div></div>
- <p>Ścieżki ${Math.round((c.sciezka||0)+(c.bruk||0))} · płoty ${c.plot||0} · ławy ${c.lawa||0} · drzewa owocowe ${Math.ceil(c.drzewo||0)} · grządki ${c.grzadka||0} · kwiaty ${c.kwiaty||0} · słupy rodowe ${c.slup||0}</p>
+ <p>Drogi ${Math.round((c.sciezka||0)+(c.bruk||0)+(c.kostka||0))} · płoty ${c.plot||0} · ławy ${c.lawa||0} · drzewa owocowe ${Math.ceil(c.drzewo||0)} · grządki ${c.grzadka||0} · kwiaty ${c.kwiaty||0} · słupy rodowe ${c.slup||0}</p>
  <p class="mut">${L.rep?`Psują ład: budynki do remontu (${L.rep}). `:''}${L.homeless?`Ludzie bez dachu (${L.homeless}). `:''}Ład podnosi nadzieję i łagodzi spory. Budowa → Ład wsi.</p></div>`}
 {const _hh=hamletHTML;hamletHTML=function(){return ladHTML()+_hh()}}
 
 /* ---- narzędzie ładu ---- */
 let ladTool=null,ladAnchor=null;
-function ladChip(){const n=Object.keys(S.lad||{}).length;return`<button data-bcat="lad" class="${buildCat==='lad'?'on':''}">Ład wsi<small>${n?n+' pól':'nowe'}</small></button>`}
-function ladBuildHTML(){let h=`<div class="card"><h4>Ład wsi</h4><p>Ścieżki, płoty, ławy, drzewa, grządki i kwiaty stawia się od razu, bez robotników. Ścieżki i płoty wytycza się od punktu do punktu: dotknij początku, potem kolejnych miejsc. Ład podnosi nadzieję i łagodzi spory.</p><p class="mut">Ład wsi: ${ladWord(ladScore().sc)} (${ladScore().sc}/100).</p></div>`;
+function ladChip(){const L=Object.values(S.lad||{}),n=L.filter(v=>v.t!=='sciezka'&&v.t!=='bruk'&&v.t!=='kostka').length,r=(S.roads||[]).length;return`<button data-bcat="drogi" class="${buildCat==='drogi'?'on':''}">Drogi${r?`<small>${r} w budowie</small>`:''}</button><button data-bcat="lad" class="${buildCat==='lad'?'on':''}">Ład wsi<small>${n?n+' pól':'nowe'}</small></button>`}
+function ladBuildHTML(){let h=`<div class="card"><h4>Ład wsi</h4><p>Płoty, ławy, drzewa, grządki, kwiaty i słupy rodowe stawia się od razu, bez robotników. Płot wytycza się od punktu do punktu: dotknij początku, potem kolejnych miejsc. Ład podnosi nadzieję i łagodzi spory. Ścieżki i drogi są w osobnej zakładce Drogi.</p><p class="mut">Ład wsi: ${ladWord(ladScore().sc)} (${ladScore().sc}/100).</p></div>`;
  LAD_K.forEach(k=>{const d=LAD[k],av=!d.need||d.need();h+=`<div class="card"${av?'':' style="opacity:.62"'}><h4>${d.n}</h4><p>${d.d}</p><div class="cost">${Object.keys(d.cost).length?costHTML(d.cost)+(d.line?' za pole':''):'bez kosztu'}</div>${av?`<button class="pri" style="margin-top:7px" data-ladt="${k}">Wybierz</button>`:`<div class="cost">${d.why}</div>`}</div>`});
  return h+`<div class="card"><h4>Usuwanie</h4><p>Zdejmuje ścieżkę, płot albo ozdobę z pola.</p><button style="margin-top:7px" data-ladt="usun">Usuń</button></div>`}
 {const bar=document.createElement('div');bar.id='ladbar';bar.className='ui';bar.hidden=true;document.body.appendChild(bar);

@@ -10,9 +10,9 @@ const require=createRequire(import.meta.url);
 const {checkDeployment,BASE,PACKAGE}=require('../tools/deploy-check.cjs');
 const {verifyPackage}=require('../tools/verify-package.cjs');
 
-test('RC10 deployment targets the verified RC9 checkpoint in every release guard',async()=>{
- const expectedBase='492e8bfd1a8ba058f467701115f1e74146343180';
- assert.equal(BASE,expectedBase,'preflight must accept the deployed RC9 checkpoint');
+test('RC11 deployment targets the verified RC10 checkpoint in every release guard',async()=>{
+ const expectedBase='2729bbabf1add082b5491881f64ddeaf2b67c505';
+ assert.equal(BASE,expectedBase,'preflight must accept the deployed RC10 checkpoint');
  const installer=await fs.readFile(new URL('../WDROZ_TERMUX.sh',import.meta.url),'utf8');
  assert.match(installer,new RegExp("EXPECTED_COMMIT='"+expectedBase+"'"));
  assert.match(installer,/npm run test:install/);
@@ -27,7 +27,7 @@ test('package integrity detects missing, changed and out-of-root files',async()=
  const directory=await fs.mkdtemp(path.join(os.tmpdir(),'przystan-integrity-'));
  const outside=await fs.mkdtemp(path.join(os.tmpdir(),'przystan-outside-'));
  const file=path.join(directory,'game.txt');const content='expected game';
- const manifest={version:'4.0.0-rc.10',files:{'game.txt':crypto.createHash('sha256').update(content).digest('hex')}};
+ const manifest={version:JSON.parse(await fs.readFile(new URL('../package.json',import.meta.url),'utf8')).version,files:{'game.txt':crypto.createHash('sha256').update(content).digest('hex')}};
  try{
   await fs.writeFile(file,content);assert.equal(verifyPackage(directory,manifest),1);
   await fs.writeFile(file,'changed');assert.throws(()=>verifyPackage(directory,manifest));

@@ -60,7 +60,7 @@ function bldPanelHTML(b){const d=BD[b.kind];let h='';if(!bDone(b))return h;
   if(c<.8&&!b.proj)h+=`<button data-rep="${b.id}" style="margin:2px 6px 6px 0">Remontuj</button><span class="cost">${costHTML(repCost(b))}</span>`}
  if(b.proj){const pr=b.proj;const e=pr.t==='ext'?EXT[b.kind].find(x=>x.id===pr.id):null;h+=`<p>Trwają prace: ${pr.t==='rep'?'remont':pr.t==='rozb'?'rozbiórka':pr.t==='lv'?'poziom '+(lvOf(b)+1):e.n.toLowerCase()} · ${Math.round(100*pr.prog/pr.work)}% · przy pracy: ${b.workers||0}</p><div class="pbar"><div style="width:${Math.round(100*pr.prog/pr.work)}%"></div></div>`;return h}
  const canLv=(d.wk||d.store)&&lvOf(b)<3;const exts=EXT[b.kind]||[];
- if(d.wk||d.store||exts.length)h+=`<p class="mut">Poziom ${lvOf(b)}${d.wk?` · ${wkOf(b)} prac.`:''}${d.r?` · zasięg ${rOf(b)}`:''}${exts.length?` · rozbudowy ${(b.ext||[]).length}/${extSlots(b)}`:''}</p>`;
+ if(d.house&&exts.length)h+=`<p class="mut">Rozbudowy przy domu: ${(b.ext||[]).length} z ${extSlots(b)}</p>`;else if(d.wk||d.store||exts.length)h+=`<p class="mut">Poziom ${lvOf(b)}${d.wk?` · ${wkOf(b)} prac.`:''}${d.r?` · zasięg ${rOf(b)}`:''}${exts.length?` · rozbudowy ${(b.ext||[]).length}/${extSlots(b)}`:''}</p>`;
  if(canLv){const to=lvOf(b)+1;h+=`<button class="pri" data-lv="${b.id}" style="margin:2px 6px 4px 0">Ulepsz do poziomu ${to}</button><span class="cost">${costHTML(lvCost(b,to))}${to===3&&!tech('r_zrab')?' · <span class="no">wymaga zrębu na jaskółczy ogon</span>':''}</span>`}
  exts.forEach(e=>{const on=hasExt(b,e.id);h+=`<div class="ext${on?' on':''}"><b>${on?'✓ ':''}${e.n}</b><small>${e.d}</small>${on?'':`<span class="cost">${costHTML(e.cost)}</span><button data-ext="${b.id}" data-eid="${e.id}">Dobuduj</button>`}</div>`});
  return h}

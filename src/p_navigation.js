@@ -32,10 +32,18 @@ function navCrowdRoute(person){
   return astar(start[0],start[1],goal[0],goal[1]);
  }finally{for(const key of changed)walk[key]=1;}
 }
+// RC11: ustępowanie bez zakleszczeń. Trzy zasady: ostatnie kroki do celu (bez ładunku) nie czekają na tłum przy celu;
+// z dwóch czekających ustępuje ten z wyższym numerem; kto czeka dłużej niż NAV_GHOST, przeciska się przez tłum.
+const NAV_GHOST=2.2,NAV_SQUEEZE=1.6;
+function navBlocks(person,peer){if(peer.navWait>1.1&&person.navWait>1.1&&peer.id>person.id)return false;return true;}
 function navPauseForCrowd(person,point,distance,delta){const dx=point.x-person.x,dz=point.z-person.z,length=Math.hypot(dx,dz);if(length<1e-8)return false;const travel=Math.min(distance,length),x=person.x+dx/length*travel,z=person.z+dz/length*travel,vx=x-person.x,vz=z-person.z;
- let occupied=false;for(const peer of navPeers(person,x,z)){const start=Math.hypot(peer.x-person.x,peer.z-person.z),end=Math.hypot(peer.x-x,peer.z-z),radius=(person.age<12?.16:.22)+(peer.age<12?.16:.22),fraction=clamp(((peer.x-person.x)*vx+(peer.z-person.z)*vz)/(vx*vx+vz*vz||1),0,1),closest=Math.hypot(peer.x-person.x-vx*fraction,peer.z-person.z-vz*fraction);if(closest<radius&&!(start<radius&&end>start+1e-6)){occupied=true;break;}}
+ if(person.navGhost>S.t)return false;
+ const goal=person.routeGoal;if(goal&&!pendingDelivery(person)&&Math.hypot(person.x-tcx(goal[0]),person.z-tcx(goal[1]))<1.3){if(person.navResumeAct){person.act=person.navResumeAct;delete person.navResumeAct}delete person.navWait;return false;}
+ let occupied=false;for(const peer of navPeers(person,x,z)){if(!navBlocks(person,peer))continue;const start=Math.hypot(peer.x-person.x,peer.z-person.z),end=Math.hypot(peer.x-x,peer.z-z),radius=(person.age<12?.16:.22)+(peer.age<12?.16:.22),fraction=clamp(((peer.x-person.x)*vx+(peer.z-person.z)*vz)/(vx*vx+vz*vz||1),0,1),closest=Math.hypot(peer.x-person.x-vx*fraction,peer.z-person.z-vz*fraction);if(closest<radius&&!(start<radius&&end>start+1e-6)){occupied=true;break;}}
  if(!occupied){if(person.navResumeAct)person.act=person.navResumeAct;delete person.navResumeAct;delete person.navWait;delete person.navRetry;return false;}
- person.navResumeAct??=person.act;person.navWait=(person.navWait||0)+delta;person.act='Przejście zajęte — ustępuje i szuka obejścia';
+ person.navResumeAct??=person.act;person.navWait=(person.navWait||0)+delta;
+ if(person.navWait>=NAV_GHOST){person.navGhost=S.t+NAV_SQUEEZE;if(person.navResumeAct)person.act=person.navResumeAct;delete person.navResumeAct;delete person.navWait;delete person.navRetry;return false;}
+ person.act='Ustępuje przejścia';
  if(person.navWait>=.6&&(!(person.navRetry>S.t))){person.navRetry=S.t+.8;
   // Punkt odbioru może zająć ktoś już po wyznaczeniu drogi. Wybierz wolne wejście tą samą bramką co po restarcie.
   if(pendingDelivery(person)&&person.routeGoal&&Math.hypot(person.x-tcx(person.routeGoal[0]),person.z-tcx(person.routeGoal[1]))<2){release(person);resumeDelivery(person);return true;}

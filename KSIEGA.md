@@ -839,6 +839,39 @@ Od Domu rady osada ma radę: trzech radnych, w ratuszu pięciu. Pierwsza rada wy
 - W starych zapisach bez serca kronika podpowiada, żeby postawić ognisko. Pakiety rozwiniętej osady spełniają się wtedy od razu, zostaje tylko rozbudowa.
 - **Kalendarz obrzędów naprawiony.** Od wersji 1.5 rok ma 20 dni, a Dziady, Szczodre Gody i Topienie Marzanny liczyły dni jeszcze po staremu: Dziady wypadały wiosną, a Gody i Marzanna nie przychodziły wcale. Teraz Dziady są w ostatni dzień jesieni, Szczodre Gody trzeciego dnia zimy, a Topienie Marzanny w pierwszy dzień wiosny.
 
+## Drogi, zadania główne i zorza (od wersji 4.0.0-rc.11)
+
+### Drogi
+Ścieżki wydeptują się same: każdy krok wydeptuje trawę, a kafel wydeptany do połowy to ścieżka, po której chodzi się o 10% szybciej. Nieużywana ścieżka zarasta.
+Budowa → Drogi: wybierz nawierzchnię i dotknij budynku albo wydeptanego śladu. Trasa biegnie od najbliższej drogi o tej samej nawierzchni albo od obozu i trzyma się śladów ludzi. Podgląd pokazuje długość, ile pól jest już wydeptanych, koszt i czas pracy. Po „Wytycz” budowniczowie wbijają paliki i układają drogę kafel po kaflu; kamień schodzi ze składu przy każdym kaflu, a gdy go zabraknie, praca czeka.
+
+| Nawierzchnia | Kamień za pole | Praca za pole | Szybciej | Warunek |
+|---|---|---|---|---|
+| Wydeptana ścieżka | — | — | 10% | sama z ruchu |
+| Ścieżka utwardzona | 0,25 | 5 s | 20% | — |
+| Droga kamienna | 1 | 10 s | 30% | — |
+| Bruk | 2 | 18 s | 40% | Dom osadników (serce, 3. etap) |
+
+### Zadania główne
+Każda epoka ma trzy zadania główne. Są na górze zakładki Zadania, a dotknięcie celu na ekranie też je otwiera. Epoka idzie dalej (wiec pokoleń, koniec epoki II, koniec epoki III, Wiec Rodów) dopiero, gdy wszystkie są wykonane.
+
+| Epoka | Zadania |
+|---|---|
+| I Rozbitkowie | Ogień na cyplu (stos na zachodnim cyplu, trzy noce ognia, odpowiedź z morza); Kamienny krąg (trzy ślady dawnego ludu i wyprawa do kręgu); Pod jednym dachem (serce osady: wiata i Dom osadników) |
+| II Dzieci wyspy | Przybysz z zachodu (tratwa, leczenie ziołami, nauka mowy); Zimny rok (zapasy jedzenia i opału, potem pięć dni mrozu); Rada przy stole (Dom rady i pierwszy wniosek rady) |
+| III Cała wyspa | Wyspy Kręgu (łódź dalekomorska i rejs na zachód z wyborem daru); Kopiec na szczycie (kopiec z kamieni i ogień w Noc Kupały); Ratusz nad rynkiem (ratusz i pierwszy jarmark) |
+
+Wyprawy zadań prowadzi jedna albo trzy osoby. Z zadania można je pokazać na mapie i śledzić. W drodze nocują przy małym ognisku.
+
+### Zorza
+Zorza jest zakotwiczona w świecie, a nie przyklejona do ekranu: zielona poświata na ziemi, śniegu i morzu (silniejsza na wodzie) oraz fałdowane kurtyny nad morzem za wyspą, zawsze po stronie przeciwnej niż patrzący. Nie zasłania lądu. Pojawia się zimą w pogodne noce.
+
+### Domy i wiata
+Karta szałasu i chaty ma zawsze sekcję „Rozbudowa” z przyciskiem. Gdy rozbudowa jest niemożliwa, przycisk jest wyłączony, a lista ✓/✗ mówi, czego brakuje (wiedza, miejsce, każdy materiał). Karta domu pokazuje spiżarkę (porcje i na ile dni), ciepło, ciepłe ubrania i zdrowie rodziny.
+Wiata nad ogniskiem ma gliniany okap i komin z dymnikiem ponad strzechą, którym ucieka dym.
+
+Projekt dalszych zmian (złoża, folwarki ze złóż, większa wyspa od startu, nowe menu): docs/PROJEKT_WYSPY_5.md.
+
 ## Łowy hodowców (od wersji 3.3.2)
 
 Zagroda nie musi już stać przy halach. Hodowca sam wyprawia się tam, gdzie pasą się dzikie kozy, choćby daleko w głębi wyspy: idzie śladem stada, oswaja jedną kozę w trzech podejściach i prowadzi ją do zagrody na postronku. Na mapie widać kozę idącą za hodowcą. Bliskie stado to krótka droga, dalekie to wyprawa na pół dnia.
@@ -1081,6 +1114,8 @@ Pierze z kurnika i tokowiska idzie zimą na pierzyny: domy palą mniej opału. O
 | 1.8.3 | poprawka: rozbudowa domu (szałas w chatę, chata w dom) nie zabiera już rodzinie spiżarki; w czasie budowy zapas zostaje w starym domu w granicach jego pojemności |
 | 1.9 | budynki z charakterem: każdy budynek inny (ściany, dachy, spadek, okap), koniki, malowane okiennice, ganki, przybudówki, garnki na płocie, zioła pod okapem, szyldy rzemiosł, wyraźniejsza kuźnia, łaźnia i chata wiecowa |
 | 1.10 | wykonanie budynków: surowe, porządne i mistrzowskie, wyraźnie widoczne po rozbudowie (wielkość, podmurówka, dach, okiennice, obramienia okien, kwiaty, płotek, szyld); karta budynku pokazuje wykonanie i trwałość; odmiany szałasów, studni, zagród i spiżarni |
+| 4.0.0-rc.11 | zatory i drogi: ludzie ustępują sobie bez zakleszczeń (w RC9–RC10 pierwszego dnia stali w kolejkach przy wraku i obozie, osada traciła jedzenie), ekipa wraku pracuje na kilku stanowiskach; ścieżki wydeptują się same i przyspieszają o 10%, nowa zakładka Budowa → Drogi: ścieżka utwardzona, droga kamienna i bruk wytyczane od sieci dróg do wskazanego budynku po śladach ludzi, układane przez budowniczych; rozbudowa domu zawsze z przyciskiem i listą wymagań ✓/✗, karta zapasów domu; okap i dymnik w wiacie nad ogniskiem; zorza zakotwiczona w świecie (poświata na ziemi i morzu, kurtyny nad morzem za wyspą); zadania główne po trzy na epokę w zakładce Zadania, bez nich epoka nie idzie dalej |
+| 4.0.0-rc.1–rc.10 | epoka IV (rody, folwarki, wyspa 384×384), nowe menu i zakładka Zadania, zapasy z bilansem, misje budynków, autozapis i odzyskiwanie zapisu, transport i stanowiska pracy (szczegóły w docs/) |
 | 3.4 | serce osady: ognisko rośnie w pięciu etapach (wiata, Dom osadników, Dom rady, ratusz), każdy po pakiecie sześciu zadań z filarów dach, stół, ciepło, zdrowie, rzemiosło, wspólnota, i odblokowuje budynki i urzędy; plac 5 × 5 i zasięg serca przy planowaniu domów; wieczory i posiłki przy sercu, izba zimą; napitki (bednarnia, słodownia, chmielnik, browar, miodosytnia, winnica, winiarnia), piekarnia, wiatrak, szpital; rada osady z tekami i wnioskami; jarmark, cechy rzemieślników przy pełnej wyspie i prawa miejskie; chata wiecowa staje się Domem osadników; naprawiony kalendarz Dziadów, Szczodrych Godów i Marzanny |
 | 3.3.2 | łowy hodowców: zagroda może stać przy osadzie, hodowca idzie po dzikie kozy tam, gdzie się pasą, tropi stado i prowadzi kozę na postronku (widać ją na mapie), ktoś zostaje przy kozach, karta zagrody pokazuje najbliższe stado i kto jest na łowach; bateria: klatki dopasowane do tego, co się dzieje (60 przy ruchu widoku, 30 w grze, 20 w pauzie i przy scenie, 12 pod księgą zamiast do 120), dźwięk wstrzymany po schowaniu gry, pulsowanie przycisków skończone po kilku razach, tryb „Bateria” w menu tempa |
 | 3.3.1 | cele krok po kroku: opis i podpowiedź celu wskazują następny brakujący krok (wiedza, budowa, przydział, zasięg, postęp) zamiast stałej instrukcji; przy „Oswój pierwszą kozę” nie pulsuje już budowa zagrody, gdy zagroda stoi, tylko przydział hodowcy albo informacja o kozach poza zasięgiem; „Postaw tu” proponuje budynek celu tylko wtedy, gdy trzeba go postawić; postęp „x z y” przy celach epok II i III; Osada i Wieś zaliczają się od razu |
