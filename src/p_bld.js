@@ -38,7 +38,7 @@ function startProj(b,t,id,quiet){if(!b)return;if(!bDone(b)){toast('Najpierw trze
  else{const e=(EXT[b.kind]||[]).find(x=>x.id===id);if(!e)return;if((b.ext||[]).length>=extSlots(b)){toast('Brak miejsca na kolejną rozbudowę. Najpierw podnieś poziom budynku.');return}cost=e.cost;work=e.work;n=e.n.toLowerCase()}
  if(!canAfford(cost)){toast('Brakuje: '+Object.entries(cost).filter(([k,v])=>(S.res[k]||0)<v).map(([k,v])=>RN[k].toLowerCase()+' '+Math.ceil(v-(S.res[k]||0))).join(', '));return}
  Object.entries(cost).forEach(([k,v])=>S.res[k]-=v);b.proj={t,id,prog:0,work};log('Rozpoczęto prace: '+BD[b.kind].n.toLowerCase()+', '+n+'.');rebuildMesh(b);
- if(freeCount()===0)toast('Nikt nie buduje: wszyscy mają pracę. Zwolnij kogoś w zakładce Praca.');renderSel();renderPanel()}
+ if(freeCount()===0)toast('Nikt nie buduje: wszyscy mają pracę. Zwolnij kogoś w Ludzie → Praca.');renderSel();renderPanel()}
 function finishProj(b){const pr=b.proj;b.proj=null;b.workers=0;
  if(pr.t==='rep'){b.cond=1;log('Remont skończony: '+BD[b.kind].n.toLowerCase()+' znów jak nowe.')}
  else if(pr.t==='lv'){b.lv=lvOf(b)+1;b.cond=1;log(BD[b.kind].n+' rozbudowane do poziomu '+b.lv+'. '+(BD[b.kind].wk?'Mieści więcej ludzi i pracuje sprawniej.':'Mieści więcej.'));toast(BD[b.kind].n+': poziom '+b.lv)}

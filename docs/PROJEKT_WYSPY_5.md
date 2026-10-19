@@ -30,6 +30,13 @@ Status: projekt docelowy. Część „Wdrożone w RC11” opisuje, co już dzia�
 | Wydobycie | Kopalnia rudy, szyb węglowy, łom kamienia i gliniak stoją na złożu i czerpią z warstw, do których sięgają. Odkrywka bierze tylko płytką warstwę węgla, szyb głębsze. Po wyczerpaniu ludzie przestają pracować, a kronika podpowiada szyb. |
 | Widok | Paliki w kolorze surowca wokół odkrytego złoża, karta z paskami warstw i przyciskami budowli. |
 
+### Wdrożone w 4.2.0-rc.1
+
+| Obszar | Co działa |
+|---|---|
+| Menu | Pięć działów: Osada (Przegląd, Kronika, Opcje), Ludzie (Praca, Mieszkańcy), Budowa, Zadania (Zadania, Wyprawy), Wiedza (Wiedza, Natura). Pod działami najwyżej jeden rząd. Dział pamięta ostatni widok. |
+| Budowa | Wyszukiwarka i lista rozwijana rodzajów z liczbami, na początku „Możesz postawić teraz”. |
+
 ## 2. Wyspa: jedna, większa, odkrywana stopniowo
 
 ### 2.1 Rozmiar
@@ -211,7 +218,7 @@ Pięć sekcji. Każda ma tę samą budowę: nagłówek z liczbami, filtr, lista 
 |---|---|---|
 | **RC11** | Zatory, drogi z wydeptywania, karta rozbudowy domów, dymnik, zorza w świecie, zadania główne | Testy RC10 + `crowd-flow`, próby w przeglądarce, telefon |
 | **4.1 Złoża** (rc.1 wdrożone: złoża z warstwami, odkrywanie, kopalnia, szyb, łom, gliniak, wyczerpywanie; zostają charaktery krain, poszukiwania i hałdy) | Charaktery krain w rdzeniu 192, złoża skupione z warstwami, ślady i poszukiwania, odkrywka i szyb, hałdy, wyczerpywanie | Każdy seed ma komplet złóż w zasięgu; symulacja 20 lat bez braku kamienia i rudy przy rozsądnej grze |
-| **4.2 Menu** | Pięć sekcji, wzornik karty, wyszukiwarka, Zapasy w Osadzie | Test na 360×740 i 768×352; brak trzech rzędów przycisków |
+| **4.2 Menu** (rc.1 wdrożone: pięć działów, widoki, wyszukiwarka i „teraz” w Budowie; zostaje wyszukiwarka w Ludziach i wspólny wzornik karty) | Pięć sekcji, wzornik karty, wyszukiwarka, Zapasy w Osadzie | Test na 360×740 i 768×352; brak trzech rzędów przycisków |
 | **4.3 Wyspa 384** | Jedna wyspa od startu, sektory i poziomy szczegółów, krainy zewnętrzne, przysiółki w pierścieniu od epoki II | FPS i bateria na telefonie nie gorsze niż RC11 w rdzeniu |
 | **4.4 Folwarki ze złóż** | Specjalizacja folwarku z charakteru krainy i złoża, wozy zależne od nawierzchni, napięcia (woda, łąki, barcie) | Pięć pokoleń autonomii bez sztucznych dopisków zasobów |
 

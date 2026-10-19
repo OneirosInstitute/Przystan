@@ -212,7 +212,7 @@ function scUp(){const b=scB();if(!b||!bDone(b))return;if(b.proj){toast('Tu już 
  if(!canAfford(c)){toast('Brakuje: '+Object.entries(c).filter(([r,v])=>(S.res[r]||0)<v).map(([r,v])=>RN[r].toLowerCase()+' '+Math.ceil(v-(S.res[r]||0))).join(', '));return}
  Object.entries(c).forEach(([r,v])=>S.res[r]-=v);b.proj={t:'serce',id:k.to,prog:0,work:SERCE[k.to].work};b._pq=0;
  log(`Zaczyna się rozbudowa serca osady: ${SERCE[k.to].n.toLowerCase()}. Cieśle i murarze przychodzą, kiedy tylko mogą.`);toast('Rozbudowa: '+SERCE[k.to].n);rebuildMesh(b);
- if(freeCount()===0)toast('Nikt nie buduje: wszyscy mają pracę. Zwolnij kogoś w zakładce Praca.');renderSel();renderPanel()}
+ if(freeCount()===0)toast('Nikt nie buduje: wszyscy mają pracę. Zwolnij kogoś w Ludzie → Praca.');renderSel();renderPanel()}
 {const _fp=finishProj;finishProj=function(b){if(!b||!b.proj||b.proj.t!=='serce')return _fp(b);const to=b.proj.id;b.proj=null;b.workers=0;scSetStage(b,to);
   try{const c=bCenter(b);dustPuff(c.x,Hy(c.x,c.z),c.z,16,5);sfx('bell')}catch(e){}scStageScene(to);assign();renderSel();renderPanel()}}
 function scSetStage(b,st,quiet){b.st=st;b.cond=1;scOcc(b);rebuildMesh(b);scKnow();scRadaSeats();

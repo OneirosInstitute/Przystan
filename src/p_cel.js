@@ -20,7 +20,7 @@ function celBuild(k,n,o){o=o||{};n=n||1;const d=BD[k];const done=celCnt(k);if(do
  const sites=S.bld.filter(b=>(CEL_UP[k]||[k]).includes(b.kind)&&!bDone(b));
  if(sites.length&&sites.length>=n-done){const b=sites[0],pr=Math.round(100*b.prog/b.work),mt=b.mat?Math.round(100*Math.min(1,(b.del||0)/b.mat)):100;
   let t=`${BD[b.kind].n}: budowa ${pr}%${b.mat&&mt<100?`, materiał na miejscu ${mt}%`:''}.`;
-  if(freeCount()<=0)return{txt:t+' Nikt nie buduje: wszyscy mają przydział. Zwolnij kogoś w zakładce Praca.',hint:['praca',null,null]};
+  if(freeCount()<=0)return{txt:t+' Nikt nie buduje: wszyscy mają przydział. Zwolnij kogoś w Ludzie → Praca.',hint:['praca',null,null]};
   return{txt:t+' Budową zajmują się wolni robotnicy.',wait:1}}
  if(!bAvail(k)){const N=celNeed(k);return{txt:`${d.n}: ${N.txt}.`,hint:N.hint,wait:!N.hint}}
  const miss=celMiss(d.cost);const pre=(done||n>1)&&!o.noPre?`Stoi ${done} z ${n}. `:'';
@@ -83,7 +83,7 @@ const CEL={
  'Poznaj 70% krain wyspy':()=>{const pc=Math.round(knownFrac()*100);const sc=S.people.filter(p=>p.job==='zwiad').length,ex=(S.exps||[]).length;
   return sc||ex?{txt:`Znamy ${pc}% krain z 70%. ${sc?`Zwiadowców: ${sc}.`:''}${ex?` Wypraw w drodze: ${ex}.`:''}`,wait:1}:{txt:`Znamy ${pc}% krain z 70%. Nikt nie chodzi na zwiad: przydziel zwiadowców (Praca) albo wyślij wyprawę.`,hint:['praca',null,'[data-al="zwiad"][data-d="1"]']}},
  'Załóż pierwszy przysiółek':()=>{if((S.hamlets||[]).length)return{ok:1,txt:''};const why=typeof kolWhyNot==='function'?kolWhyNot():'';
-  if(!why)return{txt:'Są chętni i jest poznana kraina bez przysiółka. Ludzie → Wspólnota → Nowy przysiółek.',hint:['osada',null,'[data-knew]']};
+  if(!why)return{txt:'Są chętni i jest poznana kraina bez przysiółka. Ludzie → Mieszkańcy → Wspólnota i rody → Nowy przysiółek.',hint:['osada',null,'[data-knew]']};
   if(/krainy/.test(why))return{txt:why,hint:['praca',null,'[data-al="zwiad"][data-d="1"]']};if(/Osada/.test(why)){const v=celVillage(4,20);return{txt:why+' '+v.txt,hint:v.hint,kind:v.kind,wait:v.wait}}
   if(/rodziny/.test(why)){const k=celHouseKind();return{txt:why+' Chętniej idą młode pary, które czekają na własny dom.',wait:1}}return{txt:why,wait:1}},
  'Odkryj trzy ślady dawnego ludu':()=>{const sc=S.people.filter(p=>p.job==='zwiad').length,ex=(S.exps||[]).length;

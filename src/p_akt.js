@@ -28,7 +28,7 @@ const ACTS=[null,
   ['Wynieś z wraku, co się da, zanim przyjdzie sztorm',()=>!!S.wreck.gone,'Praca → Wrak. Sztorm przyjdzie wiosną, zapowiedź pięć dni wcześniej.'],
   ['Przetrwaj pierwszą zimę',()=>S.day>=YEAR*.78&&S.people.length>0,'Jedzenie, opał i ciepła odzież, zanim spadnie śnieg.']]},
  {n:'Zakorzenienie',intro:'Wraku już nie ma. Od teraz wszystko, co osada ma, musi zrobić sama. Ludzie przestają mówić „kiedy wrócimy”, a zaczynają mówić „u nas”.',g:[
-  ['Przeczytaj księgę z wraku',()=>S.books.kowal===2||S.books.siew===2,'Gdy księga trafi do obozu, przydziel czytelników w zakładce Praca.'],
+  ['Przeczytaj księgę z wraku',()=>S.books.kowal===2||S.books.siew===2,'Gdy księga trafi do obozu, przydziel czytelników w Ludzie → Praca.'],
   ['Oswój pierwszą kozę',()=>S.bld.some(b=>(b.animals||0)>0),'Wiedza → Hodowla → Oswajanie kóz, potem zagroda i hodowca.'],
   ['Zbierz pierwsze plony z pola',()=>!!S.seen.harvest,'Pole wymaga wiedzy o siewie i ziarna. Siej wiosną albo na początku lata.'],
   ['Osada: 4 domy i 20 osób',()=>S.tier>=1,'Więcej domów i rodzin. Wesela i narodziny przyjdą same, gdy będzie gdzie mieszkać.']]},

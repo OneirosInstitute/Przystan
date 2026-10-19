@@ -10,9 +10,9 @@ const require=createRequire(import.meta.url);
 const {checkDeployment,BASE,PACKAGE}=require('../tools/deploy-check.cjs');
 const {verifyPackage}=require('../tools/verify-package.cjs');
 
-test('4.1.0-rc.1 deployment targets the verified RC11 checkpoint in every release guard',async()=>{
- const expectedBase='e1541e93b40dd1352958a7ed268e1642b28a20db';
- assert.equal(BASE,expectedBase,'preflight must accept the deployed RC11 checkpoint');
+test('4.2.0-rc.1 deployment targets the verified 4.1.0-rc.1 checkpoint in every release guard',async()=>{
+ const expectedBase='7cac133e752076ccc7687d8a57b9309dc090d06d';
+ assert.equal(BASE,expectedBase,'preflight must accept the deployed 4.1.0-rc.1 checkpoint');
  const installer=await fs.readFile(new URL('../WDROZ_TERMUX.sh',import.meta.url),'utf8');
  assert.match(installer,new RegExp("EXPECTED_COMMIT='"+expectedBase+"'"));
  assert.match(installer,/npm run test:install/);

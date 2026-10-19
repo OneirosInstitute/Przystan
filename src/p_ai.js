@@ -47,7 +47,7 @@ function workshopActivity(building){
  const working=people.some(person=>person.state==='work'&&person.workKind==='prod'&&person.tgt===building),supplying=people.some(person=>person.supply?.building===building.id);
  const blocked=people.find(person=>person.state==='idle'&&person.blocked?.buildingId===building.id);
  let label={ready:working?'Produkcja':'Gotowe do produkcji',shortage:supplying?'Zaopatrzenie':'Brak składników',covered:'Prace wspólne',blocked:'Produkcja wstrzymana'}[policy.mode],reason=policy.reason;
- if(!people.length){label='Brak obsady';reason='Przydziel pracowników w zakładce Praca.';}
+ if(!people.length){label='Brak obsady';reason='Przydziel pracowników w Ludzie → Praca.';}
  else if(!working&&!supplying&&blocked){label='Oczekiwanie na stanowisko';reason=personActivity(blocked).reason;}
  return {label,reason,policy,peopleIds:people.map(person=>person.id)};
 }

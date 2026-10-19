@@ -283,7 +283,7 @@ addEventListener('resize',()=>{if(!$('kmap').hidden)kmapDraw()});
 
 /* ---- akty, epoka II, księga ---- */
 ACTS[4].g.push(['Załóż pierwszy przysiółek',()=>(S.hamlets||[]).length>=1,'Ludzie → Wspólnota → Nowy przysiółek. Rodzina albo młoda para idzie w poznaną krainę.']);
-{const _gi=goalInfo;goalInfo=function(){const g=_gi();if(S&&S.epoch===2&&g)return{ch:g.ch,t:`Zasiedl wyspę: ${settledCount()} z ${regionCount()} krain`,d:`${PATHS[S.path].goal}. Nowe przysiółki zakładasz w zakładce Ludzie → Wspólnota.`};return g}}
+{const _gi=goalInfo;goalInfo=function(){const g=_gi();if(S&&S.epoch===2&&g)return{ch:g.ch,t:`Zasiedl wyspę: ${settledCount()} z ${regionCount()} krain`,d:`${PATHS[S.path].goal}. Nowe przysiółki zakładasz w Ludzie → Mieszkańcy, w karcie Wspólnota i rody.`};return g}}
 {const _kt=ksiegaText;ksiegaText=function(){let t=_kt();const hs=S.hamlets||[];if(!hs.length)return t;
  const sec='PRZYSIÓŁKI\n\n'+hs.map(h=>`${h.name} (${hamKind(h)}): ${h.pop} ${osb(h.pop)}, starszy ${h.head}, założony ${dayName(Math.floor(h.day)+1)}${h.road===2?', z drogą do osady':''}.`).join('\n')+`\n\nZasiedlone krainy: ${settledCount()} z ${regionCount()}.\n\n`;
  const k=t.indexOf('Pamięć osady:');return k>=0?t.slice(0,k)+sec+t.slice(k):t+'\n\n'+sec}}

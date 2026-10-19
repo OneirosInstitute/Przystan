@@ -330,7 +330,7 @@ Dziady, Szczodre Gody i Marzanna są w 3D, gdy osada trzyma się dawnych obrzęd
 
 **Opowieść życia.** Karta każdej osoby pokazuje jej życie: czy przypłynęła statkiem, czy urodziła się na wyspie, fach i biegłość, żonę albo męża, dzieci, urząd, wykonane pamiątki i najbliższego przyjaciela. Gdy ktoś umiera, kronika zapisuje wspomnienie o nim, a ostatnie wspomnienia trafiają do Księgi rozbitków.
 
-**Kamera przy ważnych chwilach.** Przy obrzędach, weselach i pożarach kamera sama płynie w to miejsce, ale tylko wtedy, gdy gracz od kilku sekund nie przesuwa widoku, żaden panel nie jest otwarty i nic nie jest stawiane. Można to wyłączyć w zakładce Kronika.
+**Kamera przy ważnych chwilach.** Przy obrzędach, weselach i pożarach kamera sama płynie w to miejsce, ale tylko wtedy, gdy gracz od kilku sekund nie przesuwa widoku, żaden panel nie jest otwarty i nic nie jest stawiane. Można to wyłączyć w Osada → Opcje.
 
 ## Szlif i wersja 1.0
 
@@ -338,7 +338,7 @@ Dziady, Szczodre Gody i Marzanna są w 3D, gdy osada trzyma się dawnych obrzęd
 
 **Na co czekamy.** Na górze zakładki Ludzie jest lista spraw w toku, od najpilniejszych: budowy z postępem i dowozem materiału, rozbudowy i remonty, rosnące zboże i czas żniw, próby wiedzy, czytanie ksiąg, wyprawy z dniem powrotu, rodziny w drodze do przysiółków, drogi w budowie, potrzeby przysiółków, dni do sztormu, który zabierze wrak, dni do zimy i do nocy Kupały. Sprawy pilne są oznaczone wykrzyknikiem.
 
-**Łagodny początek.** Przez pierwsze cztery akty gra delikatnie podpowiada następny krok: pulsuje zakładka, potem kategoria budowy, a na końcu przycisk, który prowadzi do bieżącego celu. Podpowiedzi można wyłączyć w zakładce Kronika.
+**Łagodny początek.** Przez pierwsze cztery akty gra delikatnie podpowiada następny krok: pulsuje dział, potem widok albo rodzaj budowli, a na końcu przycisk, który prowadzi do bieżącego celu. Podpowiedzi można wyłączyć w Osada → Opcje.
 
 **Rytm sesji.** Po mniej więcej 25 minutach gry, na granicy pór roku, gra sama zapisuje osadę i proponuje przerwę. Można grać dalej albo wrócić później: „Od ostatniego razu” powie, co się działo.
 
@@ -1080,7 +1080,18 @@ Każda wyspa ma po dwa złoża rudy, łomów i glinisk, rozłożone daleko od si
 # 14. Interfejs
 
 - **Górny pasek:** pora roku i dzień, tempo, dźwięk, pełny ekran, jakość grafiki, zapasy (żywność z liczbą dni, drewno, opał, ludzie).
-- **Zakładki:** Budowa (kategorie), Praca, Ludzie (największy kłopot, prośby, niezgoda, obyczaje z ich wiekiem, urzędy, rok obrzędów, pamięć osady, rody, przysiółki, rodziny), Wyprawy, Wiedza (drzewa odkryć), Natura (atlas), Kronika (pełna kronika do pobrania, zapis i wczytanie z pliku).
+- **Księga od wersji 4.2.0-rc.1: pięć działów.** Na górze księgi (w pełnym menu na dolnym pasku) jest pięć działów, a pod nimi najwyżej jeden rząd: widoki działu albo pasek Budowy. Nigdy trzy rzędy przycisków.
+
+| Dział | Widoki | Co jest pierwsze |
+|---|---|---|
+| Osada | Przegląd, Kronika, Opcje | potrzeby i sprawy, potem zapasy z bilansem i cele |
+| Ludzie | Praca, Mieszkańcy | przydział pracy z − i +; w Mieszkańcach rodziny, wspólnota, rody i pamięć osady |
+| Budowa | — | wyszukiwarka i lista rodzajów: „Możesz postawić teraz”, Domy, Jedzenie, Pola i stada, Przetwórstwo, Surowce, Rzemiosło, Magazyny, Wspólnota, Remonty, Drogi, Ład wsi |
+| Zadania | Zadania, Wyprawy | zadania główne epoki, potem bieżące sprawy |
+| Wiedza | Wiedza, Natura | wiedza w ludziach i drzewa odkryć |
+
+Wyszukiwarka Budowy szuka po nazwie, po rodzaju i (od czterech liter) w opisie, bez polskich znaków. „Możesz postawić teraz” pokazuje tylko to, na co starcza materiałów. Dział pamięta ostatni widok. Przeciągnięcie nagłówka księgi w dół zamyka ją. Wskazówki pierwszych dni pokazują dział, potem widok, potem rodzaj budowli.
+- **Zakładki (do wersji 4.1):** Budowa (kategorie), Praca, Ludzie (największy kłopot, prośby, niezgoda, obyczaje z ich wiekiem, urzędy, rok obrzędów, pamięć osady, rody, przysiółki, rodziny), Wyprawy, Wiedza (drzewa odkryć), Natura (atlas), Kronika (pełna kronika do pobrania, zapis i wczytanie z pliku).
 - **Okno budynku:** pracownicy, przepisy, co spowalnia, stan i remont, poziomy i rozbudowy.
 - **Karta osoby:** fach, cecha, zdrowie, narzędzia, ród, małżonek, nastrój z powodami, mir i przyjaciele.
 - **Księga Osada (od wersji 1.7.1):** arkusz zajmuje cały ekran pod górną linią. Działy (Ludzie, Praca, Budowa, Wyprawy, Wiedza, Natura, Kronika) są w jednym przesuwanym rzędzie razem z przyciskami zwiń i zamknij. Gdy arkusz jest otwarty, przycisk tempa pokazuje „czas stoi”, a komunikaty pojawiają się na dole ekranu.
@@ -1137,6 +1148,7 @@ Każda wyspa ma po dwa złoża rudy, łomów i glinisk, rozłożone daleko od si
 | 1.8.3 | poprawka: rozbudowa domu (szałas w chatę, chata w dom) nie zabiera już rodzinie spiżarki; w czasie budowy zapas zostaje w starym domu w granicach jego pojemności |
 | 1.9 | budynki z charakterem: każdy budynek inny (ściany, dachy, spadek, okap), koniki, malowane okiennice, ganki, przybudówki, garnki na płocie, zioła pod okapem, szyldy rzemiosł, wyraźniejsza kuźnia, łaźnia i chata wiecowa |
 | 1.10 | wykonanie budynków: surowe, porządne i mistrzowskie, wyraźnie widoczne po rozbudowie (wielkość, podmurówka, dach, okiennice, obramienia okien, kwiaty, płotek, szyld); karta budynku pokazuje wykonanie i trwałość; odmiany szałasów, studni, zagród i spiżarni |
+| 4.2.0-rc.1 | menu: pięć działów (Osada, Ludzie, Budowa, Zadania, Wiedza) z widokami w jednym rzędzie; wyszukiwarka budowli i „Możesz postawić teraz”, rodzaje budowli w jednej liście rozwijanej zamiast trzech rzędów przycisków; opcje gry w Osada → Opcje; zamykanie księgi gestem w dół |
 | 4.1.0-rc.1 | złoża: węgiel, torf, ruda, kamień i glina w dużych, skupionych złożach z warstwami, które się wyczerpują; złoża rozpoznaje ten, kto do nich dojdzie; nowe budowle na złożach: kopalnia rudy, szyb węglowy, łom kamienia, gliniak; paliki wokół odkrytego złoża i karta z warstwami |
 | 4.0.0-rc.11 | zatory i drogi: ludzie ustępują sobie bez zakleszczeń (w RC9–RC10 pierwszego dnia stali w kolejkach przy wraku i obozie, osada traciła jedzenie), ekipa wraku pracuje na kilku stanowiskach; ścieżki wydeptują się same i przyspieszają o 10%, nowa zakładka Budowa → Drogi: ścieżka utwardzona, droga kamienna i bruk wytyczane od sieci dróg do wskazanego budynku po śladach ludzi, układane przez budowniczych; rozbudowa domu zawsze z przyciskiem i listą wymagań ✓/✗, karta zapasów domu; okap i dymnik w wiacie nad ogniskiem; zorza zakotwiczona w świecie (poświata na ziemi i morzu, kurtyny nad morzem za wyspą); zadania główne po trzy na epokę w zakładce Zadania, bez nich epoka nie idzie dalej |
 | 4.0.0-rc.1–rc.10 | epoka IV (rody, folwarki, wyspa 384×384), nowe menu i zakładka Zadania, zapasy z bilansem, misje budynków, autozapis i odzyskiwanie zapisu, transport i stanowiska pracy (szczegóły w docs/) |

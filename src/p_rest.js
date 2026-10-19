@@ -664,7 +664,7 @@ function stepPerson(p,dt){
    if(tg&&!tg.open){tg.prog=(tg.prog||0)+dt*e*craftEff(p,'ciesla')*WEATHER[S.weather.k][1];p.act='rozpoznaje: '+tg.n.toLowerCase();if(tg.prog>=tg.need){tg.open=1;W.target=-1;const it=Object.entries(tg.items).filter(([k,v])=>v>0).map(([k,v])=>k.startsWith('ks_')?'księga „'+BOOKS[k.slice(3)]+'”':RN[k].toLowerCase()+' '+v);log('Rozpoznano: '+tg.n.toLowerCase()+'. W środku: '+it.join(', ')+'.');toast('Dostęp do części wraku: '+tg.n);p.state='idle'}return}
    p.wt+=dt*e*craftEff(p,'ciesla')*(S.wreckRush&&S.day<S.wreckRush?2:1);if(p.wt>=6){p.wt=0;const part=(tg&&tg.open&&Object.values(tg.items).some(v=>v>0))?tg:W.parts.find(x=>x.open&&Object.values(x.items).some(v=>v>0));if(!part){p.state='idle';return}
     const keys=Object.keys(part.items).filter(k=>part.items[k]>0);const x=keys[(Math.random()*keys.length)|0];
-    if(x.startsWith('ks_')){part.items[x]=0;const bk=x.slice(3);S.books[bk]=1;log(p.name+' wynosi z wraku księgę: „'+BOOKS[bk]+'”. Trzeba ją przeczytać (zakładka Praca, czytelnicy).');toast('Znaleziono księgę: '+BOOKS[bk]);p.state='idle';return}
+    if(x.startsWith('ks_')){part.items[x]=0;const bk=x.slice(3);S.books[bk]=1;log(p.name+' wynosi z wraku księgę: „'+BOOKS[bk]+'”. Trzeba ją przeczytać (Ludzie → Praca, czytelnicy).');toast('Znaleziono księgę: '+BOOKS[bk]);p.state='idle';return}
     const q=Math.min({narz:2,gwozdzie:8,deski:3,plotno:1,wlokna:3,ziarno:5,odziez:2,skory:2,suchary:8}[x]||2,part.items[x]);part.items[x]-=q;
     if(!wreckLeft()&&W.parts.every(x=>x.open))log('Wrak rozebrany do ostatniej deski. Teraz wszystko trzeba zrobić samemu.');finishTrip(p,[{res:x,q}])}return}
   if(k==='zdun'){const kn=S.know;if(!kn.active){p.state='idle';return}const T=TRIAL[kn.active];gainXp(p,T.c,dt);techXp('nauka',dt*.04);kn[kn.active+'_p']+=dt*e*craftEff(p,T.c);
@@ -804,7 +804,7 @@ function legacyDayCore(){
  S.day=Math.floor(S.day);
  const d=Math.floor(rday());if(d%SD===0)log('Nastaje '+SEAS[d/SD].toLowerCase()+'.');
  curYd=yday();paintBase(curYd);fogPass(true);
- if(S.bld.some(b=>!bDone(b))&&freeCount()===0)toastOnce('nobuild'+Math.floor(S.day/6),'Budowy stoją: nikt nie jest wolny. Zdejmij kogoś z pracy w zakładce Praca.');
+ if(S.bld.some(b=>!bDone(b))&&freeCount()===0)toastOnce('nobuild'+Math.floor(S.day/6),'Budowy stoją: nikt nie jest wolny. Zdejmij kogoś z pracy w Ludzie → Praca.');
  if(d===SD){const need=K*S.people.reduce((a,p)=>a+(p.age<12?.6:1),0);if(foodTotal()<need*8)log('Przed nami zima, a zapasów jest na mniej niż 8 dób. Trzeba więcej zbieraczy, rybaków i myśliwych.')}
  if(!S.people.length){log('Osada wymarła. Wyspa znów należy do lasu.');toast('Osada wymarła')}
  if(tab)renderPanel()}
@@ -852,7 +852,7 @@ function tryPlace(){if(!placing||!ghostTile)return;const kind=placing,[i,j]=ghos
  nodes.forEach(n=>{if(n.type!=='fish'&&n.i>=i&&n.i<i+d.w&&n.j>=j&&n.j<j+d.h){n.gone=1;n.amt=0;S.nodeAmt[n.id]=0;nodeVis(n)}});
  const b={id:S.nid++,kind,i,j,prog:0,work:d.work,workers:0,want:0};S.bld.push(b);placeFootprint(kind,i,j,b.id);addBuildingMesh(b);
  for(let a=0;a<d.w;a++)for(let q=0;q<d.h;q++){const ds=tileDeco.get((j+q)*N+i+a);if(ds)ds.forEach(([t,x])=>setDeco(t,x))}decoMeshes.forEach(m=>m.instanceMatrix.needsUpdate=true);
- if(freeCount()===0)toast('Nikt nie buduje: wszyscy mają pracę. Zwolnij kogoś w zakładce Praca.');
+ if(freeCount()===0)toast('Nikt nie buduje: wszyscy mają pracę. Zwolnij kogoś w Ludzie → Praca.');
  log('Rozpoczęto budowę: '+d.n.toLowerCase()+'.');cancelPlace()}
 
 /* ================= kamera i wejście ================= */
@@ -986,13 +986,13 @@ function renderPanel(){
   h+=`<div class="bchips">${CATS.map(([c,cn])=>{const ks=BKEYS.filter(k=>BD[k].cat===c);const av=ks.filter(bAvail).length;return`<button data-bcat="${c}" class="${buildCat===c?'on':''}${av?'':' dim'}">${cn}</button>`}).join('')}<button data-bcat="remont" class="${buildCat==='remont'?'on':''}">Remonty${need.length?`<small class="no">${need.length}</small>`:''}</button>${typeof ladChip==='function'?ladChip():''}</div>`;
   if(typeof sitesHTML==='function')h+=sitesHTML();
   if(buildCat==='lad'&&typeof ladBuildHTML==='function'){h+=ladBuildHTML()}else if(buildCat==='drogi'&&typeof roadsHTML==='function'){h+=roadsHTML()}else if(buildCat==='remont'){h+=`<div class="card"><h4>Remonty</h4><p>Budynki zużywają się co roku: szybciej nad morzem, na mokradłach i w górach, wolniej, gdy są wyżej ulepszone. Remont potrzebny jest zwykle co 2–3 lata.</p><p class="mut">${need.length?'Wymaga remontu: '+need.map(b=>BD[b.kind].n.toLowerCase()+' '+Math.round(condOf(b)*100)+'%').join(', ')+'.':'Wszystko w dobrym stanie.'}</p><button data-autorep="1" class="${S.autoRep!==false?'pri':''}">${S.autoRep!==false?'Remonty automatyczne: włączone':'Remonty automatyczne: wyłączone'}</button></div>`}
-  else{const ks=BKEYS.filter(k=>BD[k].cat===buildCat);const kn=ks.filter(bAvail).sort((a,b)=>(canAfford(BD[b].cost)?1:0)-(canAfford(BD[a].cost)?1:0)),unk=ks.filter(k=>!bAvail(k));
+  else{const ks=typeof nvKeys==='function'?nvKeys():BKEYS.filter(k=>BD[k].cat===buildCat);const kn=ks.filter(bAvail).sort((a,b)=>(canAfford(BD[b].cost)?1:0)-(canAfford(BD[a].cost)?1:0)),unk=ks.filter(k=>!bAvail(k));
    kn.forEach(k=>{const d=BD[k],cnt=S.bld.filter(b=>b.kind===k).length,ok=canAfford(d.cost);const miss=Object.entries(d.cost).filter(([r,v])=>(S.res[r]||0)<v).map(([r,v])=>RN[r].toLowerCase()+' '+Math.ceil(v-(S.res[r]||0)));
     h+=`<div class="card bk" data-build-card="${k}"><h4>${d.n}</h4><p class="mut">${cnt?'Masz '+cnt+' · ':''}${ok?'Dostępny do budowy':'Potrzebne zasoby'}</p><p>${d.d}</p><div class="cost">${costHave(d.cost)}<span class="sep">·</span>${d.work} osobodni${d.wk?`<span class="sep">·</span>${d.wk} prac.`:''}${d.r?`<span class="sep">·</span>zasięg ${d.r}`:''}</div>${ok?`<button class="pri bkb" data-b="${k}">Postaw</button>`:`<button class="bkb" disabled>Brakuje: ${miss.join(', ')}</button>`}</div>`});
-   if(!kn.length&&!unk.length)h+='<p class="mut">Nic tu jeszcze nie ma.</p>';
+   if(!kn.length&&!unk.length)h+=`<p class="mut">${typeof nvEmpty==='function'?nvEmpty():'Nic tu jeszcze nie ma.'}</p>`;
    if(unk.length)h+=`<div class="card unkc"><h4>Jeszcze nie umiecie</h4>${unk.map(k=>{const d=BD[k];return`<p><b>${d.n}</b><span>${TECH_BY[d.need]?'„'+TECH_BY[d.need].n+'” w Wiedzy':{kury:'coś, co trzeba najpierw znaleźć na wyspie',wegiel_k:'coś, co trzeba najpierw znaleźć na wyspie',sol:'coś, co trzeba najpierw znaleźć na wyspie',pole:'uprawa pola (Wiedza)',piec:'budowa pieca (Wiedza, próby)',cegla:'wypał cegły (Wiedza, próby)',kuznia:'wytop żelaza (Wiedza, próby)',...(typeof ZL_WHY==='object'?ZL_WHY:{})}[d.need]||'potrzebna wiedza'}</span></p>`}).join('')}</div>`}}
  else if(tab==='wiedza'){const k=S.know;const mason=adultsPool().sort((a,b)=>b.sk.murarz-a.sk.murarz)[0]||S.people[0];
-  h+=techHTML();h+='<h3>Próby</h3><p class="lead">Niektórych rzeczy nie da się wyczytać ani podpatrzyć. Trzeba spróbować, często wiele razy. Próby prowadzą zduni (zakładka Praca).</p>';
+  h+=techHTML();h+='<h3>Próby</h3><p class="lead">Niektórych rzeczy nie da się wyczytać ani podpatrzyć. Trzeba spróbować, często wiele razy. Próby prowadzą zduni (Ludzie → Praca).</p>';
   h+=`<div class="card"><h4>Wypał cegły</h4><p>Źródło: praktyka i mistrz (${mason.name}, murarz ${mason.sk.murarz}). Pierwsze wypały często pękają.</p>`+
    (k.cegla==='tak'?'<p class="ok">Poznane. Możesz postawić piec do cegły.</p>':`<div class="cost">${costHTML({glina:8,drewno:6})}${k.cegla_f?` · porażki: ${k.cegla_f}`:''}</div>`+
    (k.active==='cegla'?`<div class="pbar"><div style="width:${Math.round(100*k.cegla_p/150)}%"></div></div><p class="mut">Próba trwa. Zdun musi być przy pracy.</p>`:`<button class="pri" style="margin-top:7px" data-try="cegla">Spróbuj</button>`))+`</div>`;
@@ -1000,7 +1000,7 @@ function renderPanel(){
    (k.piec==='tak'?'<p class="ok">Poznane. Możesz postawić piec zduński.</p>':k.cegla!=='tak'?'<div class="cost"><span class="no">Najpierw trzeba poznać wypał cegły.</span></div>':`<div class="cost">${costHTML({cegla:6})}${k.piec_f?` · porażki: ${k.piec_f}`:''}</div>`+
    (k.active==='piec'?`<div class="pbar"><div style="width:${Math.round(100*k.piec_p/240)}%"></div></div><p class="mut">Próba trwa.</p>`:`<button class="pri" style="margin-top:7px" data-try="piec">Spróbuj</button>`))+`</div>`;
   const kz=k.kuznia||'nie';h+=`<div class="card"><h4>Kuźnia</h4><p>Źródło: „${BOOKS.kowal}” z kajuty kapitana, kowal (${(adultsPool().sort((a,b)=>b.sk.kowal-a.sk.kowal)[0]||{name:'-'}).name}) i próby wytopu.</p>`+
-   (kz==='tak'?'<p class="ok">Poznane. Możesz postawić kuźnię.</p>':S.books.kowal!==2?`<div class="cost"><span class="no">${S.books.kowal===1?'Księgę trzeba przeczytać (czytelnicy w zakładce Praca).':'Księga leży w kajucie kapitana na wraku.'}</span></div>`:`<div class="cost">${costHTML(TRIAL.kuznia.cost)}${k.kuznia_f?` · porażki: ${k.kuznia_f}`:''}</div>`+
+   (kz==='tak'?'<p class="ok">Poznane. Możesz postawić kuźnię.</p>':S.books.kowal!==2?`<div class="cost"><span class="no">${S.books.kowal===1?'Księgę trzeba przeczytać (czytelnicy w Ludzie → Praca).':'Księga leży w kajucie kapitana na wraku.'}</span></div>`:`<div class="cost">${costHTML(TRIAL.kuznia.cost)}${k.kuznia_f?` · porażki: ${k.kuznia_f}`:''}</div>`+
    (k.active==='kuznia'?`<div class="pbar"><div style="width:${Math.round(100*k.kuznia_p/240)}%"></div></div><p class="mut">Próba trwa.</p>`:`<button class="pri" style="margin-top:7px" data-try="kuznia">Spróbuj</button>`))+`</div>`;
   h+=`<div class="card"><h4>Pole</h4><p>Źródło: obserwacja dzikiego zboża albo księga „${BOOKS.siew}”.</p>${k.pole==='tak'?'<p class="ok">Poznane. Pola są w zakładce Budowa.</p>':`<p class="mut">Zbieracze zebrali ${Math.floor(S.zbozeTot)} z 25 ziarna potrzebnych do odkrycia.</p>`}</div>`;
   h+=`<div class="card"><h4>Uczniowie i dzieci</h4><p>Kto pracuje obok mistrza swojego fachu, uczy się dwa razy szybciej. Dzieci od szóstego roku podpatrują rodziców. Gdy mistrz umiera bez następcy, jego wiedza ginie.</p><p>${Object.keys(S.bonus).length?'Ulepszenia uczniów: '+Object.entries(S.bonus).map(([c,v])=>`${CN[c]} +${Math.round(v*100)}%`).join(', '):'Ulepszeń uczniów jeszcze nie ma.'}</p></div>`;
@@ -1017,7 +1017,7 @@ function onPanelClick(e){const t=e.target.closest('button,[data-p],[data-rg]');i
  else if(t.dataset.wt!==undefined){const i=+t.dataset.wt;S.wreck.target=S.wreck.target===i?-1:i;renderPanel()}
  else if(t.dataset.try){const k=S.know,id=t.dataset.try;const cost=TRIAL[id].cost;if(k.active){toast('Trwa już inna próba');return}
   if(!canAfford(cost)){toast('Brakuje materiałów na próbę');return}
-  if(!S.people.some(p=>p.job==='zdun')){if(freeCount()>0){S.alloc.zdun=Math.max(1,S.alloc.zdun);assign();toast('Przydzieliłem zduna (zakładka Praca)')}else{toast('Przydziel zduna w zakładce Praca');return}}
+  if(!S.people.some(p=>p.job==='zdun')){if(freeCount()>0){S.alloc.zdun=Math.max(1,S.alloc.zdun);assign();toast('Przydzieliłem zduna (Ludzie → Praca)')}else{toast('Przydziel zduna w Ludzie → Praca');return}}
   Object.entries(cost).forEach(([a,b])=>S.res[a]-=b);k.active=id;k[id+'_p']=0;log('Zaczyna się próba: '+TRIAL[id].n.toLowerCase()+'.');assign();renderPanel()}
  else if(t.dataset.up){upgradeB(+t.dataset.up)}
  else if(t.dataset.rep){startProj(bById(+t.dataset.rep),'rep')}
