@@ -14,10 +14,11 @@ function workSiteTiles(building){
  }
  return positions;
 }
+function deliverySpotFree(person,tile){return !!tile&&!!walk[tile[1]*N+tile[0]]&&!S.people.some(peer=>peer!==person&&!['away','sleep'].includes(peer.state)&&Math.hypot(peer.x-tcx(tile[0]),peer.z-tcx(tile[1]))<.6);}
 function buildingEntryFor(person,building){
  const start=tileOf(person.x,person.z),preferred=entryOf(building.kind,building.i,building.j),positions=workSiteTiles(building);
  positions.sort((a,b)=>(preferred&&a[0]===preferred[0]&&a[1]===preferred[1]?-1:preferred&&b[0]===preferred[0]&&b[1]===preferred[1]?1:Math.hypot(a[0]-start[0],a[1]-start[1])-Math.hypot(b[0]-start[0],b[1]-start[1])));
- return positions.find(tile=>astar(start[0],start[1],tile[0],tile[1]))||null;
+ return positions.find(tile=>deliverySpotFree(person,tile)&&astar(start[0],start[1],tile[0],tile[1]))||null;
 }
 function workSiteActive(person){return !!person.tgt?.kind&&((person.state==='move'&&['prod','field','build','care'].includes(person.after))||(person.state==='work'&&['prod','field','build','care'].includes(person.workKind)))}
 function workSiteRoute(person,building,preferred){
@@ -45,4 +46,10 @@ function workSiteCheck(person){
  if(!workSiteContains(building,goal))return 'Stanowisko zamknięte — potrzebne nowe dojście.';
  if(person.state==='work'&&Math.hypot(person.x-tcx(goal[0]),person.z-tcx(goal[1]))>.6)return 'Najpierw musi dojść do stanowiska.';
  return null;
+}
+/* Odbiór przy obozie ma kilka fizycznych miejsc, a nie jeden kafel zajęty paleniskiem. */
+function campDeliveryEntry(person){
+ const start=tileOf(person.x,person.z),positions=[];
+ for(let dz=-3;dz<=3;dz++)for(let dx=-3;dx<=3;dx++){const i=camp.i+dx,j=camp.j+dz;if(i<0||j<0||i>=N||j>=N||!walk[j*N+i])continue;if(!deliverySpotFree(person,[i,j]))continue;positions.push([i,j]);}
+ positions.sort((a,b)=>Math.hypot(a[0]-start[0],a[1]-start[1])-Math.hypot(b[0]-start[0],b[1]-start[1]));return positions.find(tile=>deliverySpotFree(person,tile)&&astar(start[0],start[1],tile[0],tile[1]))||null;
 }

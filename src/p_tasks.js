@@ -3,8 +3,10 @@
 function pendingDelivery(person){return !!(person.kozN||person.carry&&person.carry.length||person.haulQ>0||person.siteQ>0)}
 function waterDelivery(person){return person.chK==='woda'&&person.chPh===1&&person.carry?.length===1&&person.carry[0].res==='woda'&&person.carry[0].q===0}
 function resumeWaterDelivery(person){
- const home=nearHouse(person),destination=person.chWaterTo||(home?entryOf(home.kind,home.i,home.j):[camp.i,camp.j+1]);
- if(destination&&go(person,destination,'chore',null)){person.chWaterTo=destination.slice();person.act='niesie wodę';return true}
+ const home=bById(person.chWaterHome)??nearHouse(person),candidates=home?[buildingEntryFor(person,home)]:[person.chWaterTo,campDeliveryEntry(person)];
+ for(const destination of candidates){if(!deliverySpotFree(person,destination))continue;
+  if(go(person,destination,'chore',null)){person.chWaterTo=destination.slice();person.act='niesie wodę';return true;}
+ }
  person.state='idle';person.path=null;person.after=null;person.wait=2;person.act='brak drogi do dostawy wody';return true;
 }
 function resumeDelivery(person){
@@ -27,7 +29,7 @@ function resumeDelivery(person){
 {const previousStep=stepPerson;stepPerson=function(person,dt){
  if(waterDelivery(person)){
   if(person.state==='move'&&person.after==='chore'&&person.path?.length){movePerson(person,dt);return}
-  if(person.state==='work'&&person.workKind==='chore'){if(isWork())return previousStep(person,dt);return}
+  if(person.state==='work'&&person.workKind==='chore'){const destination=person.chWaterTo;if(!destination||!walk[destination[1]*N+destination[0]]||Math.hypot(person.x-tcx(destination[0]),person.z-tcx(destination[1]))>.8){release(person);resumeWaterDelivery(person);return}if(isWork())return previousStep(person,dt);return}
   if(person.wait>0){person.wait-=dt;return}release(person);return resumeWaterDelivery(person);
  }
  if(pendingDelivery(person)&&person.state!=='away'){

@@ -26,8 +26,8 @@ function missionRequirement(building){const definition=missionFor(building);if(!
 function sendBuildingMission(buildingId){const building=bById(buildingId);if(!building)return false;const definition=missionFor(building),reason=missionRequirement(building);if(reason){toast(reason);return false}
  const target=missionRegion(definition),person=missionEligible(building)[0],food=expFood(target,'zwiad',1),total=foodTotal();
  if(total<=0)return false;
- FOOD.forEach(resource=>{S.res[resource]-=food*S.res[resource]/total});
- const days=expDays(target,'zwiad'),expedition={id:(S.expN=(S.expN||0)+1),r:target.id,type:'zwiad',ppl:[person.id],days,left:days,exit:exitTile(target),risk:expRisk(target,1),missionBuilding:building.id,missionKind:definition.kind};
+ const departure=expCharge([person],food);if(!departure)return false;
+ const days=expDays(target,'zwiad'),expedition={id:(S.expN=(S.expN||0)+1),r:target.id,type:'zwiad',ppl:[person.id],days,left:days,exit:exitTile(target),departure,started:false,risk:expRisk(target,1),missionBuilding:building.id,missionKind:definition.kind};
  S.exps.push(expedition);release(person);person.path=null;person.state='idle';person.wait=0;person.job='wyp';person.wb=null;person.exp=expedition.id;person.act='przygotowuje wyprawę: '+definition.title.toLowerCase();
  log(`${person.name} zabiera ${food} porcji żywności i wyrusza na zadanie „${definition.title}”. Powrót za około ${days} dni.`);toast('Zadanie rozpoczęte');assign();renderSel();renderPanel();save();return true;
 }
@@ -53,7 +53,7 @@ bldPanelHTML=function(building){let content=previousMissionBuildingPanel(buildin
  const running=missionInProgress(building),reason=missionRequirement(building),target=missionRegion(definition);
  content+=`<div class="ext"><b>Zadanie: ${definition.title}</b><small>${definition.description}</small>`;
  if(running){const explorer=S.people.find(person=>person.exp===running.id),percentage=Math.round(100*(running.days-running.left)/running.days);
- content+=`<p>Wyprawa: ${explorer?explorer.name:'w drodze'} · ${expDepartureStatus(running).blocked?escapeHtml(expDepartureStatus(running).reason):explorer&&explorer.state!=='away'?'zbiera zapasy i wychodzi':'pozostało '+running.left+' dni'}</p><div class="pbar"><div style="width:${percentage}%"></div></div><button data-mission-locate="${running.r}">Pokaż teren wyprawy</button>`}
+ content+=`<p>Wyprawa: ${explorer?explorer.name:'w drodze'} · ${expDepartureStatus(running).blocked?escapeHtml(expDepartureStatus(running).reason):explorer&&explorer.state!=='away'?'zbiera zapasy i wychodzi':'pozostało '+running.left+' dni'}</p><div class="pbar"><div style="width:${percentage}%"></div></div><button data-mission-locate="${running.r}">Pokaż teren wyprawy</button>${expCancelHTML(running)}`}
  else content+=`<p class="mut">${reason||`Czas: ${expDays(target,'zwiad')} dni · żywność: ${expFood(target,'zwiad',1)} porcji`}</p><button data-mission-start="${building.id}" ${reason?'disabled':''}>Wyrusz na poszukiwanie</button>`;
  return content+'</div>';
 };

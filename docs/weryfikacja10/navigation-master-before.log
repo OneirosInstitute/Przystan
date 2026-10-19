@@ -1,0 +1,124 @@
+TAP version 13
+# Subtest: construction cannot sever the only route from a resident to the settlement
+not ok 1 - construction cannot sever the only route from a resident to the settlement
+  ---
+  duration_ms: 1283.915701
+  type: 'test'
+  location: '/workspace/scratch/9e1bb3f2c27d/master_rc10_20261018/source/Przystan_4.0.0_RC10_MASTER/tests/navigation-master.test.mjs:5:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    true !== false
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: false
+  actual: true
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/master_rc10_20261018/source/Przystan_4.0.0_RC10_MASTER/tests/navigation-master.test.mjs:5:367)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1382:25)
+    Test.start (node:internal/test_runner/test:1242:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17)
+  ...
+# Subtest: open terrain remains buildable when people can walk around the new footprint
+ok 2 - open terrain remains buildable when people can walk around the new footprint
+  ---
+  duration_ms: 1214.234055
+  type: 'test'
+  ...
+# Subtest: a moving resident waits or detours instead of crossing a stationary resident
+not ok 3 - a moving resident waits or detours instead of crossing a stationary resident
+  ---
+  duration_ms: 1156.013668
+  type: 'test'
+  location: '/workspace/scratch/9e1bb3f2c27d/master_rc10_20261018/source/Przystan_4.0.0_RC10_MASTER/tests/navigation-master.test.mjs:7:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The expression evaluated to a falsy value:
+    
+      assert.ok(result.closest>=.4)
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/master_rc10_20261018/source/Przystan_4.0.0_RC10_MASTER/tests/navigation-master.test.mjs:7:421)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1382:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+    Test.postRun (node:internal/test_runner/test:1522:19)
+    Test.run (node:internal/test_runner/test:1447:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+  ...
+# Subtest: opposite travellers pass in open space without losing their destinations
+not ok 4 - opposite travellers pass in open space without losing their destinations
+  ---
+  duration_ms: 1005.143049
+  type: 'test'
+  location: '/workspace/scratch/9e1bb3f2c27d/master_rc10_20261018/source/Przystan_4.0.0_RC10_MASTER/tests/navigation-master.test.mjs:8:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The expression evaluated to a falsy value:
+    
+      assert.ok(result.closest>=.4)
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/master_rc10_20261018/source/Przystan_4.0.0_RC10_MASTER/tests/navigation-master.test.mjs:8:547)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1382:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+    Test.postRun (node:internal/test_runner/test:1522:19)
+    Test.run (node:internal/test_runner/test:1447:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+  ...
+# Subtest: a goat can be delivered through an alternative accessible pen entrance
+not ok 5 - a goat can be delivered through an alternative accessible pen entrance
+  ---
+  duration_ms: 1012.996318
+  type: 'test'
+  location: '/workspace/scratch/9e1bb3f2c27d/master_rc10_20261018/source/Przystan_4.0.0_RC10_MASTER/tests/navigation-master.test.mjs:9:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    0 !== 1
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/master_rc10_20261018/source/Przystan_4.0.0_RC10_MASTER/tests/navigation-master.test.mjs:9:535)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1382:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+    Test.postRun (node:internal/test_runner/test:1522:19)
+    Test.run (node:internal/test_runner/test:1447:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+  ...
+# Subtest: a failed water delivery retains its bucket and resumes after access returns
+ok 6 - a failed water delivery retains its bucket and resumes after access returns
+  ---
+  duration_ms: 1002.888986
+  type: 'test'
+  ...
+1..6
+# tests 6
+# suites 0
+# pass 2
+# fail 4
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 6817.006367

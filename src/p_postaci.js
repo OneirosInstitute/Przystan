@@ -46,9 +46,5 @@ function toolFor(p){if(S?.epoch===4&&p.e4Action?.phase==='doing')return {chop:'s
 function personWinter(m,on){const u=m.userData;if(!u.gS||u.win===on)return;const p=u.pp;
  if(on){if(!u.gW){const cloth=mdCol(p.cloth),koz=mdCol(KOZ[p.id%4]);u.gW={t:geoCat(u.gS.t,winterExtra(p)),aL:geoRecolor(u.gS.aL,cloth,koz),aR:geoRecolor(u.gS.aR,cloth,koz)}}u.torso.geometry=u.gW.t;u.aL.geometry=u.gW.aL;u.aR.geometry=u.gW.aR}
  else{u.torso.geometry=u.gS.t;u.aL.geometry=u.gS.aL;u.aR.geometry=u.gS.aR}u.win=on}
-let postT=0;
-{const _mt=mapTick;mapTick=function(rdt){_mt(rdt);if(!S)return;postT+=rdt;const slow=postT>1;if(slow)postT=0;const W=slow?isWinterNow():null;
-  for(const p of S.people){const m=pMesh[p.id];if(!m||!m.visible)continue;const u=m.userData;if(!u.p18)continue;if(slow&&u.win!==W)personWinter(m,W);
-   const t=toolFor(p);if(t){if(!u.tool){u.tool=new THREE.Mesh(toolGeo(t),MD.mat);u.tool.castShadow=true;(u.elbowR||u.aR).add(u.tool)}if(u.toolK!==t){u.tool.geometry=toolGeo(t);u.toolK=t}u.tool.visible=true;
-    if(t==='laska'){u.aR.rotation.x=-.35+Math.sin(clock*10+p.id)*.08}}else if(u.tool)u.tool.visible=false}}}
+// Aktualizacja okrycia i rekwizytów należy wyłącznie do animatePerson.
 window.__post={toolGeo,winterExtra,personWinter,toolFor,makeP:p=>makePersonMesh(p)};

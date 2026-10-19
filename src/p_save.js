@@ -11,7 +11,7 @@ function serializeSave(){
  const previous=typeof nocSkip!=='undefined'&&nocSkip?nocSkip.prev:1;
  const snapshot=Object.assign({},S,{rev:packRev(),tread:packTread(),ver:GAME_VER,saveSchema:1,speed:persistentSpeed(S.speed,previous)});
  if(S.pendingDecision)snapshot.pendingDecision={...S.pendingDecision,prev:persistentSpeed(S.pendingDecision.prev,previous)};
- return JSON.stringify(snapshot,(key,value)=>['mentor','tgt'].includes(key)||(key==='path'&&Array.isArray(value))?undefined:value);
+ return JSON.stringify(snapshot,(key,value)=>['mentor','tgt','navResumeAct','navWait','navRetry'].includes(key)||(key==='path'&&Array.isArray(value))?undefined:value);
 }
 function saveWarning(error){
  saveStatus.ok=false;saveStatus.error=(error?.name&&error.name!=='Error'?error.name+': ':'')+String(error&&error.message||error);
@@ -94,6 +94,8 @@ function validateSave(state){
   if(person.carry!==null&&person.carry!==undefined&&(!Array.isArray(person.carry)||!person.carry.every(item=>object(item)&&typeof item.res==='string'&&positive(item.q)&&(Object.hasOwn(RN,item.res)||waterDelivery(person)))))return saveInvalid('people.carry: nieprawidłowy ładunek');
   if(person.chWaterTo!==null&&person.chWaterTo!==undefined&&(!Array.isArray(person.chWaterTo)||person.chWaterTo.length!==2||!person.chWaterTo.every(coordinate=>Number.isInteger(coordinate)&&coordinate>=0&&coordinate<N)))return saveInvalid('people.chWaterTo: nieprawidłowa dostawa wody');
  }
+ if(!Array.isArray(state.exps))return saveInvalid('exps: brak listy wypraw');
+ const expeditionIds=new Set();for(const expedition of state.exps){if(!object(expedition)||!id(expedition.id)||expeditionIds.has(expedition.id)||!id(expedition.r)||!REGIONS[expedition.r]||!['zwiad','zbior','rejs','horyzont'].includes(expedition.type)||!Array.isArray(expedition.ppl)||!expedition.ppl.every(id)||!number(expedition.days)||expedition.days<=0||expedition.days>3650||!number(expedition.left)||expedition.left>expedition.days||!Array.isArray(expedition.exit)||expedition.exit.length!==2||!expedition.exit.every(value=>id(value)&&value<N))return saveInvalid('exps: nieprawidłowa odprawa');expeditionIds.add(expedition.id);if(expedition.departure&&!expLedgerValid(expedition))return saveInvalid('exps.departure: nieprawidłowa księga opłat');}
  if(!state.people.every(person=>person.pair===null||person.pair===undefined||peopleIds.has(person.pair)))return saveInvalid('people.pair: brak partnera');
  if(!Object.values(state.fams).every(family=>object(family)&&id(family.id)&&(family.sp===undefined||positive(family.sp))&&(family.home===null||family.home===undefined||buildingIds.has(family.home))))return saveInvalid('fams: nieprawidłowy dom lub zapasy');
  if(state.pendingDecision&&(!Object.hasOwn(DECISION_RECOVERY,state.pendingDecision.id)&&!EVENTS.some(event=>event.id===state.pendingDecision.id)))return saveInvalid('pendingDecision.id: nieznane zdarzenie');

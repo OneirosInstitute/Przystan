@@ -1,0 +1,31 @@
+✔ one waiting cause is shared by person, workshop and production task (1165.828625ms)
+✔ workshop task navigation selects the exact building among duplicates (1176.759065ms)
+✔ recovery has priority over emergency field work and village routines (1093.194084ms)
+✔ cargo delivery remains first during recovery and preparations for the next epoch (1037.21715ms)
+✔ death releases a station without an orphan reservation (1040.684415ms)
+✔ restart clears transient positions and replans without manufacturing goods (1027.097025ms)
+✔ urgent harvest helpers can earn real work at a reached field station (1064.344766ms)
+✔ epoch IV rest actions retain their own phase instead of appearing as production (988.780233ms)
+✔ a new construction invalidates a live route before entering its footprint (1295.113488ms)
+✔ a disconnected meal and evening do not earn attendance or preserves (1107.703794ms)
+✔ completed meal requires time and consumes real food without making new stock (1211.137653ms)
+✔ a distant sleeping master cannot teach; a present working master can (1082.257617ms)
+✔ hiding stops the render scheduler, autosave timer and simulation while retaining the exit save (1552.290202ms)
+✔ pagehide and freeze stop independently; returning starts exactly one loop without catching up time (3264.013055ms)
+✔ a hidden page cannot be restarted by pageshow/resume until it becomes visible (1326.01233ms)
+✔ delayed story retries sleep in the background and continue after return (1371.907126ms)
+✔ sound follows lifecycle even if a suspend finishes after the app has returned (1423.246921ms)
+✔ a hidden initial load does not schedule frames, timers, audio or render an intro snapshot (1054.142219ms)
+✔ one successful exit save covers visibility/pagehide/freeze; a failed exit save can retry (1327.561554ms)
+✔ hiding aborts an outstanding weekly request and prevents new background requests (1277.595524ms)
+✔ both detail levels have bounded mesh counts, readable faces and age scaling (1201.975268ms)
+✔ an actual carried resource hides the work tool and render never changes simulation (1132.73864ms)
+✔ work to meal blends limbs, displays only the real prop, and pause freezes the pose (1112.935195ms)
+ℹ tests 23
+ℹ suites 0
+ℹ pass 23
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12732.88865

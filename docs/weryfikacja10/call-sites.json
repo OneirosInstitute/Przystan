@@ -1,0 +1,232 @@
+{
+  "references": {
+    "buildingEntryFor": [
+      {
+        "file": "src/p_rest.js",
+        "line": 647
+      },
+      {
+        "file": "src/p_woz.js",
+        "line": 23
+      },
+      {
+        "file": "src/p_gosp.js",
+        "line": 83
+      },
+      {
+        "file": "src/p_hod.js",
+        "line": 15
+      },
+      {
+        "file": "src/p_tasks.js",
+        "line": 6
+      },
+      {
+        "file": "src/p_tasks.js",
+        "line": 17
+      },
+      {
+        "file": "src/p_sluzba.js",
+        "line": 78
+      },
+      {
+        "file": "src/p_worksites.js",
+        "line": 18
+      }
+    ],
+    "storeTile": [
+      {
+        "file": "src/p_rest.js",
+        "line": 522
+      },
+      {
+        "file": "src/p_rest.js",
+        "line": 586
+      },
+      {
+        "file": "src/p_woz.js",
+        "line": 14
+      },
+      {
+        "file": "src/p_tasks.js",
+        "line": 23
+      }
+    ],
+    "resumeWaterDelivery": [
+      {
+        "file": "src/p_tasks.js",
+        "line": 5
+      },
+      {
+        "file": "src/p_tasks.js",
+        "line": 13
+      },
+      {
+        "file": "src/p_tasks.js",
+        "line": 32
+      },
+      {
+        "file": "src/p_tasks.js",
+        "line": 33
+      }
+    ],
+    "makePersonMesh": [
+      {
+        "file": "src/p_rest.js",
+        "line": 419
+      },
+      {
+        "file": "src/p_rest.js",
+        "line": 441
+      },
+      {
+        "file": "src/p_postaci.js",
+        "line": 50
+      },
+      {
+        "file": "src/p_handel.js",
+        "line": 6
+      },
+      {
+        "file": "src/p_kol.js",
+        "line": 61
+      }
+    ],
+    "makePerson18": [
+      {
+        "file": "src/p_g18.js",
+        "line": 152
+      },
+      {
+        "file": "src/p_g18.js",
+        "line": 197
+      }
+    ],
+    "animatePerson": [
+      {
+        "file": "src/p_end.js",
+        "line": 89
+      },
+      {
+        "file": "src/p_people_motion.js",
+        "line": 10
+      }
+    ],
+    "e4SitePoint": [
+      {
+        "file": "src/p_e4_view.js",
+        "line": 24
+      },
+      {
+        "file": "src/p_e4_view.js",
+        "line": 25
+      },
+      {
+        "file": "src/p_e4_view.js",
+        "line": 37
+      }
+    ],
+    "finishExp": [
+      {
+        "file": "src/p_exp.js",
+        "line": 69
+      },
+      {
+        "file": "src/p_exp.js",
+        "line": 70
+      }
+    ],
+    "sendExp": [
+      {
+        "file": "src/p_rest.js",
+        "line": 1028
+      },
+      {
+        "file": "src/p_exp.js",
+        "line": 60
+      }
+    ],
+    "sendBuildingMission": [
+      {
+        "file": "src/p_misje.js",
+        "line": 26
+      },
+      {
+        "file": "src/p_misje.js",
+        "line": 61
+      }
+    ],
+    "expCharge": [
+      {
+        "file": "src/p_exp.js",
+        "line": 62
+      },
+      {
+        "file": "src/p_e2d.js",
+        "line": 187
+      },
+      {
+        "file": "src/p_misje.js",
+        "line": 29
+      },
+      {
+        "file": "src/p_departure.js",
+        "line": 3
+      },
+      {
+        "file": "src/p_e21.js",
+        "line": 39
+      }
+    ],
+    "cancelExp": [
+      {
+        "file": "src/p_departure.js",
+        "line": 22
+      },
+      {
+        "file": "src/p_departure.js",
+        "line": 44
+      }
+    ],
+    "expReturn": [
+      {
+        "file": "src/p_exp.js",
+        "line": 82
+      },
+      {
+        "file": "src/p_e2d.js",
+        "line": 199
+      },
+      {
+        "file": "src/p_departure.js",
+        "line": 37
+      },
+      {
+        "file": "src/p_e21.js",
+        "line": 52
+      }
+    ],
+    "worldDetailTick": [
+      {
+        "file": "src/p_end.js",
+        "line": 95
+      },
+      {
+        "file": "src/p_world_detail.js",
+        "line": 36
+      }
+    ],
+    "navPauseForCrowd": [
+      {
+        "file": "src/p_rest.js",
+        "line": 612
+      },
+      {
+        "file": "src/p_navigation.js",
+        "line": 35
+      }
+    ]
+  },
+  "existingCallArgumentsUnchanged": true,
+  "finishExpReturn": "A compatible boolean outcome is now returned by the outer completion guard. Prior callers ignore or forward the return; new callers/tests observe it. All legacy completion wrappers are inside the guard."
+}

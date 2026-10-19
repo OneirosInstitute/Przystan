@@ -1,0 +1,15 @@
+✔ construction cannot sever the only route from a resident to the settlement (1102.854577ms)
+✔ open terrain remains buildable when people can walk around the new footprint (1210.114234ms)
+✔ a moving resident waits or detours instead of crossing a stationary resident (1149.858233ms)
+✔ opposite travellers pass in open space without losing their destinations (1102.783669ms)
+✔ a goat can be delivered through an alternative accessible pen entrance (1075.851784ms)
+✔ a failed water delivery retains its bucket and resumes after access returns (1007.096904ms)
+✔ a carrier replans a receiving place occupied after dispatch and deposits the cargo exactly once (984.332601ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7785.41808

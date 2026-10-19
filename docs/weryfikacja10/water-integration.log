@@ -1,0 +1,42 @@
+✔ starting a new settlement immediately persists the completed boot state (1629.319785ms)
+✔ real-time autosave persists paused play within 15 seconds and survives restart (2827.770092ms)
+✔ water hauling is saved by the timer, resumed after restart and delivered exactly once (4727.779284ms)
+✔ background and page-exit callbacks persist the current state without manual save (4192.786665ms)
+✔ autosave preserves a good snapshot on storage error and retries successfully (1487.736687ms)
+✔ automatic triggers never overwrite an unreadable existing save (1245.515071ms)
+✔ water exception accepts only the real zero-quantity chore marker (1282.559292ms)
+✔ manual save reports success only after storage accepts the snapshot (1300.032387ms)
+✔ a water carrier retains the trip overnight and finishes after reassignment (1261.406958ms)
+✔ sea dispatch refuses an unreachable shipyard before charging food or boats (1386.98312ms)
+✔ cancelling preparation refunds the exact paid quantities once and survives a real restart (1514.061172ms)
+✔ first departure irreversibly closes cancellation and forged refunds are rejected (1165.303345ms)
+✔ legacy expeditions never fabricate a refundable payment history (1227.278078ms)
+✔ returners use separate safe land tiles and rewards cannot be granted twice (1282.51044ms)
+✔ blocked return holds all outcome wrappers until a safe home entry exists (980.68322ms)
+✔ an expedition cannot leave or advance through a closed exit (1172.737645ms)
+✔ an adjacent delivery cannot deposit across a blocked tile (1137.69149ms)
+✔ a failed transport route cannot snap a stranded carrier to distant walkable land (1028.798165ms)
+✔ the ordinary planner cannot teleport a stranded person (1145.387368ms)
+✔ construction under a person is rejected before paying or changing the map (1208.159289ms)
+✔ unreachable expedition dispatch does not consume provisions or reassign the crew (1482.853096ms)
+✔ expeditions never take a person away from a pending delivery (1109.546272ms)
+✔ construction cargo can reach another side when the preferred entrance is disconnected (1098.074844ms)
+✔ an adjacent delivery consumes travel time before it deposits (1054.987204ms)
+✔ blocked construction cargo survives restart and is delivered once after reopening (1049.714695ms)
+✔ a reachable expedition departs only on arrival, then its elapsed days advance (1177.329215ms)
+✔ all thirty production workshops reject stale remote work and allocate distinct stations (1057.066745ms)
+✔ a person at the corner of a station tile walks to its working position without getting stuck (1100.287678ms)
+✔ construction cannot sever the only route from a resident to the settlement (1225.833506ms)
+✔ open terrain remains buildable when people can walk around the new footprint (1156.775322ms)
+✔ a moving resident waits or detours instead of crossing a stationary resident (1039.053099ms)
+✔ opposite travellers pass in open space without losing their destinations (1026.16085ms)
+✔ a goat can be delivered through an alternative accessible pen entrance (1168.597332ms)
+✔ a failed water delivery retains its bucket and resumes after access returns (1288.579397ms)
+ℹ tests 34
+ℹ suites 0
+ℹ pass 34
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 20097.753154

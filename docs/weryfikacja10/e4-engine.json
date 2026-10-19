@@ -1,0 +1,11 @@
+{
+  "unchangedE4Engine": true,
+  "hashes": {
+    "src/p_e4_world.js": "18ffe6ce89c6f64cdd9c8ca8edc899fa49f2d46109c55f6ef5c2ab3cf5b631f4",
+    "src/p_e4_catalog.js": "ca5a3e17d8a5e3c6f5f246b0c0baa4a87e6df69a491d6a36af861af71afe3c1a",
+    "src/p_e4_domain.js": "4a06dc2168c5f99be2c5b9d770adcf5f1ff7ee44f48f50f8fe7fffabea5f0292",
+    "src/p_e4_life.js": "ebdb89c15b58017b26fd869c51a25f18aecca786906263a95951ee4eef9dd92d",
+    "src/p_e4_economy.js": "2fb9cdba03d7cf358b28b02b0f0fe1f166f980cd88042439cf4484426ed089bd",
+    "src/p_e4_population.js": "1db799dc5c4fb8234c1755f748b4bb88e76c723f774690c528c193625c524a7d"
+  }
+}

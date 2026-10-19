@@ -1,0 +1,36 @@
+✔ starting a new settlement immediately persists the completed boot state (1851.020864ms)
+✔ real-time autosave persists paused play within 15 seconds and survives restart (2820.961279ms)
+✔ water hauling is saved by the timer, resumed after restart and delivered exactly once (4288.944445ms)
+✔ background and page-exit callbacks persist the current state without manual save (4107.176216ms)
+✔ autosave preserves a good snapshot on storage error and retries successfully (1349.952921ms)
+✔ automatic triggers never overwrite an unreadable existing save (1322.333793ms)
+✔ water exception accepts only the real zero-quantity chore marker (1311.550628ms)
+✔ manual save reports success only after storage accepts the snapshot (1296.283814ms)
+✔ a water carrier retains the trip overnight and finishes after reassignment (1347.966126ms)
+✔ reassigning builders releases reserved slots, including travel (1464.222464ms)
+✔ a saved delivery reaches its warehouse along a path after the workday ends (1175.355594ms)
+✔ midnight preserves material delivery and reserves it once after restart (1099.256759ms)
+✔ full storage conserves deliveries and represents excess consistently (1014.154137ms)
+✔ ration priorities redistribute exactly the existing food equivalent (1056.363966ms)
+✔ unfeasible workshop helps without repeatedly planning production (1142.827129ms)
+✔ food emergency policy reaches the last planner and releases active builders (1120.212994ms)
+✔ unreachable and night deliveries retain ownership instead of teleporting (1158.595629ms)
+✔ feast consumes exactly 60 and insufficient food gives no feast reward (1065.285126ms)
+✔ forgotten technology cannot satisfy a new prerequisite (1034.963671ms)
+✔ led goat survives restart, full pen and removal of its destination (1104.389263ms)
+✔ construction cannot sever the only route from a resident to the settlement (1605.631423ms)
+✔ open terrain remains buildable when people can walk around the new footprint (1201.508017ms)
+✔ a moving resident waits or detours instead of crossing a stationary resident (1104.963914ms)
+✔ opposite travellers pass in open space without losing their destinations (1066.751948ms)
+✔ a goat can be delivered through an alternative accessible pen entrance (1058.460836ms)
+✔ a failed water delivery retains its bucket and resumes after access returns (1200.978047ms)
+✔ a carrier replans a receiving place occupied after dispatch and deposits the cargo exactly once (1120.627698ms)
+✔ a crowd retry may complete at the current receiving tile without resuming a closed route (1156.015718ms)
+ℹ tests 28
+ℹ suites 0
+ℹ pass 28
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 19869.746162

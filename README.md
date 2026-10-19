@@ -1,9 +1,9 @@
-# Przystań 4.0.0-rc.9
+# Przystań 4.0.0-rc.10
 
-Aktualna paczka: **Przystan_4.0.0_RC9_DROGI_TERMUX.zip**.
+Aktualna paczka: **Przystan_4.0.0_RC10_MASTER_TERMUX.zip**.
 
-[Wdrożenie](docs/WYDANIE_4.0.0_RC9.md) · [Audyt](docs/AUDYT_DROGI_RC9.md) · [Weryfikacja](docs/WERYFIKACJA_4.0.0_RC9.md).
+[Wdrożenie](docs/WYDANIE_4.0.0_RC10.md) · [Audyt](docs/AUDYT_MASTER_RC10.md) · [Weryfikacja](docs/WERYFIKACJA_4.0.0_RC10.md).
 
-RC9 zawiera całe RC8 i RC7: klasyczne menu w obu trybach, rozwijane opcje, Zadania, pełny ekran i bilans live. Naprawia pozorne wyjście wyprawy bez drogi, przeskoki postaci podczas transportu i dostawy zaliczane z sąsiedniego kafla. Dostawca korzysta także z innych dostępnych stron budowy lub magazynu. Nie można postawić budynku bezpośrednio pod mieszkańcem. Fizyczna obecność, wolne stanowiska i przerwanie nieaktualnej pracy dotyczą wszystkich 30 typów warsztatów produkcyjnych starszych epok oraz pola. Epoka IV zachowuje własny model gospodarki.
+Kumulatywne RC10 zachowuje klasyczne menu i wszystkie poprawki RC9. Budynki od razu pokazują opis, koszt i akcję. Zapasy mają podpisany zielony/czerwony bilans produkcji oraz rozwijane szczegóły. Nowe zmiany obejmują lokalne ustępowanie postaci, ochronę korytarzy przy budowie, odprawy i bezpieczne powroty wypraw, odwoływanie niewyruszonej załogi ze zwrotem udokumentowanych kosztów, ruch i wygląd mieszkańców, ograniczone budżetem detale świata oraz wyjaśnienia braków gospodarki IV. Istniejące rody i specjalizacje są zachowane. Starsze niejednoznaczne flagi away nie dostają odtworzonych nagród ani fikcyjnego zwrotu.
 
 Budowanie: `npm run build`. Kontrole instalacyjne: `npm run test:install`, `npm run test:runtime`. Pełna pula z długimi scenariuszami pokoleń: `npm test`. Sprawdzenie paczki: `node tools/verify-package.cjs`.

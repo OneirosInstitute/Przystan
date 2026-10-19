@@ -182,10 +182,10 @@ function e2Daily(){if(!S||S.epoch!==2||!S.e2)return;const e=S.e2,sea=seasonIdx()
 let e2CoastT=null;
 function e2Coast(){if(e2CoastT)return e2CoastT;const cx=N/2,cz=N/2;const L=[];for(let j=1;j<N-1;j++)for(let i=1;i<N-1;i++){const k=j*N+i;if(!land[k]||!beach[k])continue;L.push([i,j,Math.atan2(j-cz,i-cx)])}return e2CoastT=L}
 function e2RejsCands(){return expCandidates(3)}
-function e2RejsWhy(){if(!hasDone('szkutnia'))return'Najpierw trzeba postawić szkutnię.';if((S.res.lodz||0)<1)return'Nie ma wolnej łodzi. Szkutnia musi ją najpierw zbudować.';if(S.exps.some(e=>e.type==='rejs'))return'Jedna łódź jest już w rejsie.';if(e2RejsCands().length<3)return'Za mało wolnych, zdrowych ludzi (3).';if(foodTotal()<K*3*4)return'Za mało jedzenia na drogę.';return''}
+function e2RejsWhy(){if(!hasDone('szkutnia'))return'Najpierw trzeba postawić szkutnię.';if((S.res.lodz||0)<1)return'Nie ma wolnej łodzi. Szkutnia musi ją najpierw zbudować.';if(S.exps.some(e=>e.type==='rejs'))return'Jedna łódź jest już w rejsie.';if(e2RejsCands().length<3)return'Za mało wolnych, zdrowych ludzi (3).';if(foodTotal()<Math.ceil(K*3*4))return'Za mało jedzenia na drogę.';if(!expSeaExit(e2RejsCands()))return'Brak drogi do szkutni — odblokuj dojście załogi.';return''}
 function e2Rejs(){const why=e2RejsWhy();if(why){toast(why);return}const sz=S.bld.find(b=>b.kind==='szkutnia'&&bDone(b));const ppl=e2RejsCands();const days=4,food=Math.ceil(K*3*days);
- const tot=foodTotal();FOOD.forEach(k=>{S.res[k]-=food*(S.res[k]/tot)});S.res.lodz-=1;const ex=entryOf(sz.kind,sz.i,sz.j)||[camp.i,camp.j];
- const arc=(S.e2.rejsy||0)%3;const e={id:(S.expN=(S.expN||0)+1),r:0,type:'rejs',ppl:ppl.map(p=>p.id),days,left:days,exit:ex,risk:.08*wxSea()*(seasonIdx()===2?1.6:1),arc};S.exps.push(e);
+ const ex=expSeaExit(ppl),departure=ex&&expCharge(ppl,food,1);if(!departure)return;
+ const arc=(S.e2.rejsy||0)%3;const e={id:(S.expN=(S.expN||0)+1),r:0,type:'rejs',ppl:ppl.map(p=>p.id),days,left:days,exit:ex,departure,started:false,risk:.08*wxSea()*(seasonIdx()===2?1.6:1),arc};S.exps.push(e);
  ppl.forEach(p=>{release(p);p.path=null;p.state='idle';p.wait=0;p.job='wyp';p.wb=null;p.exp=e.id;p.act='wypływa w rejs wzdłuż brzegu'});
  log(`Łódź wypływa w rejs wzdłuż brzegu. Płyną: ${ppl.map(p=>p.name).join(', ')}. Wrócą za ${days} dni.`);toast('Łódź wypłynęła');assign();renderPanel()}
 {const _fe=finishExp;finishExp=function(e,out){if(e.type!=='rejs')return _fe(e,out);S.exps=S.exps.filter(x=>x!==e);const lines=[];
@@ -196,7 +196,7 @@ function e2Rejs(){const why=e2RejsWhy();if(why){toast(why);return}const sz=S.bld
  lines.unshift(['Opłynęli cypel, za którym nikt z nas jeszcze nie był.','Na skałach przy brzegu siedziały setki ptaków.','Morze było spokojne, a woda tak czysta, że widać było dno.','Trzy dni wiał wiatr od lądu i ledwo wrócili.'][(Math.random()*4)|0]);
  lines.push(`Przywieźli: ryby ${ry}, skóry fok ${sk}${dr?', drewno z wyrzutów '+dr:''}.`);if(rv)lines.push('Na mapie przybyło wybrzeża.');if(lost)lines.push('Łodzi nie udało się uratować: rozbiła się o skały przy powrocie. Ludzie wrócili brzegiem.');
  S.e2.rejsy=(S.e2.rejsy||0)+1;techXp('nauka',10);
- out.forEach(p=>{p.job='rob';p.exp=null;p.state='idle';const st=e.exit;p.x=tcx(st[0]);p.z=tcx(st[1]);p.wait=.2});
+ out.forEach(p=>{expReturn(p,e)});
  S.expLog=S.expLog||[];S.expLog.unshift({d:Math.floor(S.day)+1,r:'Rejs wzdłuż brzegu',t:lines.join(' ')});if(S.expLog.length>8)S.expLog.pop();
  log('Rejs wraca. '+lines.join(' '));toast('Łódź wróciła z rejsu');if(S.e2.rejsy===1)song('Pieśń o pierwszym rejsie');assign();renderPanel()}}
 {const _eh=expHTML;expHTML=function(){let h=_eh();if(!S||!S.e2||S.path!=='morze')return h;const why=e2RejsWhy();const on=S.exps.find(e=>e.type==='rejs');

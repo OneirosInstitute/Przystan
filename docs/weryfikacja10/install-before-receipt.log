@@ -1,0 +1,367 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> przystan@4.0.0-rc.10 test:install
+> node tools/check-build.cjs && node tools/run-tests-serial.cjs --install
+
+Compiled scripts: syntax PASS
+TEST PLAN: 47 suites, 2 worker(s), install
+TEST SUITE: ai-contract.test.mjs
+TEST SUITE: ai-life.test.mjs
+[ai-contract.test.mjs] ✔ one waiting cause is shared by person, workshop and production task (1240.166867ms)
+[ai-contract.test.mjs] ✔ workshop task navigation selects the exact building among duplicates (1082.578005ms)
+[ai-contract.test.mjs] ✔ recovery has priority over emergency field work and village routines (1011.292728ms)
+[ai-contract.test.mjs] ✔ cargo delivery remains first during recovery and preparations for the next epoch (961.473721ms)
+[ai-contract.test.mjs] ✔ death releases a station without an orphan reservation (1041.888594ms)
+[ai-contract.test.mjs] ✔ restart clears transient positions and replans without manufacturing goods (1087.899209ms)
+[ai-contract.test.mjs] ✔ urgent harvest helpers can earn real work at a reached field station (1207.130521ms)
+[ai-contract.test.mjs] ✔ epoch IV rest actions retain their own phase instead of appearing as production (1135.975877ms)
+[ai-contract.test.mjs] ℹ tests 8
+[ai-contract.test.mjs] ℹ suites 0
+[ai-contract.test.mjs] ℹ pass 8
+[ai-contract.test.mjs] ℹ fail 0
+[ai-contract.test.mjs] ℹ cancelled 0
+[ai-contract.test.mjs] ℹ skipped 0
+[ai-contract.test.mjs] ℹ todo 0
+[ai-contract.test.mjs] ℹ duration_ms 8913.74884
+TEST SUITE PASS: ai-contract.test.mjs (1/47)
+TEST SUITE: ai-movement.test.mjs
+[ai-movement.test.mjs] ✔ a new construction invalidates a live route before entering its footprint (1255.196058ms)
+[ai-movement.test.mjs] ✔ a disconnected meal and evening do not earn attendance or preserves (1239.06112ms)
+[ai-movement.test.mjs] ✔ completed meal requires time and consumes real food without making new stock (1256.45027ms)
+[ai-movement.test.mjs] ✔ a distant sleeping master cannot teach; a present working master can (995.621402ms)
+[ai-movement.test.mjs] ℹ tests 4
+[ai-movement.test.mjs] ℹ suites 0
+[ai-movement.test.mjs] ℹ pass 4
+[ai-movement.test.mjs] ℹ fail 0
+[ai-movement.test.mjs] ℹ cancelled 0
+[ai-movement.test.mjs] ℹ skipped 0
+[ai-movement.test.mjs] ℹ todo 0
+[ai-movement.test.mjs] ℹ duration_ms 4896.427339
+TEST SUITE PASS: ai-movement.test.mjs (2/47)
+TEST SUITE: ai-policy.test.mjs
+[ai-policy.test.mjs] ✔ a configured target replaces the recipe default (1268.683726ms)
+[ai-policy.test.mjs] ✔ all grain processors expose shortages while protecting seed (1111.412817ms)
+[ai-policy.test.mjs] ✔ winter and damaged workshops give an explicit non-shortage blocker (1079.546837ms)
+[ai-policy.test.mjs] ℹ tests 3
+[ai-policy.test.mjs] ℹ suites 0
+[ai-policy.test.mjs] ℹ pass 3
+[ai-policy.test.mjs] ℹ fail 0
+[ai-policy.test.mjs] ℹ cancelled 0
+[ai-policy.test.mjs] ℹ skipped 0
+[ai-policy.test.mjs] ℹ todo 0
+[ai-policy.test.mjs] ℹ duration_ms 3609.158497
+TEST SUITE PASS: ai-policy.test.mjs (3/47)
+TEST SUITE: ai-specialties.test.mjs
+[ai-specialties.test.mjs] {"scenario":"11-town-specialties","days":200,"resupply":0,"results":[{"specialty":"rolniczy","product":"chleb","quantity":768,"living":30},{"specialty":"winiarski","product":"wino","quantity":64,"living":30},{"specialty":"browarniczy","product":"piwo","quantity":156,"living":30},{"specialty":"miesny","product":"wedliny","quantity":32,"living":29},{"specialty":"hodowlany","product":"ser","quantity":70,"living":30},{"specialty":"hutniczy","product":"narz","quantity":74,"living":30},{"specialty":"drzewny","product":"wyroby_drewniane","quantity":112,"living":31},{"specialty":"tkacki","product":"odziez","quantity":60,"living":33},{"specialty":"garncarski","product":"naczynia","quantity":60,"living":30},{"specialty":"sadowniczy","product":"jablka","quantity":577.17,"living":32},{"specialty":"zielarski","product":"leki","quantity":70,"living":33}]}
+[ai-specialties.test.mjs] ✔ all eleven specialties bootstrap their main product from settlement supplies without resupply (13917.650622ms)
+[ai-specialties.test.mjs] ✔ grain reserves, exhausted ore and stone-tool substitution have explicit outcomes (1309.422098ms)
+[ai-specialties.test.mjs] ℹ tests 2
+[ai-specialties.test.mjs] ℹ suites 0
+[ai-specialties.test.mjs] ℹ pass 2
+[ai-specialties.test.mjs] ℹ fail 0
+[ai-specialties.test.mjs] ℹ cancelled 0
+[ai-specialties.test.mjs] ℹ skipped 0
+[ai-specialties.test.mjs] ℹ todo 0
+[ai-specialties.test.mjs] ℹ duration_ms 15400.99266
+TEST SUITE PASS: ai-specialties.test.mjs (4/47)
+TEST SUITE: autosave.test.mjs
+[ai-life.test.mjs] {"scenario":"large-farm-commute","workers":200,"fields":200,"harvested":196}
+[ai-life.test.mjs] ✔ the map cannot move Epoka IV people and pause preserves model positions (4076.089065ms)
+[ai-life.test.mjs] ✔ an unreachable Epoka IV workplace earns no work or production (1318.695266ms)
+[ai-life.test.mjs] ✔ recovery reconciles legacy hunger, fever, injury and warmth (3831.082696ms)
+[ai-life.test.mjs] ✔ autonomy counts owned carts and does not consume materials for a seventy-first cart (1590.933842ms)
+[ai-life.test.mjs] ✔ mastery produces more per hour while conserving source and hours (1477.104579ms)
+[ai-life.test.mjs] ✔ household goods are consumed with finite stocks and measurable household effects (1384.903042ms)
+[ai-life.test.mjs] ✔ visual stage updates without reloading and joints remain part of the same identity (1387.303459ms)
+[ai-life.test.mjs] ✔ gait advances with distance; pausing freezes the pose (1420.779568ms)
+[ai-life.test.mjs] ✔ the action route and phase survive a real save and restart without moving during rendering (6347.988912ms)
+[ai-life.test.mjs] ✔ a scheduled lesson requires an available teacher and actual arrival (1341.929369ms)
+[ai-life.test.mjs] ✔ recorded hours cannot be reassigned from mining to another production chain (1339.737586ms)
+[ai-life.test.mjs] ✔ processing reserves protect milk when other food is sufficient and release it during hunger (1357.035715ms)
+[ai-life.test.mjs] ✔ marriage migration reserves housing and food and cannot empty a working community (1376.189343ms)
+[ai-life.test.mjs] ✔ a fully tended cereal crop matures in six growing days despite clock rounding (1711.829951ms)
+[ai-life.test.mjs] ✔ a large farm keeps its fields within a real working day instead of losing harvests to commuting (3414.741594ms)
+[ai-life.test.mjs] ✔ autonomy expands housing only after completed grain fields and eight days of edible food (1310.899843ms)
+[ai-life.test.mjs] ℹ tests 16
+[ai-life.test.mjs] ℹ suites 0
+[ai-life.test.mjs] ℹ pass 16
+[ai-life.test.mjs] ℹ fail 0
+[ai-life.test.mjs] ℹ cancelled 0
+[ai-life.test.mjs] ℹ skipped 0
+[ai-life.test.mjs] ℹ todo 0
+[ai-life.test.mjs] ℹ duration_ms 34853.292484
+TEST SUITE PASS: ai-life.test.mjs (5/47)
+TEST SUITE: build-deploy.test.mjs
+[build-deploy.test.mjs] ✔ RC10 deployment targets the verified RC9 checkpoint in every release guard (6.481236ms)
+[build-deploy.test.mjs] ✔ package integrity detects missing, changed and out-of-root files (6.541927ms)
+[build-deploy.test.mjs] ✔ deployment preflight checks identity, branch, base and user changes with read-only git calls (1.006076ms)
+[build-deploy.test.mjs] ✔ asset-only changes invalidate the PWA version; UI viewport permits zoom (261.831695ms)
+[build-deploy.test.mjs] ℹ tests 4
+[build-deploy.test.mjs] ℹ suites 0
+[build-deploy.test.mjs] ℹ pass 4
+[build-deploy.test.mjs] ℹ fail 0
+[build-deploy.test.mjs] ℹ cancelled 0
+[build-deploy.test.mjs] ℹ skipped 0
+[build-deploy.test.mjs] ℹ todo 0
+[build-deploy.test.mjs] ℹ duration_ms 372.60136
+TEST SUITE PASS: build-deploy.test.mjs (6/47)
+TEST SUITE: building-missions.test.mjs
+[building-missions.test.mjs] ✔ building missions require a completed building and an assigned adult (1256.577114ms)
+[building-missions.test.mjs] ✔ building mission cannot be dispatched twice without consuming more food (1176.644544ms)
+[building-missions.test.mjs] ✔ mission payload survives validated save serialization (1055.778256ms)
+[building-missions.test.mjs] ✔ returning explorer transfers one real wild goat without exceeding the pen and resumes work (1060.892157ms)
+[building-missions.test.mjs] ℹ tests 4
+[building-missions.test.mjs] ℹ suites 0
+[building-missions.test.mjs] ℹ pass 4
+[building-missions.test.mjs] ℹ fail 0
+[building-missions.test.mjs] ℹ cancelled 0
+[building-missions.test.mjs] ℹ skipped 0
+[building-missions.test.mjs] ℹ todo 0
+[building-missions.test.mjs] ℹ duration_ms 4692.064681
+TEST SUITE PASS: building-missions.test.mjs (7/47)
+TEST SUITE: daily-pipeline.test.mjs
+[daily-pipeline.test.mjs] ✔ daily phases retain their existing order and capture fuel before the core (1594.871761ms)
+[daily-pipeline.test.mjs] ✔ the daily checkpoint includes every completed daily phase (1529.96336ms)
+[daily-pipeline.test.mjs] ✔ core failure restores temporary spoilage settings and does not save a partial day (1281.494813ms)
+[daily-pipeline.test.mjs] ✔ a failed optional daily phase is reported and later phases still run (1554.866138ms)
+[daily-pipeline.test.mjs] ℹ tests 4
+[daily-pipeline.test.mjs] ℹ suites 0
+[daily-pipeline.test.mjs] ℹ pass 4
+[daily-pipeline.test.mjs] ℹ fail 0
+[daily-pipeline.test.mjs] ℹ cancelled 0
+[daily-pipeline.test.mjs] ℹ skipped 0
+[daily-pipeline.test.mjs] ℹ todo 0
+[daily-pipeline.test.mjs] ℹ duration_ms 6093.939005
+TEST SUITE PASS: daily-pipeline.test.mjs (8/47)
+TEST SUITE: departure-master.test.mjs
+[departure-master.test.mjs] ✔ sea dispatch refuses an unreachable shipyard before charging food or boats (1108.492509ms)
+[departure-master.test.mjs] ✔ cancelling preparation refunds the exact paid quantities once and survives a real restart (1431.629644ms)
+[departure-master.test.mjs] ✔ first departure irreversibly closes cancellation and forged refunds are rejected (1013.780216ms)
+[departure-master.test.mjs] ✔ legacy expeditions never fabricate a refundable payment history (1004.775424ms)
+[departure-master.test.mjs] ✔ returners use separate safe land tiles and rewards cannot be granted twice (972.120374ms)
+[departure-master.test.mjs] ✔ blocked return holds all outcome wrappers until a safe home entry exists (1180.283275ms)
+[autosave.test.mjs] ✔ starting a new settlement immediately persists the completed boot state (1433.794664ms)
+[autosave.test.mjs] ✔ real-time autosave persists paused play within 15 seconds and survives restart (3094.94518ms)
+[autosave.test.mjs] ✔ water hauling is saved by the timer, resumed after restart and delivered exactly once (4122.551852ms)
+[autosave.test.mjs] ✔ background and page-exit callbacks persist the current state without manual save (4208.679177ms)
+[autosave.test.mjs] ✔ autosave preserves a good snapshot on storage error and retries successfully (1554.191255ms)
+[autosave.test.mjs] ✔ automatic triggers never overwrite an unreadable existing save (1431.816786ms)
+[autosave.test.mjs] ✔ water exception accepts only the real zero-quantity chore marker (1328.653087ms)
+[autosave.test.mjs] ✔ manual save reports success only after storage accepts the snapshot (1341.515288ms)
+[autosave.test.mjs] ✔ a water carrier retains the trip overnight and finishes after reassignment (1385.006304ms)
+[departure-master.test.mjs] ℹ tests 6
+[departure-master.test.mjs] ℹ suites 0
+[departure-master.test.mjs] ℹ pass 6
+[departure-master.test.mjs] ℹ fail 0
+[departure-master.test.mjs] ℹ cancelled 0
+[departure-master.test.mjs] ℹ skipped 0
+[departure-master.test.mjs] ℹ todo 0
+[departure-master.test.mjs] ℹ duration_ms 6841.371817
+TEST SUITE PASS: departure-master.test.mjs (9/47)
+TEST SUITE: deploy-runner.test.mjs
+[autosave.test.mjs] ℹ tests 9
+[autosave.test.mjs] ℹ suites 0
+[autosave.test.mjs] ℹ pass 9
+[autosave.test.mjs] ℹ fail 0
+[autosave.test.mjs] ℹ cancelled 0
+[autosave.test.mjs] ℹ skipped 0
+[autosave.test.mjs] ℹ todo 0
+[autosave.test.mjs] ℹ duration_ms 20064.83563
+TEST SUITE PASS: autosave.test.mjs (10/47)
+TEST SUITE: e4-domain.test.mjs
+[deploy-runner.test.mjs] ✔ deployment runner validates options, resource limits and complete successful reports (2.515711ms)
+[deploy-runner.test.mjs] ✔ public install CLI runs every independent suite once with at most two overlapping processes (2538.61518ms)
+[deploy-runner.test.mjs] ✔ a red suite cancels active work and prevents the next suite and a green gate (718.804161ms)
+[e4-domain.test.mjs] ✔ E4 migration retains living identities, kinship, possessions and all ordinary homes (1360.847732ms)
+[e4-domain.test.mjs] ✔ legacy hamlet residents become persistent people with unknown history explicitly marked (1278.209957ms)
+[e4-domain.test.mjs] ✔ all people have exactly one household, clan and settlement; duplicate or orphan references fail validation (1250.981543ms)
+[e4-domain.test.mjs] ✔ repeated migration and save reload preserve one balance and the same identifiers (1356.48151ms)
+[e4-domain.test.mjs] ℹ tests 4
+[e4-domain.test.mjs] ℹ suites 0
+[e4-domain.test.mjs] ℹ pass 4
+[e4-domain.test.mjs] ℹ fail 0
+[e4-domain.test.mjs] ℹ cancelled 0
+[e4-domain.test.mjs] ℹ skipped 0
+[e4-domain.test.mjs] ℹ todo 0
+[e4-domain.test.mjs] ℹ duration_ms 5389.649544
+TEST SUITE PASS: e4-domain.test.mjs (11/47)
+TEST SUITE: e4-economy.test.mjs
+[deploy-runner.test.mjs] ✔ timeout terminates the test process group including a resource-writing descendant (2460.218208ms)
+[deploy-runner.test.mjs] ✔ test discovery rejects empty plans and symlinks before starting a child (7.367944ms)
+[deploy-runner.test.mjs] ✔ install mode preserves the legacy migration test and full mode retains both extended scenarios (460.717106ms)
+[deploy-runner.test.mjs] ℹ tests 6
+[deploy-runner.test.mjs] ℹ suites 0
+[deploy-runner.test.mjs] ℹ pass 6
+[deploy-runner.test.mjs] ℹ fail 0
+[deploy-runner.test.mjs] ℹ cancelled 0
+[deploy-runner.test.mjs] ℹ skipped 0
+[deploy-runner.test.mjs] ℹ todo 0
+[deploy-runner.test.mjs] ℹ duration_ms 6282.352045
+TEST SUITE PASS: deploy-runner.test.mjs (12/47)
+TEST SUITE: e4-integration.test.mjs
+[e4-economy.test.mjs] ✔ one shipment moves real stock and is delivered once after a save and reload (1554.033429ms)
+[e4-economy.test.mjs] ✔ failed transport contracts do not debit the source or allocate workers (1226.620589ms)
+[e4-economy.test.mjs] ✔ founding physically moves the same family, constructs an ancestral home and preserves old town houses (1310.275905ms)
+[e4-economy.test.mjs] ✔ transport and construction have the same result under different clock subdivisions (1293.350718ms)
+[e4-economy.test.mjs] ✔ wine uses grapes, a barrel, worker time and fermentation; restart cannot duplicate the batch (1331.434891ms)
+[e4-economy.test.mjs] ✔ a field consumes seed, requires care, grows and produces a finite harvest (1246.20736ms)
+[e4-economy.test.mjs] ✔ processing without inputs or workers cannot create goods (1317.017567ms)
+[e4-economy.test.mjs] ✔ every recipe consumes its inputs and produces one delayed result (1623.809679ms)
+[e4-economy.test.mjs] ✔ livestock has identities, wild capture, reproduction and irreversible slaughter (4271.865479ms)
+[e4-economy.test.mjs] ✔ nature is shared by region and generations advance without replacing residents (1287.038865ms)
+[e4-economy.test.mjs] ✔ full destination rejects transport and full store delays harvesting without losing crops (1450.080278ms)
+[e4-economy.test.mjs] ✔ a vineyard requires a successful trial, matures slowly and feeds actual wine production (1574.599452ms)
+[e4-economy.test.mjs] ℹ tests 12
+[e4-economy.test.mjs] ℹ suites 0
+[e4-economy.test.mjs] ℹ pass 12
+[e4-economy.test.mjs] ℹ fail 0
+[e4-economy.test.mjs] ℹ cancelled 0
+[e4-economy.test.mjs] ℹ skipped 0
+[e4-economy.test.mjs] ℹ todo 0
+[e4-economy.test.mjs] ℹ duration_ms 19647.612119
+TEST SUITE PASS: e4-economy.test.mjs (13/47)
+TEST SUITE: e4-population.test.mjs
+[e4-population.test.mjs] ✔ legacy twins survive migration even when the old save has no surviving father identity (1551.634174ms)
+[e4-population.test.mjs] ℹ tests 1
+[e4-population.test.mjs] ℹ suites 0
+[e4-population.test.mjs] ℹ pass 1
+[e4-population.test.mjs] ℹ fail 0
+[e4-population.test.mjs] ℹ cancelled 0
+[e4-population.test.mjs] ℹ skipped 0
+[e4-population.test.mjs] ℹ todo 0
+[e4-population.test.mjs] ℹ duration_ms 1719.895485
+TEST SUITE PASS: e4-population.test.mjs (14/47)
+TEST SUITE: e4-world.test.mjs
+[e4-world.test.mjs] ✔ E4 world has four times the map area, stable terrain and distinct functional regions (5.806169ms)
+[e4-world.test.mjs] ✔ E4 core preserves old inhabited land and the landing bay remains open (2.453026ms)
+[e4-world.test.mjs] ✔ roads follow land, survive world serialization and do not cut through sea (6.769891ms)
+[e4-world.test.mjs] ✔ world rejects invalid imported dimensions and oversized or nonfinite core samples (0.489597ms)
+[e4-world.test.mjs] ℹ tests 4
+[e4-world.test.mjs] ℹ suites 0
+[e4-world.test.mjs] ℹ pass 4
+[e4-world.test.mjs] ℹ fail 0
+[e4-world.test.mjs] ℹ cancelled 0
+[e4-world.test.mjs] ℹ skipped 0
+[e4-world.test.mjs] ℹ todo 0
+[e4-world.test.mjs] ℹ duration_ms 110.30251
+TEST SUITE PASS: e4-world.test.mjs (15/47)
+TEST SUITE: economy-master.test.mjs
+[e4-integration.test.mjs] ✔ Epoka IV unlocks after III, retains the settlement and saves through the real game decoder (12301.852016ms)
+[e4-integration.test.mjs] ✔ all estate buildings have working 3D models and every Epoka IV panel renders (3643.61147ms)
+[e4-integration.test.mjs] ✔ migration completes paid legacy work and carts once and preserves the remaining ripe harvest (6636.937873ms)
+[e4-integration.test.mjs] ℹ tests 3
+[e4-integration.test.mjs] ℹ suites 0
+[e4-integration.test.mjs] ℹ pass 3
+[e4-integration.test.mjs] ℹ fail 0
+[e4-integration.test.mjs] ℹ cancelled 0
+[e4-integration.test.mjs] ℹ skipped 0
+[e4-integration.test.mjs] ℹ todo 0
+[e4-integration.test.mjs] ℹ duration_ms 22773.489446
+TEST SUITE PASS: e4-integration.test.mjs (16/47)
+TEST SUITE: flow-integration.test.mjs
+[economy-master.test.mjs] ✔ all required recipe and construction inputs have sources and every crafted product has a consumer (1.771229ms)
+[economy-master.test.mjs] ✔ chain diagnostics name the actual missing input and finite depleted source without mutating state (1385.002321ms)
+[economy-master.test.mjs] ✔ a missing-input chain resumes after resupply and restart without charging or completing twice (1338.167123ms)
+[economy-master.test.mjs] ℹ tests 3
+[economy-master.test.mjs] ℹ suites 0
+[economy-master.test.mjs] ℹ pass 3
+[economy-master.test.mjs] ℹ fail 0
+[economy-master.test.mjs] ℹ cancelled 0
+[economy-master.test.mjs] ℹ skipped 0
+[economy-master.test.mjs] ℹ todo 0
+[economy-master.test.mjs] ℹ duration_ms 2851.216024
+TEST SUITE PASS: economy-master.test.mjs (17/47)
+TEST SUITE: lifecycle.test.mjs
+[flow-integration.test.mjs] ✔ real E4 deliveries do not inflate production at either warehouse (1499.603998ms)
+[flow-integration.test.mjs] ✔ observation preserves every gameplay result across an E4 simulation (1410.187562ms)
+[flow-integration.test.mjs] ✔ actual legacy gathering, wreck recovery and pantry transfers have distinct accounting (1250.984829ms)
+[flow-integration.test.mjs] ℹ tests 3
+[flow-integration.test.mjs] ℹ suites 0
+[flow-integration.test.mjs] ℹ pass 3
+[flow-integration.test.mjs] ℹ fail 0
+[flow-integration.test.mjs] ℹ cancelled 0
+[flow-integration.test.mjs] ℹ skipped 0
+[flow-integration.test.mjs] ℹ todo 0
+[flow-integration.test.mjs] ℹ duration_ms 4317.500373
+TEST SUITE PASS: flow-integration.test.mjs (18/47)
+TEST SUITE: mechanics.test.mjs
+[lifecycle.test.mjs] ✔ hiding stops the render scheduler, autosave timer and simulation while retaining the exit save (1462.869728ms)
+[lifecycle.test.mjs] ✔ pagehide and freeze stop independently; returning starts exactly one loop without catching up time (3040.777449ms)
+[lifecycle.test.mjs] ✔ a hidden page cannot be restarted by pageshow/resume until it becomes visible (1394.099529ms)
+[lifecycle.test.mjs] ✔ delayed story retries sleep in the background and continue after return (1355.661036ms)
+[lifecycle.test.mjs] ✔ sound follows lifecycle even if a suspend finishes after the app has returned (1415.338685ms)
+[lifecycle.test.mjs] ✔ a hidden initial load does not schedule frames, timers, audio or render an intro snapshot (941.090164ms)
+[lifecycle.test.mjs] ✔ one successful exit save covers visibility/pagehide/freeze; a failed exit save can retry (1433.974921ms)
+[lifecycle.test.mjs] ✔ hiding aborts an outstanding weekly request and prevents new background requests (1267.320782ms)
+[lifecycle.test.mjs] ℹ tests 8
+[lifecycle.test.mjs] ℹ suites 0
+[lifecycle.test.mjs] ℹ pass 8
+[lifecycle.test.mjs] ℹ fail 0
+[lifecycle.test.mjs] ℹ cancelled 0
+[lifecycle.test.mjs] ℹ skipped 0
+[lifecycle.test.mjs] ℹ todo 0
+[lifecycle.test.mjs] ℹ duration_ms 12473.026578
+TEST SUITE PASS: lifecycle.test.mjs (19/47)
+TEST SUITE: menu-workspace.test.mjs
+[mechanics.test.mjs] ✔ reassigning builders releases reserved slots, including travel (1220.503955ms)
+[mechanics.test.mjs] ✖ a saved delivery reaches its warehouse along a path after the workday ends (1117.17984ms)
+[mechanics.test.mjs] ✔ midnight preserves material delivery and reserves it once after restart (1035.113469ms)
+[mechanics.test.mjs] ✔ full storage conserves deliveries and represents excess consistently (1036.009366ms)
+[mechanics.test.mjs] ✔ ration priorities redistribute exactly the existing food equivalent (998.806413ms)
+[mechanics.test.mjs] ✔ unfeasible workshop helps without repeatedly planning production (1080.829999ms)
+[mechanics.test.mjs] ✔ food emergency policy reaches the last planner and releases active builders (990.186615ms)
+[mechanics.test.mjs] ✔ unreachable and night deliveries retain ownership instead of teleporting (974.317131ms)
+[mechanics.test.mjs] ✔ feast consumes exactly 60 and insufficient food gives no feast reward (1020.871113ms)
+[mechanics.test.mjs] ✔ forgotten technology cannot satisfy a new prerequisite (1078.681964ms)
+[mechanics.test.mjs] ✔ led goat survives restart, full pen and removal of its destination (1139.220486ms)
+[mechanics.test.mjs] ℹ tests 11
+[mechanics.test.mjs] ℹ suites 0
+[mechanics.test.mjs] ℹ pass 10
+[mechanics.test.mjs] ℹ fail 1
+[mechanics.test.mjs] ℹ cancelled 0
+[mechanics.test.mjs] ℹ skipped 0
+[mechanics.test.mjs] ℹ todo 0
+[mechanics.test.mjs] ℹ duration_ms 11835.95408
+[mechanics.test.mjs] 
+[mechanics.test.mjs] ✖ failing tests:
+[mechanics.test.mjs] 
+[mechanics.test.mjs] test at tests/mechanics.test.mjs:11:1
+[mechanics.test.mjs] ✖ a saved delivery reaches its warehouse along a path after the workday ends (1117.17984ms)
+[mechanics.test.mjs]   AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+[mechanics.test.mjs]   
+[mechanics.test.mjs]   22 !== 28
+[mechanics.test.mjs]   
+[mechanics.test.mjs]       at TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/master_rc10_20261018/source/Przystan_4.0.0_RC10_MASTER/tests/mechanics.test.mjs:15:9)
+[mechanics.test.mjs]       at Test.runInAsyncScope (node:async_hooks:227:14)
+[mechanics.test.mjs]       at Test.run (node:internal/test_runner/test:1382:25)
+[mechanics.test.mjs]       at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+[mechanics.test.mjs]       at Test.postRun (node:internal/test_runner/test:1522:19)
+[mechanics.test.mjs]       at Test.run (node:internal/test_runner/test:1447:12)
+[mechanics.test.mjs]       at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+[mechanics.test.mjs]     generatedMessage: true,
+[mechanics.test.mjs]     code: 'ERR_ASSERTION',
+[mechanics.test.mjs]     actual: 22,
+[mechanics.test.mjs]     expected: 28,
+[mechanics.test.mjs]     operator: 'strictEqual',
+[mechanics.test.mjs]     diff: 'simple'
+[mechanics.test.mjs]   }
+[menu-workspace.test.mjs] 
+[menu-workspace.test.mjs] Interrupted while running:
+[menu-workspace.test.mjs] 
+[menu-workspace.test.mjs] ⚠ /workspace/scratch/9e1bb3f2c27d/master_rc10_20261018/source/Przystan_4.0.0_RC10_MASTER/tests/menu-workspace.test.mjs (tests/menu-workspace.test.mjs:1:1)
+[menu-workspace.test.mjs] ✖ /workspace/scratch/9e1bb3f2c27d/master_rc10_20261018/source/Przystan_4.0.0_RC10_MASTER/tests/menu-workspace.test.mjs (2791.293248ms)
+[menu-workspace.test.mjs] ℹ tests 1
+[menu-workspace.test.mjs] ℹ suites 0
+[menu-workspace.test.mjs] ℹ pass 0
+[menu-workspace.test.mjs] ℹ fail 0
+[menu-workspace.test.mjs] ℹ cancelled 1
+[menu-workspace.test.mjs] ℹ skipped 0
+[menu-workspace.test.mjs] ℹ todo 0
+[menu-workspace.test.mjs] ℹ duration_ms 2797.571321
+[menu-workspace.test.mjs] 
+[menu-workspace.test.mjs] ✖ failing tests:
+[menu-workspace.test.mjs] 
+[menu-workspace.test.mjs] test at tests/menu-workspace.test.mjs:1:1
+[menu-workspace.test.mjs] ✖ /workspace/scratch/9e1bb3f2c27d/master_rc10_20261018/source/Przystan_4.0.0_RC10_MASTER/tests/menu-workspace.test.mjs (2791.293248ms)
+[menu-workspace.test.mjs]   'Promise resolution is still pending but the event loop has already resolved'
+TEST GATE FAILED: mechanics.test.mjs: exit=1, signal=null

@@ -416,20 +416,22 @@ const bCenter=b=>{const d=BD[b.kind];return{x:tcx(b.i)+(d.w-1)/2,z:tcx(b.j)+(d.h
 const pGroup=new THREE.Group();scene.add(pGroup);
 const skinC=[0xe0b896,0xd0a07c,0xe8c4a2,0xb07e60];const hairC=[0x3a2a1c,0x6b4a2a,0x1e1a17,0x8a6a3a,0xc4bcb0];
 const shadowMat=new THREE.MeshBasicMaterial({map:softTex,color:0x000000,transparent:true,opacity:.35,depthWrite:false});
-function makePersonMesh(p){const g=new THREE.Group();
- const cl=M(p.cloth),sk=M(skinC[p.id%4]),pants=M(p.sex==='k'?0x5a4a3e:0x46423a);
- const torso=mesh(new THREE.CylinderGeometry(.12,p.sex==='k'?.19:.15,p.sex==='k'?.5:.42,7),cl,0,p.sex==='k'?.55:.58,0);
- const head=mesh(new THREE.SphereGeometry(.105,8,6),sk,0,.9,0);
- const hair=mesh(new THREE.SphereGeometry(.112,8,5,0,6.283,0,p.sex==='k'?1.9:1.4),M(p.age>55?hairC[4]:hairC[p.id%4]),0,.92,-.012);
- const lL=mesh(new THREE.BoxGeometry(.08,.36,.09).translate(0,-.16,0),pants,-.06,.37,0),lR=mesh(new THREE.BoxGeometry(.08,.36,.09).translate(0,-.16,0),pants,.06,.37,0);
- const aL=mesh(new THREE.BoxGeometry(.06,.32,.07).translate(0,-.14,0),cl,-.17,.74,0),aR=mesh(new THREE.BoxGeometry(.06,.32,.07).translate(0,-.14,0),cl,.17,.74,0);
- g.add(torso,head,hair,lL,lR,aL,aR);
- if(p.age>=12&&p.sex==='m'&&p.id%2===0)g.add(mesh(new THREE.CylinderGeometry(.17,.17,.03,10),M(0x5a4630),0,1.0,0),mesh(new THREE.CylinderGeometry(.09,.1,.09,8),M(0x5a4630),0,1.05,0));
- const carry=mesh(new THREE.BoxGeometry(.24,.16,.22),M(0x8a6a40),0,.76,-.2);carry.visible=false;g.add(carry);
+function makePersonMesh(p){const g=new THREE.Group(),child=p.age<12,old=p.age>55;
+ const skin=skinC[(p.rod||p.fam||p.id)%4],hair=old?hairC[4]:hairC[p.id%4],trim=EMB[(p.rod||p.fam||p.id)%4],pants=p.sex==='k'?0x5a4a3e:0x46423a;
+ const torso=new THREE.Mesh(mdMerge([[new THREE.CylinderGeometry(.12,p.sex==='k'?.19:.15,p.sex==='k'?.5:.42,8),p.cloth,mdM(0,.09,0)],[new THREE.CylinderGeometry(.13,.15,.027,8),trim,mdM(0,.015,.002)],[new THREE.BoxGeometry(.025,.28,.015),0xd8ccb0,mdM(0,.19,.12)]]),MD.mat);torso.position.y=.5;
+ const radius=child?.109:.094,headParts=[[new THREE.SphereGeometry(radius,10,8),skin,mdM(0,.935,0,0,0,0,1,1.08,1)],[new THREE.SphereGeometry(radius+.006,10,6,0,6.283,0,p.sex==='k'?1.9:1.4),hair,mdM(0,.95,-.012)],[new THREE.CylinderGeometry(.037,.045,.08,6),skin,mdM(0,.84,0)],[new THREE.SphereGeometry(.014,5,4),skin,mdM(0,.925,.09)]];
+ [-1,1].forEach(side=>headParts.push([new THREE.BoxGeometry(.014,.009,.009),0x33271e,mdM(side*.031,.953,.087)]));
+ if(!child&&p.sex==='m'&&p.id%2===0)headParts.push([new THREE.CylinderGeometry(.155,.155,.025,10),0x5a4630,mdM(0,1.01,0)],[new THREE.CylinderGeometry(.083,.095,.08,8),0x5a4630,mdM(0,1.055,0)]);
+ if(!child&&p.sex==='k'&&p.id%3!==1)headParts.push([new THREE.SphereGeometry(.113,10,6,0,6.283,0,1.75),PM.chusta[p.id%5].color,mdM(0,.945,-.014)]);
+ if(!child&&p.sex==='m'&&p.age>=24&&p.id%3!==0)headParts.push([new THREE.BoxGeometry(.1,.06,.045),hair,mdM(0,.866,.069)]);
+ const head=new THREE.Mesh(mdMerge(headParts),MD.mat);
+ const leg=side=>{const limb=new THREE.Mesh(mdMerge([[new THREE.BoxGeometry(.075,.43,.085),pants,mdM(0,-.215,0)],[new THREE.BoxGeometry(.08,.06,.13),0x5a4630,mdM(0,-.46,.018)]]),MD.mat);limb.position.set(side*.065,.5,0);return limb;};
+ const arm=side=>{const limb=new THREE.Mesh(mdMerge([[new THREE.BoxGeometry(.065,.28,.07),p.cloth,mdM(0,-.14,0)],[new THREE.BoxGeometry(.068,.024,.073),trim,mdM(0,-.275,0)],[new THREE.SphereGeometry(.035,6,5),skin,mdM(0,-.315,.012)]]),MD.mat);limb.position.set(side*.165,.76,0);return limb;};
+ const lL=leg(-1),lR=leg(1),aL=arm(-1),aR=arm(1);g.add(torso,head,lL,lR,aL,aR);
+ const carry=mesh(new THREE.BoxGeometry(.24,.16,.22),M(0x8a6a40),0,.72,.25);carry.visible=false;g.add(carry);
  const sh=new THREE.Mesh(new THREE.PlaneGeometry(.8,.8),shadowMat);sh.rotation.x=-Math.PI/2;sh.position.y=.03;g.add(sh);
  const ring=new THREE.Mesh(new THREE.RingGeometry(.32,.4,24),new THREE.MeshBasicMaterial({color:0xf4ead0,transparent:true,opacity:.95,depthWrite:false,toneMapped:false}));ring.rotation.x=-Math.PI/2;ring.position.y=.05;ring.visible=false;g.add(ring);
- g.traverse(o=>{o.userData.pid=p.id});
- g.userData={pid:p.id,carry,torso,lL,lR,aL,aR,ring,sc:0};return g}
+ g.traverse(object=>object.userData.pid=p.id);g.userData={pid:p.id,carry,torso,head,lL,lR,aL,aR,ring,sc:0};return g;}
 let pMesh={};
 function personDetail(p){return GFX.level>0&&zoom>=.65&&Math.hypot(p.x-camT.x,p.z-camT.z)<45}
 function personProfile(p){return [p.age<12?'child':p.age<24?'young':p.age>55?'old':'adult',p.sex,p.cloth,p.rod||p.fam||p.id,personDetail(p)?1:0].join(':')}
@@ -502,7 +504,7 @@ function go(person,tile,after,target){
  }else{
   if(!tile)return false;
   if(!walk[tile[1]*N+tile[0]]){
-   if(['deposit','haulPick','haulDrop','siteDrop','away'].includes(after)){person.blocked={code:'destination_closed',reason:'Cel drogi jest zamknięty — odblokuj dojście',since:person.blocked?.since??S.t,attempts:(person.blocked?.attempts||0)+1};return false;}
+   if(['deposit','haulPick','haulDrop','siteDrop','away','kozdom'].includes(after)||(after==='chore'&&waterDelivery(person))){person.blocked={code:'destination_closed',reason:'Cel drogi jest zamknięty — odblokuj dojście',since:person.blocked?.since??S.t,attempts:(person.blocked?.attempts||0)+1};return false;}
    tile=nearestWalk(tile[0],tile[1]);if(!tile)return false;
   }
   if(target?.kind&&['prod','work','build','care','field'].includes(after)){
@@ -517,8 +519,12 @@ function go(person,tile,after,target){
  person.path=route.map(([i,j])=>({x:tcx(i)+(managed?0:(Math.random()-.5)*.35),z:tcx(j)+(managed?0:(Math.random()-.5)*.35)}));person.after=after;person.tgt=target||null;person.state='move';
  if(!person.path.length){person.path=null;onArrive(person);}return true;
 }
-function storeTile(p,food){const cands=[[camp.i,camp.j+1]];S.bld.forEach(b=>{const d=BD[b.kind];if(bDone(b)&&d.store&&(d.store==='all'||food)){cands.push(...workSiteTiles(b))}});
- const[pi,pj]=tileOf(p.x,p.z);let best=cands[0],bd=1e9;cands.forEach(c=>{const d=Math.hypot(c[0]-pi,c[1]-pj);if(walk[c[1]*N+c[0]]&&d<bd&&astar(pi,pj,c[0],c[1])){bd=d;best=c}});return bd<1e9?nearestWalk(best[0],best[1]):null}
+function storeTile(person,food){
+ const candidates=[],campEntry=campDeliveryEntry(person);if(campEntry)candidates.push(campEntry);
+ for(const building of S.bld){const definition=BD[building.kind];if(bDone(building)&&definition.store&&(definition.store==='all'||food))candidates.push(...workSiteTiles(building));}
+ const start=tileOf(person.x,person.z);candidates.sort((a,b)=>Math.hypot(a[0]-start[0],a[1]-start[1])-Math.hypot(b[0]-start[0],b[1]-start[1]));
+ return candidates.find(tile=>deliverySpotFree(person,tile)&&astar(start[0],start[1],tile[0],tile[1]))||null;
+}
 function release(p){const target=p.tgt;if(target&&target.claim>0&&target.type)target.claim--;p.tgt=null;p.after=null;p.workKind=null;
  if(target&&target.kind&&S)target.workers=S.people.filter(person=>person!==p&&person.tgt===target&&((person.state==='move'&&person.after==='build')||(person.state==='work'&&person.workKind==='build'))).length}
 function productionPolicy(building,recipe){
@@ -590,7 +596,7 @@ function onArrive(p){const a=p.after;p.after=null;p.wt=0;
  else if(a==='scout'){const[i,j]=tileOf(p.x,p.z);reveal(i,j,6);techXp('nauka',.5);p.state='idle';p.wait=4;p.act='rozgląda się'}
  else if(a==='deposit'){deposit(p);p.state='idle';p.wait=.4;p.act='odpoczywa'}
  else if(a==='sleep'){p.state='sleep';p.act='śpi'}
- else if(a==='away'){p.state='away';p.act='na wyprawie'}
+ else if(a==='away'){p.state='away';p.act='na wyprawie';const expedition=S.exps.find(candidate=>candidate.id===p.exp);if(expedition)expedition.started=true;}
  else if(a==='gasic'){p.state='work';p.workKind='gasic';p.act='gasi pożar'}
  else p.state='idle'}
 function movePerson(p,dt){
@@ -603,7 +609,7 @@ function movePerson(p,dt){
   }
   p.routeRevision=walkRevision;
   const sp=(isChild(p)?1.6:2.3)*(p.age>60?.8:1)*(.6+.4*p.hp)*(p.carry?.8:1)*(typeof ladSpeed==='function'?ladSpeed(p):1);let st=sp*dt;
-  while(st>0&&p.path.length){const w=p.path[0];if(!validSegment(p,w))break;const dx=w.x-p.x,dz=w.z-p.z,d=Math.hypot(dx,dz);if(d<=st){p.x=w.x;p.z=w.z;p.path.shift();st-=d}else{p.x+=dx/d*st;p.z+=dz/d*st;p.dir=Math.atan2(dx,dz);st=0}}
+  while(st>0&&p.path.length){const w=p.path[0];if(!validSegment(p,w))break;const dx=w.x-p.x,dz=w.z-p.z,d=Math.hypot(dx,dz);if(navPauseForCrowd(p,w,Math.min(st,d),dt))return true;const oldX=p.x,oldZ=p.z;if(d<=st){p.x=w.x;p.z=w.z;p.path.shift();st-=d}else{p.x+=dx/d*st;p.z+=dz/d*st;p.dir=Math.atan2(dx,dz);st=0}navMoved(p,oldX,oldZ);}
   {const tk=tileOf(p.x,p.z),kk=tk[1]*N+tk[0];if(kk!==p.lt){p.lt=kk;tread[kk]=Math.min(1,tread[kk]+(isChild(p)?.012:.03));treadDirty=true}}
   p.rvT=(p.rvT||0)+dt;if(p.rvT>.6){p.rvT=0;const[i,j]=tileOf(p.x,p.z);if(p.job==='zwiad')reveal(i,j,3);else if(!rev[j*N+i])reveal(i,j,3)}
   if(!p.path.length){p.path=null;onArrive(p)}return true}
@@ -638,7 +644,7 @@ function stepPerson(p,dt){
     finishTrip(p,[{res:'mieso',q:ANIMAL[h.type][2]},{res:'skory',q:ANIMAL[h.type][3]*(tech('h_garb')?1.5:1)*(hasExt(bById(p.wb),'garbarnia')?1.3:1)}])}return}
   if(k==='tame'){const h=S.herds[p.herd],b=bById(p.wb);if(!h||h.n<=0||!b){p.state='idle';return}p.wt+=dt*e*craftEff(p,'hodowca');gainXp(p,'hodowca',dt);
    if(Math.hypot(h.x-p.x,h.z-p.z)>6){p.state='idle';return}h.calm=S.t+3;
-   if(p.wt>=18){p.wt=0;b.tame=(b.tame||0)+1;if(b.tame>=3){if((b.animals||0)+S.people.filter(person=>person.kozB===b.id).reduce((sum,person)=>sum+(person.kozN||0),0)>=penCap(b)){p.state='idle';p.act='brak miejsca w zagrodzie';return}b.tame=0;h.n--;p.kozN=1;p.kozB=b.id;const e=entryOf(b.kind,b.i,b.j);if(e&&go(p,e,'kozdom',null)){p.act='prowadzi kozę do zagrody'}else kozDeliver(p)}}return}
+   if(p.wt>=18){p.wt=0;b.tame=(b.tame||0)+1;if(b.tame>=3){if((b.animals||0)+S.people.filter(person=>person.kozB===b.id).reduce((sum,person)=>sum+(person.kozN||0),0)>=penCap(b)){p.state='idle';p.act='brak miejsca w zagrodzie';return}b.tame=0;h.n--;p.kozN=1;p.kozB=b.id;const e=buildingEntryFor(p,b);if(e&&go(p,e,'kozdom',null)){p.act='prowadzi kozę do zagrody'}else kozDeliver(p)}}return}
   if(k==='care'){const b=p.tgt;if(!b||!bById(b.id)){p.state='idle';return}gainXp(p,'hodowca',dt);b.care=(b.care||0)+dt*e*craftEff(p,'hodowca');p.wt+=dt;if(p.wt>12){p.state='idle';p.wait=1}return}
   if(k==='field'){const b=p.tgt;if(!b||!bById(b.id)){p.state='idle';return}const f=b.field;gainXp(p,'rolnik',dt);p.wt+=dt*e*craftEff(p,'rolnik');
    if(f.st==='puste'){if(p.wt>=10){p.wt=0;if(S.res.ziarno>=10&&inSow()){S.res.ziarno-=10;f.st='rosnie';f.g=0;f.q=0;log('Zasiano pole. Teraz pielenie i czekanie.');fieldVis(b)}p.state='idle'}}
@@ -802,7 +808,7 @@ function legacyDayCore(){
  if(d===SD){const need=K*S.people.reduce((a,p)=>a+(p.age<12?.6:1),0);if(foodTotal()<need*8)log('Przed nami zima, a zapasów jest na mniej niż 8 dób. Trzeba więcej zbieraczy, rybaków i myśliwych.')}
  if(!S.people.length){log('Osada wymarła. Wyspa znów należy do lasu.');toast('Osada wymarła')}
  if(tab)renderPanel()}
-function step(dt){const before=Math.floor(S.day);S.day+=dt/DAY;S.t+=dt;for(const p of S.people)stepPerson(p,dt);stepHerds(dt);fireStep(dt);if(Math.floor(S.day)>before)newDay()}
+function step(dt){const before=Math.floor(S.day);S.day+=dt/DAY;S.t+=dt;navBeginStep();try{for(const p of S.people)stepPerson(p,dt)}finally{navEndStep()}stepHerds(dt);fireStep(dt);if(Math.floor(S.day)>before)newDay()}
 function stepHerds(dt){S.herds.forEach((h,k)=>{if(h.calm>S.t)return;const dx=h.tx-h.x,dz=h.tz-h.z,d=Math.hypot(dx,dz);
  if(d<.3){if(Math.random()<dt*.15){const def=herdsDef[k];const a=Math.random()*6.28,r=Math.random()*(h.type==='wilk'?16:9);const tx=tcx(def.i)+Math.cos(a)*r*(h.type==='foka'?.35:1),tz=tcx(def.j)+Math.sin(a)*r*(h.type==='foka'?.35:1);const ti=tileOf(tx,tz),tk=ti[1]*N+ti[0];if(walk[tk]&&(h.type!=='foka'||beach[tk])){h.tx=tx;h.tz=tz}}}
  else{const sp=(h.type==='zajac'?1.1:h.type==='foka'?.15:.5)*dt;h.x+=dx/d*Math.min(sp,d);h.z+=dz/d*Math.min(sp,d)}})}
@@ -827,7 +833,7 @@ function checkPlace(kind,i,j){const d=BD[kind];if(placementPeople(kind,i,j))retu
  for(let a=0;a<=d.w;a++)for(let b=0;b<=d.h;b++){const h=H[(j+b)*VW+i+a];mn=Math.min(mn,h);mx=Math.max(mx,h)}
  if(mx-mn>1.3)return false;
  if(d.shore){let w=false;for(let a=-1;a<=d.w;a++)for(let b=-1;b<=d.h;b++){const x=i+a,y=j+b;if(x>=0&&y>=0&&x<N&&y<N&&!land[y*N+x])w=true}if(!w)return false}
- return !!entryOf(kind,i,j)}
+ return !!entryOf(kind,i,j)&&!placementIsolation(kind,i,j)}
 function startPlace(kind){if(!bAvail(kind))return;placing=kind;$('cancel').style.display='block';closeSheet();select(null);
  toast(coarse?'Dotknij miejsca, potem dotknij jeszcze raz, by postawić':'Wskaż miejsce i kliknij, by postawić');
  if(ghost)scene.remove(ghost);const d=BD[kind];ghost=new THREE.Mesh(new THREE.BoxGeometry(d.w,.3,d.h),new THREE.MeshBasicMaterial({color:0x66cc66,transparent:true,opacity:.5,depthWrite:false}));ghost.visible=false;scene.add(ghost);ghostTile=null;
@@ -839,6 +845,7 @@ function moveGhost(i,j){if(!placing)return;const d=BD[placing];i=clamp(i-((d.w-1
  el.innerHTML=`<b>${d.n}</b> · ${costHTML(d.cost)}${n!==null?'<br>'+rangeLabel(placing,n):''}${ok?'':'<br><span class="no">Tu nie da się budować'+(d.shore?': pomost musi stać przy wodzie':'')+'</span>'}`}
 function tryPlace(){if(!placing||!ghostTile)return;const kind=placing,[i,j]=ghostTile,d=BD[kind];
  if(placementPeople(kind,i,j)){toast('Tu stoi mieszkaniec — poczekaj, aż odejdzie, albo wybierz inne miejsce.');return}
+ const isolation=placementIsolation(kind,i,j);if(isolation){toast(isolation);return}
  if(!checkPlace(kind,i,j)){toast(d.shore?'Pomost musi stać na brzegu, przy wodzie':'Tu nie da się budować: woda, stromizna, nieodkryty teren albo zajęte');return}
  if(!canAfford(d.cost)){toast('Brakuje: '+Object.entries(d.cost).filter(([k,v])=>(S.res[k]||0)<v).map(([k,v])=>RN[k].toLowerCase()+' '+Math.ceil(v-(S.res[k]||0))).join(', '));return}
  Object.entries(d.cost).forEach(([k,v])=>S.res[k]-=v);
@@ -981,7 +988,7 @@ function renderPanel(){
   if(buildCat==='lad'&&typeof ladBuildHTML==='function'){h+=ladBuildHTML()}else if(buildCat==='remont'){h+=`<div class="card"><h4>Remonty</h4><p>Budynki zużywają się co roku: szybciej nad morzem, na mokradłach i w górach, wolniej, gdy są wyżej ulepszone. Remont potrzebny jest zwykle co 2–3 lata.</p><p class="mut">${need.length?'Wymaga remontu: '+need.map(b=>BD[b.kind].n.toLowerCase()+' '+Math.round(condOf(b)*100)+'%').join(', ')+'.':'Wszystko w dobrym stanie.'}</p><button data-autorep="1" class="${S.autoRep!==false?'pri':''}">${S.autoRep!==false?'Remonty automatyczne: włączone':'Remonty automatyczne: wyłączone'}</button></div>`}
   else{const ks=BKEYS.filter(k=>BD[k].cat===buildCat);const kn=ks.filter(bAvail).sort((a,b)=>(canAfford(BD[b].cost)?1:0)-(canAfford(BD[a].cost)?1:0)),unk=ks.filter(k=>!bAvail(k));
    kn.forEach(k=>{const d=BD[k],cnt=S.bld.filter(b=>b.kind===k).length,ok=canAfford(d.cost);const miss=Object.entries(d.cost).filter(([r,v])=>(S.res[r]||0)<v).map(([r,v])=>RN[r].toLowerCase()+' '+Math.ceil(v-(S.res[r]||0)));
-    h+=uiDisclosure('build:'+k,d.n,`<p>${d.d}</p><div class="cost">${costHave(d.cost)}<span class="sep">·</span>${d.work} osobodni${d.wk?`<span class="sep">·</span>${d.wk} prac.`:''}${d.r?`<span class="sep">·</span>zasięg ${d.r}`:''}</div>${ok?`<button class="pri bkb" data-b="${k}">Postaw</button>`:`<button class="bkb" disabled>Brakuje: ${miss.join(', ')}</button>`}`,false,`${cnt?'Masz '+cnt+' · ':''}${ok?'Dostępny do budowy':'Potrzebne zasoby'}`)});
+    h+=`<div class="card bk" data-build-card="${k}"><h4>${d.n}</h4><p class="mut">${cnt?'Masz '+cnt+' · ':''}${ok?'Dostępny do budowy':'Potrzebne zasoby'}</p><p>${d.d}</p><div class="cost">${costHave(d.cost)}<span class="sep">·</span>${d.work} osobodni${d.wk?`<span class="sep">·</span>${d.wk} prac.`:''}${d.r?`<span class="sep">·</span>zasięg ${d.r}`:''}</div>${ok?`<button class="pri bkb" data-b="${k}">Postaw</button>`:`<button class="bkb" disabled>Brakuje: ${miss.join(', ')}</button>`}</div>`});
    if(!kn.length&&!unk.length)h+='<p class="mut">Nic tu jeszcze nie ma.</p>';
    if(unk.length)h+=`<div class="card unkc"><h4>Jeszcze nie umiecie</h4>${unk.map(k=>{const d=BD[k];return`<p><b>${d.n}</b><span>${TECH_BY[d.need]?'„'+TECH_BY[d.need].n+'” w Wiedzy':{kury:'coś, co trzeba najpierw znaleźć na wyspie',wegiel_k:'coś, co trzeba najpierw znaleźć na wyspie',sol:'coś, co trzeba najpierw znaleźć na wyspie',pole:'uprawa pola (Wiedza)',piec:'budowa pieca (Wiedza, próby)',cegla:'wypał cegły (Wiedza, próby)',kuznia:'wytop żelaza (Wiedza, próby)'}[d.need]||'potrzebna wiedza'}</span></p>`}).join('')}</div>`}}
  else if(tab==='wiedza'){const k=S.know;const mason=adultsPool().sort((a,b)=>b.sk.murarz-a.sk.murarz)[0]||S.people[0];

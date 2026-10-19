@@ -1,0 +1,24 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> przystan@4.0.0-rc.10 test:runtime
+> node tools/runtime-smoke.mjs
+
+epoch 1: 1200/2400 frames; day 1.270; restart 1
+epoch 1: 2400/2400 frames; day 2.435; restart 2
+assembled-game.js:1122
+  if(!p.path.length){p.path=null;onArrive(p)}return true}
+             ^
+
+TypeError: Cannot read properties of null (reading 'length')
+    at movePerson (assembled-game.js:1122:14)
+    at stepPerson (assembled-game.js:9894:3)
+    at stepPerson (assembled-game.js:9954:9)
+    at stepPerson (assembled-game.js:10468:9)
+    at assembled-game.js:10554:108
+    at Object.run (assembled-game.js:363:14)
+    at stepPerson (assembled-game.js:10554:88)
+    at step (assembled-game.js:1318:115)
+    at step (assembled-game.js:4839:35)
+    at step (assembled-game.js:10070:104)
+
+Node.js v24.19.0

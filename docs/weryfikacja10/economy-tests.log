@@ -1,0 +1,26 @@
+✔ one shipment moves real stock and is delivered once after a save and reload (1664.303919ms)
+✔ failed transport contracts do not debit the source or allocate workers (1391.984329ms)
+✔ founding physically moves the same family, constructs an ancestral home and preserves old town houses (1524.916258ms)
+✔ transport and construction have the same result under different clock subdivisions (1528.224738ms)
+✔ wine uses grapes, a barrel, worker time and fermentation; restart cannot duplicate the batch (1500.049334ms)
+✔ a field consumes seed, requires care, grows and produces a finite harvest (1383.637344ms)
+✔ processing without inputs or workers cannot create goods (1390.25771ms)
+✔ every recipe consumes its inputs and produces one delayed result (1663.744733ms)
+✔ livestock has identities, wild capture, reproduction and irreversible slaughter (4499.857187ms)
+✔ nature is shared by region and generations advance without replacing residents (1450.390175ms)
+✔ full destination rejects transport and full store delays harvesting without losing crops (1478.04306ms)
+✔ a vineyard requires a successful trial, matures slowly and feeds actual wine production (1520.431486ms)
+✔ Epoka IV unlocks after III, retains the settlement and saves through the real game decoder (13506.695147ms)
+✔ all estate buildings have working 3D models and every Epoka IV panel renders (4112.460776ms)
+✔ migration completes paid legacy work and carts once and preserves the remaining ripe harvest (6404.481236ms)
+✔ all required recipe and construction inputs have sources and every crafted product has a consumer (1.984621ms)
+✔ chain diagnostics name the actual missing input and finite depleted source without mutating state (1501.243877ms)
+✔ a missing-input chain resumes after resupply and restart without charging or completing twice (1296.21055ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 24160.411945

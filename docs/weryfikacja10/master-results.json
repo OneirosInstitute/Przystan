@@ -1,0 +1,34 @@
+{
+  "status": "PASS",
+  "results": [
+    {
+      "viewport": {
+        "width": 412,
+        "height": 870
+      },
+      "highModels": true,
+      "modelsAtWorkStations": true,
+      "detailBudget": true,
+      "fullBuildCardsBothModes": true,
+      "stockSignsAndClasses": true,
+      "detailsInitiallyClosed": true,
+      "errors": []
+    },
+    {
+      "viewport": {
+        "width": 870,
+        "height": 412
+      },
+      "highModels": true,
+      "modelsAtWorkStations": true,
+      "detailBudget": true,
+      "fullBuildCardsBothModes": true,
+      "stockSignsAndClasses": true,
+      "detailsInitiallyClosed": true,
+      "errors": []
+    }
+  ],
+  "limits": [
+    "Software WebGL; artistic screenshots and functional checks do not measure physical Android battery or frame time."
+  ]
+}

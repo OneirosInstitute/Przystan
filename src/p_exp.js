@@ -59,9 +59,9 @@ function canSend(r,type){const n=S.expSize;if(S.exps.some(e=>e.r===r.id))return'
 function exitTile(r){const dx=r.i-camp.i,dy=r.j-camp.j,l=Math.hypot(dx,dy)||1;for(let d=12;d>=3;d--){const t=nearestWalk(clamp(Math.round(camp.i+dx/l*d),1,N-2),clamp(Math.round(camp.j+dy/l*d),1,N-2));if(t&&reach[t[1]*N+t[0]])return t}return[camp.i,camp.j+1]}
 function sendExp(rid,type){const r=REGIONS[rid];const why=canSend(r,type);if(why){toast(why);return}
  const n=S.expSize,ppl=expCandidates(n),food=expFood(r,type,n);
- const tot=foodTotal();FOOD.forEach(k=>{S.res[k]-=food*(S.res[k]/tot)});
+ const departure=expCharge(ppl,food);if(!departure)return;
  const days=expDays(r,type);const ex=exitTile(r);
- const e={id:(S.expN=(S.expN||0)+1),r:rid,type,ppl:ppl.map(p=>p.id),days,left:days,exit:ex,risk:expRisk(r,n)};S.exps.push(e);
+ const e={id:(S.expN=(S.expN||0)+1),r:rid,type,ppl:ppl.map(p=>p.id),days,left:days,exit:ex,departure,started:false,risk:expRisk(r,n)};S.exps.push(e);
  ppl.forEach(p=>{release(p);p.path=null;p.state='idle';p.wait=0;p.job='wyp';p.wb=null;p.exp=e.id;p.act='wyrusza: '+r.name.toLowerCase()});
  log(`Wyprawa (${type==='zwiad'?'zwiad':'zbiór'}) rusza na ${regDir(r)}: ${r.known?r.name:'nieznany teren'}. Idą: ${ppl.map(p=>p.name).join(', ')}. Wrócą za ${days} dni.`);toast('Wyprawa wyruszyła');assign();renderPanel()}
 function expTick(){if(!S.exps||!S.exps.length)return;
@@ -79,14 +79,14 @@ function finishExp(e,out){const r=REGIONS[e.r];S.exps=S.exps.filter(x=>x!==e);co
   lines.push('Poznano teren: '+r.name+' ('+RTYPE[r.type]+').');S.hope=clamp(S.hope+.02,0,1)}
  else{const got=[];LOOT[r.type].forEach(([k,v])=>{if(k==='miod'&&!tech('u_bart'))return;const q=Math.round(v*alive.length*(e.days-1)*(.7+Math.random()*.6)*(law('lup')?1.25:1));if(q>0){S.res[k]=(S.res[k]||0)+q;got.push(RN[k].toLowerCase()+' '+q)}});
   techXp(r.type==='coast'?'hodowla':'uprawa',15);S.seen.zbior1=1;techXp('nauka',8);lines.push(got.length?'Przynieśli: '+got.join(', ')+'.':'Wrócili z pustymi rękami.')}
- alive.forEach(p=>{p.job='rob';p.exp=null;p.state='idle';const st=e.exit;p.x=tcx(st[0]);p.z=tcx(st[1]);p.wait=.2});
+ alive.forEach(p=>{expReturn(p,e)});
  S.expLog=S.expLog||[];S.expLog.unshift({d:Math.floor(S.day)+1,r:r.name,t:lines.join(' ')});if(S.expLog.length>8)S.expLog.pop();
  log('Wyprawa wraca: '+r.name+'. '+lines.join(' '));toast('Wyprawa wróciła: '+r.name);assign();renderPanel()}
-function expDepartureStatus(expedition){const people=S.people.filter(person=>person.exp===expedition.id),blocked=people.find(person=>person.state!=='away'&&person.blocked);return {preparing:people.some(person=>person.state!=='away'),blocked:!!blocked,reason:blocked?.blocked.reason||''}}
+function expDepartureStatus(expedition){const people=S.people.filter(person=>person.exp===expedition.id),blocked=people.find(person=>person.state!=='away'&&person.blocked);return {preparing:people.some(person=>person.state!=='away'),blocked:!!blocked||!!expedition.returnBlocked,reason:expedition.returnBlocked||blocked?.blocked.reason||''}}
 function expHTML(){let h=`<p class="lead">Wyprawy zabierają ludzi z osady na kilka dni. Biorą jedzenie na drogę. Ryzyko rośnie z odległością, zimą i na halach. Pomagają narzędzia, ciepła odzież i doświadczenie.</p>`;
  h+=`<div class="row"><div class="n">Ludzi na wyprawę<small>Wolnych i zdrowych: ${expCandidates(9).length}</small></div><button class="mini" data-xs="-1">−</button><span class="cnt">${S.expSize}</span><button class="mini" data-xs="1">+</button></div>`;
  if(S.exps.length){h+='<h3>W drodze</h3>';S.exps.forEach(e=>{const r=REGIONS[e.r];const ppl=S.people.filter(p=>p.exp===e.id);const pc=Math.round(100*(e.days-e.left)/e.days),departure=expDepartureStatus(e);
-  h+=`<div class="card"><h4>${r.known?r.name:'Nieznany teren'} <span class="mut" style="font-size:13px">${e.type==='zwiad'?'zwiad':'zbiór'}</span></h4><p>${ppl.map(p=>p.name).join(', ')} · ${departure.blocked?escapeHtml(departure.reason):departure.preparing?'wychodzą z osady':'powrót za '+e.left+' dni'}</p><div class="pbar"><div style="width:${pc}%"></div></div></div>`})}
+  h+=`<div class="card"><h4>${r.known?r.name:'Nieznany teren'} <span class="mut" style="font-size:13px">${e.type==='zwiad'?'zwiad':'zbiór'}</span></h4><p>${ppl.map(p=>p.name).join(', ')} · ${departure.blocked?escapeHtml(departure.reason):departure.preparing?'wychodzą z osady':'powrót za '+e.left+' dni'}</p><div class="pbar"><div style="width:${pc}%"></div></div>${expCancelHTML(e)}</div>`})}
  h+='<h3>Regiony wyspy</h3>';
  REGIONS.filter(r=>r&&r.id!==0).sort((a,b)=>regDist(a)-regDist(b)).forEach(r=>{const on=S.exps.some(e=>e.r===r.id);const d1=expDays(r,'zwiad'),rk=Math.round(expRisk(r,S.expSize)*100);
   h+=`<div class="card"><h4>${r.known?r.name:'Nieznany teren'}</h4><p class="mut">${regDir(r)} · ${Math.round(regDist(r))} kroków · ${r.known?RTYPE[r.type]+' · poznano '+Math.round(r.seen*100)+'%':'nikt tam nie był'}</p>`;

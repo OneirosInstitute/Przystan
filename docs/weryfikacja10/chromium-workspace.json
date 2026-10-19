@@ -1,0 +1,64 @@
+{
+  "status": "PASS",
+  "results": [
+    {
+      "viewport": {
+        "width": 412,
+        "height": 870
+      },
+      "status": "PASS",
+      "classicLayout": true,
+      "quietAndFull": true,
+      "sections": 8,
+      "helpOnce": true,
+      "pinning": true,
+      "locating": true,
+      "peopleLocations": true,
+      "pauseSemantics": true,
+      "offlineReload": true,
+      "epoka4": true,
+      "errors": []
+    },
+    {
+      "viewport": {
+        "width": 870,
+        "height": 412
+      },
+      "status": "PASS",
+      "classicLayout": true,
+      "quietAndFull": true,
+      "sections": 8,
+      "helpOnce": true,
+      "pinning": true,
+      "locating": true,
+      "peopleLocations": true,
+      "pauseSemantics": true,
+      "offlineReload": true,
+      "epoka4": true,
+      "errors": []
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "status": "PASS",
+      "classicLayout": true,
+      "quietAndFull": true,
+      "sections": 8,
+      "helpOnce": true,
+      "pinning": true,
+      "locating": true,
+      "peopleLocations": true,
+      "pauseSemantics": true,
+      "offlineReload": true,
+      "epoka4": true,
+      "errors": []
+    }
+  ],
+  "unverified": [
+    "physical Android touch",
+    "phone performance",
+    "battery power"
+  ]
+}

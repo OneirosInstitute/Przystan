@@ -1,0 +1,25 @@
+{"progress":"single","day":250,"living":36}
+{"progress":"single","day":500,"living":46}
+{"progress":"single","day":750,"living":53}
+{"progress":"single","day":1000,"living":60}
+{"progress":"single","day":1250,"living":81}
+{"progress":"single","day":1500,"living":125}
+{"days":1500,"living":125,"generations":9,"births":168,"deaths":61,"succession":27,"bytes":444986}
+{"progress":"multi","day":250,"living":91}
+{"progress":"multi","day":500,"living":145}
+{"progress":"multi","day":750,"living":227}
+{"progress":"multi","day":1000,"living":400}
+{"progress":"multi","day":1250,"living":561}
+{"progress":"multi","day":1500,"living":635}
+{"scenario":"multi","living":635,"inhabited":4,"stats":{"births":818,"deaths":225,"deliveries":62,"succession":81,"maxGeneration":8,"batches":4445,"harvests":56263,"animalBirths":259},"bytes":1787604}
+✔ autonomous society survives five generations with births, kinship, learning, succession and save continuity (35148.939638ms)
+✔ several settlements retain productive descendants for five generations without manual resupply (595973.83243ms)
+✔ legacy twins survive migration even when the old save has no surviving father identity (1311.860631ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 632571.489153

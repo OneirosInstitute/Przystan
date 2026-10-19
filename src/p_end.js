@@ -92,7 +92,7 @@ function frame(now){if(!lifeCanRun()){last=now;return}lifeRequestFrame();if(gfxS
  ripples.forEach((m,k)=>{const s=1+.3*Math.sin(clock*1.6+k);m.scale.set(s,s,s);m.material.opacity=.3+.22*Math.sin(clock*1.6+k)});
  const Lt=lighting();firelight.position.set(campX(),Hy(campX(),campZ())+1.8,campZ());atmosphere(rdt,Lt);gfxTick(rdt,Lt);
  rangeRing.material.opacity=.4+.2*Math.sin(clock*3);
- mapTick(rdt);
+ mapTick(rdt);worldDetailTick(rdt);
  soundTick(rdt,Lt);
  uiT+=rdt;if(uiT>.4){uiT=0;renderTop();renderSel();goalsTick();techTick();custTick()}
  placeLabel();

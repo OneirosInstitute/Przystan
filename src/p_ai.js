@@ -27,8 +27,9 @@ function personActivity(person){
   else if(action){phase=action.phase==='travel'?'travel':action.phase==='doing'?(['sleep','rest','family','meal','wash'].includes(action.kind)?'rest':'working'):'waiting';if(action.blocked)reason='Brak drogi do celu';destination=action.target?{x:action.target.x,z:action.target.z}:null;}
  }else{
   if(person.state==='move'){
-   phase='travel';if(person.routeGoal)destination={x:tcx(person.routeGoal[0]),z:tcx(person.routeGoal[1])};
-   if(restNow(person)&&!person.fireB&&!pendingDelivery(person))reason='wraca na odpoczynek, aby odzyskać zdrowie';
+   phase=person.navWait>0?'waiting':'travel';if(person.routeGoal)destination={x:tcx(person.routeGoal[0]),z:tcx(person.routeGoal[1])};
+   if(person.navWait>0)reason=person.act;
+   else if(restNow(person)&&!person.fireB&&!pendingDelivery(person))reason='wraca na odpoczynek, aby odzyskać zdrowie';
    else if(workSiteManaged(person.tgt,person.after))reason='idzie do stanowiska: '+BD[person.tgt.kind].n.toLowerCase();
    else if(person.supply&&person.after==='mark')reason='idzie po '+(RN[person.supply.resource]||person.supply.resource).toLowerCase()+' dla pracowni';
   }

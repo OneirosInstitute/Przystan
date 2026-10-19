@@ -1,0 +1,29 @@
+✔ building missions require a completed building and an assigned adult (1246.123243ms)
+✔ building mission cannot be dispatched twice without consuming more food (1037.381184ms)
+✔ mission payload survives validated save serialization (1002.434725ms)
+✔ returning explorer transfers one real wild goat without exceeding the pen and resumes work (1091.114495ms)
+✔ an expedition cannot leave or advance through a closed exit (1232.956062ms)
+✔ an adjacent delivery cannot deposit across a blocked tile (1019.957121ms)
+✔ a failed transport route cannot snap a stranded carrier to distant walkable land (1003.486339ms)
+✔ the ordinary planner cannot teleport a stranded person (1051.900862ms)
+✔ construction under a person is rejected before paying or changing the map (1021.4027ms)
+✔ unreachable expedition dispatch does not consume provisions or reassign the crew (1040.343021ms)
+✔ expeditions never take a person away from a pending delivery (984.329752ms)
+✔ construction cargo can reach another side when the preferred entrance is disconnected (967.186297ms)
+✔ an adjacent delivery consumes travel time before it deposits (1077.227949ms)
+✔ blocked construction cargo survives restart and is delivered once after reopening (1131.474174ms)
+✔ a reachable expedition departs only on arrival, then its elapsed days advance (1029.837048ms)
+✔ all thirty production workshops reject stale remote work and allocate distinct stations (1017.061547ms)
+✔ a person at the corner of a station tile walks to its working position without getting stuck (977.817732ms)
+✔ quota occupied by the secondary backup is recovered without clearing unrelated storage (2751.840671ms)
+✔ a failed quota retry restores the secondary backup and preserves the primary (1302.500123ms)
+✔ invalid state reports the responsible field and version without replacing a good save (1356.707372ms)
+✔ text validation identifies unsafe nested input without accepting it (1326.612361ms)
+ℹ tests 21
+ℹ suites 0
+ℹ pass 21
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13688.615298

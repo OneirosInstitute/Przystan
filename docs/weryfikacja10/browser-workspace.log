@@ -1,0 +1,139 @@
+classic menu viewport 412 870
+412 quiet osada
+412 quiet praca
+412 quiet budowa
+412 quiet zadania
+412 quiet wyprawy
+412 quiet wiedza
+412 quiet natura
+412 quiet kronika
+412 full zadania
+412 full budowa
+412 full osada
+412 full praca
+412 full wyprawy
+412 full wiedza
+412 full natura
+412 full kronika
+412 epoka4 osada
+412 epoka4 zadania
+412 epoka4 budowa
+412 epoka4 praca
+412 epoka4 wyprawy
+412 epoka4 wiedza
+412 epoka4 natura
+412 epoka4 kronika
+classic menu viewport 870 412
+870 quiet osada
+870 quiet praca
+870 quiet budowa
+870 quiet zadania
+870 quiet wyprawy
+870 quiet wiedza
+870 quiet natura
+870 quiet kronika
+870 full zadania
+870 full budowa
+870 full osada
+870 full praca
+870 full wyprawy
+870 full wiedza
+870 full natura
+870 full kronika
+870 epoka4 osada
+870 epoka4 zadania
+870 epoka4 budowa
+870 epoka4 praca
+870 epoka4 wyprawy
+870 epoka4 wiedza
+870 epoka4 natura
+870 epoka4 kronika
+classic menu viewport 1280 800
+1280 quiet osada
+1280 quiet praca
+1280 quiet budowa
+1280 quiet zadania
+1280 quiet wyprawy
+1280 quiet wiedza
+1280 quiet natura
+1280 quiet kronika
+1280 full zadania
+1280 full budowa
+1280 full osada
+1280 full praca
+1280 full wyprawy
+1280 full wiedza
+1280 full natura
+1280 full kronika
+1280 epoka4 osada
+1280 epoka4 zadania
+1280 epoka4 budowa
+1280 epoka4 praca
+1280 epoka4 wyprawy
+1280 epoka4 wiedza
+1280 epoka4 natura
+1280 epoka4 kronika
+{
+  "status": "PASS",
+  "results": [
+    {
+      "viewport": {
+        "width": 412,
+        "height": 870
+      },
+      "status": "PASS",
+      "classicLayout": true,
+      "quietAndFull": true,
+      "sections": 8,
+      "helpOnce": true,
+      "pinning": true,
+      "locating": true,
+      "peopleLocations": true,
+      "pauseSemantics": true,
+      "offlineReload": true,
+      "epoka4": true,
+      "errors": []
+    },
+    {
+      "viewport": {
+        "width": 870,
+        "height": 412
+      },
+      "status": "PASS",
+      "classicLayout": true,
+      "quietAndFull": true,
+      "sections": 8,
+      "helpOnce": true,
+      "pinning": true,
+      "locating": true,
+      "peopleLocations": true,
+      "pauseSemantics": true,
+      "offlineReload": true,
+      "epoka4": true,
+      "errors": []
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "status": "PASS",
+      "classicLayout": true,
+      "quietAndFull": true,
+      "sections": 8,
+      "helpOnce": true,
+      "pinning": true,
+      "locating": true,
+      "peopleLocations": true,
+      "pauseSemantics": true,
+      "offlineReload": true,
+      "epoka4": true,
+      "errors": []
+    }
+  ],
+  "unverified": [
+    "physical Android touch",
+    "phone performance",
+    "battery power"
+  ]
+}

@@ -1,0 +1,21 @@
+✔ classic navigation retains the original sections and adds Tasks in both modes (1479.140475ms)
+✔ classic Chronicle retains save and mode controls (1354.675789ms)
+✔ goals use current act predicates and progress instead of the stale legacy checklist (1171.250098ms)
+✔ pinning produces an actionable map tracker and survives save/reload (1560.270836ms)
+✔ production blockers appear as tasks linked to real assigned suppliers and building (1269.352231ms)
+✔ classic views render in Epoka IV and preserve production and transport controls (3650.08128ms)
+✔ battery and photo controls never write an invalid simulation speed or break saving (1322.678449ms)
+✔ both detail levels have bounded mesh counts, readable faces and age scaling (1202.013453ms)
+✔ an actual carried resource hides the work tool and render never changes simulation (1032.409948ms)
+✔ work to meal blends limbs, displays only the real prop, and pause freezes the pose (1058.967086ms)
+✔ yard stations use real walkable perimeter tiles and decorative detail cannot change state or collisions (1299.94566ms)
+✔ camera, quality and restart release detail geometries instead of accumulating invisible models (1223.122143ms)
+✔ construction cards expose descriptions, costs and actions in both classic modes (1118.745371ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11988.129636

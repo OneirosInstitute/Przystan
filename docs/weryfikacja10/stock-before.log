@@ -1,0 +1,104 @@
+TAP version 13
+# Subtest: the compact stock card distinguishes production deficit from an imported surplus
+not ok 1 - the compact stock card distinguishes production deficit from an imported surplus
+  ---
+  duration_ms: 1475.362967
+  type: 'test'
+  location: '/workspace/scratch/9e1bb3f2c27d/master_rc10_20261018/source/Przystan_4.0.0_RC10_MASTER/tests/stock-compact.test.mjs:5:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /data-stock-resource="drewno"[^>]*class="[^"]*stock-deficit/. Input:
+    
+    '<details class="ui-section" data-ui-section="stock:przystan:Jedzenie" open><summary><span><b>Jedzenie</b><small>1 rodzaj</small></span><i aria-hidden="true">⌄</i></summary><div class="ui-section-content"><table class="flow-table"><thead><tr><th>Zasób</th><th>Zapas</th><th title="Produkcja na dobę" aria-label="Produkcja na dobę">Prod.<br><small>/dobę</small></th><th>Zużycie<br><small>/dobę</small></th><th>Bilans<br><small>/dobę</small></th></tr></thead><tbody><tr data-flow-resource="suchary"><th scope="row">Suchary</th><td>420</td><td class="flow-gain">0</td><td class="flow-use">0</td><td class="flow-gain">0</td></tr></tbody></table></div></details><details class="ui-section" data-ui-section="stock:przystan:Opał i budulec" ><summary><span><b>Opał i budulec</b><small>4 rodzaje</small></span><i aria-hidden="true">⌄</i></summary><div class="ui-section-content"><table class="flow-table"><thead><tr><th>Zasób</th><th>Zapas</th><th title="Produkcja na dobę" aria-label="Produkcja na dobę">Prod.<br><small>/dobę</small></th><th>Zużycie<br><small>/dobę</small></th><th>Bilans<br><small>/dobę</small></th></tr></thead><tbody><tr data-flow-resource="opal"><th scope="row">Opał</th><td>45</td><td class="flow-gain">0</td><td class="flow-use">0</td><td class="flow-gain">0</td></tr><tr data-flow-resource="drewno"><th scope="row">Kłody</th><td>116</td><td class="flow-gain">+40</td><td class="flow-use">−64</td><td class="flow-gain">+376</td></tr><tr data-flow-resource="kamien"><th scope="row">Kamień</th><td>0</td><td class="flow-gain">0</td><td class="flow-use">0</td><td class="flow-gain">0</td></tr><tr data-flow-resource="glina"><th scope="row">Glina</th><td>0</td><td class="flow-gain">0</td><td class="flow-use">0</td><td class="flow-gain">0</td></tr></tbody></table></div></details><details class="ui-section" data-ui-section="stock:przystan:Rzemiosło" ><summary><span><b>Rzemiosło</b><small>2 rodzaje</small></span><i aria-hidden="true">⌄</i></summary><div class="ui-section-content"><table class="flow-table"><thead><tr><th>Zasób</th><th>Zapas</th><th title="Produkcja na dobę" aria-label="Produkcja na dobę">Prod.<br><small>/dobę</small></th><th>Zużycie<br><small>/dobę</small></th><th>Bilans<br><small>/dobę</small></th></tr></thead><tbody><tr data-flow-resource="narz"><th scope="row">Narzędzia żelazne</th><td>8,0</td><td class="flow-gain">0</td><td class="flow-use">0</td><td class="flow-gain">0</td></tr><tr data-flow-resource="odziez"><th scope="row">Odzież</th><td>4,0</td><td class="flow-gain">0</td><td class="flow-use">0</td><td class="flow-gain">0</td></tr></tbody></table></div></details>'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: '<details class="ui-section" data-ui-section="stock:przystan:Jedzenie" open><summary><span><b>Jedzenie</b><small>1 rodzaj</small></span><i aria-hidden="true">⌄</i></summary><div class="ui-section-content"><table class="flow-table"><thead><tr><th>Zasób</th><th>Zapas</th><th title="Produkcja na dobę" aria-label="Produkcja na dobę">Prod.<br><small>/dobę</small></th><th>Zużycie<br><small>/dobę</small></th><th>Bilans<br><small>/dobę</small></th></tr></thead><tbody><tr data-flow-resource="suchary"><th scope="row">Suchary</th><td>420</td><td class="flow-gain">0</td><td class="flow-use">0</td><td class="flow-gain">0</td></tr></tbody></table></div></details><details class="ui-section" data-ui-section="stock:przystan:Opał i budulec" ><summary><span><b>Opał i budulec</b><small>4 rodzaje</small></span><i aria-hidden="true">⌄</i></summary><div class="ui-section-content"><table class="flow-table"><thead><tr><th>Zasób</th><th>Zapas</th><th title="Produkcja na dobę" aria-label="Produkcja na dobę">Prod.<br><small>/dobę</small></th><th>Zużycie<br><small>/dobę</small></th><th>Bilans<br><small>/dobę</small></th></tr></thead><tbody><tr data-flow-resource="opal"><th scope="row">Opał</th><td>45</td><td class="flow-gain">0</td><td class="flow-use">0</td><td class="flow-gain">0</td></tr><tr data-flow-resource="drewno"><th scope="row">Kłody</th><td>116</td><td class="flow-gain">+40</td><td class="flow-use">−64</td><td class="flow-gain">+376</td></tr><tr data-flow-resource="kamien"><th scope="row">Kamień</th><td>0</td><td class="flow-gain">0</td><td class="flow-use">0</td><td class="flow-gain">0</td></tr><tr data-flow-resource="glina"><th scope="row">Glina</th><td>0</td><td class="flow-gain">0</td><td class="flow-use">0</td><td class="flow-gain">0</td></tr></tbody></table></div></details><details class="ui-section" data-ui-section="stock:przystan:Rzemiosło" ><summary><span><b>Rzemiosło</b><small>2 rodzaje</small></span><i aria-hidden="true">⌄</i></summary><div class="ui-section-content"><table class="flow-table"><thead><tr><th>Zasób</th><th>Zapas</th><th title="Produkcja na dobę" aria-label="Produkcja na dobę">Prod.<br><small>/dobę</small></th><th>Zużycie<br><small>/dobę</small></th><th>Bilans<br><small>/dobę</small></th></tr></thead><tbody><tr data-flow-resource="narz"><th scope="row">Narzędzia żelazne</th><td>8,0</td><td class="flow-gain">0</td><td class="flow-use">0</td><td class="flow-gain">0</td></tr><tr data-flow-resource="odziez"><th scope="row">Odzież</th><td>4,0</td><td class="flow-gain">0</td><td class="flow-use">0</td><td class="flow-gain">0</td></tr></tbody></table></div></details>'
+  operator: 'match'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/master_rc10_20261018/source/Przystan_4.0.0_RC10_MASTER/tests/stock-compact.test.mjs:5:162)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1382:25)
+    Test.start (node:internal/test_runner/test:1242:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17)
+  ...
+# Subtest: production and use remain available in initially collapsed stock details
+not ok 2 - production and use remain available in initially collapsed stock details
+  ---
+  duration_ms: 1302.063602
+  type: 'test'
+  location: '/workspace/scratch/9e1bb3f2c27d/master_rc10_20261018/source/Przystan_4.0.0_RC10_MASTER/tests/stock-compact.test.mjs:6:1'
+  failureType: 'testCodeFailure'
+  error: 'zapDetails is not defined'
+  code: 'ERR_TEST_FAILURE'
+  name: 'ReferenceError'
+  stack: |-
+    eval (eval at window.__przystan.window.__testEvaluate (assembled-game.js:10561:35), <anonymous>:1:1)
+    window.__przystan.window.__testEvaluate (assembled-game.js:10561:35)
+    Object.evaluate (file:///workspace/scratch/9e1bb3f2c27d/master_rc10_20261018/source/Przystan_4.0.0_RC10_MASTER/tests/runtime.mjs:42:83)
+    TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/master_rc10_20261018/source/Przystan_4.0.0_RC10_MASTER/tests/stock-compact.test.mjs:6:125)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1382:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+    Test.postRun (node:internal/test_runner/test:1522:19)
+    Test.run (node:internal/test_runner/test:1447:12)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+  ...
+# Subtest: unobserved and balanced resources use different neutral labels
+not ok 3 - unobserved and balanced resources use different neutral labels
+  ---
+  duration_ms: 1261.999638
+  type: 'test'
+  location: '/workspace/scratch/9e1bb3f2c27d/master_rc10_20261018/source/Przystan_4.0.0_RC10_MASTER/tests/stock-compact.test.mjs:7:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The input did not match the regular expression /zbieranie danych/. Input:
+    
+    '<details class="ui-section" data-ui-section="stock:przystan:Jedzenie" open><summary><span><b>Jedzenie</b><small>1 rodzaj</small></span><i aria-hidden="true">⌄</i></summary><div class="ui-section-content"><table class="flow-table"><thead><tr><th>Zasób</th><th>Zapas</th><th title="Produkcja na dobę" aria-label="Produkcja na dobę">Prod.<br><small>/dobę</small></th><th>Zużycie<br><small>/dobę</small></th><th>Bilans<br><small>/dobę</small></th></tr></thead><tbody><tr data-flow-resource="suchary"><th scope="row">Suchary</th><td>420</td><td class="flow-gain">0</td><td class="flow-use">0</td><td class="flow-gain">0</td></tr></tbody></table></div></details><details class="ui-section" data-ui-section="stock:przystan:Opał i budulec" ><summary><span><b>Opał i budulec</b><small>4 rodzaje</small></span><i aria-hidden="true">⌄</i></summary><div class="ui-section-content"><table class="flow-table"><thead><tr><th>Zasób</th><th>Zapas</th><th title="Produkcja na dobę" aria-label="Produkcja na dobę">Prod.<br><small>/dobę</small></th><th>Zużycie<br><small>/dobę</small></th><th>Bilans<br><small>/dobę</small></th></tr></thead><tbody><tr data-flow-resource="opal"><th scope="row">Opał</th><td>45</td><td class="flow-gain">0</td><td class="flow-use">0</td><td class="flow-gain">0</td></tr><tr data-flow-resource="drewno"><th scope="row">Kłody</th><td>22</td><td class="flow-gain">0</td><td class="flow-use">0</td><td class="flow-gain">0</td></tr><tr data-flow-resource="kamien"><th scope="row">Kamień</th><td>0</td><td class="flow-gain">0</td><td class="flow-use">0</td><td class="flow-gain">0</td></tr><tr data-flow-resource="glina"><th scope="row">Glina</th><td>0</td><td class="flow-gain">0</td><td class="flow-use">0</td><td class="flow-gain">0</td></tr></tbody></table></div></details><details class="ui-section" data-ui-section="stock:przystan:Rzemiosło" ><summary><span><b>Rzemiosło</b><small>2 rodzaje</small></span><i aria-hidden="true">⌄</i></summary><div class="ui-section-content"><table class="flow-table"><thead><tr><th>Zasób</th><th>Zapas</th><th title="Produkcja na dobę" aria-label="Produkcja na dobę">Prod.<br><small>/dobę</small></th><th>Zużycie<br><small>/dobę</small></th><th>Bilans<br><small>/dobę</small></th></tr></thead><tbody><tr data-flow-resource="narz"><th scope="row">Narzędzia żelazne</th><td>8,0</td><td class="flow-gain">0</td><td class="flow-use">0</td><td class="flow-gain">0</td></tr><tr data-flow-resource="odziez"><th scope="row">Odzież</th><td>4,0</td><td class="flow-gain">0</td><td class="flow-use">0</td><td class="flow-gain">0</td></tr></tbody></table></div></details>'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  actual: '<details class="ui-section" data-ui-section="stock:przystan:Jedzenie" open><summary><span><b>Jedzenie</b><small>1 rodzaj</small></span><i aria-hidden="true">⌄</i></summary><div class="ui-section-content"><table class="flow-table"><thead><tr><th>Zasób</th><th>Zapas</th><th title="Produkcja na dobę" aria-label="Produkcja na dobę">Prod.<br><small>/dobę</small></th><th>Zużycie<br><small>/dobę</small></th><th>Bilans<br><small>/dobę</small></th></tr></thead><tbody><tr data-flow-resource="suchary"><th scope="row">Suchary</th><td>420</td><td class="flow-gain">0</td><td class="flow-use">0</td><td class="flow-gain">0</td></tr></tbody></table></div></details><details class="ui-section" data-ui-section="stock:przystan:Opał i budulec" ><summary><span><b>Opał i budulec</b><small>4 rodzaje</small></span><i aria-hidden="true">⌄</i></summary><div class="ui-section-content"><table class="flow-table"><thead><tr><th>Zasób</th><th>Zapas</th><th title="Produkcja na dobę" aria-label="Produkcja na dobę">Prod.<br><small>/dobę</small></th><th>Zużycie<br><small>/dobę</small></th><th>Bilans<br><small>/dobę</small></th></tr></thead><tbody><tr data-flow-resource="opal"><th scope="row">Opał</th><td>45</td><td class="flow-gain">0</td><td class="flow-use">0</td><td class="flow-gain">0</td></tr><tr data-flow-resource="drewno"><th scope="row">Kłody</th><td>22</td><td class="flow-gain">0</td><td class="flow-use">0</td><td class="flow-gain">0</td></tr><tr data-flow-resource="kamien"><th scope="row">Kamień</th><td>0</td><td class="flow-gain">0</td><td class="flow-use">0</td><td class="flow-gain">0</td></tr><tr data-flow-resource="glina"><th scope="row">Glina</th><td>0</td><td class="flow-gain">0</td><td class="flow-use">0</td><td class="flow-gain">0</td></tr></tbody></table></div></details><details class="ui-section" data-ui-section="stock:przystan:Rzemiosło" ><summary><span><b>Rzemiosło</b><small>2 rodzaje</small></span><i aria-hidden="true">⌄</i></summary><div class="ui-section-content"><table class="flow-table"><thead><tr><th>Zasób</th><th>Zapas</th><th title="Produkcja na dobę" aria-label="Produkcja na dobę">Prod.<br><small>/dobę</small></th><th>Zużycie<br><small>/dobę</small></th><th>Bilans<br><small>/dobę</small></th></tr></thead><tbody><tr data-flow-resource="narz"><th scope="row">Narzędzia żelazne</th><td>8,0</td><td class="flow-gain">0</td><td class="flow-use">0</td><td class="flow-gain">0</td></tr><tr data-flow-resource="odziez"><th scope="row">Odzież</th><td>4,0</td><td class="flow-gain">0</td><td class="flow-use">0</td><td class="flow-gain">0</td></tr></tbody></table></div></details>'
+  operator: 'match'
+  stack: |-
+    TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/master_rc10_20261018/source/Przystan_4.0.0_RC10_MASTER/tests/stock-compact.test.mjs:7:186)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1382:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+    Test.postRun (node:internal/test_runner/test:1522:19)
+    Test.run (node:internal/test_runner/test:1447:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+  ...
+# Subtest: stock summary reports a production deficit despite incoming gifts
+not ok 4 - stock summary reports a production deficit despite incoming gifts
+  ---
+  duration_ms: 1308.135033
+  type: 'test'
+  location: '/workspace/scratch/9e1bb3f2c27d/master_rc10_20261018/source/Przystan_4.0.0_RC10_MASTER/tests/stock-compact.test.mjs:8:1'
+  failureType: 'testCodeFailure'
+  error: 'zapDetails is not defined'
+  code: 'ERR_TEST_FAILURE'
+  name: 'ReferenceError'
+  stack: |-
+    eval (eval at window.__przystan.window.__testEvaluate (assembled-game.js:10561:35), <anonymous>:1:158)
+    eval (eval at window.__przystan.window.__testEvaluate (assembled-game.js:10561:35), <anonymous>:1:173)
+    window.__przystan.window.__testEvaluate (assembled-game.js:10561:35)
+    Object.evaluate (file:///workspace/scratch/9e1bb3f2c27d/master_rc10_20261018/source/Przystan_4.0.0_RC10_MASTER/tests/runtime.mjs:42:83)
+    TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/master_rc10_20261018/source/Przystan_4.0.0_RC10_MASTER/tests/stock-compact.test.mjs:8:118)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1382:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+    Test.postRun (node:internal/test_runner/test:1522:19)
+    Test.run (node:internal/test_runner/test:1447:12)
+  ...
+1..4
+# tests 4
+# suites 0
+# pass 0
+# fail 4
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 5505.053008

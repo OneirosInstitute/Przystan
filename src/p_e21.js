@@ -34,10 +34,10 @@ const ISL=[{k:'mew',n:'Wyspa Mew',d:'niska i skalista, pełna gniazd',g:{ryby:3,
 const ISL_BY={};ISL.forEach(x=>ISL_BY[x.k]=x);
 function e2Isl(){S.e2.isl=S.e2.isl||[];return S.e2.isl}
 function e2HorWhy(){if(!hasDone('szkutnia'))return'Potrzebna szkutnia.';const big=(S.e2.big||0)>=4;if(!big&&(S.res.lodz||0)<2)return S.e2.r1==='wielka'?'Wielka łódź nie jest jeszcze gotowa.':'Potrzebne dwie łodzie przy brzegu.';
- if(S.exps.some(e=>e.type==='horyzont'))return'Jedna wyprawa już płynie za horyzont.';if(expCandidates(4).length<4)return'Za mało wolnych, zdrowych ludzi (4).';if(foodTotal()<K*4*8)return'Za mało jedzenia na drogę.';return''}
+ if(S.exps.some(e=>e.type==='horyzont'))return'Jedna wyprawa już płynie za horyzont.';if(expCandidates(4).length<4)return'Za mało wolnych, zdrowych ludzi (4).';if(foodTotal()<Math.ceil(K*4*((S.e2.big||0)>=4?6:8)))return'Za mało jedzenia na drogę.';if(!expSeaExit(expCandidates(4)))return'Brak drogi do szkutni — odblokuj dojście załogi.';return''}
 function e2Hor(){const why=e2HorWhy();if(why){toast(why);return}const sz=S.bld.find(b=>b.kind==='szkutnia'&&bDone(b));const ppl=expCandidates(4);const big=(S.e2.big||0)>=4,days=big?6:8;
- const tot=foodTotal();FOOD.forEach(k=>{S.res[k]-=K*4*days*((S.res[k]||0)/tot)});if(!big)S.res.lodz-=2;const ex=entryOf(sz.kind,sz.i,sz.j)||[camp.i,camp.j];
- const e={id:(S.expN=(S.expN||0)+1),r:0,type:'horyzont',ppl:ppl.map(p=>p.id),days,left:days,exit:ex,big,risk:(big?.05:.12)*wxSea()*(seasonIdx()===2?1.7:1)};S.exps.push(e);
+ const ex=expSeaExit(ppl),departure=ex&&expCharge(ppl,Math.ceil(K*4*days),big?0:2);if(!departure)return;
+ const e={id:(S.expN=(S.expN||0)+1),r:0,type:'horyzont',ppl:ppl.map(p=>p.id),days,left:days,exit:ex,big,departure,started:false,risk:(big?.05:.12)*wxSea()*(seasonIdx()===2?1.7:1)};S.exps.push(e);
  ppl.forEach(p=>{release(p);p.path=null;p.state='idle';p.wait=0;p.job='wyp';p.wb=null;p.exp=e.id;p.act='płynie za horyzont'});
  log(`${big?'Wielka łódź':'Dwie łodzie'} wypływa${big?'':'ją'} za horyzont. Płyną: ${ppl.map(p=>p.name).join(', ')}. Wrócą za ${days} dni.`);toast('Wyprawa za horyzont');assign();renderPanel()}
 {const _fe=finishExp;finishExp=function(e,out){if(e.type!=='horyzont')return _fe(e,out);S.exps=S.exps.filter(x=>x!==e);const lines=[];const L=e2Isl();
@@ -49,7 +49,7 @@ function e2Hor(){const why=e2HorWhy();if(why){toast(why);return}const sz=S.bld.f
  lines.push('Przywieźli: '+Object.entries(got).map(([k,v])=>RN[k].toLowerCase()+' '+v).join(', ')+'.');
  out.forEach(p=>{if(Math.random()<e.risk){p.hp=Math.max(.3,p.hp-.25);p.hurt=1;lines.push(p.name+' wraca chory od zimna i słonej wody.')}gainXp(p,'rybak',50)});
  if(lost)lines.push(e.big?'':'Jedna łódź przepadła w sztormie. Ludzie przesiedli się do drugiej.');
- out.forEach(p=>{p.job='rob';p.exp=null;p.state='idle';const st=e.exit;p.x=tcx(st[0]);p.z=tcx(st[1]);p.wait=.2});S.e2.horN=(S.e2.horN||0)+1;techXp('nauka',14);
+ out.forEach(p=>{expReturn(p,e)});S.e2.horN=(S.e2.horN||0)+1;techXp('nauka',14);
  S.expLog=S.expLog||[];S.expLog.unshift({d:Math.floor(S.day)+1,r:'Za horyzont',t:lines.join(' ')});if(S.expLog.length>8)S.expLog.pop();
  log('Wyprawa za horyzont wraca. '+lines.filter(Boolean).join(' '));toast('Wyprawa wróciła zza horyzontu');assign();renderPanel()}}
 const E2_OBOZ={drewno:40,deski:10,narz:2};

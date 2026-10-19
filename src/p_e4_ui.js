@@ -18,7 +18,7 @@ function e4Panel(){
   markup+='<h3>Rozwój gospodarstwa</h3>';for(const [kind,definition]of Object.entries(catalog.buildings)){if(kind==='dom_rodowy'&&settlement.id==='przystan')continue;markup+=`<div class="card"><h4>${definition.name}${settlement.buildings[kind]?' · '+settlement.buildings[kind]:''}</h4><p>${e4Resources(definition.cost)} · ${definition.labor} godz. pracy${definition.crop?' · sadzonki: '+(settlement.land.seeds[definition.crop]||0):''}</p><button data-e4-project="${kind}">Zleć budowę</button></div>`;}
  }
  if(tab==='praca'){
-  markup+='<h3>Magazyn i bilans</h3>'+zapCard()+'<h3>Partie w pracowniach</h3>';
+  markup+='<h3>Magazyn i bilans</h3>'+zapCard()+e4ChainHTML(settlement)+'<h3>Partie w pracowniach</h3>';
   markup+=settlement.batches.map(batch=>`<div class="card"><b>${catalog.recipes[batch.recipe].name}</b><p>${batch.readyAt===null?'Praca: '+Math.floor(batch.progress/batch.work*100)+'%':'Dojrzewa jeszcze '+Math.max(0,(batch.readyAt-S.e4.simTicks)/1000000).toFixed(1)+' dni'}</p><small>Składniki w partii: ${e4Resources(batch.materials)}</small></div>`).join('')||'<p class="mut">Brak rozpoczętych partii.</p>';
   markup+='<h3>Zleć wyrób</h3>';for(const [recipeId,recipe]of Object.entries(catalog.recipes)){if(!settlement.buildings[recipe.building])continue;markup+=`<div class="card"><h4>${recipe.name}</h4><p>${e4Resources(recipe.input)} → ${e4Resources(recipe.output)}</p><p class="mut">${recipe.labor} godz. pracy${recipe.days?' · '+recipe.days+' dni dojrzewania':''}</p><button data-e4-batch="${recipeId}">Rozpocznij partię</button></div>`;}
   markup+='<p class="mut">Najpierw ziarno na siew. Przy dostatecznym zapasie żywności składniki kolejnej partii pozostają dla pracowni: '+e4Resources(settlement.processingReserve)+'.</p>';

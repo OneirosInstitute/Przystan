@@ -1,0 +1,20 @@
+✔ sea dispatch refuses an unreachable shipyard before charging food or boats (1112.978796ms)
+✔ cancelling preparation refunds the exact paid quantities once and survives a real restart (1465.85206ms)
+✔ first departure irreversibly closes cancellation and forged refunds are rejected (1027.452884ms)
+✔ legacy expeditions never fabricate a refundable payment history (1070.262457ms)
+✔ returners use separate safe land tiles and rewards cannot be granted twice (1151.937574ms)
+✔ blocked return holds all outcome wrappers until a safe home entry exists (1059.451933ms)
+✔ construction cannot sever the only route from a resident to the settlement (1118.449207ms)
+✔ open terrain remains buildable when people can walk around the new footprint (1149.790091ms)
+✔ a moving resident waits or detours instead of crossing a stationary resident (1027.379729ms)
+✔ opposite travellers pass in open space without losing their destinations (1084.71631ms)
+✔ a goat can be delivered through an alternative accessible pen entrance (1052.643866ms)
+✔ a failed water delivery retains its bucket and resumes after access returns (1098.636279ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7012.017716

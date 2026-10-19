@@ -1,0 +1,959 @@
+--- RC9/WDROZ_TERMUX.sh
++++ RC10/WDROZ_TERMUX.sh
+@@ -6,7 +6,7 @@
+ if [ "${1:-}" = '--prepare-only' ]; then MODE=prepare; shift; fi
+ [ "$#" -le 1 ] || { echo 'Użycie: bash WDROZ_TERMUX.sh [--prepare-only] [katalog-repo]'; exit 1; }
+ PACKAGE_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+-EXPECTED_COMMIT='fd11ce669488ef4e3a698f16ec737a7390b1147b'
++EXPECTED_COMMIT='492e8bfd1a8ba058f467701115f1e74146343180'
+ REPOSITORY="${1:-}"
+ if [ -z "$REPOSITORY" ]; then
+  if [ -d "$HOME/Przystan/.git" ]; then REPOSITORY="$HOME/Przystan";
+@@ -41,7 +41,7 @@
+ fi
+ git add -- .github .gitignore KSIEGA.md README.md WDROZ_TERMUX.sh assets build.js docs package.json railway.json release-manifest.json server.js src tests tools
+ git diff --cached --quiet && { echo 'STOP: brak zmian do commitu.'; exit 1; }
+-git commit -m '4.0.0-rc.9: dojscia, transport i stanowiska produkcyjne'
++git commit -m '4.0.0-rc.10: zapasy, SI, ludzie i hardening gospodarki'
+ git push origin main
+ git fetch origin main
+ [ "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)" ]
+--- RC9/build.js
++++ RC10/build.js
+@@ -1,7 +1,7 @@
+ // Składa grę z plików w src/ w jeden index.html i przygotowuje wersję do instalacji (PWA) w dist/.
+ const fs=require('fs'),path=require('path'),crypto=require('crypto');
+ const SRC=path.join(__dirname,'src'),AS=path.join(__dirname,'assets'),OUT=path.join(__dirname,'dist');
+-const PARTS=['p_head.html','p_const.js','p_mid.js','p_resources.js','p_flow.js','p_worksites.js','p_lifecycle.js','p_rest.js','p_daily.js','p_save.js','p_ui_sections.js','p_map.js','p_tech.js','p_exp.js','p_v8.js','p_bld.js','p_story.js','p_slav.js','p_wild.js','p_ludzie.js','p_urz.js','p_pamiec.js','p_akt.js','p_kol.js','p_slady.js','p_lad.js','p_gosp.js','p_bud.js','p_swiat.js','p_szlif.js','p_mapa.js','p_cisza.js','p_sluzba.js','p_zycie.js','p_rok.js','p_wiedza.js','p_gfx.js','p_grafika.js','p_ksiega.js','p_ratunek.js','p_g18.js','p_e2.js','p_e2d.js','p_e2m.js','p_e21.js','p_e22.js','p_woz.js','p_zad.js','p_rozb.js','p_noc.js','p_opow.js','p_przyr.js','p_handel.js','p_tydzien.js','p_e3.js','p_zwierz.js','p_postaci.js','p_pogoda.js','p_rola.js','p_odkr.js','p_rod.js','p_cel.js','p_hod.js','p_serce.js','p_ognisko.js','p_misje.js','p_e4_world.js','p_e4_catalog.js','p_e4_domain.js','p_e4_life.js','p_e4_economy.js','p_e4_population.js','p_bat.js','p_tasks.js','p_supply.js','p_e4_view.js','p_e4_game.js','p_e4_ui.js','p_tracking.js','p_journal.js','p_menu.js','p_people_motion.js','p_ai.js','p_flow_bridge.js','p_update.js','p_end.js'];
++const PARTS=['p_head.html','p_const.js','p_mid.js','p_resources.js','p_flow.js','p_worksites.js','p_navigation.js','p_lifecycle.js','p_rest.js','p_daily.js','p_save.js','p_ui_sections.js','p_map.js','p_tech.js','p_exp.js','p_v8.js','p_bld.js','p_story.js','p_slav.js','p_wild.js','p_ludzie.js','p_urz.js','p_pamiec.js','p_akt.js','p_kol.js','p_slady.js','p_lad.js','p_gosp.js','p_bud.js','p_swiat.js','p_szlif.js','p_mapa.js','p_cisza.js','p_sluzba.js','p_zycie.js','p_rok.js','p_wiedza.js','p_gfx.js','p_grafika.js','p_ksiega.js','p_ratunek.js','p_g18.js','p_e2.js','p_e2d.js','p_e2m.js','p_e21.js','p_e22.js','p_woz.js','p_zad.js','p_rozb.js','p_noc.js','p_opow.js','p_przyr.js','p_handel.js','p_tydzien.js','p_e3.js','p_zwierz.js','p_postaci.js','p_pogoda.js','p_rola.js','p_odkr.js','p_rod.js','p_cel.js','p_hod.js','p_serce.js','p_ognisko.js','p_misje.js','p_e4_world.js','p_e4_catalog.js','p_e4_domain.js','p_e4_life.js','p_e4_economy.js','p_e4_population.js','p_e4_audit.js','p_bat.js','p_tasks.js','p_supply.js','p_e4_view.js','p_e4_game.js','p_e4_ui.js','p_tracking.js','p_journal.js','p_menu.js','p_people_motion.js','p_world_detail.js','p_ai.js','p_departure.js','p_flow_bridge.js','p_update.js','p_end.js'];
+ fs.rmSync(OUT,{recursive:true,force:true});fs.mkdirSync(OUT,{recursive:true});
+ let game=PARTS.map(f=>fs.readFileSync(path.join(SRC,f),'utf8')).join('');
+ game=game.replace('https://cdn.jsdelivr.net/npm/three@0.186.0/build/three.module.min.js','./three.module.js');
+--- RC9/package.json
++++ RC10/package.json
+@@ -1,6 +1,6 @@
+ {
+   "name": "przystan",
+-  "version": "4.0.0-rc.9",
++  "version": "4.0.0-rc.10",
+   "description": "Przystań – spokojna gra o rozbitkach budujących osadę na dzikiej wyspie (PWA, Three.js)",
+   "private": true,
+   "scripts": {
+--- RC9/src/p_ai.js
++++ RC10/src/p_ai.js
+@@ -27,8 +27,9 @@
+   else if(action){phase=action.phase==='travel'?'travel':action.phase==='doing'?(['sleep','rest','family','meal','wash'].includes(action.kind)?'rest':'working'):'waiting';if(action.blocked)reason='Brak drogi do celu';destination=action.target?{x:action.target.x,z:action.target.z}:null;}
+  }else{
+   if(person.state==='move'){
+-   phase='travel';if(person.routeGoal)destination={x:tcx(person.routeGoal[0]),z:tcx(person.routeGoal[1])};
+-   if(restNow(person)&&!person.fireB&&!pendingDelivery(person))reason='wraca na odpoczynek, aby odzyskać zdrowie';
++   phase=person.navWait>0?'waiting':'travel';if(person.routeGoal)destination={x:tcx(person.routeGoal[0]),z:tcx(person.routeGoal[1])};
++   if(person.navWait>0)reason=person.act;
++   else if(restNow(person)&&!person.fireB&&!pendingDelivery(person))reason='wraca na odpoczynek, aby odzyskać zdrowie';
+    else if(workSiteManaged(person.tgt,person.after))reason='idzie do stanowiska: '+BD[person.tgt.kind].n.toLowerCase();
+    else if(person.supply&&person.after==='mark')reason='idzie po '+(RN[person.supply.resource]||person.supply.resource).toLowerCase()+' dla pracowni';
+   }
+--- RC9/src/p_cisza.js
++++ RC10/src/p_cisza.js
+@@ -156,29 +156,33 @@
+ }
+ function zapNeed(){const scope=zapScope(),people=scope.settlement?E4Domain.residents(S,scope.id):S.people.filter(person=>person.job!=='wyp');return scope.settlement?people.reduce((sum,person)=>sum+E4Domain.need(person),0)*S.e4.dailyFactor:K*people.reduce((sum,person)=>sum+pNeed(person),0)*(law('oszczedne')?.8:1)*[.85,1,1.08][S.diff===undefined?1:S.diff];}
+ function zapNumber(value,signed=false){const absolute=Math.abs(value),number=absolute>=10000?(absolute/1000).toFixed(1)+'k':absolute>=10?String(Math.round(absolute)):absolute<.05?'0':absolute.toFixed(1).replace('.',',');return (signed&&absolute>=.05?(value<0?'−':'+'):'')+number;}
+-function zapBody(){
++function zapGroups(){
+  ResourceFlow.watch(S);const scope=zapScope(),known=new Set(),groups=[];
+  for(const [name,selection]of ZAP_G){const items=(selection===null?scope.food:selection).filter(key=>{const flow=ResourceFlow.stats(S,scope.id,key);return (scope.stock[key]||0)>=.05||ZAP_CORE[key]||flow.produced||flow.used||flow.other});for(const key of items)known.add(key);if(items.length)groups.push([name,items])}
+- const remaining=Object.keys(scope.stock).filter(key=>!known.has(key)&&(scope.stock[key]||0)>=.05);if(remaining.length)groups.push(['Pozostałe wyroby',remaining]);
+- return groups.map(([name,items],index)=>{
+-  const rows=items.map(key=>{const flow=ResourceFlow.stats(S,scope.id,key),label=ZAP_N[key]||RN[key]||(S.epoch===4?E4Catalog.resources[key]:null)||key;
+-   return `<tr data-flow-resource="${escapeHtml(key)}"><th scope="row">${escapeHtml(label)}</th><td>${zapNumber(scope.stock[key]||0)}</td><td class="flow-gain">${zapNumber(flow.productionRate,true)}</td><td class="flow-use">${zapNumber(-flow.useRate,true)}</td><td class="${flow.netRate<0?'flow-use':'flow-gain'}">${zapNumber(flow.netRate,true)}</td></tr>`}).join('');
+-  const table=`<table class="flow-table"><thead><tr><th>Zasób</th><th>Zapas</th><th title="Produkcja na dobę" aria-label="Produkcja na dobę">Prod.<br><small>/dobę</small></th><th>Zużycie<br><small>/dobę</small></th><th>Bilans<br><small>/dobę</small></th></tr></thead><tbody>${rows}</tbody></table>`;
+-  return uiDisclosure('stock:'+scope.id+':'+name,name,table,index===0,items.length+' '+(items.length===1?'rodzaj':items.length%100<12||items.length%100>14?([2,3,4].includes(items.length%10)?'rodzaje':'rodzajów'):'rodzajów'));
+- }).join('');
++ const remaining=Object.keys(scope.stock).filter(key=>!known.has(key)&&(scope.stock[key]||0)>=.05);if(remaining.length)groups.push(['Pozostałe wyroby',remaining]);return {scope,groups};
++}
++function zapLabel(key){return ZAP_N[key]||RN[key]||(S.epoch===4?E4Catalog.resources[key]:null)||key;}
++function zapBalance(flow){const value=flow.productionRate-flow.useRate,observed=flow.elapsed>1e-9;return {value,observed,kind:!observed?'stock-pending':Math.abs(value)<.05?'stock-balanced':value<0?'stock-deficit':'stock-surplus',text:observed?zapNumber(value,true)+' /d':'—',label:observed?(Math.abs(value)<.05?'równowaga':value<0?'deficyt produkcji':'nadwyżka produkcji'):'zbieranie danych'};}
++function zapBody(){const {scope,groups}=zapGroups();return '<div class="stock-compact">'+groups.map(([name,items])=>{
++ const rows=items.map(key=>{const balance=zapBalance(ResourceFlow.stats(S,scope.id,key));return `<div data-stock-resource="${escapeHtml(key)}" class="stock-row ${balance.kind}"><span>${escapeHtml(zapLabel(key))}</span><b>${zapNumber(scope.stock[key]||0)}</b><small aria-label="${escapeHtml(balance.label)}" title="${escapeHtml(balance.label)}">${balance.text}</small></div>`}).join('');
++ return uiDisclosure('stock:compact:'+scope.id+':'+name,name,'<div class="stock-grid">'+rows+'</div>',true);
++ }).join('')+'</div>';}
++function zapDetails(){const {scope,groups}=zapGroups();const rows=groups.flatMap(([name,items])=>items.map(key=>{const flow=ResourceFlow.stats(S,scope.id,key),balance=zapBalance(flow),number=value=>balance.observed?zapNumber(value,true):'—';return `<tr data-flow-resource="${escapeHtml(key)}"><th scope="row">${escapeHtml(zapLabel(key))}</th><td class="flow-gain">${number(flow.productionRate)}</td><td>${number(-flow.useRate)}</td><td class="${balance.kind}">${number(balance.value)}</td><td>${number(flow.otherRate)}</td></tr>`})).join('');
++ const table=`<table class="flow-table"><thead><tr><th>Zasób</th><th>Produkcja<br><small>/dobę</small></th><th>Zużycie<br><small>/dobę</small></th><th>Bilans<br><small>/dobę</small></th><th>Pozostałe<br><small>/dobę</small></th></tr></thead><tbody>${rows}</tbody></table>`;
++ return uiDisclosure('stock:details:'+scope.id,'Szczegóły produkcji i zużycia',table+zapLegend(),false,'Rozwiń liczby i pozostałe przepływy');
+ }
+ function zapHead(){
+- ResourceFlow.watch(S);const scope=zapScope(),need=zapNeed(),total=scope.food.reduce((sum,key)=>sum+(scope.stock[key]||0),0),days=need?total/need:99,flow=ResourceFlow.stats(S,scope.id,scope.food);
+- const period=flow.elapsed>0?'Średnia z '+flow.elapsed.toFixed(2).replace('.',',')+' doby gry':'Pomiar rozpoczyna się w tej wersji';
+- return `<div class="zph">${ico('zapasy')}<div><b>Zapasy${scope.settlement?' · '+escapeHtml(scope.settlement.name):''}</b><small>Żywność ${zapNumber(total)}${scope.settlement?'':' / '+foodCap()} · na ${Math.min(99,Math.floor(days))}${days>=99?'+':''} dni${!scope.settlement&&spizTot()>=1?' · w spiżarkach rodzin '+zapNumber(spizTot()):''}<br>Zapotrzebowanie na posiłki: ${zapNumber(need)} /dobę</small></div></div><div class="flow-overview" aria-label="Bieżący bilans żywności"><span>Produkcja /d<b class="flow-gain" data-food-flow="production">${zapNumber(flow.productionRate,true)}</b></span><span>Zużycie /d<b class="flow-use" data-food-flow="use">${zapNumber(-flow.useRate,true)}</b></span><span>Bilans /d<b data-food-flow="balance">${zapNumber(flow.netRate,true)}</b></span></div><p class="flow-period">${period} · dane aktualizowane na bieżąco</p>`;
++ ResourceFlow.watch(S);const scope=zapScope(),need=zapNeed(),total=scope.food.reduce((sum,key)=>sum+(scope.stock[key]||0),0),days=need?total/need:99,flow=ResourceFlow.stats(S,scope.id,scope.food),balance=zapBalance(flow);
++ const period=flow.elapsed>1e-9?'Średnia z '+flow.elapsed.toFixed(2).replace('.',',')+' doby gry':'Zbieranie danych o produkcji i zużyciu';
++ return `<div class="zph">${ico('zapasy')}<div><b>Zapasy${scope.settlement?' · '+escapeHtml(scope.settlement.name):''}</b><small>Żywność ${zapNumber(total)}${scope.settlement?'':' / '+foodCap()} · na ${Math.min(99,Math.floor(days))}${days>=99?'+':''} dni${!scope.settlement&&spizTot()>=1?' · w spiżarkach rodzin '+zapNumber(spizTot()):''}</small></div></div><p class="stock-food-balance ${balance.kind}">Bilans żywności <b data-food-flow="balance">${balance.text}</b></p><p class="flow-period">${period} · produkcja − zużycie</p>`;
+ }
+ function zapLegend(){const scope=zapScope(),keys=Object.keys(scope.stock),other=keys.map(key=>[key,ResourceFlow.stats(S,scope.id,key).otherRate]).filter(([,value])=>Math.abs(value)>.05);
+- return uiDisclosure('stock:legend','Jak czytać bilans?',`<p>Produkcja obejmuje wyroby i pozyskanie dostarczone do magazynu. Zużycie obejmuje posiłki, składniki, straty i utrzymanie. Bilans uwzględnia również dostawy, handel, ręczne wydatki i przesunięcia zapasów, wykazywane jako pozostałe zmiany.</p><p>Wartości /dobę wynikają z rzeczywistych operacji od początku zachowanego pomiaru (bieżąca i poprzednia doba). Zapotrzebowanie to osobna potrzeba mieszkańców. Spiżarki rodzin i ładunki w drodze są poza tym magazynem.</p>${other.length?'<p>Pozostałe zmiany /dobę: '+other.map(([key,value])=>escapeHtml(ZAP_N[key]||RN[key]||key)+' '+zapNumber(value,true)).join(' · ')+'</p>':''}`);
+-}
+-function zapCard(){return `<div class="card zapc">${zapHead()}${zapBody()}${zapLegend()}</div>`}
++ return uiDisclosure('stock:legend','Jak czytać bilans?',`<p>Produkcja obejmuje wyroby i pozyskanie dostarczone do magazynu. Zużycie obejmuje posiłki, składniki, straty i utrzymanie. Bilans produkcyjny to produkcja minus zużycie. Dostawy, handel, ręczne wydatki i przesunięcia są oddzielnie w kolumnie Pozostałe. Nie udają produkcji.</p><p>Wartości /dobę wynikają z rzeczywistych operacji od początku zachowanego pomiaru (bieżąca i poprzednia doba). Zapotrzebowanie to osobna potrzeba mieszkańców. Spiżarki rodzin i ładunki w drodze są poza tym magazynem.</p>${other.length?'<p>Pozostałe zmiany /dobę: '+other.map(([key,value])=>escapeHtml(ZAP_N[key]||RN[key]||key)+' '+zapNumber(value,true)).join(' · ')+'</p>':''}`);
++}
++function zapCard(){return `<div class="card zapc">${zapHead()}${zapBody()}${zapDetails()}</div>`}
+ const zapPop=document.createElement('div');zapPop.id='zappop';zapPop.hidden=true;document.body.appendChild(zapPop);
+ zapPop.innerHTML='<div class="zpc"></div><button class="zap-close" data-zapclose="1" aria-label="Zamknij zapasy" title="Zamknij zapasy">×</button><div class="zpb"><button data-zapclose="1">Zamknij zapasy</button></div>';
+-let zapFT=0;function zapFill(force){if(!S)return;const t=performance.now();if(!force&&t-zapFT<900)return;zapFT=t;setH(zapPop.firstChild,zapHead()+zapBody()+zapLegend())}
++let zapFT=0;function zapFill(force){if(!S)return;const t=performance.now();if(!force&&t-zapFT<900)return;zapFT=t;setH(zapPop.firstChild,zapHead()+zapBody()+zapDetails())}
+ function zapShow(){if(!S)return;if(!zapPop.hidden){zapPop.hidden=true;return}const wp=$('wxpop');if(wp)wp.hidden=true;zapFill(true);zapPop.hidden=false;zapPop.scrollTop=0;
+  try{const r=$(czOn?'cz-res':'stats').getBoundingClientRect();zapPop.style.top=(r.bottom+6)+'px';const css=getComputedStyle(document.documentElement),safeLeft=parseFloat(css.getPropertyValue('--safe-left'))||0,safeRight=parseFloat(css.getPropertyValue('--safe-right'))||0;zapPop.style.left=Math.max(10+safeLeft,Math.min(r.left,innerWidth-zapPop.offsetWidth-10-safeRight))+'px'}catch(e){}}
+ {const l=$('cz-l');l.insertAdjacentHTML('beforeend','<i class="czbr"></i><button id="cz-res" type="button" aria-label="Zapasy"></button>');
+--- RC9/src/p_departure.js
++++ RC10/src/p_departure.js
+@@ -0,0 +1,44 @@
++/* Wspólna odprawa i powrót. Księga opłat jest częścią zapisu, cele powrotu tylko chwilowe. */
++function expSeaExit(people){const shipyard=S.bld.find(building=>building.kind==='szkutnia'&&bDone(building));return shipyard?workSiteTiles(shipyard).find(tile=>expRouteReady(people,tile))||null:null;}
++function expCharge(people,food,boats=0){
++ if(!people.length||!Number.isFinite(food)||food<0||foodTotal()+1e-9<food||(S.res.lodz||0)<boats)return null;
++ const total=foodTotal(),paid={};let remaining=food;
++ const available=FOOD.filter(resource=>(S.res[resource]||0)>0);
++ available.forEach((resource,index)=>{const quantity=index===available.length-1?remaining:Math.min(S.res[resource],food*S.res[resource]/total);paid[resource]=quantity;remaining-=quantity;});
++ if(Math.abs(remaining)>1e-6||Object.entries(paid).some(([resource,quantity])=>quantity<0||quantity>(S.res[resource]||0)+1e-6))return null;
++ for(const [resource,quantity] of Object.entries(paid))S.res[resource]=Math.max(0,S.res[resource]-quantity);
++ if(boats){paid.lodz=boats;S.res.lodz-=boats;}
++ return {schema:1,food,paid,crew:people.map(person=>({id:person.id,job:person.job||'rob',wb:person.wb??null}))};
++}
++function expLedgerValid(expedition){
++ const ledger=expedition.departure;if(!ledger||ledger.schema!==1||!ledger.paid||Array.isArray(ledger.paid)||!Array.isArray(ledger.crew)||ledger.crew.length!==expedition.ppl.length)return false;
++ if(!Number.isFinite(ledger.food)||ledger.food<0||Math.abs(ledger.food-Math.ceil(K*expedition.ppl.length*expedition.days))>1.000001)return false;
++ const ids=new Set();for(const person of ledger.crew){if(!Number.isSafeInteger(person.id)||!expedition.ppl.includes(person.id)||ids.has(person.id)||!['rob','bud','wb','zwiad','zdun','czyt'].includes(person.job)||(person.wb!==null&&!Number.isSafeInteger(person.wb)))return false;ids.add(person.id);}
++ let food=0;for(const [resource,quantity] of Object.entries(ledger.paid)){if(!Number.isFinite(quantity)||quantity<0)return false;if(FOOD.includes(resource))food+=quantity;else if(resource!=='lodz')return false;}
++ const boats=ledger.paid.lodz||0,expected=expedition.type==='rejs'?1:expedition.type==='horyzont'&&!expedition.big?2:0;
++ return Math.abs(food-ledger.food)<1e-6&&boats===expected;
++}
++function expCancelWhy(expedition){if(!expedition||!S.exps.includes(expedition))return 'Wyprawa jest zakończona.';if(expedition.started||S.people.some(person=>person.exp===expedition.id&&person.state==='away'))return 'Załoga już wyruszyła.';if(!expLedgerValid(expedition))return 'Starszy zapis nie zawiera księgi opłat — zwrot nie jest dostępny.';return '';}
++function cancelExp(id){
++ const expedition=S.exps.find(candidate=>candidate.id===id);if(expCancelWhy(expedition))return false;
++ S.exps=S.exps.filter(candidate=>candidate!==expedition);
++ for(const [resource,quantity] of Object.entries(expedition.departure.paid))S.res[resource]=(S.res[resource]||0)+quantity;
++ for(const record of expedition.departure.crew){const person=S.people.find(candidate=>candidate.id===record.id);if(!person||person.exp!==id)continue;release(person);person.exp=null;person.path=null;person.after=null;person.routeGoal=null;person.state='idle';person.wait=.2;person.job=record.job;person.wb=record.wb;if(person.job==='wb'&&!bById(person.wb)){person.job='rob';person.wb=null;}person.act='przygotowania odwołane';}
++ log('Odwołano przygotowanie wyprawy. Zwrócono pobraną żywność i łodzie.');assign();renderPanel();renderSel();save();return true;
++}
++function expCancelHTML(expedition){const reason=expCancelWhy(expedition);return reason?'<p class="mut">'+escapeHtml(reason)+'</p>':'<button data-exp-cancel="'+expedition.id+'">Odwołaj przygotowania i zwróć zapasy</button>';}
++let expReturnSlots=null;
++function expSafeReturnSlots(expedition,people){
++ const camps=navCampTiles();if(!camps.length)return null;const components=navComponents(walk),home=components[camps[0][1]*N+camps[0][0]],occupied=new Set(S.people.filter(person=>!people.includes(person)&&!['away','sleep'].includes(person.state)).map(person=>tileOf(person.x,person.z).join(':'))),candidates=[];
++ for(const center of [expedition.exit,[camp.i,camp.j]])for(let dz=-8;dz<=8;dz++)for(let dx=-8;dx<=8;dx++){const i=center[0]+dx,j=center[1]+dz,key=i+':'+j;if(i<0||j<0||i>=N||j>=N||!walk[j*N+i]||components[j*N+i]!==home||occupied.has(key)||candidates.some(tile=>tile[0]===i&&tile[1]===j))continue;candidates.push([i,j]);}
++ candidates.sort((a,b)=>Math.hypot(a[0]-expedition.exit[0],a[1]-expedition.exit[1])-Math.hypot(b[0]-expedition.exit[0],b[1]-expedition.exit[1]));
++ if(candidates.length<people.length)return null;return new Map(people.map((person,index)=>[person.id,candidates[index]]));
++}
++function expReturn(person,expedition){const tile=expReturnSlots?.get(person.id);if(!tile)throw Error('Brak sprawdzonego miejsca powrotu');release(person);person.job='rob';person.exp=null;person.state='idle';person.x=tcx(tile[0]);person.z=tcx(tile[1]);person.path=null;person.after=null;person.routeGoal=null;person.navWait=0;person.navResumeAct=null;person.wait=.2;}
++const departureFinish=finishExp;
++finishExp=function(expedition,people){
++ if(!S.exps.includes(expedition))return false;
++ const slots=expSafeReturnSlots(expedition,people);if(!slots){expedition.returnBlocked='Powrót czeka na bezpieczne miejsce przy osadzie — odblokuj przejście.';expedition.left=0;return false;}
++ expReturnSlots=slots;delete expedition.returnBlocked;try{departureFinish(expedition,people);return true;}finally{expReturnSlots=null;}
++};
++document.addEventListener('click',event=>{const control=event.target.closest('[data-exp-cancel]');if(control&&S){event.preventDefault();cancelExp(Number(control.dataset.expCancel));}},true);
+--- RC9/src/p_e21.js
++++ RC10/src/p_e21.js
+@@ -34,10 +34,10 @@
+ const ISL_BY={};ISL.forEach(x=>ISL_BY[x.k]=x);
+ function e2Isl(){S.e2.isl=S.e2.isl||[];return S.e2.isl}
+ function e2HorWhy(){if(!hasDone('szkutnia'))return'Potrzebna szkutnia.';const big=(S.e2.big||0)>=4;if(!big&&(S.res.lodz||0)<2)return S.e2.r1==='wielka'?'Wielka łódź nie jest jeszcze gotowa.':'Potrzebne dwie łodzie przy brzegu.';
+- if(S.exps.some(e=>e.type==='horyzont'))return'Jedna wyprawa już płynie za horyzont.';if(expCandidates(4).length<4)return'Za mało wolnych, zdrowych ludzi (4).';if(foodTotal()<K*4*8)return'Za mało jedzenia na drogę.';return''}
++ if(S.exps.some(e=>e.type==='horyzont'))return'Jedna wyprawa już płynie za horyzont.';if(expCandidates(4).length<4)return'Za mało wolnych, zdrowych ludzi (4).';if(foodTotal()<Math.ceil(K*4*((S.e2.big||0)>=4?6:8)))return'Za mało jedzenia na drogę.';if(!expSeaExit(expCandidates(4)))return'Brak drogi do szkutni — odblokuj dojście załogi.';return''}
+ function e2Hor(){const why=e2HorWhy();if(why){toast(why);return}const sz=S.bld.find(b=>b.kind==='szkutnia'&&bDone(b));const ppl=expCandidates(4);const big=(S.e2.big||0)>=4,days=big?6:8;
+- const tot=foodTotal();FOOD.forEach(k=>{S.res[k]-=K*4*days*((S.res[k]||0)/tot)});if(!big)S.res.lodz-=2;const ex=entryOf(sz.kind,sz.i,sz.j)||[camp.i,camp.j];
+- const e={id:(S.expN=(S.expN||0)+1),r:0,type:'horyzont',ppl:ppl.map(p=>p.id),days,left:days,exit:ex,big,risk:(big?.05:.12)*wxSea()*(seasonIdx()===2?1.7:1)};S.exps.push(e);
++ const ex=expSeaExit(ppl),departure=ex&&expCharge(ppl,Math.ceil(K*4*days),big?0:2);if(!departure)return;
++ const e={id:(S.expN=(S.expN||0)+1),r:0,type:'horyzont',ppl:ppl.map(p=>p.id),days,left:days,exit:ex,big,departure,started:false,risk:(big?.05:.12)*wxSea()*(seasonIdx()===2?1.7:1)};S.exps.push(e);
+  ppl.forEach(p=>{release(p);p.path=null;p.state='idle';p.wait=0;p.job='wyp';p.wb=null;p.exp=e.id;p.act='płynie za horyzont'});
+  log(`${big?'Wielka łódź':'Dwie łodzie'} wypływa${big?'':'ją'} za horyzont. Płyną: ${ppl.map(p=>p.name).join(', ')}. Wrócą za ${days} dni.`);toast('Wyprawa za horyzont');assign();renderPanel()}
+ {const _fe=finishExp;finishExp=function(e,out){if(e.type!=='horyzont')return _fe(e,out);S.exps=S.exps.filter(x=>x!==e);const lines=[];const L=e2Isl();
+@@ -49,7 +49,7 @@
+  lines.push('Przywieźli: '+Object.entries(got).map(([k,v])=>RN[k].toLowerCase()+' '+v).join(', ')+'.');
+  out.forEach(p=>{if(Math.random()<e.risk){p.hp=Math.max(.3,p.hp-.25);p.hurt=1;lines.push(p.name+' wraca chory od zimna i słonej wody.')}gainXp(p,'rybak',50)});
+  if(lost)lines.push(e.big?'':'Jedna łódź przepadła w sztormie. Ludzie przesiedli się do drugiej.');
+- out.forEach(p=>{p.job='rob';p.exp=null;p.state='idle';const st=e.exit;p.x=tcx(st[0]);p.z=tcx(st[1]);p.wait=.2});S.e2.horN=(S.e2.horN||0)+1;techXp('nauka',14);
++ out.forEach(p=>{expReturn(p,e)});S.e2.horN=(S.e2.horN||0)+1;techXp('nauka',14);
+  S.expLog=S.expLog||[];S.expLog.unshift({d:Math.floor(S.day)+1,r:'Za horyzont',t:lines.join(' ')});if(S.expLog.length>8)S.expLog.pop();
+  log('Wyprawa za horyzont wraca. '+lines.filter(Boolean).join(' '));toast('Wyprawa wróciła zza horyzontu');assign();renderPanel()}}
+ const E2_OBOZ={drewno:40,deski:10,narz:2};
+--- RC9/src/p_e2d.js
++++ RC10/src/p_e2d.js
+@@ -182,10 +182,10 @@
+ let e2CoastT=null;
+ function e2Coast(){if(e2CoastT)return e2CoastT;const cx=N/2,cz=N/2;const L=[];for(let j=1;j<N-1;j++)for(let i=1;i<N-1;i++){const k=j*N+i;if(!land[k]||!beach[k])continue;L.push([i,j,Math.atan2(j-cz,i-cx)])}return e2CoastT=L}
+ function e2RejsCands(){return expCandidates(3)}
+-function e2RejsWhy(){if(!hasDone('szkutnia'))return'Najpierw trzeba postawić szkutnię.';if((S.res.lodz||0)<1)return'Nie ma wolnej łodzi. Szkutnia musi ją najpierw zbudować.';if(S.exps.some(e=>e.type==='rejs'))return'Jedna łódź jest już w rejsie.';if(e2RejsCands().length<3)return'Za mało wolnych, zdrowych ludzi (3).';if(foodTotal()<K*3*4)return'Za mało jedzenia na drogę.';return''}
++function e2RejsWhy(){if(!hasDone('szkutnia'))return'Najpierw trzeba postawić szkutnię.';if((S.res.lodz||0)<1)return'Nie ma wolnej łodzi. Szkutnia musi ją najpierw zbudować.';if(S.exps.some(e=>e.type==='rejs'))return'Jedna łódź jest już w rejsie.';if(e2RejsCands().length<3)return'Za mało wolnych, zdrowych ludzi (3).';if(foodTotal()<Math.ceil(K*3*4))return'Za mało jedzenia na drogę.';if(!expSeaExit(e2RejsCands()))return'Brak drogi do szkutni — odblokuj dojście załogi.';return''}
+ function e2Rejs(){const why=e2RejsWhy();if(why){toast(why);return}const sz=S.bld.find(b=>b.kind==='szkutnia'&&bDone(b));const ppl=e2RejsCands();const days=4,food=Math.ceil(K*3*days);
+- const tot=foodTotal();FOOD.forEach(k=>{S.res[k]-=food*(S.res[k]/tot)});S.res.lodz-=1;const ex=entryOf(sz.kind,sz.i,sz.j)||[camp.i,camp.j];
+- const arc=(S.e2.rejsy||0)%3;const e={id:(S.expN=(S.expN||0)+1),r:0,type:'rejs',ppl:ppl.map(p=>p.id),days,left:days,exit:ex,risk:.08*wxSea()*(seasonIdx()===2?1.6:1),arc};S.exps.push(e);
++ const ex=expSeaExit(ppl),departure=ex&&expCharge(ppl,food,1);if(!departure)return;
++ const arc=(S.e2.rejsy||0)%3;const e={id:(S.expN=(S.expN||0)+1),r:0,type:'rejs',ppl:ppl.map(p=>p.id),days,left:days,exit:ex,departure,started:false,risk:.08*wxSea()*(seasonIdx()===2?1.6:1),arc};S.exps.push(e);
+  ppl.forEach(p=>{release(p);p.path=null;p.state='idle';p.wait=0;p.job='wyp';p.wb=null;p.exp=e.id;p.act='wypływa w rejs wzdłuż brzegu'});
+  log(`Łódź wypływa w rejs wzdłuż brzegu. Płyną: ${ppl.map(p=>p.name).join(', ')}. Wrócą za ${days} dni.`);toast('Łódź wypłynęła');assign();renderPanel()}
+ {const _fe=finishExp;finishExp=function(e,out){if(e.type!=='rejs')return _fe(e,out);S.exps=S.exps.filter(x=>x!==e);const lines=[];
+@@ -196,7 +196,7 @@
+  lines.unshift(['Opłynęli cypel, za którym nikt z nas jeszcze nie był.','Na skałach przy brzegu siedziały setki ptaków.','Morze było spokojne, a woda tak czysta, że widać było dno.','Trzy dni wiał wiatr od lądu i ledwo wrócili.'][(Math.random()*4)|0]);
+  lines.push(`Przywieźli: ryby ${ry}, skóry fok ${sk}${dr?', drewno z wyrzutów '+dr:''}.`);if(rv)lines.push('Na mapie przybyło wybrzeża.');if(lost)lines.push('Łodzi nie udało się uratować: rozbiła się o skały przy powrocie. Ludzie wrócili brzegiem.');
+  S.e2.rejsy=(S.e2.rejsy||0)+1;techXp('nauka',10);
+- out.forEach(p=>{p.job='rob';p.exp=null;p.state='idle';const st=e.exit;p.x=tcx(st[0]);p.z=tcx(st[1]);p.wait=.2});
++ out.forEach(p=>{expReturn(p,e)});
+  S.expLog=S.expLog||[];S.expLog.unshift({d:Math.floor(S.day)+1,r:'Rejs wzdłuż brzegu',t:lines.join(' ')});if(S.expLog.length>8)S.expLog.pop();
+  log('Rejs wraca. '+lines.join(' '));toast('Łódź wróciła z rejsu');if(S.e2.rejsy===1)song('Pieśń o pierwszym rejsie');assign();renderPanel()}}
+ {const _eh=expHTML;expHTML=function(){let h=_eh();if(!S||!S.e2||S.path!=='morze')return h;const why=e2RejsWhy();const on=S.exps.find(e=>e.type==='rejs');
+--- RC9/src/p_e4_audit.js
++++ RC10/src/p_e4_audit.js
+@@ -0,0 +1,39 @@
++/* Łańcuchy są odczytem katalogu i stanu, bez drugiej symulacji gospodarki. */
++const E4Audit=(()=>{
++ const catalog=typeof E4Catalog==='undefined'?require('./p_e4_catalog.js'):E4Catalog;
++ const domain=typeof E4Domain==='undefined'?require('./p_e4_domain.js'):E4Domain;
++ const world=typeof E4World==='undefined'?require('./p_e4_world.js'):E4World;
++ const raw={drewno:['Las','timber'],kamien:['Odkrywka kamienia','stone'],ruda:['Złoże rudy','ore'],glina:['Odkrywka gliny','clay'],ziarno:['Dzikie zboże lub pole','wildGrain'],jagody:['Runo leśne','forage'],ryby:['Łowisko','fish'],ziola:['Dzikie zioła lub zielnik','herbs'],mieso:['Polowanie albo hodowla',null],skory:['Polowanie albo hodowla',null],mleko:['Dorosłe kozy w zagrodzie',null],jaja:['Kury w kurniku',null],miod:['Pasieka',null],wosk:['Pasieka',null],pierze:['Kurnik',null],bursztyn:['Wybrzeże',null]};
++ function matrix(){
++  const result=Object.fromEntries(Object.keys(catalog.resources).map(resource=>[resource,{resource,sources:[],uses:[]} ]));
++  const source=(resource,label)=>result[resource]?.sources.push(label),use=(resource,label)=>result[resource]?.uses.push(label);
++  for(const [resource,[label]] of Object.entries(raw))source(resource,label);
++  for(const crop of Object.values(catalog.crops)){source(crop.resource,crop.name);if(crop.seed)use(crop.seed,'Siew: '+crop.name);}
++  for(const [id,recipe] of Object.entries(catalog.recipes)){for(const resource of Object.keys(recipe.input))use(resource,'Przetwarzanie: '+id);for(const resource of Object.keys(recipe.output))source(resource,'Receptura: '+id);}
++  for(const [id,building] of Object.entries(catalog.buildings))for(const resource of Object.keys(building.cost))use(resource,'Budowa: '+id);
++  for(const resource of catalog.food)use(resource,'Posiłki');for(const resource of Object.keys(catalog.householdUse))use(resource,'Wyposażenie domów');
++  for(const resource of ['narz','narzk'])use(resource,'Praca i zużycie narzędzi');for(const resource of ['odziez','leki','ziola'])use(resource,'Ubiór i zdrowie');for(const resource of ['piwo','wino','mpitny'])use(resource,'Karczma');use('opal','Ogrzewanie');use('woz','Transport i przeprowadzki');
++  return Object.values(result);
++ }
++ function contract(){const rows=matrix(),required=new Set([...Object.values(catalog.recipes).flatMap(recipe=>Object.keys(recipe.input)),...Object.values(catalog.buildings).flatMap(building=>Object.keys(building.cost))]),produced=new Set(Object.values(catalog.recipes).flatMap(recipe=>Object.keys(recipe.output)));return {missingSources:rows.filter(row=>required.has(row.resource)&&!row.sources.length).map(row=>row.resource),unusedProducts:rows.filter(row=>produced.has(row.resource)&&!row.uses.length).map(row=>row.resource),unknownRecipes:Object.entries(catalog.recipes).filter(([,recipe])=>Object.keys({...recipe.input,...recipe.output}).some(resource=>!catalog.resources[resource])).map(([id])=>id),rows};}
++ function source(state,settlement,resource){
++  const region=world.regionAt(state.e4.world,settlement.x,settlement.z),pool=state.e4.nature?.[region?.id||'centrum'];
++  const natural=raw[resource];if(natural){if(natural[1]&&pool?.[natural[1]]<=.001)return natural[0]+': zasób wyczerpany. Sprowadź '+catalog.resources[resource].toLowerCase()+' z innej krainy.';return natural[0]+'. Sprawdź pracowników, porę roku i zapas krainy w Naturze.';}
++  const crop=Object.values(catalog.crops).find(candidate=>candidate.resource===resource);if(crop)return crop.name+': pole, sadzonki i praca do zbiorów (Natura).';
++  const producers=Object.values(catalog.recipes).filter(recipe=>recipe.output[resource]),local=producers.find(recipe=>settlement.buildings[recipe.building]),recipe=local||producers[0];
++  return recipe?(local?'Uruchom ':'Zbuduj '+(catalog.buildings[recipe.building]?.name||recipe.building)+' i uruchom ')+recipe.name.toLowerCase()+'. Możesz też dowieźć wyrób z innego ośrodka.':'Zasób z wcześniejszej epoki lub dostawy.';
++ }
++ function status(state,settlementId){
++  const settlement=state.e4.settlements[settlementId];if(!settlement)return [];
++  const stock=domain.stock(state,settlementId),results=[];
++  for(const [id,recipe] of Object.entries(catalog.recipes)){
++   if(!settlement.buildings[recipe.building]||settlement.batches.some(batch=>batch.recipe===id)||Object.entries(recipe.output).every(([resource])=>(stock[resource]||0)>=60))continue;
++   const missing=Object.entries(recipe.input).filter(([resource,quantity])=>(stock[resource]||0)+1e-9<quantity).map(([resource,quantity])=>({resource,quantity:quantity-(stock[resource]||0),source:source(state,settlement,resource)}));
++   if(missing.length)results.push({id,name:recipe.name,missing});
++  }
++  return results;
++ }
++ return {matrix,contract,status,source};
++})();
++if(typeof module!=='undefined'&&module.exports)module.exports=E4Audit;
++function e4ChainHTML(settlement){const rows=E4Audit.status(S,settlement.id);return uiDisclosure('e4:chains:'+settlement.id,'Co zatrzymuje łańcuchy',rows.length?rows.map(row=>'<div class="card"><h4>'+escapeHtml(row.name)+'</h4>'+row.missing.map(item=>'<p>Brakuje: <b>'+escapeHtml(E4Catalog.resources[item.resource])+' '+fmt(item.quantity)+'</b><br><small>'+escapeHtml(item.source)+'</small></p>').join('')+'</div>').join(''):'<p>Brak brakujących składników w dostępnych pracowniach. Sprawdź kolejki, pracowników i miejsce w magazynie.</p>',false,rows.length?rows.length+' pracowni czeka na składniki':'Składniki dostępne lub partia już trwa');}
+--- RC9/src/p_e4_ui.js
++++ RC10/src/p_e4_ui.js
+@@ -18,7 +18,7 @@
+   markup+='<h3>Rozwój gospodarstwa</h3>';for(const [kind,definition]of Object.entries(catalog.buildings)){if(kind==='dom_rodowy'&&settlement.id==='przystan')continue;markup+=`<div class="card"><h4>${definition.name}${settlement.buildings[kind]?' · '+settlement.buildings[kind]:''}</h4><p>${e4Resources(definition.cost)} · ${definition.labor} godz. pracy${definition.crop?' · sadzonki: '+(settlement.land.seeds[definition.crop]||0):''}</p><button data-e4-project="${kind}">Zleć budowę</button></div>`;}
+  }
+  if(tab==='praca'){
+-  markup+='<h3>Magazyn i bilans</h3>'+zapCard()+'<h3>Partie w pracowniach</h3>';
++  markup+='<h3>Magazyn i bilans</h3>'+zapCard()+e4ChainHTML(settlement)+'<h3>Partie w pracowniach</h3>';
+   markup+=settlement.batches.map(batch=>`<div class="card"><b>${catalog.recipes[batch.recipe].name}</b><p>${batch.readyAt===null?'Praca: '+Math.floor(batch.progress/batch.work*100)+'%':'Dojrzewa jeszcze '+Math.max(0,(batch.readyAt-S.e4.simTicks)/1000000).toFixed(1)+' dni'}</p><small>Składniki w partii: ${e4Resources(batch.materials)}</small></div>`).join('')||'<p class="mut">Brak rozpoczętych partii.</p>';
+   markup+='<h3>Zleć wyrób</h3>';for(const [recipeId,recipe]of Object.entries(catalog.recipes)){if(!settlement.buildings[recipe.building])continue;markup+=`<div class="card"><h4>${recipe.name}</h4><p>${e4Resources(recipe.input)} → ${e4Resources(recipe.output)}</p><p class="mut">${recipe.labor} godz. pracy${recipe.days?' · '+recipe.days+' dni dojrzewania':''}</p><button data-e4-batch="${recipeId}">Rozpocznij partię</button></div>`;}
+   markup+='<p class="mut">Najpierw ziarno na siew. Przy dostatecznym zapasie żywności składniki kolejnej partii pozostają dla pracowni: '+e4Resources(settlement.processingReserve)+'.</p>';
+--- RC9/src/p_e4_view.js
++++ RC10/src/p_e4_view.js
+@@ -21,7 +21,7 @@
+  e4Sync();
+ }
+ function HyLegacyE4(x,z){const column=clamp(Math.round(x+96),0,192),row=clamp(Math.round(z+96),0,192);return H[row*VW+column];}
+-function e4SitePoint(settlement,index,radius=9){const angle=index*2.3999632297,distance=radius+Math.floor(index/12)*4;for(let attempt=0;attempt<8;attempt++){const x=settlement.x+Math.cos(angle+attempt*.4)*distance,z=settlement.z+Math.sin(angle+attempt*.4)*distance;if(E4World.height(S.e4.world,x,z)>.2)return{x,z};}return{x:settlement.x,z:settlement.z};}
++function e4SitePoint(settlement,index,radius=9){return E4Life.point(S,settlement,index,radius);}
+ function e4Building(group,settlement,kind,index,unfinished=false){const definition=E4Catalog.buildings[kind];if(!definition||definition.crop||['pole','ogrodek','zielnik','len'].includes(kind))return;const model=definition.model,profile={id:600000+index,kind:model,prog:1,work:1,ext:[],cond:1},visual=makeBuildingModel(model,profile),position=e4SitePoint(settlement,index,settlement.id==='przystan'?15:7);visual.position.set(position.x,Hy(position.x,position.z),position.z);if(kind==='dom_rodowy')visual.scale.set(1.8,1.3,1.6);if(unfinished)visual.scale.y*=.25;visual.userData.e4Id=settlement.id;visual.traverse(object=>object.userData.e4Id=settlement.id);group.add(visual);try{mergeGroup(visual)}catch(error){console.warn(error)};}
+ function e4Sync(){
+  if(S?.epoch!==4)return;
+--- RC9/src/p_end.js
++++ RC10/src/p_end.js
+@@ -92,7 +92,7 @@
+  ripples.forEach((m,k)=>{const s=1+.3*Math.sin(clock*1.6+k);m.scale.set(s,s,s);m.material.opacity=.3+.22*Math.sin(clock*1.6+k)});
+  const Lt=lighting();firelight.position.set(campX(),Hy(campX(),campZ())+1.8,campZ());atmosphere(rdt,Lt);gfxTick(rdt,Lt);
+  rangeRing.material.opacity=.4+.2*Math.sin(clock*3);
+- mapTick(rdt);
++ mapTick(rdt);worldDetailTick(rdt);
+  soundTick(rdt,Lt);
+  uiT+=rdt;if(uiT>.4){uiT=0;renderTop();renderSel();goalsTick();techTick();custTick()}
+  placeLabel();
+--- RC9/src/p_exp.js
++++ RC10/src/p_exp.js
+@@ -59,9 +59,9 @@
+ function exitTile(r){const dx=r.i-camp.i,dy=r.j-camp.j,l=Math.hypot(dx,dy)||1;for(let d=12;d>=3;d--){const t=nearestWalk(clamp(Math.round(camp.i+dx/l*d),1,N-2),clamp(Math.round(camp.j+dy/l*d),1,N-2));if(t&&reach[t[1]*N+t[0]])return t}return[camp.i,camp.j+1]}
+ function sendExp(rid,type){const r=REGIONS[rid];const why=canSend(r,type);if(why){toast(why);return}
+  const n=S.expSize,ppl=expCandidates(n),food=expFood(r,type,n);
+- const tot=foodTotal();FOOD.forEach(k=>{S.res[k]-=food*(S.res[k]/tot)});
++ const departure=expCharge(ppl,food);if(!departure)return;
+  const days=expDays(r,type);const ex=exitTile(r);
+- const e={id:(S.expN=(S.expN||0)+1),r:rid,type,ppl:ppl.map(p=>p.id),days,left:days,exit:ex,risk:expRisk(r,n)};S.exps.push(e);
++ const e={id:(S.expN=(S.expN||0)+1),r:rid,type,ppl:ppl.map(p=>p.id),days,left:days,exit:ex,departure,started:false,risk:expRisk(r,n)};S.exps.push(e);
+  ppl.forEach(p=>{release(p);p.path=null;p.state='idle';p.wait=0;p.job='wyp';p.wb=null;p.exp=e.id;p.act='wyrusza: '+r.name.toLowerCase()});
+  log(`Wyprawa (${type==='zwiad'?'zwiad':'zbiór'}) rusza na ${regDir(r)}: ${r.known?r.name:'nieznany teren'}. Idą: ${ppl.map(p=>p.name).join(', ')}. Wrócą za ${days} dni.`);toast('Wyprawa wyruszyła');assign();renderPanel()}
+ function expTick(){if(!S.exps||!S.exps.length)return;
+@@ -79,14 +79,14 @@
+   lines.push('Poznano teren: '+r.name+' ('+RTYPE[r.type]+').');S.hope=clamp(S.hope+.02,0,1)}
+  else{const got=[];LOOT[r.type].forEach(([k,v])=>{if(k==='miod'&&!tech('u_bart'))return;const q=Math.round(v*alive.length*(e.days-1)*(.7+Math.random()*.6)*(law('lup')?1.25:1));if(q>0){S.res[k]=(S.res[k]||0)+q;got.push(RN[k].toLowerCase()+' '+q)}});
+   techXp(r.type==='coast'?'hodowla':'uprawa',15);S.seen.zbior1=1;techXp('nauka',8);lines.push(got.length?'Przynieśli: '+got.join(', ')+'.':'Wrócili z pustymi rękami.')}
+- alive.forEach(p=>{p.job='rob';p.exp=null;p.state='idle';const st=e.exit;p.x=tcx(st[0]);p.z=tcx(st[1]);p.wait=.2});
++ alive.forEach(p=>{expReturn(p,e)});
+  S.expLog=S.expLog||[];S.expLog.unshift({d:Math.floor(S.day)+1,r:r.name,t:lines.join(' ')});if(S.expLog.length>8)S.expLog.pop();
+  log('Wyprawa wraca: '+r.name+'. '+lines.join(' '));toast('Wyprawa wróciła: '+r.name);assign();renderPanel()}
+-function expDepartureStatus(expedition){const people=S.people.filter(person=>person.exp===expedition.id),blocked=people.find(person=>person.state!=='away'&&person.blocked);return {preparing:people.some(person=>person.state!=='away'),blocked:!!blocked,reason:blocked?.blocked.reason||''}}
++function expDepartureStatus(expedition){const people=S.people.filter(person=>person.exp===expedition.id),blocked=people.find(person=>person.state!=='away'&&person.blocked);return {preparing:people.some(person=>person.state!=='away'),blocked:!!blocked||!!expedition.returnBlocked,reason:expedition.returnBlocked||blocked?.blocked.reason||''}}
+ function expHTML(){let h=`<p class="lead">Wyprawy zabierają ludzi z osady na kilka dni. Biorą jedzenie na drogę. Ryzyko rośnie z odległością, zimą i na halach. Pomagają narzędzia, ciepła odzież i doświadczenie.</p>`;
+  h+=`<div class="row"><div class="n">Ludzi na wyprawę<small>Wolnych i zdrowych: ${expCandidates(9).length}</small></div><button class="mini" data-xs="-1">−</button><span class="cnt">${S.expSize}</span><button class="mini" data-xs="1">+</button></div>`;
+  if(S.exps.length){h+='<h3>W drodze</h3>';S.exps.forEach(e=>{const r=REGIONS[e.r];const ppl=S.people.filter(p=>p.exp===e.id);const pc=Math.round(100*(e.days-e.left)/e.days),departure=expDepartureStatus(e);
+-  h+=`<div class="card"><h4>${r.known?r.name:'Nieznany teren'} <span class="mut" style="font-size:13px">${e.type==='zwiad'?'zwiad':'zbiór'}</span></h4><p>${ppl.map(p=>p.name).join(', ')} · ${departure.blocked?escapeHtml(departure.reason):departure.preparing?'wychodzą z osady':'powrót za '+e.left+' dni'}</p><div class="pbar"><div style="width:${pc}%"></div></div></div>`})}
++  h+=`<div class="card"><h4>${r.known?r.name:'Nieznany teren'} <span class="mut" style="font-size:13px">${e.type==='zwiad'?'zwiad':'zbiór'}</span></h4><p>${ppl.map(p=>p.name).join(', ')} · ${departure.blocked?escapeHtml(departure.reason):departure.preparing?'wychodzą z osady':'powrót za '+e.left+' dni'}</p><div class="pbar"><div style="width:${pc}%"></div></div>${expCancelHTML(e)}</div>`})}
+  h+='<h3>Regiony wyspy</h3>';
+  REGIONS.filter(r=>r&&r.id!==0).sort((a,b)=>regDist(a)-regDist(b)).forEach(r=>{const on=S.exps.some(e=>e.r===r.id);const d1=expDays(r,'zwiad'),rk=Math.round(expRisk(r,S.expSize)*100);
+   h+=`<div class="card"><h4>${r.known?r.name:'Nieznany teren'}</h4><p class="mut">${regDir(r)} · ${Math.round(regDist(r))} kroków · ${r.known?RTYPE[r.type]+' · poznano '+Math.round(r.seen*100)+'%':'nikt tam nie był'}</p>`;
+--- RC9/src/p_g18.js
++++ RC10/src/p_g18.js
+@@ -151,7 +151,7 @@
+ const EMB=[0x8a2a22,0x6a2a1a,0x2a3a6a,0x7a5a1a];
+ function makePerson18(p){const g=new THREE.Group();const k=p.sex==='k',adult=p.age>=12,old=p.age>55,id=p.id;
+  const skin=mdCol(skinC[(p.rod||p.fam||id)%4]),cloth=mdCol(p.cloth),hair=mdCol(old?hairC[4]:hairC[id%4]);
+- const linen=mdCol(0xd8ccb0),pants=mdCol(k?0x5a4a3e:(id%3?0x4a463c:0x6a5a44)),emb=mdCol(EMB[id%4]),shoe=mdCol(id%2?0x8a6a44:0x5a4630),belt=mdCol(id%3===0?0x8a2a22:0x3a2c1e);
++ const linen=mdCol(0xd8ccb0),pants=mdCol(k?0x5a4a3e:(id%3?0x4a463c:0x6a5a44)),emb=mdCol(EMB[(p.rod||p.fam||id)%4]),shoe=mdCol(id%2?0x8a6a44:0x5a4630),belt=mdCol(id%3===0?0x8a2a22:0x3a2c1e);
+  // tułów z głową (jedna bryła), punkt obrotu w biodrach
+  const T=[];const h0=.5;
+  if(k){T.push([mdLathe([[.0,.06],[.205,.06],[.19,.16],[.165,.3],[.13,.46],[.118,.54],[.13,.62],[.14,.68],[.135,.74],[.1,.79],[.05,.82],[0,.83]].map(([r,y])=>[r,y-h0]),14),cloth]);
+@@ -165,8 +165,8 @@
+  // szyja i głowa
+  T.push([new THREE.CylinderGeometry(.04,.046,.07,10),skin,mdM(0,.84-h0,0)]);
+  const hy=.935-h0;T.push([new THREE.SphereGeometry(.098,16,12),skin,mdM(0,hy,0,0,0,0,.94+(id%5)*.03,adult?1.08+(id%3)*.035:1.2,.95+(id%4)*.025)]);
+- T.push([new THREE.SphereGeometry(.02,8,6),skin,mdM(0,hy-.012,.095,0,0,0,1,1.2,1.1)]);
+- [-1,1].forEach(s=>{T.push([new THREE.SphereGeometry(.0125,6,5),mdCol(0x1c1612),mdM(s*.034,hy+.018,.086)]);T.push([new THREE.SphereGeometry(.02,6,5),skin,mdM(s*.097,hy,0,0,0,0,.6,1,1)])});
++ T.push([new THREE.SphereGeometry(.016,8,6),skin,mdM(0,hy-.012,.095,0,0,0,1,1.2,1.1)]);
++ [-1,1].forEach(s=>{T.push([new THREE.SphereGeometry(.008,6,5),mdCol(0x1c1612),mdM(s*.034,hy+.018,.086)]);T.push([new THREE.SphereGeometry(.02,6,5),skin,mdM(s*.097,hy,0,0,0,0,.6,1,1)])});
+  T.push([new THREE.SphereGeometry(.022,6,4),mdCol(0x9a5a4a),mdM(0,hy-.05,.082,0,0,0,1.3,.4,.6)]);
+  // włosy, chusty, brody, kapelusze
+  if(k){const covered=adult&&id%3!==1;
+--- RC9/src/p_grafika.js
++++ RC10/src/p_grafika.js
+@@ -91,21 +91,7 @@
+ 
+ // ---------- ludzie: pasy, buty, chusty, brody, sakwy ----------
+ const PM={belt:M(0x2e241a),boot:M(0x2a2018),beard:[M(0x4a3626),M(0x6b4e30),M(0x2a221c),M(0x9a948a)],chusta:[M(0xb04a36),M(0xc8b48a),M(0x5a6a7a),M(0x7a5a8a),M(0xe0d6c0)],bag:M(0x7a5a3a)};
+-{const _mp=makePersonMesh;makePersonMesh=function(p){const g=_mp(p);const u=g.userData;const k=p.sex==='k',adult=p.age>=12;
+-  const add=(geo,mat,x,y,z,par)=>{const m=mesh(geo,mat,x,y,z);m.castShadow=true;m.userData.pid=p.id;(par||g).add(m);return m};
+-  const skin=g.children[1]&&g.children[1].material,cloth=u.aL.material;
+-  u.aL.geometry=new THREE.CylinderGeometry(.036,.03,.32,7).translate(0,-.14,0);u.aR.geometry=u.aL.geometry;
+-  u.lL.geometry=new THREE.CylinderGeometry(.046,.038,.36,7).translate(0,-.16,0);u.lR.geometry=u.lL.geometry;
+-  [u.aL,u.aR].forEach(a=>add(new THREE.SphereGeometry(.034,6,5),skin,0,-.31,0,a));
+-  [-1,1].forEach(s=>add(new THREE.SphereGeometry(.052,7,5),cloth,s*.15,.75,0));
+-  add(new THREE.CylinderGeometry(.04,.045,.06,6),skin,0,.83,0);
+-  if(k)add(new THREE.CylinderGeometry(.14,.21,.36,9),cloth,0,.43,0);
+-  add(new THREE.CylinderGeometry(k?.135:.128,k?.14:.132,.035,8),PM.belt,0,k?.62:.5,0);
+-  [u.lL,u.lR].forEach(l=>{const b=add(new THREE.BoxGeometry(.095,.08,.13),PM.boot,0,-.31,.02,l)});
+-  if(adult&&k&&p.id%3!==1){add(new THREE.SphereGeometry(.122,8,5,0,6.283,0,1.75),PM.chusta[p.id%5],0,.925,-.01)}
+-  if(adult&&!k&&p.age>=24&&p.id%3!==0){add(new THREE.BoxGeometry(.12,.08,.06),PM.beard[p.age>55?3:p.id%3],0,.84,.085)}
+-  if(adult&&p.id%4===2){const s=add(new THREE.BoxGeometry(.035,.36,.03),PM.bag,.07,.62,.11);s.rotation.z=.6;add(new THREE.BoxGeometry(.14,.12,.07),PM.bag,.14,.48,.1)}
+-  return g}}
++// Detale postaci są scalane w kanonicznym makePersonMesh / makePerson18.
+ 
+ // ---------- mgła o świcie nad wodą i nizinami ----------
+ const dawnMist=[];function mistInit(){const r0=rng(171);let k=0;for(let t=0;t<6000&&k<44;t++){const x=(r0()*2-1)*92,z=(r0()*2-1)*92,h=Hy(x,z);if(h>.7||h<-1.6)continue;
+--- RC9/src/p_hod.js
++++ RC10/src/p_hod.js
+@@ -12,13 +12,13 @@
+ function kozResume(person){
+  const pens=S.bld.filter(building=>building.kind==='zagroda'&&bDone(building)&&(building.animals||0)+S.people.filter(other=>other!==person&&other.kozB===building.id).reduce((sum,other)=>sum+(other.kozN||0),0)+person.kozN<=penCap(building));
+  const preferred=pens.find(building=>building.id===person.kozB);if(preferred)pens.splice(pens.indexOf(preferred),1),pens.unshift(preferred);
+- for(const pen of pens){const entry=entryOf(pen.kind,pen.i,pen.j);if(!entry)continue;person.kozB=pen.id;if(go(person,entry,'kozdom',null)){person.act='prowadzi kozę do zagrody';return true}}
++ for(const pen of pens){const entry=buildingEntryFor(person,pen);if(!entry)continue;person.kozB=pen.id;if(go(person,entry,'kozdom',null)){person.act='prowadzi kozę do zagrody';return true}}
+  if(!pens.length){kozRelease(person);person.state='idle';person.wait=.4;return true}
+  person.state='idle';person.wait=2;person.act='brak drogi do zagrody — prowadzi kozę';return true;
+ }
+ function kozDeliver(person){if(!person.kozN){person.state='idle';return}
+- const pen=bById(person.kozB),entry=pen&&entryOf(pen.kind,pen.i,pen.j);
+- const arrived=entry&&Math.hypot(person.x-tcx(entry[0]),person.z-tcx(entry[1]))<=1.5;
++ const pen=bById(person.kozB),entry=person.routeGoal;
++ const arrived=pen&&workSiteContains(pen,entry)&&Math.hypot(person.x-tcx(entry[0]),person.z-tcx(entry[1]))<=.8;
+  if(!pen||pen.kind!=='zagroda'||!bDone(pen)||(pen.animals||0)+person.kozN>penCap(pen)||!arrived){kozResume(person);return}
+  pen.animals=(pen.animals||0)+person.kozN;
+  if(!S.seen.koza1){S.seen.koza1=S.seen.koza=1;log(person.name+' przyprowadza do zagrody pierwszą oswojoną kozę.');toast('Pierwsza oswojona koza')}
+--- RC9/src/p_menu.js
++++ RC10/src/p_menu.js
+@@ -49,3 +49,6 @@
+ @media(min-width:761px) and (min-height:461px){body:not(.cz) #sheet{bottom:calc(76px + var(--safe-bottom))}}
+ @media(max-height:460px) and (min-width:600px){body.cz #sheet,body:not(.cz) #sheet{right:calc(8px + var(--safe-right))}}
+ `;document.head.appendChild(style)}
++
++/* Zapas i bilans na wierzchu; pełne liczby po świadomym rozwinięciu. */
++{const style=document.createElement('style');style.textContent=`.stock-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 14px}.stock-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:1px 7px;padding:6px 0;border-bottom:1px solid #ffffff14;font-variant-numeric:tabular-nums}.stock-row>span{min-width:0;overflow-wrap:anywhere;align-self:center}.stock-row>b{font-size:15px;color:var(--hi)}.stock-row>small{grid-column:1/-1;text-align:right;font-size:11px;line-height:1.2}.stock-surplus>small,.stock-surplus.stock-food-balance,.flow-table .stock-surplus{color:#a9d992}.stock-deficit>small,.stock-deficit.stock-food-balance,.flow-table .stock-deficit{color:#f3a49d}.stock-balanced>small,.stock-pending>small,.stock-balanced.stock-food-balance,.stock-pending.stock-food-balance{color:var(--mut)}.stock-food-balance{display:flex;justify-content:space-between;gap:8px;margin:8px 0}.stock-food-balance b{white-space:nowrap}.stock-compact .ui-section>summary{padding:9px 5px!important}.stock-compact .ui-section-content{padding:0 5px!important}.stock-compact .ui-section{border:0;border-radius:0;margin:5px 0 12px}.stock-compact .ui-section summary b{font-family:var(--sans);font-size:12px!important;letter-spacing:.1em;text-transform:uppercase}.stock-compact .ui-section>summary small{display:none}@media(max-width:380px){.stock-grid{gap:0 10px}.stock-row>span{font-size:12px}.stock-row>b{font-size:14px}.stock-row>small{font-size:10px}}`;document.head.appendChild(style)}
+--- RC9/src/p_misje.js
++++ RC10/src/p_misje.js
+@@ -26,8 +26,8 @@
+ function sendBuildingMission(buildingId){const building=bById(buildingId);if(!building)return false;const definition=missionFor(building),reason=missionRequirement(building);if(reason){toast(reason);return false}
+  const target=missionRegion(definition),person=missionEligible(building)[0],food=expFood(target,'zwiad',1),total=foodTotal();
+  if(total<=0)return false;
+- FOOD.forEach(resource=>{S.res[resource]-=food*S.res[resource]/total});
+- const days=expDays(target,'zwiad'),expedition={id:(S.expN=(S.expN||0)+1),r:target.id,type:'zwiad',ppl:[person.id],days,left:days,exit:exitTile(target),risk:expRisk(target,1),missionBuilding:building.id,missionKind:definition.kind};
++ const departure=expCharge([person],food);if(!departure)return false;
++ const days=expDays(target,'zwiad'),expedition={id:(S.expN=(S.expN||0)+1),r:target.id,type:'zwiad',ppl:[person.id],days,left:days,exit:exitTile(target),departure,started:false,risk:expRisk(target,1),missionBuilding:building.id,missionKind:definition.kind};
+  S.exps.push(expedition);release(person);person.path=null;person.state='idle';person.wait=0;person.job='wyp';person.wb=null;person.exp=expedition.id;person.act='przygotowuje wyprawę: '+definition.title.toLowerCase();
+  log(`${person.name} zabiera ${food} porcji żywności i wyrusza na zadanie „${definition.title}”. Powrót za około ${days} dni.`);toast('Zadanie rozpoczęte');assign();renderSel();renderPanel();save();return true;
+ }
+@@ -53,7 +53,7 @@
+  const running=missionInProgress(building),reason=missionRequirement(building),target=missionRegion(definition);
+  content+=`<div class="ext"><b>Zadanie: ${definition.title}</b><small>${definition.description}</small>`;
+  if(running){const explorer=S.people.find(person=>person.exp===running.id),percentage=Math.round(100*(running.days-running.left)/running.days);
+- content+=`<p>Wyprawa: ${explorer?explorer.name:'w drodze'} · ${expDepartureStatus(running).blocked?escapeHtml(expDepartureStatus(running).reason):explorer&&explorer.state!=='away'?'zbiera zapasy i wychodzi':'pozostało '+running.left+' dni'}</p><div class="pbar"><div style="width:${percentage}%"></div></div><button data-mission-locate="${running.r}">Pokaż teren wyprawy</button>`}
++ content+=`<p>Wyprawa: ${explorer?explorer.name:'w drodze'} · ${expDepartureStatus(running).blocked?escapeHtml(expDepartureStatus(running).reason):explorer&&explorer.state!=='away'?'zbiera zapasy i wychodzi':'pozostało '+running.left+' dni'}</p><div class="pbar"><div style="width:${percentage}%"></div></div><button data-mission-locate="${running.r}">Pokaż teren wyprawy</button>${expCancelHTML(running)}`}
+  else content+=`<p class="mut">${reason||`Czas: ${expDays(target,'zwiad')} dni · żywność: ${expFood(target,'zwiad',1)} porcji`}</p><button data-mission-start="${building.id}" ${reason?'disabled':''}>Wyrusz na poszukiwanie</button>`;
+  return content+'</div>';
+ };
+--- RC9/src/p_navigation.js
++++ RC10/src/p_navigation.js
+@@ -0,0 +1,45 @@
++/* Nawigacja: jedna siatka świata, lokalny ruch osób i kontrola nowych odcięć. */
++function navComponents(mask){const labels=new Int32Array(N*N),queue=new Int32Array(N*N);let component=0;for(let start=0;start<mask.length;start++){if(!mask[start]||labels[start])continue;let head=0,tail=1;queue[0]=start;labels[start]=++component;while(head<tail){const cell=queue[head++],x=cell%N,z=(cell/N)|0;for(let dz=-1;dz<=1;dz++)for(let dx=-1;dx<=1;dx++){if(!dx&&!dz)continue;const nx=x+dx,nz=z+dz,next=nz*N+nx;if(nx<0||nz<0||nx>=N||nz>=N||!mask[next]||labels[next]||(dx&&dz&&(!mask[z*N+nx]||!mask[nz*N+x])))continue;labels[next]=component;queue[tail++]=next;}}}return labels;}
++function navCampTiles(){return [[camp.i,camp.j+1],[camp.i+1,camp.j],[camp.i-1,camp.j],[camp.i,camp.j-1]].filter(([x,z])=>x>=0&&z>=0&&x<N&&z<N&&walk[z*N+x]);}
++function placementIsolation(kind,i,j){
++ const definition=BD[kind],inside=tile=>tile[0]>=i&&tile[0]<i+definition.w&&tile[1]>=j&&tile[1]<j+definition.h;
++ for(const building of S.bld){const entries=workSiteTiles(building);if(entries.length&&entries.every(inside))return 'Budowa zamknęłaby wszystkie wejścia: '+BD[building.kind].n+'.';}
++ if((S.exps||[]).some(expedition=>!expedition.started&&S.people.some(person=>person.exp===expedition.id&&person.state!=='away')&&inside(expedition.exit)))return 'Tu jest wyjście przygotowywanej wyprawy.';
++ // Połączony obwód gwarantuje obejście prostokąta bez pełnego przeglądu wyspy.
++ const perimeter=workSiteTiles({kind,i,j}),keys=new Set(perimeter.map(([x,z])=>z*N+x));let connected=0;
++ if(perimeter.length){const queue=[perimeter[0]],seen=new Set([perimeter[0][1]*N+perimeter[0][0]]);for(let head=0;head<queue.length;head++){const [x,z]=queue[head];connected++;for(let dz=-1;dz<=1;dz++)for(let dx=-1;dx<=1;dx++){const nx=x+dx,nz=z+dz,key=nz*N+nx;if((!dx&&!dz)||!keys.has(key)||seen.has(key)||(dx&&dz&&(!keys.has(z*N+nx)||!keys.has(nz*N+x))))continue;seen.add(key);queue.push([nx,nz]);}}}
++ if(perimeter.length&&connected===perimeter.length)return '';
++ const before=navComponents(walk),mask=walk.slice();for(let x=i;x<i+definition.w;x++)for(let z=j;z<j+definition.h;z++)mask[z*N+x]=0;const after=navComponents(mask),anchors=new Map();
++ for(const tile of navCampTiles()){const key=tile[1]*N+tile[0];if(mask[key]){anchors.set(before[key],after[key]);break;}}
++ for(const person of S.people){if(person.state==='away')continue;const tile=tileOf(person.x,person.z),key=tile[1]*N+tile[0],old=before[key];if(!old||!mask[key])continue;if(!anchors.has(old))anchors.set(old,after[key]);else if(anchors.get(old)!==after[key])return 'Budowa odcięłaby mieszkańca od osady — zostaw przejście.';}
++ for(const building of S.bld){const entries=workSiteTiles(building),previous=entries.find(([x,z])=>anchors.has(before[z*N+x]));if(previous&&!entries.some(([x,z])=>mask[z*N+x]&&after[z*N+x]===anchors.get(before[previous[1]*N+previous[0]])))return 'Budowa odcięłaby dojście: '+BD[building.kind].n+'.';}
++ return '';
++}
++const navCrowd={active:false,state:null,cells:new Map()};
++function navRebuildCrowd(){navCrowd.state=S;navCrowd.cells.clear();for(const person of S.people){if(['away','sleep'].includes(person.state))continue;const key=Math.floor(person.x)+':'+Math.floor(person.z);if(!navCrowd.cells.has(key))navCrowd.cells.set(key,new Set());navCrowd.cells.get(key).add(person);}}
++function navBeginStep(){navCrowd.active=true;navRebuildCrowd();}
++function navEndStep(){navCrowd.active=false;}
++function navPeers(person,x,z){if(!navCrowd.active||navCrowd.state!==S)navRebuildCrowd();const peers=new Set();for(let column=Math.floor(Math.min(person.x,x)-.6);column<=Math.floor(Math.max(person.x,x)+.6);column++)for(let row=Math.floor(Math.min(person.z,z)-.6);row<=Math.floor(Math.max(person.z,z)+.6);row++)for(const peer of navCrowd.cells.get(column+':'+row)||[])if(peer!==person)peers.add(peer);return peers;}
++function navMoved(person,oldX,oldZ){if(!navCrowd.active)return;const previous=Math.floor(oldX)+':'+Math.floor(oldZ),current=Math.floor(person.x)+':'+Math.floor(person.z);if(previous===current)return;navCrowd.cells.get(previous)?.delete(person);if(!navCrowd.cells.has(current))navCrowd.cells.set(current,new Set());navCrowd.cells.get(current).add(person);}
++function navCrowdRoute(person){
++ const start=tileOf(person.x,person.z),goal=person.routeGoal;if(!goal||!walk[goal[1]*N+goal[0]])return null;
++ const direction={x:tcx(goal[0])-person.x,z:tcx(goal[1])-person.z},length=Math.hypot(direction.x,direction.z)||1,right={x:-direction.z/length,z:direction.x/length};
++ const candidates=[];for(let dz=-1;dz<=1;dz++)for(let dx=-1;dx<=1;dx++){if(!dx&&!dz)continue;const x=start[0]+dx,z=start[1]+dz;if(x<0||z<0||x>=N||z>=N||!walk[z*N+x]||(dx&&dz&&(!walk[start[1]*N+x]||!walk[z*N+start[0]])))continue;const projection=dx*right.x+dz*right.z;if(projection>.25)candidates.push({tile:[x,z],projection});}
++ candidates.sort((a,b)=>b.projection-a.projection);const changed=[];
++ try{
++  for(const peer of S.people){if(peer===person||['away','sleep'].includes(peer.state)||Math.hypot(peer.x-person.x,peer.z-person.z)>8)continue;const tile=tileOf(peer.x,peer.z),key=tile[1]*N+tile[0];if((tile[0]!==start[0]||tile[1]!==start[1])&&walk[key]){changed.push(key);walk[key]=0;}}
++  for(const candidate of candidates){const [x,z]=candidate.tile;if(!walk[z*N+x])continue;const route=astar(x,z,goal[0],goal[1]);if(route)return [candidate.tile,...route];}
++  return astar(start[0],start[1],goal[0],goal[1]);
++ }finally{for(const key of changed)walk[key]=1;}
++}
++function navPauseForCrowd(person,point,distance,delta){const dx=point.x-person.x,dz=point.z-person.z,length=Math.hypot(dx,dz);if(length<1e-8)return false;const travel=Math.min(distance,length),x=person.x+dx/length*travel,z=person.z+dz/length*travel,vx=x-person.x,vz=z-person.z;
++ let occupied=false;for(const peer of navPeers(person,x,z)){const start=Math.hypot(peer.x-person.x,peer.z-person.z),end=Math.hypot(peer.x-x,peer.z-z),radius=(person.age<12?.16:.22)+(peer.age<12?.16:.22),fraction=clamp(((peer.x-person.x)*vx+(peer.z-person.z)*vz)/(vx*vx+vz*vz||1),0,1),closest=Math.hypot(peer.x-person.x-vx*fraction,peer.z-person.z-vz*fraction);if(closest<radius&&!(start<radius&&end>start+1e-6)){occupied=true;break;}}
++ if(!occupied){if(person.navResumeAct)person.act=person.navResumeAct;delete person.navResumeAct;delete person.navWait;delete person.navRetry;return false;}
++ person.navResumeAct??=person.act;person.navWait=(person.navWait||0)+delta;person.act='Przejście zajęte — ustępuje i szuka obejścia';
++ if(person.navWait>=.6&&(!(person.navRetry>S.t))){person.navRetry=S.t+.8;
++  // Punkt odbioru może zająć ktoś już po wyznaczeniu drogi. Wybierz wolne wejście tą samą bramką co po restarcie.
++  if(pendingDelivery(person)&&person.routeGoal&&Math.hypot(person.x-tcx(person.routeGoal[0]),person.z-tcx(person.routeGoal[1]))<2){release(person);resumeDelivery(person);return true;}
++  const route=navCrowdRoute(person);if(route?.length)person.path=route.map(([i,j])=>({x:tcx(i),z:tcx(j)}));
++ }
++ return true;
++}
+--- RC9/src/p_people_motion.js
++++ RC10/src/p_people_motion.js
+@@ -1,3 +1,4 @@
++function dailyPropGeo(kind){return mdG('daily:'+kind,()=>kind==='book'?mdMerge([[new THREE.BoxGeometry(.18,.025,.13),0x5a3c28,mdM(0,-.17,.11)],[new THREE.BoxGeometry(.16,.018,.115),0xd8ccb0,mdM(0,-.15,.11)]]):mdMerge([[new THREE.CylinderGeometry(.075,.045,.055,10,1,true),0x8a5d39,mdM(0,-.17,.08)],[new THREE.CircleGeometry(.067,10),0xb18b52,mdM(0,-.148,.08,-Math.PI/2)]]));}
+ /* Poza wynika z działania. Dystans steruje krokiem, czas gry gestem pracy. */
+ function personMotion(p){
+  if(S.epoch===4)return p.e4Action?.phase==='doing'?p.e4Action.kind:p.state==='move'?'walk':'rest';
+@@ -7,12 +8,14 @@
+  const tool=toolFor(p);return {siekiera:'chop',kilof:'mine',sierp:'field',lopata:'field',wedka:'fish',luk:'hunt',kosz:'gather'}[tool]||(k==='prod'&&(BD[bById(p.wb)?.kind]?.c==='kowal')?'forge':k==='prod'&&BD[bById(p.wb)?.kind]?.c==='krawiec'?'sew':'craft');
+ }
+ function animatePerson(p,m,rdt){
+- const u=m.userData;const winter=isWinterNow();if(u.p18){personWinter(m,winter);const tool=toolFor(p);if(tool){if(!u.tool){u.tool=new THREE.Mesh(toolGeo(tool),MD.mat);(u.elbowR||u.aR).add(u.tool)}if(u.toolK!==tool){u.tool.geometry=toolGeo(tool);u.toolK=tool}u.tool.visible=true;}else if(u.tool)u.tool.visible=false;}
++ const u=m.userData;const winter=isWinterNow();if(u.p18){personWinter(m,winter);const tool=p.carry?null:toolFor(p);if(tool){if(!u.tool){u.tool=new THREE.Mesh(toolGeo(tool),MD.mat);(u.elbowR||u.aR).add(u.tool)}if(u.toolK!==tool){u.tool.geometry=toolGeo(tool);u.toolK=tool}u.tool.visible=true;}else if(u.tool)u.tool.visible=false;}
+  const position={x:p.x,z:p.z},distance=u.lastPosition?Math.hypot(p.x-u.lastPosition.x,p.z-u.lastPosition.z):0;u.lastPosition=position;
+  if(S.speed===0&&u.poseReady)return;
++ const poseParts=u.poseParts||(u.poseParts=[u.torso,u.lL,u.lR,u.aL,u.aR,u.kneeL,u.kneeR,u.elbowL,u.elbowR].filter(Boolean)),pose=u.poseValues||(u.poseValues=new Float32Array(poseParts.length*6)),blendPose=!!u.poseReady;
++ poseParts.forEach((part,index)=>{const offset=index*6;pose[offset]=part.rotation.x;pose[offset+1]=part.rotation.y;pose[offset+2]=part.rotation.z;pose[offset+3]=part.position.x;pose[offset+4]=part.position.y;pose[offset+5]=part.position.z;});
+  const mode=personMotion(p),walking=p.state==='move'&&distance>.00001,dt=rdt*S.speed;u.motionTime=(u.motionTime||0)+dt;u.stride=(u.stride||0)+distance/(p.age<12?.6:.95)*Math.PI*2;
+  const phase=u.stride||0,swing=walking?Math.sin(phase)*.5:0,beat=Math.sin(u.motionTime*5+p.id),bend=walking?Math.abs(Math.sin(phase))*.014:0,old=p.age>60;
+- let direction=p.dir??m.rotation.y;if(walking){let difference=((direction-m.rotation.y+Math.PI*3)%(Math.PI*2))-Math.PI;m.rotation.y+=difference*Math.min(1,dt*9);}else if(p.tgt?.x!==undefined)m.rotation.y=Math.atan2(p.tgt.x-p.x,p.tgt.z-p.z);
++ let direction=p.dir??m.rotation.y;if(walking){let difference=((direction-m.rotation.y+Math.PI*3)%(Math.PI*2))-Math.PI;m.rotation.y+=difference*Math.min(1,dt*9);}else if(p.tgt?.x!==undefined){const target=Math.atan2(p.tgt.x-p.x,p.tgt.z-p.z),difference=((target-m.rotation.y+Math.PI*3)%(Math.PI*2))-Math.PI;m.rotation.y+=difference*Math.min(1,dt*7);}
+  u.lL.rotation.set(swing,0,0);u.lR.rotation.set(-swing,0,0);u.aL.rotation.set(-swing*.65,0,-.06);u.aR.rotation.set(swing*.65,0,.06);u.torso.rotation.set(old?.08:0,0,walking?Math.sin(phase)*.025:0);
+  u.torso.position.y=.5+bend;u.aL.position.y=u.aR.position.y=.76+bend;u.lL.position.y=u.lR.position.y=.5;
+  if(u.kneeL){u.kneeL.rotation.x=walking?Math.max(0,-Math.sin(phase))*.65:0;u.kneeR.rotation.x=walking?Math.max(0,Math.sin(phase))*.65:0;u.elbowL.rotation.x=u.elbowR.rotation.x=-.1;}
+@@ -29,6 +32,9 @@
+  u.carry.visible=!!p.carry;if(p.carry){u.aL.rotation.x=u.aR.rotation.x=-.8;u.carry.position.set(0,.72+bend,.25);if(u.elbowR)u.elbowL.rotation.x=u.elbowR.rotation.x=-.65;const item=p.carry[0];if(item)u.carry.material.color.set({drewno:0x8a6a40,ruda:0x777174,kamien:0x8c8a80,glina:0xa9683c,jagody:0x8a3a55,deski:0xb08a55,plotno:0xc9bda0}[item.res]||0x888888);}
+  // Stopy podążają za lokalnym nachyleniem bez przesuwania pozycji osoby.
+  if(u.kneeL&&walking){const half=.14*Math.cos(m.rotation.y),left=Hy(p.x-half,p.z),right=Hy(p.x+half,p.z),base=Hy(p.x,p.z);u.lL.position.y=.5+clamp((left-base)/m.scale.y,-.06,.06);u.lR.position.y=.5+clamp((right-base)/m.scale.y,-.06,.06);}
++ if(u.head){const targetY=u.torso.position.y-.5;u.head.position.y=targetY;u.head.rotation.x=mode==='read'||mode==='learn'||mode==='meal'?.1:old?.045:0;}
++ if(u.p18){const prop=['meal','read','learn','teach'].includes(mode)&&!walking&&!p.carry?(mode==='meal'?'bowl':'book'):null;if(prop){if(!u.dailyProp){u.dailyProp=new THREE.Mesh(dailyPropGeo(prop),MD.mat);(u.elbowL||u.aL).add(u.dailyProp);}if(u.dailyPropKind!==prop){u.dailyProp.geometry=dailyPropGeo(prop);u.dailyPropKind=prop;}u.dailyProp.visible=true;}else if(u.dailyProp)u.dailyProp.visible=false;}
++ if(blendPose){const alpha=1-Math.exp(-Math.min(.1,Math.max(0,dt))*14);poseParts.forEach((part,index)=>{const offset=index*6;part.rotation.set(pose[offset]+(part.rotation.x-pose[offset])*alpha,pose[offset+1]+(part.rotation.y-pose[offset+1])*alpha,pose[offset+2]+(part.rotation.z-pose[offset+2])*alpha);part.position.set(pose[offset+3]+(part.position.x-pose[offset+3])*alpha,pose[offset+4]+(part.position.y-pose[offset+4])*alpha,pose[offset+5]+(part.position.z-pose[offset+5])*alpha);});if(u.head)u.head.position.y=u.torso.position.y-.5;}
+  u.motionMode=mode;u.poseReady=true;
+ }
+ {const previousCard=ludCard;ludCard=function(person){
+--- RC9/src/p_postaci.js
++++ RC10/src/p_postaci.js
+@@ -46,9 +46,5 @@
+ function personWinter(m,on){const u=m.userData;if(!u.gS||u.win===on)return;const p=u.pp;
+  if(on){if(!u.gW){const cloth=mdCol(p.cloth),koz=mdCol(KOZ[p.id%4]);u.gW={t:geoCat(u.gS.t,winterExtra(p)),aL:geoRecolor(u.gS.aL,cloth,koz),aR:geoRecolor(u.gS.aR,cloth,koz)}}u.torso.geometry=u.gW.t;u.aL.geometry=u.gW.aL;u.aR.geometry=u.gW.aR}
+  else{u.torso.geometry=u.gS.t;u.aL.geometry=u.gS.aL;u.aR.geometry=u.gS.aR}u.win=on}
+-let postT=0;
+-{const _mt=mapTick;mapTick=function(rdt){_mt(rdt);if(!S)return;postT+=rdt;const slow=postT>1;if(slow)postT=0;const W=slow?isWinterNow():null;
+-  for(const p of S.people){const m=pMesh[p.id];if(!m||!m.visible)continue;const u=m.userData;if(!u.p18)continue;if(slow&&u.win!==W)personWinter(m,W);
+-   const t=toolFor(p);if(t){if(!u.tool){u.tool=new THREE.Mesh(toolGeo(t),MD.mat);u.tool.castShadow=true;(u.elbowR||u.aR).add(u.tool)}if(u.toolK!==t){u.tool.geometry=toolGeo(t);u.toolK=t}u.tool.visible=true;
+-    if(t==='laska'){u.aR.rotation.x=-.35+Math.sin(clock*10+p.id)*.08}}else if(u.tool)u.tool.visible=false}}}
++// Aktualizacja okrycia i rekwizytów należy wyłącznie do animatePerson.
+ window.__post={toolGeo,winterExtra,personWinter,toolFor,makeP:p=>makePersonMesh(p)};
+--- RC9/src/p_rest.js
++++ RC10/src/p_rest.js
+@@ -416,20 +416,22 @@
+ const pGroup=new THREE.Group();scene.add(pGroup);
+ const skinC=[0xe0b896,0xd0a07c,0xe8c4a2,0xb07e60];const hairC=[0x3a2a1c,0x6b4a2a,0x1e1a17,0x8a6a3a,0xc4bcb0];
+ const shadowMat=new THREE.MeshBasicMaterial({map:softTex,color:0x000000,transparent:true,opacity:.35,depthWrite:false});
+-function makePersonMesh(p){const g=new THREE.Group();
+- const cl=M(p.cloth),sk=M(skinC[p.id%4]),pants=M(p.sex==='k'?0x5a4a3e:0x46423a);
+- const torso=mesh(new THREE.CylinderGeometry(.12,p.sex==='k'?.19:.15,p.sex==='k'?.5:.42,7),cl,0,p.sex==='k'?.55:.58,0);
+- const head=mesh(new THREE.SphereGeometry(.105,8,6),sk,0,.9,0);
+- const hair=mesh(new THREE.SphereGeometry(.112,8,5,0,6.283,0,p.sex==='k'?1.9:1.4),M(p.age>55?hairC[4]:hairC[p.id%4]),0,.92,-.012);
+- const lL=mesh(new THREE.BoxGeometry(.08,.36,.09).translate(0,-.16,0),pants,-.06,.37,0),lR=mesh(new THREE.BoxGeometry(.08,.36,.09).translate(0,-.16,0),pants,.06,.37,0);
+- const aL=mesh(new THREE.BoxGeometry(.06,.32,.07).translate(0,-.14,0),cl,-.17,.74,0),aR=mesh(new THREE.BoxGeometry(.06,.32,.07).translate(0,-.14,0),cl,.17,.74,0);
+- g.add(torso,head,hair,lL,lR,aL,aR);
+- if(p.age>=12&&p.sex==='m'&&p.id%2===0)g.add(mesh(new THREE.CylinderGeometry(.17,.17,.03,10),M(0x5a4630),0,1.0,0),mesh(new THREE.CylinderGeometry(.09,.1,.09,8),M(0x5a4630),0,1.05,0));
+- const carry=mesh(new THREE.BoxGeometry(.24,.16,.22),M(0x8a6a40),0,.76,-.2);carry.visible=false;g.add(carry);
++function makePersonMesh(p){const g=new THREE.Group(),child=p.age<12,old=p.age>55;
++ const skin=skinC[(p.rod||p.fam||p.id)%4],hair=old?hairC[4]:hairC[p.id%4],trim=EMB[(p.rod||p.fam||p.id)%4],pants=p.sex==='k'?0x5a4a3e:0x46423a;
++ const torso=new THREE.Mesh(mdMerge([[new THREE.CylinderGeometry(.12,p.sex==='k'?.19:.15,p.sex==='k'?.5:.42,8),p.cloth,mdM(0,.09,0)],[new THREE.CylinderGeometry(.13,.15,.027,8),trim,mdM(0,.015,.002)],[new THREE.BoxGeometry(.025,.28,.015),0xd8ccb0,mdM(0,.19,.12)]]),MD.mat);torso.position.y=.5;
++ const radius=child?.109:.094,headParts=[[new THREE.SphereGeometry(radius,10,8),skin,mdM(0,.935,0,0,0,0,1,1.08,1)],[new THREE.SphereGeometry(radius+.006,10,6,0,6.283,0,p.sex==='k'?1.9:1.4),hair,mdM(0,.95,-.012)],[new THREE.CylinderGeometry(.037,.045,.08,6),skin,mdM(0,.84,0)],[new THREE.SphereGeometry(.014,5,4),skin,mdM(0,.925,.09)]];
++ [-1,1].forEach(side=>headParts.push([new THREE.BoxGeometry(.014,.009,.009),0x33271e,mdM(side*.031,.953,.087)]));
++ if(!child&&p.sex==='m'&&p.id%2===0)headParts.push([new THREE.CylinderGeometry(.155,.155,.025,10),0x5a4630,mdM(0,1.01,0)],[new THREE.CylinderGeometry(.083,.095,.08,8),0x5a4630,mdM(0,1.055,0)]);
++ if(!child&&p.sex==='k'&&p.id%3!==1)headParts.push([new THREE.SphereGeometry(.113,10,6,0,6.283,0,1.75),PM.chusta[p.id%5].color,mdM(0,.945,-.014)]);
++ if(!child&&p.sex==='m'&&p.age>=24&&p.id%3!==0)headParts.push([new THREE.BoxGeometry(.1,.06,.045),hair,mdM(0,.866,.069)]);
++ const head=new THREE.Mesh(mdMerge(headParts),MD.mat);
++ const leg=side=>{const limb=new THREE.Mesh(mdMerge([[new THREE.BoxGeometry(.075,.43,.085),pants,mdM(0,-.215,0)],[new THREE.BoxGeometry(.08,.06,.13),0x5a4630,mdM(0,-.46,.018)]]),MD.mat);limb.position.set(side*.065,.5,0);return limb;};
++ const arm=side=>{const limb=new THREE.Mesh(mdMerge([[new THREE.BoxGeometry(.065,.28,.07),p.cloth,mdM(0,-.14,0)],[new THREE.BoxGeometry(.068,.024,.073),trim,mdM(0,-.275,0)],[new THREE.SphereGeometry(.035,6,5),skin,mdM(0,-.315,.012)]]),MD.mat);limb.position.set(side*.165,.76,0);return limb;};
++ const lL=leg(-1),lR=leg(1),aL=arm(-1),aR=arm(1);g.add(torso,head,lL,lR,aL,aR);
++ const carry=mesh(new THREE.BoxGeometry(.24,.16,.22),M(0x8a6a40),0,.72,.25);carry.visible=false;g.add(carry);
+  const sh=new THREE.Mesh(new THREE.PlaneGeometry(.8,.8),shadowMat);sh.rotation.x=-Math.PI/2;sh.position.y=.03;g.add(sh);
+  const ring=new THREE.Mesh(new THREE.RingGeometry(.32,.4,24),new THREE.MeshBasicMaterial({color:0xf4ead0,transparent:true,opacity:.95,depthWrite:false,toneMapped:false}));ring.rotation.x=-Math.PI/2;ring.position.y=.05;ring.visible=false;g.add(ring);
+- g.traverse(o=>{o.userData.pid=p.id});
+- g.userData={pid:p.id,carry,torso,lL,lR,aL,aR,ring,sc:0};return g}
++ g.traverse(object=>object.userData.pid=p.id);g.userData={pid:p.id,carry,torso,head,lL,lR,aL,aR,ring,sc:0};return g;}
+ let pMesh={};
+ function personDetail(p){return GFX.level>0&&zoom>=.65&&Math.hypot(p.x-camT.x,p.z-camT.z)<45}
+ function personProfile(p){return [p.age<12?'child':p.age<24?'young':p.age>55?'old':'adult',p.sex,p.cloth,p.rod||p.fam||p.id,personDetail(p)?1:0].join(':')}
+@@ -502,7 +504,7 @@
+  }else{
+   if(!tile)return false;
+   if(!walk[tile[1]*N+tile[0]]){
+-   if(['deposit','haulPick','haulDrop','siteDrop','away'].includes(after)){person.blocked={code:'destination_closed',reason:'Cel drogi jest zamknięty — odblokuj dojście',since:person.blocked?.since??S.t,attempts:(person.blocked?.attempts||0)+1};return false;}
++   if(['deposit','haulPick','haulDrop','siteDrop','away','kozdom'].includes(after)||(after==='chore'&&waterDelivery(person))){person.blocked={code:'destination_closed',reason:'Cel drogi jest zamknięty — odblokuj dojście',since:person.blocked?.since??S.t,attempts:(person.blocked?.attempts||0)+1};return false;}
+    tile=nearestWalk(tile[0],tile[1]);if(!tile)return false;
+   }
+   if(target?.kind&&['prod','work','build','care','field'].includes(after)){
+@@ -517,8 +519,12 @@
+  person.path=route.map(([i,j])=>({x:tcx(i)+(managed?0:(Math.random()-.5)*.35),z:tcx(j)+(managed?0:(Math.random()-.5)*.35)}));person.after=after;person.tgt=target||null;person.state='move';
+  if(!person.path.length){person.path=null;onArrive(person);}return true;
+ }
+-function storeTile(p,food){const cands=[[camp.i,camp.j+1]];S.bld.forEach(b=>{const d=BD[b.kind];if(bDone(b)&&d.store&&(d.store==='all'||food)){cands.push(...workSiteTiles(b))}});
+- const[pi,pj]=tileOf(p.x,p.z);let best=cands[0],bd=1e9;cands.forEach(c=>{const d=Math.hypot(c[0]-pi,c[1]-pj);if(walk[c[1]*N+c[0]]&&d<bd&&astar(pi,pj,c[0],c[1])){bd=d;best=c}});return bd<1e9?nearestWalk(best[0],best[1]):null}
++function storeTile(person,food){
++ const candidates=[],campEntry=campDeliveryEntry(person);if(campEntry)candidates.push(campEntry);
++ for(const building of S.bld){const definition=BD[building.kind];if(bDone(building)&&definition.store&&(definition.store==='all'||food))candidates.push(...workSiteTiles(building));}
++ const start=tileOf(person.x,person.z);candidates.sort((a,b)=>Math.hypot(a[0]-start[0],a[1]-start[1])-Math.hypot(b[0]-start[0],b[1]-start[1]));
++ return candidates.find(tile=>deliverySpotFree(person,tile)&&astar(start[0],start[1],tile[0],tile[1]))||null;
++}
+ function release(p){const target=p.tgt;if(target&&target.claim>0&&target.type)target.claim--;p.tgt=null;p.after=null;p.workKind=null;
+  if(target&&target.kind&&S)target.workers=S.people.filter(person=>person!==p&&person.tgt===target&&((person.state==='move'&&person.after==='build')||(person.state==='work'&&person.workKind==='build'))).length}
+ function productionPolicy(building,recipe){
+@@ -590,7 +596,7 @@
+  else if(a==='scout'){const[i,j]=tileOf(p.x,p.z);reveal(i,j,6);techXp('nauka',.5);p.state='idle';p.wait=4;p.act='rozgląda się'}
+  else if(a==='deposit'){deposit(p);p.state='idle';p.wait=.4;p.act='odpoczywa'}
+  else if(a==='sleep'){p.state='sleep';p.act='śpi'}
+- else if(a==='away'){p.state='away';p.act='na wyprawie'}
++ else if(a==='away'){p.state='away';p.act='na wyprawie';const expedition=S.exps.find(candidate=>candidate.id===p.exp);if(expedition)expedition.started=true;}
+  else if(a==='gasic'){p.state='work';p.workKind='gasic';p.act='gasi pożar'}
+  else p.state='idle'}
+ function movePerson(p,dt){
+@@ -603,7 +609,7 @@
+   }
+   p.routeRevision=walkRevision;
+   const sp=(isChild(p)?1.6:2.3)*(p.age>60?.8:1)*(.6+.4*p.hp)*(p.carry?.8:1)*(typeof ladSpeed==='function'?ladSpeed(p):1);let st=sp*dt;
+-  while(st>0&&p.path.length){const w=p.path[0];if(!validSegment(p,w))break;const dx=w.x-p.x,dz=w.z-p.z,d=Math.hypot(dx,dz);if(d<=st){p.x=w.x;p.z=w.z;p.path.shift();st-=d}else{p.x+=dx/d*st;p.z+=dz/d*st;p.dir=Math.atan2(dx,dz);st=0}}
++  while(st>0&&p.path.length){const w=p.path[0];if(!validSegment(p,w))break;const dx=w.x-p.x,dz=w.z-p.z,d=Math.hypot(dx,dz);if(navPauseForCrowd(p,w,Math.min(st,d),dt))return true;const oldX=p.x,oldZ=p.z;if(d<=st){p.x=w.x;p.z=w.z;p.path.shift();st-=d}else{p.x+=dx/d*st;p.z+=dz/d*st;p.dir=Math.atan2(dx,dz);st=0}navMoved(p,oldX,oldZ);}
+   {const tk=tileOf(p.x,p.z),kk=tk[1]*N+tk[0];if(kk!==p.lt){p.lt=kk;tread[kk]=Math.min(1,tread[kk]+(isChild(p)?.012:.03));treadDirty=true}}
+   p.rvT=(p.rvT||0)+dt;if(p.rvT>.6){p.rvT=0;const[i,j]=tileOf(p.x,p.z);if(p.job==='zwiad')reveal(i,j,3);else if(!rev[j*N+i])reveal(i,j,3)}
+   if(!p.path.length){p.path=null;onArrive(p)}return true}
+@@ -638,7 +644,7 @@
+     finishTrip(p,[{res:'mieso',q:ANIMAL[h.type][2]},{res:'skory',q:ANIMAL[h.type][3]*(tech('h_garb')?1.5:1)*(hasExt(bById(p.wb),'garbarnia')?1.3:1)}])}return}
+   if(k==='tame'){const h=S.herds[p.herd],b=bById(p.wb);if(!h||h.n<=0||!b){p.state='idle';return}p.wt+=dt*e*craftEff(p,'hodowca');gainXp(p,'hodowca',dt);
+    if(Math.hypot(h.x-p.x,h.z-p.z)>6){p.state='idle';return}h.calm=S.t+3;
+-   if(p.wt>=18){p.wt=0;b.tame=(b.tame||0)+1;if(b.tame>=3){if((b.animals||0)+S.people.filter(person=>person.kozB===b.id).reduce((sum,person)=>sum+(person.kozN||0),0)>=penCap(b)){p.state='idle';p.act='brak miejsca w zagrodzie';return}b.tame=0;h.n--;p.kozN=1;p.kozB=b.id;const e=entryOf(b.kind,b.i,b.j);if(e&&go(p,e,'kozdom',null)){p.act='prowadzi kozę do zagrody'}else kozDeliver(p)}}return}
++   if(p.wt>=18){p.wt=0;b.tame=(b.tame||0)+1;if(b.tame>=3){if((b.animals||0)+S.people.filter(person=>person.kozB===b.id).reduce((sum,person)=>sum+(person.kozN||0),0)>=penCap(b)){p.state='idle';p.act='brak miejsca w zagrodzie';return}b.tame=0;h.n--;p.kozN=1;p.kozB=b.id;const e=buildingEntryFor(p,b);if(e&&go(p,e,'kozdom',null)){p.act='prowadzi kozę do zagrody'}else kozDeliver(p)}}return}
+   if(k==='care'){const b=p.tgt;if(!b||!bById(b.id)){p.state='idle';return}gainXp(p,'hodowca',dt);b.care=(b.care||0)+dt*e*craftEff(p,'hodowca');p.wt+=dt;if(p.wt>12){p.state='idle';p.wait=1}return}
+   if(k==='field'){const b=p.tgt;if(!b||!bById(b.id)){p.state='idle';return}const f=b.field;gainXp(p,'rolnik',dt);p.wt+=dt*e*craftEff(p,'rolnik');
+    if(f.st==='puste'){if(p.wt>=10){p.wt=0;if(S.res.ziarno>=10&&inSow()){S.res.ziarno-=10;f.st='rosnie';f.g=0;f.q=0;log('Zasiano pole. Teraz pielenie i czekanie.');fieldVis(b)}p.state='idle'}}
+@@ -802,7 +808,7 @@
+  if(d===SD){const need=K*S.people.reduce((a,p)=>a+(p.age<12?.6:1),0);if(foodTotal()<need*8)log('Przed nami zima, a zapasów jest na mniej niż 8 dób. Trzeba więcej zbieraczy, rybaków i myśliwych.')}
+  if(!S.people.length){log('Osada wymarła. Wyspa znów należy do lasu.');toast('Osada wymarła')}
+  if(tab)renderPanel()}
+-function step(dt){const before=Math.floor(S.day);S.day+=dt/DAY;S.t+=dt;for(const p of S.people)stepPerson(p,dt);stepHerds(dt);fireStep(dt);if(Math.floor(S.day)>before)newDay()}
++function step(dt){const before=Math.floor(S.day);S.day+=dt/DAY;S.t+=dt;navBeginStep();try{for(const p of S.people)stepPerson(p,dt)}finally{navEndStep()}stepHerds(dt);fireStep(dt);if(Math.floor(S.day)>before)newDay()}
+ function stepHerds(dt){S.herds.forEach((h,k)=>{if(h.calm>S.t)return;const dx=h.tx-h.x,dz=h.tz-h.z,d=Math.hypot(dx,dz);
+  if(d<.3){if(Math.random()<dt*.15){const def=herdsDef[k];const a=Math.random()*6.28,r=Math.random()*(h.type==='wilk'?16:9);const tx=tcx(def.i)+Math.cos(a)*r*(h.type==='foka'?.35:1),tz=tcx(def.j)+Math.sin(a)*r*(h.type==='foka'?.35:1);const ti=tileOf(tx,tz),tk=ti[1]*N+ti[0];if(walk[tk]&&(h.type!=='foka'||beach[tk])){h.tx=tx;h.tz=tz}}}
+  else{const sp=(h.type==='zajac'?1.1:h.type==='foka'?.15:.5)*dt;h.x+=dx/d*Math.min(sp,d);h.z+=dz/d*Math.min(sp,d)}})}
+@@ -827,7 +833,7 @@
+  for(let a=0;a<=d.w;a++)for(let b=0;b<=d.h;b++){const h=H[(j+b)*VW+i+a];mn=Math.min(mn,h);mx=Math.max(mx,h)}
+  if(mx-mn>1.3)return false;
+  if(d.shore){let w=false;for(let a=-1;a<=d.w;a++)for(let b=-1;b<=d.h;b++){const x=i+a,y=j+b;if(x>=0&&y>=0&&x<N&&y<N&&!land[y*N+x])w=true}if(!w)return false}
+- return !!entryOf(kind,i,j)}
++ return !!entryOf(kind,i,j)&&!placementIsolation(kind,i,j)}
+ function startPlace(kind){if(!bAvail(kind))return;placing=kind;$('cancel').style.display='block';closeSheet();select(null);
+  toast(coarse?'Dotknij miejsca, potem dotknij jeszcze raz, by postawić':'Wskaż miejsce i kliknij, by postawić');
+  if(ghost)scene.remove(ghost);const d=BD[kind];ghost=new THREE.Mesh(new THREE.BoxGeometry(d.w,.3,d.h),new THREE.MeshBasicMaterial({color:0x66cc66,transparent:true,opacity:.5,depthWrite:false}));ghost.visible=false;scene.add(ghost);ghostTile=null;
+@@ -839,6 +845,7 @@
+  el.innerHTML=`<b>${d.n}</b> · ${costHTML(d.cost)}${n!==null?'<br>'+rangeLabel(placing,n):''}${ok?'':'<br><span class="no">Tu nie da się budować'+(d.shore?': pomost musi stać przy wodzie':'')+'</span>'}`}
+ function tryPlace(){if(!placing||!ghostTile)return;const kind=placing,[i,j]=ghostTile,d=BD[kind];
+  if(placementPeople(kind,i,j)){toast('Tu stoi mieszkaniec — poczekaj, aż odejdzie, albo wybierz inne miejsce.');return}
++ const isolation=placementIsolation(kind,i,j);if(isolation){toast(isolation);return}
+  if(!checkPlace(kind,i,j)){toast(d.shore?'Pomost musi stać na brzegu, przy wodzie':'Tu nie da się budować: woda, stromizna, nieodkryty teren albo zajęte');return}
+  if(!canAfford(d.cost)){toast('Brakuje: '+Object.entries(d.cost).filter(([k,v])=>(S.res[k]||0)<v).map(([k,v])=>RN[k].toLowerCase()+' '+Math.ceil(v-(S.res[k]||0))).join(', '));return}
+  Object.entries(d.cost).forEach(([k,v])=>S.res[k]-=v);
+@@ -981,7 +988,7 @@
+   if(buildCat==='lad'&&typeof ladBuildHTML==='function'){h+=ladBuildHTML()}else if(buildCat==='remont'){h+=`<div class="card"><h4>Remonty</h4><p>Budynki zużywają się co roku: szybciej nad morzem, na mokradłach i w górach, wolniej, gdy są wyżej ulepszone. Remont potrzebny jest zwykle co 2–3 lata.</p><p class="mut">${need.length?'Wymaga remontu: '+need.map(b=>BD[b.kind].n.toLowerCase()+' '+Math.round(condOf(b)*100)+'%').join(', ')+'.':'Wszystko w dobrym stanie.'}</p><button data-autorep="1" class="${S.autoRep!==false?'pri':''}">${S.autoRep!==false?'Remonty automatyczne: włączone':'Remonty automatyczne: wyłączone'}</button></div>`}
+   else{const ks=BKEYS.filter(k=>BD[k].cat===buildCat);const kn=ks.filter(bAvail).sort((a,b)=>(canAfford(BD[b].cost)?1:0)-(canAfford(BD[a].cost)?1:0)),unk=ks.filter(k=>!bAvail(k));
+    kn.forEach(k=>{const d=BD[k],cnt=S.bld.filter(b=>b.kind===k).length,ok=canAfford(d.cost);const miss=Object.entries(d.cost).filter(([r,v])=>(S.res[r]||0)<v).map(([r,v])=>RN[r].toLowerCase()+' '+Math.ceil(v-(S.res[r]||0)));
+-    h+=uiDisclosure('build:'+k,d.n,`<p>${d.d}</p><div class="cost">${costHave(d.cost)}<span class="sep">·</span>${d.work} osobodni${d.wk?`<span class="sep">·</span>${d.wk} prac.`:''}${d.r?`<span class="sep">·</span>zasięg ${d.r}`:''}</div>${ok?`<button class="pri bkb" data-b="${k}">Postaw</button>`:`<button class="bkb" disabled>Brakuje: ${miss.join(', ')}</button>`}`,false,`${cnt?'Masz '+cnt+' · ':''}${ok?'Dostępny do budowy':'Potrzebne zasoby'}`)});
++    h+=`<div class="card bk" data-build-card="${k}"><h4>${d.n}</h4><p class="mut">${cnt?'Masz '+cnt+' · ':''}${ok?'Dostępny do budowy':'Potrzebne zasoby'}</p><p>${d.d}</p><div class="cost">${costHave(d.cost)}<span class="sep">·</span>${d.work} osobodni${d.wk?`<span class="sep">·</span>${d.wk} prac.`:''}${d.r?`<span class="sep">·</span>zasięg ${d.r}`:''}</div>${ok?`<button class="pri bkb" data-b="${k}">Postaw</button>`:`<button class="bkb" disabled>Brakuje: ${miss.join(', ')}</button>`}</div>`});
+    if(!kn.length&&!unk.length)h+='<p class="mut">Nic tu jeszcze nie ma.</p>';
+    if(unk.length)h+=`<div class="card unkc"><h4>Jeszcze nie umiecie</h4>${unk.map(k=>{const d=BD[k];return`<p><b>${d.n}</b><span>${TECH_BY[d.need]?'„'+TECH_BY[d.need].n+'” w Wiedzy':{kury:'coś, co trzeba najpierw znaleźć na wyspie',wegiel_k:'coś, co trzeba najpierw znaleźć na wyspie',sol:'coś, co trzeba najpierw znaleźć na wyspie',pole:'uprawa pola (Wiedza)',piec:'budowa pieca (Wiedza, próby)',cegla:'wypał cegły (Wiedza, próby)',kuznia:'wytop żelaza (Wiedza, próby)'}[d.need]||'potrzebna wiedza'}</span></p>`}).join('')}</div>`}}
+  else if(tab==='wiedza'){const k=S.know;const mason=adultsPool().sort((a,b)=>b.sk.murarz-a.sk.murarz)[0]||S.people[0];
+--- RC9/src/p_save.js
++++ RC10/src/p_save.js
+@@ -11,7 +11,7 @@
+  const previous=typeof nocSkip!=='undefined'&&nocSkip?nocSkip.prev:1;
+  const snapshot=Object.assign({},S,{rev:packRev(),tread:packTread(),ver:GAME_VER,saveSchema:1,speed:persistentSpeed(S.speed,previous)});
+  if(S.pendingDecision)snapshot.pendingDecision={...S.pendingDecision,prev:persistentSpeed(S.pendingDecision.prev,previous)};
+- return JSON.stringify(snapshot,(key,value)=>['mentor','tgt'].includes(key)||(key==='path'&&Array.isArray(value))?undefined:value);
++ return JSON.stringify(snapshot,(key,value)=>['mentor','tgt','navResumeAct','navWait','navRetry'].includes(key)||(key==='path'&&Array.isArray(value))?undefined:value);
+ }
+ function saveWarning(error){
+  saveStatus.ok=false;saveStatus.error=(error?.name&&error.name!=='Error'?error.name+': ':'')+String(error&&error.message||error);
+@@ -94,6 +94,8 @@
+   if(person.carry!==null&&person.carry!==undefined&&(!Array.isArray(person.carry)||!person.carry.every(item=>object(item)&&typeof item.res==='string'&&positive(item.q)&&(Object.hasOwn(RN,item.res)||waterDelivery(person)))))return saveInvalid('people.carry: nieprawidłowy ładunek');
+   if(person.chWaterTo!==null&&person.chWaterTo!==undefined&&(!Array.isArray(person.chWaterTo)||person.chWaterTo.length!==2||!person.chWaterTo.every(coordinate=>Number.isInteger(coordinate)&&coordinate>=0&&coordinate<N)))return saveInvalid('people.chWaterTo: nieprawidłowa dostawa wody');
+  }
++ if(!Array.isArray(state.exps))return saveInvalid('exps: brak listy wypraw');
++ const expeditionIds=new Set();for(const expedition of state.exps){if(!object(expedition)||!id(expedition.id)||expeditionIds.has(expedition.id)||!id(expedition.r)||!REGIONS[expedition.r]||!['zwiad','zbior','rejs','horyzont'].includes(expedition.type)||!Array.isArray(expedition.ppl)||!expedition.ppl.every(id)||!number(expedition.days)||expedition.days<=0||expedition.days>3650||!number(expedition.left)||expedition.left>expedition.days||!Array.isArray(expedition.exit)||expedition.exit.length!==2||!expedition.exit.every(value=>id(value)&&value<N))return saveInvalid('exps: nieprawidłowa odprawa');expeditionIds.add(expedition.id);if(expedition.departure&&!expLedgerValid(expedition))return saveInvalid('exps.departure: nieprawidłowa księga opłat');}
+  if(!state.people.every(person=>person.pair===null||person.pair===undefined||peopleIds.has(person.pair)))return saveInvalid('people.pair: brak partnera');
+  if(!Object.values(state.fams).every(family=>object(family)&&id(family.id)&&(family.sp===undefined||positive(family.sp))&&(family.home===null||family.home===undefined||buildingIds.has(family.home))))return saveInvalid('fams: nieprawidłowy dom lub zapasy');
+  if(state.pendingDecision&&(!Object.hasOwn(DECISION_RECOVERY,state.pendingDecision.id)&&!EVENTS.some(event=>event.id===state.pendingDecision.id)))return saveInvalid('pendingDecision.id: nieznane zdarzenie');
+--- RC9/src/p_sluzba.js
++++ RC10/src/p_sluzba.js
+@@ -75,7 +75,7 @@
+    if(k==='naprawa'){const b=bById(p.chB);if(!b||!bDone(b)||b.proj||condOf(b)>=.98){p.chK=null;p.state='idle';p.wait=.2;return}gainXp(p,'ciesla',dt*.6);
+     if(p.wt>=T){p.wt=0;const wood=S.res.drewno>=.3;if(wood)S.res.drewno-=.3;b.cond=Math.min(1,condOf(b)+(wood?.06:.025)*craftEff(p,'ciesla'));const own=Object.values(S.fams).find(f=>f.home===b.id);chLog(p,k,own?gen(famName(own.id)):'');p.state='idle';p.wait=.3}return}
+    if(k==='woda'){if(p.chPh!==1){if(p.wt>=T){p.wt=0;p.chPh=1;p.carry=[{res:'woda',q:0}];const h=nearHouse(p)||null;const S2=S.bld.filter(b=>bDone(b)&&BD[b.kind].house);const tgt=S2.length?S2[(Math.random()*S2.length)|0]:h;
+-      const t=tgt?entryOf(tgt.kind,tgt.i,tgt.j):[camp.i,camp.j+1];p.chWaterTo=t?t.slice():null;p.act='niesie wodę';if(!go(p,t,'chore',null)){p.carry=null;p.chPh=0;p.chWaterTo=null;p.state='idle'}}return}
++      p.chWaterHome=tgt?.id??null;const t=tgt?buildingEntryFor(p,tgt):campDeliveryEntry(p);p.chWaterTo=t?t.slice():null;p.act='niesie wodę';if(!t||!go(p,t,'chore',null)){p.state='idle';p.wait=2;p.act='Brak drogi do domu — zachowuje wodę'}}return}
+     if(p.wt>=1){p.wt=0;p.carry=null;p.chPh=0;p.chWaterTo=null;S.wBonus=(S.wBonus||0)+2.5;chLog(p,k);p.state='idle';p.wait=.2}return}
+    if(k==='opieka'){const q=pById(p.chP);if(!q||q.hp>=.85){p.chK=null;p.state='idle';p.wait=.2;return}q.hp=Math.min(1,q.hp+dt*.0035*(offHolder&&offHolder('zielarka')?1.3:1)*(S.res.ziola>0?1.2:1));if(p.wt>=T){p.wt=0;chLog(p,k,q.name);p.state='idle';p.wait=.2}return}
+    p.state='idle';return}
+--- RC9/src/p_szlif.js
++++ RC10/src/p_szlif.js
+@@ -1,6 +1,6 @@
+ 
+ /* ================= 1.0: szlif — wydajność, zapis odporny na wersje, nowe wyspy i wyzwania, łagodny początek, „Od ostatniego razu”, „Na co czekamy”, rytm sesji ================= */
+-const GAME_VER='4.0.0-rc.9';
++const GAME_VER='4.0.0-rc.10';
+ // ---------- wydajność: gotowe budynki scalane w jedną bryłę na materiał ----------
+ const _mInv=new THREE.Matrix4(),_mM=new THREE.Matrix4(),_mN=new THREE.Matrix3(),_vP=new THREE.Vector3(),_vN=new THREE.Vector3();
+ function mergeGroup(g){if(!g)return 0;g.updateMatrixWorld(true);_mInv.copy(g.matrixWorld).invert();const fireSet=new Set(fires.map(f=>f.g));const byMat=new Map();
+--- RC9/src/p_tasks.js
++++ RC10/src/p_tasks.js
+@@ -3,8 +3,10 @@
+ function pendingDelivery(person){return !!(person.kozN||person.carry&&person.carry.length||person.haulQ>0||person.siteQ>0)}
+ function waterDelivery(person){return person.chK==='woda'&&person.chPh===1&&person.carry?.length===1&&person.carry[0].res==='woda'&&person.carry[0].q===0}
+ function resumeWaterDelivery(person){
+- const home=nearHouse(person),destination=person.chWaterTo||(home?entryOf(home.kind,home.i,home.j):[camp.i,camp.j+1]);
+- if(destination&&go(person,destination,'chore',null)){person.chWaterTo=destination.slice();person.act='niesie wodę';return true}
++ const home=bById(person.chWaterHome)??nearHouse(person),candidates=home?[buildingEntryFor(person,home)]:[person.chWaterTo,campDeliveryEntry(person)];
++ for(const destination of candidates){if(!deliverySpotFree(person,destination))continue;
++  if(go(person,destination,'chore',null)){person.chWaterTo=destination.slice();person.act='niesie wodę';return true;}
++ }
+  person.state='idle';person.path=null;person.after=null;person.wait=2;person.act='brak drogi do dostawy wody';return true;
+ }
+ function resumeDelivery(person){
+@@ -27,7 +29,7 @@
+ {const previousStep=stepPerson;stepPerson=function(person,dt){
+  if(waterDelivery(person)){
+   if(person.state==='move'&&person.after==='chore'&&person.path?.length){movePerson(person,dt);return}
+-  if(person.state==='work'&&person.workKind==='chore'){if(isWork())return previousStep(person,dt);return}
++  if(person.state==='work'&&person.workKind==='chore'){const destination=person.chWaterTo;if(!destination||!walk[destination[1]*N+destination[0]]||Math.hypot(person.x-tcx(destination[0]),person.z-tcx(destination[1]))>.8){release(person);resumeWaterDelivery(person);return}if(isWork())return previousStep(person,dt);return}
+   if(person.wait>0){person.wait-=dt;return}release(person);return resumeWaterDelivery(person);
+  }
+  if(pendingDelivery(person)&&person.state!=='away'){
+--- RC9/src/p_worksites.js
++++ RC10/src/p_worksites.js
+@@ -14,10 +14,11 @@
+  }
+  return positions;
+ }
++function deliverySpotFree(person,tile){return !!tile&&!!walk[tile[1]*N+tile[0]]&&!S.people.some(peer=>peer!==person&&!['away','sleep'].includes(peer.state)&&Math.hypot(peer.x-tcx(tile[0]),peer.z-tcx(tile[1]))<.6);}
+ function buildingEntryFor(person,building){
+  const start=tileOf(person.x,person.z),preferred=entryOf(building.kind,building.i,building.j),positions=workSiteTiles(building);
+  positions.sort((a,b)=>(preferred&&a[0]===preferred[0]&&a[1]===preferred[1]?-1:preferred&&b[0]===preferred[0]&&b[1]===preferred[1]?1:Math.hypot(a[0]-start[0],a[1]-start[1])-Math.hypot(b[0]-start[0],b[1]-start[1])));
+- return positions.find(tile=>astar(start[0],start[1],tile[0],tile[1]))||null;
++ return positions.find(tile=>deliverySpotFree(person,tile)&&astar(start[0],start[1],tile[0],tile[1]))||null;
+ }
+ function workSiteActive(person){return !!person.tgt?.kind&&((person.state==='move'&&['prod','field','build','care'].includes(person.after))||(person.state==='work'&&['prod','field','build','care'].includes(person.workKind)))}
+ function workSiteRoute(person,building,preferred){
+@@ -46,3 +47,9 @@
+  if(person.state==='work'&&Math.hypot(person.x-tcx(goal[0]),person.z-tcx(goal[1]))>.6)return 'Najpierw musi dojść do stanowiska.';
+  return null;
+ }
++/* Odbiór przy obozie ma kilka fizycznych miejsc, a nie jeden kafel zajęty paleniskiem. */
++function campDeliveryEntry(person){
++ const start=tileOf(person.x,person.z),positions=[];
++ for(let dz=-3;dz<=3;dz++)for(let dx=-3;dx<=3;dx++){const i=camp.i+dx,j=camp.j+dz;if(i<0||j<0||i>=N||j>=N||!walk[j*N+i])continue;if(!deliverySpotFree(person,[i,j]))continue;positions.push([i,j]);}
++ positions.sort((a,b)=>Math.hypot(a[0]-start[0],a[1]-start[1])-Math.hypot(b[0]-start[0],b[1]-start[1]));return positions.find(tile=>deliverySpotFree(person,tile)&&astar(start[0],start[1],tile[0],tile[1]))||null;
++}
+--- RC9/src/p_world_detail.js
++++ RC10/src/p_world_detail.js
+@@ -0,0 +1,44 @@
++/* Detal ma jeden cykl w istniejącej klatce; nie jest źródłem zasobów ani przeszkodą SI. */
++const worldDetails=new THREE.Group();scene.add(worldDetails);
++const worldDetailModels=new Map();let worldDetailState=null,worldDetailClock=1,worldDetailTerrain=null,worldDetailTerrainKey='';
++function worldDetailPlan(building){
++ const definition=BD[building.kind];if(!definition||!bDone(building))return null;
++ const entries=workSiteTiles(building).slice(0,12),center=bCenter(building),ext=building.ext||[];
++ return {id:building.id,kind:building.kind,center,entries,house:!!definition.house,production:!!definition.prod,wood:['drwal','drewutnia','pracownia','warsztat','szkutnia'].includes(building.kind),stone:['ruda','kamien','kuznia','dymarka','garncarnia'].includes(building.kind),ext:ext.slice()};
++}
++function worldDetailModel(plan){
++ const parts=[],add=(geometry,color,x,y,z,rx=0)=>parts.push([geometry,color,mdM(x,y,z,rx)]),winter=seasonIdx()===2;
++ // Każde oznaczenie stanowiska pochodzi z tych samych pól co cele SI.
++ for(const tile of plan.entries){const x=tcx(tile[0]),z=tcx(tile[1]);add(new THREE.BoxGeometry(.24,.025,.32),winter?0xb0aba0:0x8a7656,x,Hy(x,z)+.025,z);}
++ const building=bById(plan.id),definition=BD[plan.kind],x=tcx(building.i)+.25,z=tcx(building.j)+.25,y=Hy(x,z);
++ if(plan.production){add(new THREE.BoxGeometry(.48,.06,.3),0x8c6c46,x,y+.45,z);for(const side of [-1,1])add(new THREE.BoxGeometry(.045,.42,.22),0x4d3828,x+side*.18,y+.22,z);}
++ if(plan.wood)for(let index=0;index<4;index++)add(new THREE.CylinderGeometry(.055,.06,.48,6),0x7c5837,x+.18*(index%2),y+.07+.12*Math.floor(index/2),z+.4,Math.PI/2);
++ else if(plan.stone)for(let index=0;index<3;index++)add(new THREE.DodecahedronGeometry(.11,0),plan.kind==='ruda'?0x675b53:0x77786f,x+index*.12,y+.1,z+.4);
++ else if(plan.production||plan.house){add(new THREE.CylinderGeometry(.12,.1,.3,8),0x8b6640,x,y+.15,z+.4);for(const height of [.08,.24])add(new THREE.CylinderGeometry(.123,.123,.018,8),0x4a4035,x,y+height,z+.4);}
++ if(plan.ext.includes('wyroby'))add(new THREE.CylinderGeometry(.075,.07,.16,8),0xa6784a,x+.3,y+.08,z+.45);
++ if(!parts.length)return null;const model=new THREE.Mesh(mdMerge(parts),MD.mat);model.receiveShadow=true;model.userData.detail=true;model.userData.stations=plan.entries;return model;
++}
++function worldDetailTerrainPlan(){
++ const tiles=[],ci=Math.round(camT.x+N/2-.5),cj=Math.round(camT.z+N/2-.5);
++ for(let dj=-20;dj<=20;dj+=4)for(let di=-20;di<=20;di+=4){const i=ci+di,j=cj+dj,index=j*N+i;if(i<1||j<1||i>=N-1||j>=N-1||!land[index]||!rev[index]||occ[index]>=0)continue;const x=tcx(i),z=tcx(j),y=Hy(x,z);if(y<.1)continue;tiles.push({i,j,x,y,z,biome:biomeOf(i,j),path:tread[index]>.35});}
++ return tiles.slice(0,121);
++}
++function worldDetailTerrainModel(){
++ const parts=[],winter=seasonIdx()===2;for(const tile of worldDetailTerrainPlan()){
++  if(tile.path){for(const side of [-1,1])parts.push([new THREE.DodecahedronGeometry(.065,0),0x7d7b6e,mdM(tile.x+side*.32,tile.y+.04,tile.z+.1)]);}
++  else if(tile.biome==='wet'||tile.biome==='coast'){for(let stem=0;stem<3;stem++)parts.push([new THREE.CylinderGeometry(.009,.014,.28+stem*.05,3),winter?0xaaa48b:0x747750,mdM(tile.x+stem*.055,tile.y+.14,tile.z)]);}
++  else if(tile.biome==='high'){parts.push([new THREE.DodecahedronGeometry(.16,0),winter?0xadafa8:0x7c8076,mdM(tile.x,tile.y+.06,tile.z,0,0,0,1,.5,1.3)]);}
++  else{const color=winter?0x9c9b86:seasonIdx()===1?0x827246:0x6c7951;for(let blade=0;blade<3;blade++)parts.push([new THREE.ConeGeometry(.04,.13,3),color,mdM(tile.x+blade*.05,tile.y+.065,tile.z+blade*.03)]);}
++ }
++ if(!parts.length)return null;const model=new THREE.Mesh(mdMerge(parts),MD.mat);model.receiveShadow=true;model.userData.detail=true;return model;
++}
++function worldDetailClear(){for(const model of worldDetailModels.values())retireObjects(model);worldDetailModels.clear();if(worldDetailTerrain)retireObjects(worldDetailTerrain);worldDetailTerrain=null;worldDetailTerrainKey='';}
++function worldDetailTick(delta){
++ if(!S)return;if(worldDetailState!==S){worldDetailClear();worldDetailState=S;worldDetailClock=1;}
++ worldDetailClock+=delta;if(worldDetailClock<.5)return;worldDetailClock=0;
++ if(GFX.level===0){if(worldDetailModels.size||worldDetailTerrain)worldDetailClear();return;}
++ const limit=GFX.level===2?48:32,visible=S.bld.filter(building=>bDone(building)&&revAt(building.i,building.j)&&Math.hypot(bCenter(building).x-camT.x,bCenter(building).z-camT.z)<40).sort((a,b)=>Math.hypot(bCenter(a).x-camT.x,bCenter(a).z-camT.z)-Math.hypot(bCenter(b).x-camT.x,bCenter(b).z-camT.z)).slice(0,limit),ids=new Set(visible.map(building=>building.id));
++ for(const [id,model] of worldDetailModels)if(!ids.has(id)){retireObjects(model);worldDetailModels.delete(id);}
++ for(const building of visible){const plan=worldDetailPlan(building);if(!plan)continue;const key=JSON.stringify([plan.kind,plan.entries,plan.ext,seasonIdx()]),previous=worldDetailModels.get(building.id);if(previous?.userData.key===key)continue;if(previous)retireObjects(previous);const model=worldDetailModel(plan);if(model){model.userData.key=key;worldDetails.add(model);worldDetailModels.set(building.id,model);}}
++ const terrainKey=[Math.floor(camT.x/8),Math.floor(camT.z/8),seasonIdx(),walkRevision,Math.floor(S.day)].join(':');if(terrainKey!==worldDetailTerrainKey){if(worldDetailTerrain)retireObjects(worldDetailTerrain);worldDetailTerrain=worldDetailTerrainModel();if(worldDetailTerrain)worldDetails.add(worldDetailTerrain);worldDetailTerrainKey=terrainKey;}
++}
+--- RC9/tests/build-deploy.test.mjs
++++ RC10/tests/build-deploy.test.mjs
+@@ -10,9 +10,9 @@
+ const {checkDeployment,BASE,PACKAGE}=require('../tools/deploy-check.cjs');
+ const {verifyPackage}=require('../tools/verify-package.cjs');
+ 
+-test('RC9 deployment targets the verified RC8 checkpoint in every release guard',async()=>{
+- const expectedBase='fd11ce669488ef4e3a698f16ec737a7390b1147b';
+- assert.equal(BASE,expectedBase,'preflight must accept the deployed RC8 checkpoint');
++test('RC10 deployment targets the verified RC9 checkpoint in every release guard',async()=>{
++ const expectedBase='492e8bfd1a8ba058f467701115f1e74146343180';
++ assert.equal(BASE,expectedBase,'preflight must accept the deployed RC9 checkpoint');
+  const installer=await fs.readFile(new URL('../WDROZ_TERMUX.sh',import.meta.url),'utf8');
+  assert.match(installer,new RegExp("EXPECTED_COMMIT='"+expectedBase+"'"));
+  assert.match(installer,/npm run test:install/);
+@@ -27,7 +27,7 @@
+  const directory=await fs.mkdtemp(path.join(os.tmpdir(),'przystan-integrity-'));
+  const outside=await fs.mkdtemp(path.join(os.tmpdir(),'przystan-outside-'));
+  const file=path.join(directory,'game.txt');const content='expected game';
+- const manifest={version:'4.0.0-rc.9',files:{'game.txt':crypto.createHash('sha256').update(content).digest('hex')}};
++ const manifest={version:'4.0.0-rc.10',files:{'game.txt':crypto.createHash('sha256').update(content).digest('hex')}};
+  try{
+   await fs.writeFile(file,content);assert.equal(verifyPackage(directory,manifest),1);
+   await fs.writeFile(file,'changed');assert.throws(()=>verifyPackage(directory,manifest));
+--- RC9/tests/departure-master.test.mjs
++++ RC10/tests/departure-master.test.mjs
+@@ -0,0 +1,10 @@
++import test from 'node:test';
++import assert from 'node:assert/strict';
++import {createGame} from './runtime.mjs';
++function fixture(){const runtime=createGame();runtime.evaluate(`S=freshState();S.e2={};land.fill(1);occ.fill(-1);H.fill(1);rev.fill(1);walk.fill(1);S.res.ryby=1000;S.res.lodz=3;S.day=.4;S.people=S.people.filter(person=>person.age>=16);for(const person of S.people){person.job='rob';person.hp=1;person.carry=null;person.x=tcx(camp.i);person.z=tcx(camp.j+1);}`);return runtime;}
++test('sea dispatch refuses an unreachable shipyard before charging food or boats',()=>{const runtime=fixture();const result=runtime.evaluate(`(()=>{const definition=BD.szkutnia;S.bld=[{id:901,kind:'szkutnia',i:110,j:110,prog:definition.work,work:definition.work}];walk.fill(0);walk[(camp.j+1)*N+camp.i]=1;const before=JSON.stringify(S.res),why=e2RejsWhy();e2Rejs();e2Hor();return {why,same:before===JSON.stringify(S.res),count:S.exps.length};})()`);assert.match(result.why,/Brak drogi/);assert.equal(result.same,true);assert.equal(result.count,0);});
++test('cancelling preparation refunds the exact paid quantities once and survives a real restart',()=>{const runtime=fixture();const result=runtime.evaluate(`(()=>{const before={...S.res};sendExp(1,'zwiad');const expedition=S.exps[0],id=expedition.id;const charged=foodTotal();const stored=save();boot(false);const cancelled=cancelExp(id),again=cancelExp(id);return {stored,cancelled,again,paid:charged<FOOD.reduce((sum,key)=>sum+(before[key]||0),0),same:Object.keys(before).every(key=>Math.abs((S.res[key]||0)-before[key])<1e-8),count:S.exps.length,valid:save()};})()`);assert.equal(result.stored,true);assert.equal(result.cancelled,true);assert.equal(result.again,false);assert.equal(result.paid,true);assert.equal(result.same,true);assert.equal(result.count,0);assert.equal(result.valid,true);});
++test('first departure irreversibly closes cancellation and forged refunds are rejected',()=>{const runtime=fixture();const result=runtime.evaluate(`(()=>{sendExp(1,'zwiad');const expedition=S.exps[0],person=S.people.find(person=>person.exp===expedition.id);person.after='away';onArrive(person);const started=expedition.started,denied=!cancelExp(expedition.id);const snapshot=JSON.parse(serializeSave());snapshot.exps[0].departure.paid.ruda=500;return {started,denied,rejected:decodeSave(JSON.stringify(snapshot))===null};})()`);assert.equal(result.started,true);assert.equal(result.denied,true);assert.equal(result.rejected,true);});
++test('legacy expeditions never fabricate a refundable payment history',()=>{const runtime=fixture();assert.equal(runtime.evaluate(`(()=>{sendExp(1,'zwiad');const expedition=S.exps[0];delete expedition.departure;const before=JSON.stringify(S.res);return !cancelExp(expedition.id)&&before===JSON.stringify(S.res)&&!!decodeSave(serializeSave());})()`),true);});
++test('returners use separate safe land tiles and rewards cannot be granted twice',()=>{const runtime=fixture();const result=runtime.evaluate(`(()=>{S.expSize=3;sendExp(1,'zwiad');const expedition=S.exps[0],crew=S.people.filter(person=>person.exp===expedition.id);expedition.risk=0;crew.forEach(person=>person.state='away');walk[expedition.exit[1]*N+expedition.exit[0]]=0;const finished=finishExp(expedition,crew),resources=JSON.stringify(S.res),twice=finishExp(expedition,crew);return {finished,twice,same:resources===JSON.stringify(S.res),walkable:crew.every(person=>{const tile=tileOf(person.x,person.z);return !!walk[tile[1]*N+tile[0]];}),distinct:new Set(crew.map(person=>tileOf(person.x,person.z).join(':'))).size,count:crew.length};})()`);assert.equal(result.finished,true);assert.equal(result.twice,false);assert.equal(result.same,true);assert.equal(result.walkable,true);assert.equal(result.distinct,result.count);});
++test('blocked return holds all outcome wrappers until a safe home entry exists',()=>{const runtime=fixture();const result=runtime.evaluate(`(()=>{sendExp(1,'zwiad');const expedition=S.exps[0],crew=S.people.filter(person=>person.exp===expedition.id);expedition.risk=0;crew.forEach(person=>person.state='away');walk.fill(0);const before=JSON.stringify(S.res),blocked=finishExp(expedition,crew),held=S.exps.includes(expedition)&&crew.every(person=>person.state==='away')&&before===JSON.stringify(S.res);walk.fill(1);const resumed=finishExp(expedition,crew);return {blocked,held,resumed,left:S.exps.length};})()`);assert.equal(result.blocked,false);assert.equal(result.held,true);assert.equal(result.resumed,true);assert.equal(result.left,0);});
+--- RC9/tests/economy-master.test.mjs
++++ RC10/tests/economy-master.test.mjs
+@@ -0,0 +1,6 @@
++import test from 'node:test';import assert from 'node:assert/strict';import {createRequire} from 'node:module';import {createGame} from './runtime.mjs';
++const require=createRequire(import.meta.url),audit=require('../src/p_e4_audit.js'),world=require('../src/p_e4_world.js'),domain=require('../src/p_e4_domain.js'),economy=require('../src/p_e4_economy.js');
++function fixture(){const runtime=createGame();runtime.game.startGame(true);runtime.evaluate('ludInit()');const state=domain.migrate(JSON.parse(runtime.evaluate('serializeSave()')),{world:world.create({seed:2207,town:{x:0,z:50}})});economy.ensure(state);const town=state.e4.settlements.przystan;town.autonomy=false;town.capacity=100000;Object.assign(state.res,{suchary:10000,ziarno:3000,opal:1000});return {state,town};}
++test('all required recipe and construction inputs have sources and every crafted product has a consumer',()=>{const contract=audit.contract();assert.deepEqual(contract.missingSources,[]);assert.deepEqual(contract.unusedProducts,[]);assert.deepEqual(contract.unknownRecipes,[]);});
++test('chain diagnostics name the actual missing input and finite depleted source without mutating state',()=>{const {state,town}=fixture();town.buildings.huta=1;state.res.ruda=0;state.res.wegiel=0;economy.nature(state,town).ore=0;const before=JSON.stringify(state),rows=audit.status(state,'przystan'),iron=rows.find(row=>row.id==='zelazo');assert.ok(iron);assert.equal(iron.missing.find(item=>item.resource==='ruda').quantity,8);assert.match(iron.missing.find(item=>item.resource==='ruda').source,/wyczerpany/);assert.match(iron.missing.find(item=>item.resource==='wegiel').source,/Wypał węgla|wypał węgla/);assert.equal(JSON.stringify(state),before);});
++test('a missing-input chain resumes after resupply and restart without charging or completing twice',()=>{const {state,town}=fixture();town.buildings.mielerz=1;state.res.drewno=0;const before=JSON.stringify(state.res);assert.equal(economy.batch(state,'przystan','wegiel').ok,false);assert.equal(JSON.stringify(state.res),before);state.res.drewno=8;assert.equal(economy.batch(state,'przystan','wegiel').ok,true);assert.equal(state.res.drewno,0);const restarted=JSON.parse(JSON.stringify(state));economy.advance(restarted,5);assert.equal(restarted.e4.settlements.przystan.output.wegiel,6);const last=JSON.parse(JSON.stringify(restarted));economy.advance(last,2);assert.equal(last.e4.settlements.przystan.output.wegiel,6);assert.equal(domain.validate(last),true);});
+--- RC9/tests/mobile-ui.test.mjs
++++ RC10/tests/mobile-ui.test.mjs
+@@ -9,10 +9,10 @@
+ });
+ test('game options expand in the current panel and expose version and fullscreen controls',()=>{
+  const runtime=createGame();runtime.game.startGame(true);const markup=runtime.evaluate('classicModeTools()');
+- assert.match(markup,/<details[^>]*data-ui-section/);assert.match(markup,/<summary/);assert.match(markup,/data-ui-fullscreen/);assert.match(markup,/4\.0\.0-rc\.9/);assert.doesNotMatch(markup,/<a\b/);
++ assert.match(markup,/<details[^>]*data-ui-section/);assert.match(markup,/<summary/);assert.match(markup,/data-ui-fullscreen/);assert.match(markup,/4\.0\.0-rc\.10/);assert.doesNotMatch(markup,/<a\b/);
+ });
+-test('stock views retain separate live daily production, use and balance columns',()=>{
+- const runtime=createGame();runtime.game.startGame(true);const markup=runtime.evaluate('zapBody()');
++test('stock details retain separate live daily production, use and balance columns',()=>{
++ const runtime=createGame();runtime.game.startGame(true);const markup=runtime.evaluate('zapDetails()');
+  for(const label of ['Produkcja','Zużycie','Bilans'])assert.ok(markup.includes(label),label);
+  assert.match(markup,/<details[^>]*data-ui-section/);
+ });
+--- RC9/tests/navigation-master.test.mjs
++++ RC10/tests/navigation-master.test.mjs
+@@ -0,0 +1,12 @@
++import test from 'node:test';
++import assert from 'node:assert/strict';
++import {createGame} from './runtime.mjs';
++function fixture(){const game=createGame();game.evaluate('S=freshState();S.day=.4;S.wreck.gone=1;S.people=S.people.slice(0,2);land.fill(1);occ.fill(-1);H.fill(1);rev.fill(1);recomputeWalk();for(const p of S.people){p.job="rob";p.carry=null;p.hp=1;p.state="idle"}');return game}
++test('construction cannot sever the only route from a resident to the settlement',()=>{const game=fixture();const result=game.evaluate(`(()=>{land.fill(0);for(let j=1;j<N-1;j++)for(let i=camp.i;i<camp.i+2;i++)land[j*N+i]=1;recomputeWalk();const p=S.people[0];S.people=[p];p.x=tcx(camp.i);p.z=tcx(camp.j-7);return checkPlace('pracownia',camp.i,camp.j-4)})()`);assert.equal(result,false)});
++test('open terrain remains buildable when people can walk around the new footprint',()=>{const game=fixture();assert.equal(game.evaluate("checkPlace('pracownia',110,100)"),true)});
++test('a moving resident waits or detours instead of crossing a stationary resident',()=>{const game=fixture();const result=game.evaluate(`(()=>{const [p,q]=S.people;p.x=tcx(100);p.z=tcx(100);q.x=tcx(102);q.z=tcx(100);go(p,[105,100],'idle',null);let closest=100;for(let n=0;n<150;n++){movePerson(p,.05);closest=Math.min(closest,Math.hypot(p.x-q.x,p.z-q.z))}return {closest,done:p.state==='idle',x:p.x,z:p.z}})()`);assert.ok(result.closest>=.4);assert.equal(result.done,true)});
++test('opposite travellers pass in open space without losing their destinations',()=>{const game=fixture();const result=game.evaluate(`(()=>{const [p,q]=S.people;p.x=tcx(100);p.z=tcx(100);q.x=tcx(105);q.z=tcx(100);go(p,[105,100],'idle',null);go(q,[100,100],'idle',null);let closest=100;for(let n=0;n<700&&(p.state==='move'||q.state==='move');n++){movePerson(p,.05);movePerson(q,.05);S.t+=.05;closest=Math.min(closest,Math.hypot(p.x-q.x,p.z-q.z))}return {closest,states:S.people.map(p=>p.state),tiles:S.people.map(p=>tileOf(p.x,p.z))}})()`);assert.ok(result.closest>=.4);assert.deepEqual(Array.from(result.states),['idle','idle']);assert.deepEqual(Array.from(result.tiles,tile=>Array.from(tile)),[[105,100],[100,100]])});
++test('a goat can be delivered through an alternative accessible pen entrance',()=>{const game=fixture();const result=game.evaluate(`(()=>{const p=S.people[0];S.people=[p];const d=BD.zagroda,b={id:501,kind:'zagroda',i:110,j:100,prog:d.work,work:d.work,cond:1,animals:0};S.bld=[b];p.kozN=1;p.kozB=501;p.x=tcx(110+d.w+1);p.z=tcx(101);walk.fill(0);walk[(100+d.h)*N+109]=1;walk[101*N+110+d.w]=1;walk[101*N+111+d.w]=1;kozResume(p);for(let n=0;n<400&&p.state==='move';n++)movePerson(p,.05);return {animals:b.animals,led:p.kozN}})()`);assert.equal(result.animals,1);assert.equal(result.led,0)});
++test('a failed water delivery retains its bucket and resumes after access returns',()=>{const game=fixture();const result=game.evaluate(`(()=>{const p=S.people[0];S.people=[p];p.chK='woda';p.chPh=1;p.carry=[{res:'woda',q:0}];p.chWaterTo=[110,100];p.x=tcx(113);p.z=tcx(100);walk.fill(0);resumeWaterDelivery(p);const retained=waterDelivery(p);walk.fill(1);walkRevision++;resumeWaterDelivery(p);for(let n=0;n<400&&p.state==='move';n++)movePerson(p,.05);stepPerson(p,2);return {retained,bonus:S.wBonus||0,cargo:p.carry}})()`);assert.equal(result.retained,true);assert.ok(result.bonus>0);assert.equal(result.cargo,null)});
++test('a carrier replans a receiving place occupied after dispatch and deposits the cargo exactly once',()=>{const game=fixture();const result=game.evaluate(`(()=>{const [person,peer]=S.people;S.people=[person,peer];person.x=tcx(camp.i+6);person.z=tcx(camp.j+1);peer.x=tcx(camp.i+10);peer.z=tcx(camp.j+8);const before=S.res.drewno;finishTrip(person,[{res:'drewno',q:3}]);const original=person.routeGoal.slice();peer.x=tcx(original[0]);peer.z=tcx(original[1]);for(let tick=0;tick<1500&&person.carry;tick++){S.t+=.1;stepPerson(person,.1);}return {delivered:S.res.drewno-before,cargo:person.carry,clear:Math.hypot(person.x-peer.x,person.z-peer.z)>.4};})()`);assert.equal(result.delivered,3);assert.equal(result.cargo,null);assert.equal(result.clear,true);});
++test('a crowd retry may complete at the current receiving tile without resuming a closed route',()=>{const game=fixture();const result=game.evaluate(`(()=>{const [person,peer]=S.people;S.people=[person,peer];const i=camp.i+2,j=camp.j+1;person.x=tcx(i)-.49;person.z=tcx(j);peer.x=tcx(i)-.9;peer.z=tcx(j);person.state='move';person.after='deposit';person.routeGoal=[i-1,j];person.routeRevision=walkRevision;person.path=[{x:tcx(i-1),z:tcx(j)}];person.carry=[{res:'drewno',q:3}];person.navWait=.6;person.navRetry=0;S.t=5;const before=S.res.drewno;movePerson(person,.1);const once=S.res.drewno-before;movePerson(person,.1);return {once,total:S.res.drewno-before,cargo:person.carry,state:person.state,path:person.path};})()`);assert.equal(result.once,3);assert.equal(result.total,3);assert.equal(result.cargo,null);assert.equal(result.state,'idle');assert.equal(result.path,null);});
+--- RC9/tests/people-master.test.mjs
++++ RC10/tests/people-master.test.mjs
+@@ -0,0 +1,5 @@
++import test from 'node:test';import assert from 'node:assert/strict';import {createGame} from './runtime.mjs';
++function fixture(){const runtime=createGame();runtime.evaluate(`S=freshState();S.speed=1;S.day=.4;`);return runtime;}
++test('both detail levels have bounded mesh counts, readable faces and age scaling',()=>{const runtime=fixture();const result=runtime.evaluate(`(()=>{const person=S.people[0],low=makePersonLow(person),high=makePerson18(person),counts=model=>{let meshes=0,vertices=0;model.traverse(object=>{if(object.isMesh){meshes++;vertices+=object.geometry.attributes.position.count;}});return {meshes,vertices};};return {low:counts(low),high:counts(high),face:!!low.userData.head,child:personScale({...person,age:7}),adult:personScale({...person,age:30})};})()`);assert.equal(result.face,true);assert.ok(result.low.meshes<=9);assert.ok(result.high.meshes<=16);assert.ok(result.low.vertices<10000);assert.ok(result.high.vertices<35000);assert.ok(result.child<result.adult);});
++test('an actual carried resource hides the work tool and render never changes simulation',()=>{const runtime=fixture();const result=runtime.evaluate(`(()=>{const person=S.people[0];person.state='work';person.workKind='build';person.carry=[{res:'ruda',q:2}];const model=makePerson18(person),before=serializeSave();for(let frame=0;frame<200;frame++)animatePerson(person,model,1/30);return {unchanged:before===serializeSave(),cargo:model.userData.carry.visible,tool:!!model.userData.tool?.visible,mode:model.userData.motionMode};})()`);assert.equal(result.unchanged,true);assert.equal(result.cargo,true);assert.equal(result.tool,false);assert.equal(result.mode,'carry');});
++test('work to meal blends limbs, displays only the real prop, and pause freezes the pose',()=>{const runtime=fixture();const result=runtime.evaluate(`(()=>{const person=S.people[0],model=makePerson18(person);person.carry=null;person.state='work';person.workKind='build';animatePerson(person,model,1/30);const arm=model.userData.aR.rotation.x;person.workKind='rytm';person.ryK='meal';animatePerson(person,model,1/120);const first=model.userData.aR.rotation.x,prop=model.userData.dailyProp.visible,kind=model.userData.dailyPropKind;const pose=model.userData.aR.rotation.toArray().join(':');S.speed=0;for(let frame=0;frame<50;frame++)animatePerson(person,model,1/30);const frozen=pose===model.userData.aR.rotation.toArray().join(':');S.speed=1;person.state='move';animatePerson(person,model,1/30);return {arm,first,prop,kind,frozen,hidden:!model.userData.dailyProp.visible};})()`);assert.ok(Math.abs(result.first-result.arm)<.2);assert.equal(result.prop,true);assert.equal(result.kind,'bowl');assert.equal(result.frozen,true);assert.equal(result.hidden,true);});
+--- RC9/tests/stock-compact.test.mjs
++++ RC10/tests/stock-compact.test.mjs
+@@ -0,0 +1,8 @@
++import test from 'node:test';
++import assert from 'node:assert/strict';
++import {createGame} from './runtime.mjs';
++function fixture(){const game=createGame();game.game.startGame(true);game.evaluate("ResourceFlow.attach(S,{reset:true});ResourceFlow.run(S,'economy',()=>{S.res.drewno+=10;S.res.drewno-=16});ResourceFlow.run(S,'other',()=>S.res.drewno+=100);S.day+=.25");return game}
++test('the compact stock card distinguishes production deficit from an imported surplus',()=>{const game=fixture();const markup=game.evaluate('zapBody()');assert.match(markup,/data-stock-resource="drewno"[^>]*class="[^"]*stock-deficit/);assert.match(markup,/−24/);assert.doesNotMatch(markup,/<table/)});
++test('production and use remain available in initially collapsed stock details',()=>{const game=fixture();const markup=game.evaluate('zapDetails()');assert.match(markup,/<details[^>]*data-ui-section="stock:details:przystan"[^>]*>/);assert.doesNotMatch(markup,/<details[^>]*\bopen\b/);for(const label of ['Produkcja','Zużycie','Pozostałe','Bilans'])assert.ok(markup.includes(label));assert.match(markup,/data-flow-resource="drewno"/)});
++test('unobserved and balanced resources use different neutral labels',()=>{const game=createGame();game.game.startGame(true);game.evaluate('ResourceFlow.attach(S,{reset:true})');assert.match(game.evaluate('zapBody()'),/zbieranie danych/);game.evaluate('S.day+=.25');assert.doesNotMatch(game.evaluate('zapBody()'),/zbieranie danych/);assert.match(game.evaluate('zapBody()'),/stock-balanced/)});
++test('stock summary reports a production deficit despite incoming gifts',()=>{const game=fixture();const result=game.evaluate("(()=>{const scope=zapScope();const flow=ResourceFlow.stats(S,scope.id,'drewno');return {balance:flow.productionRate-flow.useRate,other:flow.otherRate,markup:zapDetails()}})()");assert.equal(result.balance,-24);assert.equal(result.other,400);assert.match(result.markup,/\+400/)});
+--- RC9/tests/world-detail.test.mjs
++++ RC10/tests/world-detail.test.mjs
+@@ -0,0 +1,5 @@
++import test from 'node:test';import assert from 'node:assert/strict';import {createGame} from './runtime.mjs';
++function fixture(){const runtime=createGame();runtime.evaluate(`S=freshState();land.fill(1);occ.fill(-1);walk.fill(1);rev.fill(1);S.day=.4;GFX.level=1;S.bld=[];for(let index=0;index<50;index++)S.bld.push({id:1000+index,kind:index%2?'chata':'pracownia',i:camp.i+index%8,j:camp.j+Math.floor(index/8),prog:100,work:100,ext:index%2?['zielnik','wyroby']:[],cond:1});camT.x=tcx(camp.i);camT.z=tcx(camp.j);`);return runtime;}
++test('yard stations use real walkable perimeter tiles and decorative detail cannot change state or collisions',()=>{const runtime=fixture();const result=runtime.evaluate(`(()=>{const before=serializeSave(),walkBefore=Array.from(walk).join(''),plan=worldDetailPlan(S.bld[0]);worldDetailTick(.6);return {state:before===serializeSave(),walk:walkBefore===Array.from(walk).join(''),stations:plan.entries.every(tile=>workSiteContains(S.bld[0],tile)),models:worldDetailModels.size,terrain:worldDetailTerrainPlan().length,extensions:worldDetailPlan(S.bld[1]).ext};})()`);assert.equal(result.state,true);assert.equal(result.walk,true);assert.equal(result.stations,true);assert.ok(result.models<=32);assert.ok(result.models>0);assert.ok(result.terrain<=121);assert.deepEqual(Array.from(result.extensions),['zielnik','wyroby']);});
++test('camera, quality and restart release detail geometries instead of accumulating invisible models',()=>{const runtime=fixture();const result=runtime.evaluate(`(()=>{worldDetailTick(.6);let disposed=0;for(const model of worldDetailModels.values())model.geometry.addEventListener('dispose',()=>disposed++);const original=worldDetailModels.size;camT.x=1000;camT.z=1000;worldDetailTick(.6);const removed=worldDetailModels.size===0;camT.x=tcx(camp.i);camT.z=tcx(camp.j);worldDetailTick(.6);GFX.level=0;worldDetailTick(.6);return {original,disposed,removed,empty:worldDetailModels.size===0&&worldDetailTerrain===null};})()`);assert.ok(result.original>0);assert.ok(result.disposed>=result.original);assert.equal(result.removed,true);assert.equal(result.empty,true);});
++test('construction cards expose descriptions, costs and actions in both classic modes',()=>{const runtime=fixture();const result=runtime.evaluate(`(()=>{S.res.drewno=100;S.res.kamien=100;S.res.deski=100;S.res.glina=100;S.res.gwozdzie=100;const checks=[];for(const quiet of [true,false]){czOn=quiet;openSheet('budowa');buildCat='dom';tab='budowa';$('body')._h=null;renderPanel();const content=$('body').innerHTML;checks.push({description:content.includes(BD.chata.d),action:content.includes('data-b="chata"'),cost:content.includes('osobodni'),hidden:content.includes('data-ui-section="build:')});}return checks;})()`);for(const check of result){assert.equal(check.description,true);assert.equal(check.action,true);assert.equal(check.cost,true);assert.equal(check.hidden,false);}});
+--- RC9/tools/browser-ai.cjs
++++ RC10/tools/browser-ai.cjs
+@@ -11,8 +11,8 @@
+   for(const viewport of [{width:412,height:870},{width:870,height:412}]){
+    const context=await browser.newContext({viewport,isMobile:true,hasTouch:true}),page=await context.newPage(),errors=[];page.on('pageerror',error=>errors.push(error.message));await page.addInitScript(()=>{localStorage.setItem('przystan-gfx','0');localStorage.setItem('przystan-autocam','0')});
+    await page.goto('http://127.0.0.1:4317/');await page.waitForFunction(()=>!!window.__g);await page.locator('#go').click();await settle(page);
+-   const stations=await page.evaluate(()=>window.__qaEval(`(()=>{closeSheet();S.day=.4;S.speed=0;S.wreck.gone=1;const building={id:501,kind:'pracownia',i:camp.i+5,j:camp.j+3,prog:6,work:6,cond:1,lv:1,want:2};S.bld.push(building);placeFootprint(building.kind,building.i,building.j,building.id);addBuildingMesh(building);S.res.drewno=100;S.res.deski=0;const crew=S.people.filter(isWorker).slice(0,2);for(const person of crew){release(person);person.job='wb';person.wb=501;person.hp=1;person.carry=null;person.path=null;person.state='idle';if(!go(person,entryOf(building.kind,building.i,building.j),'prod',building))throw Error('No work route');for(let tick=0;tick<3000&&person.state==='move';tick++)movePerson(person,.05)}globalThis.qaCrew=crew.map(person=>person.id);lookAt(bCenter(building).x,bCenter(building).z,1.8);return crew.map(person=>({id:person.id,goal:person.routeGoal,state:person.state,check:workSiteCheck(person)}))})()`));
+-   assert.ok(stations.every(person=>person.state==='work'&&person.check===null));assert.notDeepEqual(stations[0].goal,stations[1].goal);
++   const stations=await page.evaluate(()=>window.__qaEval(`(()=>{closeSheet();S.day=.4;S.speed=0;S.wreck.gone=1;const building={id:501,kind:'pracownia',i:camp.i+5,j:camp.j+3,prog:6,work:6,cond:1,lv:1,want:2};S.bld.push(building);placeFootprint(building.kind,building.i,building.j,building.id);addBuildingMesh(building);S.res.drewno=100;S.res.deski=0;const crew=S.people.filter(isWorker).slice(0,2);for(const person of crew){release(person);person.job='wb';person.wb=501;person.hp=1;person.carry=null;person.path=null;person.state='idle';if(!go(person,entryOf(building.kind,building.i,building.j),'prod',building))throw Error('No work route');}for(let tick=0;tick<3000&&crew.some(person=>person.state==='move');tick++){S.t+=.05;for(const peer of S.people){if(crew.includes(peer)){if(peer.state==='move')movePerson(peer,.05);}else stepPerson(peer,.05);}}S.res.deski=0;globalThis.qaCrew=crew.map(person=>person.id);lookAt(bCenter(building).x,bCenter(building).z,1.8);return crew.map(person=>({id:person.id,goal:person.routeGoal,state:person.state,check:workSiteCheck(person),act:person.act,crowdWait:person.navWait,position:[person.x,person.z]}))})()`));
++   console.log(JSON.stringify({viewport,stations}));assert.ok(stations.every(person=>person.state==='work'&&person.check===null));assert.notDeepEqual(stations[0].goal,stations[1].goal);
+    await page.waitForFunction(()=>window.__qaEval('qaCrew.every(id=>{const person=pById(id),mesh=pMesh[id];return mesh&&Math.hypot(mesh.position.x-person.x,mesh.position.z-person.z)<1e-8})'));
+    const approach=await page.evaluate(()=>window.__qaEval(`(()=>{const p=pById(qaCrew[0]),b=bById(501),goal=p.routeGoal.slice();release(p);p.x=tcx(goal[0])+.49;p.z=tcx(goal[1])+.49;const before=[p.x,p.z];go(p,goal,'prod',b);const immediate=p.state,continuous=p.x===before[0]&&p.z===before[1];for(let n=0;n<100&&p.state==='move';n++)movePerson(p,.05);return {immediate,continuous,state:p.state,check:workSiteCheck(p)}})()`));assert.equal(approach.immediate,'move');assert.equal(approach.continuous,true);assert.equal(approach.state,'work');assert.equal(approach.check,null);
+    const blocked=await page.evaluate(()=>window.__qaEval(`(()=>{const [sick,waiting]=qaCrew.map(pById);S.laws.odpoczynek=true;sick.hp=.1;sick.wt=100;stepPerson(sick,.2);if(S.res.deski!==0)throw Error('Remote production');release(waiting);waiting.path=null;waiting.state='idle';walk.fill(0);planJob(waiting);const activity=personActivity(waiting),workshop=workshopActivity(bById(501)),task=taskList().find(task=>task.id==='workshop:501');return {phase:activity.phase,reason:activity.reason,workshop:workshop.reason,task:task.detail,stock:S.res.deski,recovery:personActivity(sick)}})()`));
+--- RC9/tools/browser-master.cjs
++++ RC10/tools/browser-master.cjs
+@@ -0,0 +1,28 @@
++/* RC10: rzeczywiste modele, pełne karty budowy i dwa znaki bilansu. */
++const {chromium}=require(process.env.PRZYSTAN_PLAYWRIGHT_MODULE||'playwright');
++const fs=require('node:fs'),path=require('node:path'),http=require('node:http'),assert=require('node:assert/strict');
++(async()=>{
++ const output=process.env.PRZYSTAN_BROWSER_OUTPUT||path.resolve('browser-evidence');fs.mkdirSync(output,{recursive:true});const dist=path.resolve(__dirname,'../dist');let browser;const results=[];
++ const server=http.createServer((request,response)=>{const name=new URL(request.url,'http://localhost').pathname,file=path.resolve(dist,name==='/'?'index.html':'.'+name);if(!file.startsWith(dist+path.sep)||!fs.existsSync(file)){response.writeHead(404);response.end();return;}response.setHeader('Content-Type',path.extname(file)==='.html'?'text/html':path.extname(file)==='.js'?'text/javascript':'application/octet-stream');let content=fs.readFileSync(file);if(name==='/'||name==='/index.html')content=content.toString().replace(/\n\}\);\s*<\/script>/,'\nwindow.__qaEval=expression=>eval(expression);\n});\n</script>');response.end(content);});
++ await new Promise(resolve=>server.listen(4317,'127.0.0.1',resolve));
++ try{
++  browser=await chromium.launch({headless:true,executablePath:process.env.CHROMIUM_PATH,args:JSON.parse(process.env.PRZYSTAN_CHROMIUM_ARGS||'[]')});
++  async function settle(page){await page.evaluate(()=>window.__qaEval('S.speed=0;S.evT=10000'));for(let attempt=0;attempt<40;attempt++){await page.evaluate(()=>window.__qaEval('custTick()'));if(await page.locator('#ev').isVisible()){const close=page.locator('#ev [data-close]');if(await close.count())await close.click();else await page.locator('#ev [data-o="0"]').click();await page.evaluate(()=>window.__g.S.speed=0);}else if(await page.evaluate(()=>window.__qaEval('!!S.cust.umowa&&!evOpen')))return;}throw Error('Decisions did not settle');}
++  for(const viewport of [{width:412,height:870},{width:870,height:412}]){
++   const context=await browser.newContext({viewport,isMobile:true,hasTouch:true}),page=await context.newPage(),errors=[];page.on('pageerror',error=>errors.push(error.message));await page.addInitScript(()=>{localStorage.setItem('przystan-gfx','1');localStorage.setItem('przystan-autocam','0');});
++   await page.goto('http://127.0.0.1:4317/');await page.waitForFunction(()=>!!window.__g);await page.locator('#go').click();await page.evaluate(()=>window.__qaEval('S.speed=0;S.evT=10000'));
++   for(let attempt=0;attempt<16;attempt++){await page.evaluate(()=>window.__qaEval('custTick()'));if(await page.locator('#ev').isVisible()){const close=page.locator('#ev [data-close]');if(await close.count())await close.click();else await page.locator('#ev [data-o="0"]').click();await page.evaluate(()=>window.__g.S.speed=0);}else if(await page.evaluate(()=>window.__qaEval('!!S.cust.umowa&&!evOpen')))break;}
++   const detail=await page.evaluate(()=>window.__qaEval(`(()=>{closeSheet();gfxSetLevel(1,true);S.day=.4;const positions=[[camp.i+5,camp.j+3,'pracownia'],[camp.i+1,camp.j+6,'chata'],[camp.i-4,camp.j+4,'kuznia']];positions.forEach(([i,j,kind],index)=>{const definition=BD[kind],building={id:950+index,kind,i,j,work:definition.work,prog:definition.work,lv:1,want:2,cond:1,ext:kind==='chata'?['ogrod','zielnik','piwnica','wyroby']:[]};S.bld.push(building);placeFootprint(kind,i,j,building.id);addBuildingMesh(building);});recomputeWalk();const building=bById(950),people=S.people.filter(isWorker).slice(0,2);for(const person of people){release(person);person.job='wb';person.wb=950;person.carry=null;person.hp=1;person.state='idle';if(go(person,entryOf(building.kind,building.i,building.j),'prod',building))for(let tick=0;tick<3000&&person.state==='move';tick++)movePerson(person,.05);}lookAt(tcx(camp.i+3),tcx(camp.j+4),2.5);worldDetailTick(1);return {yards:worldDetailModels.size,entries:worldDetailModels.get(950)?.userData.stations.length,people:people.map(person=>({id:person.id,state:person.state,check:workSiteCheck(person)}))};})()`));
++   assert.ok(detail.yards>0&&detail.yards<=32);assert.ok(detail.entries>0);assert.ok(detail.people.every(person=>person.state==='work'&&person.check===null));
++   await settle(page);await page.evaluate(()=>window.__qaEval('S.speed=1'));await page.waitForTimeout(1000);await page.evaluate(()=>window.__qaEval('S.speed=0'));assert.equal(await page.locator('#ev').isVisible(),false);const models=await page.evaluate(()=>window.__qaEval(`S.people.filter(person=>person.wb===950).every(person=>{const model=pMesh[person.id];return model?.userData.p18&&Math.hypot(model.position.x-person.x,model.position.z-person.z)<1e-8;})`));assert.equal(models,true);await page.screenshot({path:path.join(output,`master-world-${viewport.width}.png`)});
++   for(const quiet of [true,false]){
++    await page.evaluate(value=>window.__qaEval(`menuSetMode(${value});S.res.drewno=1000;S.res.kamien=1000;S.res.glina=1000;S.res.gwozdzie=1000;buildCat='dom';openSheet('budowa')`),quiet);
++    const card=page.locator('[data-build-card="chata"]');await card.waitFor();assert.equal(await card.locator('details').count(),0);assert.ok((await card.innerText()).includes('Ciepły dom'));assert.ok((await card.innerText()).includes('osobodni'));assert.ok(await card.locator('[data-b="chata"]').isVisible());assert.equal(await page.locator('#body').evaluate(element=>element.scrollWidth<=element.clientWidth+2),true);await page.screenshot({path:path.join(output,`master-build-${viewport.width}-${quiet}.png`)});
++    await page.evaluate(()=>window.__qaEval(`closeSheet();ResourceFlow.attach(S,{reset:true});ResourceFlow.run(S,'economy',()=>{S.res.drewno+=4;S.res.drewno-=10;S.res.glina+=10;S.res.glina-=4;});S.day+=.25;S.t+=60;zapShow();zapFill(true);`));
++    await settle(page);const deficit=page.locator('[data-stock-resource="drewno"]'),surplus=page.locator('[data-stock-resource="glina"]');assert.ok(await deficit.evaluate(element=>element.classList.contains('stock-deficit')));assert.match(await deficit.innerText(),/−24/);assert.ok(await surplus.evaluate(element=>element.classList.contains('stock-surplus')));assert.match(await surplus.innerText(),/\+24/);const details=page.locator('[data-ui-section="stock:details:przystan"]');assert.equal(await details.evaluate(element=>element.open),false);await page.screenshot({path:path.join(output,`master-stock-${viewport.width}-${quiet}.png`)});await page.locator('.zap-close').click();
++   }
++   assert.deepEqual(errors,[]);results.push({viewport,highModels:true,modelsAtWorkStations:true,detailBudget:true,fullBuildCardsBothModes:true,stockSignsAndClasses:true,detailsInitiallyClosed:true,errors});await context.close();
++  }
++  const report={status:'PASS',results,limits:['Software WebGL; artistic screenshots and functional checks do not measure physical Android battery or frame time.']};fs.writeFileSync(path.join(output,'master-results.json'),JSON.stringify(report,null,2));console.log(JSON.stringify(report));
++ }finally{await browser?.close();await new Promise(resolve=>server.close(resolve));}
++})().catch(error=>{console.error(error);process.exitCode=1;});
+--- RC9/tools/browser-mobile-ui.cjs
++++ RC10/tools/browser-mobile-ui.cjs
+@@ -41,9 +41,10 @@
+     await dismiss(page);const section=page.locator('[data-ui-section="osada:people"]');assert.equal(await section.evaluate(element=>element.open),false);await section.locator(':scope > summary').click();
+     await page.evaluate(()=>window.__qaEval('renderPanel()'));assert.equal(await section.evaluate(element=>element.open),true);await section.locator(':scope > summary').click();
+     await page.evaluate(()=>window.__qaEval("openSheet('kronika')"));const options=page.locator('[data-ui-section="game:options"]');await options.evaluate(element=>{if(!element.open)element.querySelector('summary').click()});
+-    assert.equal(await options.locator('a').count(),0);assert.match(await options.innerText(),/4\.0\.0-rc\.9/);assert.ok(await options.locator('[data-ui-fullscreen]').isVisible());
+-    await page.evaluate(()=>window.__qaEval("closeSheet();zapShow()"));const woodGroup=page.locator('[data-ui-section="stock:przystan:Opał i budulec"]');await woodGroup.evaluate(element=>{if(!element.open)element.querySelector('summary').click()});
++    assert.equal(await options.locator('a').count(),0);assert.match(await options.innerText(),/4\.0\.0-rc\.10/);assert.ok(await options.locator('[data-ui-fullscreen]').isVisible());
++    await page.evaluate(()=>window.__qaEval("closeSheet();zapShow()"));const woodGroup=page.locator('[data-ui-section="stock:compact:przystan:Opał i budulec"]');await woodGroup.evaluate(element=>{if(!element.open)element.querySelector('summary').click()});
+     await page.evaluate(()=>window.__qaEval("ResourceFlow.attach(S,{reset:true});ResourceFlow.run(S,'economy',()=>{S.res.drewno+=10;S.res.drewno-=4});S.day+=.25;S.t+=60;zapFill(true)"));
++    const compact=page.locator('[data-stock-resource="drewno"]');assert.match(await compact.innerText(),/\+24/);assert.ok(await compact.evaluate(element=>element.classList.contains('stock-surplus')));const details=page.locator('[data-ui-section="stock:details:przystan"]');await details.evaluate(element=>{if(!element.open)element.querySelector('summary').click()});
+     const row=page.locator('[data-flow-resource="drewno"]');await page.waitForFunction(()=>document.querySelector('[data-flow-resource="drewno"]')?.innerText.includes('+40'));assert.ok((await row.innerText()).includes('−16'));
+     assert.equal(await woodGroup.evaluate(element=>element.open),true);assert.equal(await page.locator('#zappop').evaluate(element=>element.scrollWidth<=element.clientWidth+2),true);
+     await page.screenshot({path:path.join(output,`stock-${viewport.width}-${quiet?'quiet':'full'}.png`)});
+--- RC9/tools/deploy-check.cjs
++++ RC10/tools/deploy-check.cjs
+@@ -1,7 +1,7 @@
+ const {execFileSync}=require('node:child_process');
+ const path=require('node:path');
+-const BASE='fd11ce669488ef4e3a698f16ec737a7390b1147b';
+-const PACKAGE='Przystan_4.0.0_RC9_DROGI';
++const BASE='492e8bfd1a8ba058f467701115f1e74146343180';
++const PACKAGE='Przystan_4.0.0_RC10_MASTER';
+ function checkDeployment(readGit=(...arguments_)=>execFileSync('git',arguments_,{encoding:'utf8'}).trim(),{beforePull=false}={}){
+  const root=readGit('rev-parse','--show-toplevel');
+  if(path.resolve(root)!==process.cwd())throw new Error('Uruchom komendy w głównym katalogu repozytorium.');
+--- RC9/tools/run-tests-serial.cjs
++++ RC10/tools/run-tests-serial.cjs
+@@ -105,7 +105,7 @@
+  if(failure)throw failure;
+  if(completed!==suites.length)throw new Error('Incomplete test plan');
+  output.stdout('TEST GATE PASS: '+completed+' suites, '+passed+' cases\n');
+- if(installMode)output.stdout('INSTALL MODE: 2 extended 1500-day generation scenarios are release gates; see docs/weryfikacja9/results.json.\n');
++ if(installMode)output.stdout('INSTALL MODE: 2 extended 1500-day generation scenarios are release gates; see docs/weryfikacja10/results.json.\n');
+  return {suites:completed,cases:passed,workers};
+ }
+ if(require.main===module){let options;try{options=parseOptions(process.argv.slice(2))}catch(error){console.error('TEST GATE FAILED:',error.message);process.exitCode=1}
+--- RC9/tools/verify-package.cjs
++++ RC10/tools/verify-package.cjs
+@@ -3,7 +3,7 @@
+ const crypto=require('node:crypto');
+ function verifyPackage(root=path.join(__dirname,'..'),manifest=JSON.parse(fs.readFileSync(path.join(root,'release-manifest.json'),'utf8'))){
+  const directory=fs.realpathSync(path.resolve(root));
+- if(!manifest||manifest.version!=='4.0.0-rc.9'||!manifest.files||typeof manifest.files!=='object'||Array.isArray(manifest.files))throw new Error('Nieprawidłowy manifest paczki');
++ if(!manifest||manifest.version!=='4.0.0-rc.10'||!manifest.files||typeof manifest.files!=='object'||Array.isArray(manifest.files))throw new Error('Nieprawidłowy manifest paczki');
+  const files=Object.entries(manifest.files);if(!files.length)throw new Error('Pusty manifest');
+  for(const [name,checksum]of files){
+   const resolved=path.resolve(directory,name);

@@ -75,7 +75,7 @@ function chLog(p,k,x){S.chLog=S.chLog||[];S.chLog.push({k,id:p.id,x:x||'',d:Math
    if(k==='naprawa'){const b=bById(p.chB);if(!b||!bDone(b)||b.proj||condOf(b)>=.98){p.chK=null;p.state='idle';p.wait=.2;return}gainXp(p,'ciesla',dt*.6);
     if(p.wt>=T){p.wt=0;const wood=S.res.drewno>=.3;if(wood)S.res.drewno-=.3;b.cond=Math.min(1,condOf(b)+(wood?.06:.025)*craftEff(p,'ciesla'));const own=Object.values(S.fams).find(f=>f.home===b.id);chLog(p,k,own?gen(famName(own.id)):'');p.state='idle';p.wait=.3}return}
    if(k==='woda'){if(p.chPh!==1){if(p.wt>=T){p.wt=0;p.chPh=1;p.carry=[{res:'woda',q:0}];const h=nearHouse(p)||null;const S2=S.bld.filter(b=>bDone(b)&&BD[b.kind].house);const tgt=S2.length?S2[(Math.random()*S2.length)|0]:h;
-      const t=tgt?entryOf(tgt.kind,tgt.i,tgt.j):[camp.i,camp.j+1];p.chWaterTo=t?t.slice():null;p.act='niesie wodę';if(!go(p,t,'chore',null)){p.carry=null;p.chPh=0;p.chWaterTo=null;p.state='idle'}}return}
+      p.chWaterHome=tgt?.id??null;const t=tgt?buildingEntryFor(p,tgt):campDeliveryEntry(p);p.chWaterTo=t?t.slice():null;p.act='niesie wodę';if(!t||!go(p,t,'chore',null)){p.state='idle';p.wait=2;p.act='Brak drogi do domu — zachowuje wodę'}}return}
     if(p.wt>=1){p.wt=0;p.carry=null;p.chPh=0;p.chWaterTo=null;S.wBonus=(S.wBonus||0)+2.5;chLog(p,k);p.state='idle';p.wait=.2}return}
    if(k==='opieka'){const q=pById(p.chP);if(!q||q.hp>=.85){p.chK=null;p.state='idle';p.wait=.2;return}q.hp=Math.min(1,q.hp+dt*.0035*(offHolder&&offHolder('zielarka')?1.3:1)*(S.res.ziola>0?1.2:1));if(p.wt>=T){p.wt=0;chLog(p,k,q.name);p.state='idle';p.wait=.2}return}
    p.state='idle';return}

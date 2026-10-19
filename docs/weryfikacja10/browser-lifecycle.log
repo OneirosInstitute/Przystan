@@ -1,0 +1,158 @@
+lifecycle viewport PASS 412
+lifecycle viewport PASS 1280
+{
+  "status": "PASS",
+  "results": [
+    {
+      "viewport": {
+        "width": 412,
+        "height": 870
+      },
+      "status": "PASS",
+      "hiddenSeconds": 16,
+      "visibility": "document visibility overridden in isolated QA page",
+      "nativeFreezeResume": true,
+      "foreground": {
+        "frames": 8,
+        "draws": 1075,
+        "queuedFrames": 1,
+        "intervals": 1,
+        "timeouts": 2,
+        "audio": [
+          "running"
+        ],
+        "day": 0.2712504166666667,
+        "stored": 22
+      },
+      "hidden": {
+        "frames": 8,
+        "draws": 1075,
+        "queuedFrames": 0,
+        "intervals": 0,
+        "timeouts": 0,
+        "audio": [
+          "suspended"
+        ],
+        "day": 0.2712504166666667,
+        "stored": 61
+      },
+      "afterHidden": {
+        "frames": 8,
+        "draws": 1075,
+        "queuedFrames": 0,
+        "intervals": 0,
+        "timeouts": 0,
+        "audio": [
+          "suspended"
+        ],
+        "day": 0.2712504166666667,
+        "stored": 61
+      },
+      "returned": {
+        "frames": 20,
+        "draws": 2011,
+        "queuedFrames": 1,
+        "intervals": 1,
+        "timeouts": 2,
+        "audio": [
+          "running"
+        ],
+        "day": 0.2712504166666667,
+        "stored": 61
+      },
+      "rapid": {
+        "frames": 21,
+        "draws": 2245,
+        "queuedFrames": 1,
+        "intervals": 1,
+        "timeouts": 2,
+        "audio": [
+          "running"
+        ],
+        "day": 0.2712504166666667,
+        "stored": 61
+      },
+      "saveSurvivesReload": true,
+      "errors": []
+    },
+    {
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "status": "PASS",
+      "hiddenSeconds": 16,
+      "visibility": "document visibility overridden in isolated QA page",
+      "nativeFreezeResume": true,
+      "foreground": {
+        "frames": 10,
+        "draws": 1262,
+        "queuedFrames": 1,
+        "intervals": 1,
+        "timeouts": 2,
+        "audio": [
+          "running"
+        ],
+        "day": 0.27,
+        "stored": 22
+      },
+      "hidden": {
+        "frames": 10,
+        "draws": 1262,
+        "queuedFrames": 0,
+        "intervals": 0,
+        "timeouts": 0,
+        "audio": [
+          "suspended"
+        ],
+        "day": 0.27,
+        "stored": 61
+      },
+      "afterHidden": {
+        "frames": 10,
+        "draws": 1262,
+        "queuedFrames": 0,
+        "intervals": 0,
+        "timeouts": 0,
+        "audio": [
+          "suspended"
+        ],
+        "day": 0.27,
+        "stored": 61
+      },
+      "returned": {
+        "frames": 22,
+        "draws": 2322,
+        "queuedFrames": 1,
+        "intervals": 1,
+        "timeouts": 2,
+        "audio": [
+          "running"
+        ],
+        "day": 0.27,
+        "stored": 61
+      },
+      "rapid": {
+        "frames": 22,
+        "draws": 2322,
+        "queuedFrames": 1,
+        "intervals": 1,
+        "timeouts": 2,
+        "audio": [
+          "running"
+        ],
+        "day": 0.27,
+        "stored": 61
+      },
+      "saveSurvivesReload": true,
+      "errors": []
+    }
+  ],
+  "unverified": [
+    "physical Android lifecycle",
+    "battery discharge",
+    "GPU power",
+    "temperature",
+    "Android process eviction"
+  ]
+}

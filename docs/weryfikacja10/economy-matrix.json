@@ -1,0 +1,580 @@
+{
+  "missingSources": [],
+  "unusedProducts": [],
+  "unknownRecipes": [],
+  "rows": [
+    {
+      "resource": "woz",
+      "sources": [
+        "Receptura: woz"
+      ],
+      "uses": [
+        "Transport i przeprowadzki"
+      ]
+    },
+    {
+      "resource": "suchary",
+      "sources": [],
+      "uses": [
+        "Posiłki"
+      ]
+    },
+    {
+      "resource": "jagody",
+      "sources": [
+        "Runo leśne"
+      ],
+      "uses": [
+        "Posiłki"
+      ]
+    },
+    {
+      "resource": "grzyby",
+      "sources": [],
+      "uses": [
+        "Posiłki"
+      ]
+    },
+    {
+      "resource": "ryby",
+      "sources": [
+        "Łowisko"
+      ],
+      "uses": [
+        "Przetwarzanie: suszone_ryby",
+        "Posiłki"
+      ]
+    },
+    {
+      "resource": "mieso",
+      "sources": [
+        "Polowanie albo hodowla"
+      ],
+      "uses": [
+        "Przetwarzanie: wedliny",
+        "Posiłki"
+      ]
+    },
+    {
+      "resource": "ziarno",
+      "sources": [
+        "Dzikie zboże lub pole",
+        "Zboże"
+      ],
+      "uses": [
+        "Siew: Zboże",
+        "Przetwarzanie: maka",
+        "Przetwarzanie: slod",
+        "Budowa: pole",
+        "Posiłki"
+      ]
+    },
+    {
+      "resource": "warzywa",
+      "sources": [
+        "Warzywnik"
+      ],
+      "uses": [
+        "Przetwarzanie: kiszonki",
+        "Posiłki"
+      ]
+    },
+    {
+      "resource": "mleko",
+      "sources": [
+        "Dorosłe kozy w zagrodzie"
+      ],
+      "uses": [
+        "Przetwarzanie: ser",
+        "Posiłki"
+      ]
+    },
+    {
+      "resource": "jaja",
+      "sources": [
+        "Kury w kurniku"
+      ],
+      "uses": [
+        "Posiłki"
+      ]
+    },
+    {
+      "resource": "maka",
+      "sources": [
+        "Receptura: maka"
+      ],
+      "uses": [
+        "Przetwarzanie: chleb",
+        "Posiłki"
+      ]
+    },
+    {
+      "resource": "chleb",
+      "sources": [
+        "Receptura: chleb"
+      ],
+      "uses": [
+        "Posiłki"
+      ]
+    },
+    {
+      "resource": "ser",
+      "sources": [
+        "Receptura: ser"
+      ],
+      "uses": [
+        "Posiłki"
+      ]
+    },
+    {
+      "resource": "kiszonki",
+      "sources": [
+        "Receptura: kiszonki"
+      ],
+      "uses": [
+        "Posiłki"
+      ]
+    },
+    {
+      "resource": "miod",
+      "sources": [
+        "Pasieka"
+      ],
+      "uses": [
+        "Przetwarzanie: mpitny",
+        "Posiłki"
+      ]
+    },
+    {
+      "resource": "ziola",
+      "sources": [
+        "Dzikie zioła lub zielnik",
+        "Zielnik"
+      ],
+      "uses": [
+        "Przetwarzanie: leki",
+        "Ubiór i zdrowie"
+      ]
+    },
+    {
+      "resource": "drewno",
+      "sources": [
+        "Las"
+      ],
+      "uses": [
+        "Przetwarzanie: narzk",
+        "Przetwarzanie: deski_reczne",
+        "Przetwarzanie: opal",
+        "Przetwarzanie: wegiel",
+        "Przetwarzanie: narz",
+        "Przetwarzanie: deski",
+        "Budowa: dom_rodowy",
+        "Budowa: chata",
+        "Budowa: skrzydlo",
+        "Budowa: magazyn",
+        "Budowa: ogrodek",
+        "Budowa: zielnik",
+        "Budowa: wyroby",
+        "Budowa: pole",
+        "Budowa: winnica",
+        "Budowa: chmielnik",
+        "Budowa: karczma",
+        "Budowa: wedzarnia",
+        "Budowa: zagroda",
+        "Budowa: kurnik",
+        "Budowa: chlew",
+        "Budowa: mielerz",
+        "Budowa: tartak",
+        "Budowa: garncarnia",
+        "Budowa: cegielnia",
+        "Budowa: sad",
+        "Budowa: pasieka",
+        "Budowa: len",
+        "Budowa: rowy"
+      ]
+    },
+    {
+      "resource": "opal",
+      "sources": [
+        "Receptura: opal"
+      ],
+      "uses": [
+        "Przetwarzanie: sol",
+        "Przetwarzanie: chleb",
+        "Przetwarzanie: piwo",
+        "Przetwarzanie: wedliny",
+        "Przetwarzanie: suszone_ryby",
+        "Przetwarzanie: naczynia",
+        "Przetwarzanie: cegla",
+        "Ogrzewanie"
+      ]
+    },
+    {
+      "resource": "kamien",
+      "sources": [
+        "Odkrywka kamienia"
+      ],
+      "uses": [
+        "Przetwarzanie: narzk",
+        "Budowa: dom_rodowy",
+        "Budowa: chata",
+        "Budowa: skrzydlo",
+        "Budowa: magazyn",
+        "Budowa: piwnica",
+        "Budowa: zielnik",
+        "Budowa: mlyn",
+        "Budowa: piekarnia",
+        "Budowa: winiarnia",
+        "Budowa: browar",
+        "Budowa: karczma",
+        "Budowa: wedzarnia",
+        "Budowa: chlew",
+        "Budowa: serownia",
+        "Budowa: huta",
+        "Budowa: kuznia",
+        "Budowa: mielerz",
+        "Budowa: garncarnia",
+        "Budowa: cegielnia",
+        "Budowa: sad",
+        "Budowa: rowy"
+      ]
+    },
+    {
+      "resource": "glina",
+      "sources": [
+        "Odkrywka gliny"
+      ],
+      "uses": [
+        "Przetwarzanie: naczynia",
+        "Przetwarzanie: cegla",
+        "Budowa: garncarnia",
+        "Budowa: cegielnia"
+      ]
+    },
+    {
+      "resource": "deski",
+      "sources": [
+        "Receptura: deski_reczne",
+        "Receptura: deski"
+      ],
+      "uses": [
+        "Przetwarzanie: woz",
+        "Przetwarzanie: wyroby_drewniane",
+        "Przetwarzanie: beczki",
+        "Budowa: dom_rodowy",
+        "Budowa: chata",
+        "Budowa: skrzydlo",
+        "Budowa: magazyn",
+        "Budowa: piwnica",
+        "Budowa: wyroby",
+        "Budowa: mlyn",
+        "Budowa: piekarnia",
+        "Budowa: winnica",
+        "Budowa: winiarnia",
+        "Budowa: browar",
+        "Budowa: karczma",
+        "Budowa: wedzarnia",
+        "Budowa: zagroda",
+        "Budowa: kurnik",
+        "Budowa: serownia",
+        "Budowa: huta",
+        "Budowa: kuznia",
+        "Budowa: tartak",
+        "Budowa: stolarnia",
+        "Budowa: przasnia",
+        "Budowa: szwalnia",
+        "Budowa: pasieka",
+        "Budowa: zielarnia"
+      ]
+    },
+    {
+      "resource": "narz",
+      "sources": [
+        "Receptura: narz"
+      ],
+      "uses": [
+        "Budowa: mlyn",
+        "Budowa: huta",
+        "Budowa: tartak",
+        "Budowa: stolarnia",
+        "Budowa: szwalnia",
+        "Praca i zużycie narzędzi"
+      ]
+    },
+    {
+      "resource": "narzk",
+      "sources": [
+        "Receptura: narzk"
+      ],
+      "uses": [
+        "Praca i zużycie narzędzi"
+      ]
+    },
+    {
+      "resource": "gwozdzie",
+      "sources": [
+        "Receptura: gwozdzie"
+      ],
+      "uses": [
+        "Przetwarzanie: woz",
+        "Przetwarzanie: wyroby_drewniane"
+      ]
+    },
+    {
+      "resource": "plotno",
+      "sources": [
+        "Receptura: plotno"
+      ],
+      "uses": [
+        "Przetwarzanie: odziez"
+      ]
+    },
+    {
+      "resource": "skory",
+      "sources": [
+        "Polowanie albo hodowla"
+      ],
+      "uses": [
+        "Przetwarzanie: odziez_skory"
+      ]
+    },
+    {
+      "resource": "odziez",
+      "sources": [
+        "Receptura: odziez",
+        "Receptura: odziez_skory"
+      ],
+      "uses": [
+        "Ubiór i zdrowie"
+      ]
+    },
+    {
+      "resource": "ruda",
+      "sources": [
+        "Złoże rudy"
+      ],
+      "uses": [
+        "Przetwarzanie: zelazo"
+      ]
+    },
+    {
+      "resource": "wegiel",
+      "sources": [
+        "Receptura: wegiel"
+      ],
+      "uses": [
+        "Przetwarzanie: zelazo",
+        "Przetwarzanie: narz",
+        "Przetwarzanie: gwozdzie"
+      ]
+    },
+    {
+      "resource": "wlokna",
+      "sources": [
+        "Len"
+      ],
+      "uses": [
+        "Przetwarzanie: plotno",
+        "Budowa: przasnia"
+      ]
+    },
+    {
+      "resource": "naczynia",
+      "sources": [
+        "Receptura: naczynia"
+      ],
+      "uses": [
+        "Przetwarzanie: leki",
+        "Budowa: winiarnia",
+        "Budowa: browar",
+        "Budowa: serownia",
+        "Budowa: zielarnia"
+      ]
+    },
+    {
+      "resource": "sol",
+      "sources": [
+        "Receptura: sol"
+      ],
+      "uses": [
+        "Przetwarzanie: wedliny"
+      ]
+    },
+    {
+      "resource": "winogrona",
+      "sources": [
+        "Winorośl"
+      ],
+      "uses": [
+        "Przetwarzanie: wino",
+        "Posiłki"
+      ]
+    },
+    {
+      "resource": "jablka",
+      "sources": [
+        "Sad jabłoniowy"
+      ],
+      "uses": [
+        "Posiłki"
+      ]
+    },
+    {
+      "resource": "chmiel",
+      "sources": [
+        "Chmielnik"
+      ],
+      "uses": [
+        "Przetwarzanie: piwo"
+      ]
+    },
+    {
+      "resource": "slod",
+      "sources": [
+        "Receptura: slod"
+      ],
+      "uses": [
+        "Przetwarzanie: piwo"
+      ]
+    },
+    {
+      "resource": "wino",
+      "sources": [
+        "Receptura: wino"
+      ],
+      "uses": [
+        "Karczma"
+      ]
+    },
+    {
+      "resource": "piwo",
+      "sources": [
+        "Receptura: piwo"
+      ],
+      "uses": [
+        "Karczma"
+      ]
+    },
+    {
+      "resource": "mpitny",
+      "sources": [
+        "Receptura: mpitny"
+      ],
+      "uses": [
+        "Karczma"
+      ]
+    },
+    {
+      "resource": "beczki",
+      "sources": [
+        "Receptura: beczki"
+      ],
+      "uses": [
+        "Przetwarzanie: wino",
+        "Przetwarzanie: piwo",
+        "Przetwarzanie: mpitny"
+      ]
+    },
+    {
+      "resource": "wedliny",
+      "sources": [
+        "Receptura: wedliny"
+      ],
+      "uses": [
+        "Posiłki"
+      ]
+    },
+    {
+      "resource": "suszone_ryby",
+      "sources": [
+        "Receptura: suszone_ryby"
+      ],
+      "uses": [
+        "Posiłki"
+      ]
+    },
+    {
+      "resource": "zelazo",
+      "sources": [
+        "Receptura: zelazo"
+      ],
+      "uses": [
+        "Przetwarzanie: woz",
+        "Przetwarzanie: narz",
+        "Przetwarzanie: gwozdzie",
+        "Przetwarzanie: beczki"
+      ]
+    },
+    {
+      "resource": "wyroby_drewniane",
+      "sources": [
+        "Receptura: wyroby_drewniane"
+      ],
+      "uses": [
+        "Wyposażenie domów"
+      ]
+    },
+    {
+      "resource": "wosk",
+      "sources": [
+        "Pasieka"
+      ],
+      "uses": [
+        "Wyposażenie domów"
+      ]
+    },
+    {
+      "resource": "leki",
+      "sources": [
+        "Receptura: leki"
+      ],
+      "uses": [
+        "Ubiór i zdrowie"
+      ]
+    },
+    {
+      "resource": "pierze",
+      "sources": [
+        "Kurnik"
+      ],
+      "uses": [
+        "Wyposażenie domów"
+      ]
+    },
+    {
+      "resource": "bursztyn",
+      "sources": [
+        "Wybrzeże"
+      ],
+      "uses": [
+        "Wyposażenie domów"
+      ]
+    },
+    {
+      "resource": "cegla",
+      "sources": [
+        "Receptura: cegla"
+      ],
+      "uses": [
+        "Budowa: piekarnia",
+        "Budowa: huta",
+        "Budowa: kuznia"
+      ]
+    },
+    {
+      "resource": "lodz",
+      "sources": [],
+      "uses": []
+    },
+    {
+      "resource": "_sh",
+      "sources": [],
+      "uses": []
+    },
+    {
+      "resource": "_wl",
+      "sources": [],
+      "uses": []
+    }
+  ]
+}

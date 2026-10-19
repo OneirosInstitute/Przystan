@@ -12,13 +12,13 @@ function kozRelease(person){if(!person.kozN)return;const [i,j]=tileOf(person.x,p
 function kozResume(person){
  const pens=S.bld.filter(building=>building.kind==='zagroda'&&bDone(building)&&(building.animals||0)+S.people.filter(other=>other!==person&&other.kozB===building.id).reduce((sum,other)=>sum+(other.kozN||0),0)+person.kozN<=penCap(building));
  const preferred=pens.find(building=>building.id===person.kozB);if(preferred)pens.splice(pens.indexOf(preferred),1),pens.unshift(preferred);
- for(const pen of pens){const entry=entryOf(pen.kind,pen.i,pen.j);if(!entry)continue;person.kozB=pen.id;if(go(person,entry,'kozdom',null)){person.act='prowadzi kozę do zagrody';return true}}
+ for(const pen of pens){const entry=buildingEntryFor(person,pen);if(!entry)continue;person.kozB=pen.id;if(go(person,entry,'kozdom',null)){person.act='prowadzi kozę do zagrody';return true}}
  if(!pens.length){kozRelease(person);person.state='idle';person.wait=.4;return true}
  person.state='idle';person.wait=2;person.act='brak drogi do zagrody — prowadzi kozę';return true;
 }
 function kozDeliver(person){if(!person.kozN){person.state='idle';return}
- const pen=bById(person.kozB),entry=pen&&entryOf(pen.kind,pen.i,pen.j);
- const arrived=entry&&Math.hypot(person.x-tcx(entry[0]),person.z-tcx(entry[1]))<=1.5;
+ const pen=bById(person.kozB),entry=person.routeGoal;
+ const arrived=pen&&workSiteContains(pen,entry)&&Math.hypot(person.x-tcx(entry[0]),person.z-tcx(entry[1]))<=.8;
  if(!pen||pen.kind!=='zagroda'||!bDone(pen)||(pen.animals||0)+person.kozN>penCap(pen)||!arrived){kozResume(person);return}
  pen.animals=(pen.animals||0)+person.kozN;
  if(!S.seen.koza1){S.seen.koza1=S.seen.koza=1;log(person.name+' przyprowadza do zagrody pierwszą oswojoną kozę.');toast('Pierwsza oswojona koza')}

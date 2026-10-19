@@ -91,21 +91,7 @@ function grassTick(rdt){if(!S)return;GR.t+=rdt;const show=GFX.level>0&&zoom>=.85
 
 // ---------- ludzie: pasy, buty, chusty, brody, sakwy ----------
 const PM={belt:M(0x2e241a),boot:M(0x2a2018),beard:[M(0x4a3626),M(0x6b4e30),M(0x2a221c),M(0x9a948a)],chusta:[M(0xb04a36),M(0xc8b48a),M(0x5a6a7a),M(0x7a5a8a),M(0xe0d6c0)],bag:M(0x7a5a3a)};
-{const _mp=makePersonMesh;makePersonMesh=function(p){const g=_mp(p);const u=g.userData;const k=p.sex==='k',adult=p.age>=12;
-  const add=(geo,mat,x,y,z,par)=>{const m=mesh(geo,mat,x,y,z);m.castShadow=true;m.userData.pid=p.id;(par||g).add(m);return m};
-  const skin=g.children[1]&&g.children[1].material,cloth=u.aL.material;
-  u.aL.geometry=new THREE.CylinderGeometry(.036,.03,.32,7).translate(0,-.14,0);u.aR.geometry=u.aL.geometry;
-  u.lL.geometry=new THREE.CylinderGeometry(.046,.038,.36,7).translate(0,-.16,0);u.lR.geometry=u.lL.geometry;
-  [u.aL,u.aR].forEach(a=>add(new THREE.SphereGeometry(.034,6,5),skin,0,-.31,0,a));
-  [-1,1].forEach(s=>add(new THREE.SphereGeometry(.052,7,5),cloth,s*.15,.75,0));
-  add(new THREE.CylinderGeometry(.04,.045,.06,6),skin,0,.83,0);
-  if(k)add(new THREE.CylinderGeometry(.14,.21,.36,9),cloth,0,.43,0);
-  add(new THREE.CylinderGeometry(k?.135:.128,k?.14:.132,.035,8),PM.belt,0,k?.62:.5,0);
-  [u.lL,u.lR].forEach(l=>{const b=add(new THREE.BoxGeometry(.095,.08,.13),PM.boot,0,-.31,.02,l)});
-  if(adult&&k&&p.id%3!==1){add(new THREE.SphereGeometry(.122,8,5,0,6.283,0,1.75),PM.chusta[p.id%5],0,.925,-.01)}
-  if(adult&&!k&&p.age>=24&&p.id%3!==0){add(new THREE.BoxGeometry(.12,.08,.06),PM.beard[p.age>55?3:p.id%3],0,.84,.085)}
-  if(adult&&p.id%4===2){const s=add(new THREE.BoxGeometry(.035,.36,.03),PM.bag,.07,.62,.11);s.rotation.z=.6;add(new THREE.BoxGeometry(.14,.12,.07),PM.bag,.14,.48,.1)}
-  return g}}
+// Detale postaci są scalane w kanonicznym makePersonMesh / makePerson18.
 
 // ---------- mgła o świcie nad wodą i nizinami ----------
 const dawnMist=[];function mistInit(){const r0=rng(171);let k=0;for(let t=0;t<6000&&k<44;t++){const x=(r0()*2-1)*92,z=(r0()*2-1)*92,h=Hy(x,z);if(h>.7||h<-1.6)continue;

@@ -1,0 +1,196 @@
+TAP version 13
+# Subtest: a new construction invalidates a live route before entering its footprint
+ok 1 - a new construction invalidates a live route before entering its footprint
+  ---
+  duration_ms: 1229.833096
+  type: 'test'
+  ...
+# Subtest: a disconnected meal and evening do not earn attendance or preserves
+ok 2 - a disconnected meal and evening do not earn attendance or preserves
+  ---
+  duration_ms: 1348.118362
+  type: 'test'
+  ...
+# Subtest: completed meal requires time and consumes real food without making new stock
+ok 3 - completed meal requires time and consumes real food without making new stock
+  ---
+  duration_ms: 1089.35137
+  type: 'test'
+  ...
+# Subtest: a distant sleeping master cannot teach; a present working master can
+ok 4 - a distant sleeping master cannot teach; a present working master can
+  ---
+  duration_ms: 1093.354293
+  type: 'test'
+  ...
+# Subtest: an expedition cannot leave or advance through a closed exit
+ok 5 - an expedition cannot leave or advance through a closed exit
+  ---
+  duration_ms: 1305.732474
+  type: 'test'
+  ...
+# Subtest: an adjacent delivery cannot deposit across a blocked tile
+ok 6 - an adjacent delivery cannot deposit across a blocked tile
+  ---
+  duration_ms: 1270.307669
+  type: 'test'
+  ...
+# Subtest: a failed transport route cannot snap a stranded carrier to distant walkable land
+ok 7 - a failed transport route cannot snap a stranded carrier to distant walkable land
+  ---
+  duration_ms: 1130.693186
+  type: 'test'
+  ...
+# Subtest: the ordinary planner cannot teleport a stranded person
+ok 8 - the ordinary planner cannot teleport a stranded person
+  ---
+  duration_ms: 1264.157588
+  type: 'test'
+  ...
+# Subtest: construction under a person is rejected before paying or changing the map
+ok 9 - construction under a person is rejected before paying or changing the map
+  ---
+  duration_ms: 1598.268965
+  type: 'test'
+  ...
+# Subtest: unreachable expedition dispatch does not consume provisions or reassign the crew
+ok 10 - unreachable expedition dispatch does not consume provisions or reassign the crew
+  ---
+  duration_ms: 1734.524201
+  type: 'test'
+  ...
+# Subtest: expeditions never take a person away from a pending delivery
+ok 11 - expeditions never take a person away from a pending delivery
+  ---
+  duration_ms: 1542.570691
+  type: 'test'
+  ...
+# Subtest: construction cargo can reach another side when the preferred entrance is disconnected
+ok 12 - construction cargo can reach another side when the preferred entrance is disconnected
+  ---
+  duration_ms: 1422.416778
+  type: 'test'
+  ...
+# Subtest: an adjacent delivery consumes travel time before it deposits
+ok 13 - an adjacent delivery consumes travel time before it deposits
+  ---
+  duration_ms: 1193.862042
+  type: 'test'
+  ...
+# Subtest: blocked construction cargo survives restart and is delivered once after reopening
+ok 14 - blocked construction cargo survives restart and is delivered once after reopening
+  ---
+  duration_ms: 1144.735174
+  type: 'test'
+  ...
+# Subtest: a reachable expedition departs only on arrival, then its elapsed days advance
+ok 15 - a reachable expedition departs only on arrival, then its elapsed days advance
+  ---
+  duration_ms: 1020.461102
+  type: 'test'
+  ...
+# Subtest: all thirty production workshops reject stale remote work and allocate distinct stations
+ok 16 - all thirty production workshops reject stale remote work and allocate distinct stations
+  ---
+  duration_ms: 1035.314703
+  type: 'test'
+  ...
+# Subtest: a person at the corner of a station tile walks to its working position without getting stuck
+ok 17 - a person at the corner of a station tile walks to its working position without getting stuck
+  ---
+  duration_ms: 1036.791137
+  type: 'test'
+  ...
+# Subtest: construction cannot sever the only route from a resident to the settlement
+ok 18 - construction cannot sever the only route from a resident to the settlement
+  ---
+  duration_ms: 1948.699519
+  type: 'test'
+  ...
+# Subtest: open terrain remains buildable when people can walk around the new footprint
+ok 19 - open terrain remains buildable when people can walk around the new footprint
+  ---
+  duration_ms: 1563.17231
+  type: 'test'
+  ...
+# Subtest: a moving resident waits or detours instead of crossing a stationary resident
+ok 20 - a moving resident waits or detours instead of crossing a stationary resident
+  ---
+  duration_ms: 1738.050996
+  type: 'test'
+  ...
+# Subtest: opposite travellers pass in open space without losing their destinations
+ok 21 - opposite travellers pass in open space without losing their destinations
+  ---
+  duration_ms: 1759.602144
+  type: 'test'
+  ...
+# Subtest: a goat can be delivered through an alternative accessible pen entrance
+ok 22 - a goat can be delivered through an alternative accessible pen entrance
+  ---
+  duration_ms: 1939.001868
+  type: 'test'
+  ...
+# Subtest: a failed water delivery retains its bucket and resumes after access returns
+ok 23 - a failed water delivery retains its bucket and resumes after access returns
+  ---
+  duration_ms: 1770.000599
+  type: 'test'
+  ...
+# Subtest: a fully occupied workshop waits instead of assigning its last station twice
+ok 24 - a fully occupied workshop waits instead of assigning its last station twice
+  ---
+  duration_ms: 1204.830269
+  type: 'test'
+  ...
+# Subtest: another side of a workshop remains usable when the preferred entrance is disconnected
+ok 25 - another side of a workshop remains usable when the preferred entrance is disconnected
+  ---
+  duration_ms: 1374.212603
+  type: 'test'
+  ...
+# Subtest: a distant or stale production pose earns no materials before reaching the workshop
+ok 26 - a distant or stale production pose earns no materials before reaching the workshop
+  ---
+  duration_ms: 1218.858846
+  type: 'test'
+  ...
+# Subtest: a critically ill worker releases production before earning more work
+ok 27 - a critically ill worker releases production before earning more work
+  ---
+  duration_ms: 1248.696773
+  type: 'test'
+  ...
+# Subtest: a changed job cannot complete an old workshop operation
+ok 28 - a changed job cannot complete an old workshop operation
+  ---
+  duration_ms: 1416.474989
+  type: 'test'
+  ...
+# Subtest: field work waits if its worker has lost access to every work position
+ok 29 - field work waits if its worker has lost access to every work position
+  ---
+  duration_ms: 1530.711549
+  type: 'test'
+  ...
+# Subtest: workers use distinct positions on all three managed worksites
+ok 30 - workers use distinct positions on all three managed worksites
+  ---
+  duration_ms: 4454.480422
+  type: 'test'
+  ...
+# Subtest: a blocked attempt keeps its existing cargo and does not teleport
+ok 31 - a blocked attempt keeps its existing cargo and does not teleport
+  ---
+  duration_ms: 1104.874685
+  type: 'test'
+  ...
+1..31
+# tests 31
+# suites 0
+# pass 31
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 16841.136757

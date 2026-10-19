@@ -1,0 +1,124 @@
+TAP version 13
+# Subtest: touch launch requests immersive fullscreen even in an installed standalone app
+ok 1 - touch launch requests immersive fullscreen even in an installed standalone app
+  ---
+  duration_ms: 1503.609747
+  type: 'test'
+  ...
+# Subtest: game options expand in the current panel and expose version and fullscreen controls
+ok 2 - game options expand in the current panel and expose version and fullscreen controls
+  ---
+  duration_ms: 1719.74933
+  type: 'test'
+  ...
+# Subtest: stock details retain separate live daily production, use and balance columns
+ok 3 - stock details retain separate live daily production, use and balance columns
+  ---
+  duration_ms: 1594.634795
+  type: 'test'
+  ...
+# Subtest: live measurements survive a real save and restore without changing resources
+ok 4 - live measurements survive a real save and restore without changing resources
+  ---
+  duration_ms: 1775.355041
+  type: 'test'
+  ...
+# Subtest: service worker updates checkpoint before reload and preserve a failed save
+ok 5 - service worker updates checkpoint before reload and preserve a failed save
+  ---
+  duration_ms: 2709.93314
+  type: 'test'
+  ...
+# Subtest: first worker activation does not reload and hidden updates wait for visibility
+ok 6 - first worker activation does not reload and hidden updates wait for visibility
+  ---
+  duration_ms: 1470.320808
+  type: 'test'
+  ...
+# Subtest: gross production and consumption stay separate even when net stock is unchanged
+ok 7 - gross production and consumption stay separate even when net stock is unchanged
+  ---
+  duration_ms: 1.385359
+  type: 'test'
+  ...
+# Subtest: deliveries and pantry transfers are movements and never create production
+ok 8 - deliveries and pantry transfers are movements and never create production
+  ---
+  duration_ms: 0.359094
+  type: 'test'
+  ...
+# Subtest: an input consumed and refunded is not counted as a new product
+ok 9 - an input consumed and refunded is not counted as a new product
+  ---
+  duration_ms: 0.220944
+  type: 'test'
+  ...
+# Subtest: nested contexts recover after exceptions and preserve outer classification
+ok 10 - nested contexts recover after exceptions and preserve outer classification
+  ---
+  duration_ms: 0.293966
+  type: 'test'
+  ...
+# Subtest: midnight consumption is accounted to the completed day and old bins remain bounded
+ok 11 - midnight consumption is accounted to the completed day and old bins remain bounded
+  ---
+  duration_ms: 0.450593
+  type: 'test'
+  ...
+# Subtest: serialized measurements survive attaching twice without double counting
+ok 12 - serialized measurements survive attaching twice without double counting
+  ---
+  duration_ms: 0.382599
+  type: 'test'
+  ...
+# Subtest: malformed optional measurements are reset without touching stock
+ok 13 - malformed optional measurements are reset without touching stock
+  ---
+  duration_ms: 0.198251
+  type: 'test'
+  ...
+# Subtest: headless models remain ordinary cloneable objects when observation is not enabled
+ok 14 - headless models remain ordinary cloneable objects when observation is not enabled
+  ---
+  duration_ms: 0.681984
+  type: 'test'
+  ...
+# Subtest: a daily charge represents a whole completed day even after a late first observation
+ok 15 - a daily charge represents a whole completed day even after a late first observation
+  ---
+  duration_ms: 0.256979
+  type: 'test'
+  ...
+# Subtest: the compact stock card distinguishes production deficit from an imported surplus
+ok 16 - the compact stock card distinguishes production deficit from an imported surplus
+  ---
+  duration_ms: 1457.814028
+  type: 'test'
+  ...
+# Subtest: production and use remain available in initially collapsed stock details
+ok 17 - production and use remain available in initially collapsed stock details
+  ---
+  duration_ms: 1652.619939
+  type: 'test'
+  ...
+# Subtest: unobserved and balanced resources use different neutral labels
+ok 18 - unobserved and balanced resources use different neutral labels
+  ---
+  duration_ms: 1586.217151
+  type: 'test'
+  ...
+# Subtest: stock summary reports a production deficit despite incoming gifts
+ok 19 - stock summary reports a production deficit despite incoming gifts
+  ---
+  duration_ms: 1461.697213
+  type: 'test'
+  ...
+1..19
+# tests 19
+# suites 0
+# pass 19
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 10919.13999

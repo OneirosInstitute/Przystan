@@ -21,7 +21,7 @@ function e4BuildWorld(){
  e4Sync();
 }
 function HyLegacyE4(x,z){const column=clamp(Math.round(x+96),0,192),row=clamp(Math.round(z+96),0,192);return H[row*VW+column];}
-function e4SitePoint(settlement,index,radius=9){const angle=index*2.3999632297,distance=radius+Math.floor(index/12)*4;for(let attempt=0;attempt<8;attempt++){const x=settlement.x+Math.cos(angle+attempt*.4)*distance,z=settlement.z+Math.sin(angle+attempt*.4)*distance;if(E4World.height(S.e4.world,x,z)>.2)return{x,z};}return{x:settlement.x,z:settlement.z};}
+function e4SitePoint(settlement,index,radius=9){return E4Life.point(S,settlement,index,radius);}
 function e4Building(group,settlement,kind,index,unfinished=false){const definition=E4Catalog.buildings[kind];if(!definition||definition.crop||['pole','ogrodek','zielnik','len'].includes(kind))return;const model=definition.model,profile={id:600000+index,kind:model,prog:1,work:1,ext:[],cond:1},visual=makeBuildingModel(model,profile),position=e4SitePoint(settlement,index,settlement.id==='przystan'?15:7);visual.position.set(position.x,Hy(position.x,position.z),position.z);if(kind==='dom_rodowy')visual.scale.set(1.8,1.3,1.6);if(unfinished)visual.scale.y*=.25;visual.userData.e4Id=settlement.id;visual.traverse(object=>object.userData.e4Id=settlement.id);group.add(visual);try{mergeGroup(visual)}catch(error){console.warn(error)};}
 function e4Sync(){
  if(S?.epoch!==4)return;

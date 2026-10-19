@@ -151,7 +151,7 @@ const MDG={};function mdG(k,f){return MDG[k]||(MDG[k]=f())}
 const EMB=[0x8a2a22,0x6a2a1a,0x2a3a6a,0x7a5a1a];
 function makePerson18(p){const g=new THREE.Group();const k=p.sex==='k',adult=p.age>=12,old=p.age>55,id=p.id;
  const skin=mdCol(skinC[(p.rod||p.fam||id)%4]),cloth=mdCol(p.cloth),hair=mdCol(old?hairC[4]:hairC[id%4]);
- const linen=mdCol(0xd8ccb0),pants=mdCol(k?0x5a4a3e:(id%3?0x4a463c:0x6a5a44)),emb=mdCol(EMB[id%4]),shoe=mdCol(id%2?0x8a6a44:0x5a4630),belt=mdCol(id%3===0?0x8a2a22:0x3a2c1e);
+ const linen=mdCol(0xd8ccb0),pants=mdCol(k?0x5a4a3e:(id%3?0x4a463c:0x6a5a44)),emb=mdCol(EMB[(p.rod||p.fam||id)%4]),shoe=mdCol(id%2?0x8a6a44:0x5a4630),belt=mdCol(id%3===0?0x8a2a22:0x3a2c1e);
  // tułów z głową (jedna bryła), punkt obrotu w biodrach
  const T=[];const h0=.5;
  if(k){T.push([mdLathe([[.0,.06],[.205,.06],[.19,.16],[.165,.3],[.13,.46],[.118,.54],[.13,.62],[.14,.68],[.135,.74],[.1,.79],[.05,.82],[0,.83]].map(([r,y])=>[r,y-h0]),14),cloth]);
@@ -165,8 +165,8 @@ function makePerson18(p){const g=new THREE.Group();const k=p.sex==='k',adult=p.a
  // szyja i głowa
  T.push([new THREE.CylinderGeometry(.04,.046,.07,10),skin,mdM(0,.84-h0,0)]);
  const hy=.935-h0;T.push([new THREE.SphereGeometry(.098,16,12),skin,mdM(0,hy,0,0,0,0,.94+(id%5)*.03,adult?1.08+(id%3)*.035:1.2,.95+(id%4)*.025)]);
- T.push([new THREE.SphereGeometry(.02,8,6),skin,mdM(0,hy-.012,.095,0,0,0,1,1.2,1.1)]);
- [-1,1].forEach(s=>{T.push([new THREE.SphereGeometry(.0125,6,5),mdCol(0x1c1612),mdM(s*.034,hy+.018,.086)]);T.push([new THREE.SphereGeometry(.02,6,5),skin,mdM(s*.097,hy,0,0,0,0,.6,1,1)])});
+ T.push([new THREE.SphereGeometry(.016,8,6),skin,mdM(0,hy-.012,.095,0,0,0,1,1.2,1.1)]);
+ [-1,1].forEach(s=>{T.push([new THREE.SphereGeometry(.008,6,5),mdCol(0x1c1612),mdM(s*.034,hy+.018,.086)]);T.push([new THREE.SphereGeometry(.02,6,5),skin,mdM(s*.097,hy,0,0,0,0,.6,1,1)])});
  T.push([new THREE.SphereGeometry(.022,6,4),mdCol(0x9a5a4a),mdM(0,hy-.05,.082,0,0,0,1.3,.4,.6)]);
  // włosy, chusty, brody, kapelusze
  if(k){const covered=adult&&id%3!==1;

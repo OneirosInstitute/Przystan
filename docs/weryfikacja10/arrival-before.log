@@ -1,0 +1,32 @@
+✔ construction cannot sever the only route from a resident to the settlement (1100.30072ms)
+✔ open terrain remains buildable when people can walk around the new footprint (1038.271234ms)
+✔ a moving resident waits or detours instead of crossing a stationary resident (1021.030095ms)
+✔ opposite travellers pass in open space without losing their destinations (971.880549ms)
+✔ a goat can be delivered through an alternative accessible pen entrance (985.585681ms)
+✔ a failed water delivery retains its bucket and resumes after access returns (992.09156ms)
+✔ a carrier replans a receiving place occupied after dispatch and deposits the cargo exactly once (1051.976079ms)
+✖ a crowd retry may complete at the current receiving tile without resuming a closed route (996.273739ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 7
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8291.595308
+
+✖ failing tests:
+
+test at tests/navigation-master.test.mjs:12:1
+✖ a crowd retry may complete at the current receiving tile without resuming a closed route (996.273739ms)
+  TypeError: Cannot read properties of null (reading 'length')
+      at movePerson (assembled-game.js:1122:14)
+      at eval (eval at window.__przystan.window.__testEvaluate (assembled-game.js:10747:35), <anonymous>:1:394)
+      at eval (eval at window.__przystan.window.__testEvaluate (assembled-game.js:10747:35), <anonymous>:1:566)
+      at window.__przystan.window.__testEvaluate (assembled-game.js:10747:35)
+      at Object.evaluate (file:///workspace/scratch/9e1bb3f2c27d/master_rc10_20261018/source/Przystan_4.0.0_RC10_MASTER/tests/runtime.mjs:42:83)
+      at TestContext.<anonymous> (file:///workspace/scratch/9e1bb3f2c27d/master_rc10_20261018/source/Przystan_4.0.0_RC10_MASTER/tests/navigation-master.test.mjs:12:141)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
