@@ -90,6 +90,7 @@ function expHTML(){let h=`<p class="lead">Wyprawy zabierają ludzi z osady na ki
  h+='<h3>Regiony wyspy</h3>';
  REGIONS.filter(r=>r&&r.id!==0).sort((a,b)=>regDist(a)-regDist(b)).forEach(r=>{const on=S.exps.some(e=>e.r===r.id);const d1=expDays(r,'zwiad'),rk=Math.round(expRisk(r,S.expSize)*100);
   h+=`<div class="card"><h4>${r.known?r.name:'Nieznany teren'}</h4><p class="mut">${regDir(r)} · ${Math.round(regDist(r))} kroków · ${r.known?RTYPE[r.type]+' · poznano '+Math.round(r.seen*100)+'%':'nikt tam nie był'}</p>`;
+  if(r.known&&typeof krLine==='function')h+=krLine(r);
   if(r.known)h+=`<p>Można przynieść: ${LOOT[r.type].filter(([k])=>k!=='miod'||tech('u_bart')).map(([k])=>RN[k].toLowerCase()).join(', ')}.</p>`;
   h+=`<p class="mut">Zwiad: ${d1} dni, jedzenie ${expFood(r,'zwiad',S.expSize)}${r.known?` · zbiór: ${expDays(r,'zbior')} dni, jedzenie ${expFood(r,'zbior',S.expSize)}`:''} · ryzyko ${rk<10?'małe':rk<22?'średnie':'duże'}</p>`;
   h+=on?'<p class="ok">Wyprawa w drodze.</p>':`<div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap">${r.seen<.9?`<button class="pri" data-ex="${r.id}" data-et="zwiad">Zwiad</button>`:''}${r.known?`<button ${r.seen>=.9?'class="pri"':''} data-ex="${r.id}" data-et="zbior">Zbiór</button>`:''}<button data-rg="${r.id}">Pokaż</button></div>`;

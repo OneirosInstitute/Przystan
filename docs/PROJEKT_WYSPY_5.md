@@ -37,6 +37,14 @@ Status: projekt docelowy. Część „Wdrożone w RC11” opisuje, co już dzia�
 | Menu | Pięć działów: Osada (Przegląd, Kronika, Opcje), Ludzie (Praca, Mieszkańcy), Budowa, Zadania (Zadania, Wyprawy), Wiedza (Wiedza, Natura). Pod działami najwyżej jeden rząd. Dział pamięta ostatni widok. |
 | Budowa | Wyszukiwarka i lista rozwijana rodzajów z liczbami, na początku „Możesz postawić teraz”. |
 
+### Wdrożone w 4.3.0-rc.1
+
+| Obszar | Co działa |
+|---|---|
+| Krainy | Każda kraina rdzenia dostaje jedną z dziesięciu ról z rozdziału 2.2. Rolę liczymy z ziemi (las iglasty i liściasty, łąka, mokradło, hale, wybrzeże, nachylenie do słońca) i ze złóż. Każda rola jest na każdej wyspie co najmniej raz. Zagłębie leży tam, gdzie węgiel albo ruda, a Gliniska tam, gdzie złoże gliny. |
+| Wpływ | Budynki pracują szybciej w swojej krainie (np. barć +50% na Kwietnych Łąkach, drwal +20% w Starych Borach, kamieniołom +25% na Kamiennej Grani), a pola na Żyznych Nizinach dają o 30% większy plon. Podgląd stawiania i karta budynku to pokazują. |
+| Wygląd | Ziemia ma barwę krainy (soczysta zieleń nizin, jasne łąki i stoki, oliwkowe mokradła). Na łąkach od wiosny do jesieni kwitną kępki kwiatów. |
+
 ## 2. Wyspa: jedna, większa, odkrywana stopniowo
 
 ### 2.1 Rozmiar
@@ -219,7 +227,8 @@ Pięć sekcji. Każda ma tę samą budowę: nagłówek z liczbami, filtr, lista 
 | **RC11** | Zatory, drogi z wydeptywania, karta rozbudowy domów, dymnik, zorza w świecie, zadania główne | Testy RC10 + `crowd-flow`, próby w przeglądarce, telefon |
 | **4.1 Złoża** (rc.1 wdrożone: złoża z warstwami, odkrywanie, kopalnia, szyb, łom, gliniak, wyczerpywanie; zostają charaktery krain, poszukiwania i hałdy) | Charaktery krain w rdzeniu 192, złoża skupione z warstwami, ślady i poszukiwania, odkrywka i szyb, hałdy, wyczerpywanie | Każdy seed ma komplet złóż w zasięgu; symulacja 20 lat bez braku kamienia i rudy przy rozsądnej grze |
 | **4.2 Menu** (rc.1 wdrożone: pięć działów, widoki, wyszukiwarka i „teraz” w Budowie; zostaje wyszukiwarka w Ludziach i wspólny wzornik karty) | Pięć sekcji, wzornik karty, wyszukiwarka, Zapasy w Osadzie | Test na 360×740 i 768×352; brak trzech rzędów przycisków |
-| **4.3 Wyspa 384** | Jedna wyspa od startu, sektory i poziomy szczegółów, krainy zewnętrzne, przysiółki w pierścieniu od epoki II | FPS i bateria na telefonie nie gorsze niż RC11 w rdzeniu |
-| **4.4 Folwarki ze złóż** | Specjalizacja folwarku z charakteru krainy i złoża, wozy zależne od nawierzchni, napięcia (woda, łąki, barcie) | Pięć pokoleń autonomii bez sztucznych dopisków zasobów |
+| **4.3 Krainy** (rc.1 wdrożone: dziesięć ról krain w rdzeniu 192, każda na każdej wyspie, wpływ na budynki i pola, barwa ziemi, kwietne łąki; zostają koszty krain: powodzie, przymrozki, choroby górników) | Charaktery krain w rdzeniu, wpływ na pracę i plon, wygląd | Każdy seed ma każdą rolę; testy wpływu na budynki i pola |
+| **4.4 Wyspa 384** | Jedna wyspa od startu, sektory i poziomy szczegółów, krainy zewnętrzne, przysiółki w pierścieniu od epoki II | FPS i bateria na telefonie nie gorsze niż RC11 w rdzeniu |
+| **4.5 Folwarki ze złóż** | Specjalizacja folwarku z charakteru krainy i złoża, wozy zależne od nawierzchni, napięcia (woda, łąki, barcie) | Pięć pokoleń autonomii bez sztucznych dopisków zasobów |
 
 Każde wydanie kończy się kompletem testów, próbą w przeglądarce z WebGL (zatory, produkcja pierwszego dnia, zrzuty) i krótką listą do sprawdzenia na telefonie.

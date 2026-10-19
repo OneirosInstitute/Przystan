@@ -997,6 +997,25 @@ Wyspa kryje miejsca, które zawsze leżą w tym samym miejscu dla danej wyspy. G
 
 Pierze z kurnika i tokowiska idzie zimą na pierzyny: domy palą mniej opału. Odkryte miejsca są w Naturze, w rozdziale „Miejsca na wyspie”, razem z tymi, które widziano tylko z daleka.
 
+### Krainy z charakterem (od wersji 4.3.0-rc.1)
+
+Każda kraina wyspy ma rolę. Rola wynika z ziemi (las, łąka, mokradło, hale, wybrzeże, stok zwrócony na południe) i ze złóż, i na każdej wyspie jest każda z dziesięciu ról. Rolę widać w karcie krainy (Zadania → Wyprawy), pod nazwą na mapie i w kronice, gdy zwiadowcy nazwą nowe miejsce. Budynek postawiony w swojej krainie pracuje szybciej: podgląd stawiania i karta budynku mówią o ile.
+
+| Kraina | Co daje |
+|---|---|
+| Żyzne Niziny | plon pól +30%, zagroda +15% |
+| Słoneczne Stoki | winnica +35%, chmielnik +20%, ogród ziołowy +25% |
+| Kwietne Łąki | barć +50%, zagroda +20%, chata zbieracza +10%; od wiosny do jesieni kwitną |
+| Stare Bory | chata drwala +20%, chata myśliwego, mielerz i leśniczówka +15% |
+| Grąd i Dąbrowa | barć +25%, chata drwala i myśliwego +10% |
+| Kamienna Grań | kamieniołom +25%, łom kamienia +15% |
+| Zagłębie | odkrywka, szyb węglowy i kopalnia rudy +10%, wykop rudy +15%; zawsze tam, gdzie węgiel albo ruda |
+| Mokradła | kopanka torfu +20%, wykop rudy +25%, ogród ziołowy +10% |
+| Gliniska nad wodą | glinianka +25%, gliniak +15%, piec do cegły i garncarnia +10%; zawsze tam, gdzie złoże gliny |
+| Wybrzeże i Zatoki | pomost rybacki +20%, warzelnia +15% |
+
+Ziemia ma barwę krainy: niziny są soczyście zielone, łąki i stoki jaśniejsze, mokradła oliwkowe. Zimą różnice prawie znikają.
+
 ### Złoża (od wersji 4.1.0-rc.1)
 
 Kamienie, glina i ruda leżące luzem przy osadzie wystarczają na początek. Na lata osada sięga do złóż: dużych, skupionych w jednym miejscu i skończonych. Złoże leży zawsze w tym samym miejscu dla danej wyspy, z daleka widać je jako zagadkę („Rdzawa woda w potoku”, „Szare ściany skalne”, „Biała maź nad wodą”), a rozpoznaje je dopiero ten, kto do niego dojdzie. Odkrycie złoża daje wiedzę o budowlach, które z niego czerpią.
@@ -1148,6 +1167,7 @@ Wyszukiwarka Budowy szuka po nazwie, po rodzaju i (od czterech liter) w opisie, 
 | 1.8.3 | poprawka: rozbudowa domu (szałas w chatę, chata w dom) nie zabiera już rodzinie spiżarki; w czasie budowy zapas zostaje w starym domu w granicach jego pojemności |
 | 1.9 | budynki z charakterem: każdy budynek inny (ściany, dachy, spadek, okap), koniki, malowane okiennice, ganki, przybudówki, garnki na płocie, zioła pod okapem, szyldy rzemiosł, wyraźniejsza kuźnia, łaźnia i chata wiecowa |
 | 1.10 | wykonanie budynków: surowe, porządne i mistrzowskie, wyraźnie widoczne po rozbudowie (wielkość, podmurówka, dach, okiennice, obramienia okien, kwiaty, płotek, szyld); karta budynku pokazuje wykonanie i trwałość; odmiany szałasów, studni, zagród i spiżarni |
+| 4.3.0-rc.1 | krainy z charakterem: dziesięć ról krain (Żyzne Niziny, Słoneczne Stoki, Kwietne Łąki, Stare Bory, Grąd i Dąbrowa, Kamienna Grań, Zagłębie, Mokradła, Gliniska, Wybrzeże), każda na każdej wyspie; budynki pracują szybciej w swojej krainie, pola na nizinach rodzą więcej; barwa ziemi krainy i kwitnące łąki |
 | 4.2.0-rc.1 | menu: pięć działów (Osada, Ludzie, Budowa, Zadania, Wiedza) z widokami w jednym rzędzie; wyszukiwarka budowli i „Możesz postawić teraz”, rodzaje budowli w jednej liście rozwijanej zamiast trzech rzędów przycisków; opcje gry w Osada → Opcje; zamykanie księgi gestem w dół |
 | 4.1.0-rc.1 | złoża: węgiel, torf, ruda, kamień i glina w dużych, skupionych złożach z warstwami, które się wyczerpują; złoża rozpoznaje ten, kto do nich dojdzie; nowe budowle na złożach: kopalnia rudy, szyb węglowy, łom kamienia, gliniak; paliki wokół odkrytego złoża i karta z warstwami |
 | 4.0.0-rc.11 | zatory i drogi: ludzie ustępują sobie bez zakleszczeń (w RC9–RC10 pierwszego dnia stali w kolejkach przy wraku i obozie, osada traciła jedzenie), ekipa wraku pracuje na kilku stanowiskach; ścieżki wydeptują się same i przyspieszają o 10%, nowa zakładka Budowa → Drogi: ścieżka utwardzona, droga kamienna i bruk wytyczane od sieci dróg do wskazanego budynku po śladach ludzi, układane przez budowniczych; rozbudowa domu zawsze z przyciskiem i listą wymagań ✓/✗, karta zapasów domu; okap i dymnik w wiacie nad ogniskiem; zorza zakotwiczona w świecie (poświata na ziemi i morzu, kurtyny nad morzem za wyspą); zadania główne po trzy na epokę w zakładce Zadania, bez nich epoka nie idzie dalej |
