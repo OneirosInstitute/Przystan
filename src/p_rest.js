@@ -858,8 +858,9 @@ function tryPlace(){if(!placing||!ghostTile)return;const kind=placing,[i,j]=ghos
 /* ================= kamera i wejście ================= */
 let camT={x:0,z:0},yaw=Math.PI/4,yawT=yaw,zoom=1.6,zoomT=1.6;const pitch=.64;
 const ZMIN=.22,ZMAX=3.2;
-function setCam(){const size=34/zoom,asp=innerWidth/innerHeight;cam.left=-size*asp/2;cam.right=size*asp/2;cam.top=size/2;cam.bottom=-size/2;cam.updateProjectionMatrix();
- const h=Hy(camT.x,camT.z);const r=160;cam.position.set(camT.x+Math.sin(yaw)*Math.cos(pitch)*r,h+Math.sin(pitch)*r,camT.z+Math.cos(yaw)*Math.cos(pitch)*r);cam.lookAt(camT.x,h,camT.z);
+// 4.3: przy dalekim widoku dolna krawędź kadru (kamera ortogonalna) schodziła pod morze i zostawał szary pas; kamera odsuwa się razem z kadrem
+function setCam(){const size=34/zoom,asp=innerWidth/innerHeight,r=Math.max(160,size*.62+70),far=Math.max(500,r+size*.62+260);cam.left=-size*asp/2;cam.right=size*asp/2;cam.top=size/2;cam.bottom=-size/2;if(cam.far!==far)cam.far=far;cam.updateProjectionMatrix();
+ const h=Hy(camT.x,camT.z);cam.position.set(camT.x+Math.sin(yaw)*Math.cos(pitch)*r,h+Math.sin(pitch)*r,camT.z+Math.cos(yaw)*Math.cos(pitch)*r);cam.lookAt(camT.x,h,camT.z);
  sun.target.position.set(camT.x,0,camT.z);sun.target.updateMatrixWorld()}
 function resize(){renderer.setSize(innerWidth,innerHeight,false);setCam();gfxResize()}
 addEventListener('resize',resize);

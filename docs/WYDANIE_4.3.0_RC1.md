@@ -1,5 +1,7 @@
 # Przystań 4.3.0-rc.1 — Krainy z charakterem
 
+> **4.3.0-rc.2** (baza `1e7d2ea`) dokłada dwie rzeczy. W Ludziach (Praca i Mieszkańcy) jest wyszukiwarka po imieniu, fachu albo budynku: pokazuje tylko pasujące wiersze i karty, rozwija zwinięte sekcje z trafieniem i podaje liczbę trafień, a po wyczyszczeniu sekcje wracają do stanu sprzed szukania. W dalekim widoku wyspy zniknął szary pas u dołu ekranu: dolna krawędź kadru kamery ortogonalnej schodziła pod morze, więc teraz kamera i jej zasięg odsuwają się razem z kadrem (`setCam`).
+
 Baza: main 4.2.0-rc.1 `8fbdcba5ca32bacba9941ee5472ca4c286a1328d`. Wydanie wypchnięte prosto na main (Railway buduje z main).
 Trzeci krok planu z [projektu wyspy](PROJEKT_WYSPY_5.md), rozdział 2.2. Wyspa 384 od pierwszego dnia przesuwa się na 4.4, folwarki ze złóż na 4.5.
 

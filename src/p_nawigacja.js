@@ -11,7 +11,7 @@ const NV=[
  {k:'zadania',n:'Zadania',i:'zadania',v:[{k:'zadania',n:'Zadania',t:'zadania'},{k:'wyprawy',n:'Wyprawy',t:'wyprawy'}]},
  {k:'wiedza',n:'Wiedza',i:'wiedza',v:[{k:'wiedza',n:'Wiedza',t:'wiedza'},{k:'natura',n:'Natura',t:'natura'}]}];
 const NV_VIEWS={};NV.forEach(s=>s.v.forEach(v=>{v.s=s.k;NV_VIEWS[v.k]=v}));
-let nvView=null,nvNext=null,nvQ='';
+let nvView=null,nvNext=null,nvQ='',nvP='';
 const nvLast=(()=>{try{const o=JSON.parse(localStorage.getItem('przystan-nav')||'{}');return o&&typeof o==='object'?o:{}}catch(e){return{}}})();
 const nvSec=k=>NV.find(s=>s.k===k);
 function nvSecView(k){const s=nvSec(k);return s.v.find(v=>v.k===nvLast[k])||s.v[0]}
@@ -30,17 +30,19 @@ function nvApply(){const b=$('body'),v=NV_VIEWS[nvView];let mode='';
 .nv-seg{display:flex;gap:3px;padding:3px;border-radius:12px;background:#0000002e;border:1px solid var(--line)}
 .nv-seg button{flex:1 1 0;min-width:0;min-height:42px;border:0;border-radius:9px;background:transparent;color:var(--fg);font:600 14.5px var(--sans);padding:0 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .nv-seg button.on{background:#2c2a20;color:var(--hi);box-shadow:inset 0 0 0 1px var(--gold)}
-#nv-tools{display:flex;gap:6px;align-items:stretch}#nv-tools[hidden],#nv-seg[hidden]{display:none}
+#nv-tools{display:flex;gap:6px;align-items:stretch}#nv-tools[hidden],#nv-seg[hidden],#nv-p[hidden],#nv-hint[hidden]{display:none}
+#nv-p{display:block;width:100%;box-sizing:border-box;margin-top:8px;height:44px;border-radius:10px;border:1px solid var(--line);background:#0000002e;color:var(--hi);font:500 15px var(--sans);padding:0 12px}#nv-p::placeholder{color:var(--mut)}#nv-p:focus{outline:2px solid var(--gold);outline-offset:1px}
+#body .nv-miss{display:none!important}
 #nv-q{flex:1 1 50%;min-width:0;height:44px;border-radius:10px;border:1px solid var(--line);background:#0000002e;color:var(--hi);font:500 15px var(--sans);padding:0 12px}
 #nv-q::placeholder{color:var(--mut)}#nv-q:focus,#nv-cat:focus{outline:2px solid var(--gold);outline-offset:1px}
 #nv-cat{flex:1 1 50%;min-width:0;height:44px;border-radius:10px;border:1px solid var(--gold);background:#2c2a20;color:var(--hi);font:600 15px var(--sans);padding:0 8px}
 #sheet #body .bchips{display:none}
 body.cz #cz-chips{overflow:visible;gap:4px}body.cz #cz-chips button{flex:1 1 0;min-width:0;padding:0 2px;font-size:14px;overflow:hidden;text-overflow:ellipsis}body.cz #cz-chips button.on{font-weight:650}
 @media(max-height:460px),(max-width:370px){body.cz #cz-chips button{font-size:13px}}
-#nv-hint{font-size:12px;color:var(--mut);margin:-2px 0 8px}
+#nv-hint{font-size:13px;color:var(--mut);margin:6px 2px 0}
 `;document.head.appendChild(st)}
 // ---------- pasek działów: Cicha wyspa w panelu, pełne menu na dole ----------
-{const el=document.createElement('div');el.id='nv-view';el.hidden=true;el.innerHTML='<div class="nv-seg" id="nv-seg" role="tablist"></div><div id="nv-tools" hidden><input id="nv-q" type="search" enterkeyhint="search" autocomplete="off" placeholder="Szukaj budynku" aria-label="Szukaj budynku"><select id="nv-cat" aria-label="Rodzaj budowli"></select></div>';
+{const el=document.createElement('div');el.id='nv-view';el.hidden=true;el.innerHTML='<div class="nv-seg" id="nv-seg" role="tablist"></div><div id="nv-tools" hidden><input id="nv-q" type="search" enterkeyhint="search" autocomplete="off" placeholder="Szukaj budynku" aria-label="Szukaj budynku"><select id="nv-cat" aria-label="Rodzaj budowli"></select></div><input id="nv-p" type="search" enterkeyhint="search" autocomplete="off" placeholder="Szukaj osoby, fachu albo budynku" aria-label="Szukaj osoby, fachu albo budynku" hidden><div id="nv-hint" hidden></div>';
  $('sheet').insertBefore(el,$('body'))}
 const nvCur=()=>nvView&&!$('sheet').hidden?NV_VIEWS[nvView].s:null;
 const nvOn=el=>{const cur=nvCur();for(const b of el.children)b.classList.toggle('on',b.dataset.nvs===cur)};
@@ -53,8 +55,9 @@ function nvCatHTML(){if(!S)return'';const n=k=>BKEYS.filter(q=>BD[q].cat===k);co
 function nvNav(){if(!S)return;czChips();nvTabbar();const box=$('nv-view');if($('sheet').hidden||!nvView){box.hidden=true;return}
  const s=nvSec(NV_VIEWS[nvView].s),build=s.k==='budowa';box.hidden=!(s.v.length>1||build);
  setH($('nv-seg'),s.v.length>1?s.v.map(v=>`<button role="tab" data-nvv="${v.k}" class="${v.k===nvView?'on':''}" aria-selected="${v.k===nvView}">${v.n}</button>`).join(''):'');$('nv-seg').hidden=s.v.length<2;
+ const ppl=s.k==='ludzie';$('nv-p').hidden=!ppl;if(ppl){const q=$('nv-p');if(document.activeElement!==q&&q.value!==nvP)q.value=nvP}if(!ppl)$('nv-hint').hidden=true;
  $('nv-tools').hidden=!build;if(build){const sel=$('nv-cat');if(document.activeElement!==sel)setH(sel,nvCatHTML());if(sel.value!==buildCat&&document.activeElement!==sel&&!nvQ)sel.value=buildCat;const q=$('nv-q');if(document.activeElement!==q&&q.value!==nvQ)q.value=nvQ}}
-{const _rp=renderPanel;renderPanel=function(){_rp();if(!S)return;try{if(!$('sheet').hidden&&tab){if(!nvView||NV_VIEWS[nvView].t!==tab)nvView=nvViewFor(tab);nvApply();if(!czOn&&nvView){const s=nvSec(NV_VIEWS[nvView].s),t=s.v.length>1?NV_VIEWS[nvView].n:s.n;if($('stitle').textContent!==t)$('stitle').textContent=t}}nvNav()}catch(e){console.warn(e)}}}
+{const _rp=renderPanel;renderPanel=function(){_rp();if(!S)return;try{if(!$('sheet').hidden&&tab){if(!nvView||NV_VIEWS[nvView].t!==tab)nvView=nvViewFor(tab);nvApply();nvPeople();if(!czOn&&nvView){const s=nvSec(NV_VIEWS[nvView].s),t=s.v.length>1?NV_VIEWS[nvView].n:s.n;if($('stitle').textContent!==t)$('stitle').textContent=t}}nvNav()}catch(e){console.warn(e)}}}
 {const _cs=closeSheet;closeSheet=function(){const r=_cs();try{nvNav()}catch(e){}return r}}
 // kliknięcia: dział, widok, rodzaj budowli, wyszukiwarka
 function nvSecClick(e){const b=e.target.closest&&e.target.closest('[data-nvs]');if(!b||!S)return;e.stopImmediatePropagation();e.preventDefault();const k=b.dataset.nvs;
@@ -64,6 +67,18 @@ $('nv-seg').addEventListener('click',e=>{const b=e.target.closest('[data-nvv]');
 $('nv-cat').addEventListener('change',e=>{buildCat=e.target.value;nvQ='';$('nv-q').value='';$('body')._h=null;renderPanel();$('body').scrollTop=0;e.target.blur()});
 $('nv-q').addEventListener('input',e=>{nvQ=String(e.target.value||'').slice(0,40);if(nvQ&&['remont','drogi','lad'].includes(buildCat))buildCat='teraz';$('body')._h=null;renderPanel();$('body').scrollTop=0});
 $('nv-q').addEventListener('keydown',e=>{if(e.key==='Enter')e.target.blur();if(e.key==='Escape'){e.stopPropagation();e.target.value='';nvQ='';$('body')._h=null;renderPanel()}});
+// ---------- wyszukiwarka w Ludziach: po imieniu, fachu albo budynku ----------
+const nvOpened=new Set();
+function nvPeople(){const b=$('body');if(!b.querySelectorAll)return;const on=nvView&&NV_VIEWS[nvView].s==='ludzie',q=on?nvNorm(nvP).trim():'';
+ if(!q&&!b.querySelector('.nv-miss')&&!nvOpened.size)return;let n=0;const v=NV_VIEWS[nvView]||{},L=[...b.querySelectorAll('.card,.row')].filter(e=>!e.querySelector('.card,.row'));
+ const shown=e=>{const k=e.closest('[data-ui-section]')?.dataset.uiSection;return!k||!b.dataset.nv||(v.only?v.only.includes(k):!(v.hide||[]).includes(k))};
+ for(const e of L){const ok=!q||nvNorm(e.textContent).includes(q);e.classList.toggle('nv-miss',!ok);if(!ok||!q||!shown(e))continue;n++;
+  // rozwiń zwinięte sekcje z trafieniem; po wyczyszczeniu wracają do stanu sprzed szukania
+  for(let d=e.closest('details');d&&b.contains(d);d=d.parentElement&&d.parentElement.closest('details'))if(!d.open){d.open=true;nvOpened.add(d)}}
+ if(!q){for(const d of nvOpened)if(b.contains(d))d.open=false;nvOpened.clear()}
+ const h=$('nv-hint'),txt=q?(n?`Pasuje: ${n}`:`Nic nie pasuje do „${nvP.trim()}”.`):'';h.hidden=!txt;if(h.textContent!==txt)h.textContent=txt}
+$('nv-p').addEventListener('input',e=>{nvP=String(e.target.value||'').slice(0,40);nvPeople();$('body').scrollTop=0});
+$('nv-p').addEventListener('keydown',e=>{if(e.key==='Enter')e.target.blur();if(e.key==='Escape'){e.stopPropagation();e.target.value='';nvP='';nvPeople()}});
 // ---------- wyszukiwarka i „Możesz postawić teraz” w Budowie ----------
 const nvNorm=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/ł/g,'l');
 function nvKeys(){const q=nvNorm(nvQ).trim();
@@ -86,4 +101,4 @@ hintTick=function(rdt){hintT+=rdt;if(hintT<.6)return;hintT=0;hintEl.forEach(e=>e
  if(el){el.classList.add('hintp');hintEl.push(el)}};
 {const _b=boot;boot=function(f){_b(f);try{nvNav()}catch(e){}}}
 try{nvNav()}catch(e){}
-window.__nv={NV,NV_VIEWS,nvGo,nvKeys,get view(){return nvView},get q(){return nvQ},set q(v){nvQ=v}};
+window.__nv={NV,NV_VIEWS,nvGo,nvKeys,nvPeople,get p(){return nvP},set p(v){nvP=v},get view(){return nvView},get q(){return nvQ},set q(v){nvQ=v}};

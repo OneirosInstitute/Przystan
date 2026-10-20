@@ -1109,7 +1109,7 @@ Każda wyspa ma po dwa złoża rudy, łomów i glinisk, rozłożone daleko od si
 | Zadania | Zadania, Wyprawy | zadania główne epoki, potem bieżące sprawy |
 | Wiedza | Wiedza, Natura | wiedza w ludziach i drzewa odkryć |
 
-Wyszukiwarka Budowy szuka po nazwie, po rodzaju i (od czterech liter) w opisie, bez polskich znaków. „Możesz postawić teraz” pokazuje tylko to, na co starcza materiałów. Dział pamięta ostatni widok. Przeciągnięcie nagłówka księgi w dół zamyka ją. Wskazówki pierwszych dni pokazują dział, potem widok, potem rodzaj budowli.
+W Ludziach (Praca i Mieszkańcy) wyszukiwarka szuka po imieniu, fachu albo budynku i rozwija sekcje z trafieniem. Wyszukiwarka Budowy szuka po nazwie, po rodzaju i (od czterech liter) w opisie, bez polskich znaków. „Możesz postawić teraz” pokazuje tylko to, na co starcza materiałów. Dział pamięta ostatni widok. Przeciągnięcie nagłówka księgi w dół zamyka ją. Wskazówki pierwszych dni pokazują dział, potem widok, potem rodzaj budowli.
 - **Zakładki (do wersji 4.1):** Budowa (kategorie), Praca, Ludzie (największy kłopot, prośby, niezgoda, obyczaje z ich wiekiem, urzędy, rok obrzędów, pamięć osady, rody, przysiółki, rodziny), Wyprawy, Wiedza (drzewa odkryć), Natura (atlas), Kronika (pełna kronika do pobrania, zapis i wczytanie z pliku).
 - **Okno budynku:** pracownicy, przepisy, co spowalnia, stan i remont, poziomy i rozbudowy.
 - **Karta osoby:** fach, cecha, zdrowie, narzędzia, ród, małżonek, nastrój z powodami, mir i przyjaciele.
@@ -1167,6 +1167,7 @@ Wyszukiwarka Budowy szuka po nazwie, po rodzaju i (od czterech liter) w opisie, 
 | 1.8.3 | poprawka: rozbudowa domu (szałas w chatę, chata w dom) nie zabiera już rodzinie spiżarki; w czasie budowy zapas zostaje w starym domu w granicach jego pojemności |
 | 1.9 | budynki z charakterem: każdy budynek inny (ściany, dachy, spadek, okap), koniki, malowane okiennice, ganki, przybudówki, garnki na płocie, zioła pod okapem, szyldy rzemiosł, wyraźniejsza kuźnia, łaźnia i chata wiecowa |
 | 1.10 | wykonanie budynków: surowe, porządne i mistrzowskie, wyraźnie widoczne po rozbudowie (wielkość, podmurówka, dach, okiennice, obramienia okien, kwiaty, płotek, szyld); karta budynku pokazuje wykonanie i trwałość; odmiany szałasów, studni, zagród i spiżarni |
+| 4.3.0-rc.2 | wyszukiwarka w Ludziach (imię, fach, budynek); bez szarego pasa u dołu dalekiego widoku wyspy |
 | 4.3.0-rc.1 | krainy z charakterem: dziesięć ról krain (Żyzne Niziny, Słoneczne Stoki, Kwietne Łąki, Stare Bory, Grąd i Dąbrowa, Kamienna Grań, Zagłębie, Mokradła, Gliniska, Wybrzeże), każda na każdej wyspie; budynki pracują szybciej w swojej krainie, pola na nizinach rodzą więcej; barwa ziemi krainy i kwitnące łąki |
 | 4.2.0-rc.1 | menu: pięć działów (Osada, Ludzie, Budowa, Zadania, Wiedza) z widokami w jednym rzędzie; wyszukiwarka budowli i „Możesz postawić teraz”, rodzaje budowli w jednej liście rozwijanej zamiast trzech rzędów przycisków; opcje gry w Osada → Opcje; zamykanie księgi gestem w dół |
 | 4.1.0-rc.1 | złoża: węgiel, torf, ruda, kamień i glina w dużych, skupionych złożach z warstwami, które się wyczerpują; złoża rozpoznaje ten, kto do nich dojdzie; nowe budowle na złożach: kopalnia rudy, szyb węglowy, łom kamienia, gliniak; paliki wokół odkrytego złoża i karta z warstwami |
