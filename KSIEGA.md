@@ -44,7 +44,7 @@ Dzieci urodzone na wyspie dostają dawne słowiańskie imiona, na przykład Ziem
 
 # 4. Wyspa
 
-Wyspa ma 192 na 192 pola. Jest duża, a na początku prawie cała kryje się we mgle nieznanego, którą odsłaniają ludzie, zwiadowcy i wyprawy.
+Od wersji 4.5 wyspa ma 384 na 384 pola. Rozbitkowie lądują na dawnej wyspie (192 na 192 pola), która leży pośrodku i jest taka sama jak przed 4.5. Dookoła niej leży Cicha Zatoka, a za nią nowy ląd, na który prowadzą trzy przesmyki (więcej w „Wyspa 384”). Na początku prawie wszystko kryje się we mgle nieznanego, którą odsłaniają ludzie, zwiadowcy i wyprawy.
 
 - **Krajobrazy:** morze, brzeg i plaże, wyżyny i skały, mokradła i olsy, bór iglasty (sosna, świerk), las liściasty (dąb, brzoza) i łąki z wrzosowiskami. Drzewa zmieniają barwy z porami roku.
 - **Drobna przyroda:** kępy trawy, kwiaty, kamienie, paprocie, trzcina, wrzos, zwalone pnie, suche kikuty drzew i drewno wyrzucone przez morze.
@@ -1061,6 +1061,29 @@ Każde złoże ma warstwy: płytką, głębszą i najgłębszą. Budynek stoi na
 
 Każda wyspa ma po dwa złoża rudy, łomów i glinisk, rozłożone daleko od siebie, więc osada rośnie w kierunku złóż, a drogi do nich się opłacają. Stare zapisy: odkrywka zachowuje to, co już wykopano z żyły, a budynki postawione wcześniej przy złożu rozpoznają je od razu.
 
+### Wyspa 384 (od wersji 4.5.0-rc.1)
+
+Dawna wyspa zostaje sercem gry. Na niej rozbitkowie lądują, na niej leżą wrak, obóz, pierwsze krainy i złoża. Jej teren, drzewa, ślady dawnego ludu, stada i złoża są co do pola takie same jak przed 4.5. Złoża dawnej wyspy wystarczą na start: zanim społeczność urośnie do folwarków, ma z czego żyć, ale nie bez końca. Gdy się kończą, trzeba iść dalej albo gospodarować oszczędniej. Jedni gracze ruszą wcześnie przez przesmyki, inni długo wyciągną swoje z serca wyspy.
+
+Wokół dawnej wyspy leży Cicha Zatoka, płytka i spokojna. Trzy przesmyki (Północny, Zachodni i Wschodni) to groble z plażami po obu stronach, którymi da się przejść suchą nogą. Za zatoką nowy ląd ma ułożone ręcznie krainy:
+
+| Kraina | Rola | Co tam jest |
+|---|---|---|
+| Wronia Grań i Szczyt Peruna | Kamienna Grań | najwyższe góry wyspy, wielki łom kamienia (8000 / 25 000 / 60 000) |
+| Czarne Zagłębie | Zagłębie | węgiel (4000 / 15 000 / 40 000) i ruda (3000 / 12 000 / 30 000), Czarna Struga |
+| Złote Stoki | Słoneczne Stoki | południowe zbocza pod granią |
+| Modre Łąki, Wrzosowy Płaskowyż | Kwietne Łąki | łąki i wrzosowiska pod barcie |
+| Bure Bagna | Mokradła | torfowisko (3000 / 8000) |
+| Dolina Wierzby, Wierzbowe Łęgi | Żyzne Niziny | szeroka dolina rzeki Wierzbnej |
+| Gliniska u Ujścia | Gliniska | glina przy ujściu Wierzbnej (4000 / 10 000) |
+| Puszcza Wschodnia, Sośniny Północne | Stare Bory | gęsty las |
+| Lipowa Dąbrowa, Kamienny Bród | Grąd i Dąbrowa | Jezioro Lipowe, mniejsze złoże rudy |
+| Zatoka Fok, Bursztynowy Cypel, Wyspy Mew | Wybrzeże i Zatoki | sól, bursztyn, foki i ptaki |
+
+Złoża nowego lądu są dwa do trzech razy większe niż na dawnej wyspie, więc to one ciągną osadę dalej. Rzeki mają łagodne brzegi i brody, w których przechodzi się w poprzek koryta. Krainy nowego lądu mają swoje role od początku i nie zmieniają ról krain dawnej wyspy.
+
+**Stare zapisy** przechodzą na nową wyspę same: budynki, ludzie, drogi, wydeptane ścieżki, odkryte pola i ład wsi przesuwają się na środek, więc na ekranie wszystko stoi tam, gdzie stało. W epoce IV folwarki z dawnych krain zastępczych przenoszą się do najbliższej wolnej krainy nowego lądu, a ludzie razem z nimi.
+
 # 13. Grafika i dźwięk
 
 - **Styl:** trójwymiarowe, niskopoligonowe modele w ściszonej, chłodnej palecie północy. Mgła nieznanego, pory dnia i roku, deszcz, śnieg, mgły, dym z kominów, świetliki latem, ptaki.
@@ -1146,6 +1169,7 @@ W Ludziach (Praca i Mieszkańcy) wyszukiwarka szuka po imieniu, fachu albo budyn
 - **Plik gry:** jeden plik HTML (około 860 kB) i biblioteka Three.js r186 (dwa moduły, około 2 MB, w paczce do instalacji trzymane lokalnie) składany z części: p_head.html, p_const.js, p_mid.js, p_rest.js, p_map.js, p_tech.js, p_exp.js, p_v8.js, p_bld.js, p_story.js, p_slav.js, p_wild.js, p_ludzie.js, p_urz.js, p_pamiec.js, p_akt.js, p_kol.js, p_slady.js, p_lad.js, p_gosp.js, p_bud.js, p_swiat.js, p_szlif.js, p_mapa.js, p_cisza.js, p_sluzba.js, p_zycie.js, p_rok.js, p_wiedza.js, p_gfx.js, p_grafika.js, p_ksiega.js, p_ratunek.js, p_g18.js, p_e2.js, p_e2d.js, p_e2m.js, p_e21.js, p_e22.js, p_woz.js, p_zad.js, p_rozb.js, p_noc.js, p_opow.js, p_przyr.js, p_handel.js, p_tydzien.js, p_e3.js, p_zwierz.js, p_postaci.js, p_end.js.
 - **Grafika:** Three.js r186 (WebGL2, ładowany jako moduł), własna obróbka obrazu (bloom, cienie kontaktowe, cienie chmur, tilt-shift, korekcja barw), własne shadery wody i terenu dopinane do materiałów Three.js.
 - **Wydajność dużej wsi (od 2.0):** gotowe budynki w każdym kwadracie wyspy (32 na 32 pola) rysuje się jako jedna bryła na materiał, gładkie kolory przechodzą do wspólnego materiału z kolorem w wierzchołkach, a kłosy na polach są instancjami. W gotowej wsi z epoki II to 1070 zamiast 2030 wywołań rysowania na klatkę. Dotknięcie budynku działa jak dawniej.
+- **Szczegóły blisko kamery (od 4.5):** drzewa, krzaki, kamienie, zioła, trawy i kwiaty całej wyspy trzyma się w pamięci, ale rysuje tylko te, które leżą w sektorach 8 na 8 pól wokół kadru. Z daleka drobiazgi znikają, a drzewa zamieniają się w proste stożki i kule. Teren to 64 kawałki po 48 na 48 pól, a głębokie morze i woda bez lądu w pobliżu nie są rysowane. Zwierzęta chodzą tylko w pobliżu kamery. Widok startowy ma około 0,2 mln trójkątów (przed 4.5 około 0,8 mln), a widok całej, czterokrotnie większej wyspy około 0,9 mln.
 - **Zapis:** w pamięci przeglądarki (klucz przystan-v7, kopia zapasowa przystan-v7-bak), do pobrania jako plik JSON i do wczytania z pliku.
 - **Instalacja:** PWA z manifestem i service workerem, działa bez sieci.
 - **Repozytorium:** src/ z częściami gry, build.js (składa grę i PWA do dist/), server.js (serwer bez zależności), railway.json (wdrożenie na Railway).
@@ -1189,6 +1213,7 @@ W Ludziach (Praca i Mieszkańcy) wyszukiwarka szuka po imieniu, fachu albo budyn
 | 1.8.3 | poprawka: rozbudowa domu (szałas w chatę, chata w dom) nie zabiera już rodzinie spiżarki; w czasie budowy zapas zostaje w starym domu w granicach jego pojemności |
 | 1.9 | budynki z charakterem: każdy budynek inny (ściany, dachy, spadek, okap), koniki, malowane okiennice, ganki, przybudówki, garnki na płocie, zioła pod okapem, szyldy rzemiosł, wyraźniejsza kuźnia, łaźnia i chata wiecowa |
 | 1.10 | wykonanie budynków: surowe, porządne i mistrzowskie, wyraźnie widoczne po rozbudowie (wielkość, podmurówka, dach, okiennice, obramienia okien, kwiaty, płotek, szyld); karta budynku pokazuje wykonanie i trwałość; odmiany szałasów, studni, zagród i spiżarni |
+| 4.5.0-rc.1 | wyspa 384: dawna wyspa bez zmian pośrodku, wokół Cicha Zatoka, trzy przesmyki i nowy ląd z 17 krainami (Wronia Grań, Czarne Zagłębie, Złote Stoki, Modre Łąki, Bure Bagna, Dolina Wierzby, Puszcza Wschodnia, Lipowa Dąbrowa i inne), rzeki Wierzbna i Czarna Struga z brodami, większe złoża na nowym lądzie; szczegóły rysowane tylko blisko kamery; stare zapisy przechodzą same; Budowa znów z przyciskami rodzajów; księga w hafcie i drewnie |
 | 4.4.0-rc.2 | koszty krain: wylewy na nizinach, przymrozek w winnicach na stokach, zagrody i drwale zabierają barciom pożytek, mniej jedzenia na grani i w borach, gorączka bagienna i kaszel górniczy, błoto na gliniskach, sztorm na wybrzeżu; karta krainy mówi, czym płaci |
 | 4.4.0-rc.1 | folwarki ze złóż i ziemi: specjalizacja musi pasować do krainy (huta do rudy, tartak do lasu, garncarze do gliny…), formularz pokazuje ✓/✗ i czego brakuje; szyb kopalni rudy w folwarku hutników sięga głębokiego złoża; Zagłębia w zewnętrznym pierścieniu; złoża rdzenia przechodzą do krain przy Wiecu Rodów |
 | 4.3.0-rc.2 | wyszukiwarka w Ludziach (imię, fach, budynek); bez szarego pasa u dołu dalekiego widoku wyspy |

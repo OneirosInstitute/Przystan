@@ -5,7 +5,8 @@ function e4Dispose(group){const children=new Set();group.traverse(object=>childr
 function e4ClearWorld(){if(S?.epoch!==4){document.body.classList.remove('epoka4');$('cz-res')._ok=0;}e4MapBase=null;for(const child of e4Scene.children.slice())e4Dispose(child);e4Settlements.clear();e4Convoys.clear();e4WorldKey=null;}
 function e4BuildWorld(){
  if(e4WorldKey===S.e4.world)return;e4ClearWorld();e4WorldKey=S.e4.world;const world=S.e4.world;
- for(const sector of E4World.sectors(world)){
+ // 4.5: na wyspie 384 cały teren jest prawdziwy, więc dorysowany pierścień nie jest potrzebny (zostają osady i konwoje)
+ for(const sector of (world.core&&world.core.size===world.size?[]:E4World.sectors(world))){
   const positions=[],colors=[],trees=[],stoneColor=new THREE.Color(0x767664);let maximum=-10;
   for(let row=0;row<16;row++)for(let column=0;column<16;column++){
    const x=sector.x+column*2,z=sector.z+row*2,centerX=x+1,centerZ=z+1;
@@ -20,7 +21,7 @@ function e4BuildWorld(){
  }
  e4Sync();
 }
-function HyLegacyE4(x,z){const column=clamp(Math.round(x+96),0,192),row=clamp(Math.round(z+96),0,192);return H[row*VW+column];}
+function HyLegacyE4(x,z){const column=clamp(Math.round(x+N/2),0,N),row=clamp(Math.round(z+N/2),0,N);return H[row*VW+column];}
 function e4SitePoint(settlement,index,radius=9){return E4Life.point(S,settlement,index,radius);}
 function e4Building(group,settlement,kind,index,unfinished=false){const definition=E4Catalog.buildings[kind];if(!definition||definition.crop||['pole','ogrodek','zielnik','len'].includes(kind))return;const model=definition.model,profile={id:600000+index,kind:model,prog:1,work:1,ext:[],cond:1},visual=makeBuildingModel(model,profile),position=e4SitePoint(settlement,index,settlement.id==='przystan'?15:7);visual.position.set(position.x,Hy(position.x,position.z),position.z);if(kind==='dom_rodowy')visual.scale.set(1.8,1.3,1.6);if(unfinished)visual.scale.y*=.25;visual.userData.e4Id=settlement.id;visual.traverse(object=>object.userData.e4Id=settlement.id);group.add(visual);try{mergeGroup(visual)}catch(error){console.warn(error)};}
 function e4Sync(){

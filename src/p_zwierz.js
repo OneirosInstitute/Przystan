@@ -89,7 +89,7 @@ const ZM={};// instancje: ZM[typ][klucz]
 function zMeshes(t,max){if(ZM[t])return ZM[t];const G=zBuild(t),o={};Object.keys(G).forEach(k=>{const m=new THREE.InstancedMesh(G[k],ZMAT,max);m.count=0;m.castShadow=true;m.receiveShadow=true;m.frustumCulled=false;scene.add(m);o[k]=m});ZM[t]=o;return o}
 const zDummy=new THREE.Object3D();
 drawAnimals=function(){Object.keys(animM).forEach(t=>{animM[t].visible=false;const Ms=zMeshes(t,Math.max(1,animIdx[t].length*7));const cnt={};Object.keys(Ms).forEach(k=>cnt[k]=0);const sp=ZSP[t]||{};
-  animIdx[t].forEach((hi,slot)=>{const h=S.herds[hi];if(!h)return;const ti=tileOf(h.x,h.z);if(!revAt(ti[0],ti[1]))return;const moving=Math.hypot(h.tx-h.x,h.tz-h.z)>.3;
+  animIdx[t].forEach((hi,slot)=>{const h=S.herds[hi];if(!h)return;if(lodFar||Math.hypot(h.x-camT.x,h.z-camT.z)>lodR+12)return;/* 4.5: zwierzęta tylko w oknie wokół kamery */const ti=tileOf(h.x,h.z);if(!revAt(ti[0],ti[1]))return;const moving=Math.hypot(h.tx-h.x,h.tz-h.z)>.3;
    for(let q=0;q<Math.min(7,h.n);q++){const o=deerOff[hi*7+q];const a=o.a+Math.sin(clock*.2+o.ph)*.4;const rr=o.r*(t==='wilk'?1.4:1);const x=h.x+Math.cos(a)*rr,z=h.z+Math.sin(a)*rr;
     let pose='stand';if(moving)pose=(Math.floor(clock*(sp.step||5)+o.ph*3)%2)?'walkA':'walkB';else if(sp.graze&&Math.sin(clock*.35+o.ph*2.1)>.25)pose='graze';
     const key=(t==='sarna'&&q===0?'r_':'')+pose;const m=Ms[key];if(!m)continue;

@@ -16,7 +16,7 @@ const KR={
  gliniska:{n:'Gliniska nad wodą',d:'Grube warstwy gliny przy wodzie. Gliniaki, cegielnie i garncarze.',cost:'Wiosną roztopy zamieniają wyrobiska w błoto: glinianka i gliniak pracują o 30% wolniej.',b:{glinianka:1.25,gliniak:1.15,cegielnia:1.1,garncarnia:1.1},tint:[1.04,1,.95]},
  wybrzeze:{n:'Wybrzeże i Zatoki',d:'Plaże, zatoki i pomosty. Ryby, sól i bursztyn.',cost:'Słony wiatr od morza: pola −10%, a w sztorm pomost stoi.',field:.9,b:{pomost:1.2,warzelnia:1.15}}};
 // ---------- przydział ról: z ziemi i złóż, każda rola co najmniej raz ----------
-(function krAssign(){const R=REGIONS.filter(Boolean);if(!R.length)return;const st={};R.forEach(r=>st[r.id]={n:0,h:0,sl:0,sun:0,bi:{},dep:{}});
+(function krAssign(){/* krainy nowego lądu (4.5) mają rolę z projektu */const R=REGIONS.filter(r=>r&&!r.ring);if(!R.length)return;const st={};R.forEach(r=>st[r.id]={n:0,h:0,sl:0,sun:0,bi:{},dep:{}});
  for(let j=1;j<N-1;j+=2)for(let i=1;i<N-1;i+=2){const k=j*N+i,q=REGION[k];if(q<0||!st[q]||!land[k])continue;const s=st[q];const b=biomeOf(i,j);s.n++;s.bi[b]=(s.bi[b]||0)+1;s.h+=tileH(i,j);s.sl+=slope(i,j);s.sun+=Math.max(0,tileH(i,j-1)-tileH(i,j+1))}
  ODK.forEach(o=>{const q=REGION[o.j*N+o.i];if(q>=0&&st[q])st[q].dep[o.t]=(st[q].dep[o.t]||0)+1});
  const f=(s,b)=>(s.bi[b]||0)/Math.max(1,s.n);
@@ -84,7 +84,7 @@ let krFKey='';
 function krFlowerBuild(){if(!S)return;const sea=seasonIdx(),key=sea+':'+S.bld.length;if(key===krFKey)return;krFKey=key;if(sea===2){krFlowers.count=0;return}
  const R0=rng(SEED*7+31),d=new THREE.Object3D(),occ=new Set();S.bld.forEach(b=>{const D=BD[b.kind];if(!D)return;for(let a=-1;a<=D.w;a++)for(let c=-1;c<=D.h;c++)occ.add((b.j+c)*N+b.i+a)});
  const share=sea===1?.35:1;let q=0;
- const C=[];for(let j=2;j<N-2;j++)for(let i=2;i<N-2;i++){const k=j*N+i;const reg=REGION[k];if(reg<0)continue;const r=REGIONS[reg];if(!r||!r.kr)continue;const K=KR[r.kr];const dens=K.flowers?.4:r.kr==='stoki'||r.kr==='niziny'||r.kr==='grad'?.05:0;
+ const C=[];for(let j=2;j<N-2;j++)for(let i=2;i<N-2;i++){const k=j*N+i;const reg=REGION[k];if(reg<0)continue;const r=REGIONS[reg];if(!r||!r.kr)continue;const K=KR[r.kr];if(!K.flowers&&r.kr!=='stoki'&&r.kr!=='niziny'&&r.kr!=='grad')continue;const dens=K.flowers?.4:r.kr==='stoki'||r.kr==='niziny'||r.kr==='grad'?.05:0;
   const roll=R0(),pick=R0(),x0=R0(),z0=R0(),s0=R0();if(!dens||roll>dens*share||occ.has(k)||!land[k]||beach[k]||biomeOf(i,j)!=='meadow'||slope(i,j)>.8)continue;
   C.push([i,j,pick,x0,z0,s0])}
  // równo po całej wyspie, gdy kępek jest więcej niż miejsca

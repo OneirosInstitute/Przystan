@@ -54,7 +54,7 @@ const E4Domain=(()=>{
   }
   state.pid=Math.max(state.pid||0,...state.people.map(person=>person.id+1));state.fid=Math.max(state.fid||1,nextId(state.fams));
   for(const hamlet of state.hamlets||[]){
-   const clanId=ensureClan(hamlet.rod,hamlet.head||hamlet.name),settlement=createSettlement(state,{id:'przysiolek:'+hamlet.id,name:hamlet.name,clanId,x:hamlet.i-96+.5,z:hamlet.j-96+.5,stage:'zagroda',legacyHamletId:hamlet.id,buildings:{schronienie:1},road:hamlet.road===2?2:1});
+   const clanId=ensureClan(hamlet.rod,hamlet.head||hamlet.name),settlement=createSettlement(state,{id:'przysiolek:'+hamlet.id,name:hamlet.name,clanId,x:hamlet.i-(snapshot.mapN||192)/2+.5,z:hamlet.j-(snapshot.mapN||192)/2+.5,stage:'zagroda',legacyHamletId:hamlet.id,buildings:{schronienie:1},road:hamlet.road===2?2:1});
    const family=household(state,{clanId,settlementId:settlement.id,homeId:null});
    const count=Math.max(0,Math.floor(hamlet.pop||0));
    for(let index=0;index<count;index++){
@@ -96,7 +96,7 @@ const E4Domain=(()=>{
  }
  function validate(state){try{
   const model=state.e4;if(state.epoch!==4||!object(model)||model.schema!==1||!object(model.world)||model.world.version!==1||model.world.size!==384||!identity(model.world.seed)||model.world.seed!==state.seed||!Array.isArray(model.world.regions)||!model.world.regions.length||model.world.regions.length>144)return false;
-  if(model.world.core&&(model.world.core.size!==192||model.world.core.step!==2||model.world.core.heights?.length!==9409||!model.world.core.heights.every(finite)))return false;
+  if(model.world.core&&((model.world.core.size!==192&&model.world.core.size!==384)||model.world.core.step!==2||model.world.core.heights?.length!==(model.world.core.size/2+1)**2||!model.world.core.heights.every(finite)))return false;
   if(!finite(model.dailyFactor)||model.dailyFactor<=0||model.dailyFactor>20||!identity(model.randomState)||!object(model.households)||!object(model.settlements)||!object(model.archive)||!Array.isArray(model.events)||!Array.isArray(model.transports)||model.events.length>600)return false;
   if(!['nextTransport','nextEstate','nextEvent'].every(key=>identity(model[key])&&model[key]>=1)||model.randomState>4294967295)return false;
   if(!model.world.regions.every(region=>typeof region.id==='string'&&finite(region.x)&&finite(region.z)&&Math.abs(region.x)<=192&&Math.abs(region.z)<=192&&['fertility','moisture','sun','forest','ore','clay','fish','nectar'].every(key=>finite(region[key])&&region[key]>=0&&region[key]<=1)))return false;

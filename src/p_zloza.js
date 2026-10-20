@@ -18,17 +18,24 @@ const ZL_LN=['płytka','głębsza','najgłębsza'];
 const ZL_B={odkrywka:{t:'wegiel',lay:[0]},szybw:{t:'wegiel',lay:[1,2]},kopalnia:{t:'rudne',lay:[0,1,2]},lom:{t:'lom',lay:[0,1,2]},gliniak:{t:'glinisko',lay:[0,1]},torfowisko:{t:'torf',lay:[0,1]}};
 const ZL_KNOW={rudne:'zl_rudne',lom:'zl_lom',glinisko:'zl_glin',wegiel:'wegiel_k',torf:'torf'};
 // ---------- położenie złóż: z ziarna wyspy, zawsze te same ----------
-(function zlGen(){const R0=rng(SEED*13+977);const dc=(i,j)=>Math.hypot(i-camp.i,j-camp.j);
+// 4.5: złoża dawnej wyspy jak dawniej (jej współrzędne i losowanie), złoża nowego lądu z projektu wyspy 384
+(function zlGen(){const N=N0,land=LEG.land,beach=LEG.beach,reach=reach0,biomeOf=LEG.biomeOf,tileHH=LEG.tileHH,slope=LEG.slope,tcx=LEG.tcx,camp=CAMP0;
+ const R0=rng(SEED*13+977);const dc=(i,j)=>Math.hypot(i-camp.i,j-camp.j);
  const ok=(i,j)=>i>5&&j>5&&i<N-6&&j<N-6&&land[j*N+i]&&reach[j*N+i]&&!beach[j*N+i];
- const far=(i,j,d)=>ODK.every(o=>Math.hypot(o.i-i,o.j-j)>=(ZL[o.t]?d:8))&&dc(i,j)>=12;
- const cnt=(type,i,j,r)=>(nodeBy[type]||[]).filter(n=>Math.abs(n.i-i)<=r&&Math.abs(n.j-j)<=r).length;
+ const far=(i,j,d)=>ODK.every(o=>Math.hypot(o.i-OFF-i,o.j-OFF-j)>=(ZL[o.t]?d:8))&&dc(i,j)>=12;
+ const cnt=(type,i,j,r)=>(nodeBy[type]||[]).filter(n=>n.id<coreNodes&&Math.abs(n.i-OFF-i)<=r&&Math.abs(n.j-OFF-j)<=r).length;
  const pick=(t,n,score,dmin,dmax,sep)=>{for(let m=0;m<n;m++){let best=null,bv=-1e9;for(let k=0;k<7000;k++){const i=(R0()*N)|0,j=(R0()*N)|0;if(!ok(i,j))continue;const d=dc(i,j);if(d<dmin||d>dmax||!far(i,j,sep))continue;const v=score(i,j);if(v>bv){bv=v;best=[i,j]}}
-  if(best)ODK.push({id:ODK.length,t,i:best[0],j:best[1],x:tcx(best[0]),z:tcx(best[1]),rot:R0()*6.28})}};
+  if(best)ODK.push({id:ODK.length,t,i:best[0]+OFF,j:best[1]+OFF,x:tcx(best[0]),z:tcx(best[1]),rot:R0()*6.28})}};
  pick('rudne',2,(i,j)=>{const h=tileHH(i,j);return(biomeOf(i,j)==='high'?3:0)+h*4+slope(i,j)*1.2-(h>.92?6:0)},25,90,35);
  pick('lom',2,(i,j)=>cnt('rock',i,j,6)*2+(biomeOf(i,j)==='high'?3:0)+slope(i,j)*1.5,14,75,25);
  pick('glinisko',2,(i,j)=>cnt('clay',i,j,6)*2.5+(biomeOf(i,j)==='wet'?3:0)-tileHH(i,j)*4-slope(i,j),10,75,25)})();
+// złoża nowego lądu: duże, z własnymi warstwami (L); sól i bursztyn jako miejsca do odkrycia
+{const R1=rng(SEED*13+1977);for(const[t,i0,j0,L]of WY.deposits){let best=null,bd=1e9;
+ const want=WY.regions.reduce((b,r,q)=>Math.hypot(r[2]-i0,r[3]-j0)<Math.hypot(WY.regions[b][2]-i0,WY.regions[b][3]-j0)?q:b,0);   // złoże zostaje w swojej krainie także na innych wyspach
+ for(const strict of[1,0]){if(best)break;for(let r=0;r<60&&!best;r++)for(let a=-r;a<=r;a++)for(let b=-r;b<=r;b++){const i=i0+a,j=j0+b;if(i<4||j<4||i>=N-4||j>=N-4)continue;const k=j*N+i;if(!land[k]||!reach[k]||beach[k]||WYD.core[k]||(strict&&WYD.reg[k]!==want))continue;const d=Math.hypot(a,b);if(d<bd){bd=d;best=[i,j]}}}
+ if(best){const o={id:ODK.length,t,i:best[0],j:best[1],x:tcx(best[0]),z:tcx(best[1]),rot:R1()*6.28,ring:1};if(L)o.L=L.slice();ODK.push(o)}}}
 const zlIs=o=>!!ZL[o.t];
-function zlInit(o){const st=odkSt(o);if(!st)return null;if(!st.zl){st.zl=ZL[o.t].L.slice();if(o.t==='wegiel'&&st.left!==undefined){st.zl[0]=Math.max(0,ZL.wegiel.L[0]-(600-st.left));}}
+function zlInit(o){const st=odkSt(o);if(!st)return null;if(!st.zl){st.zl=(o.L||ZL[o.t].L).slice();if(o.t==='wegiel'&&st.left!==undefined){st.zl[0]=Math.max(0,ZL.wegiel.L[0]-(600-st.left));}}
  if(o.t==='wegiel'){st.left=st.zl[0];if(st.left>0)st.exh=0}return st.zl}
 const zlTot=o=>{const z=zlInit(o);return z?z.reduce((a,b)=>a+b,0):0};
 function zlOf(b){const r=ZL_B[b.kind];if(!r)return null;const c=bCenter(b);let best=null,bd=1e9;for(const o of ODK){if(o.t!==r.t)continue;const st=odkSt(o);if(!st||st.s!==2)continue;const d=Math.hypot(o.x-c.x,o.z-c.z);if(d<bd){bd=d;best=o}}return best&&bd<=9?best:null}
@@ -56,7 +63,7 @@ Object.assign(ODK_WHERE,{kopalnia:'kopalnia musi stać na odkrytym złożu rudy 
    for(const l of R.lay){if(left<=0)break;const take=Math.min(z[l]||0,left);z[l]-=take;left-=take}
    const st=odkSt(o);const rem=zlLeft(b),rate=(st.rate=(st.rate||0)*.98+v*.02*50);
    if(rem<=0&&!b.zlEx){b.zlEx=1;log(`${BD[b.kind].n} w miejscu ${odkName(o)}: warstwy, do których sięga, są wyczerpane.${R.lay[R.lay.length-1]<z.length-1?' Głębiej jest jeszcze surowiec: potrzebny szyb.':''}`);toast(BD[b.kind].n+': złoże wyczerpane')}
-   else if(!b.zlWarn&&rem<1500&&rem<ZL[o.t].L[0]*.3){b.zlWarn=1;log(`${BD[b.kind].n} w miejscu ${odkName(o)}: zostało ok. ${Math.round(rem)} porcji. Warto szykować następną warstwę albo inne złoże.`)}}}}catch(e){console.warn(e)}return x}}
+   else if(!b.zlWarn&&rem<1500&&rem<(o.L||ZL[o.t].L)[0]*.3){b.zlWarn=1;log(`${BD[b.kind].n} w miejscu ${odkName(o)}: zostało ok. ${Math.round(rem)} porcji. Warto szykować następną warstwę albo inne złoże.`)}}}}catch(e){console.warn(e)}return x}}
 {const _pj=planJob;planJob=function(p){if(p.job==='wb'&&S){const b=bById(p.wb);if(b&&ZL_B[b.kind]&&b.kind!=='odkrywka'&&bDone(b)){const o=zlOf(b);
    if(o&&zlLeft(b)<=0){p.act='złoże wyczerpane — potrzebny głębszy szyb albo inne złoże';return false}
    if(!o&&b.kind!=='torfowisko'){p.act='budynek nie stoi na odkrytym złożu';return false}}}return _pj(p)}}
@@ -72,7 +79,7 @@ function zlVis(){ZLG.children.slice().forEach(o=>{ZLG.remove(o);o.dispose&&o.dis
 {const _oc=odkCard;odkCard=function(o){let h=_oc(o);const st=odkSt(o);if(!zlIs(o)||!st||st.s!==2)return h;const z=zlInit(o),Z=ZL[o.t];
   const kinds=Object.entries(ZL_B).filter(([k,r])=>r.t===o.t&&BD[k]&&BKEYS.includes(k));
   h=h.replace(/<p class="mut">(W żyle zostało około \d+ węgla\.|Żyła wyczerpana\.)<\/p>/,'');
-  h+=`<div class="zlw">${Z.L.map((cap,l)=>`<div class="zlr"><span>Warstwa ${ZL_LN[l]}</span><em>${Math.round(z[l])} z ${cap}</em></div><div class="pbar" style="height:5px"><div style="width:${Math.round(z[l]/cap*100)}%;background:${l===0?'#c9a66b':l===1?'#a88a56':'#86704a'}"></div></div>`).join('')}</div>`;
+  h+=`<div class="zlw">${(o.L||Z.L).map((cap,l)=>`<div class="zlr"><span>Warstwa ${ZL_LN[l]}</span><em>${Math.round(z[l])} z ${cap}</em></div><div class="pbar" style="height:5px"><div style="width:${Math.round(z[l]/cap*100)}%;background:${l===0?'#c9a66b':l===1?'#a88a56':'#86704a'}"></div></div>`).join('')}</div>`;
   const here=S.bld.filter(b=>ZL_B[b.kind]&&zlOf(b)===o);
   h+=`<p class="mut">${here.length?'Pracuje tu: '+here.map(b=>BD[b.kind].n.toLowerCase()).join(', ')+'.':'Nikt tu jeszcze nie kopie.'}</p>`;
   h+=`<div class="cz-act">${kinds.map(([k,r])=>`<button data-zlb="${k}"${bAvail(k)?'':' disabled'}>${BD[k].n} · warstwy: ${r.lay.map(l=>ZL_LN[l]).join(', ')}</button>`).join('')}</div>`;return h}}

@@ -13,6 +13,8 @@ const E4World=(()=>{
  }
  function height(world,x,z){
   if(!Number.isFinite(x)||!Number.isFinite(z)||Math.abs(x)>world.size/2||Math.abs(z)>world.size/2)return -4;
+  // 4.5: od wyspy 384 świat rodów to prawdziwa mapa gry (wysokości co 2 kafle), bez dorysowanego pierścienia
+  if(world.core&&world.core.size===world.size)return legacyHeight(world.core,x,z);
   const radial=Math.hypot(x/(world.size*.49),z/(world.size*.49));
   const outer=(1-radial*radial)*5+(smooth(world.seed+70,x,z,43)-.5)*3+(smooth(world.seed+103,x,z,15)-.5)*.7;
   if(Math.abs(x)<=96&&Math.abs(z)<=96){
@@ -33,10 +35,12 @@ const E4World=(()=>{
   const oreNoise=smooth(world.seed+650,x,z,31),ore=biome==='high'?.85:oreNoise>.74&&biome!=='coast'?.7:oreNoise*.35;
   return{id,x,z,name:(ore>=.6&&biome!=='high'?'Zagłębie':biomeNames[biome])+' '+id.split(':').slice(1).join('·'),biome,fertility,moisture,sun,forest,ore,clay:moisture*.8,water:biome==='wet'||biome==='coast'||moisture>.48,fish:biome==='coast'?1:biome==='wet'?.6:.1,nectar:limit(fertility*.7+forest*.3,0,1)};
  }
- function create({seed,core=null,town={x:0,z:65}}={}){
+ function create({seed,core=null,town={x:0,z:65},regions=null}={}){
   if(!Number.isSafeInteger(seed)||seed<=0||!Number.isFinite(town.x)||!Number.isFinite(town.z)||Math.abs(town.x)>96||Math.abs(town.z)>96)throw new Error('Nieprawidłowy opis wyspy');
-  if(core&&(core.size!==192||core.step!==2||!Array.isArray(core.heights)||core.heights.length!==97*97||!core.heights.every(Number.isFinite)))throw new Error('Nieprawidłowy rdzeń starej mapy');
+  const cells=core?core.size/2+1:0;if(core&&((core.size!==192&&core.size!==384)||core.step!==2||!Array.isArray(core.heights)||core.heights.length!==cells*cells||!core.heights.every(Number.isFinite)))throw new Error('Nieprawidłowy rdzeń starej mapy');
   const world={version:1,seed,size:384,sectorSize:32,town:{...town},core:core?{...core,heights:core.heights.slice()}:null,regions:[]};
+  // krainy prawdziwej wyspy przychodzą gotowe (nazwy, role, środki); dawny podział na kratkę zostaje dla starych światów
+  if(regions){world.regions=regions.map(region=>({...region}));return world}
   for(let row=0;row<12;row++)for(let column=0;column<12;column++){
    const centerX=-176+column*32,centerZ=-176+row*32;let position=null;
    for(const offset of [[0,0],[-8,0],[8,0],[0,-8],[0,8]])if(height(world,centerX+offset[0],centerZ+offset[1])>.3){position={x:centerX+offset[0],z:centerZ+offset[1]};break}

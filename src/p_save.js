@@ -9,7 +9,7 @@ function persistentSpeed(speed,previous=1){return speed===40?([1,2,4,8].includes
 function serializeSave(){
  if(!S)throw new Error('Brak osady');
  const previous=typeof nocSkip!=='undefined'&&nocSkip?nocSkip.prev:1;
- const snapshot=Object.assign({},S,{rev:packRev(),tread:packTread(),ver:GAME_VER,saveSchema:1,speed:persistentSpeed(S.speed,previous)});
+ const snapshot=Object.assign({},S,{rev:packRev(),tread:packTread(),ver:GAME_VER,saveSchema:1,mapN:N,speed:persistentSpeed(S.speed,previous)});
  if(S.pendingDecision)snapshot.pendingDecision={...S.pendingDecision,prev:persistentSpeed(S.pendingDecision.prev,previous)};
  return JSON.stringify(snapshot,(key,value)=>['mentor','tgt','navResumeAct','navWait','navRetry'].includes(key)||(key==='path'&&Array.isArray(value))?undefined:value);
 }
@@ -107,7 +107,7 @@ function decodeSave(text){
   saveDecodeError='';if(typeof text!=='string'||text.length>8*1024*1024){saveInvalid('Plik zapisu jest pusty lub zbyt duży.');return null}
   let state=JSON.parse(text);
   const issue=saveTreeIssue(state);if(issue){saveInvalid(issue);return null}if(!state||!state.fams||!state.people||!state.nodeAmt){saveInvalid('Brak wymaganych danych osady.');return null}
-  state=saveFix(state);
+  state=wyMigrate(saveFix(state));
   state.speed=persistentSpeed(state.speed);
   if(state.pendingDecision)state.pendingDecision.prev=persistentSpeed(state.pendingDecision.prev);
   if(state.epoch===2&&!state.path){

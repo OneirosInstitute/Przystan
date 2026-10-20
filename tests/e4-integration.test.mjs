@@ -27,7 +27,7 @@ test('all estate buildings have working 3D models and every Epoka IV panel rende
 
 test('migration completes paid legacy work and carts once and preserves the remaining ripe harvest',()=>{
  const runtime=createGame();runtime.game.startGame(true);
- runtime.evaluate("ludInit();S.e3={done:1};Object.assign(S.res,{suchary:10000,ziarno:100,drewno:200,opal:200});S.bld.push({id:91,kind:'kuznia',i:90,j:162,prog:2,work:5,mat:10,del:5,cond:1},{id:92,kind:'warsztat',i:94,j:162,prog:5,work:5,cond:1,wozQ:1,wozP:45},{id:93,kind:'pole',i:100,j:162,prog:5,work:5,cond:1,field:{st:'dojrzale',g:1,fert:.8,left:5,q:1}});S.bid=94;rebuildWorldFromState();");
+ runtime.evaluate("ludInit();S.e3={done:1};Object.assign(S.res,{suchary:10000,ziarno:100,drewno:200,opal:200});S.bld.push({id:91,kind:'kuznia',i:186,j:258,prog:2,work:5,mat:10,del:5,cond:1},{id:92,kind:'warsztat',i:190,j:258,prog:5,work:5,cond:1,wozQ:1,wozP:45},{id:93,kind:'pole',i:196,j:258,prog:5,work:5,cond:1,field:{st:'dojrzale',g:1,fert:.8,left:5,q:1}});S.bid=94;rebuildWorldFromState();");
  const initialCarts=runtime.game.S.wozy||0;
  assert.equal(runtime.evaluate('e4Start().ok'),true);runtime.evaluate("S.e4.settlements.przystan.autonomy=false;S.e4.settlements.przystan.capacity=100000;step(240);boot(false);step(240)");
  assert.equal(runtime.game.S.res.drewno,200,'materials already paid are neither refunded nor debited twice');

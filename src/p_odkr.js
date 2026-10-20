@@ -24,7 +24,9 @@ const ODK_T={
   find:p=>`Na klifie nad morzem ${p.name} zrywa sinozielone liście z mięsistym głąbem. Dzika kapusta, gorzka, ale jadalna. Obok rośnie dzika rzepa. Gdyby wziąć nasiona i siać na polu, urosłyby słodsze.`}};
 // ---------- miejsca: z ziarna wyspy, zawsze te same ----------
 const ODK=[];
-(function odkGen(){const R0=rng(SEED*7+515);const dc=(i,j)=>Math.hypot(i-camp.i,j-camp.j);const ok=(i,j)=>i>3&&j>3&&i<N-4&&j<N-4&&land[j*N+i]&&reach[j*N+i];
+// 4.5: miejsca dawnej wyspy losowane jak dawniej, we współrzędnych dawnej wyspy; numery (id) bez zmian
+(function odkGen(){const N=N0,land=LEG.land,beach=LEG.beach,reach=reach0,biomeOf=LEG.biomeOf,forestF=LEG.forestF,tileH=LEG.tileH,tileHH=LEG.tileHH,slope=LEG.slope,tcx=LEG.tcx,camp={i:CAMP0.i,j:CAMP0.j},herdsDef=HERDS0;
+ const R0=rng(SEED*7+515);const dc=(i,j)=>Math.hypot(i-camp.i,j-camp.j);const ok=(i,j)=>i>3&&j>3&&i<N-4&&j<N-4&&land[j*N+i]&&reach[j*N+i];
  const used=[[camp.i,camp.j]];const far=(i,j,d)=>used.every(u=>Math.hypot(u[0]-i,u[1]-j)>=d);
  const nearB=(i,j,r)=>{for(let b=-r;b<=r;b++)for(let a=-r;a<=r;a++){const x=i+a,y=j+b;if(x>=0&&y>=0&&x<N&&y<N&&(beach[y*N+x]||!land[y*N+x]))return true}return false};
  const wetN=(i,j,r)=>{let n=0;for(let b=-r;b<=r;b++)for(let a=-r;a<=r;a++){const x=i+a,y=j+b;if(x>=0&&y>=0&&x<N&&y<N&&land[y*N+x]&&biomeOf(x,y)==='wet')n++}return n};
@@ -40,7 +42,8 @@ const ODK=[];
  pick('bursztyn',2,(i,j)=>!!beach[j*N+i],15,60,30);
  // nory i legowiska przy stadach lisów i wilków
  const den=(type,t,cnt)=>{let m=0;for(const h of herdsDef){if(h.type!==type||m>=cnt)continue;for(let k=0;k<60;k++){const i=h.i+((R0()*7)|0)-3,j=h.j+((R0()*7)|0)-3;if(ok(i,j)&&!beach[j*N+i]&&far(i,j,6)){add(t,i,j);m++;break}}}};
- den('lis','lis',4);den('wilk','wilk',3)})();
+ den('lis','lis',4);den('wilk','wilk',3);
+ for(const o of ODK){o.i+=OFF;o.j+=OFF}})();
 const odkSt=o=>S&&S.odk&&S.odk[o.id];
 const odkFound=t=>!!(S&&S.odk&&ODK.some(o=>o.t===t&&S.odk[o.id]&&S.odk[o.id].s===2));
 const odkName=o=>{const st=odkSt(o);return st&&st.nm?st.nm:ODK_T[o.t].n[0]};

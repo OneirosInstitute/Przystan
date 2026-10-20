@@ -16,7 +16,7 @@ function mqSerceStep(k){return{k:'cond',t:()=>SERCE[k].n,ok:()=>scSt()>=k,show:'
 // ---------- miejsca ----------
 function mqSeaNear(i,j,r){for(let a=-r;a<=r;a++)for(let b=-r;b<=r;b++){const x=i+a,y=j+b;if(x<0||y<0||x>=N||y>=N||!land[y*N+x])return true}return false}
 function mqCape(){const M=MQM();if(M.cape)return M.cape;let best=null,bv=-1e9;
- for(let j=2;j<N-2;j++)for(let i=2;i<N-2;i++){const k=j*N+i;if(!land[k]||!walk[k]||!reach||!reach[k])continue;const d=Math.hypot(i-camp.i,j-camp.j);if(d<12||d>72)continue;if(!mqSeaNear(i,j,2))continue;
+ for(let j=2;j<N-2;j++)for(let i=2;i<N-2;i++){const k=j*N+i;if(!land[k]||!walk[k]||!reach||!reach[k]||!WYD.core[k])continue;const d=Math.hypot(i-camp.i,j-camp.j);if(d<12||d>72)continue;if(!mqSeaNear(i,j,2))continue;
   const v=tileH(i,j)*1.2+(camp.i-i)*.3-Math.max(0,d-28)*.3;if(v>bv){bv=v;best=[i,j]}}
  M.cape=best||[camp.i-6,camp.j];return M.cape}
 function mqShore(c){let best=null,bv=1e9;for(let a=-12;a<=12;a++)for(let b=-12;b<=12;b++){const i=c[0]+a,j=c[1]+b,k=j*N+i;if(i<2||j<2||i>=N-2||j>=N-2||!land[k]||!walk[k]||!reach||!reach[k])continue;if(!mqSeaNear(i,j,1))continue;

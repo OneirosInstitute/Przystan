@@ -59,7 +59,7 @@ const IC={
 const ico=(k,cls)=>`<svg class="i${cls?' '+cls:''}" viewBox="0 0 24 24" aria-hidden="true">${IC[k]}</svg>`;
 
 /* ================= stałe ================= */
-const N=192, VW=N+1, DAY=240, SD=5, YEAR=20, K=96/YEAR, KF=K/2.4, SEAS=['Lato','Jesień','Zima','Wiosna'];
+const N=384, VW=N+1, DAY=240, SD=5, YEAR=20, K=96/YEAR, KF=K/2.4, SEAS=['Lato','Jesień','Zima','Wiosna'];
 const T0=0.22, T1=0.80, SAVEKEY='przystan-v7';
 const FOOD=['suchary','jagody','grzyby','ryby','mieso','ziarno','mleko','miod','warzywa','chleb','ser','kiszonki'];
 const RN={suchary:'Suchary',jagody:'Jagody',grzyby:'Grzyby',ryby:'Ryby',mieso:'Mięso',drewno:'Kłody',opal:'Opał',kamien:'Kamień',glina:'Glina',deski:'Deski',gwozdzie:'Gwoździe',plotno:'Płótno',skory:'Skóry',odziez:'Odzież',narz:'Narzędzia żelazne',narzk:'Narzędzia kamienne',cegla:'Cegły',ziarno:'Ziarno',mleko:'Mleko',ruda:'Ruda darniowa',wegiel:'Węgiel drzewny',wlokna:'Włókna lnu',miod:'Miód',ziola:'Zioła',warzywa:'Warzywa',maka:'Mąka',chleb:'Chleb',ser:'Ser',kiszonki:'Kiszonki',naczynia:'Naczynia'};

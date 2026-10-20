@@ -2,15 +2,15 @@
 /* ================= regiony wyspy ================= */
 const REGION=new Int8Array(N*N).fill(-1);
 const REGIONS=[];
-(function(){const r0=rng(SEED+404);const seeds=[];
+(function(){const r0=rng(SEED+404);const seeds=[];const N=N0,land=LEG.land,tileH=LEG.tileH,forestF=LEG.forestF,beach=LEG.beach,R0=new Int8Array(N0*N0).fill(-1);const campL={i:camp.i-OFF,j:camp.j-OFF};
  const cand=[];for(let j=4;j<N-4;j+=3)for(let i=4;i<N-4;i+=3)if(land[j*N+i])cand.push([i,j]);
  for(let k=cand.length-1;k>0;k--){const q=(r0()*(k+1))|0;const t=cand[k];cand[k]=cand[q];cand[q]=t}
- seeds.push([camp.i,camp.j]);
+ seeds.push([campL.i,campL.j]);
  for(const c of cand){if(seeds.length>=26)break;if(seeds.every(s=>Math.hypot(s[0]-c[0],s[1]-c[1])>=28))seeds.push(c)}
  const st=seeds.map(()=>({n:0,h:0,f:0,b:0,x:0,z:0}));
  for(let j=0;j<N;j++)for(let i=0;i<N;i++){const k=j*N+i;if(!land[k])continue;let best=0,bd=1e9;
   for(let q=0;q<seeds.length;q++){const w=(n2(i*.09,j*.09)-.5)*14;const d=Math.hypot(seeds[q][0]-i,seeds[q][1]-j)+w*(q%2?1:-1);if(d<bd){bd=d;best=q}}
-  REGION[k]=best;const s=st[best];s.n++;s.h+=tileH(i,j);s.f+=forestF(i+.5,j+.5)>.5?1:0;s.b+=beach[k];s.x+=i;s.z+=j}
+  R0[k]=best;const s=st[best];s.n++;s.h+=tileH(i,j);s.f+=forestF(i+.5,j+.5)>.5?1:0;s.b+=beach[k];s.x+=i;s.z+=j}
  const POOL={high:['Łysa Góra','Siwy Grzbiet','Kruczy Kamień','Wietrzna Grań','Kamienne Progi'],
   forest:['Czarny Bór','Głuchy Las','Wilcze Ostępy','Mszary','Stary Bór','Jodłowy Jar','Leszy Kąt'],
   coast:['Zatoka Mgieł','Słony Cypel','Foczy Brzeg','Siwa Plaża','Kamienista Zatoka','Mewi Cypel'],
@@ -21,9 +21,19 @@ const REGIONS=[];
   let name=q===0?'Zatoka Wraku':POOL[type][used[type]++%POOL[type].length];
   // środek: kafel regionu najbliższy średniej
   const mx=s.x/s.n,mz=s.z/s.n;let ci=seeds[q][0],cj=seeds[q][1],bd=1e9;
-  for(let j=0;j<N;j+=2)for(let i=0;i<N;i+=2)if(REGION[j*N+i]===q){const d=Math.hypot(i-mx,j-mz);if(d<bd){bd=d;ci=i;cj=j}}
-  REGIONS[q]={id:q,name,type,n:s.n,i:ci,j:cj,seen:0}});
+  for(let j=0;j<N;j+=2)for(let i=0;i<N;i+=2)if(R0[j*N+i]===q){const d=Math.hypot(i-mx,j-mz);if(d<bd){bd=d;ci=i;cj=j}}
+  REGIONS[q]={id:q,name,type,n:s.n,i:ci+OFF,j:cj+OFF,seen:0}});
+ for(let j=0;j<N0;j++)for(let i=0;i<N0;i++)REGION[(j+OFF)*N0*2+i+OFF]=R0[j*N0+i];
 })();
+// 4.5: krainy nowego lądu z projektu wyspy 384; numery po dawnych, rola (kraina z charakterem) ustalona w projekcie
+{const base=REGIONS.length,TYPE={gran:'high',zaglebie:'high',bory:'forest',grad:'forest',wybrzeze:'coast'},cnt=new Array(WY.regions.length).fill(0),sx=cnt.slice(),sz=cnt.slice();
+ for(let k=0;k<N*N;k++){const q=WYD.reg[k];if(q<0||WYD.core[k])continue;REGION[k]=base+q;cnt[q]++;sx[q]+=k%N;sz[q]+=(k/N)|0}
+ WY.regions.forEach(([name,kr,ri,rj],q)=>{if(!cnt[q])return;const mx=sx[q]/cnt[q],mz=sz[q]/cnt[q];let ci=ri,cj=rj,bd=1e9;for(let j=0;j<N;j+=2)for(let i=0;i<N;i+=2)if(REGION[j*N+i]===base+q){const d=Math.hypot(i-mx,j-mz);if(d<bd){bd=d;ci=i;cj=j}}
+  REGIONS[base+q]={id:base+q,name,type:TYPE[kr]||'meadow',n:cnt[q],i:ci,j:cj,seen:0,kr,ring:1}})}
+// ląd bez krainy (przesmyki przy dawnej wyspie, nowe płycizny): dostaje krainę sąsiada, najpierw z nowego lądu, żeby krainy dawnej wyspy zostały jak były
+{const fill=ringOnly=>{let Q=[];for(let k=0;k<N*N;k++){const r=REGION[k];if(r>=0&&land[k]&&(!ringOnly||(REGIONS[r]&&REGIONS[r].ring)))Q.push(k)}
+  while(Q.length){const nq=[];for(const k of Q){const i=k%N,j=(k/N)|0;for(const d of[1,-1,N,-N]){const q=k+d;if((d===1&&i===N-1)||(d===-1&&i===0)||q<0||q>=N*N)continue;if(land[q]&&REGION[q]<0){REGION[q]=REGION[k];const R=REGIONS[REGION[k]];if(R)R.n++;nq.push(q)}}}Q=nq}};
+ fill(true);fill(false)}
 const regLayer=$('labels');
 REGIONS.forEach(r=>{if(!r)return;const el=document.createElement('div');el.className='rl';el.innerHTML='<i>?</i><span>Nieznany teren</span>';el.style.opacity=0;
  el.addEventListener('click',()=>{if(!r.known)return;const title=r.el.querySelector('span');if(title){title.style.display='block';gameCancelLater(r._nameTimer);r._nameTimer=gameLater(()=>{title.style.display=''},2600)}else lookAt(tcx(r.i),tcx(r.j),1.25)});regLayer.appendChild(el);r.el=el});
@@ -50,10 +60,12 @@ function regionAt(i,j){const r=REGION[j*N+i];return r>=0?REGIONS[r]:null}
 const mcv=$('mcv'),mctx=mcv.getContext('2d');
 const mBase=document.createElement('canvas');mBase.width=mBase.height=N;const mbx=mBase.getContext('2d');const mImg=mbx.createImageData(N,N);
 const toS=v=>Math.round(Math.pow(clamp(v,0,1),1/2.2)*255);
-function minimapBase(){const d=mImg.data;
+// las na minimapie liczony raz (na wyspie 384 szum w każdym przebiegu co 2,5 s był zbędnym kosztem)
+let mForest=null;
+function minimapBase(){const d=mImg.data;if(!mForest){mForest=new Uint8Array(N*N);for(let q=0;q<N*N;q++)if(land[q])mForest[q]=forestF(q%N+.5,((q/N)|0)+.5)>.5?1:0}
  for(let j=0;j<N;j++)for(let i=0;i<N;i++){const k=j*N+i,o=k*4,vk=j*VW+i;let r,g,b;
   if(land[k]){if(rev[k]){r=toS(baseCol[vk*3]);g=toS(baseCol[vk*3+1]);b=toS(baseCol[vk*3+2]);
-    const f=forestF(i+.5,j+.5);if(f>.5&&!beach[k]){r*=.78;g*=.84;b*=.8}}
+    if(mForest[k]&&!beach[k]){r*=.78;g*=.84;b*=.8}}
    else{r=70;g=80;b=84}}
   else{const dp=clamp(-tileHH(i,j)*3,0,1);r=lerp(70,28,dp);g=lerp(118,64,dp);b=lerp(120,78,dp)}
   d[o]=r;d[o+1]=g;d[o+2]=b;d[o+3]=255}

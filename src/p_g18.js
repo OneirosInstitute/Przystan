@@ -262,7 +262,7 @@ const mBal=[0x8a6a46,0x7a5c3c,0x6e5236].map(c=>TM(TX.planks,c));const mBalEnd=M(
 
 // ================= wydajność: rysujemy tylko to, co w kadrze (wycinanie pojedynczych drzew, krzaków, kępek) =================
 const CULL={list:[],t:-9,v:new THREE.Vector3(),key:''};
-function cullAdd(src){if(!src||!src.isInstancedMesh||src.userData.cull)return;const dst=new THREE.InstancedMesh(src.geometry,src.material,src.count);
+function cullAdd(src){if(!src||!src.isInstancedMesh||src.userData.cull||src.userData.lod)return;   /* 4.5: siatki z oknem wokół kamery (p_lod) wycinają kadr same */const dst=new THREE.InstancedMesh(src.geometry,src.material,src.count);
  dst.castShadow=src.castShadow;dst.receiveShadow=src.receiveShadow;dst.frustumCulled=false;dst.count=0;dst.renderOrder=src.renderOrder;
  if(src.instanceColor)dst.instanceColor=new THREE.InstancedBufferAttribute(new Float32Array(src.count*3),3);
  src.layers.set(31);src.userData.cull=dst;dst.userData.src=src;(src.parent||scene).add(dst);CULL.list.push(src)}

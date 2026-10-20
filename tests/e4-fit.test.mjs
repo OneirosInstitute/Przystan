@@ -11,7 +11,8 @@ function fixture(seed){const runtime=createGame(seed?{search:'?seed='+seed}:{});
 test('every specialty fits at least one region on several islands, and an ironworks needs ore',()=>{
  for(const seed of [2207,31,4096]){const w=fixture(seed).e4.world;
   for(const key of Object.keys(catalog.specialties))assert.ok(w.regions.some(r=>catalog.specialtyFit(key,r).ok),`wyspa ${seed}: ${key} nie pasuje nigdzie`);
-  const high=w.regions.find(r=>r.biome==='high'),meadow=w.regions.find(r=>r.biome==='meadow'&&r.ore<.4);
+  // 4.5: krainy to krainy prawdziwej wyspy; huta pasuje tam, gdzie leży złoże rudy (Zagłębie), a nie na każdej grani
+  const high=w.regions.find(r=>r.ore>=.6),meadow=w.regions.find(r=>r.biome==='meadow'&&r.ore<.4);
   assert.equal(catalog.specialtyFit('hutniczy',high).ok,true);assert.deepEqual(catalog.specialtyFit('hutniczy',meadow).missing,['złoże rudy w skale'])}
 });
 test('founding refuses a specialty the region cannot carry and names what is missing',()=>{

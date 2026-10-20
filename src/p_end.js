@@ -11,7 +11,7 @@ const ffN=90,ffGeo=new THREE.BufferGeometry(),ffPos=new Float32Array(ffN*3),ffSe
 ffGeo.setAttribute('position',new THREE.BufferAttribute(ffPos,3));
 const ff=new THREE.Points(ffGeo,new THREE.PointsMaterial({map:glowTex,size:.6,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,color:0xe8ff9a,opacity:0}));ff.frustumCulled=false;scene.add(ff);
 const skyDay=new THREE.Color(0xa9bcbf),skyDusk=new THREE.Color(0x7b5a5c),skyNight=new THREE.Color(0x1a2530),skyW=new THREE.Color(0xc6cfd2),skyC=new THREE.Color();
-let treadT=0,clock=0,last=performance.now(),uiT=0,panT=0,fpsAcc=0,fpsN=0,qLevel=LOWQ?2:0;
+let treadPrev=null,treadT=0,clock=0,last=performance.now(),uiT=0,panT=0,fpsAcc=0,fpsN=0,qLevel=LOWQ?2:0;
 function lighting(){const t=tod();let e=0;if(t>=T0&&t<T1)e=Math.sin((t-T0)/(T1-T0)*Math.PI);
  const day=sstep(0,.35,e);const ang=Math.PI*clamp((t-T0)/(T1-T0),0,1);
  sun.position.set(camT.x-Math.cos(ang)*60,12+Math.sin(ang)*55,camT.z+30);
@@ -82,7 +82,12 @@ function frame(now){if(!lifeCanRun()){last=now;return}lifeRequestFrame();if(gfxS
  GFXU.t.value=clock;if(!S){yaw+=rdt*.04;yawT=yaw;setCam();introLight();gfxRender();return}
  if(S.speed>0&&S.people.length){let dt=rdt*S.speed;while(dt>0){const s=Math.min(.1,dt);step(s);dt-=s}storyTick()}
  fogT+=rdt;if(fogT>.8){fogT=0;fogPass(false)}
- treadT+=rdt;if(treadT>3&&treadDirty){treadT=0;treadDirty=false;applyTread();applyFog();for(const t of['tuft','fern','heath','reed'])for(let k=0;k<deco[t].length;k++){const it=deco[t][k];const ti=tileOf(it[0],it[1]);if(tread[ti[1]*N+ti[0]]>.3)setDeco(t,k)}decoMeshes.forEach(m=>m.instanceMatrix.needsUpdate=true)}
+ // 4.5: tylko prostokąt, w którym ścieżki się zmieniły (porównanie z poprzednim stanem)
+ treadT+=rdt;if(treadT>3&&treadDirty){treadT=0;treadDirty=false;let R=null;
+  if(!treadPrev)treadPrev=new Float32Array(tread);else{let i0=N,j0=N,i1=-1,j1=-1;for(let k=0;k<N*N;k++)if(tread[k]!==treadPrev[k]){treadPrev[k]=tread[k];const i=k%N,j=(k/N)|0;if(i<i0)i0=i;if(i>i1)i1=i;if(j<j0)j0=j;if(j>j1)j1=j}R=i1<0?'none':[i0,j0,i1+1,j1+1]}
+  if(R!=='none'){applyTread(R);applyFog(R);const Q=R||[0,0,N-1,N-1];
+   for(let j=Q[1];j<=Math.min(N-1,Q[3]);j++)for(let i=Q[0];i<=Math.min(N-1,Q[2]);i++){const k=j*N+i;if(tread[k]<=.3)continue;const ds=tileDeco.get(k);if(ds)for(const[t,q]of ds)if(t==='tuft'||t==='fern'||t==='heath'||t==='reed')setDeco(t,q)}
+   decoMeshes.forEach(m=>m.instanceMatrix.needsUpdate=true)}}
  if(Math.abs(yawT-yaw)>.001){yaw+=(yawT-yaw)*Math.min(1,rdt*8);setCam()}
  if(Math.abs(zoomT-zoom)>.001){zoom+=(zoomT-zoom)*Math.min(1,rdt*10);setCam()}
  if(follow&&selId!==null){const p=pById(selId);if(p){camT.x+=(p.x-camT.x)*Math.min(1,rdt*4);camT.z+=(p.z-camT.z)*Math.min(1,rdt*4);setCam()}}

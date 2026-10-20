@@ -5,7 +5,19 @@ const nodes=[];
 let camp={i:0,j:0}, wreck={i:0,j:0,stand:[0,0]}, reach=null;
 const tribe=[], herdsDef=[];
 const R=rng(SEED+99);
-(function worldGen(){
+// 4.5: dawna wyspa powstaje tym samym kodem co przed wyspą 384, we własnych współrzędnych i na własnych tablicach,
+// więc drzewa, krzaki, złoża, stada i numery rzeczy są co do kafla takie same jak w starych zapisach. Nowy ląd dochodzi potem.
+const LEG=(()=>{const n=N0,vw=VW0,H0=new Float32Array(vw*vw);for(let k=0;k<vw*vw;k++){const h=HH0[k];H0[k]=h>0?Math.pow(Math.min(h,1.6),1.35)*8:Math.max(h*5,-2.6)}
+ const tHH=(i,j)=>(HH0[j*vw+i]+HH0[j*vw+i+1]+HH0[(j+1)*vw+i]+HH0[(j+1)*vw+i+1])/4,tH=(i,j)=>(H0[j*vw+i]+H0[j*vw+i+1]+H0[(j+1)*vw+i]+H0[(j+1)*vw+i+1])/4;
+ const beach=new Uint8Array(n*n);for(let j=0;j<n;j++)for(let i=0;i<n;i++){const h=tHH(i,j);beach[j*n+i]=(h>0.02&&h<0.075)?1:0}
+ const sl=(i,j)=>{const a=H0[j*vw+i],b=H0[j*vw+i+1],c=H0[(j+1)*vw+i],d=H0[(j+1)*vw+i+1];return Math.max(a,b,c,d)-Math.min(a,b,c,d)};
+ const fF=(x,y)=>fbm(n3,x/n*7+40,y/n*7+9,3),wF=(x,y)=>fbm(n2,x/n*5+60,y/n*5+3,3);
+ const bio=(i,j)=>{const k=j*n+i;if(!land0[k])return'sea';if(beach[k])return'coast';const h=tH(i,j);if(h>6.5)return'high';const f=fF(i+.5,j+.5),w=wF(i+.5,j+.5),hh=tHH(i,j);if(hh<.24&&w>.56)return'wet';if(f>.5)return(h>4||w<.42)?'conif':'decid';return'meadow'};
+ const occ=new Int16Array(n*n).fill(-1),walk=new Uint8Array(n*n);
+ const rw=()=>{for(let k=0;k<n*n;k++)walk[k]=(land0[k]&&occ[k]<0)?1:0};
+ const nw=(i,j)=>{if(walk[j*n+i])return[i,j];for(let r=1;r<7;r++)for(let dy=-r;dy<=r;dy++)for(let dx=-r;dx<=r;dx++){const x=i+dx,y=j+dy;if(x>=0&&y>=0&&x<n&&y<n&&walk[y*n+x]&&Math.max(Math.abs(dx),Math.abs(dy))===r)return[x,y]}return null};
+ return{N:n,land:land0,beach,tileH:tH,tileHH:tHH,slope:sl,forestF:fF,biomeOf:bio,tcx:i=>i-n/2+.5,walk,occ,recomputeWalk:rw,nearestWalk:nw}})();
+function worldGenCore(N,land,beach,tileH,tileHH,slope,forestF,biomeOf,tcx,walk,occ,recomputeWalk,nearestWalk){
  recomputeWalk();
  const dirC=(i,j)=>{const dx=N/2-i,dy=N/2-j,l=Math.hypot(dx,dy)||1;return[dx/l,dy/l]};
  for(const need of[6,3,0]){let best=1e9;
@@ -58,6 +70,46 @@ const R=rng(SEED+99);
  herdPlan.forEach(([type,cnt,minD,sep])=>{let made=0;for(let t=0;t<40000&&made<cnt;t++){const i=(R()*(N-10)+5)|0,j=(R()*(N-10)+5)|0,k=j*N+i;if(!land[k]||!reach[k]||tileH(i,j)>8.5)continue;const f=forestF(i+.5,j+.5);
   if(!okH[type](biomeOf(i,j),f))continue;
   const dd=dc(i,j);if(dd<minD||(made<2&&(type==='sarna'||type==='koza'||type==='dzik')&&dd>(type==='koza'?18:26)))continue;if(herdsDef.some(h=>h.type===type&&Math.hypot(h.i-i,h.j-j)<sep))continue;herdsDef.push({i,j,type});made++}})
+}
+worldGenCore(LEG.N,LEG.land,LEG.beach,LEG.tileH,LEG.tileHH,LEG.slope,LEG.forestF,LEG.biomeOf,LEG.tcx,LEG.walk,LEG.occ,LEG.recomputeWalk,LEG.nearestWalk);
+// przesunięcie z dawnych współrzędnych na mapę 384 (świat w metrach się nie zmienia)
+camp={i:camp.i+OFF,j:camp.j+OFF};wreck={i:wreck.i+OFF,j:wreck.j+OFF,stand:[wreck.stand[0]+OFF,wreck.stand[1]+OFF]};
+for(const n of nodes){n.i+=OFF;n.j+=OFF;n.stand=[n.stand[0]+OFF,n.stand[1]+OFF]}
+for(const t of tribe){t.i+=OFF;t.j+=OFF}for(const h of herdsDef){h.i+=OFF;h.j+=OFF}
+const coreNodes=nodes.length,coreHerds=herdsDef.length,reach0=reach,CAMP0={i:camp.i-OFF,j:camp.j-OFF},HERDS0=herdsDef.map(h=>({i:h.i-OFF,j:h.j-OFF,type:h.type}));   // reach0: zasięg na dawnej wyspie (we współrzędnych dawnej wyspy)
+(function worldGenRing(){
+ recomputeWalk();occ[camp.j*N+camp.i]=999;recomputeWalk();
+ reach=new Uint8Array(N*N);const st0=nearestWalk(camp.i,camp.j+1);const stk=[st0];reach[st0[1]*N+st0[0]]=1;
+ while(stk.length){const[x,y]=stk.pop();for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){const a=x+dx,b=y+dy;if(a<0||b<0||a>=N||b>=N)continue;const k=b*N+a;if(walk[k]&&!reach[k]){reach[k]=1;stk.push([a,b])}}}
+ // nowy ląd: te same zasady co na dawnej wyspie, osobne losowanie, kafle dawnej wyspy pominięte
+ const R2=rng(SEED+199),core=WYD.core,nb={};const near0=(type,i,j,r)=>nb[type]&&nb[type].some(n=>Math.abs(n.i-i)<r&&Math.abs(n.j-j)<r&&Math.hypot(n.i-i,n.j-j)<r)||nodes.some(n=>n.type===type&&n.id<coreNodes&&Math.abs(n.i-i)<r&&Math.abs(n.j-j)<r&&Math.hypot(n.i-i,n.j-j)<r);
+ const add=(type,i,j,x,z,amt,extra)=>{const n=Object.assign({id:nodes.length,type,i,j,x,z,amt,max:amt,claim:0,bad:0,stand:[i,j]},extra||{});nodes.push(n);(nb[type]||(nb[type]=[])).push(n);return n};
+ const ok=k=>land[k]&&reach[k]&&!core[k];
+ for(let j=0;j<N;j++)for(let i=0;i<N;i++){const k=j*N+i;if(!ok(k)||beach[k])continue;const h=tileH(i,j);if(h>9.5||slope(i,j)>1.6)continue;
+  const f=forestF(i+.5,j+.5),bi=biomeOf(i,j);let p=f>.52?.55:(f>.46?.14:.018);if(bi==='wet')p=Math.max(p*.5,.12);if(bi==='high')p*=.6;
+  if(R2()<p){const sp=treeSpecies(bi,R2);add('tree',i,j,tcx(i)+(R2()-.5)*.8,tcx(j)+(R2()-.5)*.8,5,{sc:.8+R2()*.6,rot:R2()*6.28,sh:R2(),sp,leaf:sp==='oak'||sp==='birch'})}}
+ for(let j=0;j<N;j++)for(let i=0;i<N;i++){const k=j*N+i;if(!ok(k)||beach[k]||tileH(i,j)>6.5)continue;const f=forestF(i+.5,j+.5);
+  if(f>.32&&f<.6&&R2()<.07)add('bush',i,j,tcx(i)+(R2()-.5)*.7,tcx(j)+(R2()-.5)*.7,4,{sc:.8+R2()*.4});
+  else if(f>.55&&R2()<.035)add('grzyb',i,j,tcx(i)+(R2()-.5)*.7,tcx(j)+(R2()-.5)*.7,3,{sc:.8+R2()*.5,rot:R2()*6.28})}
+ for(let j=0;j<N;j++)for(let i=0;i<N;i++){const k=j*N+i;if(!ok(k)||beach[k]||tileH(i,j)>4.5)continue;const f=forestF(i+.5,j+.5);
+  if(f<.33&&R2()<.022)add('zboze',i,j,tcx(i)+(R2()-.5)*.7,tcx(j)+(R2()-.5)*.7,3,{sc:.8+R2()*.4,rot:R2()*6.28});
+  else if(f>.4&&f<.5&&R2()<.02)add('len',i,j,tcx(i)+(R2()-.5)*.7,tcx(j)+(R2()-.5)*.7,3,{sc:.8+R2()*.4,rot:R2()*6.28});
+  else if(f>.3&&f<.56&&R2()<.014)add('ziola',i,j,tcx(i)+(R2()-.5)*.7,tcx(j)+(R2()-.5)*.7,3,{sc:.8+R2()*.4,rot:R2()*6.28});
+  else if(biomeOf(i,j)==='decid'&&R2()<.006&&!near0('ul',i,j,9))add('ul',i,j,tcx(i)+(R2()-.5)*.5,tcx(j)+(R2()-.5)*.5,4,{sc:.9+R2()*.3,rot:R2()*6.28})}
+ for(let t=0;t<60000;t++){const i=(R2()*N)|0,j=(R2()*N)|0,k=j*N+i;if(!ok(k))continue;const h=tileHH(i,j);
+  if(h>.06&&h<.22&&n1(i*.21+7,j*.21)>.58&&!near0('ruda',i,j,6))add('ruda',i,j,tcx(i)+(R2()-.5)*.5,tcx(j)+(R2()-.5)*.5,10,{sc:.8+R2()*.4,rot:R2()*6.28})}
+ for(let j=0;j<N;j++)for(let i=0;i<N;i++){const k=j*N+i;if(!ok(k))continue;const h=tileH(i,j);
+  if((h>6.5&&R2()<.08)||(n2(i*.3,j*.3)>.74&&R2()<.16)||(beach[k]&&R2()<.012))add('rock',i,j,tcx(i)+(R2()-.5)*.6,tcx(j)+(R2()-.5)*.6,8,{sc:.7+R2()*.9,rot:R2()*6.28})}
+ for(let t=0;t<48000;t++){const i=(R2()*N)|0,j=(R2()*N)|0,k=j*N+i;if(!ok(k))continue;const h=tileHH(i,j);
+  if(h>.05&&h<.16&&n2(i*.25,j*.25)>.48&&!near0('clay',i,j,7))add('clay',i,j,tcx(i),tcx(j),14)}
+ for(let t=0;t<110000;t++){const i=(R2()*N)|0,j=(R2()*N)|0,k=j*N+i;if(land[k]||core[k])continue;const hh=tileHH(i,j);if(hh<-.3)continue;
+  let st=null;for(const[dx,dy]of[[1,0],[-1,0],[0,1],[0,-1]]){const a=i+dx,b=j+dy;if(a>=0&&b>=0&&a<N&&b<N&&ok(b*N+a)){st=[a,b];break}}
+  if(st&&!near0('fish',i,j,6))add('fish',i,j,tcx(i),tcx(j),30,{stand:st})}
+ // stada nowego lądu
+ const herdPlan=[['sarna',40,16],['koza',22,14],['dzik',22,16],['wilk',12,24],['zajac',28,12],['lis',14,18],['foka',10,18],['niedzwiedz',6,40]];
+ const okH={sarna:(b,f)=>b!=='coast'&&b!=='high',koza:(b,f)=>f<=.45&&b!=='coast',dzik:(b,f)=>f>=.52&&b!=='coast',wilk:(b,f)=>f>=.52&&b!=='coast',zajac:b=>b==='meadow',lis:(b,f)=>f>.4&&f<.62&&b!=='coast',foka:b=>b==='coast',niedzwiedz:b=>b==='conif'||b==='high'};
+ herdPlan.forEach(([type,cnt,sep])=>{let made=0;for(let t=0;t<60000&&made<cnt;t++){const i=(R2()*(N-10)+5)|0,j=(R2()*(N-10)+5)|0,k=j*N+i;if(!ok(k)||tileH(i,j)>8.5)continue;const f=forestF(i+.5,j+.5);
+  if(!okH[type](biomeOf(i,j),f))continue;if(herdsDef.some(h=>h.type===type&&Math.hypot(h.i-i,h.j-j)<sep))continue;herdsDef.push({i,j,type});made++}})
 })();
 const nodeBy={};['tree','rock','bush','grzyb','clay','fish','zboze','len','ruda','ziola','ul'].forEach(t=>nodeBy[t]=nodes.filter(n=>n.type===t));
 const tileNodes=new Map();nodes.forEach(n=>{const k=n.type==='fish'?n.stand[1]*N+n.stand[0]:n.j*N+n.i;if(!tileNodes.has(k))tileNodes.set(k,[]);tileNodes.get(k).push(n)});
@@ -149,10 +201,12 @@ const deerOff=[];{const r0=rng(91);for(let k=0;k<herdsDef.length*7+80;k++)deerOf
 // dekoracja
 const tuftG=mergeGeos([{g:new THREE.ConeGeometry(.05,.42,3),y:.21,c:W1},{g:new THREE.ConeGeometry(.05,.34,3),y:.17,x:.09,z:.04,c:[.85,.9,.8]},{g:new THREE.ConeGeometry(.05,.3,3),y:.15,x:-.08,z:-.05,c:[.9,.95,.85]},{g:new THREE.ConeGeometry(.04,.26,3),y:.13,x:.02,z:-.1,c:[.8,.85,.75]}]);
 const deco={tuft:[],flower:[],pebble:[],drift:[],fern:[],reed:[],heath:[],log:[],snag:[]};const DECO_T=Object.keys(deco);const tileDeco=new Map();
-{const RD=rng(SEED+5);const put=(type,k,item)=>{deco[type].push(item);if(!tileDeco.has(k))tileDeco.set(k,[]);tileDeco.get(k).push([type,deco[type].length-1])};
- for(let j=0;j<N;j++)for(let i=0;i<N;i++){const k=j*N+i;if(!land[k])continue;const h=tileH(i,j),f=forestF(i+.5,j+.5);
+{const put=(type,k,item)=>{deco[type].push(item);if(!tileDeco.has(k))tileDeco.set(k,[]);tileDeco.get(k).push([type,deco[type].length-1])};
+ // 4.5: dawna wyspa tym samym losowaniem co dawniej (jej tablice i współrzędne), potem nowy ląd osobnym losowaniem
+ const pass=(n,landA,beachA,tileH,forestF,biomeOf,tileHH,key,tcx,RD,skip)=>{
+ for(let j=0;j<n;j++)for(let i=0;i<n;i++){const k0=j*n+i;if(!landA[k0]||skip(i,j))continue;const k=key(i,j);const h=tileH(i,j),f=forestF(i+.5,j+.5);
   const P=()=>[tcx(i)+(RD()-.5),tcx(j)+(RD()-.5),RD()];
-  if(beach[k]){if(RD()<.18)put('pebble',k,P());if(RD()<.03)put('drift',k,P());if(RD()<.3)put('tuft',k,[...P(),2]);continue}
+  if(beachA[k0]){if(RD()<.18)put('pebble',k,P());if(RD()<.03)put('drift',k,P());if(RD()<.3)put('tuft',k,[...P(),2]);continue}
   const bi=biomeOf(i,j);
   if(bi==='high'||(bi==='meadow'&&h>4)){if(RD()<.4)put('heath',k,P());if(RD()<.25)put('heath',k,P())}
   if(h>8.5)continue;
@@ -160,7 +214,9 @@ const deco={tuft:[],flower:[],pebble:[],drift:[],fern:[],reed:[],heath:[],log:[]
   if(bi==='wet'){if(RD()<.6)put('reed',k,P());if(RD()<.3)put('reed',k,P());if(RD()<.008)put('snag',k,P())}
   else if(tileHH(i,j)<.06&&RD()<.25)put('reed',k,P());
   const nT=f<.46?2:1;for(let q=0;q<nT;q++)if(RD()<.7)put('tuft',k,[tcx(i)+(RD()-.5),tcx(j)+(RD()-.5),RD(),f>.52?1:0]);
-  if(f<.42&&RD()<.3)put('flower',k,[tcx(i)+(RD()-.5),tcx(j)+(RD()-.5),RD()])}}
+  if(f<.42&&RD()<.3)put('flower',k,[tcx(i)+(RD()-.5),tcx(j)+(RD()-.5),RD()])}};
+ pass(N0,LEG.land,LEG.beach,LEG.tileH,LEG.forestF,LEG.biomeOf,LEG.tileHH,(i,j)=>(j+OFF)*N+i+OFF,LEG.tcx,rng(SEED+5),()=>false);
+ pass(N,land,beach,tileH,forestF,biomeOf,tileHH,(i,j)=>j*N+i,tcx,rng(SEED+105),(i,j)=>WYD.core[j*N+i]===1);}
 const tufts=new THREE.InstancedMesh(tuftG,windify(new THREE.MeshStandardMaterial({vertexColors:true,roughness:1}),.35),Math.max(1,deco.tuft.length));
 tufts.instanceColor=new THREE.InstancedBufferAttribute(new Float32Array(Math.max(1,deco.tuft.length)*3),3);tufts.receiveShadow=true;scene.add(tufts);
 const flowerG=mergeGeos([{g:new THREE.IcosahedronGeometry(.06,0),y:.2,c:W1},{g:new THREE.IcosahedronGeometry(.055,0),y:.16,x:.12,z:.05,c:W1},{g:new THREE.IcosahedronGeometry(.055,0),y:.14,x:-.08,z:.1,c:W1}]);
@@ -815,7 +871,7 @@ function stepHerds(dt){S.herds.forEach((h,k)=>{if(h.calm>S.t)return;const dx=h.t
 let fogT=0;
 function fogPass(force){
  if(force){revNew.length=0;revDirty=false;applyFog();refreshNodes();refreshDeco()}
- else{if(!revDirty)return;revDirty=false;applyFog();const list=revNew.splice(0);decoSeason();
+ else{if(!revDirty)return;revDirty=false;let i0=VW,j0=VW,i1=-1,j1=-1;for(const k of revNew){const i=k%N,j=(k/N)|0;if(i<i0)i0=i;if(i>i1)i1=i;if(j<j0)j0=j;if(j>j1)j1=j}applyFog(i1<0?null:[i0-1,j0-1,i1+2,j1+2]);const list=revNew.splice(0);decoSeason();
   for(const k of list){const ns=tileNodes.get(k);if(ns)ns.forEach(nodeSet);const ds=tileDeco.get(k);if(ds)ds.forEach(([t,i])=>setDeco(t,i))}
   nodeMeshes.concat(decoMeshes).forEach(m=>{m.instanceMatrix.needsUpdate=true;if(m.instanceColor)m.instanceColor.needsUpdate=true})}
  if(S)tribe.forEach(t=>{const seen=revAt(t.i,t.j);if(t.m)t.m.visible=seen;if(seen&&!S.found.includes(t.k)){S.found.push(t.k);techXp('nauka',25);log('Ślad dawnego ludu: '+TRIBE[t.k][0].toLowerCase()+'. '+TRIBE[t.k][1]);toast('Odkryto: '+TRIBE[t.k][0])}})}
@@ -905,7 +961,7 @@ function renderCtl(){{const gb=$('speed').querySelector('[data-gfx]');if(gb)gb.t
  $('ctl').innerHTML=`<button class="txt${overview?' on':''}" data-c="isl" aria-label="Cała wyspa">Wyspa</button><button data-c="eye" class="${document.body.classList.contains('clean')?'on':''}" aria-label="Czysty widok">${ico('eye')}</button><button data-c="rl" aria-label="Obróć w lewo">${ico('rotl')}</button><button data-c="rr" aria-label="Obróć w prawo">${ico('rotr')}</button><button data-c="zin" aria-label="Przybliż">${ico('plus')}</button><button data-c="zout" aria-label="Oddal">${ico('minus')}</button><button data-c="home" aria-label="Wróć do obozu">${ico('dom')}</button>`}
 gameLater(renderCtl,0);
 let overview=null;
-function islandZoom(){const asp=innerWidth/innerHeight;return clamp(34/Math.max(128*N/144,205*N/144/asp),.07,1)}
+function islandZoom(){const asp=innerWidth/innerHeight;return clamp(34/Math.max(N*.62,N*.92/asp),.025,1)}
 function toggleOverview(on){if(on===undefined)on=!overview;
  if(on&&!overview){overview={x:camT.x,z:camT.z,zoom:zoomT};camT.x=0;camT.z=4;zoomT=islandZoom();follow=false;setCam()}
  else if(!on&&overview){camT.x=overview.x;camT.z=overview.z;zoomT=Math.max(overview.zoom,.6);overview=null;setCam()}
