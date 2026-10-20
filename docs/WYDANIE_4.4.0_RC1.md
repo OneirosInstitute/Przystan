@@ -1,5 +1,7 @@
 # Przystań 4.4.0-rc.1 — Folwarki ze złóż i ziemi
 
+> **4.4.0-rc.2** (baza `80feed4`) domyka krainy z 4.3: każda kraina ma swoją cenę. Na nizinach woda wylewa w ulewy i odwilż. Na stokach wiosenny przymrozek ścina kwiat winorośli (winnica dwa dni o połowę wolniej), a deszcz zmywa ziemię (pola −10%). Na kwietnych łąkach każda zagroda, a w grądzie każda chata drwala, zabiera barciom 12% pożytku. Na grani i w borach jest mniej jedzenia. Na mokradłach latem łapie się gorączkę bagienną, a w Zagłębiu kaszel górniczy (dwie nowe choroby, zioła je łagodzą). Na gliniskach wiosną jest błoto. Na wybrzeżu słony wiatr osłabia pola, a w sztorm pomost stoi. Karta krainy ma wiersz „Czym płaci”, a podgląd stawiania i karta budynku pokazują też minusy. Kraina obozu daje plusy, ale nie płaci, żeby początek gry został łagodny. Test: `regions-character` (3 przypadki).
+
 Baza: main 4.3.0-rc.2 `4c410e42271aeb24cbbbd8196c86ef087a04cb69`. Wydanie wypchnięte prosto na main (Railway buduje z main).
 Czwarty krok planu z [projektu wyspy](PROJEKT_WYSPY_5.md), rozdział 4. Kolejność w planie się zmienia: folwarki są teraz w 4.4, a wyspa 384 od pierwszego dnia w 4.5.
 

@@ -1,8 +1,8 @@
-# Przystań 4.4.0-rc.1
+# Przystań 4.4.0-rc.2
 
 Spokojna gra o rozbitkach, którzy budują osadę na dzikiej wyspie (PWA, Three.js).
 
-4.4.0-rc.1 wiąże folwarki epoki IV z ziemią i złożami: huta tylko przy rudzie, z szybem do głębokiego złoża, tartak w starym lesie, garncarze przy glinie; formularz pokazuje, co w krainie pasuje.
+4.4.0-rc.2 dodaje krainom koszty: wylewy na nizinach, przymrozki w winnicach, gorączka bagienna, kaszel górniczy, wypas, który zjada łąki barciom. 4.4.0-rc.1 związał folwarki epoki IV z ziemią i złożami: huta tylko przy rudzie, z szybem do głębokiego złoża, tartak w starym lesie, garncarze przy glinie; formularz pokazuje, co w krainie pasuje.
 
 4.3.0-rc.2 dodał wyszukiwarkę w Ludziach i usuwa szary pas w widoku całej wyspy. 4.3.0-rc.1 dał krainom charakter: dziesięć ról (Żyzne Niziny, Kwietne Łąki, Stare Bory, Zagłębie i inne) na każdej wyspie. Budynki pracują szybciej w swojej krainie, pola na nizinach rodzą więcej, a łąki kwitną.
 

@@ -5,16 +5,16 @@
 // daje: pola na żyznych nizinach rodzą więcej, barcie na kwietnych łąkach dają więcej miodu, drwale w starych borach
 // rąbią szybciej. Krainy różnią się też barwą ziemi, a łąki kwitną od wiosny do jesieni.
 const KR={
- niziny:{n:'Żyzne Niziny',d:'Ciemna, tłusta ziemia nad wodą. Zboże, len i kapusta rodzą tu najlepiej.',field:1.3,b:{zagroda:1.15},tint:[.9,1.07,.84]},
- stoki:{n:'Słoneczne Stoki',d:'Zbocza zwrócone na południe, ciepłe od rana. Dobre pod winnice, chmiel i ogrody ziół.',b:{winnica:1.35,chmielnik:1.2,ogrodziol:1.25},tint:[1.1,1.05,.86]},
- laki:{n:'Kwietne Łąki',d:'Otwarte łąki pełne kwiatów od wiosny do jesieni. Pszczoły, siano i zioła.',b:{pasieka:1.5,zagroda:1.2,zbieracz:1.1},tint:[1.08,1.08,.9],flowers:1},
- bory:{n:'Stare Bory',d:'Gęste sosny i świerki. Drewno budulcowe, smoła, grzyby i zwierzyna.',b:{drwal:1.2,mysliwy:1.15,mielerz:1.15,lesnik:1.15}},
- grad:{n:'Grąd i Dąbrowa',d:'Dęby, lipy i polany. Barcie w dziuplach starych drzew, twarde drewno.',b:{pasieka:1.25,drwal:1.1,mysliwy:1.1},tint:[.97,1.03,.92]},
- gran:{n:'Kamienna Grań',d:'Skały, piarg i kosodrzewina. Kamień i granit, ale mało jedzenia.',b:{kamien:1.25,lom:1.15}},
- zaglebie:{n:'Zagłębie',d:'Wychodnie węgla i rudy w jednym miejscu. Tu stoją szyby i kopalnie.',b:{odkrywka:1.1,szybw:1.1,kopalnia:1.1,ruda:1.15},tint:[.95,.95,.97]},
- mokradla:{n:'Mokradła',d:'Trzciny, oczka wodne i torf. Ruda darniowa i zioła bagienne.',b:{torfowisko:1.2,ruda:1.25,ogrodziol:1.1},tint:[.9,.95,.84]},
- gliniska:{n:'Gliniska nad wodą',d:'Grube warstwy gliny przy wodzie. Gliniaki, cegielnie i garncarze.',b:{glinianka:1.25,gliniak:1.15,cegielnia:1.1,garncarnia:1.1},tint:[1.04,1,.95]},
- wybrzeze:{n:'Wybrzeże i Zatoki',d:'Plaże, zatoki i pomosty. Ryby, sól i bursztyn.',b:{pomost:1.2,warzelnia:1.15}}};
+ niziny:{n:'Żyzne Niziny',d:'Ciemna, tłusta ziemia nad wodą. Zboże, len i kapusta rodzą tu najlepiej.',cost:'W ulewy i odwilż woda wylewa na pola i ziemia podmaka; rowy ją odprowadzają.',field:1.3,b:{zagroda:1.15},tint:[.9,1.07,.84]},
+ stoki:{n:'Słoneczne Stoki',d:'Zbocza zwrócone na południe, ciepłe od rana. Dobre pod winnice, chmiel i ogrody ziół.',cost:'Winorośl kwitnie tu wcześnie, więc wiosenny przymrozek ścina kwiat: winnica przez dwa dni pracuje o połowę wolniej. Deszcz zmywa ziemię ze stoku: pola −10%.',field:.9,b:{winnica:1.35,chmielnik:1.2,ogrodziol:1.25},tint:[1.1,1.05,.86]},
+ laki:{n:'Kwietne Łąki',d:'Otwarte łąki pełne kwiatów od wiosny do jesieni. Pszczoły, siano i zioła.',cost:'Kozy wyjadają kwiaty: każda zagroda w krainie zabiera barciom część pożytku.',b:{pasieka:1.5,zagroda:1.2,zbieracz:1.1},tint:[1.08,1.08,.9],flowers:1},
+ bory:{n:'Stare Bory',d:'Gęste sosny i świerki. Drewno budulcowe, smoła, grzyby i zwierzyna.',cost:'Pod gęstymi koronami mało jagód i pól: zbieracz −15%, pola −15%.',field:.85,b:{drwal:1.2,mysliwy:1.15,mielerz:1.15,lesnik:1.15,zbieracz:.85}},
+ grad:{n:'Grąd i Dąbrowa',d:'Dęby, lipy i polany. Barcie w dziuplach starych drzew, twarde drewno.',cost:'Wycinka niszczy dziuple: każda chata drwala w krainie zabiera barciom część pożytku.',b:{pasieka:1.25,drwal:1.1,mysliwy:1.1},tint:[.97,1.03,.92]},
+ gran:{n:'Kamienna Grań',d:'Skały, piarg i kosodrzewina. Kamień i granit, ale mało jedzenia.',cost:'Mało jedzenia i kamienista ziemia: zbieracz −25%, pola −20%.',field:.8,b:{kamien:1.25,lom:1.15,zbieracz:.75}},
+ zaglebie:{n:'Zagłębie',d:'Wychodnie węgla i rudy w jednym miejscu. Tu stoją szyby i kopalnie.',cost:'Pył w szybach i kopalniach: górnicy łapią kaszel górniczy, zioła go łagodzą.',b:{odkrywka:1.1,szybw:1.1,kopalnia:1.1,ruda:1.15},tint:[.95,.95,.97]},
+ mokradla:{n:'Mokradła',d:'Trzciny, oczka wodne i torf. Ruda darniowa i zioła bagienne.',cost:'Latem komary: kto tu pracuje, łapie gorączkę bagienną.',b:{torfowisko:1.2,ruda:1.25,ogrodziol:1.1},tint:[.9,.95,.84]},
+ gliniska:{n:'Gliniska nad wodą',d:'Grube warstwy gliny przy wodzie. Gliniaki, cegielnie i garncarze.',cost:'Wiosną roztopy zamieniają wyrobiska w błoto: glinianka i gliniak pracują o 30% wolniej.',b:{glinianka:1.25,gliniak:1.15,cegielnia:1.1,garncarnia:1.1},tint:[1.04,1,.95]},
+ wybrzeze:{n:'Wybrzeże i Zatoki',d:'Plaże, zatoki i pomosty. Ryby, sól i bursztyn.',cost:'Słony wiatr od morza: pola −10%, a w sztorm pomost stoi.',field:.9,b:{pomost:1.2,warzelnia:1.15}}};
 // ---------- przydział ról: z ziemi i złóż, każda rola co najmniej raz ----------
 (function krAssign(){const R=REGIONS.filter(Boolean);if(!R.length)return;const st={};R.forEach(r=>st[r.id]={n:0,h:0,sl:0,sun:0,bi:{},dep:{}});
  for(let j=1;j<N-1;j+=2)for(let i=1;i<N-1;i+=2){const k=j*N+i,q=REGION[k];if(q<0||!st[q]||!land[k])continue;const s=st[q];const b=biomeOf(i,j);s.n++;s.bi[b]=(s.bi[b]||0)+1;s.h+=tileH(i,j);s.sl+=slope(i,j);s.sun+=Math.max(0,tileH(i,j-1)-tileH(i,j+1))}
@@ -44,20 +44,30 @@ const KR={
  R.forEach(r=>{if(!r.kr)r.kr=r.type==='coast'?'wybrzeze':r.type==='high'?'gran':r.type==='forest'?'bory':'laki'})})();
 const krAt=(i,j)=>{if(i<0||j<0||i>=N||j>=N)return null;const r=regionAt(i,j);return r&&r.kr?r:null};
 function krOfB(b){if(!b)return null;const c=bCenter(b);const t=tileOf(c.x,c.z);return krAt(t[0],t[1])}
-function krMulKind(r,kind){if(!r)return 1;const K=KR[r.kr];return(K&&K.b[kind])||1}
+// kraina obozu (Zatoka Wraku) nie płaci: rozbitkowie wylądowali w osłoniętym miejscu, a początek gry ma zostać łagodny
+const krFree=r=>r&&r.id===0;
+function krMulKind(r,kind,b){if(!r)return 1;const K=KR[r.kr];let m=(K&&K.b[kind])||1;if(krFree(r))return Math.max(1,m);if(!S)return m;
+ // koszty krain, które zależą od chwili albo od sąsiadów
+ if(kind==='pasieka'&&(r.kr==='laki'||r.kr==='grad')){const rival=r.kr==='laki'?'zagroda':'drwal';const n=S.bld.filter(q=>q.kind===rival&&bDone(q)&&krOfB(q)===r).length;m*=Math.max(.6,1-.12*n)}
+ if(kind==='winnica'&&r.kr==='stoki'&&S.krFrost!==undefined&&S.day-S.krFrost<2)m*=.5;
+ if((kind==='glinianka'||kind==='gliniak')&&r.kr==='gliniska'&&seasonIdx()===3)m*=.7;
+ if(kind==='pomost'&&r.kr==='wybrzeze'&&S.weather&&(S.weather.k==='storm'||S.weather.k==='burza'))m*=0;
+ return m}
 // ---------- wpływ na pracę: bMul dla budynków, plon dla pól ----------
-{const _bm=bMul;bMul=function(b){const m=_bm(b);try{if(!b||!S||b.kind===undefined)return m;return m*krMulKind(krOfB(b),b.kind)}catch(e){return m}}}
-{const _fm=fieldMul;fieldMul=function(b){const m=_fm(b);try{const r=krOfB(b);return r&&KR[r.kr].field?m*KR[r.kr].field:m}catch(e){return m}}}
+{const _bm=bMul;bMul=function(b){const m=_bm(b);try{if(!b||!S||b.kind===undefined)return m;return m*krMulKind(krOfB(b),b.kind,b)}catch(e){return m}}}
+const krField=r=>{const f=r&&KR[r.kr].field||1;return krFree(r)?Math.max(1,f):f};
+{const _fm=fieldMul;fieldMul=function(b){const m=_fm(b);try{return m*krField(krOfB(b))}catch(e){return m}}}
 // ---------- opis: karta krainy w Wyprawach, karta budynku, podgląd stawiania, etykieta ----------
-function krBonus(K){const L=Object.entries(K.b).filter(([k])=>BD[k]).map(([k,v])=>`${BD[k].n.toLowerCase()} +${Math.round((v-1)*100)}%`);if(K.field)L.unshift(`plon pól +${Math.round((K.field-1)*100)}%`);return L.join(', ')}
-function krLine(r){const K=r&&KR[r.kr];if(!K)return'';return`<p class="kr-line"><b>${K.n}.</b> ${K.d}${krBonus(K)?` <span class="mut">Tu: ${krBonus(K)}.</span>`:''}</p>`}
-function krBld(b){const r=krOfB(b);if(!r)return'';const K=KR[r.kr];const v=b.field?(K.field||1):krMulKind(r,b.kind);if(v===1)return'';
- return`<p class="kr-box"><b>${K.n}</b> (${r.known?r.name:'kraina'}): ${b.field?'plon':'praca idzie'} o ${Math.round((v-1)*100)}% ${b.field?'większy':'szybciej'}.</p>`}
+const krPct=v=>(v>=1?'+':'−')+Math.round(Math.abs(v-1)*100)+'%';
+function krBonus(K){const L=Object.entries(K.b).filter(([k,v])=>BD[k]&&v>1).map(([k,v])=>`${BD[k].n.toLowerCase()} ${krPct(v)}`);if(K.field>1)L.unshift(`plon pól ${krPct(K.field)}`);return L.join(', ')}
+function krLine(r){const K=r&&KR[r.kr];if(!K)return'';if(krFree(r))return`<p class="kr-line"><b>${K.n}.</b> ${K.d}${krBonus(K)?` <span class="mut">Tu: ${krBonus(K)}.</span>`:''}<br><span class="mut">Zatoka, w której wylądowali rozbitkowie, jest osłonięta: tu kraina nic nie kosztuje.</span></p>`;return`<p class="kr-line"><b>${K.n}.</b> ${K.d}${krBonus(K)?` <span class="mut">Tu: ${krBonus(K)}.</span>`:''}${K.cost?`<br><span class="kr-cost">Czym płaci: ${K.cost}</span>`:''}</p>`}
+function krBld(b){const r=krOfB(b);if(!r)return'';const K=KR[r.kr];const v=b.field?krField(r):krMulKind(r,b.kind,b);if(Math.abs(v-1)<.005)return'';
+ return`<p class="kr-box${v<1?' no':''}"><b>${K.n}</b> (${r.known?r.name:'kraina'}): ${b.field?'plon':'praca'} ${krPct(v)}${v<1&&K.cost?`. ${K.cost}`:'.'}</p>`}
 {const _rs=renderSel;renderSel=function(){_rs();try{if(!S||selB===null)return;const b=bById(selB),el=$('sel');if(!b||el.style.display!=='block'||el.querySelector('.kr-box'))return;const h=krBld(b);if(h)el.insertAdjacentHTML('beforeend',h)}catch(e){}}}
 {const _mg=moveGhost;moveGhost=function(i,j){_mg(i,j);try{if(!placing||!ghostTile||!BD[placing])return;const d=BD[placing],r=krAt(ghostTile[0]+((d.w-1)>>1),ghostTile[1]+((d.h-1)>>1));if(!r)return;const K=KR[r.kr];
-  const v=d.field||placing==='pole'?(K.field||1):krMulKind(r,placing);const el=$('pinfo');if(!el)return;el.querySelector('.kr-pi')?.remove();
-  if(v!==1)el.insertAdjacentHTML('beforeend',`<div class="kr-pi">${K.n}: ${placing==='pole'?'plon':'praca'} +${Math.round((v-1)*100)}%</div>`)}catch(e){}}}
-{const st=document.createElement('style');st.textContent=`.kr-line{margin:6px 0 4px}.kr-line b{color:var(--hi)}.kr-box{margin:8px 0 0;color:#cfe3a8}.kr-box b{color:var(--hi)}.kr-pi{color:#cfe3a8;font-size:13px;margin-top:4px}.rl small.kr{display:block;font-size:11px;opacity:.8;font-style:normal}`;document.head.appendChild(st)}
+  const v=d.field||placing==='pole'?krField(r):krMulKind(r,placing);const el=$('pinfo');if(!el)return;el.querySelector('.kr-pi')?.remove();
+  if(Math.abs(v-1)>=.005)el.insertAdjacentHTML('beforeend',`<div class="kr-pi${v<1?' no':''}">${K.n}: ${placing==='pole'?'plon':'praca'} ${krPct(v)}</div>`)}catch(e){}}}
+{const st=document.createElement('style');st.textContent=`.kr-line{margin:6px 0 4px}.kr-line b{color:var(--hi)}.kr-box{margin:8px 0 0;color:#cfe3a8}.kr-box b{color:var(--hi)}.kr-pi{color:#cfe3a8;font-size:13px;margin-top:4px}.kr-pi.no,.kr-box.no{color:#e8b08a}.kr-cost{color:#e8c8a0;font-size:13px}.rl small.kr{display:block;font-size:11px;opacity:.8;font-style:normal}`;document.head.appendChild(st)}
 {const _scan=regionScan;regionScan=function(quiet){const before=S&&S.regs?{...S.regs}:{};_scan(quiet);try{REGIONS.forEach(r=>{if(!r||!r.known||!r.kr)return;const sp=r.el&&r.el.querySelector('span');if(sp&&!sp.querySelector('small.kr'))sp.insertAdjacentHTML('beforeend',`<small class="kr">${KR[r.kr].n}</small>`);
    if(!quiet&&!before[r.id]&&S.regs[r.id]){const K=KR[r.kr];log(`${r.name} to ${K.n.toLowerCase()}. ${K.d}`)}})}catch(e){}}}
 // ---------- wygląd: barwa ziemi i kwiaty na łąkach ----------
@@ -85,4 +95,18 @@ function krFlowerBuild(){if(!S)return;const sea=seasonIdx(),key=sea+':'+S.bld.le
  krFlowers.count=q;krFlowers.instanceMatrix.needsUpdate=true;if(krFlowers.instanceColor)krFlowers.instanceColor.needsUpdate=true}
 {const _ad=actDaily;actDaily=function(){_ad();try{krFlowerBuild()}catch(e){console.warn(e)}}}
 {const _b=boot;boot=function(f){_b(f);krFKey='';try{krFlowerBuild()}catch(e){}}}
+// ---------- koszty krain w ciągu dnia: wylewy na nizinach, przymrozek na stokach, choroby na mokradłach i w Zagłębiu ----------
+{const _rd=rolaDaily;rolaDaily=function(){_rd();try{const k=S.weather&&S.weather.k;if(!['rain','storm','burza','odwilz'].includes(k)||(k==='rain'&&wxI()<.5))return;let hit=0;
+  for(const b of S.bld){if(!b.field||!bDone(b)||hasExt(b,'rowy'))continue;const r=krOfB(b);if(!r||r.kr!=='niziny'||krFree(r))continue;b.field.m=Math.min(1,b.field.m+.08);hit++}
+  const sk=Math.floor(S.day/SD);if(hit&&!S.seen['krWylew'+sk]){S.seen['krWylew'+sk]=1;log('Woda wylała na niziny i pola podmokły. Rowy odprowadziłyby ją do strumienia.')}}catch(e){console.warn(e)}}}
+function krDailyCost(){if(!S)return;const day=Math.floor(S.day),sea=seasonIdx();
+ if(S.szron===day&&sea===3&&S.krFrost!==day&&S.bld.some(b=>b.kind==='winnica'&&bDone(b)&&krOfB(b)?.kr==='stoki'&&!krFree(krOfB(b)))){S.krFrost=day;log('Przymrozek ściął kwiat winorośli na stokach. Winnica przez dwa dni pracuje o połowę wolniej.')}}
+{const _ad=actDaily;actDaily=function(){_ad();try{krDailyCost()}catch(e){console.warn(e)}}}
+Object.assign(ILL,{bagienna:['gorączka bagienna','komary przy pracy na mokradłach latem',.03,.65,4,'gorączkę bagienną'],gornicza:['kaszel górniczy','pył w szybach i kopalniach',.02,.75,5,'kaszel górniczy']});
+{const _id=illDaily;illDaily=function(){_id();try{const sea=seasonIdx(),got={};
+  for(const p of S.people){if(p.ill||p.job!=='wb'||p.lost)continue;const b=bById(p.wb);if(!b||!bDone(b))continue;const r=krOfB(b);if(!r||krFree(r))continue;let k=null;
+   if(r.kr==='mokradla'&&sea===0&&Math.random()<.012*KF)k='bagienna';
+   else if(r.kr==='zaglebie'&&['kopalnia','szybw','odkrywka','ruda'].includes(b.kind)&&Math.random()<.006*KF)k='gornicza';
+   if(k&&illGive(p,k))got[k]=(got[k]||0)+1}
+  Object.entries(got).forEach(([k,n])=>{const I=ILL[k];log(`${n>1?`Zachorowały ${n} osoby`:'Ktoś zachorował'}: ${I[0]}. Przyczyna: ${I[1]}.`);if(!S.seen['ill'+k]){S.seen['ill'+k]=1;toast(`Choroba: ${I[0]} (${I[1]})`)}})}catch(e){console.warn(e)}}}
 window.__kr={KR,krAt,krOfB,krMulKind,krLine,flowers:()=>krFlowers.count,regions:()=>REGIONS.filter(Boolean).map(r=>({id:r.id,name:r.name,kr:r.kr,i:r.i,j:r.j}))};

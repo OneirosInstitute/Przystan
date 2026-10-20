@@ -1001,18 +1001,20 @@ Pierze z kurnika i tokowiska idzie zimą na pierzyny: domy palą mniej opału. O
 
 Każda kraina wyspy ma rolę. Rola wynika z ziemi (las, łąka, mokradło, hale, wybrzeże, stok zwrócony na południe) i ze złóż, i na każdej wyspie jest każda z dziesięciu ról. Rolę widać w karcie krainy (Zadania → Wyprawy), pod nazwą na mapie i w kronice, gdy zwiadowcy nazwą nowe miejsce. Budynek postawiony w swojej krainie pracuje szybciej: podgląd stawiania i karta budynku mówią o ile.
 
-| Kraina | Co daje |
-|---|---|
-| Żyzne Niziny | plon pól +30%, zagroda +15% |
-| Słoneczne Stoki | winnica +35%, chmielnik +20%, ogród ziołowy +25% |
-| Kwietne Łąki | barć +50%, zagroda +20%, chata zbieracza +10%; od wiosny do jesieni kwitną |
-| Stare Bory | chata drwala +20%, chata myśliwego, mielerz i leśniczówka +15% |
-| Grąd i Dąbrowa | barć +25%, chata drwala i myśliwego +10% |
-| Kamienna Grań | kamieniołom +25%, łom kamienia +15% |
-| Zagłębie | odkrywka, szyb węglowy i kopalnia rudy +10%, wykop rudy +15%; zawsze tam, gdzie węgiel albo ruda |
-| Mokradła | kopanka torfu +20%, wykop rudy +25%, ogród ziołowy +10% |
-| Gliniska nad wodą | glinianka +25%, gliniak +15%, piec do cegły i garncarnia +10%; zawsze tam, gdzie złoże gliny |
-| Wybrzeże i Zatoki | pomost rybacki +20%, warzelnia +15% |
+| Kraina | Co daje | Czym płaci |
+|---|---|---|
+| Żyzne Niziny | plon pól +30%, zagroda +15% | w ulewy i odwilż woda wylewa na pola, ziemia podmaka (rowy pomagają) |
+| Słoneczne Stoki | winnica +35%, chmielnik +20%, ogród ziołowy +25% | wiosenny przymrozek ścina kwiat winorośli: winnica dwa dni o połowę wolniej; pola −10% (deszcz zmywa ziemię) |
+| Kwietne Łąki | barć +50%, zagroda +20%, chata zbieracza +10%; od wiosny do jesieni kwitną | każda zagroda w krainie zabiera barciom 12% pożytku (najwyżej 40%) |
+| Stare Bory | chata drwala +20%, chata myśliwego, mielerz i leśniczówka +15% | zbieracz −15%, pola −15% |
+| Grąd i Dąbrowa | barć +25%, chata drwala i myśliwego +10% | każda chata drwala w krainie zabiera barciom 12% pożytku |
+| Kamienna Grań | kamieniołom +25%, łom kamienia +15% | zbieracz −25%, pola −20% |
+| Zagłębie | odkrywka, szyb węglowy i kopalnia rudy +10%, wykop rudy +15%; zawsze tam, gdzie węgiel albo ruda | kaszel górniczy przy kopalniach i szybach |
+| Mokradła | kopanka torfu +20%, wykop rudy +25%, ogród ziołowy +10% | latem gorączka bagienna u pracujących |
+| Gliniska nad wodą | glinianka +25%, gliniak +15%, piec do cegły i garncarnia +10%; zawsze tam, gdzie złoże gliny | wiosną błoto: glinianka i gliniak −30% |
+| Wybrzeże i Zatoki | pomost rybacki +20%, warzelnia +15% | pola −10% (słony wiatr), w sztorm pomost stoi |
+
+Kraina obozu (Zatoka Wraku) daje swoje plusy, ale nic nie kosztuje: rozbitkowie wylądowali w osłoniętym miejscu.
 
 Ziemia ma barwę krainy: niziny są soczyście zielone, łąki i stoki jaśniejsze, mokradła oliwkowe. Zimą różnice prawie znikają.
 
@@ -1187,6 +1189,7 @@ W Ludziach (Praca i Mieszkańcy) wyszukiwarka szuka po imieniu, fachu albo budyn
 | 1.8.3 | poprawka: rozbudowa domu (szałas w chatę, chata w dom) nie zabiera już rodzinie spiżarki; w czasie budowy zapas zostaje w starym domu w granicach jego pojemności |
 | 1.9 | budynki z charakterem: każdy budynek inny (ściany, dachy, spadek, okap), koniki, malowane okiennice, ganki, przybudówki, garnki na płocie, zioła pod okapem, szyldy rzemiosł, wyraźniejsza kuźnia, łaźnia i chata wiecowa |
 | 1.10 | wykonanie budynków: surowe, porządne i mistrzowskie, wyraźnie widoczne po rozbudowie (wielkość, podmurówka, dach, okiennice, obramienia okien, kwiaty, płotek, szyld); karta budynku pokazuje wykonanie i trwałość; odmiany szałasów, studni, zagród i spiżarni |
+| 4.4.0-rc.2 | koszty krain: wylewy na nizinach, przymrozek w winnicach na stokach, zagrody i drwale zabierają barciom pożytek, mniej jedzenia na grani i w borach, gorączka bagienna i kaszel górniczy, błoto na gliniskach, sztorm na wybrzeżu; karta krainy mówi, czym płaci |
 | 4.4.0-rc.1 | folwarki ze złóż i ziemi: specjalizacja musi pasować do krainy (huta do rudy, tartak do lasu, garncarze do gliny…), formularz pokazuje ✓/✗ i czego brakuje; szyb kopalni rudy w folwarku hutników sięga głębokiego złoża; Zagłębia w zewnętrznym pierścieniu; złoża rdzenia przechodzą do krain przy Wiecu Rodów |
 | 4.3.0-rc.2 | wyszukiwarka w Ludziach (imię, fach, budynek); bez szarego pasa u dołu dalekiego widoku wyspy |
 | 4.3.0-rc.1 | krainy z charakterem: dziesięć ról krain (Żyzne Niziny, Słoneczne Stoki, Kwietne Łąki, Stare Bory, Grąd i Dąbrowa, Kamienna Grań, Zagłębie, Mokradła, Gliniska, Wybrzeże), każda na każdej wyspie; budynki pracują szybciej w swojej krainie, pola na nizinach rodzą więcej; barwa ziemi krainy i kwitnące łąki |
