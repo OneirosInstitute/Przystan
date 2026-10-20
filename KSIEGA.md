@@ -1121,13 +1121,13 @@ Każda wyspa ma po dwa złoża rudy, łomów i glinisk, rozłożone daleko od si
 # 14. Interfejs
 
 - **Górny pasek:** pora roku i dzień, tempo, dźwięk, pełny ekran, jakość grafiki, zapasy (żywność z liczbą dni, drewno, opał, ludzie).
-- **Księga od wersji 4.2.0-rc.1: pięć działów.** Na górze księgi (w pełnym menu na dolnym pasku) jest pięć działów, a pod nimi najwyżej jeden rząd: widoki działu albo pasek Budowy. Nigdy trzy rzędy przycisków.
+- **Księga od wersji 4.2.0-rc.1: pięć działów.** Od 4.5 księga ma własny wygląd: u góry pas haftu krzyżykowego (marzanna i bursztyn), działy jak rzeźbione drewniane tabliczki z bursztynową nitką pod wybraną, ten sam ścieg pod nagłówkami. Na górze księgi (w pełnym menu na dolnym pasku) jest pięć działów, a pod nimi najwyżej jeden rząd: widoki działu albo pasek Budowy. Nigdy trzy rzędy przycisków.
 
 | Dział | Widoki | Co jest pierwsze |
 |---|---|---|
 | Osada | Przegląd, Kronika, Opcje | potrzeby i sprawy, potem zapasy z bilansem i cele |
 | Ludzie | Praca, Mieszkańcy | przydział pracy z − i +; w Mieszkańcach rodziny, wspólnota, rody i pamięć osady |
-| Budowa | — | wyszukiwarka i lista rodzajów: „Możesz postawić teraz”, Domy, Jedzenie, Pola i stada, Przetwórstwo, Surowce, Rzemiosło, Magazyny, Wspólnota, Remonty, Drogi, Ład wsi |
+| Budowa | — | wyszukiwarka i przyciski rodzajów (od 4.5 znów w kilku rzędach, jak przed 4.2): „Możesz teraz”, Domy, Jedzenie, Pola i stada, Przetwórstwo, Surowce, Rzemiosło, Magazyny, Wspólnota, Remonty, Drogi, Ład wsi |
 | Zadania | Zadania, Wyprawy | zadania główne epoki, potem bieżące sprawy |
 | Wiedza | Wiedza, Natura | wiedza w ludziach i drzewa odkryć |
 

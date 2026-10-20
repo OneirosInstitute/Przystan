@@ -35,7 +35,7 @@ Status: projekt docelowy. Część „Wdrożone w RC11” opisuje, co już dzia�
 | Obszar | Co działa |
 |---|---|
 | Menu | Pięć działów: Osada (Przegląd, Kronika, Opcje), Ludzie (Praca, Mieszkańcy), Budowa, Zadania (Zadania, Wyprawy), Wiedza (Wiedza, Natura). Pod działami najwyżej jeden rząd. Dział pamięta ostatni widok. |
-| Budowa | Wyszukiwarka i lista rozwijana rodzajów z liczbami, na początku „Możesz postawić teraz”. |
+| Budowa | Wyszukiwarka i „Możesz postawić teraz”. Lista rozwijana rodzajów z 4.2 wróciła w 4.5 do przycisków w kilku rzędach (na życzenie: przy wielu budynkach przyciski są wygodniejsze). |
 
 ### Wdrożone w 4.3.0-rc.1
 

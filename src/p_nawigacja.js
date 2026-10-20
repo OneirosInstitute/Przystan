@@ -33,30 +33,24 @@ function nvApply(){const b=$('body'),v=NV_VIEWS[nvView];let mode='';
 #nv-tools{display:flex;gap:6px;align-items:stretch}#nv-tools[hidden],#nv-seg[hidden],#nv-p[hidden],#nv-hint[hidden]{display:none}
 #nv-p{display:block;width:100%;box-sizing:border-box;margin-top:8px;height:44px;border-radius:10px;border:1px solid var(--line);background:#0000002e;color:var(--hi);font:500 15px var(--sans);padding:0 12px}#nv-p::placeholder{color:var(--mut)}#nv-p:focus{outline:2px solid var(--gold);outline-offset:1px}
 #body .nv-miss{display:none!important}
-#nv-q{flex:1 1 50%;min-width:0;height:44px;border-radius:10px;border:1px solid var(--line);background:#0000002e;color:var(--hi);font:500 15px var(--sans);padding:0 12px}
-#nv-q::placeholder{color:var(--mut)}#nv-q:focus,#nv-cat:focus{outline:2px solid var(--gold);outline-offset:1px}
-#nv-cat{flex:1 1 50%;min-width:0;height:44px;border-radius:10px;border:1px solid var(--gold);background:#2c2a20;color:var(--hi);font:600 15px var(--sans);padding:0 8px}
-#sheet #body .bchips{display:none}
+#nv-q{flex:1 1 100%;min-width:0;height:44px;border-radius:10px;border:1px solid var(--line);background:#0000002e;color:var(--hi);font:500 15px var(--sans);padding:0 12px}
+#nv-q::placeholder{color:var(--mut)}#nv-q:focus{outline:2px solid var(--gold);outline-offset:1px}
 body.cz #cz-chips{overflow:visible;gap:4px}body.cz #cz-chips button{flex:1 1 0;min-width:0;padding:0 2px;font-size:14px;overflow:hidden;text-overflow:ellipsis}body.cz #cz-chips button.on{font-weight:650}
 @media(max-height:460px),(max-width:370px){body.cz #cz-chips button{font-size:13px}}
 #nv-hint{font-size:13px;color:var(--mut);margin:6px 2px 0}
 `;document.head.appendChild(st)}
 // ---------- pasek działów: Cicha wyspa w panelu, pełne menu na dole ----------
-{const el=document.createElement('div');el.id='nv-view';el.hidden=true;el.innerHTML='<div class="nv-seg" id="nv-seg" role="tablist"></div><div id="nv-tools" hidden><input id="nv-q" type="search" enterkeyhint="search" autocomplete="off" placeholder="Szukaj budynku" aria-label="Szukaj budynku"><select id="nv-cat" aria-label="Rodzaj budowli"></select></div><input id="nv-p" type="search" enterkeyhint="search" autocomplete="off" placeholder="Szukaj osoby, fachu albo budynku" aria-label="Szukaj osoby, fachu albo budynku" hidden><div id="nv-hint" hidden></div>';
+{const el=document.createElement('div');el.id='nv-view';el.hidden=true;el.innerHTML='<div class="nv-seg" id="nv-seg" role="tablist"></div><div id="nv-tools" hidden><input id="nv-q" type="search" enterkeyhint="search" autocomplete="off" placeholder="Szukaj budynku" aria-label="Szukaj budynku"></div><input id="nv-p" type="search" enterkeyhint="search" autocomplete="off" placeholder="Szukaj osoby, fachu albo budynku" aria-label="Szukaj osoby, fachu albo budynku" hidden><div id="nv-hint" hidden></div>';
  $('sheet').insertBefore(el,$('body'))}
 const nvCur=()=>nvView&&!$('sheet').hidden?NV_VIEWS[nvView].s:null;
 const nvOn=el=>{const cur=nvCur();for(const b of el.children)b.classList.toggle('on',b.dataset.nvs===cur)};
 czChips=function(){if(!czOn)return;const el=$('cz-chips');setH(el,NV.map(s=>`<button data-czt="${nvSecView(s.k).t}" data-nvs="${s.k}">${s.n}</button>`).join(''));nvOn(el)};
 function nvTabbar(){const el=$('tabbar');setH(el,NV.map(s=>`<button data-tab="${nvSecView(s.k).t}" data-nvs="${s.k}">${ico(s.i)}<span>${s.n}</span></button>`).join(''));nvOn(el)}
-function nvCatHTML(){if(!S)return'';const n=k=>BKEYS.filter(q=>BD[q].cat===k);const now=BKEYS.filter(k=>bAvail(k)&&canAfford(BD[k].cost)).length;const rem=S.bld.filter(b=>bDone(b)&&condOf(b)<.5).length;
- const o=[['teraz',`Możesz postawić teraz (${now})`],...CATS.map(([c,cn])=>{const ks=n(c),av=ks.filter(bAvail).length;return[c,`${cn} (${av} z ${ks.length})`]}),['remont',`Remonty${rem?` (${rem})`:''}`]];
- if(typeof roadsHTML==='function')o.push(['drogi','Drogi']);if(typeof ladBuildHTML==='function')o.push(['lad','Ład wsi']);
- const q=!!nvQ.trim();return(q?'<option value="__all" selected hidden>Wszystkie rodzaje</option>':'')+o.map(([k,t])=>`<option value="${k}"${!q&&buildCat===k?' selected':''}>${t}</option>`).join('')}
 function nvNav(){if(!S)return;czChips();nvTabbar();const box=$('nv-view');if($('sheet').hidden||!nvView){box.hidden=true;return}
  const s=nvSec(NV_VIEWS[nvView].s),build=s.k==='budowa';box.hidden=!(s.v.length>1||build);
  setH($('nv-seg'),s.v.length>1?s.v.map(v=>`<button role="tab" data-nvv="${v.k}" class="${v.k===nvView?'on':''}" aria-selected="${v.k===nvView}">${v.n}</button>`).join(''):'');$('nv-seg').hidden=s.v.length<2;
  const ppl=s.k==='ludzie';$('nv-p').hidden=!ppl;if(ppl){const q=$('nv-p');if(document.activeElement!==q&&q.value!==nvP)q.value=nvP}if(!ppl)$('nv-hint').hidden=true;
- $('nv-tools').hidden=!build;if(build){const sel=$('nv-cat');if(document.activeElement!==sel)setH(sel,nvCatHTML());if(sel.value!==buildCat&&document.activeElement!==sel&&!nvQ)sel.value=buildCat;const q=$('nv-q');if(document.activeElement!==q&&q.value!==nvQ)q.value=nvQ}}
+ $('nv-tools').hidden=!build;if(build){const q=$('nv-q');if(document.activeElement!==q&&q.value!==nvQ)q.value=nvQ}}
 {const _rp=renderPanel;renderPanel=function(){_rp();if(!S)return;try{if(!$('sheet').hidden&&tab){if(!nvView||NV_VIEWS[nvView].t!==tab)nvView=nvViewFor(tab);nvApply();nvPeople();if(!czOn&&nvView){const s=nvSec(NV_VIEWS[nvView].s),t=s.v.length>1?NV_VIEWS[nvView].n:s.n;if($('stitle').textContent!==t)$('stitle').textContent=t}}nvNav()}catch(e){console.warn(e)}}}
 {const _cs=closeSheet;closeSheet=function(){const r=_cs();try{nvNav()}catch(e){}return r}}
 // kliknięcia: dział, widok, rodzaj budowli, wyszukiwarka
@@ -64,7 +58,6 @@ function nvSecClick(e){const b=e.target.closest&&e.target.closest('[data-nvs]');
  if(nvCur()===k&&!czOn){closeSheet();return}nvGo(nvSecView(k).k)}
 $('cz-chips').addEventListener('click',nvSecClick,true);$('tabbar').addEventListener('click',nvSecClick,true);
 $('nv-seg').addEventListener('click',e=>{const b=e.target.closest('[data-nvv]');if(!b||!S)return;nvGo(b.dataset.nvv)});
-$('nv-cat').addEventListener('change',e=>{buildCat=e.target.value;nvQ='';$('nv-q').value='';$('body')._h=null;renderPanel();$('body').scrollTop=0;e.target.blur()});
 $('nv-q').addEventListener('input',e=>{nvQ=String(e.target.value||'').slice(0,40);if(nvQ&&['remont','drogi','lad'].includes(buildCat))buildCat='teraz';$('body')._h=null;renderPanel();$('body').scrollTop=0});
 $('nv-q').addEventListener('keydown',e=>{if(e.key==='Enter')e.target.blur();if(e.key==='Escape'){e.stopPropagation();e.target.value='';nvQ='';$('body')._h=null;renderPanel()}});
 // ---------- wyszukiwarka w Ludziach: po imieniu, fachu albo budynku ----------
@@ -80,6 +73,7 @@ function nvPeople(){const b=$('body');if(!b.querySelectorAll)return;const on=nvV
 $('nv-p').addEventListener('input',e=>{nvP=String(e.target.value||'').slice(0,40);nvPeople();$('body').scrollTop=0});
 $('nv-p').addEventListener('keydown',e=>{if(e.key==='Enter')e.target.blur();if(e.key==='Escape'){e.stopPropagation();e.target.value='';nvP='';nvPeople()}});
 // ---------- wyszukiwarka i „Możesz postawić teraz” w Budowie ----------
+$('body').addEventListener('click',e=>{if(e.target.closest&&e.target.closest('[data-bcat]')&&nvQ){nvQ='';$('nv-q').value=''}},true);
 const nvNorm=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/ł/g,'l');
 function nvKeys(){const q=nvNorm(nvQ).trim();
  if(q){const cn=Object.fromEntries(CATS);const rank=k=>{const n=nvNorm(BD[k].n);return n.startsWith(q)?0:n.includes(q)?1:2};return BKEYS.filter(k=>{const d=BD[k];return nvNorm(d.n).includes(q)||nvNorm(cn[d.cat]).includes(q)||q.length>=4&&nvNorm(d.d).includes(q)}).sort((a,b)=>rank(a)-rank(b))}
@@ -96,7 +90,7 @@ hintTick=function(rdt){hintT+=rdt;if(hintT<.6)return;hintT=0;hintEl.forEach(e=>e
  if($('sheet').hidden)el=czOn?$('cz-osada'):secBtn();
  else if(nvCur()!==v.s)el=secBtn();
  else if(nvView!==vk||tab!==tb)el=document.querySelector(`#nv-seg [data-nvv="${vk}"]`);
- else if(cat&&tb==='budowa'&&buildCat!==cat)el=$('nv-cat');
+ else if(cat&&tb==='budowa'&&buildCat!==cat)el=document.querySelector(`#body [data-bcat="${cat}"]`);
  else el=document.querySelector('#body '+sel);
  if(el){el.classList.add('hintp');hintEl.push(el)}};
 {const _b=boot;boot=function(f){_b(f);try{nvNav()}catch(e){}}}
