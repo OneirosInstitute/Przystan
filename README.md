@@ -1,6 +1,8 @@
-# Przystań 4.6.0-rc.1
+# Przystań 4.6.0-rc.2
 
 Spokojna gra o rozbitkach, którzy budują osadę na dzikiej wyspie (PWA, Three.js).
+
+4.6.0-rc.2: po aktualizacji gra ładuje się raz, od razu w nowej wersji.
 
 4.6.0-rc.1 zmienia przysiółki: nic nie staje samo. Przysiółek zaczyna od szałasu z ogniskiem, a każdą budowę wybierasz w jego karcie albo zgadzasz się na prośbę rodu. Szałas przebudowuje się w chatę, dom z piecem i dom rodu. Ludzi przybywa tylko pod nowe dachy, materiał zbierają sami albo niosą go tragarze z Przystani. W epoce IV wieś z domem rodu staje się folwarkiem i rośnie aż do dworu, a rody proszą o zgodę na każdą nową budowę.
 

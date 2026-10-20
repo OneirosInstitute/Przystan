@@ -41,7 +41,9 @@ self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(k=>Promise.a
 self.addEventListener('fetch',e=>{const r=e.request;if(r.method!=='GET')return;const u=new URL(r.url);
  if(u.origin===location.origin&&u.pathname.includes("/api/"))return;
  if(u.origin===location.origin){
-  if(r.mode==='navigate'){e.respondWith(caches.open(V).then(c=>c.match('index.html')).then(m=>m||fetch(r)));return}
+  // 4.6.0-rc.2: strona najpierw z sieci (krótkie oczekiwanie), z pamięci tylko bez sieci. Wcześniej po każdej aktualizacji
+  // najpierw uruchamiała się stara gra z pamięci, a po chwili cała strona ładowała się drugi raz już w nowej wersji.
+  if(r.mode==='navigate'){e.respondWith(caches.open(V).then(async c=>{try{const res=await Promise.race([fetch(r),new Promise((_,no)=>setTimeout(()=>no(new Error('wolna sieć')),3500))]);if(res&&res.ok){await c.put('index.html',res.clone());return res}}catch(error){}return(await c.match('index.html'))||fetch(r)}));return}
   e.respondWith(caches.open(V).then(cache=>cache.match(r).then(m=>m||fetch(r).then(async res=>{if(res.ok)await cache.put(r,res.clone());return res}))));return}
  if(/fonts\\.(googleapis|gstatic)\\.com$/.test(u.hostname)){e.respondWith(caches.match(r).then(m=>m||fetch(r).then(res=>{const c=res.clone();caches.open(V).then(x=>x.put(r,c));return res}).catch(()=>new Response('',{status:200,headers:{'Content-Type':'text/css'}}))))}
 });

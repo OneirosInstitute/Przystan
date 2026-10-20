@@ -118,6 +118,9 @@ const server=http.createServer((request,response)=>{
    const file=error||!stat.isFile()?path.join(ROOT,'index.html'):resolved,extension=path.extname(file);
    const headers={'Content-Type':TYPES[extension]||'application/octet-stream','Cache-Control':extension==='.html'||file.endsWith('sw.js')||extension==='.webmanifest'?'no-cache':'public, max-age=86400','X-Content-Type-Options':'nosniff'};
    if(file.endsWith('sw.js'))headers['Service-Worker-Allowed']='/';
+   // bez ponownego pobierania: przeglądarka pyta „czy się zmieniło”, a serwer odpowiada 304, gdy plik jest ten sam
+   const tag=stat&&stat.isFile()?'W/"'+stat.size.toString(36)+'-'+Math.floor(stat.mtimeMs).toString(36)+'"':null;
+   if(tag){headers.ETag=tag;if(request.headers['if-none-match']===tag){response.writeHead(304,headers);return response.end()}}
    const zipped=/gzip/.test(request.headers['accept-encoding']||'')&&/\.(html|js|webmanifest|json)$/.test(file);
    if(zipped){headers['Content-Encoding']='gzip';headers.Vary='Accept-Encoding'}
    if(request.method==='HEAD'){response.writeHead(200,headers);return response.end()}

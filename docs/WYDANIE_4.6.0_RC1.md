@@ -1,5 +1,7 @@
 # Przystań 4.6.0-rc.1 — Budowa w przysiółkach
 
+> **4.6.0-rc.2** (baza `41c48eb`) usuwa podwójne ładowanie po aktualizacji. Do tej pory gra z telefonu brała stronę najpierw z pamięci, więc po każdym nowym wydaniu uruchamiała się najpierw stara wersja (ekran tytułowy, wczytanie wyspy), a po kilkunastu sekundach cała strona ładowała się drugi raz już w nowej. Teraz pracownik offline (`sw.js`) bierze stronę najpierw z sieci (czeka do 3,5 s) i z pamięci tylko bez sieci. Strona rejestruje pracownika z numerem wersji (`sw.js?v=…`) i nie przeładowuje się, gdy nowy pracownik ma tę samą wersję co ona. Serwer odpowiada „bez zmian” (304, `ETag`), więc przy niezmienionej grze telefon nie pobiera jej od nowa. Sprawdzone w przeglądarce z prawdziwym serwerem: po podmianie wersji jedno ładowanie od razu w nowej wersji, a bez sieci gra startuje z pamięci. Jedno podwójne ładowanie zdarzy się jeszcze przy przejściu z 4.6.0-rc.1, bo tamta wersja pracownika działa po staremu.
+
 Baza: main 4.5.0-rc.2 `f29008133744e8902c9d1381ba4de22714678c69`. Wydanie wypchnięte na main (Railway buduje z main).
 Cały [projekt przysiółka i folwarku](PROJEKT_PRZYSIOLEK_FOLWARK.md), zaakceptowany 20.10.2026, w jednym wydaniu: etapy 0–4 (od szałasu do wsi z domem rodu) w epokach I–III i etapy 5–7 (folwark, folwark rozwinięty, dwór z folwarkiem) w epoce IV.
 
