@@ -29,7 +29,9 @@ const E4World=(()=>{
  const biomeNames={valley:'Żyzna Dolina',slope:'Słoneczny Stok',forest:'Stary Bór',meadow:'Miodowa Łąka',high:'Kamienna Grań',wet:'Źródliska',coast:'Zatoka'};
  function describe(world,x,z,id){const altitude=height(world,x,z),moisture=smooth(world.seed+901,x,z,38),forest=smooth(world.seed+151,x,z,27),sun=limit(.8-.04*altitude+smooth(world.seed+182,x,z,40)*.2-moisture*.2,0,1),fertility=limit(.45+moisture*.45-altitude*.025,0,1);
   let biome=altitude>5.4?'high':altitude<1?'coast':moisture>.69?'wet':forest>.61?'forest':sun>.71&&altitude>2.8?'slope':fertility>.7?'valley':'meadow';
-  return{id,x,z,name:biomeNames[biome]+' '+id.split(':').slice(1).join('·'),biome,fertility,moisture,sun,forest,ore:biome==='high'?.85:smooth(world.seed+650,x,z,31)*.35,clay:moisture*.8,water:biome==='wet'||biome==='coast'||moisture>.48,fish:biome==='coast'?1:biome==='wet'?.6:.1,nectar:limit(fertility*.7+forest*.3,0,1)};
+  // 4.4: poza graniami też bywa złoże rudy (Zagłębie): tam może stanąć folwark hutników z szybem
+  const oreNoise=smooth(world.seed+650,x,z,31),ore=biome==='high'?.85:oreNoise>.74&&biome!=='coast'?.7:oreNoise*.35;
+  return{id,x,z,name:(ore>=.6&&biome!=='high'?'Zagłębie':biomeNames[biome])+' '+id.split(':').slice(1).join('·'),biome,fertility,moisture,sun,forest,ore,clay:moisture*.8,water:biome==='wet'||biome==='coast'||moisture>.48,fish:biome==='coast'?1:biome==='wet'?.6:.1,nectar:limit(fertility*.7+forest*.3,0,1)};
  }
  function create({seed,core=null,town={x:0,z:65}}={}){
   if(!Number.isSafeInteger(seed)||seed<=0||!Number.isFinite(town.x)||!Number.isFinite(town.z)||Math.abs(town.x)>96||Math.abs(town.z)>96)throw new Error('Nieprawidłowy opis wyspy');

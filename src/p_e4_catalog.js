@@ -37,6 +37,7 @@ const E4Catalog=(()=>{
   huta:{name:'Cech hutniczy',model:'kuznia',cost:{kamien:20,cegla:16,deski:8,narz:2},labor:48},
   kuznia:{name:'Kuźnia narzędzi',model:'kuznia',cost:{kamien:14,cegla:8,deski:6},labor:32},
   mielerz:{name:'Mielerz',model:'mielerz',cost:{drewno:8,kamien:4},labor:12},
+  szyb:{name:'Szyb kopalni rudy',model:'kopalnia',cost:{drewno:24,deski:10,kamien:12,narz:2},labor:30},
   tartak:{name:'Tartak',model:'drwal',cost:{drewno:18,deski:8,narz:2},labor:28},
   stolarnia:{name:'Cech wyrobów drewnianych',model:'warsztat',cost:{deski:14,narz:2},labor:24},
   przasnia:{name:'Prząśnia i tkalnia',model:'szwalnia',cost:{deski:12,wlokna:4},labor:24},
@@ -86,7 +87,7 @@ const E4Catalog=(()=>{
   browarniczy:{name:'Browar i karczma',buildings:['chmielnik','browar','karczma','stolarnia'],crops:['zboze','chmiel'],recipes:['slod','piwo','beczki'],skill:'rolnik'},
   miesny:{name:'Wyroby mięsne i wędzarnie',buildings:['zagroda','chlew','wedzarnia','piwnica'],crops:['warzywa'],recipes:['wedliny','suszone_ryby'],skill:'mysliwy'},
   hodowlany:{name:'Hodowla kóz, kur i świń',buildings:['zagroda','kurnik','chlew','serownia'],crops:['zboze'],recipes:['ser'],skill:'hodowca'},
-  hutniczy:{name:'Cech hutniczy i narzędzia',buildings:['mielerz','huta','kuznia','magazyn'],crops:['warzywa'],recipes:['wegiel','zelazo','narz','gwozdzie'],skill:'kowal'},
+  hutniczy:{name:'Cech hutniczy i narzędzia',buildings:['szyb','mielerz','huta','kuznia','magazyn'],crops:['warzywa'],recipes:['wegiel','zelazo','narz','gwozdzie'],skill:'kowal'},
   drzewny:{name:'Tartak i wyroby drewniane',buildings:['tartak','stolarnia','magazyn'],crops:['warzywa'],recipes:['deski','wyroby_drewniane','beczki'],skill:'drwal'},
   tkacki:{name:'Len, tkaniny i odzież',buildings:['len','przasnia','szwalnia'],crops:['len'],recipes:['plotno','odziez'],skill:'krawiec'},
   garncarski:{name:'Cech garncarski i ceglarski',buildings:['garncarnia','cegielnia','magazyn'],crops:['warzywa'],recipes:['naczynia','cegla'],skill:'murarz'},
@@ -94,6 +95,14 @@ const E4Catalog=(()=>{
   zielarski:{name:'Zielnik i wyroby zielarskie',buildings:['zielnik','zielarnia','wyroby'],crops:['ziola'],recipes:['leki','kiszonki'],skill:'zbieracz'}
  };
  const animals={koza:{name:'Koza',building:'zagroda',feed:.2,milk:.7,gestation:25,adult:20,capacity:16,meat:7,skin:1},kura:{name:'Kura',building:'kurnik',feed:.07,eggs:.3,gestation:7,adult:8,capacity:32,meat:2,skin:0},swinia:{name:'Świnia',building:'chlew',feed:.5,gestation:20,adult:18,capacity:12,meat:18,skin:2}};
- return{resources,food,spoil,crops,buildings,recipes,specialties,animals,householdUse};
+ // 4.4: folwark rośnie z tego, co daje kraina. Wymagania: [cecha krainy, próg (ujemny = najwyżej), czego trzeba]
+ const fitNeeds={rolniczy:[['fertility',.6,'żyzna ziemia']],winiarski:[['sun',.7,'dużo słońca']],browarniczy:[['fertility',.55,'żyzna ziemia pod zboże i chmiel']],
+  miesny:[['fertility',.45,'pastwiska']],hodowlany:[['fertility',.45,'pastwiska'],['moisture',-.85,'suche łąki, nie bagno']],hutniczy:[['ore',.6,'złoże rudy w skale']],
+  drzewny:[['forest',.55,'stary las']],tkacki:[['fertility',.55,'żyzna ziemia pod len'],['moisture',.35,'wilgoć dla lnu']],garncarski:[['clay',.45,'złoże gliny']],
+  sadowniczy:[['nectar',.55,'pożytek dla pszczół'],['sun',.6,'słońce dla sadu']],zielarski:[['moisture',.45,'wilgotne łąki i zioła']]};
+ function specialtyFit(key,region){const needs=fitNeeds[key]||[];if(!region)return{ok:false,missing:['kraina'],score:0};const missing=[];let score=1;
+  for(const[k,t,label]of needs){const v=region[k]??0;const ok=t>=0?v>=t:v<=-t;if(!ok)missing.push(label);score=Math.min(score,t>=0?v/t:(-t)/Math.max(.01,v))}
+  return{ok:!missing.length,missing,score:Math.round(Math.min(score,2)*100)/100,needs:needs.map(n=>n[2])}}
+ return{resources,food,spoil,crops,buildings,recipes,specialties,animals,householdUse,fitNeeds,specialtyFit};
 })();
 if(typeof module!=='undefined'&&module.exports)module.exports=E4Catalog;

@@ -60,6 +60,7 @@ const E4Economy=(()=>{
  function found(state,{householdId,regionId,specialization}){
   ensure(state);const family=state.e4.households[householdId],region=state.e4.world.regions.find(candidate=>candidate.id===regionId),definition=catalog.specialties[specialization];
   if(!family||!region||!definition)return{ok:false,reason:'Wybierz rodzinę, krainę i specjalizację.'};
+  {const fit=catalog.specialtyFit(specialization,region);if(!fit.ok)return{ok:false,reason:`${definition.name} nie ma tu z czego żyć. Brakuje: ${fit.missing.join(', ')}.`};}
   if(Object.values(state.e4.settlements).some(settlement=>settlement.regionId===regionId))return{ok:false,reason:'W tej krainie działa już ośrodek.'};
   const source=state.e4.settlements[family.settlementId],people=domain.members(state,family.id);
   if(people.filter(person=>person.age>=16&&person.age<65&&person.hp>.45).length<2||people.some(person=>person.e4Transport||person.job==='wyp'||person.carry?.length||person.kozN))return{ok:false,reason:'Rodzina potrzebuje dwóch zdrowych dorosłych i zakończonych dostaw lub wypraw.'};
@@ -142,7 +143,8 @@ const E4Economy=(()=>{
   if(state.e4.simTicks===undefined)ensure(state);
   const region=worldApi.regionAt(state.e4.world,settlement.x,settlement.z),id=region?.id||'centrum';
   if(!state.e4.nature[id]){const forest=region?.forest??.5;state.e4.nature[id]={timber:forest*8000,maxTimber:forest*8000,ore:(region?.ore??.3)*5000,clay:(region?.clay??.4)*5000,stone:4000,fish:(region?.fish??.3)*1500,maxFish:(region?.fish??.3)*1500,forage:(region?.fertility??.6)*800,maxForage:(region?.fertility??.6)*800,herbs:180,wildGrain:80,wild:{koza:8,kura:12,swinia:6},cuttings:{winogrona:8,jablka:8,chmiel:8,len:12},lastDay:Math.floor(state.day)};}
-  return state.e4.nature[id];
+  const pool=state.e4.nature[id];if(pool.oreDeep===undefined)pool.oreDeep=(region?.ore??0)>=.6?Math.round(region.ore*20000):0;
+  return pool;
  }
  function regenerate(state){
   for(const pool of Object.values(state.e4.nature)){if(pool.lastDay>=Math.floor(state.day))continue;pool.lastDay=Math.floor(state.day);pool.timber=Math.min(pool.maxTimber,pool.timber+(winter(state)?0:pool.maxTimber*.0007));pool.fish=Math.min(pool.maxFish,pool.fish+pool.maxFish*.008);pool.forage=Math.min(pool.maxForage,pool.forage+(winter(state)?0:pool.maxForage*.018));pool.herbs=Math.min(180,pool.herbs+(winter(state)?0:2));pool.wildGrain=Math.min(150,pool.wildGrain+(winter(state)?0:4));if(!winter(state))for(const species of Object.keys(pool.wild))pool.wild[species]=Math.min(species==='kura'?24:16,pool.wild[species]+.025*pool.wild[species]);}
@@ -150,7 +152,9 @@ const E4Economy=(()=>{
  function gather(state,settlement,people,resource,quantity){
   const pool=nature(state,settlement),mapping={drewno:['timber',3,'drwal'],kamien:['stone',2,'kamieniarz'],ruda:['ore',1.5,'kamieniarz'],glina:['clay',3,'kamieniarz'],jagody:['forage',6,'zbieracz'],ryby:['fish',5,'rybak'],ziola:['herbs',2,'zbieracz'],ziarno:['wildGrain',3,'rolnik']},definition=mapping[resource];if(!definition)return 0;
   if((resource==='jagody'||resource==='ziola'||resource==='ziarno')&&winter(state))return 0;
-  const work=useLabor(people,Math.min(quantity,pool[definition[0]],Math.max(0,freeCapacity(state,settlement)))/definition[1],definition[2],'pozyskuje '+catalog.resources[resource].toLowerCase(),'supply:'+settlement.id+':'+resource),yielded=Math.min(pool[definition[0]],work*definition[1]);pool[definition[0]]-=yielded;add(domain.stock(state,settlement.id),{[resource]:yielded});add(settlement.output,{[resource]:yielded});return yielded;
+  // 4.4: szyb sięga głębokiego złoża rudy i wydobywa dwa i pół raza szybciej niż kopanie z powierzchni
+  let field=definition[0],rate=definition[1],act='pozyskuje '+catalog.resources[resource].toLowerCase();if(resource==='ruda'&&settlement.buildings.szyb&&pool.oreDeep>0){field='oreDeep';rate*=2.5;act='kopie rudę w szybie'}
+  const work=useLabor(people,Math.min(quantity,pool[field],Math.max(0,freeCapacity(state,settlement)))/rate,definition[2],act,'supply:'+settlement.id+':'+resource),yielded=Math.min(pool[field],work*rate);pool[field]-=yielded;add(domain.stock(state,settlement.id),{[resource]:yielded});add(settlement.output,{[resource]:yielded});return yielded;
  }
  function trial(state,settlementId,cropId){
   ensure(state);const settlement=state.e4.settlements[settlementId];if(!settlement||!catalog.crops[cropId]||!['winogrona','jablka','chmiel','len'].includes(cropId))return{ok:false,reason:'Nieznana próba uprawy.'};

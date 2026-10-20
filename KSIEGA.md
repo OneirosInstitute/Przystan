@@ -1016,6 +1016,26 @@ Każda kraina wyspy ma rolę. Rola wynika z ziemi (las, łąka, mokradło, hale,
 
 Ziemia ma barwę krainy: niziny są soczyście zielone, łąki i stoki jaśniejsze, mokradła oliwkowe. Zimą różnice prawie znikają.
 
+### Folwarki ze złóż i ziemi (od wersji 4.4.0-rc.1)
+
+W epoce IV folwark zakłada się tam, gdzie kraina daje to, z czego ma żyć. Lista krain w formularzu „Załóż folwark” mówi, co w danej krainie pasuje. Najpierw pokazuje to, co na wyspie rzadkie: rudę, glinę, stary las. Wybór specjalizacji od razu pokazuje ✓ albo ✗ i czego brakuje. Gdy kraina tego nie udźwignie, przycisk jest wyłączony.
+
+| Specjalizacja | Czego potrzebuje kraina |
+|---|---|
+| Pola, młyn i piekarze | żyzna ziemia |
+| Winnica | dużo słońca |
+| Browar | żyzna ziemia pod zboże i chmiel |
+| Wędliny | pastwiska |
+| Hodowla | pastwiska, suche łąki (nie bagno) |
+| Cech hutniczy | złoże rudy w skale (Kamienna Grań albo Zagłębie) |
+| Tartak | stary las |
+| Len i tkaniny | żyzna ziemia i wilgoć |
+| Garncarze i cegła | złoże gliny |
+| Sad i pasieka | pożytek dla pszczół i słońce |
+| Zielnik | wilgotne łąki |
+
+Folwark hutników zaczyna od szybu kopalni rudy. Szyb sięga głębokiego złoża (w Zagłębiu około 14 000 porcji) i daje dwa i pół raza więcej rudy z tej samej pracy niż kopanie z powierzchni. Cały folwark może stać obok, na złożu jest tylko szyb. Karta folwarku pokazuje rudę na wierzchu i w głębi, kamień i glinę. Złoża odkryte wcześniej w rdzeniu wyspy przechodzą przy Wiecu Rodów do krain z tym, co w nich zostało.
+
 ### Złoża (od wersji 4.1.0-rc.1)
 
 Kamienie, glina i ruda leżące luzem przy osadzie wystarczają na początek. Na lata osada sięga do złóż: dużych, skupionych w jednym miejscu i skończonych. Złoże leży zawsze w tym samym miejscu dla danej wyspy, z daleka widać je jako zagadkę („Rdzawa woda w potoku”, „Szare ściany skalne”, „Biała maź nad wodą”), a rozpoznaje je dopiero ten, kto do niego dojdzie. Odkrycie złoża daje wiedzę o budowlach, które z niego czerpią.
@@ -1167,6 +1187,7 @@ W Ludziach (Praca i Mieszkańcy) wyszukiwarka szuka po imieniu, fachu albo budyn
 | 1.8.3 | poprawka: rozbudowa domu (szałas w chatę, chata w dom) nie zabiera już rodzinie spiżarki; w czasie budowy zapas zostaje w starym domu w granicach jego pojemności |
 | 1.9 | budynki z charakterem: każdy budynek inny (ściany, dachy, spadek, okap), koniki, malowane okiennice, ganki, przybudówki, garnki na płocie, zioła pod okapem, szyldy rzemiosł, wyraźniejsza kuźnia, łaźnia i chata wiecowa |
 | 1.10 | wykonanie budynków: surowe, porządne i mistrzowskie, wyraźnie widoczne po rozbudowie (wielkość, podmurówka, dach, okiennice, obramienia okien, kwiaty, płotek, szyld); karta budynku pokazuje wykonanie i trwałość; odmiany szałasów, studni, zagród i spiżarni |
+| 4.4.0-rc.1 | folwarki ze złóż i ziemi: specjalizacja musi pasować do krainy (huta do rudy, tartak do lasu, garncarze do gliny…), formularz pokazuje ✓/✗ i czego brakuje; szyb kopalni rudy w folwarku hutników sięga głębokiego złoża; Zagłębia w zewnętrznym pierścieniu; złoża rdzenia przechodzą do krain przy Wiecu Rodów |
 | 4.3.0-rc.2 | wyszukiwarka w Ludziach (imię, fach, budynek); bez szarego pasa u dołu dalekiego widoku wyspy |
 | 4.3.0-rc.1 | krainy z charakterem: dziesięć ról krain (Żyzne Niziny, Słoneczne Stoki, Kwietne Łąki, Stare Bory, Grąd i Dąbrowa, Kamienna Grań, Zagłębie, Mokradła, Gliniska, Wybrzeże), każda na każdej wyspie; budynki pracują szybciej w swojej krainie, pola na nizinach rodzą więcej; barwa ziemi krainy i kwitnące łąki |
 | 4.2.0-rc.1 | menu: pięć działów (Osada, Ludzie, Budowa, Zadania, Wiedza) z widokami w jednym rzędzie; wyszukiwarka budowli i „Możesz postawić teraz”, rodzaje budowli w jednej liście rozwijanej zamiast trzech rzędów przycisków; opcje gry w Osada → Opcje; zamykanie księgi gestem w dół |

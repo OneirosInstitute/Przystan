@@ -22,6 +22,10 @@ function e4Start(){
   for(const settlement of Object.values(next.e4.settlements)){if(settlement.legacyHamletId){settlement.homeCapacity=Math.max(8,E4Domain.residents(next,settlement.id).length+4);settlement.specialization=Object.keys(E4Catalog.specialties)[settlement.legacyHamletId%11];}
   }
   for(const region of world.regions)if(Math.abs(region.x)<96&&Math.abs(region.z)<96){const pool=E4Economy.nature(next,region);for(const key of ['timber','ore','clay','stone','forage','fish','wildGrain'])pool[key]=0;pool.wild={koza:0,kura:0,swinia:0};}
+  // 4.4: złoża rdzenia (4.1) przechodzą do krain Wiecu Rodów z tym, co w nich zostało: ruda w głąb (szyb), kamień i glina na wierzch
+  try{if(typeof ODK!=='undefined'&&typeof odkSt==='function'){for(const region of world.regions)if(Math.abs(region.x)<96&&Math.abs(region.z)<96)E4Economy.nature(next,region).oreDeep=0;
+   for(const o of ODK){const st=odkSt(o);if(!st||st.s!==2||!Array.isArray(st.zl))continue;const region=E4World.regionAt(world,o.x,o.z);if(!region)continue;const pool=E4Economy.nature(next,region),left=st.zl.reduce((a,b)=>a+Math.max(0,b),0);
+    if(o.t==='rudne')pool.oreDeep+=left;else if(o.t==='lom')pool.stone+=left;else if(o.t==='glinisko')pool.clay+=left}}}catch(error){console.warn(error)}
   // Każdy stary węzeł trafia do jednej krainy. Wycięty las nie wraca podczas migracji.
   for(const node of nodes){const region=E4World.regionAt(world,node.x,node.z),settlement=region;if(!settlement)continue;const pool=E4Economy.nature(next,settlement),key={tree:'timber',rock:'stone',ruda:'ore',clay:'clay',bush:'forage',grzyb:'forage',fish:'fish',zboze:'wildGrain'}[node.type];if(key)pool[key]+=Math.max(0,next.nodeAmt[nodes.indexOf(node)]||0);}
   for(const herd of next.herds){const species={koza:'koza',kura:'kura',dzik:'swinia'}[herd.type];if(species)E4Economy.nature(next,herd).wild[species]+=herd.n;}
