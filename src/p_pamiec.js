@@ -36,7 +36,8 @@ function askVName(){if(!S||S.vname)return;if(evOpen||placing){gameLater(askVName
 {const _w=wedding;wedding=function(k,m){_w(k,m);if(Math.random()<.35)song(`Pieśń o weselu: ${k.name} i ${m.name}`)}}
 {const _ef=endFire;endFire=function(b){const hp=b.fire?b.fire.hp:1,n=BD[b.kind].n.toLowerCase();_ef(b);if(Math.random()<.4)song(hp>0?'Pieśń o ugaszonym ogniu':'Pieśń o pożarze: '+n)}}
 {const _fx=finishExp;finishExp=function(e,out){const n0=S.people.length,r=REGIONS[e.r];_fx(e,out);if(S.people.length<n0)song('Pieśń o tych, co nie wrócili z wyprawy');else if(Math.random()<.15&&r&&r.known)song('Pieśń o drodze: '+r.name)}}
-{const _fh=foundHamlet;foundHamlet=function(m,why){const h=_fh(m,why);if(h)song('Pieśń o odejściu: '+h.name);return h}}
+{const _fh=foundHamlet;foundHamlet=function(m,why,rid,o){const h=_fh(m,why,rid,o);   // 4.5: przekazuje krainę wybraną na wiecu (wcześniej ginęła i przysiółek szedł zawsze do najbliższej)
+ if(h)song('Pieśń o odejściu: '+h.name);return h}}
 // ---- panel ----
 function pamHTML(){const K0=S.pamK||{},sg=(S.songs||[]).slice(-5).reverse(),fs=Object.values(S.firsts||{});
  return`<div class="card"><div class="eyebrow">Pamięć osady</div><h4>${S.vname||'Przystań'} · pamięć ${pamWord()}</h4>

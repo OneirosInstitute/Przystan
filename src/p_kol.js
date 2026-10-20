@@ -16,17 +16,18 @@ function zapWord(z){return z>=.7?'pełne':z>=.4?'wystarczą':z>=.18?'skąpe':'g�
 function kolInit(){ludInit();S.hamlets.forEach(h=>{if(h.zap===undefined)h.zap=.45;if(h.st===undefined){h.st=0;HST.forEach((s,i)=>{if(h.pop>=s[1])h.st=i})}if(!h.road)h.road=1;if(!h.head)h.head=h.ppl&&h.ppl[0]||'?';if(hamPath[h.id]===undefined)kolPath(h)})}
 function settledCount(){return 1+new Set((S.hamlets||[]).map(h=>h.rid)).size}
 function regionCount(){return REGIONS.filter(Boolean).length}
-function freeRegions(){const used=new Set((S.hamlets||[]).map(h=>h.rid));return REGIONS.filter(r=>r&&r.id!==0&&!used.has(r.id)&&S.regs&&S.regs[r.id]).sort((a,b)=>Math.hypot(a.i-camp.i,a.j-camp.j)-Math.hypot(b.i-camp.i,b.j-camp.j))}
+function freeRegions(){const used=new Set((S.hamlets||[]).map(h=>h.rid));return REGIONS.filter(r=>r&&r.id!==0&&!used.has(r.id)&&hamRegionOK(r)&&S.regs&&S.regs[r.id]).sort((a,b)=>Math.hypot(a.i-camp.i,a.j-camp.j)-Math.hypot(b.i-camp.i,b.j-camp.j))}
 
 /* ---- ścieżki: A* po lądzie, wydeptane w ziemi ---- */
 const hamPath={};let forC=null;
 function forAt(i,j){if(!forC){forC=new Float32Array(N*N);for(let b=0;b<N;b++)for(let a=0;a<N;a++)forC[b*N+a]=forestF(a+.5,b+.5)}return forC[j*N+i]}
+const KOL_IT=Math.round(90000*N*N/(192*192));   // 4.5: limit kroków rośnie z mapą (drogi na nowy ląd mają ponad 250 pól)
 function kolAstar(si,sj,ti,tj){const NN=N*N,g=new Float32Array(NN).fill(1e9),from=new Int32Array(NN).fill(-1),cl=new Uint8Array(NN),hk=[],hf=[];
  const sw=(a,b)=>{let t=hk[a];hk[a]=hk[b];hk[b]=t;t=hf[a];hf[a]=hf[b];hf[b]=t};
  const push=(k,f)=>{hk.push(k);hf.push(f);let c=hk.length-1;while(c>0){const p=(c-1)>>1;if(hf[p]<=hf[c])break;sw(p,c);c=p}};
  const pop=()=>{const k=hk[0],lk=hk.pop(),lf=hf.pop();if(hk.length){hk[0]=lk;hf[0]=lf;let c=0;for(;;){const l=c*2+1,r=l+1;let m=c;if(l<hk.length&&hf[l]<hf[m])m=l;if(r<hk.length&&hf[r]<hf[m])m=r;if(m===c)break;sw(m,c);c=m}}return k};
  const s=sj*N+si,t=tj*N+ti;g[s]=0;push(s,0);const D=[[1,0,1],[-1,0,1],[0,1,1],[0,-1,1],[1,1,1.414],[1,-1,1.414],[-1,1,1.414],[-1,-1,1.414]];let it=0;
- while(hk.length&&it++<90000){const k=pop();if(cl[k])continue;cl[k]=1;if(k===t)break;const i=k%N,j=(k/N)|0,hh=tileH(i,j);
+ while(hk.length&&it++<KOL_IT){const k=pop();if(cl[k])continue;cl[k]=1;if(k===t)break;const i=k%N,j=(k/N)|0,hh=tileH(i,j);
   for(const[di,dj,dc]of D){const a=i+di,b=j+dj;if(a<1||b<1||a>=N-1||b>=N-1)continue;const n=b*N+a;if(cl[n]||!land[n])continue;if(dc>1&&(!land[j*N+a]||!land[b*N+i]))continue;
    const c=dc*(1+Math.abs(tileH(a,b)-hh)*2.2+forAt(a,b)*.7+(occ[n]>=0&&n!==t?5:0))*(tread[n]>.4?.55:1);const ng=g[k]+c;
    if(ng<g[n]){g[n]=ng;from[n]=k;push(n,ng+Math.hypot(a-ti,b-tj)*.55)}}}
@@ -160,9 +161,11 @@ function kolGo(c,rid,eager){const r=REGIONS[rid];const sup=kolSupply();const sna
  toast('Nowy przysiółek: '+h.name);sfx('bell');hamVis();return h}
 {const _f=foundHamlet;foundHamlet=function(m,why,rid,o){const snap=(m||[]).map(p=>({id:p.id,sex:p.sex,age:p.age,cloth:p.cloth}));const h=_f(m,why,rid,o);
  if(h&&why!=='wola'){kolInit();kolPath(h);kolReveal(h);kolClearPath(h,false);kolTread();let tmax=0;snap.forEach((p,k)=>{const t=spawnWalker(h,1,p,0,k*1.4);tmax=Math.max(tmax,(t||0)+k*1.4)});h.arr=S.day+tmax/DAY;hamVis()}return h}}
-function kolNew(){const why=kolWhyNot();if(why){toast(why);return}const rs=freeRegions().slice(0,4);
+function kolNew(){const why=kolWhyNot();if(why){toast(why);return}const fr=freeRegions(),rs=fr.slice(0,4);
+ // 4.5: gdy znany jest wolny nowy ląd, wiec zawsze ma go na mapie, nawet jeśli bliżej są puste krainy dawnej wyspy
+ if(rs.length&&!rs.some(r=>r.ring)){const far=fr.find(r=>r.ring);if(far)rs[Math.min(3,rs.length)]=far}
  openEvent({ey:'Wiec',t:'Nowy przysiółek',text:()=>'Ktoś rozkłada na ziemi mapę wyspy wyrysowaną węglem na korze. Wiec radzi, gdzie warto osiąść. Daleko jest więcej ziemi, ale dłuższa droga i więcej niebezpieczeństw.',
-  opts:rs.map(r=>{const d=Math.round(Math.hypot(r.i-camp.i,r.j-camp.j)),dg=hamDng({rid:r.id,i:r.i,j:r.j});return{n:r.name,d:`przysiółek ${HAM_T[r.type].n}: ${HAM_T[r.type].d} · ${d<45?'blisko':d<90?'pół dnia drogi':'daleko'} · ${dg<.4?'spokojnie':dg<.6?'trzeba uważać':'groźnie'}`,
+  opts:rs.map(r=>{const d=Math.round(Math.hypot(r.i-camp.i,r.j-camp.j)),dg=hamDng({rid:r.id,i:r.i,j:r.j});return{n:r.name,d:`${r.ring&&r.kr&&KR[r.kr]?'za zatoką, '+KR[r.kr].n+' · ':''}przysiółek ${(HAM_T[r.type]||HAM_T.forest).n}: ${(HAM_T[r.type]||HAM_T.forest).d} · ${d<45?'blisko':d<90?'pół dnia drogi':d<140?'daleko':'cały dzień drogi przez przesmyk'} · ${dg<.4?'spokojnie':dg<.6?'trzeba uważać':'groźnie'}`,
    f:()=>{S.kolR=r.id;gameLater(kolWho,400);return`Wiec wybiera krainę ${r.name}. Teraz trzeba zapytać, kto pójdzie.`}}}).concat([{n:'Jeszcze nie teraz',d:'',f:()=>'Mapa wraca pod belkę. Może na wiosnę.'}])},{})}
 function kolWho(){if(evOpen){gameLater(kolWho,700);return}const rid=S.kolR;const r=REGIONS[rid];if(!r)return;const cs=kolCands();if(!cs.length){toast('Nikt nie może teraz pójść.');return}
  const sup=foodTotal()>=60&&S.res.drewno>=15&&S.res.narz+S.res.narzk>=1;

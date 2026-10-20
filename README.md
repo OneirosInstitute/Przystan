@@ -1,6 +1,8 @@
-# Przystań 4.5.0-rc.1
+# Przystań 4.5.0-rc.2
 
 Spokojna gra o rozbitkach, którzy budują osadę na dzikiej wyspie (PWA, Three.js).
+
+4.5.0-rc.2 otwiera nowy ląd dla przysiółków od epoki II: wiec może posłać ludzi przez przesmyk, a przysiółek staje tam, gdzie wiec zdecydował.
 
 4.5.0-rc.1 to wyspa 384 × 384: dawna wyspa zostaje bez zmian pośrodku (z tymi samymi złożami na początek gry), a wokół niej Cicha Zatoka, trzy przesmyki i nowy ląd z 17 krainami, dwiema rzekami i dużymi złożami, które ciągną osadę dalej, gdy złoża dawnej wyspy się kończą. Drobna przyroda rysuje się tylko blisko kamery, stare zapisy przechodzą same, Budowa znów ma przyciski rodzajów, a księga dostała haft i drewno.
 

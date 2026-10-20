@@ -1,5 +1,7 @@
 # Przystań 4.5.0-rc.1 — Wyspa 384
 
+> **4.5.0-rc.2** (baza `d7a1335`) otwiera nowy ląd dla przysiółków od epoki II. W epoce I przysiółki powstają tylko na dawnej wyspie (`hamRegionOK` w `p_ludzie.js`). Od epoki II wiec ma na mapie zawsze jedną krainę „za zatoką” z nazwą jej charakteru, a odległość „cały dzień drogi przez przesmyk”. Krainy, do których nie da się dojść lądem (Wyspy Mew), nie są proponowane. Limit kroków szukania ścieżki (`kolAstar`) rośnie z mapą, bo drogi na nowy ląd mają ponad 250 pól: wcześniej do Sośnin Północnych i Zatoki Fok ścieżka się nie znajdowała. Poprawka starego błędu: pieśń o odejściu (`p_pamiec.js`) gubiła krainę wybraną na wiecu i przysiółek szedł zawsze do najbliższej. Nowy zestaw `hamlets-ring`. Repozytorium ma nowy adres `OneirosInstitute/Przystan`.
+
 Baza: main 4.4.0-rc.2 `9d043ed1c0840d33b4c5354579b4a8b85d67a55f`. Prace na gałęzi `wyspa-384`, wydanie scalone na main (Railway buduje z main).
 Piąty krok planu z [projektu wyspy](PROJEKT_WYSPY_5.md): jedna wyspa 384 × 384 od pierwszego dnia, szczegóły blisko kamery, krainy zewnętrzne.
 
@@ -58,5 +60,5 @@ Projekt nowego lądu powstał najpierw jako mapa do akceptacji (narzędzie w Pyt
 
 ## Jeszcze nie w tym wydaniu
 
-- Przysiółki na nowym lądzie od epoki II (plan 4.5 w projekcie wyspy).
+- Przysiółki na nowym lądzie od epoki II: zrobione w 4.5.0-rc.2.
 - Próba na prawdziwym telefonie (FPS i bateria w rdzeniu), bo przeglądarka bez okna rysuje programowo.

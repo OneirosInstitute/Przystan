@@ -265,6 +265,8 @@ Celem gry jest zasiedlenie całej wyspy: przysiółek w każdej krainie. Karta �
 
 W Księdze rozbitków jest rozdział o przysiółkach. W epoce II karta celu liczy zasiedlone krainy.
 
+**Przysiółki na nowym lądzie (od wersji 4.5.0-rc.2).** W epoce I przysiółki powstają tylko na dawnej wyspie. Od epoki II wiec może posłać ludzi przez przesmyk na nowy ląd, do każdej poznanej krainy, do której da się dojść pieszo (Wyspy Mew są tylko dla łodzi). Mapa na wiecu zawsze pokazuje jedną krainę „za zatoką”, nawet gdy bliżej są jeszcze puste krainy dawnej wyspy. Droga przez przesmyk trwa około dnia, a daleki przysiółek jest groźniejszy. Przysiółek staje w tej krainie, którą wybrał wiec (wcześniej szedł zawsze do najbliższej). W epoce III „cała wyspa” to wszystkie krainy, do których da się dojść lądem, także na nowym lądzie.
+
 ## Ład wsi (od wersji 0.20)
 
 Budowa → Ład wsi. Ozdoby i porządek stawia się od razu, bez robotników, w promieniu około 40 pól od ogniska.
@@ -1213,6 +1215,7 @@ W Ludziach (Praca i Mieszkańcy) wyszukiwarka szuka po imieniu, fachu albo budyn
 | 1.8.3 | poprawka: rozbudowa domu (szałas w chatę, chata w dom) nie zabiera już rodzinie spiżarki; w czasie budowy zapas zostaje w starym domu w granicach jego pojemności |
 | 1.9 | budynki z charakterem: każdy budynek inny (ściany, dachy, spadek, okap), koniki, malowane okiennice, ganki, przybudówki, garnki na płocie, zioła pod okapem, szyldy rzemiosł, wyraźniejsza kuźnia, łaźnia i chata wiecowa |
 | 1.10 | wykonanie budynków: surowe, porządne i mistrzowskie, wyraźnie widoczne po rozbudowie (wielkość, podmurówka, dach, okiennice, obramienia okien, kwiaty, płotek, szyld); karta budynku pokazuje wykonanie i trwałość; odmiany szałasów, studni, zagród i spiżarni |
+| 4.5.0-rc.2 | przysiółki na nowym lądzie od epoki II: wiec ma na mapie krainę za zatoką, ścieżka przez przesmyk, Wyspy Mew tylko łodzią; przysiółek staje w krainie wybranej na wiecu (wcześniej zawsze w najbliższej) |
 | 4.5.0-rc.1 | wyspa 384: dawna wyspa bez zmian pośrodku, wokół Cicha Zatoka, trzy przesmyki i nowy ląd z 17 krainami (Wronia Grań, Czarne Zagłębie, Złote Stoki, Modre Łąki, Bure Bagna, Dolina Wierzby, Puszcza Wschodnia, Lipowa Dąbrowa i inne), rzeki Wierzbna i Czarna Struga z brodami, większe złoża na nowym lądzie; szczegóły rysowane tylko blisko kamery; stare zapisy przechodzą same; Budowa znów z przyciskami rodzajów; księga w hafcie i drewnie |
 | 4.4.0-rc.2 | koszty krain: wylewy na nizinach, przymrozek w winnicach na stokach, zagrody i drwale zabierają barciom pożytek, mniej jedzenia na grani i w borach, gorączka bagienna i kaszel górniczy, błoto na gliniskach, sztorm na wybrzeżu; karta krainy mówi, czym płaci |
 | 4.4.0-rc.1 | folwarki ze złóż i ziemi: specjalizacja musi pasować do krainy (huta do rudy, tartak do lasu, garncarze do gliny…), formularz pokazuje ✓/✗ i czego brakuje; szyb kopalni rudy w folwarku hutników sięga głębokiego złoża; Zagłębia w zewnętrznym pierścieniu; złoża rdzenia przechodzą do krain przy Wiecu Rodów |

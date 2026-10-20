@@ -40,9 +40,12 @@ function ludDis(){if(!S||!S.people.length)return 0;return(.62-avgZad(S.people))*
 function hamletSpot(r){let ci=r.i,cj=r.j,best=null,bs=1e9;for(let rr=0;rr<16;rr++)for(let a=0;a<20;a++){const i=Math.round(ci+Math.cos(a/20*6.28)*rr),j=Math.round(cj+Math.sin(a/20*6.28)*rr);if(i<3||j<3||i>N-4||j>N-4)continue;const k=j*N+i;if(!land[k]||beach[k]||occ[k]>=0)continue;
   const sc=forestF(i+.5,j+.5)*20+rr*.6+(tileH(i,j)>6?8:0);if(sc<bs){bs=sc;best=[i,j]}}return best||[ci,cj]}
 function hamClear(h){const x0=tcx(h.i),z0=tcx(h.j);nodeBy.tree.forEach(n=>{if(n.amt>0&&Math.hypot(n.x-x0,n.z-z0)<3.2){n.amt=0;const k=nodes.indexOf(n);if(k>=0)S.nodeAmt[k]=0;nodeVis(n)}})}
+// 4.5: nowy ląd za Cichą Zatoką można zasiedlać od epoki II (w epoce I tylko dawna wyspa)
+// i tylko tam, dokąd da się dojść lądem (Wyspy Mew są tylko dla łodzi)
+function hamRegionOK(r){if(!r)return false;if(!r.ring)return true;if((S.epoch||1)<2)return false;if(r._walk===undefined){const t=nearestWalk(r.i,r.j);r._walk=!!(t&&reach&&reach[t[1]*N+t[0]])}return r._walk}
 function foundHamlet(m,why,rid,o){if(!m.length)return null;o=o||{};ludInit();const fid=m[0].fam,nm=famName(fid),head=m.filter(isAdult).sort((a,b)=>(b.sex==='m')-(a.sex==='m')||b.age-a.age)[0]||m[0];
- const used=new Set(S.hamlets.map(h=>h.rid));let cands=REGIONS.filter(r=>r&&r.id!==0&&!used.has(r.id)&&S.regs&&S.regs[r.id]);
- if(!cands.length)cands=REGIONS.filter(r=>r&&r.id!==0&&!used.has(r.id));const dist=r=>Math.hypot(r.i-camp.i,r.j-camp.j);cands.sort((a,b)=>dist(a)-dist(b));const r=rid!==undefined&&REGIONS[rid]?REGIONS[rid]:cands[0];if(!r)return null;
+ const used=new Set(S.hamlets.map(h=>h.rid));let cands=REGIONS.filter(r=>r&&r.id!==0&&!used.has(r.id)&&hamRegionOK(r)&&S.regs&&S.regs[r.id]);
+ if(!cands.length)cands=REGIONS.filter(r=>r&&r.id!==0&&!used.has(r.id)&&hamRegionOK(r));const dist=r=>Math.hypot(r.i-camp.i,r.j-camp.j);cands.sort((a,b)=>dist(a)-dist(b));const r=rid!==undefined&&REGIONS[rid]?REGIONS[rid]:cands[0];if(!r)return null;
  const[i,j]=hamletSpot(r);reveal(i,j,6);const h={id:(S.hid=(S.hid||0)+1),rid:r.id,i,j,name:placeName(head.name),rod:head.rod,pop:m.length,wiez:o.wiez!==undefined?o.wiez:why==='spor'?.25:.5,zap:o.zap!==undefined?o.zap:.45,day:S.day,ppl:m.map(p=>p.name),head:head.name,why:why||''};
  const stay=famMembers(fid).filter(p=>!m.includes(p));m.forEach(p=>{p.waitHome=0;leavePerson(p)});if(S.fams[fid]&&!stay.length){S.fams[fid].home=null;delete S.fams[fid]}S.hamlets.push(h);hamVis();
  if(!o.quiet)log(`Rodzina ${nm} odchodzi w głąb wyspy, ale nie znika: ${r.known?'w krainie '+r.name:'daleko od brzegu'} stawia szałasy. Tak powstaje ${h.name}. To wciąż nasi ludzie, tylko dalej.`);toast('Nowy przysiółek: '+h.name);return h}
