@@ -1,6 +1,8 @@
-# Przystań 4.5.0-rc.2
+# Przystań 4.6.0-rc.1
 
 Spokojna gra o rozbitkach, którzy budują osadę na dzikiej wyspie (PWA, Three.js).
+
+4.6.0-rc.1 zmienia przysiółki: nic nie staje samo. Przysiółek zaczyna od szałasu z ogniskiem, a każdą budowę wybierasz w jego karcie albo zgadzasz się na prośbę rodu. Szałas przebudowuje się w chatę, dom z piecem i dom rodu. Ludzi przybywa tylko pod nowe dachy, materiał zbierają sami albo niosą go tragarze z Przystani. W epoce IV wieś z domem rodu staje się folwarkiem i rośnie aż do dworu, a rody proszą o zgodę na każdą nową budowę.
 
 4.5.0-rc.2 otwiera nowy ląd dla przysiółków od epoki II: wiec może posłać ludzi przez przesmyk, a przysiółek staje tam, gdzie wiec zdecydował.
 
@@ -16,6 +18,6 @@ Spokojna gra o rozbitkach, którzy budują osadę na dzikiej wyspie (PWA, Three.
 
 RC11 naprawił zatory ludzi z RC9–RC10 i dodał: drogi wydeptywane z ruchu i utwardzane przez budowniczych (Budowa → Drogi), rozbudowę domów zawsze z przyciskiem i listą wymagań, dymnik nad wiatą, zorzę zakotwiczoną w świecie oraz po trzy zadania główne na epokę w zakładce Zadania.
 
-[Wydanie 4.5.0-rc.1](docs/WYDANIE_4.5.0_RC1.md) · [Wydanie 4.4.0-rc.1](docs/WYDANIE_4.4.0_RC1.md) · [Wydanie 4.3.0-rc.1](docs/WYDANIE_4.3.0_RC1.md) · [Wydanie 4.2.0-rc.1](docs/WYDANIE_4.2.0_RC1.md) · [Wydanie 4.1.0-rc.1](docs/WYDANIE_4.1.0_RC1.md) · [Wydanie RC11](docs/WYDANIE_4.0.0_RC11.md) · [Projekt wyspy, złóż i menu](docs/PROJEKT_WYSPY_5.md) · [Księga gry](KSIEGA.md)
+[Wydanie 4.6.0-rc.1](docs/WYDANIE_4.6.0_RC1.md) · [Projekt: przysiółek → folwark](docs/PROJEKT_PRZYSIOLEK_FOLWARK.md) · [Wydanie 4.5.0-rc.1](docs/WYDANIE_4.5.0_RC1.md) · [Wydanie 4.4.0-rc.1](docs/WYDANIE_4.4.0_RC1.md) · [Wydanie 4.3.0-rc.1](docs/WYDANIE_4.3.0_RC1.md) · [Wydanie 4.2.0-rc.1](docs/WYDANIE_4.2.0_RC1.md) · [Wydanie 4.1.0-rc.1](docs/WYDANIE_4.1.0_RC1.md) · [Wydanie RC11](docs/WYDANIE_4.0.0_RC11.md) · [Projekt wyspy, złóż i menu](docs/PROJEKT_WYSPY_5.md) · [Księga gry](KSIEGA.md)
 
 Budowanie: `npm run build`. Testy: `npm run test:install`, `npm run test:runtime`, pełna pula `npm test`. Sprawdzenie paczki: `node tools/verify-package.cjs`.

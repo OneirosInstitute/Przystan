@@ -18,7 +18,9 @@ const E4Economy=(()=>{
  function ensure(state){
   const model=state.e4;if(!model||model.schema!==1)throw new Error('Brak modelu Epoki IV');
   if(model.simTicks===undefined){model.simTicks=Math.round(state.day*ticksPerDay);model.startTicks=model.simTicks;model.startTime=state.t||0;model.fraction=0;model.vehicles=Array.from({length:Math.max(0,Math.floor(state.wozy||0))},(_,index)=>({id:index+1,owner:'przystan',transportId:null}));model.nextBatch=1;model.nextAnimal=1;model.nature={};}
-  for(const settlement of Object.values(model.settlements)){settlement.invested??={};settlement.conditions??={};settlement.herd??=[];settlement.plans??=[];settlement.output??={};settlement.consumed??={};settlement.trials??=[];settlement.land.strains??={};settlement.buildings.schronienie??=1;}
+  for(const settlement of Object.values(model.settlements)){settlement.invested??={};settlement.conditions??={};settlement.herd??=[];settlement.plans??=[];settlement.output??={};settlement.consumed??={};settlement.trials??=[];settlement.land.strains??={};settlement.buildings.schronienie??=1;settlement.proposals??=[];settlement.declined??={};}
+  // 4.6: nowe budynki tylko za zgodą gracza; dawne zapisy przechodzą na ten tryb raz (przełącznik zostaje w polityce)
+  model.policy??={};if(!model.policy.v46){model.policy.v46=1;if(model.policy.autoBuild===undefined)model.policy.autoBuild=false;}
   if(model.fieldLayoutVersion!==1){for(const person of state.people)if(person.e4Action?.taskId?.startsWith('crop:'))delete person.e4Action;model.fieldLayoutVersion=1;}
   if(!model.natureInitialized){model.natureInitialized=true;for(const region of model.world.regions)nature(state,region);}
   return model;
@@ -27,6 +29,7 @@ const E4Economy=(()=>{
  function project(state,settlementId,kind){
   ensure(state);const settlement=state.e4.settlements[settlementId],definition=catalog.buildings[kind];
   if(!settlement||!definition)return{ok:false,reason:'Nieznany projekt.'};
+  if(definition.needs&&definition.needs.some(need=>!settlement.buildings[need]))return{ok:false,reason:'Najpierw: '+definition.needs.filter(need=>!settlement.buildings[need]).map(need=>catalog.buildings[need].name.toLowerCase()).join(', ')+'.'};
   if(definition.crop&&!(settlement.land.seeds[definition.crop]>0))return{ok:false,reason:'Najpierw pozyskaj sadzonki: '+catalog.crops[definition.crop].name+'.'};
   if(settlement.projects.some(item=>item.kind===kind))return{ok:false,reason:'Te prace już trwają.'};
   if((settlement.buildings[kind]||0)>0&&!['pole','ogrodek','zielnik','len','skrzydlo','chata','magazyn'].includes(kind))return{ok:false,reason:'Ten budynek już stoi.'};
@@ -34,6 +37,29 @@ const E4Economy=(()=>{
   if(!workers(state,settlementId).length)return{ok:false,reason:'Brakuje dorosłego budowniczego.'};
   take(resources,cost);if(definition.crop)settlement.land.seeds[definition.crop]--;settlement.projects.push({kind,work:definition.labor,progress:0,materials:{...cost},started:state.day});
   domain.record(state,'build',settlement.name+': rozpoczynają '+definition.name.toLowerCase()+'.',{settlementId});return{ok:true};
+ }
+ // 4.6: ród prosi o zgodę zamiast budować sam (chyba że gracz pozwolił w polityce)
+ let wantedNow=null;
+ function want(state,settlement,kind,reason){
+  if(state.e4.policy.autoBuild)return project(state,settlement.id,kind);
+  const definition=catalog.buildings[kind];if(!definition||settlement.projects.some(item=>item.kind===kind))return{ok:false};if(wantedNow)wantedNow.add(kind);
+  const existing=settlement.proposals.find(item=>item.kind===kind);if(existing){existing.reason=reason;return{ok:false,proposed:true}}
+  // dach i pola są pilne; pracownie po jednej naraz, żeby karta nie zarosła prośbami
+  const urgent=['pole','chata','skrzydlo'].includes(kind),workshop=/^potrzebna do/.test(reason);
+  if((settlement.declined[kind]||0)>state.day||(!urgent&&settlement.proposals.length>=4)||(workshop&&settlement.proposals.some(item=>/^potrzebna do/.test(item.reason||''))))return{ok:false};
+  settlement.proposals.push({kind,reason,day:state.day});settlement.proposals.sort((a,b)=>(['pole','chata','skrzydlo'].includes(b.kind))-(['pole','chata','skrzydlo'].includes(a.kind)));domain.record(state,'proposal',settlement.name+' prosi o zgodę na budowę: '+definition.name.toLowerCase()+' ('+reason+').',{settlementId:settlement.id});return{ok:false,proposed:true};
+ }
+ // 4.6: specjalność dawnego przysiółka (albo folwarku bez niej) wybiera gracz; musi pasować do krainy
+ function specialize(state,settlementId,key){
+  ensure(state);const settlement=state.e4.settlements[settlementId],definition=catalog.specialties[key];if(!settlement||settlement.id==='przystan'||!definition)return{ok:false,reason:'Niedostępny wybór.'};
+  if(settlement.specialization)return{ok:false,reason:'Ten folwark ma już specjalność.'};const region=worldApi.regionAt(state.e4.world,settlement.x,settlement.z),fit=catalog.specialtyFit(key,region);
+  if(!fit.ok)return{ok:false,reason:`${definition.name} nie ma tu z czego żyć. Brakuje: ${fit.missing.join(', ')}.`};settlement.specialization=key;delete settlement._slots;
+  domain.record(state,'specialty',settlement.name+' obiera kierunek: '+definition.name.toLowerCase()+'.',{settlementId});return{ok:true};
+ }
+ function decide(state,settlementId,kind,accept){
+  ensure(state);const settlement=state.e4.settlements[settlementId];if(!settlement)return{ok:false,reason:'Nieznany ośrodek.'};const item=settlement.proposals.find(entry=>entry.kind===kind);if(!item)return{ok:false,reason:'Ta prośba nie jest już aktywna.'};
+  if(!accept){settlement.proposals=settlement.proposals.filter(entry=>entry!==item);settlement.declined[kind]=state.day+10;domain.record(state,'proposal',settlement.name+': budowa ('+catalog.buildings[kind].name.toLowerCase()+') musi poczekać.',{settlementId});return{ok:true}}
+  const result=project(state,settlementId,kind);if(result.ok)settlement.proposals=settlement.proposals.filter(entry=>entry!==item);return result;
  }
  function routeFor(state,source,target){return source.route&&target.id==='przystan'?{points:source.route.points.slice().reverse(),length:source.route.length}:target.route&&source.id==='przystan'?target.route:worldApi.route(state.e4.world,source,target)}
  function courier(state,sourceId){const vehicle=state.e4.vehicles.find(candidate=>candidate.owner===sourceId&&!candidate.transportId),worker=workers(state,sourceId).sort((first,second)=>first.id-second.id)[0];return{vehicle,worker,capacity:vehicle?250:30}}
@@ -186,23 +212,24 @@ const E4Economy=(()=>{
   const stock=domain.stock(state,settlement.id);if((stock[resource]||0)>=quantity||seen.includes(resource)||seen.length>8)return;
   if(['drewno','kamien','glina','ruda','ziarno','jagody','ryby','ziola'].includes(resource)){gather(state,settlement,people,resource,quantity-(stock[resource]||0));return;}
   const candidates=Object.entries(catalog.recipes).filter(([,recipe])=>recipe.output[resource]),entry=candidates.find(([,recipe])=>settlement.buildings[recipe.building])||candidates[0];if(!entry)return;
-  const [id,recipe]=entry;if(!settlement.buildings[recipe.building]){if(settlement.id!=='przystan'){settlement.blocker='Potrzebny import: '+catalog.resources[resource]+'. Zapewnij dostawę lub warsztat.';return;}const definition=catalog.buildings[recipe.building];if(!definition)return;const cost=materialCost(definition.cost,stock);for(const [key,value]of Object.entries(cost))supplyChain(state,settlement,people,key,value,[...seen,resource]);if(settlement.projects.length<2&&!settlement.projects.some(p=>p.kind===recipe.building))project(state,settlement.id,recipe.building);return;}
+  const [id,recipe]=entry;if(!settlement.buildings[recipe.building]){if(settlement.id!=='przystan'){settlement.blocker='Potrzebny import: '+catalog.resources[resource]+'. Zapewnij dostawę lub warsztat.';return;}const definition=catalog.buildings[recipe.building];if(!definition)return;const cost=materialCost(definition.cost,stock);for(const [key,value]of Object.entries(cost))supplyChain(state,settlement,people,key,value,[...seen,resource]);if(settlement.projects.length<2&&!settlement.projects.some(p=>p.kind===recipe.building))want(state,settlement,recipe.building,'potrzebna do: '+recipe.name.toLowerCase());return;}
   for(const [key,value]of Object.entries(recipe.input))supplyChain(state,settlement,people,key,value+(key==='ziarno'?Math.max(2,settlement.fields.filter(f=>f.crop==='zboze').length*2):0),[...seen,resource]);
   if(!settlement.batches.some(b=>b.recipe===id)&&settlement.batches.length<6)batch(state,settlement.id,id);
  }
  function autoPlan(state,settlement,people){
   if(!settlement.autonomy||!people.length||settlement.stage==='podroz')return;
+  settlement.proposals=settlement.proposals.filter(item=>!(settlement.buildings[item.kind]&&!['pole','chata','skrzydlo','magazyn'].includes(item.kind)));wantedNow=new Set();
   const resources=domain.stock(state,settlement.id),residents=domain.residents(state,settlement.id),need=residents.reduce((total,person)=>total+domain.need(person),0)*state.e4.dailyFactor;
   if((resources.ziarno||0)<10)gather(state,settlement,people,'ziarno',10-(resources.ziarno||0));
   if(foodTotal(resources)<need*8){gather(state,settlement,people,'jagody',Math.min(need*2,40));gather(state,settlement,people,'ryby',Math.min(need,30));}
   const grainPlots=settlement.fields.filter(field=>field.crop==='zboze').length+settlement.projects.filter(item=>item.kind==='pole').length,annualYield=(catalog.crops.zboze.yield*.8*(.6+settlement.land.fertility*.7)-catalog.crops.zboze.seedCost)*.75,target=Math.ceil(need*catalog.crops.zboze.days/annualYield*1.1)+1;settlement.grainTarget=target;
-  if(grainPlots<target&&settlement.projects.length<2)project(state,settlement.id,'pole');
+  if(grainPlots<target&&settlement.projects.length<2)want(state,settlement,'pole','pól zboża '+grainPlots+' z '+target);
   const completedGrain=settlement.fields.filter(field=>field.crop==='zboze').length,edibleFood=foodTotal(resources)-Math.min(resources.ziarno||0,Math.max(2,completedGrain*2)),housingNeeded=residents.length>=settlement.homeCapacity-3;
   settlement.growthBlocker=housingNeeded&&completedGrain<target?'Rozbudowa domu czeka: najpierw ukończ pola zboża ('+completedGrain+'/'+target+').':housingNeeded&&edibleFood<need*8?'Rozbudowa domu czeka: zgromadź żywność na 8 dni.':'';
-  if(housingNeeded&&!settlement.growthBlocker)project(state,settlement.id,settlement.id==='przystan'?'chata':'skrzydlo');
-  if(settlement.capacity<Math.max(need*12+500,sum(resources)+need*4))project(state,settlement.id,'magazyn');
+  if(housingNeeded&&!settlement.growthBlocker)want(state,settlement,settlement.id==='przystan'?'chata':'skrzydlo','ciasno: '+residents.length+' z '+settlement.homeCapacity+' miejsc');
+  if(settlement.capacity<Math.max(need*12+500,sum(resources)+need*4))want(state,settlement,'magazyn','magazyn się zapełnia');
   const specialty=catalog.specialties[settlement.specialization],next=specialty?.buildings.find(kind=>!settlement.buildings[kind]&&!settlement.projects.some(item=>item.kind===kind));
-  if(next&&settlement.projects.length<2){const definition=catalog.buildings[next];if(definition.crop&&!settlement.land.seeds[definition.crop]){if(!(resources.narz>=1))supplyChain(state,settlement,people,'narzk',2);trial(state,settlement.id,definition.crop);}const cost=materialCost(definition.cost,resources);for(const [key,value]of Object.entries(cost))supplyChain(state,settlement,people,key,value);const outcome=project(state,settlement.id,next);settlement.blocker=outcome.ok?'':outcome.reason;}
+  if(next&&settlement.projects.length<2){const definition=catalog.buildings[next];if(definition.crop&&!settlement.land.seeds[definition.crop]){if(!(resources.narz>=1))supplyChain(state,settlement,people,'narzk',2);trial(state,settlement.id,definition.crop);}const cost=materialCost(definition.cost,resources);for(const [key,value]of Object.entries(cost))supplyChain(state,settlement,people,key,value);const outcome=want(state,settlement,next,'następny budynek specjalności');settlement.blocker=outcome.ok||outcome.proposed||!outcome.reason?'':outcome.reason;}
   for(const species of Object.keys(catalog.animals))if(settlement.buildings[catalog.animals[species].building]&&(settlement.animals[species]||0)<2&&!(settlement.captures||[]).some(item=>item.species===species))capture(state,settlement.id,species);
   if(settlement.specialization==='miesny'){const animal=settlement.herd.find(candidate=>candidate.species==='swinia'&&candidate.age>=18&&settlement.animals.swinia>4);if(animal&&(resources.mieso||0)<30)slaughter(state,settlement.id,animal.id);}
   for(const [resource,targetQuantity]of Object.entries({drewno:60,kamien:40,glina:30,ruda:settlement.buildings.huta?30:0}))if((resources[resource]||0)<targetQuantity)gather(state,settlement,people,resource,targetQuantity-(resources[resource]||0));
@@ -211,6 +238,8 @@ const E4Economy=(()=>{
    const owned=output==='woz'?state.e4.vehicles.filter(vehicle=>vehicle.owner===settlement.id).length:(resources[output]||0),target=output==='woz'?Math.max(1,Math.ceil(residents.length/12)):limit;
    if(owned<target)for(const [key,value]of Object.entries(recipe.input))supplyChain(state,settlement,people,key,value);
    if(owned<target&&!settlement.batches.some(item=>item.recipe===recipeId)&&settlement.batches.length<6)batch(state,settlement.id,recipeId);}
+  // prośby, których dziś nikt nie ponowił (pole już jest, magazyn wystarcza), znikają
+  if(wantedNow){const now=wantedNow;settlement.proposals=settlement.proposals.filter(item=>now.has(item.kind));wantedNow=null;}
  }
  function grow(state,settlement,people){
   const resources=domain.stock(state,settlement.id);
@@ -290,6 +319,6 @@ const E4Economy=(()=>{
  ship=observed(ship,'other');found=observed(found,'other');join=observed(join,'other');arrive=observed(arrive,'other');
  project=observed(project,'economy');extendHouse=observed(extendHouse,'economy');batch=observed(batch,'economy');trial=observed(trial,'economy');capture=observed(capture,'economy');slaughter=observed(slaughter,'economy');gather=observed(gather,'economy');
  daily=observed(daily,'economy',true);advance=observed(advance,'economy');
- return{recordedLabor,catalog,ensure,foodTotal,foodItems,add,take,has,workers,project,extendHouse,batch,trial,capture,slaughter,nature,gather,ship,found,join,advance,daily,positionOnRoute,ticksPerDay};
+ return{recordedLabor,catalog,ensure,foodTotal,foodItems,add,take,has,workers,project,want,decide,specialize,extendHouse,batch,trial,capture,slaughter,nature,gather,ship,found,join,advance,daily,positionOnRoute,ticksPerDay};
 })();
 if(typeof module!=='undefined'&&module.exports)module.exports=E4Economy;

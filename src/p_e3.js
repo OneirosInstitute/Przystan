@@ -5,7 +5,7 @@ const e3On=()=>!!(S&&S.e3&&S.e3.on);
 // krainy, do których da się dojść lądem z osady
 function e3Regs(){return REGIONS.filter(r=>{if(!r||r.id===0)return false;const t=nearestWalk(r.i,r.j);return!!(t&&reach&&reach[t[1]*N+t[0]])})}
 function e3Need(){if(!S.e3.regN)S.e3.regN=e3Regs().length;return S.e3.regN}
-const e3Settled=()=>{const ok=new Set(e3Regs().map(r=>r.id));return new Set((S.hamlets||[]).filter(h=>ok.has(h.rid)).map(h=>h.rid)).size};
+const e3Settled=()=>{const ok=new Set(e3Regs().map(r=>r.id));return new Set((S.hamlets||[]).filter(h=>ok.has(h.rid)&&h.st>=1).map(h=>h.rid)).size};   // 4.6: liczy się przysiółek z chatą z bali
 const e3Pop=()=>S.people.length+(S.hamlets||[]).reduce((a,h)=>a+h.pop,0);
 const e3Roads=()=>(S.hamlets||[]).filter(h=>h.road===2).length;
 const e3Big=()=>(S.hamlets||[]).filter(h=>(h.st||0)>=3).length;
@@ -13,7 +13,7 @@ const e3Han=()=>(S.hanN||0)-(S.e3.han0||0);
 const e3Types=()=>Object.keys(S.hanTy||{}).length;
 const E3A={
  10:{n:'Krainy',intro:'Wiec całej wyspy zbiera się po raz pierwszy: z osady i ze wszystkich przysiółków. Ktoś rozkłada na ziemi mapę z kory. Połowa krain jest jeszcze pusta. Starsi mówią: wyspa jest nasza dopiero wtedy, gdy w każdej krainie pali się czyjś ogień.',
-  g:[['Przysiółki w połowie krain',()=>e3Settled()>=Math.ceil(e3Need()/2),'Ludzie → Wspólnota → nowy przysiółek. Duże przysiółki mogą też wysłać młodych dalej (karta przysiółka).',()=>`Zasiedlonych krain: ${e3Settled()} z ${e3Need()}. Za borem i za górami są jeszcze puste doliny.`],
+  g:[['Przysiółki w połowie krain',()=>e3Settled()>=Math.ceil(e3Need()/2),'Ludzie → Wspólnota → nowy przysiółek; kraina liczy się, gdy przysiółek postawi chatę z bali. Duże przysiółki mogą też wysłać młodych dalej (karta przysiółka).',()=>`Zasiedlonych krain: ${e3Settled()} z ${e3Need()}. Za borem i za górami są jeszcze puste doliny.`],
    ['Przysiółek zakłada przysiółek',()=>(S.e3.corki||0)>=1,'Karta przysiółka w Ludzie → Mieszkańcy, w karcie Wspólnota i rody: „Wyślij młodych dalej”. Przysiółek musi mieć co najmniej 8 osób.',()=>'W przysiółkach rosną dzieci, którym jest tam za ciasno. Mogą pójść dalej, nie wracając do osady.'],
    ['Drogi do pięciu przysiółków',()=>e3Roads()>=5,'Karta przysiółka → Wytycz drogę. Droga kosztuje kłody i kamień.',()=>`Wyrównanych dróg: ${e3Roads()} z 5. Po ścieżkach wóz nie przejedzie.`]]},
  11:{n:'Wymiana',intro:'Przysiółki rosną i każdy ma coś, czego brakuje innym: wybrzeże ryby, bór drewno i miód, góry kamień, łąki ziarno. Na wiecu ktoś mówi, że wyspa powinna być jak jedno gospodarstwo. Trzeba dróg, wozów i miejsca, gdzie woźnica odpocznie.',
@@ -21,7 +21,7 @@ const E3A={
    ['40 wozów z towarem',()=>e3Han()>=40,'Wozy jeżdżą same po wyrównanych drogach. Więcej dróg i zajazd to więcej wozów. Wozy robi warsztat.',()=>`Wozów z towarem od początku tej epoki: ${e3Han()} z 40.`],
    ['Towar z czterech rodzajów krain',()=>e3Types()>=4,'Potrzebne przysiółki na wybrzeżu, w borze, w górach i na łąkach, każdy z wyrównaną drogą.',()=>`Rodzaje krain, z których przyjechał towar: ${e3Types()} z 4.`]]},
  12:{n:'Wyspa nasza',intro:'Drogi łączą już większość wyspy. Wieczorami przy ogniskach w przysiółkach śpiewa się te same pieśni co w osadzie. Zostało ostatnie: zasiedlić każdą krainę i dorosnąć do tego, żeby wyspa naprawdę była nasza.',
-  g:[['Ogień w każdej krainie',()=>e3Settled()>=e3Need(),'Każda kraina, do której da się dojść lądem, potrzebuje przysiółka. Mapa wspólnoty pokazuje puste krainy.',()=>{const n=e3Need()-e3Settled();return n>0?`Pustych krain: ${n}. Mapa wspólnoty pokazuje, gdzie jeszcze nikt nie mieszka.`:'Wszystkie krainy mają już swój ogień.'}],
+  g:[['Ogień w każdej krainie',()=>e3Settled()>=e3Need(),'Każda kraina, do której da się dojść lądem, potrzebuje przysiółka z chatą z bali. Mapa wspólnoty pokazuje puste krainy.',()=>{const n=e3Need()-e3Settled();return n>0?`Pustych krain: ${n}. Mapa wspólnoty pokazuje, gdzie jeszcze nikt nie mieszka.`:'Wszystkie krainy mają już swój ogień.'}],
    ['Cała wyspa: 150 osób',()=>e3Pop()>=150,'Rośnie osada i przysiółki. Przysiółki rosną, gdy mają zapasy i więź z osadą: dary, wozy, drogi.',()=>`Na całej wyspie żyje ${e3Pop()} ${osb(e3Pop())}.`],
    ['Trzy przysiółki urosły do osiedli',()=>e3Big()>=3,'Przysiółek staje się osiedlem przy 14 osobach.',()=>`Osiedli i wsi: ${e3Big()} z 3.`]]}};
 const E3RN={10:'X',11:'XI',12:'XII'};

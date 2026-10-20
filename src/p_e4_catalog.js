@@ -16,6 +16,7 @@ const E4Catalog=(()=>{
   dom_rodowy:{name:'Dom rodowy',model:'dom',cost:{drewno:30,deski:10,kamien:8},labor:64,capacity:12},
   chata:{name:'Nowa chata z bali',model:'chata',cost:{drewno:30,kamien:10,deski:4},labor:40,capacityAdd:6},
   skrzydlo:{name:'Skrzydło domu rodowego',model:'chata',cost:{drewno:24,deski:12,kamien:8},labor:48,capacityAdd:8},
+  dwor:{name:'Dwór (przebudowa domu rodowego)',model:'dwor',cost:{drewno:40,deski:24,kamien:20,cegla:12},labor:120,capacityAdd:8,needs:['dom_rodowy','skrzydlo']},
   magazyn:{name:'Spichlerz i magazyn',model:'sklad',cost:{drewno:18,deski:8,kamien:4},labor:24,storage:800},
   piwnica:{name:'Piwniczka',model:'kiszarnia',cost:{kamien:12,deski:6},labor:20,storage:250},
   ogrodek:{name:'Ogródek rodzinny',model:'pole',cost:{drewno:3},labor:6},

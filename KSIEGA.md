@@ -241,7 +241,7 @@ W finale epoki pamięć zdecyduje, z czym młodzi wejdą w epokę II.
 
 ## Kolonizacja (od wersji 0.19)
 
-Celem gry jest zasiedlenie całej wyspy: przysiółek w każdej krainie. Karta „Wspólnota” w zakładce Ludzie pokazuje, ile krain jest zasiedlonych, na przykład „3 z 21”.
+Celem gry jest zasiedlenie całej wyspy: przysiółek z chatą z bali w każdej krainie. Karta „Wspólnota” w zakładce Ludzie pokazuje, ile krain jest zasiedlonych, na przykład „3 z 21”.
 
 **Nowy przysiółek z własnej woli.** Gdy osada ma poziom Osada i co najmniej 14 osób, wiec może wysłać ludzi w poznaną krainę. Najpierw wybiera się krainę: gra mówi, jaki to będzie przysiółek, jak daleko i jak tam groźnie. Potem wybiera się, kto pójdzie: młoda para bez domu albo rodzina. Każdy ma swoją chęć: „chętnie”, „rozważą” albo „niechętnie”. Kto idzie niechętnie, odchodzi z żalem: rośnie niezgoda, a więź z przysiółkiem jest chłodna od początku. Jeśli osada ma zapasy, daje im na drogę 30 jedzenia, 15 kłód i narzędzia.
 
@@ -249,7 +249,19 @@ Celem gry jest zasiedlenie całej wyspy: przysiółek w każdej krainie. Karta �
 
 **Rodzaj przysiółka** zależy od krainy: rybacki na wybrzeżu (ryby, foki), leśny w puszczy (drewno, miód, skóry, grzyby), górski na halach (kamień, ruda, skóry), polny na łąkach (ziarno, mleko, zioła). Taki też jest rodzaj darów, które przysiółek przysyła do osady.
 
-**Przysiółek rośnie** przez pięć etapów: obozowisko (szałas i ognisko), zagroda (od 5 osób, pierwsza chata), przysiółek (od 9 osób, druga chata i budynek swojego rodzaju), osiedle (od 14 osób, trzecia chata i płot), wieś (od 24 osób, dom rodu i studnia). Każdy etap widać na mapie w 3D. Przysiółek ma własne zapasy: latem i jesienią rosną, zimą topnieją. Przy głodzie ludzie umierają, a ich imiona trafiają na Dziady.
+**Przysiółek rośnie z budowy (od wersji 4.6.0-rc.1).** Nic nie staje samo. Nowy przysiółek to szałas z ogniskiem. W karcie przysiółka (Ludzie → Wspólnota) jest lista tego, co można zbudować, z kosztem i powodem, jeśli coś jeszcze nie jest możliwe. Raz na kilka dni ród sam prosi o zgodę na konkretną budowę: najpierw o dach, gdy jest ciasno, potem o to, czego brakuje do następnego etapu. Gracz się zgadza albo prosi, żeby poczekali. Jednocześnie trwają najwyżej dwie budowy.
+
+| Etap | Co musi stać | Miejsca pod dachem |
+|---|---|---|
+| Obozowisko | szałas z ogniskiem | 5 |
+| Zagroda | szałas przebudowany w chatę z bali, stanowisko krainy (suszarnia ryb, chata drwala, łom kamienia albo zagroda kóz), ogród | 6 |
+| Przysiółek | druga chata, ziemianka, studnia w miejscu ogniska, pole albo zielnik | 12 |
+| Osiedle (od epoki II) | chata na czele przebudowana w dom z piecem, trzecia chata, płot, stodoła, warsztat krainy (wędzarnia ryb, pracownia cieśli, warsztat kamieniarza albo serownia) | 20 |
+| Wieś (od epoki III) | dom przebudowany w dom rodu, spichlerz, drugie pole | 26, do 30 po przebudowie bocznych chat w domy |
+
+Budują dorośli przysiółka. Najpierw zbierają w swojej krainie to, co tam jest: drewno (najwięcej w puszczy), kamień (najwięcej w górach) i glinę (najwięcej na gliniskach, nizinach i mokradłach). Resztę, na przykład gwoździe, deski, cegłę, płótno i ziarno na siew, trzeba posłać z Przystani przyciskiem „Poślij z Przystani”. Tragarze niosą to ścieżką i dochodzą po około dniu, a po drodze szybciej. Przy dużej budowie mały przysiółek prosi o dwóch budowniczych z Przystani. Idą tylko za zgodą wiecu, biorą jedzenie na drogę, a na ten czas ubywa ich w Przystani. Na miejscu budowa idzie mniej więcej dwa razy szybciej. Budynki stoją w stałych miejscach działki: dom na czele podwórza, studnia na środku, chaty po bokach, stodoła przy drodze do Przystani, ogród za domem, pola po bokach. Szałas przebudowuje się w miejscu w chatę, potem w dom z piecem i w dom rodu. Tam, gdzie trwa budowa, stoi rusztowanie ze stosem bali.
+
+**Dachy.** Ludzi przybywa (narodziny, wesela, przybysze) tylko wtedy, gdy jest dla nich miejsce. Gdy jest ciasno, nikt nie odchodzi, ale ród prosi o nową chatę. Pożar albo osuwisko zabiera ostatnio postawiony dach. Kraina liczy się jako zasiedlona dopiero wtedy, gdy przysiółek ma chatę z bali. Warsztat krainy dokłada swój wyrób do darów dla Przystani. Stare przysiółki zachowują to, co było widać na ich modelu, a ich etap się nie cofa.
 
 **Prośby przysiółków.** Raz na jakiś czas przysiółek prosi o jedzenie, opał, narzędzia, odzież, ziarno, naczynia albo płótno. Pomoc wzmacnia więź i zapasy. Brak odpowiedzi ochładza więź.
 
@@ -1040,6 +1052,20 @@ W epoce IV folwark zakłada się tam, gdzie kraina daje to, z czego ma żyć. Li
 
 Folwark hutników zaczyna od szybu kopalni rudy. Szyb sięga głębokiego złoża (w Zagłębiu około 14 000 porcji) i daje dwa i pół raza więcej rudy z tej samej pracy niż kopanie z powierzchni. Cały folwark może stać obok, na złożu jest tylko szyb. Karta folwarku pokazuje rudę na wierzchu i w głębi, kamień i glinę. Złoża odkryte wcześniej w rdzeniu wyspy przechodzą przy Wiecu Rodów do krain z tym, co w nich zostało.
 
+### Z przysiółka folwark (od wersji 4.6.0-rc.1)
+
+Przysiółek wchodzi w epokę IV z tym, co zbudował. Chaty i domy zostają, dom rodu staje się domem rodowym, a przysiółek z domem rodu jest od razu folwarkiem. Ziemianka staje się piwniczką, spichlerz magazynem, a ogród, zielnik i pola przechodzą w ogródek, zielnik i pola zboża. Kierunek folwarku wybiera gracz z listy pasujących do krainy.
+
+Codzienną pracę (siew, żniwa, wypas, wyroby, zbieranie, dostawy) rody prowadzą same. O nowe pola, chaty, skrzydła, magazyny i budynki specjalności proszą o zgodę: karta „Ród prosi o zgodę” mówi, co, za ile i dlaczego. „Nie teraz” odkłada prośbę na 10 dni. W polityce można pozwolić rodom budować samym.
+
+| Etap | Co musi stać |
+|---|---|
+| Folwark | dom rodowy, specjalność i jej pierwszy budynek, czworak, magazyn, dwa pola zboża |
+| Folwark rozwinięty | cały łańcuch specjalności, piwniczka, skrzydło domu rodowego, obora, sad albo pasieka |
+| Dwór z folwarkiem | dwór (przebudowa domu rodowego, wymaga skrzydła), drugi czworak, kuźnia albo karczma |
+
+Folwark stoi w tym samym układzie co przysiółek. Na czele podwórza stoi dom rodowy, a potem dwór. Po bokach są czworaki, w miejscu warsztatu i przy bramie budynki specjalności, obok stodoły obora, w narożnikach kuźnia i karczma, a za domem sad i pasieka.
+
 ### Złoża (od wersji 4.1.0-rc.1)
 
 Kamienie, glina i ruda leżące luzem przy osadzie wystarczają na początek. Na lata osada sięga do złóż: dużych, skupionych w jednym miejscu i skończonych. Złoże leży zawsze w tym samym miejscu dla danej wyspy, z daleka widać je jako zagadkę („Rdzawa woda w potoku”, „Szare ściany skalne”, „Biała maź nad wodą”), a rozpoznaje je dopiero ten, kto do niego dojdzie. Odkrycie złoża daje wiedzę o budowlach, które z niego czerpią.
@@ -1215,6 +1241,7 @@ W Ludziach (Praca i Mieszkańcy) wyszukiwarka szuka po imieniu, fachu albo budyn
 | 1.8.3 | poprawka: rozbudowa domu (szałas w chatę, chata w dom) nie zabiera już rodzinie spiżarki; w czasie budowy zapas zostaje w starym domu w granicach jego pojemności |
 | 1.9 | budynki z charakterem: każdy budynek inny (ściany, dachy, spadek, okap), koniki, malowane okiennice, ganki, przybudówki, garnki na płocie, zioła pod okapem, szyldy rzemiosł, wyraźniejsza kuźnia, łaźnia i chata wiecowa |
 | 1.10 | wykonanie budynków: surowe, porządne i mistrzowskie, wyraźnie widoczne po rozbudowie (wielkość, podmurówka, dach, okiennice, obramienia okien, kwiaty, płotek, szyld); karta budynku pokazuje wykonanie i trwałość; odmiany szałasów, studni, zagród i spiżarni |
+| 4.6.0-rc.1 | przysiółek rośnie w folwark: nic nie staje samo, lista budowy w karcie przysiółka i prośby rodu o zgodę, przebudowy w miejscu (szałas → chata → dom z piecem → dom rodu), etap z tego, co stoi, ludzi tylu, ile dachów, materiał z krainy i od tragarzy z Przystani, budowniczowie z Przystani za zgodą wiecu; kraina zasiedlona od chaty z bali; w epoce IV przysiółek przechodzi z dorobkiem, kierunek folwarku wybiera gracz, nowe budynki za zgodą rodów, etapy folwark, folwark rozwinięty i dwór z folwarkiem, ten sam układ działki |
 | 4.5.0-rc.2 | przysiółki na nowym lądzie od epoki II: wiec ma na mapie krainę za zatoką, ścieżka przez przesmyk, Wyspy Mew tylko łodzią; przysiółek staje w krainie wybranej na wiecu (wcześniej zawsze w najbliższej) |
 | 4.5.0-rc.1 | wyspa 384: dawna wyspa bez zmian pośrodku, wokół Cicha Zatoka, trzy przesmyki i nowy ląd z 17 krainami (Wronia Grań, Czarne Zagłębie, Złote Stoki, Modre Łąki, Bure Bagna, Dolina Wierzby, Puszcza Wschodnia, Lipowa Dąbrowa i inne), rzeki Wierzbna i Czarna Struga z brodami, większe złoża na nowym lądzie; szczegóły rysowane tylko blisko kamery; stare zapisy przechodzą same; Budowa znów z przyciskami rodzajów; księga w hafcie i drewnie |
 | 4.4.0-rc.2 | koszty krain: wylewy na nizinach, przymrozek w winnicach na stokach, zagrody i drwale zabierają barciom pożytek, mniej jedzenia na grani i w borach, gorączka bagienna i kaszel górniczy, błoto na gliniskach, sztorm na wybrzeżu; karta krainy mówi, czym płaci |

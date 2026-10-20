@@ -10,7 +10,7 @@ test('Epoka IV unlocks after III, retains the settlement and saves through the r
  assert.deepEqual(JSON.parse(JSON.stringify(runtime.game.S.bld)),original.bld);
  assert.equal(runtime.game.save(),true);const saved=runtime.memory.get('przystan-save');
  assert.ok(runtime.evaluate('decodeSave(serializeSave())'));
- runtime.evaluate('E4Economy.advance(S,40,e4Daily)');assert.equal(runtime.game.save(),true);
+ runtime.evaluate('S.e4.policy.autoBuild=true;E4Economy.advance(S,40,e4Daily)');assert.equal(runtime.game.save(),true);   // 4.6: gracz zgadza się na każdą budowę rodów
  runtime.evaluate('boot(false)');assert.equal(runtime.game.S.epoch,4);assert.ok(runtime.game.S.e4.stats.harvests>0);
  runtime.game.openSheet('osada');assert.match(runtime.elements.get('body').innerHTML,/Epoka IV|Rody i folwarki/);
  assert.ok(runtime.evaluate('e4Scene.children.length>0'));

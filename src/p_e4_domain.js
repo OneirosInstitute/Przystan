@@ -35,14 +35,29 @@ const E4Domain=(()=>{
  function createSettlement(state,profile){
   if(state.e4.settlements[profile.id])throw new Error('Ośrodek już istnieje');
   const region=worldApi.regionAt(state.e4.world,profile.x,profile.z);
-  const settlement={id:profile.id,name:profile.name,clanId:profile.clanId??null,x:profile.x,z:profile.z,regionId:region?.id||null,stock:profile.id==='przystan'?null:{},stage:'oboz',buildings:{schronienie:1},projects:[],fields:[],herd:[],captures:[],trials:[],plans:[],invested:{},conditions:{},output:{},consumed:{},animals:{koza:0,kura:0,swinia:0},batches:[],capacity:400,homeCapacity:8,autonomy:true,priority:'żywność',status:'Powstaje gospodarstwo',founded:state.day,road:0,route:null,headId:null,land:{strains:{},fertility:region?.fertility??.6,timber:Math.round((region?.forest??.4)*1200),forestPressure:0,huntPressure:0,wild:{koza:8,kura:12,swinia:6},seeds:{zboze:1,warzywa:1,winogrona:0,jablka:0,len:0,chmiel:0,ziola:1}},...profile};
+  const settlement={id:profile.id,name:profile.name,clanId:profile.clanId??null,x:profile.x,z:profile.z,regionId:region?.id||null,stock:profile.id==='przystan'?null:{},stage:'oboz',buildings:{schronienie:1},projects:[],fields:[],herd:[],captures:[],trials:[],plans:[],invested:{},conditions:{},output:{},consumed:{},animals:{koza:0,kura:0,swinia:0},batches:[],capacity:400,homeCapacity:8,autonomy:true,priority:'żywność',status:'Powstaje gospodarstwo',proposals:[],declined:{},founded:state.day,road:0,route:null,headId:null,land:{strains:{},fertility:region?.fertility??.6,timber:Math.round((region?.forest??.4)*1200),forestPressure:0,huntPressure:0,wild:{koza:8,kura:12,swinia:6},seeds:{zboze:1,warzywa:1,winogrona:0,jablka:0,len:0,chmiel:0,ziola:1}},...profile};
   state.e4.settlements[settlement.id]=settlement;return settlement;
+ }
+ // Budynki przysiółka (4.6) w języku epoki IV. Przysiółek bez zapisanych budynków dostaje to, co odpowiada jego etapowi.
+ function hamletEstate(hamlet,day){
+  let bud=hamlet.bud&&typeof hamlet.bud==='object'?{...hamlet.bud}:null;
+  if(!bud){const st=Math.max(0,Math.min(4,Math.floor(hamlet.st||0)));bud={glowa:'szalas',srodek:'ognisko'};
+   if(st>=1)Object.assign(bud,{glowa:'chata',praca:'stanowisko',tyl:'ogrod'});if(st>=2)Object.assign(bud,{lewa:'chata2',zapas:'ziemianka',srodek:'studnia',pole1:'pole'});
+   if(st>=3)Object.assign(bud,{glowa:'dom',prawa:'chata3',plot:'plot',brama:'stodola',praca:'warsztat'});if(st>=4)Object.assign(bud,{glowa:'domrodu',zapas:'spichlerz',pole2:'pole2'});}
+  const caps={szalas:5,chata:6,dom:8,domrodu:14,chata2:6,dom2:8,chata3:6,dom3:8},buildings={schronienie:1},fields=[];let storage=0;
+  const houses=['lewa','prawa'].filter(slot=>bud[slot]).length+(['chata','dom'].includes(bud.glowa)?1:0);if(houses)buildings.chata=houses;
+  if(bud.glowa==='domrodu')buildings.dom_rodowy=1;
+  if(bud.zapas==='ziemianka')buildings.piwnica=1;if(bud.zapas==='spichlerz'){buildings.magazyn=1;storage+=800}
+  if(bud.tyl){buildings.ogrodek=1;fields.push('warzywa')}if(bud.tyl==='zielnik'){buildings.zielnik=1;fields.push('ziola')}
+  for(const slot of ['pole1','pole2'])if(bud[slot]){buildings.pole=(buildings.pole||0)+1;fields.push('zboze')}
+  const homeCapacity=Math.max(8,['glowa','lewa','prawa'].reduce((total,slot)=>total+(caps[bud[slot]]||0),0));
+  return{bud,buildings,fields,storage,homeCapacity,stage:bud.glowa==='domrodu'?'folwark':'zagroda'};
  }
  function migrate(snapshot,{world,dailyFactor=4.8}={}){
   if(!object(snapshot)||!Array.isArray(snapshot.people)||!snapshot.people.length||!object(snapshot.fams)||!object(snapshot.res))throw new Error('Brak poprawnej osady do migracji');
   if(snapshot.e4){if(!validate(snapshot))throw new Error('Nieprawidłowy zapis Epoki IV');return clone(snapshot)}
   if(!world||!finite(dailyFactor)||dailyFactor<=0)throw new Error('Brak świata lub nieprawidłowy rytm gospodarki');
-  const state=clone(snapshot);state.epoch=4;state.e4={schema:1,world:clone(world),dailyFactor,randomState:(world.seed^0x4e4f5244)>>>0||1,started:state.day,lastDay:Math.floor(state.day),elapsed:0,households:{},settlements:{},archive:{},events:[],transports:[],nextTransport:1,nextEstate:1,nextEvent:1,policy:{reserveDays:12,shareSurplus:true,autoExpand:false},migration:{sourceVersion:snapshot.ver||null,day:state.day,reservesConverted:[],unknownResidents:0},unlocks:{uprawy:1,hodowla:1,przetworstwo:1},stats:{births:0,deaths:0,deliveries:0,succession:0,maxGeneration:1}};
+  const state=clone(snapshot);state.epoch=4;state.e4={schema:1,world:clone(world),dailyFactor,randomState:(world.seed^0x4e4f5244)>>>0||1,started:state.day,lastDay:Math.floor(state.day),elapsed:0,households:{},settlements:{},archive:{},events:[],transports:[],nextTransport:1,nextEstate:1,nextEvent:1,policy:{reserveDays:12,shareSurplus:true,autoExpand:false,autoBuild:false,v46:1},migration:{sourceVersion:snapshot.ver||null,day:state.day,reservesConverted:[],unknownResidents:0},unlocks:{uprawy:1,hodowla:1,przetworstwo:1},stats:{births:0,deaths:0,deliveries:0,succession:0,maxGeneration:1}};
   state.rody=state.rody||{};
   const ensureClan=(requested,name)=>{if(identity(requested)&&state.rody[requested])return requested;const id=nextId(state.rody);state.rody[id]={id,name:name||'Założyciele',day:state.day};return id};
   const town=createSettlement(state,{id:'przystan',name:state.vname||'Przystań',x:world.town.x,z:world.town.z,stage:'osada',capacity:1200,homeCapacity:Math.max(state.people.length+4,40),buildings:{schronienie:1},road:2});
@@ -54,7 +69,10 @@ const E4Domain=(()=>{
   }
   state.pid=Math.max(state.pid||0,...state.people.map(person=>person.id+1));state.fid=Math.max(state.fid||1,nextId(state.fams));
   for(const hamlet of state.hamlets||[]){
-   const clanId=ensureClan(hamlet.rod,hamlet.head||hamlet.name),settlement=createSettlement(state,{id:'przysiolek:'+hamlet.id,name:hamlet.name,clanId,x:hamlet.i-(snapshot.mapN||192)/2+.5,z:hamlet.j-(snapshot.mapN||192)/2+.5,stage:'zagroda',legacyHamletId:hamlet.id,buildings:{schronienie:1},road:hamlet.road===2?2:1});
+   // 4.6: przysiółek przechodzi z tym, co zbudował; z domem rodu od razu jest folwarkiem
+   const built=hamletEstate(hamlet,state.day);
+   const clanId=ensureClan(hamlet.rod,hamlet.head||hamlet.name),settlement=createSettlement(state,{id:'przysiolek:'+hamlet.id,name:hamlet.name,clanId,x:hamlet.i-(snapshot.mapN||192)/2+.5,z:hamlet.j-(snapshot.mapN||192)/2+.5,stage:built.stage,legacyHamletId:hamlet.id,...(Number.isFinite(hamlet.ang)?{ang:hamlet.ang}:{}),buildings:built.buildings,homeCapacity:built.homeCapacity,capacity:400+built.storage,bud:built.bud,road:hamlet.road===2?2:1});
+   settlement.fields=built.fields.map((crop,index)=>({id:900000+hamlet.id*20+index,crop,planted:state.day,age:30,progress:0,soil:1,sown:false,harvests:0}));
    const family=household(state,{clanId,settlementId:settlement.id,homeId:null});
    const count=Math.max(0,Math.floor(hamlet.pop||0));
    for(let index=0;index<count;index++){

@@ -13,8 +13,8 @@ function hType(h){const r=REGIONS[h.rid];return r&&HAM_T[r.type]?r.type:'forest'
 function hamGifts(h){return HAM_T[hType(h)].g}
 function hamDng(h){return({coast:.2,meadow:.3,forest:.5,high:.6}[hType(h)]||.4)+Math.min(.3,Math.hypot(h.i-camp.i,h.j-camp.j)/220)-(h.pal?.15:0)-(h.road===2?.1:0)}
 function zapWord(z){return z>=.7?'pełne':z>=.4?'wystarczą':z>=.18?'skąpe':'głód'}
-function kolInit(){ludInit();S.hamlets.forEach(h=>{if(h.zap===undefined)h.zap=.45;if(h.st===undefined){h.st=0;HST.forEach((s,i)=>{if(h.pop>=s[1])h.st=i})}if(!h.road)h.road=1;if(!h.head)h.head=h.ppl&&h.ppl[0]||'?';if(hamPath[h.id]===undefined)kolPath(h)})}
-function settledCount(){return 1+new Set((S.hamlets||[]).map(h=>h.rid)).size}
+function kolInit(){ludInit();S.hamlets.forEach(h=>{if(h.zap===undefined)h.zap=.45;if(h.st===undefined){h.st=0;HST.forEach((s,i)=>{if(h.pop>=s[1])h.st=i})}if(!h.road)h.road=1;if(!h.head)h.head=h.ppl&&h.ppl[0]||'?';if(hamPath[h.id]===undefined)kolPath(h);hamInit(h)})}
+function settledCount(){return 1+new Set((S.hamlets||[]).filter(h=>h.st>=1).map(h=>h.rid)).size}   // 4.6: kraina jest zasiedlona, gdy przysiółek ma chatę z bali
 function regionCount(){return REGIONS.filter(Boolean).length}
 function freeRegions(){const used=new Set((S.hamlets||[]).map(h=>h.rid));return REGIONS.filter(r=>r&&r.id!==0&&!used.has(r.id)&&hamRegionOK(r)&&S.regs&&S.regs[r.id]).sort((a,b)=>Math.hypot(a.i-camp.i,a.j-camp.j)-Math.hypot(b.i-camp.i,b.j-camp.j))}
 
@@ -84,18 +84,10 @@ function ringFence(g,x0,z0,R,tall,gapA){const step=tall?.34:1.0,n=Math.floor(R*6
   rm.count=q;g.add(rm)}}
 const hamM2={};
 hamVis=function(){if(!S||!S.hamlets)return;Object.keys(hamM).forEach(id=>{if(!S.hamlets.some(h=>h.id===+id)){const g=hamM[id];if(hamRib[id]){retireObjects(hamRib[id]);delete hamRib[id]}for(let k=fires.length-1;k>=0;k--)if(fires[k].g.parent===g)fires.splice(k,1);retireObjects(g);delete hamM[id]}});
- S.hamlets.forEach(h=>{if(hamPath[h.id]===undefined)kolPath(h);const key=h.st+'|'+(h.pal?1:0)+'|'+(hamPath[h.id]?1:0);let g=hamM[h.id];
+ S.hamlets.forEach(h=>{if(hamPath[h.id]===undefined)kolPath(h);const key=hamKey(h);let g=hamM[h.id];
   if(g&&g.userData.key!==key){for(let k=fires.length-1;k>=0;k--)if(fires[k].g.parent===g)fires.splice(k,1);retireObjects(g);g=null;delete hamM[h.id]}
-  if(!g){g=new THREE.Group();g.userData={key,chims:[]};const x0=tcx(h.i),z0=tcx(h.j),a0=h.id*2.1;const R=3.2+h.st*.9;
-   const x00=x0,z00=z0;nodeBy.tree.forEach(n=>{if(n.amt>0&&Math.hypot(n.x-x00,n.z-z00)<R+(h.pal?2:1.5)){n.amt=0;const k=nodes.indexOf(n);if(k>=0)S.nodeAmt[k]=0;nodeVis(n)}});
-   const put=(m,lx,lz,ry)=>{const c=Math.cos(a0),s=Math.sin(a0),wx=x0+lx*c-lz*s,wz=z0+lx*s+lz*c;m.position.set(wx,Hy(wx,wz),wz);m.rotation.y=(ry||0)-a0;g.add(m);return[wx,wz]};
-   put(makeBuildingModel('szalas',null),-1.4,.2,.4);{const c=Math.cos(a0),s=Math.sin(a0),wx=x0+.3*c-1.4*s,wz=z0+.3*s+1.4*c;makeFire(g,wx,Hy(wx,wz),wz,true)}
-   if(h.st>=1){const p=put(makeBuildingModel('chata',null),1.6,-.4,-.5);g.userData.chims.push(p)}
-   if(h.st>=2){const ty=hType(h);put(ty==='coast'?fishCamp():makeBuildingModel(ty==='forest'?'drwal':ty==='high'?'kamien':'zagroda',null),-.3,-3.0,.1);const p=put(makeBuildingModel('chata',null),-2.3,2.6,.9);g.userData.chims.push(p)}
-   if(h.st>=3){const p=put(makeBuildingModel('chata',null),3.5,2.2,-1.2);g.userData.chims.push(p)}
-   if(h.st>=4){const p=put(makeBuildingModel('dom',null),-4.2,-1.4,.3);g.userData.chims.push(p);put(makeBuildingModel('studnia',null),1.4,3.4,0)}
-   const P=hamPath[h.id];let gap=0;if(P&&P.tiles.length>3){const k=P.tiles[P.tiles.length-4];gap=Math.atan2(tcx((k/N)|0)-z0,tcx(k%N)-x0)}
-   if(h.pal)ringFence(g,x0,z0,R+1.1,true,gap);else if(h.st>=3)ringFence(g,x0,z0,R+.8,false,gap);
+  if(!g){g=new THREE.Group();g.userData={key,chims:[]};const x0=tcx(h.i),z0=tcx(h.j);
+   hamBuildModel(h,g,x0,z0);   // 4.6: budynki w stałych miejscach działki (p_przys.js)
    g.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true}});scene.add(g);hamM[h.id]=g}
   g.visible=revAt(h.i,h.j)&&!(h.arr&&S.day<h.arr);kolRibbon(h)})}
 function kolChims(ch){if(!S||!S.hamlets)return;S.hamlets.forEach(h=>{const g=hamM[h.id];if(!g||!g.visible)return;g.userData.chims.forEach(p=>{if(Math.hypot(p[0]-camT.x,p[1]-camT.z)<45)ch.push([p[0]-.95,Hy(p[0],p[1])+2.6,p[1]])})})}
@@ -132,8 +124,7 @@ function kolDaily(){if(!S.hamlets)return;kolInit();const sea=seasonIdx();
   const pro=T.food[sea]*(1+.05*h.st)*(h.road===2?1.06:1),need=HAM_NEED[sea]*(sea===2?dM():1);h.zap=clamp(h.zap+(pro-need)*.045,0,1);
   if(Math.random()<K*.0004*h.pop){h.pop--;h.lost=(h.lost||0)+1;if(Math.random()<.3){const sx=Math.random()<.5?'k':'m';log(`W przysiółku ${h.name} zmarł${sx==='k'?'a':''} ${sx==='k'?'stara':'stary'} ${newName(sx)}. Pochowano ${sx==='k'?'ją':'go'} pod brzozą za chatami.`)}if(h.pop<=0){gameLater(()=>hamGone(h),50);return}}
   if(h.zap<.08&&h.pop>1&&Math.random()<.07*dM()){const nm=hamDeath(h,'glod');if(nm)log(`W przysiółku ${h.name} głód. Zmarł${nm.slice(-1)==='a'?'a':''} ${nm}.`)}
-  const nx=HST[h.st+1];if(nx&&h.pop>=nx[1]&&h.zap>.3&&S.day-(h.stD||h.day)>=SD){h.st++;h.stD=S.day;pamAdd(1,'przysiolek');
-   log(['',`W przysiółku ${h.name} stanęła pierwsza chata z bali. To już nie obozowisko, tylko zagroda.`,`W przysiółku ${h.name} jest już kilka chat i ${T.n==='rybacki'?'suszarnie ryb':T.n==='leśny'?'chata drwala':T.n==='górski'?'łom kamienia':'zagroda dla kóz'}. Ludzie mówią o nim jak o prawdziwym miejscu.`,`Wokół przysiółka ${h.name} stanął płot. Osiedle ma swoje pola i swoje ścieżki.`,`${h.name} to już wieś. Druga osada na wyspie, z domem rodu i studnią.`][h.st]);toast(h.name+': '+HST[h.st][0])}
+  hamDaily(h);   // 4.6: etap rośnie tylko z budowy (p_przys.js)
   if(h.need&&S.day>h.need.until){h.wiez=Math.max(0,h.wiez-.1);log(`Nikt nie odpowiedział na prośbę przysiółka ${h.name}. Więź jest ${wiezWord(h)}.`);h.need=null}
   else if(!h.need&&S.day-(h.needD||h.day)>SD*1.5&&Math.random()<(h.zap<.3?.3:.05)){genNeed(h);h.needD=S.day}
   if(h.rb){h.rb.p++;if(h.rb.p>=h.rb.n){h.rb=null;h.road=2;kolClearPath(h,true);pamAdd(2,'droga');log(`Droga do przysiółka ${h.name} gotowa: wyrównana, z kładkami przez strumienie i palami przy brzegu. Ludzie chodzą nią co kilka dni.`);toast('Droga do '+h.name+' gotowa');song('Pieśń o drodze do przysiółka '+h.name)}}
@@ -202,12 +193,12 @@ EVENTS.push(
    {n:'Czekać, aż przejdzie',d:'',f:c=>{if(bad(.5)){const nm=hamDeath(c.h);return`Gorączka mija po dwóch tygodniach. Umiera ${nm}.`}return'Gorączka mija sama. Ludzie są osłabieni, ale żyją.'}}]},
  {id:'kol_pozar',w:1,cd:80,cond:()=>thrOK()&&seasonIdx()===0&&!!hamPick(isT('forest')),t:'Las płonie',ctx:()=>{const h=hamPick(isT('forest'));if(!h)return null;thrSet();return{h}},
   text:c=>`Nad lasem za przysiółkiem ${c.h.name} stoi słup dymu. Las płonie, a wiatr niesie ogień w stronę chat.`,
-  opts:[{n:'Wszyscy do gaszenia',d:'osada traci dzień pracy',f:c=>{needTake('jedzenie',Math.min(10,foodTotal()));S.hope=clamp(S.hope-.02,0,1);if(Math.random()<.85){c.h.wiez=Math.min(1,c.h.wiez+.12);return'Kopią rowy i gaszą ogień gałęziami do późnej nocy. Chaty ocalały.'}c.h.st=Math.max(0,c.h.st-1);hamVis();return'Ognia nie udało się zatrzymać. Spłonęła jedna chata, ale ludzie są cali.'}},
-   {n:'Niech uciekają z dobytkiem',d:'',f:c=>{c.h.st=Math.max(0,c.h.st-1);c.h.zap=Math.max(0,c.h.zap-.2);hamVis();return`Ludzie z przysiółka ${c.h.name} uciekają do strumienia. Ogień zabiera chaty i zapasy. Zaczną od nowa.`}}]},
+  opts:[{n:'Wszyscy do gaszenia',d:'osada traci dzień pracy',f:c=>{needTake('jedzenie',Math.min(10,foodTotal()));S.hope=clamp(S.hope-.02,0,1);if(Math.random()<.85){c.h.wiez=Math.min(1,c.h.wiez+.12);return'Kopią rowy i gaszą ogień gałęziami do późnej nocy. Chaty ocalały.'}hamLoseHut(c.h);return'Ognia nie udało się zatrzymać. Spłonęła jedna chata, ale ludzie są cali.'}},
+   {n:'Niech uciekają z dobytkiem',d:'',f:c=>{hamLoseHut(c.h);c.h.zap=Math.max(0,c.h.zap-.2);return`Ludzie z przysiółka ${c.h.name} uciekają do strumienia. Ogień zabiera chaty i zapasy. Zaczną od nowa.`}}]},
  {id:'kol_osuwisko',w:1,cd:80,cond:()=>thrOK()&&seasonIdx()===3&&!!hamPick(isT('high')),t:'Osuwisko',ctx:()=>{const h=hamPick(isT('high'));if(!h)return null;thrSet();return{h}},
   text:c=>`Wiosenne roztopy podmyły zbocze nad przysiółkiem ${c.h.name}. Ziemia z kamieniami zsunęła się na chaty.`,
   opts:[{n:'Posłać cieśli i kłody',d:'15 kłód',f:c=>{if(S.res.drewno<15)return'Nie ma tylu kłód.';S.res.drewno-=15;c.h.wiez=Math.min(1,c.h.wiez+.1);return'Cieśle z osady w tydzień stawiają nowe ściany. Zbocze podparto palami.'}},
-   {n:'Odbudują sami',d:'',f:c=>{c.h.st=Math.max(0,c.h.st-1);hamVis();if(bad(.3)){const nm=hamDeath(c.h);return`Pod ziemią zostaje ${nm}. Resztę wykopują własnymi rękami.`}return'Odbudowują powoli, z tego, co zostało.'}}]},
+   {n:'Odbudują sami',d:'',f:c=>{hamLoseHut(c.h);if(bad(.3)){const nm=hamDeath(c.h);return`Pod ziemią zostaje ${nm}. Resztę wykopują własnymi rękami.`}return'Odbudowują powoli, z tego, co zostało.'}}]},
  {id:'kol_sztorm',w:1,cd:70,cond:()=>thrOK()&&[1,3].includes(seasonIdx())&&!!hamPick(isT('coast')),t:'Sztorm połamał łodzie',ctx:()=>{const h=hamPick(isT('coast'));if(!h)return null;thrSet();return{h}},
   text:c=>`Sztorm połamał łodzie w przysiółku ${c.h.name}. Bez łodzi nie będzie ryb na zimę.`,
   opts:[{n:'Posłać deski na nowe łodzie',d:'10 desek',f:c=>{if(S.res.deski<10)return'Nie ma tylu desek.';S.res.deski-=10;c.h.wiez=Math.min(1,c.h.wiez+.1);return'W dwa tygodnie na brzegu leżą nowe łodzie, pachnące żywicą.'}},
@@ -218,8 +209,8 @@ EVENTS.push(
    {n:'Czekać',d:'',f:c=>{if(Math.random()<.4)return'Czwartego dnia wraca sam, wychudzony, ale żywy.';const nm=hamDeath(c.h);return`${nm} nie wraca. Puszcza nie oddaje tego, co zabrała.`}}]},
  {id:'kol_wesele',w:1,cd:70,cond:()=>(S.hamlets||[]).some(h=>h.pop>=5&&h.wiez>=.3&&!(h.arr&&S.day<h.arr)),t:'Wesele w przysiółku',ctx:()=>{const c=S.hamlets.filter(h=>h.pop>=5&&h.wiez>=.3);return c.length?{h:c[(Math.random()*c.length)|0]}:null},
   text:c=>`W przysiółku ${c.h.name} będzie wesele. Przyszli z zaproszeniem dla całej osady, z wieńcem z kłosów i dzbanem miodu.`,
-  opts:[{n:'Iść całą osadą',d:'10 jedzenia na dary, nadzieja i więź',f:c=>{if(needHave('jedzenie',10))needTake('jedzenie',10);S.hope=clamp(S.hope+.05,0,1);S.wh=(S.wh||0)+.02;c.h.wiez=Math.min(1,c.h.wiez+.2);c.h.pop++;for(let k=0;k<4;k++)spawnWalker(c.h,1,null,0,k*2);return'Idą ścieżką z pochodniami i śpiewem. Wesele trwa do rana, a młodzi z osady i przysiółka tańczą razem.'}},
-   {n:'Posłać dary i życzenia',d:'',f:c=>{c.h.wiez=Math.min(1,c.h.wiez+.08);c.h.pop++;spawnWalker(c.h,1,null,1,0);return'Posłaniec niesie dary i wraca z kołaczem.'}}]},
+  opts:[{n:'Iść całą osadą',d:'10 jedzenia na dary, nadzieja i więź',f:c=>{if(needHave('jedzenie',10))needTake('jedzenie',10);S.hope=clamp(S.hope+.05,0,1);S.wh=(S.wh||0)+.02;c.h.wiez=Math.min(1,c.h.wiez+.2);if(hamRoom(c.h)>0)c.h.pop++;for(let k=0;k<4;k++)spawnWalker(c.h,1,null,0,k*2);return'Idą ścieżką z pochodniami i śpiewem. Wesele trwa do rana, a młodzi z osady i przysiółka tańczą razem.'}},
+   {n:'Posłać dary i życzenia',d:'',f:c=>{c.h.wiez=Math.min(1,c.h.wiez+.08);if(hamRoom(c.h)>0)c.h.pop++;spawnWalker(c.h,1,null,1,0);return'Posłaniec niesie dary i wraca z kołaczem.'}}]},
  {id:'kol_slad',w:1,cd:999,cond:()=>(S.hamlets||[]).some(h=>tribe.some(t=>!S.found.includes(t.k)&&Math.hypot(t.i-h.i,t.j-h.j)<36)),t:'Coś w głębi lasu',
   ctx:()=>{for(const h of S.hamlets){const t=tribe.find(t=>!S.found.includes(t.k)&&Math.hypot(t.i-h.i,t.j-h.j)<36);if(t)return{h,t}}return null},
   text:c=>`Ludzie z przysiółka ${c.h.name} znaleźli w głębi lasu coś, czego nie umieją nazwać. Mówią o kamieniach ułożonych ręką człowieka.`,
@@ -231,7 +222,7 @@ EVENTS.push(
 
 /* ---- panel Wspólnota ---- */
 hamletHTML=function(){kolInit();const hs=S.hamlets;if(S.tier<1&&!hs.length)return'';const tot=hs.reduce((a,h)=>a+h.pop,0),why=kolWhyNot();
- let h=`<h3>Wspólnota</h3><div class="card"><h4>Zasiedlone krainy: ${settledCount()} z ${regionCount()}</h4><p>${S.people.length} ${osb(S.people.length)} w osadzie${hs.length?` i ${tot} w ${hs.length===1?'przysiółku':'przysiółkach'}`:''}. Celem jest cała wyspa: przysiółek w każdej krainie.</p>
+ let h=`<h3>Wspólnota</h3><div class="card"><h4>Zasiedlone krainy: ${settledCount()} z ${regionCount()}</h4><p>${S.people.length} ${osb(S.people.length)} w osadzie${hs.length?` i ${tot} w ${hs.length===1?'przysiółku':'przysiółkach'}`:''}. Celem jest cała wyspa: przysiółek z chatą z bali w każdej krainie.</p>
  <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap"><button data-kmap>Mapa wspólnoty</button><button data-knew ${why?'disabled':''} class="${why?'':'pri'}">Nowy przysiółek</button></div>${why?`<p class="mut" style="margin-top:4px">${why}</p>`:''}</div>`;
  hs.forEach(x=>{const r=REGIONS[x.rid],T=HAM_T[hType(x)],rc=roadCost(x),trav=x.arr&&S.day<x.arr;
   h+=`<div class="card"><h4>${x.name} <span class="mut" style="font-size:13px">${hamKind(x)}</span></h4>
@@ -239,6 +230,7 @@ hamletHTML=function(){kolInit();const hs=S.hamlets;if(S.tier<1&&!hs.length)retur
   <p class="mut">Starszy: ${x.head} · ${rodName(x.rod)} · daje: ${T.d}${x.lost?` · pochowano: ${x.lost}`:''}</p>
   ${trav?'<p class="mut">Są jeszcze w drodze.</p>':''}
   ${x.need?`<p><b>Prośba:</b> ${NEEDS[x.need.k][1]} (${x.need.q}). Czekają jeszcze ${Math.max(1,Math.ceil(x.need.until-S.day))} ${dniW(Math.max(1,Math.ceil(x.need.until-S.day)))}.</p><button data-kneed="${x.id}" ${needHave(x.need.k,x.need.q)?'class="pri"':'disabled'}>Wyślij ${NEEDS[x.need.k][1]}</button>`:''}
+  ${hamBudHTML(x)}
   <p class="mut" style="margin-top:4px">${x.road===2?'Droga z osady: wyrównana, ludzie chodzą często.':x.rb?`Droga w budowie: ${Math.round(100*x.rb.p/x.rb.n)}%.`:hamPath[x.id]?`Wydeptana ścieżka, ${Math.round(hamPath[x.id].len)} kroków.`:'Brak drogi lądem.'}</p>
   <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px"><button data-kdar="${x.id}">Dary (20 jedzenia, 6 opału)</button>${x.road!==2&&!x.rb&&hamPath[x.id]?`<button data-kroad="${x.id}" ${S.res.drewno>=rc.drewno&&S.res.kamien>=rc.kamien?'':'disabled'}>Wytycz drogę (${rc.drewno} kłód, ${rc.kamien} kamienia)</button>`:''}<button data-klook="${x.id}">Pokaż</button></div></div>`});
  return h};

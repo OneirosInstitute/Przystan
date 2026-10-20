@@ -34,9 +34,9 @@ test('a large farm keeps its fields within a real working day instead of losing 
 test('autonomy expands housing only after completed grain fields and eight days of edible food',()=>{
  const state=estate(),town=state.e4.settlements.przystan;town.homeCapacity=state.people.length;town.capacity=1000000;
  Object.assign(state.res,{suchary:10000,drewno:1000,kamien:1000,deski:1000,narz:1000,opal:1000});E.advance(state,1);
- assert.equal(town.projects.some(project=>project.kind==='chata'),false,'pending fields cannot fund a larger population');
+ assert.equal(town.projects.some(project=>project.kind==='chata')||town.proposals.some(item=>item.kind==='chata'),false,'pending fields cannot fund a larger population');
  town.projects=[];town.fields=Array.from({length:town.grainTarget},(_,index)=>({id:2000+index,crop:'zboze',age:20,progress:0,soil:1,sown:true,harvests:0}));
  for(const key of E.catalog.food)state.res[key]=0;state.res.ziarno=town.fields.length*2;E.advance(state,1);
- assert.equal(town.projects.some(project=>project.kind==='chata'),false,'protected seed is not an edible reserve for new households');
- state.res.suchary=10000;E.advance(state,1);assert.ok(town.projects.some(project=>project.kind==='chata')||(town.buildings.chata||0)>0,'prepared settlements can grow normally');
+ assert.equal(town.projects.some(project=>project.kind==='chata')||town.proposals.some(item=>item.kind==='chata'),false,'protected seed is not an edible reserve for new households');
+ state.res.suchary=10000;E.advance(state,1);assert.ok(town.proposals.some(item=>item.kind==='chata')||town.projects.some(project=>project.kind==='chata')||(town.buildings.chata||0)>0,'prepared settlements ask for consent to grow (4.6)');
 });

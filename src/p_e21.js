@@ -134,7 +134,7 @@ function e2Daily21(){if(!S||S.epoch!==2||!S.e2||!S.e2.r2)return;const e=S.e2,sea
   if(!S.spor&&S.day>12&&(!S.sporNext||S.day>=S.sporNext-4)&&Math.random()<.3){const ad=S.people.filter(isAdult);const a=lpick(ad),b=lpick(ad.filter(q=>a&&q.fam!==a.fam));if(a&&b){S.spor={a:a.id,b:b.id,why:S.bld.filter(x=>x.field).length>=2&&Math.random()<.5?'miedza':'krzywda',day:S.day};S.sporNext=S.day+3+Math.random()*3;openSpor()}}}
  if(e.r2==='wiec'){S.hope=clamp(S.hope+.002,0,1);e.hopeD=S.hope>.8?(e.hopeD||0)+1:0;if(S.sporNext&&S.sporNext>S.day+6)S.sporNext-=.4}
  if(e.r2==='rod'){const c=e2RodCnt();const others=Object.keys(c).filter(k=>k!==String(e.rodLead)&&c[k]>=3).length;S.dis=clamp((S.dis||0)+.0012*others,0,1)}
- if(e.r2==='druga'){const h=e2Second();if(h&&(h.zap||0)>.45&&Math.random()<.18+(h.road===2?.08:0)){h.pop++;h.ppl=h.ppl||[];if(Math.random()<.35)log(`Do drugiej osady, ${h.name}, przybyło ludzi: ${h.pop} ${osb(h.pop)}.`)}}
+ if(e.r2==='druga'){const h=e2Second();if(h&&(h.zap||0)>.45&&hamRoom(h)>0&&Math.random()<.18+(h.road===2?.08:0)){h.pop++;h.ppl=h.ppl||[];if(Math.random()<.35)log(`Do drugiej osady, ${h.name}, przybyło ludzi: ${h.pop} ${osb(h.pop)}.`)}}
  if(e.r2==='lancuch')(S.hamlets||[]).forEach(h=>h.wiez=Math.min(1,(h.wiez||0)+.002));
  if(e.r2==='wyspy')e2IslDaily();
  if(e.r2==='skaly'&&sea===2&&(S.res.pierze||0)>=30){const hh=S.bld.filter(b=>bDone(b)&&BD[b.kind].house).length;S.res.opal+=K*.08*hh}}

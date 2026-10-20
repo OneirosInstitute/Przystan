@@ -169,7 +169,7 @@ function e2Daily(){if(!S||S.epoch!==2||!S.e2)return;const e=S.e2,sea=seasonIdx()
  if(S.path==='dom'&&!e.prawo&&!e.prawoQ&&wspOn()&&e2OldCust(4))e.prawoQ=1;
  if(hasDone('targ')&&d%5===0&&e.targD!==d){e.targD=d;e2Targ()}
  if(e.r1==='grod'&&e.wal){S.dis=Math.max(0,(S.dis||0)-.003);(S.hamlets||[]).forEach(h=>h.wiez=Math.max(.1,(h.wiez||0)-.002))}
- if(e.r1==='wies'){(S.hamlets||[]).forEach(h=>{h.wiez=Math.min(1,(h.wiez||0)+.003);if((h.zap||0)>.5&&Math.random()<.04){h.pop++;if(Math.random()<.4)log(`W przysiółku ${h.name} przybyło ludzi: ${h.pop} ${osb(h.pop)}.`)}})}
+ if(e.r1==='wies'){(S.hamlets||[]).forEach(h=>{h.wiez=Math.min(1,(h.wiez||0)+.003);if((h.zap||0)>.5&&hamRoom(h)>0&&Math.random()<.04){h.pop++;if(Math.random()<.4)log(`W przysiółku ${h.name} przybyło ludzi: ${h.pop} ${osb(h.pop)}.`)}})}
  if(e.r1==='gory'&&sea===2){const hh=S.bld.filter(b=>bDone(b)&&BD[b.kind].house).length;S.res.opal=Math.max(0,S.res.opal-K*.12*hh)}
  if(e.r1==='bagna'&&sea===0){const at=S.people.filter(p=>p.wb&&(()=>{const b=bById(p.wb);return b&&(b.kind==='torfowisko'||b.kind==='ruda')})());let n=0;at.forEach(p=>{if(Math.random()<.035*KF*(tech('u_ziel')?.6:1)&&__rok.illGive(p,'bagienna'))n++});
   if(n)log(`${n>1?'Zachorowały '+n+' osoby':'Ktoś zachorował'}: gorączka bagienna. Przyczyna: komary i wilgoć mokradeł.`)}
