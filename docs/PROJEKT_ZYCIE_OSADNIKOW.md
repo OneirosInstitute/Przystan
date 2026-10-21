@@ -1,6 +1,6 @@
 # Projekt: życie osadników, wieczory i ich SI
 
-Stan: zaakceptowany 21.10.2026 (po 4.7.0-rc.1), z decyzjami i folklorem niżej. Wdrażany w wydaniach 4.8.
+Stan: zaakceptowany 21.10.2026 (po 4.7.0-rc.1), z decyzjami i folklorem niżej. Wdrożony w wydaniach 4.8.0-rc.1 (dusza i wieczory) oraz 4.8.0-rc.2 (wydarzenia i SI czasu wolnego, połączone w jedno wydanie).
 
 ## Co jest dziś i dlaczego się powtarza
 

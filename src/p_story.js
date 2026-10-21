@@ -85,9 +85,10 @@ const DECISION_RECOVERY={
 function storyTick(){if(evOpen||placing||!S.people.length)return;if(S.evT===undefined)S.evT=S.day+1.2;if(S.day<S.evT||!isWork())return;
  S.evT=S.day+1.3+Math.random()*1.8;S.evCd=S.evCd||{};
  const pool=EVENTS.filter(e=>(S.evCd[e.id]||0)<=S.day&&!(e.once&&S.seen['ev'+e.id])&&e.cond());if(!pool.length)return;
- let tot=pool.reduce((a,e)=>a+e.w,0),x=Math.random()*tot,ev=pool[0];for(const e of pool){if(x<e.w){ev=e;break}x-=e.w}
+ // 4.8: po wydarzeniu jednego rodzaju przez chwilę przychodzą inne
+ const cats=S.evCat||[],ew=e=>e.w*(cats.includes(e.cat||e.id)?.35:1);let tot=pool.reduce((a,e)=>a+ew(e),0),x=Math.random()*tot,ev=pool[0];for(const e of pool){if(x<ew(e)){ev=e;break}x-=ew(e)}
  const ctx=ev.ctx?ev.ctx():{};if(ev.ctx&&!ctx)return;
- S.evCd[ev.id]=S.day+ev.cd/K;if(ev.once)S.seen['ev'+ev.id]=1;openEvent(ev,ctx)}
+ S.evCd[ev.id]=S.day+ev.cd/K;if(ev.once)S.seen['ev'+ev.id]=1;cats.push(ev.cat||ev.id);if(cats.length>3)cats.shift();S.evCat=cats;openEvent(ev,ctx)}
 function decisionReferences(){return{person:S.people,building:S.bld,family:Object.values(S.fams),hamlet:S.hamlets||[],region:REGIONS,tribe,herd:S.herds,node:nodes}}
 function decisionReferenceId(kind,value,items){return kind==='tribe'?value.k:kind==='herd'?items.indexOf(value):value.id}
 function packDecisionContext(value,ancestors=new Set()){

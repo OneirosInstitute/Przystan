@@ -1,7 +1,7 @@
 const {execFileSync}=require('node:child_process');
 const path=require('node:path');
-const BASE='50739a6d2d0909348fe3d0da3c8d1ddfcc55393a';
-const PACKAGE='Przystan_4.8.0_RC1';
+const BASE='d008975a7b5b7d93ccadb231b64d0e927bd78eba';
+const PACKAGE='Przystan_4.8.0_RC2';
 function checkDeployment(readGit=(...arguments_)=>execFileSync('git',arguments_,{encoding:'utf8'}).trim(),{beforePull=false}={}){
  const root=readGit('rev-parse','--show-toplevel');
  if(path.resolve(root)!==process.cwd())throw new Error('Uruchom komendy w głównym katalogu repozytorium.');
