@@ -279,7 +279,7 @@ function makeFire(parent,x,y,z,small){const g=new THREE.Group();g.position.set(x
  const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:glowTex,blending:THREE.AdditiveBlending,transparent:true,depthWrite:false,opacity:0}));sp.scale.set(2.6,2.6,1);sp.position.y=.5;g.add(sp);
  parent.add(g);fires.push({g,fl,fl2,sp});return g}
 /* ---- faktury proceduralne ---- */
-function ctex(w,h,draw,rep){const c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d');draw(x,w,h);const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=4;return t}
+function ctex(w,h,draw,rep){const c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d');draw(x,w,h);const t=new THREE.CanvasTexture(c);c.addEventListener('contextrestored',()=>{try{draw(x,w,h);t.needsUpdate=true}catch(e){}});t.wrapS=t.wrapT=THREE.RepeatWrapping;t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=4;return t}
 const RT=rng(4242);
 const TX={
  logs:ctex(128,128,(x,w,h)=>{const n=6,rh=h/n;for(let i=0;i<n;i++){const y=i*rh;const g=x.createLinearGradient(0,y,0,y+rh);const b=150+RT()*30;g.addColorStop(0,`rgb(${b*.55|0},${b*.42|0},${b*.3|0})`);g.addColorStop(.35,`rgb(${b*.85|0},${b*.66|0},${b*.45|0})`);g.addColorStop(1,`rgb(${b*.42|0},${b*.31|0},${b*.21|0})`);x.fillStyle=g;x.fillRect(0,y,w,rh);
