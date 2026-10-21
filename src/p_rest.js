@@ -202,7 +202,9 @@ const deerOff=[];{const r0=rng(91);for(let k=0;k<herdsDef.length*7+80;k++)deerOf
 const PEN_SLOTS=[[-.85,.05],[-.25,.2],[.35,.15],[.9,.2],[-.95,.85],[-.35,.95],[.3,.9],[.95,.85],[-.15,-.45],[.3,-.5],[-.95,2.0],[-.3,2.25],[.35,2.0],[.95,2.3],[-.6,2.45],[.65,2.5]];
 // 4.6.0-rc.4: kto stoi na płyciźnie albo w krzakach, wychodzi na najbliższe wolne pole, ale tylko z bliska (najwyżej 3 pola, tyle da się przebrnąć); dalej nikt nie przeskakuje
 function wadeOut(s){if(walk[s[1]*N+s[0]])return s;const out=nearestWalk(s[0],s[1]);return out&&Math.max(Math.abs(out[0]-s[0]),Math.abs(out[1]-s[1]))<=3?out:s}
-function penPos(b,q,o){const c=bCenter(b),sl=PEN_SLOTS[q%PEN_SLOTS.length],w=.12*Math.sin(clock*.07*(1+o.ph*.1)+o.ph);return[c.x+sl[0]+w,c.z+sl[1]+.1*Math.cos(clock*.05+o.ph*2)]}
+const PEN_KOJEC=[[2.05,-.35],[2.5,-.3],[2.1,.4],[2.55,.45]],penSl=new WeakMap();   // 4.7: kojec z boku zagrody
+function penSlots(b){const key=(b.ext||[]).join();let c=penSl.get(b);if(c&&c.key===key)return c.L;const L=PEN_SLOTS.slice(0,10);if(hasExt(b,'wybieg'))L.push(...PEN_SLOTS.slice(10));if(hasExt(b,'kojec'))L.push(...PEN_KOJEC);penSl.set(b,{key,L});return L}
+function penPos(b,q,o){const c=bCenter(b),P=penSlots(b),sl=P[q%P.length],w=.12*Math.sin(clock*.07*(1+o.ph*.1)+o.ph);return[c.x+sl[0]+w,c.z+sl[1]+.1*Math.cos(clock*.05+o.ph*2)]}
 
 // dekoracja
 const tuftG=mergeGeos([{g:new THREE.ConeGeometry(.05,.42,3),y:.21,c:W1},{g:new THREE.ConeGeometry(.05,.34,3),y:.17,x:.09,z:.04,c:[.85,.9,.8]},{g:new THREE.ConeGeometry(.05,.3,3),y:.15,x:-.08,z:-.05,c:[.9,.95,.85]},{g:new THREE.ConeGeometry(.04,.26,3),y:.13,x:.02,z:-.1,c:[.8,.85,.75]}]);
@@ -541,7 +543,7 @@ function craftEff(p,c){return(1+0.18*(p.sk[c]||0)+(S.bonus[c]||0))*[1.15,1,.94][
 function seasonYield(kind){const s=seasonIdx();if(kind==='bush')return[1,.6,0,.7][s];if(kind==='grzyb')return[.8,1.3,0,.4][s];if(kind==='zboze')return[.7,1,0,0][s];if(kind==='len')return[1,.8,0,.4][s];if(kind==='ziola')return[1,.7,0,.6][s];if(kind==='ul')return[1,.8,0,.3][s];if(kind==='fish')return[1,.9,.7,.9][s];return 1}
 function gainXp(p,c,dt){let m=1;p.mentor=null;p.worked=1;
  for(const q of S.people){if(q!==p&&q.wb===p.wb&&q.job===p.job&&isAdult(q)&&q.state==='work'&&q.hp>.5&&Math.hypot(q.x-p.x,q.z-p.z)<=3&&q.sk[c]>p.sk[c]&&q.sk[c]>=2&&(!p.mentor||q.sk[c]>p.mentor.sk[c]))p.mentor=q}
- if(p.mentor)m=(p.mentor.trait==='Nauczyciel'?2.6:2)*(tech('n_kron')?1.25:1);if(law('npracy'))m*=1.2;if(p.trait==='Dociekliwy')m*=1.25;if(S.offCraft===c&&offHolder('mistrz')&&offHolder('mistrz')!==p)m*=1.25;techXp(DOMC[c],dt*.09);
+ if(p.mentor)m=(p.mentor.trait==='Nauczyciel'?2.6:2)*(tech('n_kron')?1.25:1)*(tech('n_szkola')?1.5:1);if(law('npracy'))m*=1.2;if(p.trait==='Dociekliwy')m*=1.25;if(S.offCraft===c&&offHolder('mistrz')&&offHolder('mistrz')!==p)m*=1.25;techXp(DOMC[c],dt*.09);
  const Lv=p.sk[c];const masterOf=Object.keys(CN).filter(q=>p.sk[q]>=3).length;if(Lv===2&&masterOf>=3){p.xp[c]=Math.min(p.xp[c]+dt*m,LVL[2]-1);if(!p.capLog){p.capLog=1;log(p.name+' jest mistrzem w trzech fachach. Na czwarty nie starczy już życia.')}return}
  p.xp[c]+=dt*m;if(Lv<5&&p.xp[c]>=LVL[Lv]){p.sk[c]=Lv+1;log(p.name+' awansuje: '+CN[c]+' '+(Lv+1)+'.');
   if(p.mentor&&p.mentor.sk[c]>=Lv+1&&Lv+1>=2&&(S.bonus[c]||0)<.3&&Math.random()<.2){S.bonus[c]=(S.bonus[c]||0)+.06;log(p.name+' wpada na ulepszenie w fachu '+CN[c]+'. Wszyscy pracują tym szybciej.');toast('Pomysł ucznia: '+CN[c]+' idzie sprawniej')}}}
@@ -693,7 +695,7 @@ function stepPerson(p,dt){
   if(k==='work'){const n=p.tgt,b=bById(p.wb);if(!n||n.amt<1-1e-6||!b){release(p);p.state='idle';p.wait=.2;return}const d=BD[b.kind];const c=d.c;
    p.wt+=dt*e*craftEff(p,c)*bMul(b);gainXp(p,c,dt);const T={zbieracz:n.type==='ul'?9:5,pomost:8,drwal:7,kamien:9,glinianka:7,ruda:9}[b.kind];
    if(p.wt>=T){p.wt=0;n.amt=Math.max(0,n.amt-1);S.nodeAmt[n.id]=n.amt;nodeVis(n);release(p);
-    const gm=(tech('u_rozp')?1.15:1)*(hasExt(b,'kosze')?1.25:1);let items;if(n.type==='bush')items=[{res:'jagody',q:3*seasonYield('bush')*gm}];else if(n.type==='grzyb')items=[{res:'grzyby',q:3.5*seasonYield('grzyb')*gm}];else if(n.type==='fish')items=[{res:'ryby',q:4*seasonYield('fish')*(tech('h_sieci')?1.25:1)*(tech('n_gwiazd')?1.2:1)*(hasExt(b,'lodz')?1.25:1)}];
+    const gm=(tech('u_rozp')?1.15:1)*(hasExt(b,'kosze')?1.25:1);let items;if(n.type==='bush')items=[{res:'jagody',q:3*seasonYield('bush')*gm}];else if(n.type==='grzyb')items=[{res:'grzyby',q:3.5*seasonYield('grzyb')*gm}];else if(n.type==='fish')items=[{res:'ryby',q:4*seasonYield('fish')*(tech('h_sieci')?1.25:1)*(tech('n_gwiazd')?1.2:1)*(tech('h_lodzie')?1.2:1)*(hasExt(b,'lodz')?1.25:1)}];
     else if(n.type==='ziola')items=[{res:'ziola',q:2*gm}];
     else if(n.type==='ul'){items=[{res:'miod',q:3}];if(!S.seen.miod){S.seen.miod=1;log(p.name+' przynosi pierwszy plaster dzikiego miodu.')}if(Math.random()<(p.trait==='Ostrożny'?.03:.08)){p.hp=Math.max(.3,p.hp-.08);toastOnce('zadlo'+Math.floor(S.day),p.name+' pogryziony przez pszczoły')}}
     else if(n.type==='zboze'){items=[{res:'ziarno',q:2.5*seasonYield('zboze')}];S.zbozeTot+=2.5;if(S.know.pole!=='tak'&&S.zbozeTot>=25){S.know.pole='tak';log(p.name+' zauważa, że ziarno rozsypane przy obozie wykiełkowało. Można założyć pole.');toast('Odkrycie: dzikie zboże da się siać')}}
@@ -719,9 +721,9 @@ function stepPerson(p,dt){
    if(S.readP[bk]>=200){S.books[bk]=2;log(p.name+' kończy czytać „'+BOOKS[bk]+'”.'+(bk==='kowal'?' Można spróbować postawić kuźnię (zakładka Wiedza).':bk==='siew'?' Wiemy, jak założyć pole.':''));toast('Przeczytano: '+BOOKS[bk]);if(bk==='siew')S.know.pole='tak';p.state='idle'}return}
   if(k==='plant'){const n=p.tgt;if(!n||n.amt>0||n.grow>0){release(p);p.state='idle';return}p.wt+=dt*e;gainXp(p,'drwal',dt*.5);if(p.wt>=5){n.grow=.03;S.grow[n.id]=n.grow;nodeVis(n);release(p);p.state='idle';p.wait=.3}return}
   if(k==='gasic'){const b=p.tgt;if(!b||!b.fire){p.fireB=null;p.state='idle';p.wait=.3;return}b.fire.s-=dt*.011*e*(wellCount()?1:.35)*(law('straz')?1.4:1);p.dir=(p.dir||0)+Math.sin(clock*3)*.02;return}
-  if(k==='build'){const s=p.tgt;if(s&&bDone(s)&&s.proj&&bById(s.id)){s.proj.prog+=dt*e*craftEff(p,'ciesla')*(tech('r_zrab')?1.25:1)*(1+.04*offLv('budowa'));gainXp(p,'ciesla',dt);if(s.proj.prog>=s.proj.work){finishProj(s);p.tgt=null;p.state='idle';p.wait=.2}return}
+  if(k==='build'){const s=p.tgt;if(s&&bDone(s)&&s.proj&&bById(s.id)){s.proj.prog+=dt*e*craftEff(p,'ciesla')*(tech('r_zrab')?1.25:1)*(tech('r_zaprawa')?1.15:1)*(1+.04*offLv('budowa'));gainXp(p,'ciesla',dt);if(s.proj.prog>=s.proj.work){finishProj(s);p.tgt=null;p.state='idle';p.wait=.2}return}
   if(!s||bDone(s)){if(s&&s.workers>0)s.workers--;p.tgt=null;p.state='idle';p.wait=.2;return}
-   s.prog+=dt*e*craftEff(p,'ciesla')*(tech('r_zrab')?1.25:1)*(1+.04*offLv('budowa'));gainXp(p,'ciesla',dt);if(s.mat&&(s.del||0)<s.mat-1e-6&&s.prog>s.work*Math.min(1,(s.del||0)/s.mat)){s.prog=s.work*Math.min(1,(s.del||0)/s.mat);if(s.workers>0)s.workers--;p.tgt=null;p.state='idle';p.wait=.4;p.act='czeka na materiał';return}{const bm=bMesh[s.id];if(bm){if(typeof buildApply==='function')buildApply(bm,s.prog/s.work);else bm.scale.y=Math.max(.12,Math.min(1,s.prog/s.work))}}
+   s.prog+=dt*e*craftEff(p,'ciesla')*(tech('r_zrab')?1.25:1)*(tech('r_zaprawa')?1.15:1)*(1+.04*offLv('budowa'));gainXp(p,'ciesla',dt);if(s.mat&&(s.del||0)<s.mat-1e-6&&s.prog>s.work*Math.min(1,(s.del||0)/s.mat)){s.prog=s.work*Math.min(1,(s.del||0)/s.mat);if(s.workers>0)s.workers--;p.tgt=null;p.state='idle';p.wait=.4;p.act='czeka na materiał';return}{const bm=bMesh[s.id];if(bm){if(typeof buildApply==='function')buildApply(bm,s.prog/s.work);else bm.scale.y=Math.max(.12,Math.min(1,s.prog/s.work))}}
    if(bDone(s)){completeSite(s);p.tgt=null;p.state='idle';p.wait=.2}return}
   if(k==='wreck'){const W=S.wreck;if(W.gone){p.state='idle';return}gainXp(p,'ciesla',dt);
    const tg=W.target>=0?W.parts[W.target]:null;
@@ -798,7 +800,7 @@ function dailyPeople(cold,fuelHeated){
   const was=p.age;p.age+=2/YEAR;if(was<12&&p.age>=12){log(p.name+' kończy 12 lat i może pracować.');p.tool={t:0,d:0};const m=pMesh[p.id];if(m)m.scale.setScalar(personScale(p));assign()}
   else if(Math.floor(was)!==Math.floor(p.age)&&p.age<13){const m=pMesh[p.id];if(m)m.scale.setScalar(personScale(p))}
   // dzieci podpatrują rodziców
-  if(isChild(p)&&p.age>=6){const par=famMembers(p.fam).filter(isAdult);if(par.length){const c=Object.keys(CN).sort((a,b)=>Math.max(...par.map(q=>q.sk[b]))-Math.max(...par.map(q=>q.sk[a])))[0];p.xp[c]+=4*K*(tech('n_szk')?2:1)*(law('nauka')?1.5:1)*(hasB('izbanauki')?1.5:1);if(p.sk[c]<1&&p.xp[c]>=LVL[0]){p.sk[c]=1;log(p.name+' podpatrzył rodziców i zna podstawy fachu: '+CN[c]+'.')}}}
+  if(isChild(p)&&p.age>=6){const par=famMembers(p.fam).filter(isAdult);if(par.length){const c=Object.keys(CN).sort((a,b)=>Math.max(...par.map(q=>q.sk[b]))-Math.max(...par.map(q=>q.sk[a])))[0];p.xp[c]+=4*K*(tech('n_szk')?2:1)*(tech('n_szkola')?1.5:1)*(law('nauka')?1.5:1)*(hasB('izbanauki')?1.5:1);if(p.sk[c]<1&&p.xp[c]>=LVL[0]){p.sk[c]=1;log(p.name+' podpatrzył rodziców i zna podstawy fachu: '+CN[c]+'.')}}}
   // śmierć
   if(p.age>62&&Math.random()<(p.age-62)*.0007*K)killPerson(p,'ze starości');
   else if(p.hp<=.02&&!S.diedToday&&Math.random()<.1){S.diedToday=1;killPerson(p,S.fedR<.6?'z głodu':'z wyziębienia')}}
@@ -814,7 +816,7 @@ function legacyDayCore(){
  if(tot>0){const take=Math.min(tot,need);FOOD.forEach(k=>{S.res[k]-=take*(Math.max(0,avail(k))/tot)})}
  S.fedR=need>0?Math.min(1,tot/need):1;
  if(S.fedR<1){S.hungerDays++;if(S.hungerDays===1)log('Zabrakło jedzenia dla wszystkich. Ludzie słabną.')}else S.hungerDays=0;
- const exposed=foodOverflow()/Math.max(1,foodTotal());const sp=hasB('piec')?.5:1,spz=(hasB('spizarnia')?.5:1)*(anyExt('lodownia')?.8:1),garn=dM()*(tech('r_garn')?.75:1)*(1-Math.min(.3,(S.res.naczynia||0)*.01))*(law('zapasy')?.8:1)*(1-Math.min(.3,.05*offLv('spizarnia')));FOOD.forEach(k=>{const tm=((k==='jagody'||k==='grzyby')&&tech('u_susz')?.6:1)*((k==='jagody'||k==='grzyby')&&anyExt('suszarnia')?.7:1)*((k==='mieso'||k==='ryby')&&tech('h_wedz')?.5:1)*((k==='mieso'||k==='ryby')&&anyExt('wedzarnia')?.6:1)*(k==='mleko'&&tech('h_doj')?.4:1);S.res[k]=Math.max(0,(S.res[k]||0)*Math.pow(1-Math.min(.95,SPOIL[k]*sp*spz*garn*tm+exposed*.04),K))});
+ const exposed=foodOverflow()/Math.max(1,foodTotal());const sp=hasB('piec')?.5:1,spz=(hasB('spizarnia')?.5:1)*(anyExt('lodownia')?.8:1),garn=dM()*(tech('r_garn')?.75:1)*(1-Math.min(.3,(S.res.naczynia||0)*.01))*(law('zapasy')?.8:1)*(1-Math.min(.3,.05*offLv('spizarnia')));FOOD.forEach(k=>{const tm=((k==='jagody'||k==='grzyby')&&tech('u_susz')?.6:1)*((k==='jagody'||k==='grzyby')&&anyExt('suszarnia')?.7:1)*((k==='mieso'||k==='ryby')&&tech('h_wedz')?.5:1)*((k==='mieso'||k==='ryby')&&anyExt('wedzarnia')?.6:1)*(k==='mleko'&&tech('h_doj')?.4:1)*(k==='mleko'&&tech('h_ser')?.75:1)*((k==='mieso'||k==='ryby')&&tech('h_masar')?.7:1)*((k==='mieso'||k==='ryby')&&anyExt('solarnia')?.8:1);S.res[k]=Math.max(0,(S.res[k]||0)*Math.pow(1-Math.min(.95,SPOIL[k]*sp*spz*garn*tm+exposed*.04),K))});
  // opał
  const sea=seasonIdx();S.weather.left--;if(S.weather.left<=0)wxNewWeather(sea);
  const tmp=WEATHER[S.weather.k][2];const fac=K*([0,1,1.6,.7][sea]*(1+Math.max(0,-tmp)*.06)+(sea===0&&tmp<0?.3:0)),cold=fac>0;const heated=new Set();
@@ -848,11 +850,11 @@ function legacyDayCore(){
  });
  // zagrody: mleko, przychówek, opieka, wilki
  S.bld.forEach(b=>{if(b.kind!=='zagroda'||!bDone(b))return;const a=b.animals||0;const cared=(b.care||0)>20;b.care=0;
-  if(a){S.res.mleko+=K*a*(sea===2&&!hasExt(b,'obora')?.4:.9)*(cared?1:.4)*(tech('h_doj')?1.4:1);if(tech('h_siersc'))S.res.wlokna+=K*a*.12;if((sea===3||(tech('h_rozr')&&sea!==2))&&a>=2&&a+S.people.filter(person=>person.kozB===b.id).reduce((sum,person)=>sum+(person.kozN||0),0)<penCap(b)&&Math.random()<K*.06*a/2*(tech('h_rozr')?2:1)){b.animals++;log('W zagrodzie urodziło się koźlę.')}
+  if(a){S.res.mleko+=K*a*(sea===2&&!hasExt(b,'obora')?(tech('h_siano')?.65:.4):.9)*(cared?1:.4)*(tech('h_doj')?1.4:1)*(tech('h_hale')?1.15:1);if(tech('h_siersc'))S.res.wlokna+=K*a*.12*(tech('h_hale')?1.15:1);if((sea===3||(tech('h_rozr')&&sea!==2))&&a>=2&&a+S.people.filter(person=>person.kozB===b.id).reduce((sum,person)=>sum+(person.kozN||0),0)<penCap(b)&&Math.random()<K*.06*a/2*(tech('h_rozr')?2:1)*(tech('h_hale')?1.5:1)){b.animals++;log('W zagrodzie urodziło się koźlę.')}
    if(!cared&&(sea===2||Math.random()<.02)&&Math.random()<.08*K){b.animals--;log('Koza uciekła z zaniedbanej zagrody.')}}
   const c=bCenter(b);S.herds.forEach(h=>{if(h.type!=='wilk'||h.n<2||!b.animals)return;if(Math.hypot(h.x-c.x,h.z-c.z)<26&&Math.random()<dM()*K*(cared?.02:.07)*(tech('h_ostr')?.3:1)*(law('straz')?.3:1)*(hasExt(b,'obora')?.5:1)*(hasB('wieza')?.8:1)*(typeof dogGuard==='function'?dogGuard():1)){b.animals--;log('Wilki w nocy zagryzły kozę w zagrodzie.');toast('Wilki napadły na zagrodę')}})});
  // pola
- S.bld.forEach(b=>{if(!b.field)return;const f=b.field;if(f.st==='rosnie'&&sea!==2){f.g+=K/30*(tech('u_selek')?1.15:1)*(hasExt(b,'rowy')?1.15:1);if(f.g>=1){f.st='dojrzale';const best=Math.max(0,...S.people.filter(p=>p.wb===b.id).map(p=>p.sk.rolnik));f.left=Math.round(70*f.fert*(.6+.4*f.q)*(1+.1*best)*(tech('u_selek')?1.2:1)*(tech('u_nawoz')&&S.bld.some(z=>z.kind==='zagroda'&&(z.animals||0)>0)?1.25:1)*(hasExt(b,'strach')?1.1:1)*(1+.1*(lvOf(b)-1))*(1+.3*(S.adapt||0))*(typeof fieldMul==='function'?fieldMul(b):1));rolaRipe(b,f)}fieldVis(b)}
+ S.bld.forEach(b=>{if(!b.field)return;const f=b.field;if(f.st==='rosnie'&&sea!==2){f.g+=K/30*(tech('u_selek')?1.15:1)*(hasExt(b,'rowy')?1.15:1)*(tech('u_radlo')?1.15:1);if(f.g>=1){f.st='dojrzale';const best=Math.max(0,...S.people.filter(p=>p.wb===b.id).map(p=>p.sk.rolnik));f.left=Math.round(70*f.fert*(.6+.4*f.q)*(1+.1*best)*(tech('u_selek')?1.2:1)*(tech('u_nawoz')&&S.bld.some(z=>z.kind==='zagroda'&&(z.animals||0)>0)?1.25:1)*(hasExt(b,'strach')?1.1:1)*(hasExt(b,'brona')?1.1:1)*(tech('u_trojpol')?1.15:1)*(1+.1*(lvOf(b)-1))*(1+.3*(S.adapt||0))*(typeof fieldMul==='function'?fieldMul(b):1));rolaRipe(b,f)}fieldVis(b)}
   else if(f.st==='dojrzale'&&sea===2){f.left=Math.floor(f.left/2);if(f.left<=0){f.st='puste';fieldVis(b)}}
   else if(f.st==='puste'&&sea!==2)f.fert=Math.min(1,f.fert+.003*K*(tech('u_odlog')?3:1)*(hasExt(b,'rowy')?1.5:1))});
  // wrak: rozpad i sztorm
@@ -1095,6 +1097,7 @@ function onPanelClick(e){const t=e.target.closest('button,[data-p],[data-rg]');i
  else if(t.dataset.rg){const r=REGIONS[+t.dataset.rg];if(innerWidth<=760)closeSheet();lookAt(tcx(r.i),tcx(r.j),.9)}
  else if(t.dataset.dom){techDom=t.dataset.dom;techSel=null;renderPanel()}
  else if(t.dataset.tn){techSel=t.dataset.tn;renderPanel()}
+ else if(t.dataset.tall){techAll=t.dataset.tall==='1';renderPanel()}
  else if(t.dataset.focus){const tt=TECH_BY[t.dataset.focus];S.focus[tt.d]=tt.id;toast('Osada skupia się na: '+tt.n);renderPanel()}
  else if(t.dataset.p){const id=+t.dataset.p;select(id);follow=true;if(innerWidth<=760)closeSheet()}
  else if(t.dataset.x==='close')select(null)}
@@ -1108,7 +1111,7 @@ function renderSel(){const el=$('sel');
    h+=`<p>${ws.length?ws.map(p=>p.name+' ('+p.act+')').join(', '):'Nikt tu nie pracuje.'}</p>${n!==null?`<p class="mut">${rangeLabel(b.kind,n)}</p>`:''}${d.prod?`<p class="mut">${[].concat(d.prod).map(pr=>Object.entries(pr.in).map(([r,v])=>RN[r].toLowerCase()+' '+v).join(' + ')+' → '+Object.entries(pr.out).map(([r,v])=>RN[r].toLowerCase()+' '+v).join(', ')).join('<br>')}</p>`:''}
    <div class="row" style="border:0;padding:4px 0 0"><div class="n">Pracownicy</div><button class="mini" data-w="${b.id}" data-d="-1">−</button><span class="cnt">${b.want||0}/${wkOf(b)}</span><button class="mini" data-w="${b.id}" data-d="1">+</button></div>${slowHTML(b)}`}
   else if(d.pen||d.field){}
-  if(bDone(b)&&d.pen)h+=`<p>Kozy w zagrodzie: ${b.animals||0}/10 · ${goatStage(b)}</p>`;
+  if(bDone(b)&&d.pen)h+=`<p>Kozy w zagrodzie: ${b.animals||0}/${penCap(b)} · ${goatStage(b)}</p>`;
   if(bDone(b)&&d.field){const f=b.field||{st:'puste',g:0,fert:1};h+=`<p>${{puste:'Pole czeka na siew',rosnie:'Rośnie: '+Math.round(f.g*100)+'%, plewienie '+Math.round((f.q||0)*100)+'%',dojrzale:'Dojrzałe, do zebrania: '+f.left}[f.st]} · żyzność ${Math.round(f.fert*100)}% · odmiana wyspowa ${Math.round((S.adapt||0)*100)}%</p>`}
   h+=bldPanelHTML(b);
   if(b.fire)h+=`<p class="no">Pali się! Zostało ${Math.round(b.fire.hp*100)}%. Gaszenie: ${Math.round((1-b.fire.s)*100)}%.</p>`;

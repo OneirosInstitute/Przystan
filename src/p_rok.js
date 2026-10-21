@@ -55,7 +55,7 @@ function illDaily(){const sea=seasonIdx(),pop=S.people.length;if(!pop)return;con
  Object.entries(got).forEach(([k,n])=>{const I=ILL[k];log(`${n>1?(n<5?`Zachorowały ${n} osoby`:`Zachorowało ${n} osób`):'Ktoś zachorował'}: ${I[0]}. Przyczyna: ${I[1]}.`);if(!S.seen['ill'+k]){S.seen['ill'+k]=1;toast(`Choroba: ${I[0]} (${I[1]})`)}});
  // przebieg
  for(const p of [...S.people]){if(!p.ill)continue;const I=ILL[p.ill.k];const herb=S.res.ziola>=.1;if(herb)S.res.ziola-=.1;
-  p.hp=Math.max(.03,p.hp-I[2]*KF*(herb?.5:1)*(tech('n_opat')?.7:1));
+  p.hp=Math.max(.03,p.hp-I[2]*KF*(herb?.5:1)*(tech('n_opat')?.7:1)*(tech('n_leki')?.7:1));
   const over=p.ill.k==='szkorbut'?S.vitD===0&&S.day-p.ill.d>2/KF:S.day-p.ill.d>=I[4]/KF*(herb?.6:1);
   if(over){p.ill=null;continue}
   if(p.hp<=.05&&(p.age>58||p.age<4||Math.random()<.3)&&Math.random()<.2*KF){killPerson(p,'na '+I[5]);S.illDead=(S.illDead||0)+1}}}

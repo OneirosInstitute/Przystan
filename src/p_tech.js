@@ -49,8 +49,13 @@ const TECH=[
  {id:'n_gwiazd',d:'nauka',r:2,c:2,n:'Nawigacja po gwiazdach',xp:200,req:['n_mapa'],desc:'Łodzie wypływają dalej i wracają przed nocą.',eff:'Rybacy łowią o 20% więcej, wyprawy wzdłuż brzegu są bezpieczniejsze.'},
  {id:'n_pamiec',d:'nauka',r:3,c:1,n:'Księga osady',xp:220,req:['n_szk'],desc:'Wszystko, co umieją mistrzowie, zapisane dla następnych.',eff:'Gdy mistrz umiera, najlepszy uczeń przejmuje jego wiedzę.'}];
 const TECH_BY={};TECH.forEach(t=>TECH_BY[t.id]=t);
+// 4.7: drzewo rośnie z każdą epoką. Węzeł z polem ep czeka, aż osada do tej epoki dojdzie (ep brak = epoka I).
+const EP_N={1:'Epoka I · Wyspa',2:'Epoka II · Wieś',3:'Epoka III · Cała wyspa',4:'Epoka IV · Rody'};
+function epNow(){if(!S)return 1;if(S.epoch===4)return 4;if(S.e3&&S.e3.on)return 3;return S.epoch===2?2:1}
+const tEp=t=>t.ep||1;
+const tq=(id,v)=>tech(id)?v:1;
 function tech(id){return !!(S&&S.tech&&S.tech[id])}
-function techAvail(t){return !S.tech[t.id]&&!t.sync&&t.req.every(requirement=>tech(requirement))&&(!t.gate||t.gate())}
+function techAvail(t){return !S.tech[t.id]&&!t.sync&&tEp(t)<=epNow()&&t.req.every(requirement=>tech(requirement))&&(!t.gate||t.gate())}
 function techTarget(d){const f=S.focus[d];const ft=f&&TECH_BY[f];if(ft&&techAvail(ft))return ft;return TECH.find(t=>t.d===d&&techAvail(t))}
 function techXp(d,v){if(!S||!d||!S.tech)return;if(S.laws&&S.laws.wymiana)v*=1.15;S.dxp[d]=(S.dxp[d]||0)+v;const t=techTarget(d);if(!t){S.bank[d]=Math.min(150,(S.bank[d]||0)+v);return}
  const add=v+(S.bank[d]||0);S.bank[d]=0;S.tp[t.id]=(S.tp[t.id]||0)+add;if(S.tp[t.id]>=t.xp)techDone(t)}
@@ -59,26 +64,37 @@ function techDone(t,quiet){if(S.tech[t.id])return;S.tech[t.id]=1;if(S.focus[t.d]
  if(t.id==='n_znaki'){tribe.forEach(s=>reveal(s.i,s.j,4));log('Znaki prowadzą do miejsc, gdzie dawny lud zostawił swoje ślady. Zaznaczono je na mapie.')}
  if(tab==='wiedza'||tab==='budowa')renderPanel()}
 function techTick(){if(!S||!S.tech)return;TECH.forEach(t=>{if(t.sync&&!S.tech[t.id]&&t.sync())techDone(t,t.id==='r_ciesla')})}
-function techState(t){if(S.tech[t.id])return'done';if(t.sync)return'sync';if(t.req.every(requirement=>tech(requirement)))return(!t.gate||t.gate())?'avail':'gate';return'lock'}
-let techDom='uprawa',techSel=null;
-function techHTML(){const d=techDom;const list=TECH.filter(t=>t.d===d);const rows=Math.max(...list.map(t=>t.r))+1;const RH=88,W=300;
+function techState(t){if(S.tech[t.id])return'done';if(tEp(t)>epNow())return'ep';if(t.sync)return'sync';if(t.req.every(requirement=>tech(requirement)))return(!t.gate||t.gate())?'avail':'gate';return'lock'}
+let techDom='uprawa',techSel=null,techAll=false;
+// układ: każda epoka to pas z nagłówkiem; ukończone dawne epoki zwijają się do jednej linii (techAll je rozwija)
+function techLayout(d){const now=epNow(),all=TECH.filter(t=>t.d===d),eps=[...new Set(all.map(tEp))].sort((a,b)=>a-b);
+ const shown=eps.filter(e=>e<=now&&(techAll||e===now||all.some(t=>tEp(t)===e&&!S.tech[t.id]))),folded=eps.filter(e=>e<now&&!shown.includes(e));
+ const RH=88,HD=26,pos={};let y=0;
+ for(const e of shown){const L=all.filter(t=>tEp(t)===e),rs=[...new Set(L.map(t=>t.r))].sort((a,b)=>a-b);pos['ep'+e]=y;y+=HD;rs.forEach((r,k)=>L.filter(t=>t.r===r).forEach(t=>pos[t.id]=y+k*RH));y+=rs.length*RH}
+ return{now,all,shown,folded,next:eps.find(e=>e>now),list:all.filter(t=>shown.includes(tEp(t))),pos,H:y,RH,HD}}
+function techHTML(){const d=techDom;const Lo=techLayout(d),list=Lo.list,W=300;
  const cur=techTarget(d);const dd=DOMS.find(x=>x[0]===d);
- let h=`<div class="dchips">${DOMS.map(x=>{const n=TECH.filter(t=>t.d===x[0]),k=n.filter(t=>S.tech[t.id]).length;return`<button data-dom="${x[0]}" class="${x[0]===d?'on':''}">${x[1]}<small>${k}/${n.length}</small></button>`}).join('')}</div>`;
+ let h=`<div class="dchips">${DOMS.map(x=>{const n=TECH.filter(t=>t.d===x[0]&&tEp(t)<=Lo.now),k=n.filter(t=>S.tech[t.id]).length;return`<button data-dom="${x[0]}" class="${x[0]===d?'on':''}">${x[1]}<small>${k}/${n.length}</small></button>`}).join('')}</div>`;
  h+=`<p class="lead">${dd[2]}${cur?` Teraz: <b style="color:var(--hi)">${cur.n}</b>.`:' Nic nie jest teraz rozwijane.'}</p>`;
+ if(Lo.folded.length)h+=`<button class="tfold" data-tall="1">${Lo.folded.map(e=>EP_N[e]).join(', ')}: wszystko poznane (${Lo.all.filter(t=>Lo.folded.includes(tEp(t))).length}). Pokaż</button>`;
+ else if(techAll&&Lo.shown.length>1)h+=`<button class="tfold" data-tall="0">Zwiń poznane epoki</button>`;
  const cx=c=>(c+.5)*W/3;
- let svg=`<svg class="tlines" viewBox="0 0 ${W} ${rows*RH}" preserveAspectRatio="none">`;
- list.forEach(t=>t.req.forEach(r=>{const p=TECH_BY[r];if(!p||p.d!==d)return;const on=S.tech[r];svg+=`<path d="M${cx(p.c)} ${p.r*RH+62} C${cx(p.c)} ${p.r*RH+78},${cx(t.c)} ${t.r*RH+8},${cx(t.c)} ${t.r*RH+22}" class="${on?'on':''}"/>`}));svg+='</svg>';
- h+=`<div class="tree" style="height:${rows*RH}px">${svg}`;
+ let svg=`<svg class="tlines" viewBox="0 0 ${W} ${Lo.H}" preserveAspectRatio="none">`;
+ list.forEach(t=>t.req.forEach(r=>{const p=TECH_BY[r];if(!p||p.d!==d||Lo.pos[r]===undefined)return;const on=S.tech[r],y0=Lo.pos[r]+42,y1=Lo.pos[t.id]+2;svg+=`<path d="M${cx(p.c)} ${y0} C${cx(p.c)} ${y0+16},${cx(t.c)} ${y1-14},${cx(t.c)} ${y1}" class="${on?'on':''}"/>`}));svg+='</svg>';
+ h+=`<div class="tree" style="height:${Lo.H}px">${svg}`;
+ Lo.shown.forEach(e=>{const L=Lo.all.filter(t=>tEp(t)===e),k=L.filter(t=>S.tech[t.id]).length;h+=`<div class="tep" style="top:${Lo.pos['ep'+e]}px">${EP_N[e]}<small>${k} z ${L.length}</small></div>`});
  list.forEach(t=>{const st=techState(t);const pc=t.xp?Math.min(100,Math.round(100*(S.tp[t.id]||0)/t.xp)):0;const ext=t.req.filter(r=>TECH_BY[r].d!==d).map(r=>TECH_BY[r].n);
-  h+=`<button class="tn ${st}${techSel===t.id?' sel':''}${cur&&cur.id===t.id?' cur':''}" data-tn="${t.id}" style="left:calc(${t.c*33.333}% + 3px);top:${t.r*RH+20}px">
+  h+=`<button class="tn ${st}${techSel===t.id?' sel':''}${cur&&cur.id===t.id?' cur':''}" data-tn="${t.id}" style="left:calc(${t.c*33.333}% + 3px);top:${Lo.pos[t.id]}px">
   <span class="tt">${t.n}</span>${st==='done'?'<span class="ts">✓ poznane</span>':st==='sync'?'<span class="ts">próba / księga</span>':st==='gate'?'<span class="ts">warunek</span>':st==='lock'?`<span class="ts">${ext.length?'też: '+ext.join(', '):'zablokowane'}</span>`:`<span class="tb"><i style="width:${pc}%"></i></span>`}</button>`});
  h+='</div>';
+ if(Lo.next&&Lo.next<4){const L=Lo.all.filter(t=>tEp(t)===Lo.next);if(L.length)h+=`<div class="card tnext"><h4>${EP_N[Lo.next]}</h4><p class="mut">Gdy osada dojdzie do tej epoki, w tej dziedzinie będzie można poznać: ${L.map(t=>t.n).join(', ')}.</p></div>`}
  const t=techSel&&TECH_BY[techSel]&&TECH_BY[techSel].d===d?TECH_BY[techSel]:cur||list.find(x=>!S.tech[x.id])||list[0];
  if(t){const st=techState(t);h+=`<div class="card tdet"><h4>${t.n}</h4><p>${t.desc}</p><p><b style="color:var(--gold2)">Daje:</b> ${t.eff}</p>`;
   if(t.req.length)h+=`<p class="mut">Wymaga: ${t.req.map(r=>(S.tech[r]?'✓ ':'')+TECH_BY[r].n).join(', ')}</p>`;
   if(st==='done')h+='<p class="ok">Osada to już umie.</p>';
   else if(st==='sync')h+=`<p class="mut">${t.gt()}</p>`;
   else if(st==='gate')h+=`<p class="mut">${t.gt()}</p>`;
+  else if(st==='ep')h+=`<p class="mut">Przyjdzie z epoką: ${EP_N[tEp(t)]}.</p>`;
   else if(st==='avail'){const pc=Math.round(100*(S.tp[t.id]||0)/t.xp);h+=`<div class="pbar"><div style="width:${pc}%"></div></div><p class="mut">${pc}% · doświadczenie przychodzi z pracy w tej dziedzinie.</p>`+(cur&&cur.id===t.id?'<p class="ok">Osada skupia się na tym.</p>':`<button class="pri" data-focus="${t.id}">Skup się na tym</button>`)}
   else h+='<p class="mut">Najpierw trzeba poznać to, co wyżej.</p>';h+='</div>'}
  return h}

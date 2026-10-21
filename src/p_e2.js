@@ -63,7 +63,7 @@ function e2Build(){const rnd=rng(SEED*31+7);
  // wrak, księgi, wiedza
  S.wreck.gone=1;S.wreck.parts.forEach(p=>{p.open=1;Object.keys(p.items).forEach(k=>p.items[k]=0)});S.wreck.target=-1;S.books={ciesla:2,zdun:2,dziennik:2,kowal:2,siew:2};
  S.know=Object.assign(S.know,{cegla:'tak',piec:'tak',kuznia:'tak',pole:'tak',active:null});S.logbook=typeof LOGBOOK!=='undefined'?LOGBOOK.length:6;
- S.tech=S.tech||{};TECH.forEach(t=>{S.tech[t.id]=1});S.zbozeTot=200;
+ S.tech=S.tech||{};TECH.forEach(t=>{if(tEp(t)<2)S.tech[t.id]=1});   // 4.7: nowe umiejętności epoki II trzeba dopiero zdobyćS.zbozeTot=200;
  // wyspa poznana
  reveal(camp.i,camp.j,34);REGIONS.forEach(r=>{if(r)reveal(r.i,r.j,15)});S.regs={};REGIONS.forEach(r=>{if(r)S.regs[r.id]=1});
  S.found=TRIBE.map((t,i)=>i);S.foundD={};S.found.forEach(k=>S.foundD[k]=YEAR*(1+k*.7));S.slady={};S.sladClr={};if(typeof SLAD!=='undefined')SLAD.forEach((s,i)=>{if(s&&s.k){S.slady[s.k]=1;S.sladClr[i]=1}});S.sladQ=null;

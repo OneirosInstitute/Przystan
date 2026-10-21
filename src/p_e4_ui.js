@@ -32,6 +32,7 @@ function e4Panel(){
   for(const transport of S.e4.transports)markup+=`<div class="card"><h4>${e4Escape(S.e4.settlements[transport.from].name)} → ${e4Escape(S.e4.settlements[transport.to].name)}</h4><p>${transport.founding?'Przeprowadzka':transport.phase==='returning'?'Powrót przewoźnika':'Dostawa'} · dotarcie za ${((transport.arrival-S.e4.simTicks)/1000000).toFixed(1)} dni</p><p>${e4Resources(transport.items)}</p></div>`;
  }
  if(tab==='wiedza'){
+  markup+=e4NaukiHTML(settlement);
   markup+='<h3>Próby upraw i odmian</h3><p class="mut">Potrzeba narzędzia, 3 ziarna, dzikiej sadzonki i 20 godzin pracy. Nasłonecznienie wpływa na winorośl. Nieudana próba zużywa materiały. Sad zaczyna owocować po 40 dniach, winnica po 30.</p>';
   for(const crop of ['winogrona','jablka','chmiel','len'])markup+=`<div class="card"><h4>${catalog.crops[crop].name}</h4><p>Sadzonki: ${settlement.land.seeds[crop]||0} · udane próby: ${settlement.land.strains[crop]||0}</p><button data-e4-trial="${crop}">Podejmij próbę</button></div>`;
   markup+=settlement.trials.map(item=>`<p>${catalog.crops[item.crop].name}: ${Math.floor(item.progress/item.work*100)}%</p>`).join('');markup+='<h3>Uczniowie</h3>'+people.filter(person=>person.e4MentorId!==undefined).map(person=>`<p>${e4Escape(person.name)} · nauczyciel: ${e4Escape(S.people.find(candidate=>candidate.id===person.e4MentorId)?.name||S.e4.archive[person.e4MentorId]?.name||'zapamiętany mistrz')}</p>`).join('');
@@ -59,6 +60,7 @@ document.addEventListener('click',event=>{
  if(data.e4House)result=E4Economy.extendHouse(S,+data.e4House,data.e4Extension);
  if(data.e4Batch)result=E4Economy.batch(S,e4Selected,data.e4Batch);
  if(data.e4Trial)result=E4Economy.trial(S,e4Selected,data.e4Trial);
+ if(data.e4Study)result=E4Economy.study(S,e4Selected,data.e4Study);
  if(data.e4Capture)result=E4Economy.capture(S,e4Selected,data.e4Capture);
  if(data.e4Slaughter)result=E4Economy.slaughter(S,e4Selected,+data.e4Slaughter);
  if(data.e4Found)result=E4Economy.found(S,{householdId:+$('e4-family').value,regionId:$('e4-region').value,specialization:$('e4-specialty').value});
@@ -88,3 +90,19 @@ function e4ProposalsHTML(settlement){const list=settlement.proposals||[];if(!lis
 function e4StageHTML(settlement){const info=e4FolwarkStage(settlement);if(!info)return'';let h=hamLadder(info.st)+`<p class="mut">Etap: <b>${info.name}</b>${info.next?` · do etapu ${info.next} brakuje: ${info.missing.join(', ')}`:''}</p>`;
  if(!settlement.specialization){const region=E4World.regionAt(S.e4.world,settlement.x,settlement.z),opts=Object.entries(E4Catalog.specialties).map(([key,sp])=>{const f=E4Catalog.specialtyFit(key,region);return[key,(f.ok?'✓ ':'✗ ')+sp.name,f.ok]}).sort((a,b)=>b[2]-a[2]);h+=`<label>Kierunek folwarku <select id="e4-spec-${e4Escape(settlement.id)}">${opts.map(([key,label])=>`<option value="${key}">${e4Escape(label)}</option>`).join('')}</select></label><button data-e4-specialize="${e4Escape(settlement.id)}">Wybierz kierunek</button>`}
  return h;}
+
+// 4.7: nauki rodów — drzewo postępu epoki IV, w czterech dziedzinach jak w dawnych epokach
+function e4NaukiHTML(settlement){const R=E4Catalog.research,model=S.e4.nauki||{done:{},active:null},act=model.active,stock=E4Domain.stock(S,settlement.id);
+ let h='<h3>Nauki rodów</h3><p class="lead">Wiec Rodów uczy się jednej rzeczy naraz. Uczą się ludzie w wybranym ośrodku: płacą materiałem i pracą, a wiedza służy potem wszystkim folwarkom.</p>';
+ if(act&&R[act.id]){const place=S.e4.settlements[act.settlementId];h+=`<div class="card"><h4>Teraz: ${e4Escape(R[act.id].name)}</h4><p class="mut">${e4Escape(place?.name||'')} · ${Math.floor(act.progress/act.work*100)}%</p><div class="pbar"><div style="width:${Math.min(100,Math.round(act.progress/act.work*100))}%"></div></div></div>`}
+ for(const [dom,label] of DOMS.map(d=>[d[0],d[1]])){const L=Object.entries(R).filter(([,x])=>x.domain===dom);if(!L.length)continue;h+=`<h4 class="e4n-d">${label}</h4>`;
+  for(const [id,x] of L){const done=model.done[id]!==undefined,missing=x.req.filter(r=>model.done[r]===undefined),here=act&&act.id===id;
+   const lack=Object.entries(x.cost).filter(([k,v])=>(stock[k]||0)<v);
+   h+=`<div class="card e4n${done?' on':''}"><h4>${done?'✓ ':''}${e4Escape(x.name)}</h4><p>${e4Escape(x.desc)}</p><p><b style="color:var(--gold2)">Daje:</b> ${e4Escape(x.effect)}</p>`;
+   if(done)h+='<p class="ok">Rody to już umieją.</p>';
+   else if(here)h+='<p class="mut">Trwa nauka.</p>';
+   else if(missing.length)h+=`<p class="mut">Najpierw: ${missing.map(r=>e4Escape(R[r].name)).join(', ')}.</p>`;
+   else h+=`<p class="cost">${Object.entries(x.cost).map(([k,v])=>e4Escape(E4Catalog.resources[k])+' '+v).join(' · ')} · ${x.labor} godz. pracy</p>`+(act?'<p class="mut">Najpierw trzeba skończyć obecną naukę.</p>':`<button data-e4-study="${id}" ${lack.length?'disabled':''}>${lack.length?'Brakuje: '+lack.map(([k,v])=>e4Escape(E4Catalog.resources[k].toLowerCase())+' '+Math.ceil(v-(stock[k]||0))).join(', '):'Ucz się w: '+e4Escape(settlement.name)}</button>`);
+   h+='</div>'}}
+ return h}
+{const style=document.createElement('style');style.textContent='.e4n-d{margin:12px 0 4px;color:var(--gold)}.e4n.on{border-color:#7d6a45}';document.head.appendChild(style)}

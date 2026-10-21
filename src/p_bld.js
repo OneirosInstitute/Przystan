@@ -25,11 +25,11 @@ const LEVELABLE=k=>!!(BD[k].wk||BD[k].store)&&k!=='pole'||k==='pole';
 const lvOf=b=>b.lv||1;
 const hasExt=(b,id)=>!!(b&&b.ext&&b.ext.includes(id));
 const anyExt=id=>S.bld.filter(b=>bDone(b)&&hasExt(b,id)).length;
-const extSlots=b=>(b.kind==='szalas'?0:b.kind==='chata'?5:b.kind==='dom'?5:lvOf(b))+(b.kind==='pole'&&b.ext&&b.ext.includes('plot')?1:0);
+const extSlots=b=>(b.kind==='szalas'?0:b.kind==='chata'?5:b.kind==='dom'?5:lvOf(b))+(b.kind==='pole'&&b.ext&&b.ext.includes('plot')?1:0)+(BD[b.kind].wk&&b.kind!=='pole'&&tech('r_czeladz')?1:0);   // 4.7: czeladnicy
 const wkOf=b=>BD[b.kind].wk?BD[b.kind].wk+lvOf(b)-1:0;
 const rOf=b=>(BD[b.kind].r||0)+2*(lvOf(b)-1)+(hasExt(b,'lodz')?6:0);
 function bMul(b){if(!b)return 1;let m=(1+.15*(lvOf(b)-1))*condMul(b);(b.ext||[]).forEach(id=>{const e=(EXT[b.kind]||[]).find(x=>x.id===id);if(e&&e.sp)m*=e.sp});return m}
-const penCap=b=>hasExt(b,'wybieg')?16:10;
+const penCap=b=>(hasExt(b,'wybieg')?16:10)+(hasExt(b,'kojec')?4:0);
 function lvCost(b,to){const base=BD[b.kind].cost,c={};Object.entries(base).forEach(([k,v])=>c[k]=Math.ceil(v*(to===2?.6:.8)));
  const add=to===2?{deski:6,gwozdzie:10}:{deski:10,kamien:12,gwozdzie:16};Object.entries(add).forEach(([k,v])=>c[k]=(c[k]||0)+v);return c}
 const lvWork=(b,to)=>Math.ceil(BD[b.kind].work*(to===2?.6:.8));

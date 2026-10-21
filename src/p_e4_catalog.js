@@ -104,6 +104,17 @@ const E4Catalog=(()=>{
  function specialtyFit(key,region){const needs=fitNeeds[key]||[];if(!region)return{ok:false,missing:['kraina'],score:0};const missing=[];let score=1;
   for(const[k,t,label]of needs){const v=region[k]??0;const ok=t>=0?v>=t:v<=-t;if(!ok)missing.push(label);score=Math.min(score,t>=0?v/t:(-t)/Math.max(.01,v))}
   return{ok:!missing.length,missing,score:Math.round(Math.min(score,2)*100)/100,needs:needs.map(n=>n[2])}}
- return{resources,food,spoil,crops,buildings,recipes,specialties,animals,householdUse,fitNeeds,specialtyFit};
+ // 4.7: nauki rodów, czyli drzewo postępu epoki IV. Wiec wybiera, czego się uczyć; uczą się ludzie w wybranym ośrodku, pracą i materiałem.
+ const research={
+  e4_koniczyna:{name:'Koniczyna w płodozmianie',domain:'uprawa',req:[],cost:{ziarno:10},labor:40,skill:'rolnik',site:'pole',desc:'Koniczyna na ugorze oddaje ziemi to, co zboże z niej wzięło.',effect:'Plony pól o 15% większe.'},
+  e4_szczep:{name:'Szczepienie drzew',domain:'uprawa',req:['e4_koniczyna'],cost:{narz:1,drewno:6},labor:50,skill:'rolnik',site:'sad',desc:'Zraz z dobrej jabłoni na dzikiej podkładce.',effect:'Próby upraw udają się częściej, a sady, winnice i chmielniki owocują o ćwierć wcześniej.'},
+  e4_pasza:{name:'Pasza z koniczyny',domain:'hodowla',req:[],cost:{ziarno:8},labor:40,skill:'hodowca',site:'zagroda',desc:'Siano z koniczyną i otręby zimą, kiedy łąka śpi.',effect:'Mleko i jaja: o 20% więcej.'},
+  e4_pekl:{name:'Peklowanie solą',domain:'hodowla',req:['e4_pasza'],cost:{sol:6},labor:50,skill:'hodowca',site:'wedzarnia',desc:'Solanka, beczka i chłodna piwnica.',effect:'Mięso, ryby i wędliny psują się o 40% wolniej.'},
+  e4_rama:{name:'Piła ramowa',domain:'rzemioslo',req:[],cost:{narz:2,deski:6},labor:50,skill:'ciesla',site:'tartak',desc:'Kilka pił w jednej ramie tnie kłodę na deski za jednym razem.',effect:'Drewno pozyskuje się o 25% szybciej, a budowy idą o 15% szybciej.'},
+  e4_piec:{name:'Wielki piec',domain:'rzemioslo',req:['e4_rama'],cost:{cegla:12,kamien:10},labor:70,skill:'kowal',site:'kuznia',desc:'Wyższy piec i miechy od koła: żelazo płynie, a nie tylko mięknie.',effect:'Partie w pracowniach wymagają o 20% mniej pracy.'},
+  e4_ksiegi:{name:'Księgi rachunkowe',domain:'nauka',req:[],cost:{deski:4,plotno:2},labor:40,skill:'rolnik',site:'magazyn',desc:'Każdy worek i każda beczka zapisane: co przyszło, co wyszło, co zostało.',effect:'Magazyny mieszczą o 20% więcej.'},
+  e4_goscince:{name:'Gościńce między folwarkami',domain:'nauka',req:['e4_ksiegi'],cost:{kamien:20,drewno:10},labor:60,skill:'ciesla',site:'magazyn',desc:'Ubite drogi z rowami, mosty na brodach, znaki na rozstajach.',effect:'Dostawy i przeprowadzki jadą o 25% szybciej.'}
+ };
+ return{resources,food,spoil,crops,buildings,recipes,specialties,animals,householdUse,fitNeeds,specialtyFit,research};
 })();
 if(typeof module!=='undefined'&&module.exports)module.exports=E4Catalog;

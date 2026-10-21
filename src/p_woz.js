@@ -43,7 +43,7 @@ function wozOrder(id){const b=bById(id);if(!b)return;const why=wozWhy(b);if(why)
 document.addEventListener('click',ev=>{if(!S)return;const t=ev.target.closest('[data-woz]');if(t){ev.stopPropagation();wozOrder(+t.dataset.woz)}},true);
 {const _sp=stepPerson;stepPerson=function(p,dt){const b=p.tgt;
   if(p.state==='work'&&p.workKind==='prod'&&b&&b.kind==='warsztat'&&(b.wozQ||0)>0&&isWork()&&!p.fireB){
-   b.wozP=(b.wozP||0)+dt*eff(p)*craftEff(p,'ciesla');gainXp(p,'ciesla',dt);p.act='robi wóz';
+   b.wozP=(b.wozP||0)+dt*eff(p)*craftEff(p,'ciesla')*(tech('r_kute')?1.3:1);gainXp(p,'ciesla',dt);p.act='robi wóz';
    if(b.wozP>=WOZ_T){b.wozP=0;b.wozQ--;S.wozy=wozN()+1;log(p.name+' kończy wóz. Osada ma '+S.wozy+' '+(S.wozy===1?'wóz':S.wozy<5?'wozy':'wozów')+' do dowozu na dalekie budowy.');toast('Gotowy wóz');sfx('bell')}return}
   return _sp(p,dt)}}
 // stara osada z epoki II ma już wozy

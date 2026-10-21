@@ -6,6 +6,7 @@ const E4Economy=(()=>{
  const catalog=typeof E4Catalog==='undefined'?require('./p_e4_catalog.js'):E4Catalog;
  const life=typeof E4Life==='undefined'?require('./p_e4_life.js'):E4Life;
  const ticksPerDay=1000000;
+ const known=(state,id)=>!!state.e4?.nauki?.done?.[id];   // 4.7: nauki rodów
  const sum=resources=>Object.values(resources).reduce((total,quantity)=>total+quantity,0);
  const validItems=items=>!!items&&typeof items==='object'&&!Array.isArray(items)&&Object.keys(items).length>0&&Object.entries(items).every(([resource,quantity])=>Object.hasOwn(catalog.resources,resource)&&Number.isFinite(quantity)&&quantity>0);
  const foodTotal=resources=>catalog.food.reduce((total,resource)=>total+(resources[resource]||0),0);
@@ -14,12 +15,13 @@ const E4Economy=(()=>{
  function take(resources,items){for(const [resource,quantity]of Object.entries(items))resources[resource]=Math.max(0,(resources[resource]||0)-quantity)}
  const has=(resources,items)=>Object.entries(items).every(([resource,quantity])=>(resources[resource]||0)+1e-9>=quantity);
  const workers=(state,settlementId)=>domain.residents(state,settlementId).filter(person=>person.age>=16&&person.age<72&&person.hp>.35&&!person.e4Transport);
- function freeCapacity(state,settlement){const incoming=state.e4.transports.filter(transport=>transport.to===settlement.id&&transport.phase==='outbound').reduce((total,transport)=>total+sum(transport.items),0),promised=settlement.batches.reduce((total,batch)=>total+sum(catalog.recipes[batch.recipe].output),0);return settlement.capacity-sum(domain.stock(state,settlement.id))-incoming-promised;}
+ function freeCapacity(state,settlement){const incoming=state.e4.transports.filter(transport=>transport.to===settlement.id&&transport.phase==='outbound').reduce((total,transport)=>total+sum(transport.items),0),promised=settlement.batches.reduce((total,batch)=>total+sum(catalog.recipes[batch.recipe].output),0);return settlement.capacity*(known(state,'e4_ksiegi')?1.2:1)-sum(domain.stock(state,settlement.id))-incoming-promised;}
  function ensure(state){
   const model=state.e4;if(!model||model.schema!==1)throw new Error('Brak modelu Epoki IV');
   if(model.simTicks===undefined){model.simTicks=Math.round(state.day*ticksPerDay);model.startTicks=model.simTicks;model.startTime=state.t||0;model.fraction=0;model.vehicles=Array.from({length:Math.max(0,Math.floor(state.wozy||0))},(_,index)=>({id:index+1,owner:'przystan',transportId:null}));model.nextBatch=1;model.nextAnimal=1;model.nature={};}
   for(const settlement of Object.values(model.settlements)){settlement.invested??={};settlement.conditions??={};settlement.herd??=[];settlement.plans??=[];settlement.output??={};settlement.consumed??={};settlement.trials??=[];settlement.land.strains??={};settlement.buildings.schronienie??=1;settlement.proposals??=[];settlement.declined??={};}
   // 4.6: nowe budynki tylko za zgodą gracza; dawne zapisy przechodzą na ten tryb raz (przełącznik zostaje w polityce)
+  model.nauki??={done:{},active:null};model.nauki.done??={};if(model.nauki.active&&(!catalog.research[model.nauki.active.id]||!model.settlements[model.nauki.active.settlementId]))model.nauki.active=null;
   model.policy??={};if(!model.policy.v46){model.policy.v46=1;if(model.policy.autoBuild===undefined)model.policy.autoBuild=false;}
   if(model.fieldLayoutVersion!==1){for(const person of state.people)if(person.e4Action?.taskId?.startsWith('crop:'))delete person.e4Action;model.fieldLayoutVersion=1;}
   if(!model.natureInitialized){model.natureInitialized=true;for(const region of model.world.regions)nature(state,region);}
@@ -64,7 +66,7 @@ const E4Economy=(()=>{
  function routeFor(state,source,target){return source.route&&target.id==='przystan'?{points:source.route.points.slice().reverse(),length:source.route.length}:target.route&&source.id==='przystan'?target.route:worldApi.route(state.e4.world,source,target)}
  function courier(state,sourceId){const vehicle=state.e4.vehicles.find(candidate=>candidate.owner===sourceId&&!candidate.transportId),worker=workers(state,sourceId).sort((first,second)=>first.id-second.id)[0];return{vehicle,worker,capacity:vehicle?250:30}}
  function startTransport(state,{source,target,items,route,peopleIds,founding=false,vehicle=null,travelFood={}}){
-  const id=state.e4.nextTransport++,duration=Math.max(.08,route.length/(vehicle?34:24));
+  const id=state.e4.nextTransport++,duration=Math.max(.08,route.length/(vehicle?34:24)/(known(state,'e4_goscince')?1.25:1));
   const transport={id,from:source.id,to:target.id,items:{...items},travelFood:{...travelFood},peopleIds:peopleIds.slice(),vehicleId:vehicle?.id??null,route:domain.clone(route),started:state.e4.simTicks,arrival:state.e4.simTicks+Math.ceil(duration*ticksPerDay),duration,phase:'outbound',founding};
   state.e4.transports.push(transport);for(const person of state.people)if(peopleIds.includes(person.id)){person.e4Transport=id;delete person.e4Action;person.state='move';person.act=founding?'przeprowadza się z rodziną':'wiezie zapasy';person.path=null;person.tgt=null;person.after=null;}
   if(vehicle)vehicle.transportId=id;return transport;
@@ -179,7 +181,7 @@ const E4Economy=(()=>{
   const pool=nature(state,settlement),mapping={drewno:['timber',3,'drwal'],kamien:['stone',2,'kamieniarz'],ruda:['ore',1.5,'kamieniarz'],glina:['clay',3,'kamieniarz'],jagody:['forage',6,'zbieracz'],ryby:['fish',5,'rybak'],ziola:['herbs',2,'zbieracz'],ziarno:['wildGrain',3,'rolnik']},definition=mapping[resource];if(!definition)return 0;
   if((resource==='jagody'||resource==='ziola'||resource==='ziarno')&&winter(state))return 0;
   // 4.4: szyb sięga głębokiego złoża rudy i wydobywa dwa i pół raza szybciej niż kopanie z powierzchni
-  let field=definition[0],rate=definition[1],act='pozyskuje '+catalog.resources[resource].toLowerCase();if(resource==='ruda'&&settlement.buildings.szyb&&pool.oreDeep>0){field='oreDeep';rate*=2.5;act='kopie rudę w szybie'}
+  let field=definition[0],rate=definition[1],act='pozyskuje '+catalog.resources[resource].toLowerCase();if(resource==='ruda'&&settlement.buildings.szyb&&pool.oreDeep>0){field='oreDeep';rate*=2.5;act='kopie rudę w szybie'}if(resource==='drewno'&&known(state,'e4_rama'))rate*=1.25;
   const work=useLabor(people,Math.min(quantity,pool[field],Math.max(0,freeCapacity(state,settlement)))/rate,definition[2],act,'supply:'+settlement.id+':'+resource),yielded=Math.min(pool[field],work*rate);pool[field]-=yielded;add(domain.stock(state,settlement.id),{[resource]:yielded});add(settlement.output,{[resource]:yielded});return yielded;
  }
  function trial(state,settlementId,cropId){
@@ -188,9 +190,26 @@ const E4Economy=(()=>{
   const stock=domain.stock(state,settlementId),cost=materialCost({narz:1,ziarno:3},stock),pool=nature(state,settlement);if(!workers(state,settlementId).length||!has(stock,cost)||pool.cuttings[cropId]<1)return{ok:false,reason:'Potrzeba pracy, narzędzia, 3 ziarna i dzikich sadzonek w krainie.'};
   take(stock,cost);pool.cuttings[cropId]--;settlement.trials.push({crop:cropId,progress:0,work:20,started:state.day});return{ok:true};
  }
+ // 4.7: nauki rodów. Jedna nauka naraz dla całego Wiecu; prowadzi ją wybrany ośrodek swoją pracą i swoim materiałem.
+ function study(state,settlementId,id){
+  ensure(state);const settlement=state.e4.settlements[settlementId],definition=catalog.research[id],model=state.e4.nauki;
+  if(!settlement||!definition)return{ok:false,reason:'Nieznana nauka.'};if(model.done[id])return{ok:false,reason:'Ta nauka jest już poznana.'};
+  if(model.active)return{ok:false,reason:'Wiec uczy się już: '+catalog.research[model.active.id].name.toLowerCase()+'.'};
+  const missing=definition.req.filter(need=>!model.done[need]);if(missing.length)return{ok:false,reason:'Najpierw: '+missing.map(need=>catalog.research[need].name.toLowerCase()).join(', ')+'.'};
+  if(settlement.stage==='podroz'||!workers(state,settlementId).length)return{ok:false,reason:'W tym ośrodku nie ma kto się uczyć.'};
+  const stock=domain.stock(state,settlementId),cost=materialCost(definition.cost,stock);if(!has(stock,cost))return{ok:false,reason:'Brakuje: '+Object.entries(definition.cost).filter(([resource,quantity])=>(stock[resource]||0)<quantity).map(([resource,quantity])=>catalog.resources[resource].toLowerCase()+' '+Math.ceil(quantity-(stock[resource]||0))).join(', ')+'.'};
+  take(stock,cost);model.active={id,settlementId,progress:0,work:definition.labor,started:state.day,materials:{...cost}};
+  domain.record(state,'research',settlement.name+': zaczyna się nauka — '+definition.name.toLowerCase()+'.',{settlementId});return{ok:true};
+ }
+ function learn(state,settlement,people){
+  const model=state.e4.nauki,item=model.active;if(!item||item.settlementId!==settlement.id)return;const definition=catalog.research[item.id];
+  item.progress+=useLabor(people,Math.min(item.work-item.progress,Math.max(2,laborLeft(people)*.25)),definition.skill,'uczy się: '+definition.name.toLowerCase(),'study:'+settlement.id+':'+item.id);
+  if(item.progress<item.work-.001)return;model.done[item.id]=Math.floor(state.day);model.active=null;
+  domain.record(state,'research',settlement.name+': Wiec Rodów poznał nową naukę — '+definition.name.toLowerCase()+'. '+definition.effect,{settlementId:settlement.id});
+ }
  function experiments(state,settlement,people){
   const finished=[];for(const item of settlement.trials){item.progress+=useLabor(people,item.work-item.progress,'rolnik','prowadzi próby upraw','experiment:'+settlement.id+':'+item.crop);if(item.progress<item.work-.001)continue;
-   const region=worldApi.regionAt(state.e4.world,settlement.x,settlement.z),chance=item.crop==='winogrona'&&region?.sun<.5?.35:.8,success=domain.random(state)<chance;
+   const region=worldApi.regionAt(state.e4.world,settlement.x,settlement.z),chance=Math.min(.95,(item.crop==='winogrona'&&region?.sun<.5?.35:.8)+(known(state,'e4_szczep')?.15:0)),success=domain.random(state)<chance;
    if(success){settlement.land.seeds[item.crop]=(settlement.land.seeds[item.crop]||0)+3;settlement.land.strains[item.crop]=(settlement.land.strains[item.crop]||0)+1;}
    domain.record(state,'trial',settlement.name+': '+(success?'przyjęły się sadzonki '+catalog.crops[item.crop].name.toLowerCase():'próba '+catalog.crops[item.crop].name.toLowerCase()+' nie powiodła się')+'.',{settlementId:settlement.id});finished.push(item);
   }settlement.trials=settlement.trials.filter(item=>!finished.includes(item));
@@ -200,7 +219,7 @@ const E4Economy=(()=>{
   const protectedStock={...resources};protectedStock.ziarno=Math.max(0,(resources.ziarno||0)-Math.max(2,settlement.fields.filter(field=>field.crop==='zboze').length*2));settlement.processingReserve={};for(const [id,recipe]of Object.entries(catalog.recipes)){const output=Object.keys(recipe.output)[0];if(!settlement.buildings[recipe.building]||(resources[output]||0)>=60||settlement.batches.some(b=>b.recipe===id))continue;for(const [key,quantity]of Object.entries(recipe.input)){if(!catalog.food.includes(key))continue;const reserved=Math.min(quantity,protectedStock[key]||0),candidate={...protectedStock,[key]:Math.max(0,(protectedStock[key]||0)-reserved)};if(foodTotal(candidate)>=need){protectedStock[key]=candidate[key];settlement.processingReserve[key]=Math.max(settlement.processingReserve[key]||0,reserved);}}}const eaten=foodItems(protectedStock,Math.min(need,foodTotal(protectedStock)))||{};take(resources,eaten);add(settlement.consumed,eaten);settlement.fed=need?sum(eaten)/need:1;settlement.reserveDays=need?foodTotal(resources)/need:0;
   const fuelNeed=winter(state)?Math.max(.5,people.length*.25):0,heated=(resources.opal||0)>=fuelNeed;take(resources,{opal:Math.min(resources.opal||0,fuelNeed)});
   for(const person of people){person.e4Fed=person.fedR=settlement.fed;person.warm=heated?1:.35;person.hp=Math.max(0,Math.min(1,person.hp+(settlement.fed>.99?.015:-(1-settlement.fed)*.09)-(winter(state)&&!heated?.025:0)));}
-  for(const [resource,rate]of Object.entries(catalog.spoil)){const loss=(resources[resource]||0)*rate*(settlement.buildings.piwnica?.45:1);if(loss){take(resources,{[resource]:loss});settlement.spoiled??={};add(settlement.spoiled,{[resource]:loss});}}
+  for(const [resource,rate]of Object.entries(catalog.spoil)){const loss=(resources[resource]||0)*rate*(settlement.buildings.piwnica?.45:1)*(known(state,'e4_pekl')&&['mieso','ryby','wedliny','suszone_ryby'].includes(resource)?.6:1);if(loss){take(resources,{[resource]:loss});settlement.spoiled??={};add(settlement.spoiled,{[resource]:loss});}}
   settlement.status=settlement.fed<.99?'Niedobór jedzenia':winter(state)&&!heated?'Brakuje opału':settlement.reserveDays<4?'Odbudowują zapasy':'Gospodarstwo pracuje';
   for(const person of people){if(person.ill){const fresh=['warzywa','jagody','kiszonki','jablka'].some(key=>(resources[key]||0)>.1),herb=(resources.leki||0)>=.1||(resources.ziola||0)>=.1;if(herb){const key=(resources.leki||0)>=.1?'leki':'ziola';take(resources,{[key]:.1});add(settlement.consumed,{[key]:.1});}const over=person.ill.k==='szkorbut'?fresh&&state.day-person.ill.d>=2:state.day-person.ill.d>=(herb?3:5);if(over)person.ill=null;else person.hp=Math.max(0,person.hp-(herb?.008:.02));}if(person.hurt&&person.hp>.9)person.hurt=0;person.coat=Math.max(0,(person.coat??80)-.25*(1-.25*(settlement.comfort?.pierze||0)));if(person.coat<20&&(resources.odziez||0)>=1){take(resources,{odziez:1});add(settlement.consumed,{odziez:1});person.coat=100;}if(person.hp<.9&&(resources.leki||0)>=.1){take(resources,{leki:.1});add(settlement.consumed,{leki:.1});person.hp=Math.min(1,person.hp+.04);}if(winter(state)&&person.coat<10)person.hp=Math.max(0,person.hp-.005);}
   settlement.comfort={};for(const [key,definition]of Object.entries(catalog.householdUse)){const need=people.length*definition.daily,used=Math.min(resources[key]||0,need);take(resources,{[key]:used});add(settlement.consumed,{[key]:used});settlement.comfort[key]=need?used/need:1;}
@@ -245,9 +264,9 @@ const E4Economy=(()=>{
   const resources=domain.stock(state,settlement.id);
   for(const field of settlement.fields){const crop=catalog.crops[field.crop];field.age++;if(!field.sown){const seed=crop.seed?{[crop.seed]:crop.seedCost}:{};if(!has(resources,seed))continue;take(resources,seed);field.sown=true;field.progress=0;}
    if(winter(state))continue;const care=useLabor(people,.6,crop.skill,'pielęgnuje '+crop.name.toLowerCase(),'crop:'+settlement.id+':'+field.id);if(care<.3)continue;
-   field.progress+=care/.6;if(field.age<crop.maturity||field.progress<crop.days-.001)continue;
+   field.progress+=care/.6;if(field.age<crop.maturity*(known(state,'e4_szczep')?.75:1)||field.progress<crop.days-.001)continue;
    const region=worldApi.regionAt(state.e4.world,settlement.x,settlement.z),climate=crop.sun?Math.min(1,(region?.sun||.5)/crop.sun):1;
-   const quantity=field.legacyYield!=null?field.legacyYield:Math.round(crop.yield*field.soil*(.6+settlement.land.fertility*.7)*climate*100)/100;
+   const quantity=field.legacyYield!=null?field.legacyYield:Math.round(crop.yield*field.soil*(.6+settlement.land.fertility*.7)*climate*(known(state,'e4_koniczyna')?1.15:1)*100)/100;
    if(quantity>freeCapacity(state,settlement)){settlement.status='Magazyn pełny — zbiory czekają na polu';continue;}
    add(resources,{[crop.resource]:quantity});add(settlement.output,{[crop.resource]:quantity});delete field.legacyYield;field.harvests++;field.progress=0;field.sown=false;field.soil=Math.max(.8,field.soil-.002+(settlement.buildings.rowy?.003:0));if(crop.maturity||field.crop==='len')settlement.land.seeds[field.crop]=(settlement.land.seeds[field.crop]||0)+1;state.e4.stats.harvests=(state.e4.stats.harvests||0)+1;
   }
@@ -267,7 +286,7 @@ const E4Economy=(()=>{
   const newborns=[],dead=[];for(const animal of settlement.herd){const definition=catalog.animals[animal.species];animal.age++;
    const feedStock={...resources};feedStock.ziarno=Math.max(0,(resources.ziarno||0)-settlement.fields.filter(field=>field.crop==='zboze').length*2-2);const food=foodItems(feedStock,definition.feed),care=useLabor(people,.1,'hodowca','opiekuje się zwierzętami','herd:'+settlement.id);
    if(food&&care>.05){take(resources,food);add(settlement.consumed,food);animal.hp=Math.min(1,animal.hp+.025);
-    if(animal.sex==='k'&&animal.age>=definition.adult){if(definition.milk)animalOutput(state,settlement,{mleko:definition.milk*(winter(state)?.5:1)});if(definition.eggs&&!winter(state))animalOutput(state,settlement,{jaja:definition.eggs,pierze:.025});}
+    if(animal.sex==='k'&&animal.age>=definition.adult){const fed=known(state,'e4_pasza')?1.2:1;if(definition.milk)animalOutput(state,settlement,{mleko:definition.milk*(winter(state)?.5:1)*fed});if(definition.eggs&&!winter(state))animalOutput(state,settlement,{jaja:definition.eggs*fed,pierze:.025});}
    }else animal.hp-=.09;
    if(animal.hp<=0||animal.age>(animal.species==='kura'?250:650)){dead.push(animal);continue;}
    const same=settlement.herd.filter(candidate=>candidate.species===animal.species),father=same.find(candidate=>candidate.sex==='m'&&candidate.age>=definition.adult&&candidate.hp>.7&&!animal.par.includes(candidate.id));
@@ -281,7 +300,7 @@ const E4Economy=(()=>{
  function slaughter(state,settlementId,animalId){ensure(state);const settlement=state.e4.settlements[settlementId],animal=settlement?.herd.find(candidate=>candidate.id===animalId);if(!animal||!workers(state,settlementId).length)return{ok:false,reason:'Brak zwierzęcia lub hodowcy.'};const definition=catalog.animals[animal.species],items={mieso:definition.meat*Math.min(1,animal.age/definition.adult),skory:definition.skin};if(sum(items)>freeCapacity(state,settlement))return{ok:false,reason:'Brakuje miejsca na mięso i skóry.'};settlement.herd=settlement.herd.filter(candidate=>candidate!==animal);add(domain.stock(state,settlementId),items);add(settlement.output,items);settlement.animals[animal.species]--;return{ok:true};}
  function process(state,settlement,people){
   const resources=domain.stock(state,settlement.id),complete=[];
-  for(const item of settlement.batches){const recipe=catalog.recipes[item.recipe];if(item.readyAt===null){item.progress+=useLabor(people,item.work-item.progress,recipe.skill,recipe.name.toLowerCase(),'batch:'+item.id);if(item.progress>=item.work-.001)item.readyAt=state.e4.simTicks+recipe.days*ticksPerDay;}
+  for(const item of settlement.batches){const recipe=catalog.recipes[item.recipe];if(item.readyAt===null){item.progress+=(known(state,'e4_piec')?1.25:1)*useLabor(people,item.work-item.progress,recipe.skill,recipe.name.toLowerCase(),'batch:'+item.id);if(item.progress>=item.work-.001)item.readyAt=state.e4.simTicks+recipe.days*ticksPerDay;}
    if(item.readyAt!==null&&item.readyAt<=state.e4.simTicks){add(resources,recipe.output);if(item.recipe==='woz'){resources.woz=Math.max(0,resources.woz-1);const id=Math.max(0,...state.e4.vehicles.map(vehicle=>vehicle.id))+1;state.e4.vehicles.push({id,owner:settlement.id,transportId:null});state.wozy=(state.wozy||0)+1;}add(settlement.output,recipe.output);add(settlement.consumed,item.materials);complete.push(item);state.e4.stats.batches=(state.e4.stats.batches||0)+1;}
   }settlement.batches=settlement.batches.filter(item=>!complete.includes(item));
  }
@@ -292,9 +311,9 @@ const E4Economy=(()=>{
    const available=workers(state,settlement.id);
    for(const person of available){person.e4UsedCredits={};person.e4LaborDay=state.day;person.e4Labor=0;person.e4HoursLeft=8*Math.min(1,person.e4AttendanceDay===Math.floor(state.day)-1?(person.e4AttendanceTicks||0)/420000:0)*person.hp*(person.age>60?.7:1)*((domain.stock(state,settlement.id).narz||0)>0?1:(domain.stock(state,settlement.id).narzk||0)>0?.92:.85);person.e4MentorId=null}
    autoPlan(state,settlement,available);
-   for(const project of settlement.projects)project.progress+=useLabor(available,Math.min(project.work-project.progress,Math.max(4,laborLeft(available)*.45)),'ciesla','buduje: '+catalog.buildings[project.kind].name.toLowerCase(),'project:'+settlement.id+':'+project.kind+':'+project.started);
+   for(const project of settlement.projects)project.progress+=(known(state,'e4_rama')?1.15:1)*useLabor(available,Math.min(project.work-project.progress,Math.max(4,laborLeft(available)*.45)),'ciesla','buduje: '+catalog.buildings[project.kind].name.toLowerCase(),'project:'+settlement.id+':'+project.kind+':'+project.started);
    const completed=settlement.projects.filter(project=>project.progress>=project.work-.001);settlement.projects=settlement.projects.filter(project=>!completed.includes(project));for(const project of completed)completeProject(state,settlement,project);
-   grow(state,settlement,available);husbandry(state,settlement,available);experiments(state,settlement,available);process(state,settlement,available);feed(state,settlement);settlement.laborLeft=laborLeft(available);
+   grow(state,settlement,available);husbandry(state,settlement,available);experiments(state,settlement,available);process(state,settlement,available);learn(state,settlement,available);feed(state,settlement);settlement.laborLeft=laborLeft(available);
   }
  }finally{accountingState=previousAccounting}
  }
@@ -317,8 +336,8 @@ const E4Economy=(()=>{
  // Te same funkcje i argumenty; obserwacja nie zmienia komend ani bilansu.
  function observed(operation,mode,completedDay=false){return function(state,...args){return flow.run(state,mode,()=>operation(state,...args),completedDay?Math.max(0,Math.floor(state.day)-1):undefined)}}
  ship=observed(ship,'other');found=observed(found,'other');join=observed(join,'other');arrive=observed(arrive,'other');
- project=observed(project,'economy');extendHouse=observed(extendHouse,'economy');batch=observed(batch,'economy');trial=observed(trial,'economy');capture=observed(capture,'economy');slaughter=observed(slaughter,'economy');gather=observed(gather,'economy');
+ project=observed(project,'economy');extendHouse=observed(extendHouse,'economy');batch=observed(batch,'economy');trial=observed(trial,'economy');study=observed(study,'economy');capture=observed(capture,'economy');slaughter=observed(slaughter,'economy');gather=observed(gather,'economy');
  daily=observed(daily,'economy',true);advance=observed(advance,'economy');
- return{recordedLabor,catalog,ensure,foodTotal,foodItems,add,take,has,workers,project,want,decide,specialize,extendHouse,batch,trial,capture,slaughter,nature,gather,ship,found,join,advance,daily,positionOnRoute,ticksPerDay};
+ return{recordedLabor,catalog,ensure,study,known,foodTotal,foodItems,add,take,has,workers,project,want,decide,specialize,extendHouse,batch,trial,capture,slaughter,nature,gather,ship,found,join,advance,daily,positionOnRoute,ticksPerDay};
 })();
 if(typeof module!=='undefined'&&module.exports)module.exports=E4Economy;

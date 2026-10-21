@@ -117,6 +117,7 @@ const E4Domain=(()=>{
   if(model.world.core&&((model.world.core.size!==192&&model.world.core.size!==384)||model.world.core.step!==2||model.world.core.heights?.length!==(model.world.core.size/2+1)**2||!model.world.core.heights.every(finite)))return false;
   if(!finite(model.dailyFactor)||model.dailyFactor<=0||model.dailyFactor>20||!identity(model.randomState)||!object(model.households)||!object(model.settlements)||!object(model.archive)||!Array.isArray(model.events)||!Array.isArray(model.transports)||model.events.length>600)return false;
   if(!['nextTransport','nextEstate','nextEvent'].every(key=>identity(model[key])&&model[key]>=1)||model.randomState>4294967295)return false;
+  if(model.nauki!==undefined&&(!object(model.nauki)||!object(model.nauki.done)||(model.nauki.active!==null&&model.nauki.active!==undefined&&(!object(model.nauki.active)||typeof model.nauki.active.id!=='string'||!finite(model.nauki.active.progress)||!finite(model.nauki.active.work)))))return false;   // 4.7: nauki rodów
   if(!model.world.regions.every(region=>typeof region.id==='string'&&finite(region.x)&&finite(region.z)&&Math.abs(region.x)<=192&&Math.abs(region.z)<=192&&['fertility','moisture','sun','forest','ore','clay','fish','nectar'].every(key=>finite(region[key])&&region[key]>=0&&region[key]<=1)))return false;
   if(!Array.isArray(state.people)||!object(state.fams)||!object(state.rody)||!object(state.res))return false;
   const peopleIds=new Set();for(const person of state.people){
