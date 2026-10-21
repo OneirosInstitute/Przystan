@@ -92,6 +92,8 @@ function validateSave(state){
   if(!object(person.sk)||!object(person.xp)||!Object.values(person.sk).every(positive)||!Object.values(person.xp).every(positive))return saveInvalid('people.sk/xp: nieprawidłowe umiejętności');
   // Woda jest znacznikiem wykonywanej pracy (q=0), a nie zasobem magazynu.
   if(person.carry!==null&&person.carry!==undefined&&(!Array.isArray(person.carry)||!person.carry.every(item=>object(item)&&typeof item.res==='string'&&positive(item.q)&&(Object.hasOwn(RN,item.res)||waterDelivery(person)))))return saveInvalid('people.carry: nieprawidłowy ładunek');
+  // 4.8: dusza osadnika
+  if((person.us!==undefined&&(!Array.isArray(person.us)||person.us.length>3||!person.us.every(k=>typeof k==='string'&&Object.hasOwn(USP,k))))||(person.mood!==undefined&&(!number(person.mood)||Math.abs(person.mood)>1))||(person.mem!==undefined&&(!Array.isArray(person.mem)||person.mem.length>16||!person.mem.every(m=>Array.isArray(m)&&m.length===5&&Number.isFinite(m[0])&&typeof m[1]==='string'))))return saveInvalid('people['+personIndex+'].us/mood/mem: nieprawidłowa dusza osadnika');
   if(person.chWaterTo!==null&&person.chWaterTo!==undefined&&(!Array.isArray(person.chWaterTo)||person.chWaterTo.length!==2||!person.chWaterTo.every(coordinate=>Number.isInteger(coordinate)&&coordinate>=0&&coordinate<N)))return saveInvalid('people.chWaterTo: nieprawidłowa dostawa wody');
  }
  if(!Array.isArray(state.exps))return saveInvalid('exps: brak listy wypraw');

@@ -35,7 +35,8 @@ function mirOf(p){let m=p.mirX||0;Object.values(p.sk).forEach(l=>{if(l>1)m+=(l-1
 function mirWord(p){if(!isAdult(p))return'dziecko';const m=mirOf(p);return m<8?'jeszcze bez znaczenia':m<18?'znan'+(p.sex==='k'?'a':'y')+' w osadzie':m<32?'ceniony'.replace(/y$/,p.sex==='k'?'a':'y'):m<50?'szanowan'+(p.sex==='k'?'a':'y'):'poważan'+(p.sex==='k'?'a':'y')+' przez wszystkich'}
 function avgZad(m){return m.length?m.reduce((a,p)=>a+(p.zad===undefined?.65:p.zad),0)/m.length:.65}
 function ludDis(){if(!S||!S.people.length)return 0;return(.62-avgZad(S.people))*.03}
-{const _e=eff;eff=function(p){return _e(p)*(p._se||1)*(.94+.1*(p.zad===undefined?.6:p.zad))}}
+// 4.8: nastrój (zadowolenie z życia i uczucia, p_dusza.js) zmienia pracę najwyżej o 8% w górę lub w dół
+{const _e=eff;eff=function(p){return _e(p)*(p._se||1)*(p.mood!==undefined?1+.08*clamp(p.mood,-1,1):.94+.1*(p.zad===undefined?.6:p.zad))}}
 // ---- przysiółki: rody, które odeszły dalej, wciąż są częścią wspólnoty ----
 function hamletSpot(r){let ci=r.i,cj=r.j,best=null,bs=1e9;for(let rr=0;rr<16;rr++)for(let a=0;a<20;a++){const i=Math.round(ci+Math.cos(a/20*6.28)*rr),j=Math.round(cj+Math.sin(a/20*6.28)*rr);if(i<3||j<3||i>N-4||j>N-4)continue;const k=j*N+i;if(!land[k]||beach[k]||occ[k]>=0)continue;
   const sc=forestF(i+.5,j+.5)*20+rr*.6+(tileH(i,j)>6?8:0);if(sc<bs){bs=sc;best=[i,j]}}return best||[ci,cj]}
@@ -73,7 +74,7 @@ function rodyHTML(){const ids=Object.keys(S.rody||{});if(!ids.length)return'';le
   h+=`<div class="card"><h4>${S.rody[id]&&S.rody[id].znak?S.rody[id].znak+' ':''}${rodName(id).replace(/^r/,'R')}</h4>${lines.map(l=>`<p style="margin:4px 0">${l}</p>`).join('')}</div>`});return h}
 function ludCard(p){const q=p.pair!==null?pById(p.pair):null;const fr=friendsOf(p),rv=rivalsOf(p);
  return`<p class="mut">${S.rody&&S.rody[p.rod]&&S.rody[p.rod].znak?S.rody[p.rod].znak+' ':''}${escapeHtml(rodName(p.rod))}${q?` · ${p.sex==='k'?'mąż':'żona'}: ${escapeHtml(q.name)}`:''}${p.waitHome?' · czekają na własny dom':''}</p>`+
-  (p.age>=14?`<p>Nastrój: <b>${zadWord(p)}</b>${p.zr&&p.zr.length?' · '+p.zr.join(', '):''}</p><p class="mut">Mir: ${mirWord(p)}${fr.length?' · przyjaciele: '+fr.map(x=>x.name).join(', '):' · bez bliskich przyjaciół'}${rv.length?' · zatarg: '+rv[0].name:''}</p>`:'')}
+  (p.age>=14?`<p>Nastrój: <b>${typeof moodWord==='function'?moodWord(p):zadWord(p)}</b>${(()=>{const w=(typeof moodWhy==='function'?moodWhy(p):[]).concat(p.zr||[]).slice(0,3);return w.length?' · '+w.join(', '):''})()}</p><p class="mut">Mir: ${mirWord(p)}${fr.length?' · przyjaciele: '+fr.map(x=>x.name).join(', '):' · bez bliskich przyjaciół'}${rv.length?' · zatarg: '+rv[0].name:''}</p>`:'')}
 // ---- rytm dnia ----
 function single(p){return p.pair===null&&p.age>=(p.sex==='m'?18:17)&&p.age<=46&&!p.waitHome&&!(p.widowT&&S.day<p.widowT)}
 // 3.3: zakaz ślubu w bliskim pokrewieństwie (rodzeństwo, kuzynostwo, wuj i bratanica), a nie w całym rodzie: ród po kilku pokoleniach to pół wsi

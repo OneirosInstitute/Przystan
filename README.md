@@ -1,6 +1,8 @@
-# Przystań 4.7.0-rc.1
+# Przystań 4.8.0-rc.1
 
 Spokojna gra o rozbitkach, którzy budują osadę na dzikiej wyspie (PWA, Three.js).
+
+4.8.0-rc.1: poprawka — wieś nie stoi już na plaży po Marzannie (błąd jednej osoby nie zatrzymuje wszystkich, obrzęd zapisany w połowie sam się kończy). Osadnicy mają też charakter (dwa rysy usposobienia z szesnastu), upodobania, nastrój, zapis dnia i wspomnienia. Wieczorem przy ognisku mówią o tym, co przeżyli, nocą widać krótką scenę albo sen, który może się sprawdzić, a rano kartę „Wczoraj”. Zdania nie powtarzają się przez wiele wieczorów, awanse zbierają się w jedną linijkę, a w Kronice są „Wieczory przy ogniu”. Słowiańskie wierzenia: zmora, topielec, południca, boginki, płanetnik, leszy, błędne ogniki, domowik i inne. Plan: [docs/PROJEKT_ZYCIE_OSADNIKOW.md](docs/PROJEKT_ZYCIE_OSADNIKOW.md), opis: [docs/WYDANIE_4.8.0_RC1.md](docs/WYDANIE_4.8.0_RC1.md).
 
 4.7.0-rc.1: drzewo postępu rośnie z każdą epoką. Epoki II i III dokładają w każdej dziedzinie po trzy umiejętności, a epoka IV ma osiem nauk rodów, których Wiec uczy się pracą ludzi. Część nowej wiedzy otwiera nowe rozbudowy budynków (brona, inspekt, kojec, strych, kołowrót, stajnia, solarnia…), a pracownie z dalszych epok dostały pierwszą rozbudowę. Opis: [docs/WYDANIE_4.7.0_RC1.md](docs/WYDANIE_4.7.0_RC1.md).
 
@@ -26,6 +28,6 @@ Spokojna gra o rozbitkach, którzy budują osadę na dzikiej wyspie (PWA, Three.
 
 RC11 naprawił zatory ludzi z RC9–RC10 i dodał: drogi wydeptywane z ruchu i utwardzane przez budowniczych (Budowa → Drogi), rozbudowę domów zawsze z przyciskiem i listą wymagań, dymnik nad wiatą, zorzę zakotwiczoną w świecie oraz po trzy zadania główne na epokę w zakładce Zadania.
 
-[Wydanie 4.7.0-rc.1](docs/WYDANIE_4.7.0_RC1.md) · [Wydanie 4.6.0-rc.1](docs/WYDANIE_4.6.0_RC1.md) · [Projekt: przysiółek → folwark](docs/PROJEKT_PRZYSIOLEK_FOLWARK.md) · [Wydanie 4.5.0-rc.1](docs/WYDANIE_4.5.0_RC1.md) · [Wydanie 4.4.0-rc.1](docs/WYDANIE_4.4.0_RC1.md) · [Wydanie 4.3.0-rc.1](docs/WYDANIE_4.3.0_RC1.md) · [Wydanie 4.2.0-rc.1](docs/WYDANIE_4.2.0_RC1.md) · [Wydanie 4.1.0-rc.1](docs/WYDANIE_4.1.0_RC1.md) · [Wydanie RC11](docs/WYDANIE_4.0.0_RC11.md) · [Projekt wyspy, złóż i menu](docs/PROJEKT_WYSPY_5.md) · [Księga gry](KSIEGA.md)
+[Wydanie 4.8.0-rc.1](docs/WYDANIE_4.8.0_RC1.md) · [Projekt: życie osadników](docs/PROJEKT_ZYCIE_OSADNIKOW.md) · [Wydanie 4.7.0-rc.1](docs/WYDANIE_4.7.0_RC1.md) · [Wydanie 4.6.0-rc.1](docs/WYDANIE_4.6.0_RC1.md) · [Projekt: przysiółek → folwark](docs/PROJEKT_PRZYSIOLEK_FOLWARK.md) · [Wydanie 4.5.0-rc.1](docs/WYDANIE_4.5.0_RC1.md) · [Wydanie 4.4.0-rc.1](docs/WYDANIE_4.4.0_RC1.md) · [Wydanie 4.3.0-rc.1](docs/WYDANIE_4.3.0_RC1.md) · [Wydanie 4.2.0-rc.1](docs/WYDANIE_4.2.0_RC1.md) · [Wydanie 4.1.0-rc.1](docs/WYDANIE_4.1.0_RC1.md) · [Wydanie RC11](docs/WYDANIE_4.0.0_RC11.md) · [Projekt wyspy, złóż i menu](docs/PROJEKT_WYSPY_5.md) · [Księga gry](KSIEGA.md)
 
 Budowanie: `npm run build`. Testy: `npm run test:install`, `npm run test:runtime`, pełna pula `npm test`. Sprawdzenie paczki: `node tools/verify-package.cjs`.

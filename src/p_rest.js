@@ -541,11 +541,13 @@ const traitN=(p)=>p.sex==='k'?TRAITS[p.trait][0]:p.trait;
 function eff(p){const tool=p.tool.t===2?1:p.tool.t===1?.8:.55;const w=WEATHER[S.weather.k][1]*(S.buff&&S.buff.until>S.day?(S.buff.k==='praca'?1.1:.93):1);return(0.65+0.35*S.hope)*(p.age>=55?.75:p.age<16?.85:1)*(0.6+0.4*p.hp)*tool*w*(p.trait==='Wytrwały'?1.1:1)*(p.trait==='Silny'&&p.job==='wb'?1.06:1)*(p.age<12?.5:1)*(1-Math.max(0,(S.dis||0)-.5)*.5)*(p.hp<.5&&law('kazdy')?.8:1)*(law('u_swoje')?1.06:law('u_wspolne')?.96:1)}
 function craftEff(p,c){return(1+0.18*(p.sk[c]||0)+(S.bonus[c]||0))*[1.15,1,.94][S.diff===undefined?1:S.diff]}
 function seasonYield(kind){const s=seasonIdx();if(kind==='bush')return[1,.6,0,.7][s];if(kind==='grzyb')return[.8,1.3,0,.4][s];if(kind==='zboze')return[.7,1,0,0][s];if(kind==='len')return[1,.8,0,.4][s];if(kind==='ziola')return[1,.7,0,.6][s];if(kind==='ul')return[1,.8,0,.3][s];if(kind==='fish')return[1,.9,.7,.9][s];return 1}
+// awans w fachu: w 4.8 zbierany w jedną linijkę dnia (p_dusza.js)
+function lvUp(p,c,lv){log(p.name+' awansuje: '+CN[c]+' '+lv+'.')}
 function gainXp(p,c,dt){let m=1;p.mentor=null;p.worked=1;
  for(const q of S.people){if(q!==p&&q.wb===p.wb&&q.job===p.job&&isAdult(q)&&q.state==='work'&&q.hp>.5&&Math.hypot(q.x-p.x,q.z-p.z)<=3&&q.sk[c]>p.sk[c]&&q.sk[c]>=2&&(!p.mentor||q.sk[c]>p.mentor.sk[c]))p.mentor=q}
  if(p.mentor)m=(p.mentor.trait==='Nauczyciel'?2.6:2)*(tech('n_kron')?1.25:1)*(tech('n_szkola')?1.5:1);if(law('npracy'))m*=1.2;if(p.trait==='Dociekliwy')m*=1.25;if(S.offCraft===c&&offHolder('mistrz')&&offHolder('mistrz')!==p)m*=1.25;techXp(DOMC[c],dt*.09);
  const Lv=p.sk[c];const masterOf=Object.keys(CN).filter(q=>p.sk[q]>=3).length;if(Lv===2&&masterOf>=3){p.xp[c]=Math.min(p.xp[c]+dt*m,LVL[2]-1);if(!p.capLog){p.capLog=1;log(p.name+' jest mistrzem w trzech fachach. Na czwarty nie starczy już życia.')}return}
- p.xp[c]+=dt*m;if(Lv<5&&p.xp[c]>=LVL[Lv]){p.sk[c]=Lv+1;log(p.name+' awansuje: '+CN[c]+' '+(Lv+1)+'.');
+ p.xp[c]+=dt*m;if(Lv<5&&p.xp[c]>=LVL[Lv]){p.sk[c]=Lv+1;lvUp(p,c,Lv+1);
   if(p.mentor&&p.mentor.sk[c]>=Lv+1&&Lv+1>=2&&(S.bonus[c]||0)<.3&&Math.random()<.2){S.bonus[c]=(S.bonus[c]||0)+.06;log(p.name+' wpada na ulepszenie w fachu '+CN[c]+'. Wszyscy pracują tym szybciej.');toast('Pomysł ucznia: '+CN[c]+' idzie sprawniej')}}}
 function inRange(n,b){const c=bCenter(b),r=rOf(b);return Math.hypot(n.x-c.x,n.z-c.z)<=r}
 function pickNodeB(p,b){const d=BD[b.kind];let best=null,bd=1e9;
@@ -874,7 +876,21 @@ function legacyDayCore(){
  if(d===SD){const need=K*S.people.reduce((a,p)=>a+(p.age<12?.6:1),0);if(foodTotal()<need*8)log('Przed nami zima, a zapasów jest na mniej niż 8 dób. Trzeba więcej zbieraczy, rybaków i myśliwych.')}
  if(!S.people.length){log('Osada wymarła. Wyspa znów należy do lasu.');toast('Osada wymarła')}
  if(tab)renderPanel()}
-function step(dt){const before=Math.floor(S.day);S.day+=dt/DAY;S.t+=dt;navBeginStep();try{for(const p of S.people)stepPerson(p,dt)}finally{navEndStep()}stepHerds(dt);fireStep(dt);if(Math.floor(S.day)>before)newDay()}
+// 4.8.0-rc.1: błąd w jednej osobie nie może zatrzymać całej wsi. Taka osoba zaczyna od nowa, reszta żyje dalej,
+// a strażnik budzi tych, którzy bez powodu długo stoją w miejscu (zapis zachowuje wtedy ślad do sprawdzenia).
+function step(dt){const before=Math.floor(S.day);S.day+=dt/DAY;S.t+=dt;navBeginStep();try{for(const p of S.people){try{stepPerson(p,dt)}catch(e){personFault(p,e)}}}finally{navEndStep()}
+ try{stuckWatch()}catch(e){}stepHerds(dt);fireStep(dt);if(Math.floor(S.day)>before)newDay()}
+function nearReach(i,j,R){if(walk[j*N+i]&&reach[j*N+i])return[i,j];for(let r=1;r<=(R||10);r++)for(let dy=-r;dy<=r;dy++)for(let dx=-r;dx<=r;dx++){if(Math.max(Math.abs(dx),Math.abs(dy))!==r)continue;const x=i+dx,y=j+dy;if(x>=0&&y>=0&&x<N&&y<N&&walk[y*N+x]&&reach[y*N+x])return[x,y]}return null}
+function personReset(p,why){try{release(p)}catch(e){}if(p.haulB&&typeof haulEnd==='function'){try{haulEnd(p)}catch(e){}}
+ p.path=null;p.after=null;p.tgt=null;p.workKind=null;p.state='idle';p.wait=.3+Math.random()*.5;p.cerA=0;p.chatT=0;delete p.blocked;
+ const t=tileOf(p.x,p.z);if(!walk[t[1]*N+t[0]]||!reach[t[1]*N+t[0]]){const q=nearReach(t[0],t[1],12)||nearestWalk(camp.i,camp.j+1);if(q){p.x=tcx(q[0]);p.z=tcx(q[1])}}
+ S.fault=S.fault||[];S.fault.push([Math.round(S.day*100)/100,p.id,why]);if(S.fault.length>12)S.fault.shift()}
+function personFault(p,e){p.faultN=(p.faultN||0)+1;if(p.faultN<=3||p.faultN%200===0)console.warn('Osoba '+p.name+': '+(e&&e.message),e);personReset(p,'błąd: '+String(e&&e.message||e).slice(0,120)+' @ '+String(e&&e.stack||'').split('\n')[1]?.trim().slice(0,80))}
+let stuckI=0;
+function stuckWatch(){const L=S.people;if(!L.length)return;stuckI=(stuckI+1)%L.length;const p=L[stuckI];
+ if(Math.hypot((p.stX??1e9)-p.x,(p.stZ??1e9)-p.z)>.25||p.state==='work'||p.state==='sleep'||p.state==='eve'||p.state==='away'||p.lost||!isWork()||(typeof cerActive==='function'&&cerActive())){p.stX=p.x;p.stZ=p.z;p.stT=S.t;return}
+ if(S.t-(p.stT||S.t)<DAY*.12)return;p.stT=S.t;const t=tileOf(p.x,p.z),bad=!walk[t[1]*N+t[0]]||!reach[t[1]*N+t[0]];
+ if(bad||p.blocked||p.cerA||(p.state==='move'&&!(p.path&&p.path.length)))personReset(p,bad?'stał poza drogą':'stał bez ruchu')}
 function stepHerds(dt){S.herds.forEach((h,k)=>{if(h.calm>S.t)return;const dx=h.tx-h.x,dz=h.tz-h.z,d=Math.hypot(dx,dz);
  if(d<.3){if(Math.random()<dt*.15){const def=herdsDef[k];const a=Math.random()*6.28,r=Math.random()*(h.type==='wilk'?16:9);const tx=tcx(def.i)+Math.cos(a)*r*(h.type==='foka'?.35:1),tz=tcx(def.j)+Math.sin(a)*r*(h.type==='foka'?.35:1);const ti=tileOf(tx,tz),tk=ti[1]*N+ti[0];if(walk[tk]&&(h.type!=='foka'||beach[tk])){h.tx=tx;h.tz=tz}}}
  else{const sp=(h.type==='zajac'?1.1:h.type==='foka'?.15:.5)*dt;h.x+=dx/d*Math.min(sp,d);h.z+=dz/d*Math.min(sp,d)}})}
@@ -1124,7 +1140,7 @@ function renderSel(){const el=$('sel');
   h+=`<p class="mut">${d.d}</p>`;if(el._h!==h){el._h=h;el.innerHTML=h}return}
  if(selId===null){el.style.display='none';return}const p=pById(selId);if(!p){selId=null;el.style.display='none';return}el.style.display='block';
  const tl=['bez narzędzi','narzędzia kamienne','narzędzia żelazne'][p.tool.t];
- const hh=`<h4>${escapeHtml(p.name)} <span class="mut" style="font-size:13px">${Math.floor(p.age)} l.</span></h4><p>${jobLabel(p)} · ${p.act}</p><p class="mut">${traitN(p)}: ${TRAITS[p.trait][1]}</p><div>${skillTags(p,6)||'<span class="tag">bez fachu</span>'}</div><p class="mut">rodzina ${escapeHtml(famName(p.fam))} · zdrowie ${Math.round(p.hp*100)}%${isAdult(p)?' · '+tl:''}${p.coat<=0?' · bez ciepłej odzieży':''}</p>${p.mentor?`<p class="mut">uczy się od: ${p.mentor.name}</p>`:''}`+ludCard(p);if(el._h!==hh){el._h=hh;el.innerHTML=hh}}
+ const hh=`<h4>${escapeHtml(p.name)} <span class="mut" style="font-size:13px">${Math.floor(p.age)} l.</span></h4><p>${jobLabel(p)} · ${p.act}</p><p class="mut">${traitN(p)}: ${TRAITS[p.trait][1]}</p>${typeof duszaHTML==='function'?duszaHTML(p):''}<div>${skillTags(p,6)||'<span class="tag">bez fachu</span>'}</div><p class="mut">rodzina ${escapeHtml(famName(p.fam))} · zdrowie ${Math.round(p.hp*100)}%${isAdult(p)?' · '+tl:''}${p.coat<=0?' · bez ciepłej odzieży':''}</p>${p.mentor?`<p class="mut">uczy się od: ${p.mentor.name}</p>`:''}`+ludCard(p);if(el._h!==hh){el._h=hh;el.innerHTML=hh}}
 const v3=new THREE.Vector3();
 function placeLabel(){const el=$('lbl');if(selId===null||!S){el.style.display='none';return}const p=pById(selId);if(!p){el.style.display='none';return}v3.set(p.x,Hy(p.x,p.z)+2.1,p.z).project(cam);
  if(Math.abs(v3.x)>1||Math.abs(v3.y)>1){el.style.display='none';return}el.style.display='block';el.textContent=p.name;el.style.left=((v3.x+1)/2*innerWidth)+'px';el.style.top=((1-v3.y)/2*innerHeight)+'px'}

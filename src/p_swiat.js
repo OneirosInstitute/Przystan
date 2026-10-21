@@ -33,18 +33,18 @@ function cerStart(){if(cerRT)cerEnd();const C=S.cer;C.slots=S.people.filter(cerI
  if(C.k==='marzanna'){const ef=new THREE.Group();ef.add(cyl(.03,1.4,matDark,0,.7,0,0,0,0,5));ef.add(mesh(new THREE.ConeGeometry(.28,.8,7),M(0xc9b87a),0,.75,0));ef.add(mesh(new THREE.SphereGeometry(.13,7,5),M(0xd8cfb4),0,1.28,0));ef.add(mesh(new THREE.BoxGeometry(.7,.05,.05),matDark,0,1.05,0));
   [0xc8463c,0x4a6a9a,0xe8c84a].forEach((c,i)=>{const r=new THREE.Mesh(new THREE.PlaneGeometry(.05,.5),M(c,{side:THREE.DoubleSide}));r.position.set(-.3+i*.3,.8,.1);ef.add(r)});ef.position.set(C.c.x,Hy(C.c.x,C.c.z),C.c.z);g.add(ef);cerRT.eff={ef,w:waterNear(C.c.x,C.c.z)}}
  camFocus(C.c.x,C.c.z,2.0);if(C.k==='wesele'||C.k==='kupala')toast(CER_N[C.k]+': cała osada przy ogniu')}
-function cerEnd(){if(cerRT){for(let k=fires.length-1;k>=0;k--){let o=fires[k].g;while(o&&o!==cerRT.g)o=o.parent;if(o)fires.splice(k,1)}scene.remove(cerRT.g);cerRT=null}if(S&&S.cer)S.cer.on=0;S.people.forEach(p=>{if(p.cerA){p.cerA=0;if(p.state==='move'&&!p.path)p.state='idle'}})}
+function cerEnd(){if(cerRT){for(let k=fires.length-1;k>=0;k--){let o=fires[k].g;while(o&&o!==cerRT.g)o=o.parent;if(o)fires.splice(k,1)}scene.remove(cerRT.g);cerRT=null}if(S&&S.cer)S.cer.on=0;if(S)S.people.forEach(p=>{if(p.cerA||(p.state==='move'&&!p.path)){p.cerA=0;if(p.state==='move'&&!p.path){p.state='idle';p.wait=.2}}})}
 function cerPos(p,C){const n=C.slots.length,i=C.slots.indexOf(p.id),t=clock;const cx=C.c.x,cz=C.c.z;
  if(C.k==='wesele'&&C.ids.includes(p.id)){const s=C.ids.indexOf(p.id)?1:-1;return{x:cx+s*.55+Math.sin(t*1.3)*.1,z:cz+1.15,dir:s>0?-Math.PI/2:Math.PI/2,move:false}}
  if(C.k==='dziady'){const a=Math.PI*(.15+.7*(i/Math.max(1,n-1)));const r=2.4+(i%2)*.7;const x=cx+Math.cos(a)*r,z=cz-1.4+Math.sin(a)*r;return{x,z,dir:Math.atan2(cx-x,cz-1.4-z),move:false}}
  if(C.k==='marzanna'){const base=C.land===undefined?Math.PI/2:C.land,a=base+Math.PI*(-.32+.64*(i/Math.max(1,n-1))),r=2.2+(i%2)*.8;let x=cx+Math.cos(a)*r,z=cz+Math.sin(a)*r;
-  const t=tileOf(x,z);if(!walk[t[1]*N+t[0]]){const s=nearestWalk(t[0],t[1]);if(s){x=tcx(s[0]);z=tcx(s[1])}}return{x,z,dir:Math.atan2(cx-x,cz-z),move:false}}
+  const t=tileOf(x,z);if(!walk[t[1]*N+t[0]]||!reach[t[1]*N+t[0]]){const s=nearReach(t[0],t[1],8)||nearestWalk(t[0],t[1]);if(s){x=tcx(s[0]);z=tcx(s[1])}}return{x,z,dir:Math.atan2(cx-x,cz-z),move:false}}
  const outer=p.sex==='m'&&p.age>=12||i%3===2;const r=outer?2.9+n*.03:1.9+n*.02,w=outer?-.32:.42;const a=(i/n)*6.283+t*w;return{x:cx+Math.cos(a)*r,z:cz+Math.sin(a)*r,dir:a+(w>0?0:Math.PI),move:true}}
 {const _sp=stepPerson;stepPerson=function(p,dt){const C=S.cer;if(C&&C.on&&cerActive()&&C.slots&&C.slots.includes(p.id)&&cerIn(p)){const q=cerPos(p,C);
   if(!p.cerA){const dx=q.x-p.x,dz=q.z-p.z,d=Math.hypot(dx,dz);if(d<.6){p.cerA=1}else{const st=Math.min(d,(isChild(p)?1.8:2.5)*dt);p.x+=dx/d*st;p.z+=dz/d*st;p.dir=Math.atan2(dx,dz);p.state='move';p.path=null;p.act='idzie na '+CER_N[C.k].toLowerCase();return}}
   p.x+=(q.x-p.x)*Math.min(1,dt*6);p.z+=(q.z-p.z)*Math.min(1,dt*6);p.dir=q.dir;p.state=q.move?'move':'idle';p.path=null;p.act=q.move?'tańczy przy ogniu':C.k==='dziady'?'wspomina zmarłych':'patrzy';return}
  _sp(p,dt)}}
-function cerFrame(rdt){if(!S)return;const C=S.cer,act=cerActive();if(act&&C&&(!C.on||!cerRT||!C.slots))cerStart();if(!act&&cerRT)cerEnd();if(!cerRT)return;cerRT.t+=rdt;
+function cerFrame(rdt){if(!S)return;const C=S.cer,act=cerActive();if(act&&C&&(!C.on||!cerRT||!C.slots))cerStart();if(!act&&(cerRT||(C&&C.on)))cerEnd();/* 4.8: obrzęd zapisany jako trwający, a już po czasie, też się kończy */if(!cerRT)return;cerRT.t+=rdt;
  firelight.position.set(C.c.x,Hy(C.c.x,C.c.z)+2,C.c.z);firelight.intensity=Math.max(firelight.intensity,(C.k==='dziady'?1.4:3.2)*(1+.15*Math.sin(clock*9)));
  cerRT.w.forEach(w=>{if(w.s&&!w.wr)w.s.material.opacity=.55+.3*Math.sin(clock*7+w.ph);if(w.wr){if(cerRT.t<w.delay){w.wr.visible=false;return}w.wr.visible=true;w.wr.position.x+=w.vx*rdt*(S.speed||1);w.wr.position.z+=w.vz*rdt*(S.speed||1);w.wr.position.y=.02+Math.sin(clock*1.6+w.ph)*.04;w.wr.rotation.y+=rdt*.2}});
  if(cerRT.eff){const e=cerRT.eff,u=cerRT.t;if(e.w&&u>6){const k=Math.min(1,(u-6)/6);e.ef.position.x=C.c.x+(e.w.x-C.c.x)*k;e.ef.position.z=C.c.z+(e.w.z-C.c.z)*k;e.ef.position.y=Hy(e.ef.position.x,e.ef.position.z)*(1-k)+(-.3-Math.max(0,u-12)*.08)*k;e.ef.rotation.z=k*.9}}
