@@ -13,7 +13,7 @@ function expCharge(people,food,boats=0){
 function expLedgerValid(expedition){
  const ledger=expedition.departure;if(!ledger||ledger.schema!==1||!ledger.paid||Array.isArray(ledger.paid)||!Array.isArray(ledger.crew)||ledger.crew.length!==expedition.ppl.length)return false;
  if(!Number.isFinite(ledger.food)||ledger.food<0||Math.abs(ledger.food-Math.ceil(K*expedition.ppl.length*expedition.days))>1.000001)return false;
- const ids=new Set();for(const person of ledger.crew){if(!Number.isSafeInteger(person.id)||!expedition.ppl.includes(person.id)||ids.has(person.id)||!['rob','bud','wb','zwiad','zdun','czyt'].includes(person.job)||(person.wb!==null&&!Number.isSafeInteger(person.wb)))return false;ids.add(person.id);}
+ const ids=new Set();for(const person of ledger.crew){if(!Number.isSafeInteger(person.id)||!expedition.ppl.includes(person.id)||ids.has(person.id)||!['rob','bud','kar','wb','zwiad','zdun','czyt'].includes(person.job)||(person.wb!==null&&!Number.isSafeInteger(person.wb)))return false;ids.add(person.id);}
  let food=0;for(const [resource,quantity] of Object.entries(ledger.paid)){if(!Number.isFinite(quantity)||quantity<0)return false;if(FOOD.includes(resource))food+=quantity;else if(resource!=='lodz')return false;}
  const boats=ledger.paid.lodz||0,expected=expedition.type==='rejs'?1:expedition.type==='horyzont'&&!expedition.big?2:0;
  return Math.abs(food-ledger.food)<1e-6&&boats===expected;

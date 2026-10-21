@@ -1,6 +1,8 @@
-# Przystań 4.6.0-rc.2
+# Przystań 4.6.0-rc.3
 
 Spokojna gra o rozbitkach, którzy budują osadę na dzikiej wyspie (PWA, Three.js).
+
+4.6.0-rc.3: karczowanie pniaków we wsi (nowa praca w Ludzie → Praca) i większa zagroda dla kóz.
 
 4.6.0-rc.2: po aktualizacji gra ładuje się raz, od razu w nowej wersji.
 

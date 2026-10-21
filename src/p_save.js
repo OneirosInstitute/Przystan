@@ -88,7 +88,7 @@ function validateSave(state){
   if(typeof person.name!=='string'||person.name.length>100||!positive(person.age)||person.age>250||!number(person.x)||!number(person.z))return saveInvalid('people: nieprawidłowe imię, wiek lub położenie');
   if(!positive(person.hp)||person.hp>1)return saveInvalid('people['+personIndex+'].hp: nieprawidłowe zdrowie');
   if(!['k','m'].includes(person.sex)||!Object.hasOwn(TRAITS,person.trait))return saveInvalid('people['+personIndex+'].sex/trait: nieprawidłowa płeć lub cecha');
-  if(person.job!==null&&person.job!==undefined&&!['rob','bud','wb','zwiad','zdun','czyt','wyp'].includes(person.job))return saveInvalid('people.job: nieznana praca');
+  if(person.job!==null&&person.job!==undefined&&!['rob','bud','kar','wb','zwiad','zdun','czyt','wyp'].includes(person.job))return saveInvalid('people.job: nieznana praca');
   if(!object(person.sk)||!object(person.xp)||!Object.values(person.sk).every(positive)||!Object.values(person.xp).every(positive))return saveInvalid('people.sk/xp: nieprawidłowe umiejętności');
   // Woda jest znacznikiem wykonywanej pracy (q=0), a nie zasobem magazynu.
   if(person.carry!==null&&person.carry!==undefined&&(!Array.isArray(person.carry)||!person.carry.every(item=>object(item)&&typeof item.res==='string'&&positive(item.q)&&(Object.hasOwn(RN,item.res)||waterDelivery(person)))))return saveInvalid('people.carry: nieprawidłowy ładunek');

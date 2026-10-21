@@ -23,7 +23,7 @@ const ROZ3={
 const SHIP=[{n:'Kadłub z dębu',in:{drewno:2,deski:1},need:60},{n:'Pokład i dwa maszty',in:{deski:2,gwozdzie:3},need:66},{n:'Żagle i liny',in:{plotno:1,wlokna:1},need:54}];
 const e2Masters=()=>Object.keys(CN).filter(c=>S.people.some(p=>p.sk[c]>=3)).length;
 const e2FullSp=()=>Object.values(S.fams).filter(f=>famMembers(f.id).length&&typeof spizCap==='function'&&spizCap(f)>0&&(f.sp||0)>=.8*spizCap(f)).length;
-const e2Stumps=()=>nodes.reduce((a,n,k)=>a+(n.type==='tree'&&!n.gone&&(S.nodeAmt[k]||0)<=0?1:0),0);
+const e2Stumps=()=>nodes.reduce((a,n,k)=>a+(n.type==='tree'&&!n.gone&&(S.nodeAmt[k]||0)<=0?1:0),0)+(S.karczN||0);   // 4.6.0-rc.3: wykarczowane pniaki też się liczą
 const E2D={
  cechy:{n:'Cechy mistrzów',intro:'Każdy fach ma swój cech, swoją pieczęć i swojego mistrza. Uczeń przechodzi od mistrza do mistrza, aż sam nim zostanie.',g:[
   ['Postaw dom cechowy',()=>hasDone('cech'),'Budowa → Wspólnota → Dom cechowy.'],

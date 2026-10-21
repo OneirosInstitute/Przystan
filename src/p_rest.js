@@ -198,6 +198,10 @@ const ANIMG={sarna:deerG,koza:goatG,dzik:boarG,wilk:wolfG,zajac:hareG,lis:foxG,f
 const animM={},animIdx={};Object.keys(ANIMG).forEach(t=>{animIdx[t]=herdsDef.map((h,i)=>h.type===t?i:-1).filter(i=>i>=0);const m=new THREE.InstancedMesh(ANIMG[t],new THREE.MeshStandardMaterial({vertexColors:true,roughness:.9,flatShading:true}),Math.max(1,animIdx[t].length*7));m.castShadow=true;scene.add(m);animM[t]=m});
 const penM=new THREE.InstancedMesh(goatG,new THREE.MeshStandardMaterial({vertexColors:true,roughness:.9,flatShading:true}),80);penM.castShadow=true;scene.add(penM);
 const deerOff=[];{const r0=rng(91);for(let k=0;k<herdsDef.length*7+80;k++)deerOff.push({a:r0()*6.28,r:.6+r0()*1.6,ph:r0()*6.28,rot:r0()*6.28})}
+// 4.6.0-rc.3: kozy rozchodzą się po całym wybiegu zagrody (stałe miejsca, lekko się ruszają), a z „Większym wybiegiem” także przed nią
+const PEN_SLOTS=[[-.85,.05],[-.25,.2],[.35,.15],[.9,.2],[-.95,.85],[-.35,.95],[.3,.9],[.95,.85],[-.15,-.45],[.3,-.5],[-.95,2.0],[-.3,2.25],[.35,2.0],[.95,2.3],[-.6,2.45],[.65,2.5]];
+function penPos(b,q,o){const c=bCenter(b),sl=PEN_SLOTS[q%PEN_SLOTS.length],w=.12*Math.sin(clock*.07*(1+o.ph*.1)+o.ph);return[c.x+sl[0]+w,c.z+sl[1]+.1*Math.cos(clock*.05+o.ph*2)]}
+
 // dekoracja
 const tuftG=mergeGeos([{g:new THREE.ConeGeometry(.05,.42,3),y:.21,c:W1},{g:new THREE.ConeGeometry(.05,.34,3),y:.17,x:.09,z:.04,c:[.85,.9,.8]},{g:new THREE.ConeGeometry(.05,.3,3),y:.15,x:-.08,z:-.05,c:[.9,.95,.85]},{g:new THREE.ConeGeometry(.04,.26,3),y:.13,x:.02,z:-.1,c:[.8,.85,.75]}]);
 const deco={tuft:[],flower:[],pebble:[],drift:[],fern:[],reed:[],heath:[],log:[],snag:[]};const DECO_T=Object.keys(deco);const tileDeco=new Map();
@@ -372,9 +376,10 @@ function makeBuildingModel(kind,bb){const g=new THREE.Group();VR=rng(bb?bb.id*79
  else if(kind==='ruda'){plankHut(g,1.1,1.0,.8,{});g.add(cyl(.6,.05,M(0x4a3a20,{roughness:.3}),.5,.03,.5,0,0,0,10));for(let k=0;k<6;k++)g.add(mesh(new THREE.DodecahedronGeometry(.13,0),M(0x7a4a30),-.75+(k%3)*.2,.1+((k/3)|0)*.14,.7))}
  else if(kind==='kuznia'){g.add(tbox(1.7,.15,1.5,mStone,0,.07,0,0,1));shed(g,1.8,1.6,1.15,mPlankD);g.add(tbox(.7,.7,.6,mStone,-.45,.42,-.35,0,1.4));g.add(tbox(.34,1.4,.34,mStone,-.45,1.4,-.4,0,1.4));
   const gl=new THREE.Mesh(new THREE.BoxGeometry(.4,.06,.35),mGlow);gl.position.set(-.45,.8,-.3);g.add(gl);g.add(tbox(.36,.14,.18,M(0x404448,{metalness:.6,roughness:.35}),.4,.52,.3));g.add(cyl(.13,.36,matLog2,.4,.22,.3,0,0,0,8));barrel(g,.65,-.45,.8)}
- else if(kind==='zagroda'){for(let k=0;k<14;k++){const a=k/14*6.283;g.add(cyl(.05,.7,matDark,Math.cos(a)*1.35,.35,Math.sin(a)*1.35,0,0,0,5))}
-  for(let k=0;k<14;k++){const a=(k+.5)/14*6.283;for(const y of[.25,.5])g.add(tbox(.62,.07,.05,mPlank,Math.cos(a)*1.33,y,Math.sin(a)*1.33,-a+Math.PI/2,2))}
-  {const hg=plankHut(g,.8,.6,.55,{rh:.35});hg.position.x+=.55;hg.position.z-=.6}g.add(cyl(.32,.35,mThatch,-.55,.18,-.5,0,0,0,9));g.add(tbox(.6,.15,.22,mPlank,-.5,.08,.55,0,2))}
+ else if(kind==='zagroda'){// 4.6.0-rc.3: kwadratowy wybieg na całe pole zagrody, szopa i siano przy płocie, środek wolny dla kóz
+  const E=1.44;for(let k=0;k<=6;k++){const t=-E+k*(2*E/6);for(const[x,z]of[[t,-E],[t,E],[-E,t],[E,t]])g.add(cyl(.05,.7,matDark,x,.35,z,0,0,0,5))}
+  for(let k=0;k<6;k++){const t=-E+(k+.5)*(2*E/6),L=2*E/6+.02;for(const y of[.25,.5]){g.add(tbox(L,.07,.05,mPlank,t,y,-E,0,2));if(Math.abs(t)>.3)g.add(tbox(L,.07,.05,mPlank,t,y,E,0,2));g.add(tbox(.05,.07,L,mPlank,-E,y,t,0,2));g.add(tbox(.05,.07,L,mPlank,E,y,t,0,2))}}
+  {const hg=plankHut(g,.75,.55,.55,{rh:.35});hg.position.x+=.95;hg.position.z-=1.0}g.add(cyl(.3,.34,mThatch,-1.0,.17,-1.0,0,0,0,9));g.add(tbox(.62,.15,.22,mPlank,-1.05,.08,.5,Math.PI/2,2))}
  else if(kind==='studnia'){g.add(cyl(.36,.5,mStone,0,.25,0,0,0,0,12));const wt=new THREE.Mesh(new THREE.CircleGeometry(.29,14),M(0x1a2a30,{roughness:.2}));wt.rotation.x=-Math.PI/2;wt.position.y=.44;g.add(wt);
   g.add(tbox(.08,1.1,.08,matLog2,-.38,.55,0),tbox(.08,1.1,.08,matLog2,.38,.55,0));g.add(cyl(.06,.85,matLog,0,.9,0,0,0,Math.PI/2,7));g.add(gable(.95,.62,.32,mShingle,1.1,.08));
   g.add(cyl(.008,.35,M(0x9a8a6a),0,.72,0,0,0,0,3));g.add(cyl(.08,.13,mPlank,0,.5,0,0,0,0,8));g.add(cyl(.09,.14,mPlank,.5,.07,.25,0,0,0,8))}

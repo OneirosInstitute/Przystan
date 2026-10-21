@@ -1,5 +1,10 @@
 # Przystań 4.6.0-rc.1 — Budowa w przysiółkach
 
+> **4.6.0-rc.3** (baza `222f659`) dodaje pracę we wsi i powiększa zagrodę.
+> - **Karczowanie pniaków** (`p_karcz.js`). Ścięte drzewo zostawia pniak. Tam, gdzie wieś się buduje i rośnie (do kilku pól od chat i budów, przy placu), pniaki się wykopuje: najpierw przy budowach, potem przy gotowych domach. Robią to budowniczowie, gdy nie mają budowy, wolne ręce, gdy nie ma nic pilniejszego, i nowa praca „Karczowanie” w Ludzie → Praca (karczownicy z − i +, bez pniaków pracują jak wolne ręce). Pniak znika na zawsze, korzenie dają 2 opału. Wykarczowane pniaki liczą się do celu karczowisk w epoce II, a po wczytaniu gry nie wracają.
+> - **Zagroda** ma kwadratowy wybieg na całe swoje pole zamiast małego kółka, szopa i siano stoją przy płocie, a kozy rozchodzą się po stałych miejscach całego wybiegu zamiast tłoczyć się przy sianie. „Większy wybieg” to prawdziwy ogrodzony wybieg przed zagrodą na sześć kolejnych kóz.
+> - Nowy zestaw `karczowanie` (3 przypadki).
+
 > **4.6.0-rc.2** (baza `41c48eb`) usuwa podwójne ładowanie po aktualizacji. Do tej pory gra z telefonu brała stronę najpierw z pamięci, więc po każdym nowym wydaniu uruchamiała się najpierw stara wersja (ekran tytułowy, wczytanie wyspy), a po kilkunastu sekundach cała strona ładowała się drugi raz już w nowej. Teraz pracownik offline (`sw.js`) bierze stronę najpierw z sieci (czeka do 3,5 s) i z pamięci tylko bez sieci. Strona rejestruje pracownika z numerem wersji (`sw.js?v=…`) i nie przeładowuje się, gdy nowy pracownik ma tę samą wersję co ona. Serwer odpowiada „bez zmian” (304, `ETag`), więc przy niezmienionej grze telefon nie pobiera jej od nowa. Sprawdzone w przeglądarce z prawdziwym serwerem: po podmianie wersji jedno ładowanie od razu w nowej wersji, a bez sieci gra startuje z pamięci. Jedno podwójne ładowanie zdarzy się jeszcze przy przejściu z 4.6.0-rc.1, bo tamta wersja pracownika działa po staremu.
 
 Baza: main 4.5.0-rc.2 `f29008133744e8902c9d1381ba4de22714678c69`. Wydanie wypchnięte na main (Railway buduje z main).

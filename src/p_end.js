@@ -43,8 +43,8 @@ function drawAnimals(){Object.keys(animM).forEach(t=>{const m=animM[t];animIdx[t
     dummy.position.set(x,Hy(x,z),z);dummy.rotation.set(0,moving?Math.atan2(-(h.tz-h.z),h.tx-h.x):o.rot+Math.sin(clock*.3+o.ph)*.5,moving||t==='wilk'?0:Math.max(0,Math.sin(clock*.5+o.ph))*.25);dummy.scale.setScalar(t==='sarna'?1.15:1.05)}
    else{dummy.position.set(0,-50,0);dummy.scale.setScalar(0)}
    dummy.updateMatrix();m.setMatrixAt(slot*7+q,dummy.matrix)}});m.instanceMatrix.needsUpdate=true});
- let k=0;S.bld.forEach(b=>{if(b.kind!=='zagroda'||!bDone(b))return;const c=bCenter(b);for(let q=0;q<(b.animals||0)&&k<80;q++,k++){const o=deerOff[herdsDef.length*7+k];const a=o.a+clock*.05*(o.ph-3)*.1,r=.3+o.r*.45;const x=c.x+Math.cos(a)*r,z=c.z+Math.sin(a)*r;
-  dummy.position.set(x,Hy(x,z),z);dummy.rotation.set(0,o.rot+Math.sin(clock*.4+o.ph),0);dummy.scale.setScalar(.95);dummy.updateMatrix();penM.setMatrixAt(k,dummy.matrix)}});
+ let k=0;S.bld.forEach(b=>{if(b.kind!=='zagroda'||!bDone(b))return;for(let q=0;q<(b.animals||0)&&k<80;q++,k++){const o=deerOff[herdsDef.length*7+k];const[x,z]=penPos(b,q,o);
+  dummy.position.set(x,Hy(x,z),z);dummy.rotation.set(0,o.rot+Math.sin(clock*.4+o.ph),0);dummy.scale.setScalar(.85);dummy.updateMatrix();penM.setMatrixAt(k,dummy.matrix)}});
  for(;k<80;k++){dummy.position.set(0,-50,0);dummy.scale.setScalar(0);dummy.updateMatrix();penM.setMatrixAt(k,dummy.matrix)}penM.instanceMatrix.needsUpdate=true}
 /* ptaki: mewy nad zatokami, kruki nad borem, bielik nad halami */
 const birds=[];

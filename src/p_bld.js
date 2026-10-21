@@ -111,7 +111,9 @@ const EXTV={
  wedzarnia:(g,W,H)=>{const s=new THREE.Group();s.add(tbox(.6,.6,.5,mStone,0,.3,0,0,1.2));s.add(gable(.6,.5,.3,mPlankD,.6,.08));s.add(tbox(.15,.35,.15,mStone,.15,.95,0));s.position.set(-W-.4,0,H*.2);g.add(s)},
  wnyki:(g,W,H)=>{for(let k=0;k<3;k++)g.add(cyl(.01,.5,M(0x9a8a6a),W+.3+k*.15,.25,H+.2,0,0,.3,3))},
  garbarnia:(g,W,H)=>{for(let k=0;k<2;k++)g.add(cyl(.22,.25,mPlank,-W-.3,.12,-H*.4+k*.5,0,0,0,10));rack(g,-W-.35,H*.5,Math.PI/2,r=>{const h=new THREE.Mesh(new THREE.PlaneGeometry(.55,.45),M(0x7a5a3a,{side:THREE.DoubleSide}));h.position.y=.55;r.add(h)})},
- wybieg:(g,W,H)=>{for(let k=0;k<10;k++){const a=-.6+k/9*1.6;g.add(cyl(.04,.6,matDark,Math.cos(a)*2.0,.3,Math.sin(a)*2.0,0,0,0,5))}},
+ wybieg:(g,W,H)=>{// 4.6.0-rc.3: prawdziwy wybieg przed zagrodą (od strony bramy), płot z żerdzi
+  const E=1.44,D=2.75;for(const[x,z]of[[-E,D],[-E/2,D],[0,D],[E/2,D],[E,D],[-E,(E+D)/2],[E,(E+D)/2]])g.add(cyl(.045,.62,matDark,x,.31,z,0,0,0,5));
+  for(const y of[.22,.46]){g.add(tbox(2*E,.06,.05,mPlank,0,y,D,0,2));g.add(tbox(.05,.06,D-E,mPlank,-E,y,(E+D)/2,0,2));g.add(tbox(.05,.06,D-E,mPlank,E,y,(E+D)/2,0,2))}},
  obora:(g,W,H)=>{const s=new THREE.Group();s.add(tbox(1.2,.7,.8,mLogs,0,.35,0,0,1.1));s.add(gable(1.2,.8,.45,mThatch,.7,.15));s.position.set(-W-.6,0,0);g.add(s)},
  strach:(g,W,H)=>{const s=new THREE.Group();s.add(cyl(.03,1.2,matDark,0,.6,0,0,0,0,5),cyl(.025,.7,matDark,0,.95,0,0,0,Math.PI/2,5));s.add(mesh(new THREE.SphereGeometry(.1,6,4),mCanvas,0,1.25,0));s.add(mesh(new THREE.CylinderGeometry(.16,.06,.1,8),mThatch,0,1.35,0));s.add(tbox(.3,.35,.08,M(0x6a5a8a),0,.82,0));g.add(s)},
  rowy:(g,W,H)=>{g.add(tbox(W*2,.03,.12,M(0x2a3a3c,{roughness:.3}),0,.02,H+.15))},

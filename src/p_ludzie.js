@@ -22,7 +22,7 @@ function friendsOf(p){return relsOf(p).filter(x=>x[1]>=30).sort((a,b)=>b[1]-a[1]
 function rivalsOf(p){return relsOf(p).filter(x=>x[1]<=-30).sort((a,b)=>a[1]-b[1]).slice(0,1).map(x=>x[0])}
 function compat(a,b){if(a.fam===b.fam)return .3;let c=1;if(a.trait==='Pogodny'||b.trait==='Pogodny')c+=.4;if(a.trait==='Cierpliwy'||b.trait==='Cierpliwy')c+=.2;if(a.trait==='Uparty'&&b.trait==='Uparty')c=-1.2;if(Math.abs(a.age-b.age)>30)c*=.6;return c}
 // ---- nastrój, mir ----
-function jobCraft(p){if(p.job==='wb'){const b=bById(p.wb);return b?BD[b.kind].c||null:null}return p.job==='rob'||p.job==='bud'?'ciesla':null}
+function jobCraft(p){if(p.job==='wb'){const b=bById(p.wb);return b?BD[b.kind].c||null:null}return p.job==='rob'||p.job==='bud'?'ciesla':p.job==='kar'?'drwal':null}
 function zadOf(p){const r=[];let s=0,w=0;const add=(v,wt,why)=>{s+=v*wt;w+=wt;if(v<.6&&why)r.push([v,why])};const h=homeOf(p);
  add(S.fedR>=.999?1:S.fedR*.8,2,'głód');add(p.warm===undefined?1:p.warm,1.5,'zimno');add(h&&bDone(h)?(p.waitHome?.55:1):.15,1.5,p.waitHome?'czeka na własny dom':'brak dachu nad głową');
  add(p.hp,1,'choroba albo rana');const fr=friendsOf(p).length,fam=famMembers(p.fam).length>1;add(fam||fr?Math.min(1,.55+.22*fr+(fam?.25:0)):.3,1,'samotność');
@@ -84,7 +84,7 @@ function wedOk(a,b){return a.sex!==b.sex&&!kinClose(a,b)}
 function freeHouse(){return S.bld.find(b=>bDone(b)&&BD[b.kind].house&&!Object.values(S.fams).some(f=>f.home===b.id))}
 function ludDaily(){if(!ludReady)ludInit();const ad=S.people.filter(p=>p.age>=14),yr=Math.floor(S.day/YEAR),rd=Math.floor(rday());
  for(const k in S.rel){S.rel[k]*=.993;if(Math.abs(S.rel[k])<2)delete S.rel[k]}
- const groups={};ad.forEach(p=>{const g=p.job==='wb'?'b'+p.wb:p.job==='wyp'?'e'+p.exp:p.job==='rob'||p.job==='bud'?'r':null;if(g)(groups[g]=groups[g]||[]).push(p)});
+ const groups={};ad.forEach(p=>{const g=p.job==='wb'?'b'+p.wb:p.job==='wyp'?'e'+p.exp:p.job==='rob'||p.job==='bud'||p.job==='kar'?'r':null;if(g)(groups[g]=groups[g]||[]).push(p)});
  Object.entries(groups).forEach(([g,arr])=>{for(let i=0;i<arr.length;i++)for(let j=i+1;j<arr.length;j++){if(g==='r'&&Math.random()>.3)continue;relAdd(arr[i],arr[j],K*(g[0]==='e'?2.4:1.1)*compat(arr[i],arr[j]))}});
  if(seasonIdx()===2&&(law('opowiesci')||wspOn()))for(let q=0;q<5;q++){const a=lpick(ad),b=lpick(ad);if(a&&b&&a!==b)relAdd(a,b,2)}
  if((S.dis||0)>.4&&Math.random()<(S.dis-.3)*K*.6){const a=lpick(ad),b=lpick(ad);if(a&&b&&a!==b&&a.fam!==b.fam){relAdd(a,b,-14);if(Math.random()<.5)log(`${a.name} i ${b.name} kłócą się o ${['drewno','jedzenie','pracę','miejsce przy ogniu'][(Math.random()*4)|0]}. Od tej pory omijają się szerokim łukiem.`)}}

@@ -98,8 +98,8 @@ drawAnimals=function(){Object.keys(animM).forEach(t=>{animM[t].visible=false;con
   Object.keys(Ms).forEach(k=>{Ms[k].count=cnt[k];Ms[k].visible=cnt[k]>0;Ms[k].instanceMatrix.needsUpdate=true})});
  // kozy w zagrodach: stoją albo skubią trawę
  const P=zMeshes('koza_z',80);penM.visible=false;let ns=0,ng=0;let k=0;
- S.bld.forEach(b=>{if(b.kind!=='zagroda'||!bDone(b))return;const c=bCenter(b);for(let q=0;q<(b.animals||0)&&k<80;q++,k++){const o=deerOff[herdsDef.length*7+k];const a=o.a+clock*.05*(o.ph-3)*.1,r=.3+o.r*.45;const x=c.x+Math.cos(a)*r,z=c.z+Math.sin(a)*r;
-  zDummy.position.set(x,Hy(x,z),z);zDummy.rotation.set(0,o.rot+Math.sin(clock*.4+o.ph),0);zDummy.scale.setScalar(.95);zDummy.updateMatrix();
+ S.bld.forEach(b=>{if(b.kind!=='zagroda'||!bDone(b))return;for(let q=0;q<(b.animals||0)&&k<80;q++,k++){const o=deerOff[herdsDef.length*7+k];const[x,z]=penPos(b,q,o);
+  zDummy.position.set(x,Hy(x,z),z);zDummy.rotation.set(0,o.rot+Math.sin(clock*.4+o.ph),0);zDummy.scale.setScalar(.85);zDummy.updateMatrix();
   if(Math.sin(clock*.3+o.ph*1.7)>.1)P.graze.setMatrixAt(ng++,zDummy.matrix);else P.stand.setMatrixAt(ns++,zDummy.matrix)}});
  P.stand.count=ns;P.graze.count=ng;P.walkA.count=0;P.walkB.count=0;P.stand.visible=ns>0;P.graze.visible=ng>0;P.walkA.visible=P.walkB.visible=false;P.stand.instanceMatrix.needsUpdate=P.graze.instanceMatrix.needsUpdate=true};
 // kozy domowe: jaśniejsze, łaciate

@@ -243,15 +243,15 @@ function czTerrHTML(i,j){const k=j*N+i,r=regionAt(i,j);let trees=0;for(const q o
  return h}
 function selectT(i,j){select(null);selT={i,j};if(typeof mkRing!=='undefined'){mkRing.visible=true;mkRing.scale.set(1.3,1.3,1.3);const x=tcx(i),z=tcx(j);mkRing.position.set(x,Hy(x,z)+.08,z)}renderSel()}
 function czPersonAct(p){if(!isAdult(p)||!isWorker(p)||p.job==='wyp')return`<div class="cz-act"><button data-czfol="1">Idź za ${p.sex==='k'?'nią':'nim'}</button></div>`;
- if(czJobs){const opts=[['rob','Wolne ręce (robotnik)'],['bud',p.sex==='k'?'Budowniczka':'Budowniczy'],['zwiad',p.sex==='k'?'Zwiadowczyni':'Zwiadowca']];
+ if(czJobs){const opts=[['rob','Wolne ręce (robotnik)'],['bud',p.sex==='k'?'Budowniczka':'Budowniczy'],['kar',p.sex==='k'?'Karczowniczka':'Karczownik'],['zwiad',p.sex==='k'?'Zwiadowczyni':'Zwiadowca']];
   S.bld.filter(b=>bDone(b)&&BD[b.kind].wk).forEach(b=>{const here=p.job==='wb'&&p.wb===b.id;const full=(b.want||0)>=wkOf(b)&&!here;if(!full)opts.push(['b:'+b.id,`${BD[b.kind].n} (${b.want||0}/${wkOf(b)})`])});
   const cur=p.job==='wb'?'b:'+p.wb:p.job;
   return`<div class="cz-jobs"><div class="cz-ey" style="margin-top:8px">Nowa praca dla: ${p.name}</div>${opts.map(([v,n])=>`<button data-czset="${v}" class="${v===cur?'pri':''}">${n}</button>`).join('')}</div>`}
  return`<div class="cz-act"><button class="pri" data-czjob="1">Zmień pracę</button><button data-czfol="1">Idź za ${p.sex==='k'?'nią':'nim'}</button></div>`}
 function czSetJob(p,v){if(p.job==='wb'){const b=bById(p.wb);if(b)b.want=Math.max(0,(b.want||0)-1)}
- else if(p.job==='bud'||p.job==='zwiad'||p.job==='zdun'||p.job==='czyt')S.alloc[p.job]=Math.max(0,(S.alloc[p.job]||0)-1);
+ else if(p.job==='bud'||p.job==='kar'||p.job==='zwiad'||p.job==='zdun'||p.job==='czyt')S.alloc[p.job]=Math.max(0,(S.alloc[p.job]||0)-1);
  if(p.state==='work'||p.state==='move'){release(p);p.path=null;p.state='idle'}p.wait=.1;
- if(v==='rob'){p.job='rob';p.wb=null}else if(v==='bud'||v==='zwiad'){S.alloc[v]=(S.alloc[v]||0)+1;p.job=v;p.wb=null}
+ if(v==='rob'){p.job='rob';p.wb=null}else if(v==='bud'||v==='kar'||v==='zwiad'){S.alloc[v]=(S.alloc[v]||0)+1;p.job=v;p.wb=null}
  else if(v.startsWith('b:')){const b=bById(+v.slice(2));if(b){b.want=Math.min(wkOf(b),(b.want||0)+1);p.job='wb';p.wb=b.id}}
  assign();czJobs=false;$('sel')._h=null;renderSel();if(tab)renderPanel();toast(`${p.name}: ${jobLabel(p)}`)}
 {const _rs=renderSel;renderSel=function(){const el=$('sel');

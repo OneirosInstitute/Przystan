@@ -265,6 +265,8 @@ Budują dorośli przysiółka. Najpierw zbierają w swojej krainie to, co tam je
 
 **Prośby przysiółków.** Raz na jakiś czas przysiółek prosi o jedzenie, opał, narzędzia, odzież, ziarno, naczynia albo płótno. Pomoc wzmacnia więź i zapasy. Brak odpowiedzi ochładza więź.
 
+**Karczowanie (od wersji 4.6.0-rc.3).** Ścięte drzewo zostawia pniak. We wsi, czyli do kilku pól od chat, budów i placu, pniaki się wykopuje, najpierw przy budowach. Robią to budowniczowie bez budowy, wolne ręce, gdy nie ma nic pilniejszego, i karczownicy (Ludzie → Praca → Karczowanie). Pniak znika na zawsze, a korzenie dają 2 opału. W lesie pniaki zostają dla leśnika.
+
 **Ścieżki i drogi.** Ludzie, którzy idą do nowego przysiółka, wydeptują ścieżkę wzdłuż najłatwiejszej drogi lądem. Ścieżki łączą się ze sobą w sieć. Osada może wytyczyć drogę: kosztuje kłody i kamień, zależnie od długości, i trwa kilka dni. Droga jest szersza i jaśniejsza, przyspiesza dary o połowę, trzyma więź wyżej i zmniejsza niebezpieczeństwo.
 
 **Wędrowcy.** Po ścieżkach chodzą ludzie: rodziny w drodze do nowego przysiółka, posłańcy z darami, goście na obrzędy (Kupała, Dziady, Szczodre Gody, Marzanna). Na drogach ruch jest większy.
@@ -1241,6 +1243,7 @@ W Ludziach (Praca i Mieszkańcy) wyszukiwarka szuka po imieniu, fachu albo budyn
 | 1.8.3 | poprawka: rozbudowa domu (szałas w chatę, chata w dom) nie zabiera już rodzinie spiżarki; w czasie budowy zapas zostaje w starym domu w granicach jego pojemności |
 | 1.9 | budynki z charakterem: każdy budynek inny (ściany, dachy, spadek, okap), koniki, malowane okiennice, ganki, przybudówki, garnki na płocie, zioła pod okapem, szyldy rzemiosł, wyraźniejsza kuźnia, łaźnia i chata wiecowa |
 | 1.10 | wykonanie budynków: surowe, porządne i mistrzowskie, wyraźnie widoczne po rozbudowie (wielkość, podmurówka, dach, okiennice, obramienia okien, kwiaty, płotek, szyld); karta budynku pokazuje wykonanie i trwałość; odmiany szałasów, studni, zagród i spiżarni |
+| 4.6.0-rc.3 | karczowanie pniaków we wsi (budowniczowie bez budowy, wolne ręce i nowa praca „Karczowanie”), korzenie na opał; zagroda z wybiegiem na całe pole i prawdziwym większym wybiegiem, kozy nie tłoczą się przy sianie |
 | 4.6.0-rc.2 | po aktualizacji gra ładuje się raz, od razu w nowej wersji (strona z sieci, z pamięci tylko bez sieci; serwer odpowiada „bez zmian”, gdy gra się nie zmieniła) |
 | 4.6.0-rc.1 | przysiółek rośnie w folwark: nic nie staje samo, lista budowy w karcie przysiółka i prośby rodu o zgodę, przebudowy w miejscu (szałas → chata → dom z piecem → dom rodu), etap z tego, co stoi, ludzi tylu, ile dachów, materiał z krainy i od tragarzy z Przystani, budowniczowie z Przystani za zgodą wiecu; kraina zasiedlona od chaty z bali; w epoce IV przysiółek przechodzi z dorobkiem, kierunek folwarku wybiera gracz, nowe budynki za zgodą rodów, etapy folwark, folwark rozwinięty i dwór z folwarkiem, ten sam układ działki |
 | 4.5.0-rc.2 | przysiółki na nowym lądzie od epoki II: wiec ma na mapie krainę za zatoką, ścieżka przez przesmyk, Wyspy Mew tylko łodzią; przysiółek staje w krainie wybranej na wiecu (wcześniej zawsze w najbliższej) |
