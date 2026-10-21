@@ -200,6 +200,8 @@ const penM=new THREE.InstancedMesh(goatG,new THREE.MeshStandardMaterial({vertexC
 const deerOff=[];{const r0=rng(91);for(let k=0;k<herdsDef.length*7+80;k++)deerOff.push({a:r0()*6.28,r:.6+r0()*1.6,ph:r0()*6.28,rot:r0()*6.28})}
 // 4.6.0-rc.3: kozy rozchodzą się po całym wybiegu zagrody (stałe miejsca, lekko się ruszają), a z „Większym wybiegiem” także przed nią
 const PEN_SLOTS=[[-.85,.05],[-.25,.2],[.35,.15],[.9,.2],[-.95,.85],[-.35,.95],[.3,.9],[.95,.85],[-.15,-.45],[.3,-.5],[-.95,2.0],[-.3,2.25],[.35,2.0],[.95,2.3],[-.6,2.45],[.65,2.5]];
+// 4.6.0-rc.4: kto stoi na płyciźnie albo w krzakach, wychodzi na najbliższe wolne pole, ale tylko z bliska (najwyżej 3 pola, tyle da się przebrnąć); dalej nikt nie przeskakuje
+function wadeOut(s){if(walk[s[1]*N+s[0]])return s;const out=nearestWalk(s[0],s[1]);return out&&Math.max(Math.abs(out[0]-s[0]),Math.abs(out[1]-s[1]))<=3?out:s}
 function penPos(b,q,o){const c=bCenter(b),sl=PEN_SLOTS[q%PEN_SLOTS.length],w=.12*Math.sin(clock*.07*(1+o.ph*.1)+o.ph);return[c.x+sl[0]+w,c.z+sl[1]+.1*Math.cos(clock*.05+o.ph*2)]}
 
 // dekoracja
@@ -572,7 +574,8 @@ function go(person,tile,after,target){
    const taken=S.people.filter(peer=>peer!==person&&peer.tgt===target&&['move','work'].includes(peer.state)).map(peer=>peer.routeGoal||tileOf(peer.x,peer.z));
    const slot=[[0,0],[1,0],[0,1],[-1,0],[0,-1],[1,1],[-1,-1]].map(([x,z])=>[tile[0]+x,tile[1]+z]).find(([x,z])=>x>=0&&z>=0&&x<N&&z<N&&walk[z*N+x]&&!taken.some(([a,b])=>a===x&&b===z));if(slot)tile=slot;
   }
-  const start=tileOf(person.x,person.z);route=astar(start[0],start[1],tile[0],tile[1]);
+  // 4.6.0-rc.4: kto stoi na polu bez przejścia (woda przy brzegu, płot), najpierw schodzi na najbliższe wolne pole
+  const start=wadeOut(tileOf(person.x,person.z));route=astar(start[0],start[1],tile[0],tile[1]);
   if(!route){if(target?.type)target.bad=S.t+40;person.blocked={code:'route',reason:'Brak drogi do celu',since:person.blocked?.since??S.t,attempts:(person.blocked?.attempts||0)+1};return false;}
  }
  if(managed&&!route.length&&Math.hypot(person.x-tcx(tile[0]),person.z-tcx(tile[1]))>.01)route=[tile];
@@ -662,9 +665,9 @@ function onArrive(p){const a=p.after;p.after=null;p.wt=0;
  else p.state='idle'}
 function movePerson(p,dt){
  if(p.state==='move'&&p.path&&p.path.length){
-  const validSegment=(from,to)=>{const [i,j]=tileOf(from.x,from.z),[x,z]=tileOf(to.x,to.z);return x>=0&&z>=0&&x<N&&z<N&&walk[z*N+x]&&(i===x||j===z||(walk[j*N+x]&&walk[z*N+i]));};
+  const validSegment=(from,to)=>{const [i,j]=tileOf(from.x,from.z),[x,z]=tileOf(to.x,to.z);return x>=0&&z>=0&&x<N&&z<N&&walk[z*N+x]&&(i===x||j===z||!walk[j*N+i]||(walk[j*N+x]&&walk[z*N+i]));};   // 4.6.0-rc.4: z pola bez przejścia wolno zejść na wolne
   if(!validSegment(p,p.path[0])||(p.routeRevision!==walkRevision&&p.path.some((point,index)=>index>0&&!validSegment(p.path[index-1],point)))){
-   const goal=p.routeGoal||tileOf(p.path.at(-1).x,p.path.at(-1).z),start=tileOf(p.x,p.z),replacement=astar(start[0],start[1],goal[0],goal[1]);
+   const goal=p.routeGoal||tileOf(p.path.at(-1).x,p.path.at(-1).z);const start=wadeOut(tileOf(p.x,p.z));const replacement=astar(start[0],start[1],goal[0],goal[1]);
    if(!replacement){release(p);p.path=null;p.state='idle';p.wait=3;p.blocked={reason:'Droga zamknięta — odblokuj przejście',since:p.blocked?.since??S.t,attempts:(p.blocked?.attempts||0)+1};p.act=p.blocked.reason;return true;}
    p.path=replacement.map(([i,j])=>({x:tcx(i),z:tcx(j)}));delete p.blocked;
   }

@@ -1,6 +1,8 @@
-# Przystań 4.6.0-rc.3
+# Przystań 4.6.0-rc.4
 
 Spokojna gra o rozbitkach, którzy budują osadę na dzikiej wyspie (PWA, Three.js).
+
+4.6.0-rc.4: poprawka — po topieniu Marzanny nikt nie zostaje w wodzie przy brzegu, a ludzie z takich zapisów sami wychodzą na ląd.
 
 4.6.0-rc.3: karczowanie pniaków we wsi (nowa praca w Ludzie → Praca) i większa zagroda dla kóz.
 
