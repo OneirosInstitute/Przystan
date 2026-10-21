@@ -191,7 +191,7 @@ const SEN_WX={storm:['czarny koń galopuje po wodzie i rży jak wiatr','morze wc
 function senPick(){const d=Math.floor(S.day),who=S.people.filter(p=>p.age>=12&&(usp(p,'marzy')||usp(p,'zabobon')||usp(p,'bogo')||Math.random()<.25));if(!who.length)return null;const A=who[(Math.random()*who.length)|0];
  const nx=S.weather.next;
  if(nx&&SEN_WX[nx]&&S.weather.left<=1.2){const v=SEN_WX[nx][(Math.random()*2)|0];return{A,k:'wx',v:nx,txt:`${A.name} śni, że ${v}. Rano powie, że to znak.`}}
- const preg=S.people.find(p=>p.ciaza);if(preg&&Math.random()<.5)return{A,k:'dz',v:preg.fam,txt:`${A.name} śni rybę w czystej wodzie. Ryba we śnie to dziecko, mówią starzy.`};
+ const preg=S.people.find(p=>p.ciaza||p.e4Pregnancy);if(preg&&Math.random()<.5)return{A,k:'dz',v:preg.fam,txt:`${A.name} śni rybę w czystej wodzie. Ryba we śnie to dziecko, mówią starzy.`};
  const weak=S.people.find(p=>p!==A&&(p.hp<.3||p.age>72));if(weak&&Math.random()<.35)return{A,k:'sm',v:weak.id,txt:`${A.name} śni, że wypada ${gw(A,'mu','jej')} ząb. Budzi się i długo nie może zasnąć.`};
  if(S.weather.k==='drought'&&Math.random()<.4)return{A,k:'og',v:0,txt:`${A.name} śni ogień, który idzie od lasu. Rano obchodzi chaty i patrzy na strzechy.`};
  if((S.dis||0)>.45&&Math.random()<.4)return{A,k:'kl',v:0,txt:`${A.name} śni, że dwa koguty biją się na progu. Zły sen, na kłótnię.`};
@@ -199,7 +199,7 @@ function senPick(){const d=Math.floor(S.day),who=S.people.filter(p=>p.age>=12&&(
  return null}
 // sprawdzenie snu rano: pogoda nadeszła, dziecko się urodziło, ktoś odszedł
 function senCheck(){const s=S.sen;if(!s)return null;const d=Math.floor(S.day),A=pById(s.a);if(d-s.d>(s.k==='dz'?YEAR/2:s.k==='sm'?6:3)){S.sen=null;return null}
- let ok=false;if(s.k==='wx')ok=S.weather.k===s.v;else if(s.k==='dz')ok=S.people.some(p=>p.born&&p.fam===s.v&&p.age<.2);else if(s.k==='sm')ok=!pById(s.v);else if(s.k==='og')ok=S.bld.some(b=>b.fire);else if(s.k==='kl')ok=czRecent(/kłót|spór|bój/i,1);
+ let ok=false;if(s.k==='wx')ok=S.weather.k===s.v;else if(s.k==='dz')ok=S.people.some(p=>(p.born||(p.par||[]).length)&&p.fam===s.v&&p.age<.2);else if(s.k==='sm')ok=!pById(s.v);else if(s.k==='og')ok=S.bld.some(b=>b.fire);else if(s.k==='kl')ok=czRecent(/kłót|spór|bój/i,1);
  if(!ok)return null;S.sen=null;S.senOk=(S.senOk||0)+1;if(A){memAdd(A,'sen',null);if(A.sex)S.wh=(S.wh||0)+.005}
  const t=`Sen ${A?gen(A.name):'jednego z nas'} się sprawdził.`+(s.k==='wx'?' Pogoda przyszła taka, jak we śnie.':s.k==='dz'?' Urodziło się dziecko.':s.k==='sm'?' Ktoś odszedł.':s.k==='og'?' Ogień przyszedł.':' Była kłótnia.');log(t+(S.senOk>=3?' Coraz więcej ludzi mówi przy śniadaniu, co im się śniło.':''));return t}
 
@@ -208,7 +208,8 @@ function wFill(s,A,B,v){if(s.includes(' || ')){const q=s.split(' || ');s=A.sex==
  s=s.replace(/\{(\w+)\}/g,(m,k)=>k==='A'?A.name:k==='B'?(B?B.name:''):k==='Bg'?(B?gen(B.name):''):k==='Ba'?(B?acc(B.name):''):(v&&v[k]!==undefined?v[k]:''));
  return s.replace(/\[([^|\]]*)\|([^\]]*)\]/g,(m,a,b)=>A.sex==='k'?b:a).replace(/<([^|>]*)\|([^>]*)>/g,(m,a,b)=>B&&B.sex==='k'?b:a)}
 function wCtx(){const d=Math.floor(S.day);return{d,sea:seasonIdx(),days:typeof czNeedDays==='function'?czNeedDays():99}}
-function wSpeakers(){return S.people.filter(p=>p.job!=='wyp'&&p.state!=='away'&&!p.lost&&p.age>=5&&(S.epoch!==4||p.settlementId==='przystan'))}
+function wSpeakers(){if(S.epoch===4){const at=id=>S.people.filter(p=>p.settlementId===id&&!p.e4Transport&&p.age>=5);const L=at(typeof e4Selected!=='undefined'?e4Selected:'przystan');return L.length>=2?L:at('przystan')}
+ return S.people.filter(p=>p.job!=='wyp'&&p.state!=='away'&&!p.lost&&p.age>=5)}
 function wChoose(list,ctx,who,mem,forNight){const out=[];const seen=new Set(mem.seen),tseen=mem.top.slice(-5),last=mem.last||{};
  for(const T of list){let ok=true;try{if(T.c&&!T.c(ctx))ok=false}catch(e){ok=false}if(!ok)continue;
   const base=(typeof T.w==='number'?T.w:1)*(tseen.includes(T.t)?.35:1)*(tseen.slice(-2).includes(T.t)?.4:1);
@@ -232,7 +233,8 @@ function wieczorLines(){if(!S||!S.people.length)return[];const ctx=wCtx(),who=wS
  while(out.length<n&&cand.length){const x=wPick(cand);cand=cand.filter(y=>y!==x);if(used.has(x.A.id)||(x.B&&x.T.x2&&used.has(x.B.id))||topics.has(x.T.t))continue;
   const lines=wLine(x);if(out.length+lines.length>n+1)continue;used.add(x.A.id);if(x.B&&x.T.x2)used.add(x.B.id);topics.add(x.T.t);wRemember(x);out.push(...lines)}
  return out}
-function wieczorPlace(){const d=Math.floor(S.day),at=S.people.filter(p=>p.eveIntentD===d||p.eveD===d);const c={};at.forEach(p=>c[p.eveK]=(c[p.eveK]||0)+1);
+function wieczorPlace(){if(S.epoch===4){const w=wSpeakers(),st=w[0]&&S.e4.settlements[w[0].settlementId];if(!st)return'Przy ogniu';return st.id==='przystan'?'Przy ogniu w Przystani':st.buildings.dwor?'We dworze · '+st.name:st.buildings.dom_rodowy?'W domu rodowym · '+st.name:'Przy ogniu · '+st.name}
+ const d=Math.floor(S.day),at=S.people.filter(p=>p.eveIntentD===d||p.eveD===d);const c={};at.forEach(p=>c[p.eveK]=(c[p.eveK]||0)+1);
  const k=Object.keys(c).sort((a,b)=>c[b]-c[a])[0];if(k==='bania')return'W bani';if(k==='dom')return'Przed chatami';if(k==='hala')return typeof scSt==='function'&&SERCE[scSt()]?SERCE[scSt()].loc.replace(/^./,x=>x.toUpperCase()):'W izbie';return'Przy ognisku'}
 function nocLine(){const ctx=wCtx(),mem=wMem();
  if(!S.sen&&Math.random()<.32){const s=senPick();if(s){S.sen={d:ctx.d,a:s.A.id,k:s.k,v:s.v};return s.txt}}
@@ -251,6 +253,8 @@ function wczorajLines(){const d=Math.floor(S.day)-1,L=[];const pri={dziecko:9,sl
   else if(e[0]==='sen')t=`Sen ${gen(p.name)} się sprawdził.`;else if(e[0]==='zjawa')t=`${p.name} twierdzi, że ${gw(p,'widział','widziała')}: ${r||'coś w ciemności'}.`;
   else if(e[0]==='klotnia')t=`${p.name} ${gw(p,'pokłócił się','pokłóciła się')}${r?' z: '+r:''}.`;else if(e[0]==='zgoda')t=`${p.name} ${gw(p,'pogodził się','pogodziła się')}${r?' z: '+r:''}.`;else if(e[0]==='dar')t=`${p.name} ${gw(p,'dostał','dostała')} dar${r?' od: '+r:''}.`;
   if(t)L.push(t);if(L.length>=3)break}
+ // epoka IV: ważne wydarzenia rodów z wczoraj
+ if(S.epoch===4&&S.e4&&L.length<3)for(const e of S.e4.events.slice(-40)){if(Math.floor(e.day)!==d||!['birth','marriage','research','founding','arrival','complete','succession'].includes(e.type)||(e.type==='research'&&!/poznał/.test(e.text)))continue;const t=e.text.split('. ')[0].replace(/\.$/,'')+'.';if(!L.includes(t))L.push(t);if(L.length>=3)break}
  // reszta z kroniki: ważne wpisy z wczoraj, bez powtórzeń
  if(L.length<3&&typeof SINCE_RX!=='undefined')for(const l of S.log){if(l.d!==d+1)continue;if(!SINCE_RX.test(l.t)||/^Wspomnienie|lepiej zna swój fach/.test(l.t))continue;const t=l.t.split('. ')[0].replace(/\.$/,'')+'.';if(!L.some(x=>x.slice(0,24)===t.slice(0,24)))L.push(t);if(L.length>=3)break}
  return L}
@@ -260,7 +264,7 @@ let wPhase=null,wUntil=0;
 function wShow(head,lines,talk){czTalk.innerHTML=`<small>${head}</small>`+lines.map(x=>talk?`<p>„${escapeHtml(x[0])}”<span>${escapeHtml(x[1])}</span></p>`:`<p class="wnar">${escapeHtml(x)}</p>`).join('');czTalk.classList.add('on');wUntil=performance.now()+(talk?11000:8000)}
 function wArchive(o){S.wArch=S.wArch||[];S.wArch.push(o);if(S.wArch.length>20)S.wArch.shift()}
 // składanie idzie z zegarem gry (także bez ekranu), pokazywanie z klatką obrazu
-function wTick(){if(!S||S.epoch===4||!S.people.length)return;const t=tod(),d=Math.floor(S.day);
+function wTick(){if(!S||!S.people.length)return;const t=tod(),d=Math.floor(S.day);
  if(t>=.8&&t<.93&&S.czTalkD!==d&&!evOpen){S.czTalkD=d;const L=wieczorLines();if(L.length){const h=wieczorPlace();wArchive({d,h,L});wQ={h,L,talk:1}}return}
  if((t>=.95||t<T0-.04)){const nd=t>=.95?d:d-1;if(S.nocD!==nd){S.nocD=nd;const n=nocLine();if(n){const a=S.wArch&&S.wArch[S.wArch.length-1];if(a&&a.d===nd)a.n=n;else wArchive({d:nd,h:'Nocą',L:[],n});wQ={h:'Nocą',L:[n]}}}return}
  if(t>=T0&&t<T0+.12&&S.ranoD!==d&&d>0){S.ranoD=d;const s=senCheck();const L=wczorajLines();if(s)L.unshift(s);if(L.length)wQ={h:'Wczoraj',L:L.slice(0,3)}}}

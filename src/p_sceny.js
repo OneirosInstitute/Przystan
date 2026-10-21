@@ -4,7 +4,7 @@
 // Każda zostawia ślad w pamięci i w relacjach, więc wieczorem i po roku ktoś do niej wraca.
 // Zjawy są tym, co ludzie twierdzą, że widzieli: skutki mają przez ludzki strach i ludzkie zabiegi.
 Object.assign(MEMW,{radosc:.15,zalot:.22,wstyd:-.1,strach:-.12});
-const sPick=f=>{const a=S.people.filter(p=>p.state!=='away'&&!p.lost&&p.job!=='wyp'&&f(p));return a.length?a[(Math.random()*a.length)|0]:null};
+const sPick=f=>{const a=S.people.filter(p=>p.state!=='away'&&!p.lost&&p.job!=='wyp'&&!p.e4Transport&&(S.epoch!==4||p.settlementId===(typeof e4Selected!=='undefined'?e4Selected:'przystan'))&&f(p));return a.length?a[(Math.random()*a.length)|0]:null};
 const sAd=p=>p.age>=16,sKid=p=>p.age>=4&&p.age<12;
 const sNearWater=p=>{try{const w=waterNear(p.x,p.z);return!!w&&Math.hypot(w.x-p.x,w.z-p.z)<14}catch(e){return false}};
 const sRd=()=>Math.floor(rday()),sYr=()=>Math.floor(S.day/YEAR);
@@ -93,7 +93,7 @@ const SCENY=[
 ];
 // ---------- losowanie: mniej więcej raz na dobę, kategorie się zmieniają ----------
 function scWhen(T){const t=tod(),k=T.t||'d';if(k==='n')return t>=T1||t<T0+.02;if(k==='p')return t>=.45&&t<.56&&isWork();return isWork()}
-function sceneTick(){if(!S||S.epoch===4||!S.people.length||evOpen||placing||(typeof cerActive==='function'&&cerActive()))return;
+function sceneTick(){if(!S||!S.people.length||evOpen||placing||(typeof cerActive==='function'&&cerActive()))return;
  if(S.scN===undefined)S.scN=S.day+.5;if(S.day<S.scN)return;S.scCd=S.scCd||{};const cats=S.scCat||[];
  const pool=SCENY.filter(T=>(S.scCd[T.k]||0)<=S.day&&scWhen(T)&&(()=>{try{return T.c()}catch(e){return false}})());
  if(!pool.length){S.scN=S.day+.08;return}
@@ -101,14 +101,15 @@ function sceneTick(){if(!S||S.epoch===4||!S.people.length||evOpen||placing||(typ
  S.scCd[T.k]=S.day+(T.cd||3);let A=null,B=null,txt=null;try{A=T.A();if(A&&T.B){B=T.B(A);if(!B||B===A)A=null}if(A)txt=T.f(A,B)}catch(e){console.warn('scena',T.k,e);txt=null}
  if(!txt){S.scN=S.day+.1;return}
  S.scN=S.day+.7+Math.random()*.6;cats.push(T.cat);if(cats.length>3)cats.shift();S.scCat=cats;S.scLast={k:T.k,d:Math.floor(S.day)};
- log(txt);if(A){dayEv(A,'scena',T.k);scBubble(A,txt)}}
+ log(txt);if(S.epoch===4){try{E4Domain.record(S,'scena',txt,{settlementId:A&&A.settlementId})}catch(e){}}if(A){dayEv(A,'scena',T.k);scBubble(A,txt)}}
 {const _st=step;step=function(dt){_st(dt);try{sceneTick()}catch(e){console.warn('sceny',e)}}}
 // linijka nad człowiekiem: pierwsze zdanie, przez kilka sekund, tylko gdy widać go na ekranie
 const scBubEl=document.createElement('div');scBubEl.id='scBub';scBubEl.hidden=true;document.body.appendChild(scBubEl);let scBP=null,scBU=0;const scV=new THREE.Vector3();
 function scBubble(p,txt){if(typeof czOn!=='undefined'&&!czOn)return;scBP=p.id;scBU=performance.now()+7000;const L=txt.split(/(?<=[.!?])\s/);const t=txt.length<=150?txt:(L.find(x=>x.includes(p.name))||L[0]);scBubEl.textContent=t.length>150?t.slice(0,147)+'…':t;scBubEl.hidden=false}
-{const _mt=mapTick;mapTick=function(rdt){_mt(rdt);if(scBP===null)return;const p=S&&pById(scBP);if(!p||performance.now()>scBU||evOpen||!$('sheet').hidden){scBubEl.hidden=true;scBP=null;return}
+function scBubFrame(){if(scBP===null)return;const p=S&&pById(scBP);if(!p||performance.now()>scBU||evOpen||!$('sheet').hidden){scBubEl.hidden=true;scBP=null;return}
   scV.set(p.x,Hy(p.x,p.z)+2.3,p.z).project(cam);if(Math.abs(scV.x)>.95||Math.abs(scV.y)>.9||scV.z>1){scBubEl.style.opacity='0';return}scBubEl.style.opacity='1';
-  scBubEl.style.left=Math.round((scV.x+1)/2*innerWidth)+'px';scBubEl.style.top=Math.round((1-scV.y)/2*innerHeight)+'px'}}
+  scBubEl.style.left=Math.round((scV.x+1)/2*innerWidth)+'px';scBubEl.style.top=Math.round((1-scV.y)/2*innerHeight)+'px'}
+{const _mt=mapTick;mapTick=function(rdt){_mt(rdt);scBubFrame()}}
 {const st=document.createElement('style');st.textContent='#scBub{position:absolute;z-index:3;transform:translate(-50%,-100%);max-width:min(300px,80vw);padding:7px 11px;border-radius:12px;background:#18201ce6;border:1px solid #c9a66b77;color:var(--hi);font:14px/1.35 var(--serif);font-style:italic;pointer-events:none;box-shadow:0 3px 12px #0007;transition:opacity .4s}#scBub[hidden]{display:none}#scBub::after{content:"";position:absolute;left:50%;bottom:-6px;width:10px;height:10px;transform:translateX(-50%) rotate(45deg);background:#18201ce6;border-right:1px solid #c9a66b77;border-bottom:1px solid #c9a66b77}';document.head.appendChild(st)}
 window.__sceny={SCENY,sceneTick,nameDay};
 

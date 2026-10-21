@@ -51,7 +51,7 @@ const E4Life=(()=>{
   if(hour<.23||hour>=.9)return {kind:'sleep',text:'śpi w domu',target:atHome,until:hour<.23?day+.23:day+1.23};
   if(hour<.27)return {kind:'wash',text:'myje się przed pracą',target:point(state,settlement,person.fam,4),until:day+.27};
   if(hour>=.49&&hour<.53)return {kind:'meal',text:'je posiłek z rodziną',target:atHome,until:day+.53};
-  if(hour>=.73)return {kind:'family',text:'spędza wieczór z rodziną',target:atHome,until:day+.9};
+  if(hour>=.73){const own=environment.evening?.(state,person,time);if(own&&own.target)return {kind:'family',text:own.text,target:own.target,until:day+.9};return {kind:'family',text:'spędza wieczór z rodziną',target:atHome,until:day+.9};}   // 4.8: wieczór po swojemu
   const skill=catalog.specialties[settlement.specialization]?.skill||'rolnik',mentor=state.people.filter(p=>p.settlementId===person.settlementId&&!p.e4Transport&&p.hp>.5&&!p.ill&&p.age>=18&&p.age<72).sort((a,b)=>(b.sk[skill]||0)-(a.sk[skill]||0)||a.id-b.id)[0];
   if(hour>=.69&&hour<.73&&mentor&&(person.id===mentor.id||person.age>=8&&person.age<18))return {kind:person.id===mentor.id?'teach':'learn',skill,text:person.id===mentor.id?'przekazuje fach młodszym':'uczy się od: '+mentor.name,target:point(state,settlement,0,4),mentorId:mentor.id,until:day+.73};
   if(person.age<16||person.age>=72)return {kind:'rest',text:person.age<8?'bawi się przy domu':person.age<16?'pomaga rodzinie i bawi się':'odpoczywa przed domem',target:atHome,until:day+(hour<.49?.49:hour<.69?.69:.73)};

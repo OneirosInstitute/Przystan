@@ -53,7 +53,7 @@ const memAnniv=p=>(p.mem||[]).filter(m=>{const a=Math.floor(S.day)-m[0];return a
 function moodCalc(p){soulOf(p);const sea=seasonIdx(),w=S.weather.k,d=Math.floor(S.day);
  // podstawą jest zadowolenie z życia (p.zad: jedzenie, ciepło, dach, zdrowie, bliscy, praca, nadzieja), do tego uczucia:
  // usposobienie do świata (stała z numeru osoby), dni lepsze i gorsze, wspomnienia, pora roku, pogoda, wieczór z ludźmi
- let m=((p.zad===undefined?.65:p.zad)-.64)*1.8+((dHash(p.id,77)%21)-10)/100+(Math.random()-.5)*.16;
+ let m=((p.zad===undefined?.65:p.zad)-.64)*1.8+((dHash(p.id,77)%21)-10)/100+((dHash(p.id,d+911)%1000)/1000-.5)*.16;
  if(isAdult(p)&&p.job&&p.job!=='rob'){const c=jobCraft(p);if(c&&c===p.lub.f)m+=.1}
  if(p.eveD===d-1)m+=.05;if(p.lub.p===sea)m+=.05;
  if(['rain','storm','fog','burza'].includes(w)){if(usp(p,'zrzeda'))m-=.06;if(p.lub.l==='burza'&&(w==='storm'||w==='burza'))m-=.12}
@@ -94,7 +94,7 @@ function duszaHTML(p){if(!S||!p)return'';soulOf(p);const d=Math.floor(S.day);
 function agoTxt(a){if(a<=0)return'dziś';if(a===1)return'wczoraj';if(a<YEAR)return a+' dni temu';const y=Math.floor(a/YEAR);return y===1?'rok temu':y+' '+(y%10>=2&&y%10<=4&&(y%100<10||y%100>=20)?'lata':'lat')+' temu'}
 function memText(p,m){const k=m[1],r=m[2];switch(k){
  case'slub':return`Ślub${r?' z: '+r:''}`;case'dziecko':return`Narodziny dziecka${r?': '+r:''}`;case'smierc':return`Śmierć: ${r||'ktoś bliski'}`;
- case'dom':return`Własny dom (${(BD[r]&&BD[r].n||'chata').toLowerCase()})`;case'rana':return'Rana';case'budowa':return`Przy budowie: ${(BD[r]&&BD[r].n||'budowla').toLowerCase()}`;
+ case'dom':return r&&/^nowy dom/.test(r)?r.replace(/^./,x=>x.toUpperCase()):`Własny dom (${(BD[r]&&BD[r].n||'chata').toLowerCase()})`;case'rana':return'Rana';case'budowa':return`Przy budowie: ${(BD[r]&&BD[r].n||'budowla').toLowerCase()}`;
  case'wyprawa':return`Wyprawa${r?': '+r:''}`;case'mistrz':return`Mistrzostwo: ${CN[r]||r}`;case'zdobycz':return'Wielka zdobycz';case'pozar':return'Pożar';case'sen':return'Sen, który się sprawdził';
  case'obrzed':return`Obrzęd${r?': '+r:''}`;case'zguba':return'Zgubił się w lesie';case'klotnia':return`Kłótnia${r?' z: '+r:''}`;case'zjawa':return`${r||'Zjawa'}`;case'dar':return'Dar od kogoś';
  case'przyjazn':return`Przyjaźń${r?': '+r:''}`;case'radosc':return r?r.replace(/^./,x=>x.toUpperCase()):'Dobra chwila';case'zalot':return`Zaloty${r?': '+r:''}`;case'wstyd':return r?'Wstyd: '+r:'Wstyd';case'strach':return r?'Strach: '+r:'Strach';case'zgoda':return`Zgoda${r?' z: '+r:''}`;default:return k}}
