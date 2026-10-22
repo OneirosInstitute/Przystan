@@ -579,7 +579,7 @@ function go(person,tile,after,target){
    const slot=[[0,0],[1,0],[0,1],[-1,0],[0,-1],[1,1],[-1,-1]].map(([x,z])=>[tile[0]+x,tile[1]+z]).find(([x,z])=>x>=0&&z>=0&&x<N&&z<N&&walk[z*N+x]&&!taken.some(([a,b])=>a===x&&b===z));if(slot)tile=slot;
   }
   // 4.6.0-rc.4: kto stoi na polu bez przejścia (woda przy brzegu, płot), najpierw schodzi na najbliższe wolne pole
-  const start=wadeOut(tileOf(person.x,person.z));route=astar(start[0],start[1],tile[0],tile[1]);
+  let start=wadeOut(tileOf(person.x,person.z));if(!okReach(start[0],start[1])){const q=nearReach(start[0],start[1],6);if(q)start=q}route=astar(start[0],start[1],tile[0],tile[1]);
   if(!route){if(target?.type)target.bad=S.t+40;person.blocked={code:'route',reason:'Brak drogi do celu',since:person.blocked?.since??S.t,attempts:(person.blocked?.attempts||0)+1};return false;}
  }
  if(managed&&!route.length&&Math.hypot(person.x-tcx(tile[0]),person.z-tcx(tile[1]))>.01)route=[tile];
@@ -880,16 +880,24 @@ function legacyDayCore(){
 // a strażnik budzi tych, którzy bez powodu długo stoją w miejscu (zapis zachowuje wtedy ślad do sprawdzenia).
 function step(dt){const before=Math.floor(S.day);S.day+=dt/DAY;S.t+=dt;navBeginStep();try{for(const p of S.people){try{stepPerson(p,dt)}catch(e){personFault(p,e)}}}finally{navEndStep()}
  try{stuckWatch()}catch(e){}stepHerds(dt);fireStep(dt);if(Math.floor(S.day)>before)newDay()}
-function nearReach(i,j,R){if(walk[j*N+i]&&reach[j*N+i])return[i,j];for(let r=1;r<=(R||10);r++)for(let dy=-r;dy<=r;dy++)for(let dx=-r;dx<=r;dx++){if(Math.max(Math.abs(dx),Math.abs(dy))!==r)continue;const x=i+dx,y=j+dy;if(x>=0&&y>=0&&x<N&&y<N&&walk[y*N+x]&&reach[y*N+x])return[x,y]}return null}
+// 4.9.0-rc.2: dostępność liczona tak jak wyznaczanie drogi (bez przejścia na ukos między dwoma polami bez przejścia).
+// Mapa ze świata (reach) dopuszczała ten skrót, więc na plaży były pola „dostępne”, z których nie dało się wyjść.
+let reachA=null,reachRev=-2,reachT=-1e9;
+function navReach(){const now=S?S.t:0;if(reachA&&reachRev===walkRevision&&Math.abs(now-reachT)<120)return reachA;reachT=now;const A=reachA&&reachA.length===N*N?reachA:new Uint8Array(N*N);A.fill(0);const st0=nearestWalk(camp.i,camp.j+1);
+ if(st0){const stk=[st0[1]*N+st0[0]];A[stk[0]]=1;while(stk.length){const k=stk.pop(),x=k%N,y=(k/N)|0;for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){if(!dx&&!dy)continue;const a=x+dx,b=y+dy;if(a<0||b<0||a>=N||b>=N)continue;const n=b*N+a;
+   if(A[n]||!walk[n])continue;if(dx&&dy&&(!walk[y*N+a]||!walk[b*N+x]))continue;A[n]=1;stk.push(n)}}}
+ reachA=A;reachRev=walkRevision;return A}
+function okReach(i,j){const k=j*N+i;return !!(walk[k]&&reach[k]&&navReach()[k])}
+function nearReach(i,j,R){if(okReach(i,j))return[i,j];for(let r=1;r<=(R||10);r++)for(let dy=-r;dy<=r;dy++)for(let dx=-r;dx<=r;dx++){if(Math.max(Math.abs(dx),Math.abs(dy))!==r)continue;const x=i+dx,y=j+dy;if(x>=0&&y>=0&&x<N&&y<N&&okReach(x,y))return[x,y]}return null}
 function personReset(p,why){try{release(p)}catch(e){}if(p.haulB&&typeof haulEnd==='function'){try{haulEnd(p)}catch(e){}}
  p.path=null;p.after=null;p.tgt=null;p.workKind=null;p.state='idle';p.wait=.3+Math.random()*.5;p.cerA=0;p.chatT=0;delete p.blocked;
- const t=tileOf(p.x,p.z);if(!walk[t[1]*N+t[0]]||!reach[t[1]*N+t[0]]){const q=nearReach(t[0],t[1],12)||nearestWalk(camp.i,camp.j+1);if(q){p.x=tcx(q[0]);p.z=tcx(q[1])}}
+ const t=tileOf(p.x,p.z);if(!okReach(t[0],t[1])){const q=nearReach(t[0],t[1],12)||nearestWalk(camp.i,camp.j+1);if(q){p.x=tcx(q[0]);p.z=tcx(q[1])}}
  S.fault=S.fault||[];S.fault.push([Math.round(S.day*100)/100,p.id,why]);if(S.fault.length>12)S.fault.shift()}
 function personFault(p,e){p.faultN=(p.faultN||0)+1;if(p.faultN<=3||p.faultN%200===0)console.warn('Osoba '+p.name+': '+(e&&e.message),e);personReset(p,'błąd: '+String(e&&e.message||e).slice(0,120)+' @ '+String(e&&e.stack||'').split('\n')[1]?.trim().slice(0,80))}
 let stuckI=0;
 function stuckWatch(){const L=S.people;if(!L.length)return;stuckI=(stuckI+1)%L.length;const p=L[stuckI];
  if(Math.hypot((p.stX??1e9)-p.x,(p.stZ??1e9)-p.z)>.25||p.state==='work'||p.state==='sleep'||p.state==='eve'||p.state==='away'||p.lost||!isWork()||(typeof cerActive==='function'&&cerActive())){p.stX=p.x;p.stZ=p.z;p.stT=S.t;return}
- if(S.t-(p.stT||S.t)<DAY*.12)return;p.stT=S.t;const t=tileOf(p.x,p.z),bad=!walk[t[1]*N+t[0]]||!reach[t[1]*N+t[0]];
+ if(S.t-(p.stT||S.t)<DAY*.12)return;p.stT=S.t;const t=tileOf(p.x,p.z),bad=!okReach(t[0],t[1]);
  if(bad||p.blocked||p.cerA||(p.state==='move'&&!(p.path&&p.path.length)))personReset(p,bad?'stał poza drogą':'stał bez ruchu')}
 function stepHerds(dt){S.herds.forEach((h,k)=>{if(h.calm>S.t)return;const dx=h.tx-h.x,dz=h.tz-h.z,d=Math.hypot(dx,dz);
  if(d<.3){if(Math.random()<dt*.15){const def=herdsDef[k];const a=Math.random()*6.28,r=Math.random()*(h.type==='wilk'?16:9);const tx=tcx(def.i)+Math.cos(a)*r*(h.type==='foka'?.35:1),tz=tcx(def.j)+Math.sin(a)*r*(h.type==='foka'?.35:1);const ti=tileOf(tx,tz),tk=ti[1]*N+ti[0];if(walk[tk]&&(h.type!=='foka'||beach[tk])){h.tx=tx;h.tz=tz}}}

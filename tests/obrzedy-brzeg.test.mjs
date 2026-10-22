@@ -37,3 +37,17 @@ test('one broken person cannot stop the whole village, and a half-saved ceremony
    return JSON.stringify({on:S.cer.on,cerA:S.people.filter(p=>p.cerA).length,moved:S.people.filter((p,i)=>Math.hypot(p.x-a[i][0],p.z-a[i][1])>.3).length,n:S.people.length})})()`));
  assert.equal(after.on,0);assert.equal(after.cerA,0);assert.ok(after.moved>=after.n/2,'people walk away: '+after.moved+' of '+after.n);
 });
+
+// 4.9.0-rc.2: na plaży bywają pola, do których świat liczył dojście na ukos między dwoma polami bez przejścia.
+// Kto stanął tam po obrzędzie, nie mógł wyznaczyć drogi ("Brak drogi do celu") i strażnik go nie ruszał.
+test('people left on a beach pocket reachable only across a corner walk back to work',()=>{
+ const runtime=createGame({search:'?seed=2207'});const E=s=>runtime.evaluate(s);runtime.game.startGame(true);E("closeSheet();S.evT=1e9;openEvent=function(){}");
+ const pk=JSON.parse(E(`(()=>{const A=navReach();const L=[];for(let k=0;k<N*N;k++)if(reach[k]&&walk[k]&&!A[k])L.push([k%N,(k/N)|0]);return JSON.stringify(L)})()`));
+ assert.ok(pk.length>0,'the island has such pockets');
+ E(`(()=>{const L=${JSON.stringify(pk)};S.day=Math.floor(S.day)+.38;S.t=S.day*DAY;S.people.forEach((p,i)=>{const t=L[i%L.length];p.x=tcx(t[0]);p.z=tcx(t[1]);p.path=null;p.state='idle';p.wait=0})})()`);
+ const before=E(`S.people.filter(p=>{const t=tileOf(p.x,p.z);return !navReach()[t[1]*N+t[0]]}).length`);assert.ok(before>=S0(E),'everyone starts in the pocket');
+ E('(()=>{for(let n=0;n<DAY*.35*4;n++)step(1/4)})()');
+ const r=JSON.parse(E(`JSON.stringify({pocket:S.people.filter(p=>{const t=tileOf(p.x,p.z);return !navReach()[t[1]*N+t[0]]&&p.state!=='sleep'}).length,blocked:S.people.filter(p=>p.blocked&&/Brak drogi/.test(p.blocked.reason||'')).length,n:S.people.length})`));
+ assert.equal(r.pocket,0,'nobody is left in the pocket');assert.equal(r.blocked,0,'nobody waits for a route');
+});
+function S0(E){return E('S.people.length')}

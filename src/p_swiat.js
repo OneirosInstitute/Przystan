@@ -38,7 +38,7 @@ function cerPos(p,C){const n=C.slots.length,i=C.slots.indexOf(p.id),t=clock;cons
  if(C.k==='wesele'&&C.ids.includes(p.id)){const s=C.ids.indexOf(p.id)?1:-1;return{x:cx+s*.55+Math.sin(t*1.3)*.1,z:cz+1.15,dir:s>0?-Math.PI/2:Math.PI/2,move:false}}
  if(C.k==='dziady'){const a=Math.PI*(.15+.7*(i/Math.max(1,n-1)));const r=2.4+(i%2)*.7;const x=cx+Math.cos(a)*r,z=cz-1.4+Math.sin(a)*r;return{x,z,dir:Math.atan2(cx-x,cz-1.4-z),move:false}}
  if(C.k==='marzanna'){const base=C.land===undefined?Math.PI/2:C.land,a=base+Math.PI*(-.32+.64*(i/Math.max(1,n-1))),r=2.2+(i%2)*.8;let x=cx+Math.cos(a)*r,z=cz+Math.sin(a)*r;
-  const t=tileOf(x,z);if(!walk[t[1]*N+t[0]]||!reach[t[1]*N+t[0]]){const s=nearReach(t[0],t[1],8)||nearestWalk(t[0],t[1]);if(s){x=tcx(s[0]);z=tcx(s[1])}}return{x,z,dir:Math.atan2(cx-x,cz-z),move:false}}
+  const t=tileOf(x,z);if(!okReach(t[0],t[1])){const s=nearReach(t[0],t[1],8)||nearestWalk(t[0],t[1]);if(s){x=tcx(s[0]);z=tcx(s[1])}}return{x,z,dir:Math.atan2(cx-x,cz-z),move:false}}
  const outer=p.sex==='m'&&p.age>=12||i%3===2;const r=outer?2.9+n*.03:1.9+n*.02,w=outer?-.32:.42;const a=(i/n)*6.283+t*w;return{x:cx+Math.cos(a)*r,z:cz+Math.sin(a)*r,dir:a+(w>0?0:Math.PI),move:true}}
 {const _sp=stepPerson;stepPerson=function(p,dt){const C=S.cer;if(C&&C.on&&cerActive()&&C.slots&&C.slots.includes(p.id)&&cerIn(p)){const q=cerPos(p,C);
   if(!p.cerA){const dx=q.x-p.x,dz=q.z-p.z,d=Math.hypot(dx,dz);if(d<.6){p.cerA=1}else{const st=Math.min(d,(isChild(p)?1.8:2.5)*dt);p.x+=dx/d*st;p.z+=dz/d*st;p.dir=Math.atan2(dx,dz);p.state='move';p.path=null;p.act='idzie na '+CER_N[C.k].toLowerCase();return}}
