@@ -1,6 +1,8 @@
-# Przystań 4.9.0-rc.3
+# Przystań 4.9.0-rc.4
 
 Spokojna gra o rozbitkach, którzy budują osadę na dzikiej wyspie (PWA, Three.js).
+
+4.9.0-rc.4: nowy ekran startowy. Tłem jest żywa wyspa: kamera powoli krąży nad wrakiem, plażą i morzem. U góry herb z dwuwarstwowej wycinanki (łódź, z której wyrasta drzewo życia, dwa ptaki, fale), który przy wejściu rozkłada się od zgięcia. Na dole jeden przycisk; przy zapisanej grze nazwa osady, rok, pora roku, liczba ludzi i zdanie z ostatniego wieczoru przy ogniu. Poziom trudności, wyspa, wyzwanie i starty od epok II i III są w „Inne początki”.
 
 4.9.0-rc.3: poprawka do 4.9.0-rc.2 — kto stoi na odciętym polu plaży, schodzi z niego od razu (na ukos, tak jak tam wszedł), także wieczorem i nocą; wcześniej szedł spać na piasku, a rano „wracał” na brzeg. Drogi z zewnątrz nadal nie prowadzą w takie miejsca.
 
@@ -40,6 +42,6 @@ Spokojna gra o rozbitkach, którzy budują osadę na dzikiej wyspie (PWA, Three.
 
 RC11 naprawił zatory ludzi z RC9–RC10 i dodał: drogi wydeptywane z ruchu i utwardzane przez budowniczych (Budowa → Drogi), rozbudowę domów zawsze z przyciskiem i listą wymagań, dymnik nad wiatą, zorzę zakotwiczoną w świecie oraz po trzy zadania główne na epokę w zakładce Zadania.
 
-[Wydanie 4.9.0-rc.3](docs/WYDANIE_4.9.0_RC3.md) · [Wydanie 4.9.0-rc.2](docs/WYDANIE_4.9.0_RC2.md) · [Wydanie 4.9.0-rc.1](docs/WYDANIE_4.9.0_RC1.md) · [Projekt: budynki z charakterem](docs/PROJEKT_BUDYNKI.md) · [Wydanie 4.8.0-rc.4](docs/WYDANIE_4.8.0_RC4.md) · [Wydanie 4.8.0-rc.3](docs/WYDANIE_4.8.0_RC3.md) · [Wydanie 4.8.0-rc.2](docs/WYDANIE_4.8.0_RC2.md) · [Wydanie 4.8.0-rc.1](docs/WYDANIE_4.8.0_RC1.md) · [Projekt: życie osadników](docs/PROJEKT_ZYCIE_OSADNIKOW.md) · [Wydanie 4.7.0-rc.1](docs/WYDANIE_4.7.0_RC1.md) · [Wydanie 4.6.0-rc.1](docs/WYDANIE_4.6.0_RC1.md) · [Projekt: przysiółek → folwark](docs/PROJEKT_PRZYSIOLEK_FOLWARK.md) · [Wydanie 4.5.0-rc.1](docs/WYDANIE_4.5.0_RC1.md) · [Wydanie 4.4.0-rc.1](docs/WYDANIE_4.4.0_RC1.md) · [Wydanie 4.3.0-rc.1](docs/WYDANIE_4.3.0_RC1.md) · [Wydanie 4.2.0-rc.1](docs/WYDANIE_4.2.0_RC1.md) · [Wydanie 4.1.0-rc.1](docs/WYDANIE_4.1.0_RC1.md) · [Wydanie RC11](docs/WYDANIE_4.0.0_RC11.md) · [Projekt wyspy, złóż i menu](docs/PROJEKT_WYSPY_5.md) · [Księga gry](KSIEGA.md)
+[Wydanie 4.9.0-rc.4](docs/WYDANIE_4.9.0_RC4.md) · [Wydanie 4.9.0-rc.3](docs/WYDANIE_4.9.0_RC3.md) · [Wydanie 4.9.0-rc.2](docs/WYDANIE_4.9.0_RC2.md) · [Wydanie 4.9.0-rc.1](docs/WYDANIE_4.9.0_RC1.md) · [Projekt: budynki z charakterem](docs/PROJEKT_BUDYNKI.md) · [Wydanie 4.8.0-rc.4](docs/WYDANIE_4.8.0_RC4.md) · [Wydanie 4.8.0-rc.3](docs/WYDANIE_4.8.0_RC3.md) · [Wydanie 4.8.0-rc.2](docs/WYDANIE_4.8.0_RC2.md) · [Wydanie 4.8.0-rc.1](docs/WYDANIE_4.8.0_RC1.md) · [Projekt: życie osadników](docs/PROJEKT_ZYCIE_OSADNIKOW.md) · [Wydanie 4.7.0-rc.1](docs/WYDANIE_4.7.0_RC1.md) · [Wydanie 4.6.0-rc.1](docs/WYDANIE_4.6.0_RC1.md) · [Projekt: przysiółek → folwark](docs/PROJEKT_PRZYSIOLEK_FOLWARK.md) · [Wydanie 4.5.0-rc.1](docs/WYDANIE_4.5.0_RC1.md) · [Wydanie 4.4.0-rc.1](docs/WYDANIE_4.4.0_RC1.md) · [Wydanie 4.3.0-rc.1](docs/WYDANIE_4.3.0_RC1.md) · [Wydanie 4.2.0-rc.1](docs/WYDANIE_4.2.0_RC1.md) · [Wydanie 4.1.0-rc.1](docs/WYDANIE_4.1.0_RC1.md) · [Wydanie RC11](docs/WYDANIE_4.0.0_RC11.md) · [Projekt wyspy, złóż i menu](docs/PROJEKT_WYSPY_5.md) · [Księga gry](KSIEGA.md)
 
 Budowanie: `npm run build`. Testy: `npm run test:install`, `npm run test:runtime`, pełna pula `npm test`. Sprawdzenie paczki: `node tools/verify-package.cjs`.
