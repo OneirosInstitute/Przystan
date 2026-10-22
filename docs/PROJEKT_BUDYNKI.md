@@ -70,6 +70,17 @@ Istniejące dobudówki (EXT) pozostają i są dokładane na wierzch.
 - Zdobienia pochodzą ze słowiańskiego zestawu: koziołki na szczycie, słoneczka, rozety, wycinane nadokienniki.
 - Dwie chaty obok siebie nigdy nie są identyczne.
 
+## Decyzje (21.10.2026)
+1. Kolejność A → B → C → D → E, wydawane paczka po paczce.
+2. Styl epoki zmienia się na budynku dopiero po remoncie lub ulepszeniu.
+3. Wielkie budynki mogą zajmować więcej miejsca. Od początku mają odpowiednio duży plac, a próba postawienia czegoś za blisko pokazuje czerwone pole budowy i jest niemożliwa.
+4. Animacje tylko na grafice wysokiej i ultra.
+5. Szczególnie: kurnik (mały i brzydki), warsztaty i rzemieślnicy (wszystko podobne), barć (prawie niewidoczna), mielerz.
+
+## Paczki
+- 4.9.0-rc.1: A1, sylwetki rzemiosł (22 budynki, w tym kurnik, barć i mielerz).
+- następna: A2, wielkie budynki na większym placu, z czerwonym polem budowy przy kolizji.
+
 ## Wydajność i bateria
 - Do 3–4 tys. trójkątów na budynek z bliska. Z daleka drobiazgi znikają, bo LOD działa tak jak przy trawie.
 - Wszystko łączone według materiału, więc liczba wywołań rysowania nie rośnie.
