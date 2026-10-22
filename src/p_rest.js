@@ -579,7 +579,7 @@ function go(person,tile,after,target){
    const slot=[[0,0],[1,0],[0,1],[-1,0],[0,-1],[1,1],[-1,-1]].map(([x,z])=>[tile[0]+x,tile[1]+z]).find(([x,z])=>x>=0&&z>=0&&x<N&&z<N&&walk[z*N+x]&&!taken.some(([a,b])=>a===x&&b===z));if(slot)tile=slot;
   }
   // 4.6.0-rc.4: kto stoi na polu bez przejścia (woda przy brzegu, płot), najpierw schodzi na najbliższe wolne pole
-  let start=wadeOut(tileOf(person.x,person.z));if(!okReach(start[0],start[1])){const q=nearReach(start[0],start[1],6);if(q)start=q}route=astar(start[0],start[1],tile[0],tile[1]);
+  const start=wadeOut(tileOf(person.x,person.z));route=astar(start[0],start[1],tile[0],tile[1]);
   if(!route){if(target?.type)target.bad=S.t+40;person.blocked={code:'route',reason:'Brak drogi do celu',since:person.blocked?.since??S.t,attempts:(person.blocked?.attempts||0)+1};return false;}
  }
  if(managed&&!route.length&&Math.hypot(person.x-tcx(tile[0]),person.z-tcx(tile[1]))>.01)route=[tile];
@@ -669,7 +669,7 @@ function onArrive(p){const a=p.after;p.after=null;p.wt=0;
  else p.state='idle'}
 function movePerson(p,dt){
  if(p.state==='move'&&p.path&&p.path.length){
-  const validSegment=(from,to)=>{const [i,j]=tileOf(from.x,from.z),[x,z]=tileOf(to.x,to.z);return x>=0&&z>=0&&x<N&&z<N&&walk[z*N+x]&&(i===x||j===z||!walk[j*N+i]||(walk[j*N+x]&&walk[z*N+i]));};   // 4.6.0-rc.4: z pola bez przejścia wolno zejść na wolne
+  const validSegment=(from,to)=>{const [i,j]=tileOf(from.x,from.z),[x,z]=tileOf(to.x,to.z);return x>=0&&z>=0&&x<N&&z<N&&walk[z*N+x]&&(i===x||j===z||!walk[j*N+i]||(walk[j*N+x]&&walk[z*N+i])||!okReach(i,j));};   // 4.9.0-rc.2: z odciętego pola wolno zejść na ukos   // 4.6.0-rc.4: z pola bez przejścia wolno zejść na wolne
   if(!validSegment(p,p.path[0])||(p.routeRevision!==walkRevision&&p.path.some((point,index)=>index>0&&!validSegment(p.path[index-1],point)))){
    const goal=p.routeGoal||tileOf(p.path.at(-1).x,p.path.at(-1).z);const start=wadeOut(tileOf(p.x,p.z));const replacement=astar(start[0],start[1],goal[0],goal[1]);
    if(!replacement){release(p);p.path=null;p.state='idle';p.wait=3;p.blocked={reason:'Droga zamknięta — odblokuj przejście',since:p.blocked?.since??S.t,attempts:(p.blocked?.attempts||0)+1};p.act=p.blocked.reason;return true;}

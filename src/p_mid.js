@@ -164,6 +164,8 @@ function hpush(k){heap.push(k);let i=heap.length-1;while(i>0){const p=(i-1)>>1;i
 function hpop(){const top=heap[0],last=heap.pop();if(heap.length){heap[0]=last;let i=0;for(;;){const l=i*2+1,r=l+1;let m=i;if(l<heap.length&&AF[heap[l]]<AF[heap[m]])m=l;if(r<heap.length&&AF[heap[r]]<AF[heap[m]])m=r;if(m===i)break;const t=heap[m];heap[m]=heap[i];heap[i]=t;i=m}}return top}
 function astar(sx,sy,gx,gy){
  if(sx===gx&&sy===gy)return[];stamp++;heap.length=0;
+ // 4.9.0-rc.2: kto stoi na polu odciętym od wsi (wejście tylko na ukos między przeszkodami), może tak samo z niego zejść; wejść tak nie można
+ const RA=(typeof S!=='undefined'&&S&&reach&&S.epoch!==4)?navReach():null;
  const S0=sy*N+sx,G=gy*N+gx;AS[S0]=stamp;AG[S0]=0;AF[S0]=0;AC[S0]=-1;hpush(S0);
  const hf=k=>{const dx=Math.abs(k%N-gx),dy=Math.abs(((k/N)|0)-gy);return Math.max(dx,dy)+.414*Math.min(dx,dy)};
  let it=0;
@@ -172,7 +174,7 @@ function astar(sx,sy,gx,gy){
   const cx=cur%N,cy=(cur/N)|0;
   for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){if(!dx&&!dy)continue;const nx=cx+dx,ny=cy+dy;if(nx<0||ny<0||nx>=N||ny>=N)continue;const nk=ny*N+nx;
    if(AX[nk]===stamp||(!walk[nk]&&nk!==G))continue;
-   if(dx&&dy&&(!walk[cy*N+nx]||!walk[ny*N+cx]))continue;
+   if(dx&&dy&&(!walk[cy*N+nx]||!walk[ny*N+cx])&&!(RA&&!RA[cur]))continue;
    const ng=AG[cur]+(dx&&dy?1.414:1)+(slope(nx,ny)>1.1?.7:0);
    if(AS[nk]!==stamp||ng<AG[nk]){AS[nk]=stamp;AG[nk]=ng;AC[nk]=cur;AF[nk]=ng+hf(nk)*1.05;hpush(nk)}}}
  return null}

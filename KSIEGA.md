@@ -1243,6 +1243,7 @@ W Ludziach (Praca i Mieszkańcy) wyszukiwarka szuka po imieniu, fachu albo budyn
 | 1.8.3 | poprawka: rozbudowa domu (szałas w chatę, chata w dom) nie zabiera już rodzinie spiżarki; w czasie budowy zapas zostaje w starym domu w granicach jego pojemności |
 | 1.9 | budynki z charakterem: każdy budynek inny (ściany, dachy, spadek, okap), koniki, malowane okiennice, ganki, przybudówki, garnki na płocie, zioła pod okapem, szyldy rzemiosł, wyraźniejsza kuźnia, łaźnia i chata wiecowa |
 | 1.10 | wykonanie budynków: surowe, porządne i mistrzowskie, wyraźnie widoczne po rozbudowie (wielkość, podmurówka, dach, okiennice, obramienia okien, kwiaty, płotek, szyld); karta budynku pokazuje wykonanie i trwałość; odmiany szałasów, studni, zagród i spiżarni |
+| 4.9.0-rc.3 | poprawka: z odciętego pola plaży schodzi się od razu, także nocą (wcześniej sen na piasku i powrót na brzeg rano) |
 | 4.9.0-rc.2 | poprawka: ludzie nie utykają na plaży po Marzannie (pola dostępne tylko na ukos między przeszkodami) |
 | 4.9.0-rc.1 | sylwetki rzemiosł: 22 warsztaty i budynki gospodarcze z własnym znakiem rozpoznawczym (beczki, piece, skóry, sągi, żuraw, kołowrót, sery, płótna, tłocznia, kurnik na palach, kłody bartne, mielerz z dymnikami) |
 | 4.8.0-rc.4 | poprawka: czarne budynki na telefonie po resecie GPU — faktury trzymane w zwykłej pamięci i rysowane na nowo, gdy Chrome odda płótno |

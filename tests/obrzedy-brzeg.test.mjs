@@ -51,3 +51,14 @@ test('people left on a beach pocket reachable only across a corner walk back to 
  assert.equal(r.pocket,0,'nobody is left in the pocket');assert.equal(r.blocked,0,'nobody waits for a route');
 });
 function S0(E){return E('S.people.length')}
+
+test('in the evening people on such a beach pocket go home for the night instead of sleeping on the sand',()=>{
+ const runtime=createGame({search:'?seed=2207'});const E=s=>runtime.evaluate(s);runtime.game.startGame(true);E("closeSheet();S.evT=1e9;openEvent=function(){}");
+ const pk=JSON.parse(E(`(()=>{const A=navReach();const L=[];for(let k=0;k<N*N;k++)if(reach[k]&&walk[k]&&!A[k])L.push([k%N,(k/N)|0]);return JSON.stringify(L)})()`));
+ E(`(()=>{const L=${JSON.stringify(pk)};S.day=Math.floor(S.day)+.7;S.t=S.day*DAY;S.people.forEach((p,i)=>{const t=L[i%L.length];p.x=tcx(t[0]);p.z=tcx(t[1]);p.path=null;p.state='idle';p.wait=0})})()`);
+ E('(()=>{for(let n=0;n<DAY*.15*4;n++)step(1/4)})()');
+ assert.equal(E(`S.people.filter(p=>{const t=tileOf(p.x,p.z);return !navReach()[t[1]*N+t[0]]}).length`),0,'everyone left the pocket before night');
+ // droga z zewnątrz nigdy nie prowadzi w taką kieszeń
+ const into=E(`(()=>{const L=${JSON.stringify(pk)};const s=nearestWalk(camp.i,camp.j+1);let n=0;for(const t of L.slice(0,6)){const r=astar(s[0],s[1],t[0],t[1]);if(r&&r.length>1)n++}return n})()`);
+ assert.equal(into,0,'nobody is routed into the pocket');
+});
