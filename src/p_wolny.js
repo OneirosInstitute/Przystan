@@ -56,7 +56,7 @@ function wolSwap(){if(!S||S.epoch===4)return;const d=Math.floor(S.day);let done=
   const B=S.people.find(b=>b!==a&&b.job==='wb'&&isAdult(b)&&jobCraft(b)===a.lub.f&&b.lub&&b.lub.f!==a.lub.f&&((b.lub.f===ca)||((a.sk[a.lub.f]||0)>=(b.sk[a.lub.f]||0)-1&&(b.sk[ca]||0)>=(a.sk[ca]||0)-1)));
   if(!B)continue;const wa=a.wb,wb=B.wb,ba=bById(wa),bb=bById(wb);if(!ba||!bb)continue;
   release(a);release(B);a.path=B.path=null;a.state=B.state='idle';a.wb=wb;B.wb=wa;a.niech=0;B.niech=0;done++;memAdd(a,'radosc','praca, którą lubi');
-  log(`Zamiana przy pracy: ${a.name} ${gw(a,'przechodzi','przechodzi')} do budynku ${BD[bb.kind].n.toLowerCase()} (${CN[a.lub.f]}, lubi to), a ${B.name} na ${gw(B,'jego','jej')} miejsce: ${BD[ba.kind].n.toLowerCase()}. Obsada budynków się nie zmienia.`)}}
+  log(`Zamiana przy pracy: ${a.name} przechodzi do pracy: ${BD[bb.kind].n.toLowerCase()} (${CN[a.lub.f]}, lubi to), a ${B.name} na ${gw(a,'jego','jej')} miejsce: ${BD[ba.kind].n.toLowerCase()}. Obsada budynków się nie zmienia.`)}}
 {const _kd=kozDaily;kozDaily=function(){_kd();try{wolSwap();wolEveDaily()}catch(e){console.warn('wolny',e)}}}
 // wspólny wieczór zbliża: goście i gospodarze, przyjaciele przy jednym ogniu
 function wolEveDaily(){const d=Math.floor(S.day)-1;

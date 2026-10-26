@@ -65,7 +65,7 @@ Object.assign(ODK_WHERE,{kopalnia:'kopalnia musi stać na odkrytym złożu rudy 
    if(rem<=0&&!b.zlEx){b.zlEx=1;log(`${BD[b.kind].n} w miejscu ${odkName(o)}: warstwy, do których sięga, są wyczerpane.${R.lay[R.lay.length-1]<z.length-1?' Głębiej jest jeszcze surowiec: potrzebny szyb.':''}`);toast(BD[b.kind].n+': złoże wyczerpane')}
    else if(!b.zlWarn&&rem<1500&&rem<(o.L||ZL[o.t].L)[0]*.3){b.zlWarn=1;log(`${BD[b.kind].n} w miejscu ${odkName(o)}: zostało ok. ${Math.round(rem)} porcji. Warto szykować następną warstwę albo inne złoże.`)}}}}catch(e){console.warn(e)}return x}}
 {const _pj=planJob;planJob=function(p){if(p.job==='wb'&&S){const b=bById(p.wb);if(b&&ZL_B[b.kind]&&b.kind!=='odkrywka'&&bDone(b)){const o=zlOf(b);
-   if(o&&zlLeft(b)<=0){p.act='złoże wyczerpane — potrzebny głębszy szyb albo inne złoże';return false}
+   if(o&&zlLeft(b)<=0){p.act='złoże wyczerpane: potrzebny głębszy szyb albo inne złoże';return false}
    if(!o&&b.kind!=='torfowisko'){p.act='budynek nie stoi na odkrytym złożu';return false}}}return _pj(p)}}
 // ---------- zarys złoża: paliki dookoła, w kolorze surowca ----------
 const ZLG=new THREE.Group();scene.add(ZLG);const ZLC={wegiel:0x2a2a2e,torf:0x5a3e26,rudne:0x9a4a2a,lom:0x9a9a94,glinisko:0xd8c8a8};

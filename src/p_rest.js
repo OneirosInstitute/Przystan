@@ -546,7 +546,7 @@ function lvUp(p,c,lv){log(p.name+' awansuje: '+CN[c]+' '+lv+'.')}
 function gainXp(p,c,dt){let m=1;p.mentor=null;p.worked=1;
  for(const q of S.people){if(q!==p&&q.wb===p.wb&&q.job===p.job&&isAdult(q)&&q.state==='work'&&q.hp>.5&&Math.hypot(q.x-p.x,q.z-p.z)<=3&&q.sk[c]>p.sk[c]&&q.sk[c]>=2&&(!p.mentor||q.sk[c]>p.mentor.sk[c]))p.mentor=q}
  if(p.mentor)m=(p.mentor.trait==='Nauczyciel'?2.6:2)*(tech('n_kron')?1.25:1)*(tech('n_szkola')?1.5:1);if(law('npracy'))m*=1.2;if(p.trait==='Dociekliwy')m*=1.25;if(S.offCraft===c&&offHolder('mistrz')&&offHolder('mistrz')!==p)m*=1.25;techXp(DOMC[c],dt*.09);
- const Lv=p.sk[c];const masterOf=Object.keys(CN).filter(q=>p.sk[q]>=3).length;if(Lv===2&&masterOf>=3){p.xp[c]=Math.min(p.xp[c]+dt*m,LVL[2]-1);if(!p.capLog){p.capLog=1;log(p.name+' jest mistrzem w trzech fachach. Na czwarty nie starczy już życia.')}return}
+ const Lv=p.sk[c];const masterOf=Object.keys(CN).filter(q=>p.sk[q]>=3).length;if(Lv===2&&masterOf>=3){p.xp[c]=Math.min(p.xp[c]+dt*m,LVL[2]-1);if(!p.capLog){p.capLog=1;log(p.name+' jest '+gw(p,'mistrzem','mistrzynią')+' w trzech fachach. Na czwarty nie starczy już życia.')}return}
  p.xp[c]+=dt*m;if(Lv<5&&p.xp[c]>=LVL[Lv]){p.sk[c]=Lv+1;lvUp(p,c,Lv+1);
   if(p.mentor&&p.mentor.sk[c]>=Lv+1&&Lv+1>=2&&(S.bonus[c]||0)<.3&&Math.random()<.2){S.bonus[c]=(S.bonus[c]||0)+.06;log(p.name+' wpada na ulepszenie w fachu '+CN[c]+'. Wszyscy pracują tym szybciej.');toast('Pomysł ucznia: '+CN[c]+' idzie sprawniej')}}}
 function inRange(n,b){const c=bCenter(b),r=rOf(b);return Math.hypot(n.x-c.x,n.z-c.z)<=r}
@@ -776,7 +776,7 @@ function newName(sex){const pool=NAMES[sex];const used=new Set(S.people.map(p=>p
 function killPerson(p,why){S.people=S.people.filter(q=>q!==p);release(p);if(p.pair!==null){const q=pById(p.pair);if(q)q.pair=null}
  removePersonMesh(p.id);if(selId===p.id)select(null);S.died++;S.dis=clamp((S.dis||0)+(law('cmentarz')?.015:law('morze')?.06:.04),0,1);S.hope=clamp(S.hope-(law('cmentarz')?.01:.03),0,1);
  const best=Object.keys(CN).filter(c=>p.sk[c]>=3).filter(c=>!S.people.some(q=>q.sk[c]>=p.sk[c]-1));
- if(best.length&&tech('n_pamiec')){best.forEach(c=>{const h=S.people.filter(isAdult).sort((a,b)=>b.sk[c]-a.sk[c]||b.xp[c]-a.xp[c])[0];if(h){h.sk[c]=Math.max(h.sk[c],p.sk[c]-1);h.xp[c]=Math.max(h.xp[c],lvXp(h.sk[c]))}});log(p.name+' umiera'+(why?' ('+why+')':'')+' w wieku '+Math.floor(p.age)+' lat. Księga osady przechowa to, co umiał: uczniowie przejmują fach.')}
+ if(best.length&&tech('n_pamiec')){best.forEach(c=>{const h=S.people.filter(isAdult).sort((a,b)=>b.sk[c]-a.sk[c]||b.xp[c]-a.xp[c])[0];if(h){h.sk[c]=Math.max(h.sk[c],p.sk[c]-1);h.xp[c]=Math.max(h.xp[c],lvXp(h.sk[c]))}});log(p.name+' umiera'+(why?' ('+why+')':'')+' w wieku '+Math.floor(p.age)+' lat. Księga osady przechowa to, co '+gw(p,'umiał','umiała')+': uczniowie przejmują fach.')}
  else log(p.name+' umiera'+(why?' ('+why+')':'')+' w wieku '+Math.floor(p.age)+' lat.'+(best.length?' Razem z nim ginie wiedza: '+best.map(c=>CN[c]+' '+p.sk[c]).join(', ')+'.':''));
  const f=S.fams[p.fam];if(f&&!famMembers(f.id).length){f.home=null;delete S.fams[f.id]}
  assign()}
@@ -802,7 +802,7 @@ function dailyPeople(cold,fuelHeated){
   const was=p.age;p.age+=2/YEAR;if(was<12&&p.age>=12){log(p.name+' kończy 12 lat i może pracować.');p.tool={t:0,d:0};const m=pMesh[p.id];if(m)m.scale.setScalar(personScale(p));assign()}
   else if(Math.floor(was)!==Math.floor(p.age)&&p.age<13){const m=pMesh[p.id];if(m)m.scale.setScalar(personScale(p))}
   // dzieci podpatrują rodziców
-  if(isChild(p)&&p.age>=6){const par=famMembers(p.fam).filter(isAdult);if(par.length){const c=Object.keys(CN).sort((a,b)=>Math.max(...par.map(q=>q.sk[b]))-Math.max(...par.map(q=>q.sk[a])))[0];p.xp[c]+=4*K*(tech('n_szk')?2:1)*(tech('n_szkola')?1.5:1)*(law('nauka')?1.5:1)*(hasB('izbanauki')?1.5:1);if(p.sk[c]<1&&p.xp[c]>=LVL[0]){p.sk[c]=1;log(p.name+' podpatrzył rodziców i zna podstawy fachu: '+CN[c]+'.')}}}
+  if(isChild(p)&&p.age>=6){const par=famMembers(p.fam).filter(isAdult);if(par.length){const c=Object.keys(CN).sort((a,b)=>Math.max(...par.map(q=>q.sk[b]))-Math.max(...par.map(q=>q.sk[a])))[0];p.xp[c]+=4*K*(tech('n_szk')?2:1)*(tech('n_szkola')?1.5:1)*(law('nauka')?1.5:1)*(hasB('izbanauki')?1.5:1);if(p.sk[c]<1&&p.xp[c]>=LVL[0]){p.sk[c]=1;log(p.name+' '+gw(p,'podpatrzył','podpatrzyła')+' rodziców i zna podstawy fachu: '+CN[c]+'.')}}}
   // śmierć
   if(p.age>62&&Math.random()<(p.age-62)*.0007*K)killPerson(p,'ze starości');
   else if(p.hp<=.02&&!S.diedToday&&Math.random()<.1){S.diedToday=1;killPerson(p,S.fedR<.6?'z głodu':'z wyziębienia')}}
@@ -1108,7 +1108,7 @@ function onPanelClick(e){const t=e.target.closest('button,[data-p],[data-rg]');i
  else if(t.dataset.wt!==undefined){const i=+t.dataset.wt;S.wreck.target=S.wreck.target===i?-1:i;renderPanel()}
  else if(t.dataset.try){const k=S.know,id=t.dataset.try;const cost=TRIAL[id].cost;if(k.active){toast('Trwa już inna próba');return}
   if(!canAfford(cost)){toast('Brakuje materiałów na próbę');return}
-  if(!S.people.some(p=>p.job==='zdun')){if(freeCount()>0){S.alloc.zdun=Math.max(1,S.alloc.zdun);assign();toast('Przydzieliłem zduna (Ludzie → Praca)')}else{toast('Przydziel zduna w Ludzie → Praca');return}}
+  if(!S.people.some(p=>p.job==='zdun')){if(freeCount()>0){S.alloc.zdun=Math.max(1,S.alloc.zdun);assign();toast('Przydzielono zduna (Ludzie → Praca)')}else{toast('Przydziel zduna w Ludzie → Praca');return}}
   Object.entries(cost).forEach(([a,b])=>S.res[a]-=b);k.active=id;k[id+'_p']=0;log('Zaczyna się próba: '+TRIAL[id].n.toLowerCase()+'.');assign();renderPanel()}
  else if(t.dataset.up){upgradeB(+t.dataset.up)}
  else if(t.dataset.rep){startProj(bById(+t.dataset.rep),'rep')}

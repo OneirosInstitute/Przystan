@@ -39,7 +39,7 @@ function endFire(b){const f=b.fire;b.fire=null;fireFxRemove(b.id);S.people.forEa
  if(f.hp<=0){log('Ogień strawił '+BD[b.kind].n.toLowerCase()+'. Zostały zgliszcza.');toast('Spłonęło: '+BD[b.kind].n);S.dis=clamp((S.dis||0)+.06,0,1);S.hope=clamp(S.hope-.04,0,1);
   if(BD[b.kind].store){['drewno','deski','opal','skory','plotno'].forEach(k=>S.res[k]=(S.res[k]||0)*.75)}removeBuilding(b);return}
  if(f.hp<.8){b.prog=b.work*Math.max(.2,f.hp);const m=bMesh[b.id];if(m){retireObjects(m,m.userData.scaf)}addBuildingMesh(b);log('Pożar ugaszony, ale '+BD[b.kind].n.toLowerCase()+' trzeba naprawić ('+Math.round((1-f.hp)*100)+'% zniszczeń).')}
- else log('Pożar ugaszony w porę. '+BD[b.kind].n+' ocalało.');S.dis=clamp((S.dis||0)+.02,0,1)}
+ else log('Pożar ugaszony w porę. Budynek ocalał: '+BD[b.kind].n.toLowerCase()+'.');S.dis=clamp((S.dis||0)+.02,0,1)}
 const fireFxs={};
 function fireFx(b){fireFxRemove(b.id);const c=bCenter(b);const g=new THREE.Group();g.position.set(c.x,Hy(c.x,c.z),c.z);const d=BD[b.kind];const fl=[];
  for(let k=0;k<11;k++){const big=k<5;const m=new THREE.Mesh(new THREE.ConeGeometry(big?.32+Math.random()*.15:.18+Math.random()*.1,big?1.2+Math.random()*.6:.7+Math.random()*.4,6),new THREE.MeshBasicMaterial({color:k%3===0?0xffd070:k%3===1?0xff8a30:0xff5a20,toneMapped:false,transparent:true,opacity:.92}));m.position.set((Math.random()-.5)*d.w*.8,(big?1.9:1.2)+Math.random()*.7,(Math.random()-.5)*d.h*.8);m.renderOrder=6;g.add(m);fl.push(m)}

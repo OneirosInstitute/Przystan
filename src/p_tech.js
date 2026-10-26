@@ -11,14 +11,14 @@ const TECH=[
  // UPRAWA
  {id:'u_rozp',d:'uprawa',r:0,c:1,n:'Rozpoznawanie roślin',xp:50,req:[],desc:'Które jagody jeść, a które omijać. Zbieracze uczą się tego z każdym koszem.',eff:'Zbieracze przynoszą o 15% więcej. Można zbierać zioła.'},
  {id:'u_ziel',d:'uprawa',r:1,c:0,n:'Zielarstwo',xp:110,req:['u_rozp'],desc:'Krwawnik na rany, dziurawiec na gorączkę, kora wierzby na ból.',eff:'Zioła leczą dwa razy skuteczniej. Gorączka jest mniej groźna.'},
- {id:'u_pole',d:'uprawa',r:1,c:1,n:'Siew dzikiego zboża',xp:0,req:['u_rozp'],sync:()=>S.know.pole==='tak',gt:()=>`Obserwacja: ${Math.floor(S.zbozeTot)} z 25 ziarna zebranego przez zbieraczy albo księga „${BOOKS.siew}”.`,desc:'Ziarno rozsypane przy obozie wykiełkowało.',eff:'Można zakładać pola.'},
+ {id:'u_pole',d:'uprawa',r:1,c:1,n:'Siew dzikiego zboża',xp:0,req:['u_rozp'],sync:()=>S.know.pole==='tak',gt:()=>`Obserwacja: ${Math.floor(S.zbozeTot)} z 25 porcji ziarna zebranych przez zbieraczy albo księga „${BOOKS.siew}”.`,desc:'Ziarno rozsypane przy obozie wykiełkowało.',eff:'Można zakładać pola.'},
  {id:'u_susz',d:'uprawa',r:1,c:2,n:'Suszenie owoców',xp:80,req:['u_rozp'],desc:'Jagody i grzyby rozkładane na matach z trzciny, w dymie i na wietrze.',eff:'Jagody i grzyby psują się o 40% wolniej.'},
  {id:'u_bart',d:'uprawa',r:2,c:0,n:'Bartnictwo',xp:120,req:['u_ziel'],desc:'Dym, cierpliwość i ostrożna ręka przy dziupli dzikich pszczół.',eff:'Zbieracze wybierają miód z dzikich barci.'},
  {id:'u_odlog',d:'uprawa',r:2,c:1,n:'Odłóg i płodozmian',xp:140,req:['u_pole'],desc:'Pole, które odpoczywa, oddaje więcej.',eff:'Gleba wraca do sił trzy razy szybciej, żniwa męczą ją o połowę mniej.'},
  {id:'u_sad',d:'uprawa',r:2,c:2,n:'Sadzonki krzewów',xp:120,req:['u_susz'],desc:'Odrosty jagód przesadzane bliżej domów.',eff:'Krzewy jagód odrastają o 50% szybciej.'},
  {id:'u_nawoz',d:'uprawa',r:3,c:0,n:'Nawożenie obornikiem',xp:180,req:['u_odlog','h_zagr'],desc:'To, co zostaje po kozach, wraca do ziemi.',eff:'Gdy w zagrodzie są kozy, pola dają o 25% więcej.'},
  {id:'u_selek',d:'uprawa',r:3,c:1,n:'Selekcja ziarna',xp:220,req:['u_odlog'],desc:'Do siewu tylko najcięższe kłosy.',eff:'Zboże rośnie szybciej i daje o 20% więcej.'},
- {id:'u_len',d:'uprawa',r:3,c:2,n:'Uprawa lnu',xp:160,req:['u_sad'],desc:'Len przesiany bliżej osady.',eff:'Len odrasta dwa razy szybciej i daje półtora raza więcej włókna.'},
+ {id:'u_len',d:'uprawa',r:3,c:2,n:'Uprawa lnu',xp:160,req:['u_sad'],desc:'Len wysiewany bliżej osady.',eff:'Len odrasta dwa razy szybciej i daje półtora raza więcej włókna.'},
  // HODOWLA
  {id:'h_trop',d:'hodowla',r:0,c:1,n:'Tropienie',xp:50,req:[],desc:'Ślady, wiatr i cisza. Myśliwi uczą się zwierzyny tej wyspy.',eff:'Polowanie idzie o 20% szybciej, rany zdarzają się rzadziej.'},
  {id:'h_wedz',d:'hodowla',r:1,c:0,n:'Wędzenie',xp:90,req:['h_trop'],desc:'Mięso i ryby wiszą w dymie z olchy.',eff:'Mięso i ryby psują się o połowę wolniej.'},

@@ -20,7 +20,7 @@ function wiedzaDaily(){if(!S.tech)return;S.lostT=S.lostT||{};S.told=S.told||{};S
   if(tSafe())continue;
   if(!H.length){S.lostT[t]=S.day;if(S.tKnow)delete S.tKnow[t];if(TKNOW[t]&&S.know[TKNOW[t]]==='tak')S.know[TKNOW[t]]='zapomniane';
    log(`Nikt już nie umie: ${T.n.toLowerCase()}. Ta wiedza odeszła razem z ludźmi.${S.told[t]?' Coś zostało w opowieściach starszych: kto podszkoli się w fachu, może do tego wrócić.':' Trzeba będzie dojść do niej od nowa.'}`);toast('Zapomniano: '+T.n);continue}
-  if(H.length===1&&(!S.warnT[t]||S.day-S.warnT[t]>YEAR)){S.warnT[t]=S.day;const p=H[0];log(`Tylko ${p.name} (${Math.floor(p.age)} lat) umie jeszcze: ${T.n.toLowerCase()}. Bez ucznia ta wiedza zginie razem z ${p.sex==='k'?'nią':'nim'}.`)}}}
+  if(H.length===1&&(!S.warnT[t]||S.day-S.warnT[t]>YEAR)){S.warnT[t]=S.day;const p=H[0];log(`Tylko ${p.name} (${Math.floor(p.age)} ${latW(p.age)}) umie jeszcze: ${T.n.toLowerCase()}. Bez ucznia ta wiedza zginie razem z ${p.sex==='k'?'nią':'nim'}.`)}}}
 function wiedzaHTML(){const L=tLearned();if(!L.length)return'';const lost=L.filter(t=>S.lostT&&S.lostT[t]);const risk=L.filter(t=>!(S.lostT&&S.lostT[t])&&tHolders(t).length===1);const safe=L.length-lost.length-risk.length;
  const row=(t,txt,c)=>`<p style="margin:3px 0"><b style="color:${c}">${TECH_BY[t].n}</b> <span class="mut">${txt}</span></p>`;
  return`<div class="card"><h4>Wiedza w ludziach</h4>${tSafe()?'<p class="mut">Księga osady przechowuje to, co umieją mistrzowie. Nic już nie zginie.</p>':''}`+
@@ -39,7 +39,7 @@ const GRAVE_N=['Mogiła','Kamień','Kopiec'];
   try{if(far&&why!=='ze starości'&&why!=='na wyprawie'&&p.state!=='away')placeAdd(`${GRAVE_N[p.id%3]} ${gen(p.name)}`,x,z,`tu ${p.sex==='k'?'zmarła':'zmarł'} ${p.name}`)}catch(e){}}}
 {const _se=searchEnd;searchEnd=function(){const s=S.search;const kid=s?pById(s.pid):null;_se();try{if(s&&kid&&s.ok)placeAdd(`Wykrot ${gen(kid.name)}`,s.x,s.z,`tu znaleziono zgubione dziecko: ${kid.name}`)}catch(e){}}}
 {const _wp=wolfPups;wolfPups=function(n){_wp(n);try{const w=S.herds.filter(h=>h.type==='wilk').sort((a,b)=>Math.hypot(a.x-tcx(camp.i),a.z-tcx(camp.j))-Math.hypot(b.x-tcx(camp.i),b.z-tcx(camp.j)))[0];if(w)placeAdd('Wilcze Legowisko',w.x,w.z,'tu znaleziono wilcze szczenięta')}catch(e){}}}
-{const _ef=endFire;endFire=function(b){const burnt=b.fire&&b.fire.hp<=0;const c=bCenter(b);_ef(b);if(burnt)try{placeAdd('Pogorzelisko',c.x,c.z,'tu spłonął '+BD[b.kind].n.toLowerCase())}catch(e){}}}
+{const _ef=endFire;endFire=function(b){const burnt=b.fire&&b.fire.hp<=0;const c=bCenter(b);_ef(b);if(burnt)try{placeAdd('Pogorzelisko',c.x,c.z,'tu spłonął budynek: '+BD[b.kind].n.toLowerCase())}catch(e){}}}
 function plcDogGrave(d){const a=Math.random()*6.28;placeAdd(`Brzoza ${gen(d.name)}`,tcx(camp.i)+Math.cos(a)*7.5,tcx(camp.j)+Math.sin(a)*7.5,`tu pochowano psa: ${d.name}`)}
 {const _dd=dogDaily;dogDaily=function(){const before=(S.dogs||[]).filter(d=>!d.dead).map(d=>d.id);_dd();(S.dogs||[]).forEach(d=>{if(d.dead&&!d.gone&&before.includes(d.id))try{plcDogGrave(d)}catch(e){}})}}
 // etykiety na mapie

@@ -134,7 +134,7 @@ function zyAdd(p,t){if(!p)return;p.zy=p.zy||[];p.zy.push([Math.floor(S.day)+1,t]
 {const _w=wedding;wedding=function(k,m){_w(k,m);zyAdd(k,'ślub z '+m.name);zyAdd(m,'ślub z '+k.name)}}
 function lvWord(l){return l>=5?'mistrz nad mistrzami':l>=4?'mistrz':l>=3?'czeladnik':l>=2?'zna się na rzeczy':'dopiero się uczy'}
 function lifeStory(p){const L=[];const bd=Math.max(1,Math.floor(S.day-p.age*YEAR/2)+1);
- L.push(p.born?`Urodził${p.sex==='k'?'a':''} się na wyspie (${dayName(bd)}).`:`Wyszedł${p.sex==='k'?'a':''} na brzeg z rozbitego statku jako ${Math.max(0,Math.floor(p.age-S.day*2/YEAR))}-latek.`);
+ L.push(p.born?`Urodził${p.sex==='k'?'a':''} się na wyspie (${dayName(bd)}).`:`Wyszedł${p.sex==='k'?'a':''} na brzeg z rozbitego statku jako ${Math.max(0,Math.floor(p.age-S.day*2/YEAR))}-${gw(p,'latek','latka')}.`);
  const c=Object.keys(CN).sort((a,b)=>(p.sk[b]||0)-(p.sk[a]||0))[0];if(p.age>=12&&(p.sk[c]||0)>=1)L.push(`Fach: ${CN[c]}, ${lvWord(p.sk[c])}.`);
  const q=p.pair!==null&&p.pair!==undefined?pById(p.pair):null;const kids=S.people.filter(x=>(x.par||[]).includes(p.id));
  if(q)L.push(`${p.sex==='k'?'Mąż':'Żona'}: ${q.name}.`);if(kids.length)L.push(`Dzieci: ${kids.map(x=>x.name).join(', ')}.`);

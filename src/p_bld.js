@@ -15,10 +15,10 @@ const EXT={
  drewutnia:[STOL,{id:'wiata',n:'Wiata na opał',d:'Opał nie wilgotnieje: z kłody cztery porcje zamiast trzech.',cost:{drewno:12},work:5}],
  pracownia:[STOL],mielerz:[STOL],warsztat:[STOL],szwalnia:[STOL],cegielnia:[STOL],pasieka:[STOL],ogrodziol:[STOL],
  kuznia:[STOL,{id:'miech',n:'Miech skórzany',d:'Kuźnia pracuje o kolejne 25% szybciej.',cost:{skory:4,deski:4},work:5,sp:1.25}],
- chata:[{id:'ogrod',n:'Ogród warzywny',d:'Rodzina zbiera warzywa od wiosny do jesieni.',cost:{drewno:6},work:3},{id:'piwnica',n:'Piwniczka',d:'Miejsce na 80 porcji żywności więcej.',cost:{kamien:10,deski:4},work:6},{id:'ganek',n:'Ganek z ławą',d:'Wieczorami sąsiedzi siadają razem: więcej nadziei.',cost:{deski:8,gwozdzie:6},work:4}],
- sklad:[{id:'dobud',n:'Dobudówka',d:'Skład mieści 200 więcej.',cost:{drewno:16,deski:6},work:6}],
+ chata:[{id:'ogrod',n:'Ogród warzywny',d:'Rodzina zbiera warzywa od wiosny do jesieni.',cost:{drewno:6},work:3},{id:'piwnica',n:'Piwniczka',d:'Miejsce na kolejne 80 porcji żywności.',cost:{kamien:10,deski:4},work:6},{id:'ganek',n:'Ganek z ławą',d:'Wieczorami sąsiedzi siadają razem: więcej nadziei.',cost:{deski:8,gwozdzie:6},work:4}],
+ sklad:[{id:'dobud',n:'Dobudówka',d:'Skład mieści o 200 więcej.',cost:{drewno:16,deski:6},work:6}],
  spizarnia:[{id:'lodownia',n:'Lodownia',d:'Żywność w osadzie psuje się o 20% wolniej.',cost:{kamien:16,deski:6},work:8}],
- studnia:[{id:'zuraw',n:'Żuraw',d:'Woda dla 8 osób więcej.',cost:{drewno:6},work:3}]};
+ studnia:[{id:'zuraw',n:'Żuraw',d:'Woda dla kolejnych 8 osób.',cost:{drewno:6},work:3}]};
 EXT.chata.push({id:'zielnik',n:'Zielnik rodzinny',d:'Zioła pielęgnowane przy domu.',cost:{drewno:3,kamien:2},work:6},{id:'wyroby',n:'Domowe wyroby',d:'Rodzina kisi własne warzywa.',cost:{drewno:6,deski:4},work:12});
 EXT.dom=EXT.chata;STOL.sp=1.25;
 const LEVELABLE=k=>!!(BD[k].wk||BD[k].store)&&k!=='pole'||k==='pole';
@@ -40,8 +40,8 @@ function startProj(b,t,id,quiet){if(!b)return;if(!bDone(b)){toast('Najpierw trze
  Object.entries(cost).forEach(([k,v])=>S.res[k]-=v);b.proj={t,id,prog:0,work};log('Rozpoczęto prace: '+BD[b.kind].n.toLowerCase()+', '+n+'.');rebuildMesh(b);
  if(freeCount()===0)toast('Nikt nie buduje: wszyscy mają pracę. Zwolnij kogoś w Ludzie → Praca.');renderSel();renderPanel()}
 function finishProj(b){const pr=b.proj;b.proj=null;b.workers=0;
- if(pr.t==='rep'){b.cond=1;log('Remont skończony: '+BD[b.kind].n.toLowerCase()+' znów jak nowe.')}
- else if(pr.t==='lv'){b.lv=lvOf(b)+1;b.cond=1;log(BD[b.kind].n+' rozbudowane do poziomu '+b.lv+'. '+(BD[b.kind].wk?'Mieści więcej ludzi i pracuje sprawniej.':'Mieści więcej.'));toast(BD[b.kind].n+': poziom '+b.lv)}
+ if(pr.t==='rep'){b.cond=1;log('Remont skończony: '+BD[b.kind].n.toLowerCase()+'. Budynek jest znów jak nowy.')}
+ else if(pr.t==='lv'){b.lv=lvOf(b)+1;b.cond=1;log(BD[b.kind].n+': rozbudowa do poziomu '+b.lv+'. '+(BD[b.kind].wk?'Mieści więcej ludzi i pracuje sprawniej.':'Mieści więcej.'));toast(BD[b.kind].n+': poziom '+b.lv)}
  else{b.ext=(b.ext||[]).concat(pr.id);const e=EXT[b.kind].find(x=>x.id===pr.id);log('Gotowe: '+e.n.toLowerCase()+' przy budynku: '+BD[b.kind].n.toLowerCase()+'. '+e.d);toast('Gotowe: '+e.n)}
  rebuildMesh(b);assign();renderSel();renderPanel()}
 function rebuildMesh(b){const previous=bMesh[b.id];if(previous){previous.removeFromParent();if(previous.userData.scaf)previous.userData.scaf.removeFromParent()}addBuildingMesh(b);if(previous)retireObjects(previous,previous.userData.scaf)}

@@ -23,7 +23,7 @@ const E3A={
  12:{n:'Wyspa nasza',intro:'Drogi łączą już większość wyspy. Wieczorami przy ogniskach w przysiółkach śpiewa się te same pieśni co w osadzie. Zostało ostatnie: zasiedlić każdą krainę i dorosnąć do tego, żeby wyspa naprawdę była nasza.',
   g:[['Ogień w każdej krainie',()=>e3Settled()>=e3Need(),'Każda kraina, do której da się dojść lądem, potrzebuje przysiółka z chatą z bali. Mapa wspólnoty pokazuje puste krainy.',()=>{const n=e3Need()-e3Settled();return n>0?`Pustych krain: ${n}. Mapa wspólnoty pokazuje, gdzie jeszcze nikt nie mieszka.`:'Wszystkie krainy mają już swój ogień.'}],
    ['Cała wyspa: 150 osób',()=>e3Pop()>=150,'Rośnie osada i przysiółki. Przysiółki rosną, gdy mają zapasy i więź z osadą: dary, wozy, drogi.',()=>`Na całej wyspie żyje ${e3Pop()} ${osb(e3Pop())}.`],
-   ['Trzy przysiółki urosły do osiedli',()=>e3Big()>=3,'Przysiółek staje się osiedlem przy 14 osobach.',()=>`Osiedli i wsi: ${e3Big()} z 3.`]]}};
+   ['Trzy przysiółki urosły do osiedli',()=>e3Big()>=3,'Przysiółek staje się osiedlem, gdy ma 14 osób.',()=>`Osiedli i wsi: ${e3Big()} z 3.`]]}};
 const E3RN={10:'X',11:'XI',12:'XII'};
 function e3Start(){S.e3={on:1,a:10,g:{},d0:S.day,han0:S.hanN||0,corki:0};S.e3.regN=e3Regs().length;S.know.e3_zajazd='nie';pamAdd(4,'e3');log('Zaczyna się epoka III: cała wyspa.');e3ActScene()}
 function e3ActScene(){const a=S.e3.a,A=E3A[a];if(!A)return;S.e3.sceneQ=a}
@@ -54,16 +54,16 @@ function e3NewHam(src,r,pop){const taken=new Set((S.hamlets||[]).map(x=>x.name).
  let nm=placeName(head);if(taken.has(nm))nm=(r.type==='high'?'Górne ':r.type==='coast'?'Nadmorskie ':'Nowe ')+nm;const h={id:(S.hid=(S.hid||0)+1),rid:r.id,i,j,name:nm,rod:src?src.rod:0,pop,wiez:.55,zap:.5,day:S.day,ppl,head,why:'corka',road:1,from:src?src.id:0};
  S.hamlets.push(h);kolInit();kolPath(h);kolReveal(h);kolClearPath(h,false);kolTread();hamVis();try{regionScan(true)}catch(e){}return h}
 const e3CanSend=h=>e3On()&&h.pop>=8&&!(h.arr&&S.day<h.arr)&&!!e3FreeNear(h);
-function e3Send(id){const h=(S.hamlets||[]).find(x=>x.id===id);if(!h||!e3CanSend(h))return;if(!needHave('jedzenie',20)||S.res.drewno<10){toast('Osada musi dać im na drogę 20 jedzenia i 10 kłód.');return}
+function e3Send(id){const h=(S.hamlets||[]).find(x=>x.id===id);if(!h||!e3CanSend(h))return;if(!needHave('jedzenie',20)||S.res.drewno<10){toast('Osada musi dać im na drogę 20 porcji jedzenia i 10 kłód.');return}
  const r=e3FreeNear(h);needTake('jedzenie',20);S.res.drewno-=10;h.pop-=3;const n=e3NewHam(h,r,3);S.e3.corki=(S.e3.corki||0)+1;
  log(`Z przysiółka ${h.name} wychodzi troje młodych. Idą dalej, do krainy ${r.name}, i stawiają tam pierwszy szałas. Tak zaczyna się ${n.name}.`);toast('Nowy przysiółek: '+n.name);sfx('bell');renderPanel()}
 {const _hh=hamletHTML;hamletHTML=function(){let h=_hh();if(!e3On())return h;(S.hamlets||[]).forEach(x=>{if(!e3CanSend(x))return;const tag=`<button data-klook="${x.id}">Pokaż</button>`;
-   h=h.replace(tag,`<button data-e3send="${x.id}" ${needHave('jedzenie',20)&&S.res.drewno>=10?'':'disabled'}>Wyślij młodych dalej (3 osoby, 20 jedzenia, 10 kłód)</button>`+tag)});
+   h=h.replace(tag,`<button data-e3send="${x.id}" ${needHave('jedzenie',20)&&S.res.drewno>=10?'':'disabled'}>Wyślij młodych dalej (3 osoby, 20 porcji jedzenia, 10 kłód)</button>`+tag)});
   return`<div class="card"><h4>Epoka III: cała wyspa</h4><p>Zasiedlone krainy: <b>${e3Settled()} z ${e3Need()}</b> (te, do których da się dojść lądem). Na wyspie żyje ${e3Pop()} ${osb(e3Pop())}. Wozów z towarem w tej epoce: ${e3Han()}.</p></div>`+h}}
 document.addEventListener('click',ev=>{const t=ev.target.closest('[data-e3send]');if(!t||t.disabled||!S)return;ev.stopPropagation();e3Send(+t.dataset.e3send)},true);
 EVENTS.push({id:'e3_dalej',w:2.2,cd:YEAR*.5,cond:()=>e3On()&&!S.e3.done&&(S.hamlets||[]).some(e3CanSend),t:'Za ciasno w przysiółku',ctx:()=>{const L=(S.hamlets||[]).filter(e3CanSend);const h=L[(Math.random()*L.length)|0];return h?{h,r:e3FreeNear(h)}:null},
- text:c=>`Z przysiółka ${c.h.name} przychodzi młoda para. Mówią, że u nich jest już za ciasno, a za wzgórzem leży pusta kraina, ${c.r.name}. Nie chcą wracać do osady. Chcą iść dalej.`,
- opts:[{n:'Pobłogosławić i wyposażyć',d:'20 jedzenia i 10 kłód z osady, nowy przysiółek',f:c=>{if(!needHave('jedzenie',20)||S.res.drewno<10)return'Osada nie ma teraz z czego ich wyposażyć. Obiecują wrócić z tą prośbą wiosną.';e3Send(c.h.id);return`Idą we troje, z kozą i workiem ziarna. W krainie ${c.r.name} wkrótce zapali się nowy ogień.`}},
+ text:c=>`Z przysiółka ${c.h.name} przychodzi troje młodych. Mówią, że u nich jest już za ciasno, a za wzgórzem leży pusta kraina, ${c.r.name}. Nie chcą wracać do osady. Chcą iść dalej.`,
+ opts:[{n:'Pobłogosławić i wyposażyć',d:'20 porcji jedzenia i 10 kłód z osady, nowy przysiółek',f:c=>{if(!needHave('jedzenie',20)||S.res.drewno<10)return'Osada nie ma teraz z czego ich wyposażyć. Obiecują wrócić z tą prośbą wiosną.';e3Send(c.h.id);return`Idą we troje, z kozą i workiem ziarna. W krainie ${c.r.name} wkrótce zapali się nowy ogień.`}},
   {n:'Niech jeszcze poczekają',d:'',f:c=>{c.h.wiez=Math.max(0,(c.h.wiez||.5)-.04);return'Wracają do siebie. Ale za wzgórze patrzą coraz częściej.'}}]});
 // ---- zajazd przy drodze ----
 BD.zajazd={cat:'wsp',n:'Zajazd',w:3,h:2,cost:{drewno:36,deski:16,gwozdzie:16,kamien:8},work:10,need:'e3_zajazd',d:'Dom przy drodze, gdzie woźnice nocują i jedzą. Wozy jeżdżą do przysiółków prawie dwa razy częściej i przywożą więcej towaru.'};

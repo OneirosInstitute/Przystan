@@ -47,7 +47,7 @@ const DZ_EV={t:'Dziki w zbożu',ey:'Pole',text:c=>`Rano pole przy lesie wygląda
    return n?`Wokół ${n===1?'pola':n+' pól'} staje płot z żerdzi wbitych w ziemię. Dzik się przeciśnie, ale nie tak łatwo.`:'Na płot nie starczy drewna. Trzeba go będzie postawić później, przy rozbudowie pola.'}},
   {n:'Zapolować na dziki',d:'mięso, ale dzik potrafi zranić',f:()=>{const b=S.bld.filter(x=>x.field&&bDone(x)).map(rolaBoars).find(Boolean);const ad=S.people.filter(p=>isAdult(p)&&p.job!=='wyp'&&p.hp>.5);
    if(!b||!ad.length)return'Nie ma kogo posłać. Dziki zostają w zaroślach.';const n=Math.min(2,b.n);b.n-=n;S.res.mieso=(S.res.mieso||0)+10*n;const p=ad.sort((x,y)=>(y.sk.mysliwy||0)-(x.sk.mysliwy||0))[0];
-   if(Math.random()<.3){p.hp=Math.max(.15,p.hp-.35);p.hurt=1;return`Obława w zaroślach. ${n} ${n===1?'dzik':'dziki'} padają, ale odyniec rozpruwa ${p.name} udo. Wróci do sił za kilka dni.`}
+   if(Math.random()<.3){p.hp=Math.max(.15,p.hp-.35);p.hurt=1;return`Obława w zaroślach. ${n} ${plW(n,'dzik pada','dziki padają','dzików pada')}, ale ${p.name} ma udo rozprute kłem odyńca. Wróci do sił za kilka dni.`}
    return`Obława w zaroślach. ${n===1?'Dzik pada':'Dwa dziki padają'} pod oszczepami. Mięsa starczy na kilka dni, a reszta stada odchodzi w głąb lasu.`}}]};
 function rolaBoarEvent(b){if(typeof evOpen!=='undefined'&&evOpen){S.dzikEv=0;return}try{openEvent(DZ_EV,{b})}catch(e){console.warn(e)}}
 {const _fd=fieldDaily;fieldDaily=function(){S.bld.forEach(b=>{if(b.field&&b.field.st==='dojrzale'&&rolaCur(b)==='kapusta')b.field.frostHit=1});_fd();try{rolaDaily()}catch(e){console.warn(e)}}}
@@ -147,11 +147,11 @@ TECH_BY.u_len.eff=TECH_BY.u_len.eff+' Len można też siać na polu.';
 function rolaETA(b){const f=b.field;const mm=rolaMoistMul(f,b),c=rolaCur(b),cm=c==='len'?1.25:c==='kapusta'?.95:1;const r=K/30*(tech('u_selek')?1.15:1)*(hasExt(b,'rowy')?1.15:1)*mm*cm;return Math.max(1,Math.ceil((1-f.g)/Math.max(.01,r)))}
 function rolaNow(b){const f=b.field,sea=seasonIdx(),c=rolaCur(b);
  if(f.st==='dojrzale')return c==='len'?'Teraz: rwanie lnu.':c==='kapusta'?'Teraz: zbiór kapusty i rzepy.':'Teraz: żniwa. Zboże nie poczeka, deszcz i mróz zabierają plon.';
- if(f.st==='rosnie')return sea===2?'Zimą nic nie rośnie. Wschody czekają pod śniegiem.':`Rośnie. Dojrzeje za około ${rolaETA(b)} ${rolaETA(b)===1?'dzień':'dni'}.`;
+ if(f.st==='rosnie')return sea===2?'Zimą nic nie rośnie. Wschody czekają pod śniegiem.':`Rośnie. Dojrzeje za około ${rolaETA(b)} ${dniW(rolaETA(b))}.`;
  if(f.mode==='trzy'&&f.rot===2)return'Ugór: pole odpoczywa przez rok, kozy mogą tu paść.';
  const yd=yday(),x=tech('n_kal')?5:0;if(rolaSown(f))return'W tym roku już zebrano. Pole odpocznie do następnej wiosny.';if(inSow())return'Teraz: siew. Rolnicy idą w pole, gdy jest czym siać.';const d=Math.ceil((((72-x)-yd+96)%96)/(96/YEAR));return`Siew wiosną i na początku lata, za około ${d} ${d===1?'dzień':'dni'}.`}
 function rolaRisks(b){const f=b.field,sea=seasonIdx(),c=rolaCur(b),L=[];
- if(f.st!=='puste'&&sea!==2&&rolaBoars(b))L.push(hasExt(b,'plot')?'dziki w pobliżu, ale płot je trzyma z dala':S.fieldWatch>S.day?'dziki w pobliżu, przy polu czuwają ludzie':'dziki w pobliżu: nocą mogą zryć pole');
+ if(f.st!=='puste'&&sea!==2&&rolaBoars(b))L.push(hasExt(b,'plot')?'dziki w pobliżu, ale płot trzyma je z daleka':S.fieldWatch>S.day?'dziki w pobliżu, przy polu czuwają ludzie':'dziki w pobliżu: nocą mogą zryć pole');
  if(f.st==='rosnie'&&sea===3&&f.g<.4&&c!=='kapusta')L.push('przymrozki na wschody');if(f.st!=='puste'&&(sea===0||sea===3))L.push('grad i letnie burze');
  if(f.st==='dojrzale'&&c==='zboze')L.push('deszcz w żniwa: ziarno kiełkuje w kłosach');if(f.m<.3&&f.st==='rosnie')L.push(rolaWater(b)?'susza: rolnicy noszą wodę':'susza, a wody nie ma blisko');
  if(f.soil==='mokra'&&!hasExt(b,'rowy'))L.push('w ulewy staje woda (rowy pomogą)');return L}

@@ -59,7 +59,7 @@ function hamVis(){if(!S||!S.hamlets)return;S.hamlets.forEach(h=>{if(!hamM[h.id])
 function wiezWord(h){return h.wiez>=.6?'bliska':h.wiez>=.4?'dobra':h.wiez>=.2?'chłodna':'prawie zerwana'}
 function hamletHTML(){if(!S.hamlets||!S.hamlets.length)return'';const tot=S.hamlets.reduce((a,h)=>a+h.pop,0);
  return`<h3>Przysiółki</h3><p class="lead">Wspólnota: ${S.people.length} osób w osadzie i ${tot} w przysiółkach. Rody, które odeszły dalej, wciąż są nasze: przysyłają dary, a ich młodzi wracają do nas na swaty.</p>`+
-  S.hamlets.map(h=>{const r=REGIONS[h.rid];return`<div class="card"><h4>${h.name}</h4><p>${r&&r.known?r.name+' · ':''}${h.pop} osób · więź ${wiezWord(h)} · ${rodName(h.rod)}</p><p class="mut">Założyli: ${h.ppl.join(', ')}.</p><button data-ham="${h.id}" style="margin-top:6px">Wyślij dary (20 jedzenia, 6 opału)</button></div>`}).join('')}
+  S.hamlets.map(h=>{const r=REGIONS[h.rid];return`<div class="card"><h4>${h.name}</h4><p>${r&&r.known?r.name+' · ':''}${h.pop} ${plW(h.pop,'osoba','osoby','osób')} · więź ${wiezWord(h)} · ${rodName(h.rod)}</p><p class="mut">Założyli: ${h.ppl.join(', ')}.</p><button data-ham="${h.id}" style="margin-top:6px">Wyślij dary (20 porcji jedzenia, 6 porcji opału)</button></div>`}).join('')}
 document.addEventListener('click',e=>{const t=e.target.closest('[data-ham]');if(!t||!S)return;const h=S.hamlets.find(x=>x.id===+t.dataset.ham);if(!h)return;
  if(foodTotal()<40||S.res.opal<6){toast('Za mało zapasów, żeby się dzielić.');return}const tot=foodTotal();FOOD.forEach(k=>S.res[k]=Math.max(0,S.res[k]-20*(S.res[k]/tot)));S.res.opal-=6;
  h.wiez=Math.min(1,h.wiez+.15);log(`Do ${h.name} poszły dary: jedzenie i opał. Więź jest ${wiezWord(h)}.`);toast('Dary wysłane');renderPanel()});
@@ -70,7 +70,7 @@ function rodyHTML(){const ids=Object.keys(S.rody||{});if(!ids.length)return'';le
    const kids=S.people.filter(c=>c.par&&(c.par.includes(p.id)||c.par.includes(q.id))&&c.pair===null);kids.forEach(c=>shown.add(c.id));
    lines.push(`<b>${p.name}</b> ⚭ <b>${q.name}</b>${kids.length?'<br><span class="mut">dzieci: '+kids.map(c=>c.name+' '+Math.floor(c.age)).join(', ')+'</span>':''}${p.waitHome?'<br><span class="mut">czekają na własny dom</span>':''}`)});
   const rest=mem.filter(p=>!shown.has(p.id));if(rest.length)lines.push('<span class="mut">'+rest.map(p=>p.name+(p.widowT&&S.day<p.widowT+YEAR?(p.sex==='k'?' (wdowa)':' (wdowiec)'):'')).join(', ')+'</span>');
-  hm.forEach(x=>lines.push(`<span class="mut">przysiółek ${x.name}: ${x.pop} osób</span>`));
+  hm.forEach(x=>lines.push(`<span class="mut">przysiółek ${x.name}: ${x.pop} ${plW(x.pop,'osoba','osoby','osób')}</span>`));
   h+=`<div class="card"><h4>${S.rody[id]&&S.rody[id].znak?S.rody[id].znak+' ':''}${rodName(id).replace(/^r/,'R')}</h4>${lines.map(l=>`<p style="margin:4px 0">${l}</p>`).join('')}</div>`});return h}
 function ludCard(p){const q=p.pair!==null?pById(p.pair):null;const fr=friendsOf(p),rv=rivalsOf(p);
  return`<p class="mut">${S.rody&&S.rody[p.rod]&&S.rody[p.rod].znak?S.rody[p.rod].znak+' ':''}${escapeHtml(rodName(p.rod))}${q?` · ${p.sex==='k'?'mąż':'żona'}: ${escapeHtml(q.name)}`:''}${p.waitHome?' · czekają na własny dom':''}</p>`+
@@ -106,7 +106,7 @@ function ludDaily(){if(!ludReady)ludInit();const ad=S.people.filter(p=>p.age>=14
   else if(S.hamlets.length&&Math.random()<.08){const h=S.hamlets.filter(x=>x.pop>=4&&x.wiez>=.45)[0];const lone=c.filter(p=>p.age>=19&&p.age<=36&&!relsOf(p).some(x=>x[1]>=30&&x[0].sex!==p.sex))[0];
    if(h&&lone){const sex=lone.sex==='k'?'m':'k',age=18+Math.random()*8;const np=newPerson(S.pid++,newName(sex),age,sex,lone.fam,{zbieracz:1,[sex==='m'?'drwal':'krawiec']:1},TKEYS[(Math.random()*TKEYS.length)|0]);np.rod=h.rod;np.par=[];np.mirX=0;np.fromHam=h.id;
     const hc=homeOf(lone);const c0=hc?bCenter(hc):{x:tcx(camp.i),z:tcx(camp.j)};np.x=c0.x+.8;np.z=c0.z+.6;S.people.push(np);addPersonMesh(np);h.pop--;relAdd(np,lone,52);
-    log(`Z przysiółka ${h.name} przychodzi ${np.name}, ${Math.floor(age)} lat. W przysiółku za ciasno, a tu ${lone.name} od dawna nie ma z kim tańczyć.`);assign()}}}
+    log(`Z przysiółka ${h.name} przychodzi ${np.name}, ${Math.floor(age)} ${latW(age)}. W przysiółku za ciasno, a tu ${lone.name} od dawna nie ma z kim tańczyć.`);assign()}}}
  // młodzi czekający na dom
  S.people.filter(p=>p.waitHome&&p.sex==='k').forEach(k=>{const m=pById(k.pair);if(!m){k.waitHome=0;return}const fh=freeHouse();if(!fh)return;const fid=S.fid++;S.fams[fid]={id:fid,home:fh.id};k.fam=fid;m.fam=fid;k.waitHome=0;m.waitHome=0;
   log(`${k.name} i ${m.name} wprowadzają się do własnego domu (${BD[fh.kind].n.toLowerCase()}). Nowe gospodarstwo w osadzie.`);toast('Nowe gospodarstwo: '+k.name+' i '+m.name)});

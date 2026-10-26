@@ -17,7 +17,7 @@ const ZH={
  'Postaw chatę drwala':()=>'Kłody na szałasy noszą z daleka ci, którzy akurat mają wolne ręce. A las stoi tuż obok.',
  'Rozpoznaj kajutę kapitana na wraku':()=>'Drzwi kajuty kapitana są zaklinowane. Kapitan trzymał tam księgi i swoje narzędzia.',
  'Każda rodzina pod własnym dachem':()=>{const n=zHomeless();return n?`Pod gołym niebem śpi jeszcze ${n} ${osb(n)}. Noce na brzegu są zimne i mokre.${S.res.drewno<8?' Kłód nie starczy nawet na szałas.':''}`:'Wszyscy mają już dach nad głową.'},
- 'Postaw drewutnię i zgromadź 80 opału':()=>{const dw=S.bld.find(b=>b.kind==='drewutnia'&&bDone(b));if(dw&&S.res.drewno<10)return`Drewutnia stoi, ale kłód jest tylko ${fmt(S.res.drewno)}. Bez drwali nie będzie czego rąbać.`;if(dw&&!S.people.some(q=>q.job==='wb'&&q.wb===dw.id))return'Drewutnia stoi pusta. Nikt w niej nie rąbie.';return dw?`Drewutnia stoi. Opału jest ${fmt(S.res.opal)}, a na zimę trzeba co najmniej 80.`:`Opału jest ${fmt(S.res.opal)}. Zimą każdy dom spala go codziennie, a kłody same się nie porąbią.`},
+ 'Postaw drewutnię i zgromadź 80 opału':()=>{const dw=S.bld.find(b=>b.kind==='drewutnia'&&bDone(b));if(dw&&S.res.drewno<10)return`Drewutnia stoi, ale kłód jest tylko ${fmt(S.res.drewno)}. Bez drwali nie będzie czego rąbać.`;if(dw&&!S.people.some(q=>q.job==='wb'&&q.wb===dw.id))return'Drewutnia stoi pusta. Nikt w niej nie rąbie.';return dw?`Drewutnia stoi. Opału jest ${fmt(S.res.opal)}, a na zimę trzeba co najmniej 80 porcji.`:`Opału jest ${fmt(S.res.opal)}. Zimą każdy dom spala go codziennie, a kłody same się nie porąbią.`},
  'Wynieś z wraku wszystko, co się da':()=>{const t=wreckLeftTxt(),cl=S.wreck.parts.filter(p=>!p.open).map(p=>p.n.toLowerCase());return t?`Na wraku zostało: ${t}. Morze co porę roku zabiera część, a wiosną przyjdzie sztorm.`:cl.length?`Zamknięte są jeszcze: ${cl.join(', ')}. Ktoś musi się tam dostać.`:'Wrak jest pusty.'},
  'Przetrwaj pierwszą zimę':()=>{const d=Math.floor(zDaysFood()),o=fmt(S.res.opal),L=[];if(d<15)L.push(`jedzenia na ${d} ${dniW(d)}`);if(S.res.opal<60)L.push(`opału ${o}`);const hl=zHomeless();if(hl)L.push(`bez dachu ${hl}`);if((S.res.odziez||0)<S.people.length*.3)L.push('mało ciepłej odzieży');
   return L.length?`Do wiosny daleko: ${L.join(', ')}. Tego może nie starczyć.`:'Zapasy wyglądają dobrze. Teraz trzeba po prostu doczekać wiosny.'},
@@ -61,7 +61,7 @@ Object.assign(REQS.ziola,{say:'Zimą przyjdą gorączki. Bez krwawnika i rumiank
 Object.assign(REQS.pomost,{say:'Z brzegu łowi się marnie. Ryba stoi dalej, za płycizną.',end:p=>`${p.name} zarzuca sieć z końca pomostu. Pierwszy połów jest większy niż cały tydzień z brzegu.`});
 Object.assign(REQS.cieply,{say:'W szałasie wieje ze wszystkich stron. Zimy w nim nie przetrwamy.',end:p=>`W nowej chacie jest tak ciepło, że ${p.name} pierwszą noc śpi bez okrycia.`});
 Object.assign(REQS,{
- lawa:{w:1,make:()=>S.people.some(p=>p.age>50)&&zLad('lawa')<2?mk(oldestZ(),{base:zLad('lawa')}):null,t:(r,p)=>`${p.name} chciałby ławę przed chatą`,
+ lawa:{w:1,make:()=>S.people.some(p=>p.age>50)&&zLad('lawa')<2?mk(oldestZ(),{base:zLad('lawa')}):null,t:(r,p)=>`${p.name} ${gw(p,'chciałby','chciałaby')} ławę przed chatą`,
   say:'Nogi już nie te. Wieczorem chciałoby się usiąść i popatrzeć, jak dzieci się bawią.',d:'Budowa → Ład wsi → ława, przy chatach. Trzy kłody.',done:r=>zLad('lawa')>r.base,
   end:p=>{pamAdd(1);return`${p.name} siada na nowej ławie i od razu zaczyna opowiadać o statku. Dzieci zbierają się wokół.`}},
  grzadki:{w:1,make:()=>S.day>YEAR*.4&&zLad('grzadka')<4?mk(motherZ()||pickAdult(),{base:zLad('grzadka')}):null,t:(r,p)=>`${p.name} chce mieć warzywa przy domu`,
@@ -71,10 +71,10 @@ Object.assign(REQS,{
   say:'Wszystko nosimy do obozu, a potem z obozu z powrotem. Nogi bolą od samego chodzenia.',d:'Budowa → Magazyny → Skład, między lasem a budowami.',done:()=>hasB('sklad'),
   end:p=>`${p.name} zrzuca pierwsze kłody pod dachem składu. Droga jest teraz o połowę krótsza.`},
  opal:{w:2,make:()=>seasonIdx()===1&&S.res.opal<120?mk(oldestZ(),{until:Math.floor(S.day)+SD*2}):null,t:(r,p)=>`${p.name} boi się zimy`,
-  say:'Kości bolą od wilgoci. Gdyby choć tej zimy było ciepło do samej wiosny.',d:'Drewutnia rąbie kłody na opał. Przed zimą trzeba mieć 120 opału.',done:()=>S.res.opal>=120,
+  say:'Kości bolą od wilgoci. Gdyby choć tej zimy było ciepło do samej wiosny.',d:'Drewutnia rąbie kłody na opał. Przed zimą trzeba mieć 120 porcji opału.',done:()=>S.res.opal>=120,
   end:p=>`Pod ścianami rosną sągi drewna. ${p.name} kiwa głową: tej zimy nikt nie zmarznie.`},
  kozy:{w:1,make:()=>S.bld.some(b=>b.kind==='zagroda'&&bDone(b))&&S.people.some(p=>p.age<6)?mk(motherZ()||pickAdult(),{base:zAnimals()}):null,t:(r,p)=>`${p.name} prosi o mleko dla małych`,
-  say:'Najmłodsze słabo rosną. Kozie mleko by im pomogło.',d:'Hodowca w zagrodzie oswaja dzikie kozy. Trzeba dwóch kóz więcej.',done:r=>zAnimals()>=r.base+2,
+  say:'Najmłodsze słabo rosną. Kozie mleko by im pomogło.',d:'Hodowca w zagrodzie oswaja dzikie kozy. Potrzeba jeszcze dwóch kóz.',done:r=>zAnimals()>=r.base+2,
   end:p=>{S.health=clamp(S.health+.03,0,1);return`${p.name} przynosi dzban mleka prosto z zagrody. Dzieci piją na zmianę.`}},
  dom:{w:2,make:()=>S.day>YEAR*.6?mk(pickAdult(p=>p.age>=16&&p.age<26),{base:zHouses()}):null,t:(r,p)=>`${p.name} chce zamieszkać osobno`,
   say:'Śpimy u rodziców, we czworo pod jednym kocem. Chciałoby się mieć coś swojego.',d:'Budowa → Domy. Wystarczy każdy nowy dom.',done:r=>zHouses()>r.base,
@@ -84,7 +84,7 @@ Object.assign(REQS,{
   end:p=>`${p.name} podlewa kwiaty co rano z glinianego kubka. Wieś jest od razu weselsza.`},
  laznia:{w:1,make:()=>!hasB('laznia')&&bAvail('laznia')&&S.people.length>=16?mk(pickAdult()):null,t:(r,p)=>`${p.name} tęskni za gorącą parą`,
   say:'Po całym dniu przy glinie albo w lesie nie da się domyć w zimnym strumieniu.',d:'Budowa → Wspólnota → Łaźnia.',done:()=>hasB('laznia'),
-  end:p=>{S.health=clamp(S.health+.04,0,1);return`W łaźni para gęsta jak mgła. ${p.name} wychodzi czerwony i szczęśliwy prosto w śnieg.`}},
+  end:p=>{S.health=clamp(S.health+.04,0,1);return`W łaźni para gęsta jak mgła. ${p.name} wychodzi ${gw(p,'czerwony i szczęśliwy','czerwona i szczęśliwa')} prosto w śnieg.`}},
  gaj:{w:1,make:()=>!hasB('gaj')&&bAvail('gaj')?mk(oldestZ()):null,t:(r,p)=>`${p.name} szuka miejsca dla bogów`,
   say:'Dziadowie mieli miejsce, gdzie się nie rąbie drzew i nie podnosi głosu. Tu takiego nie mamy.',d:'Budowa → Wspólnota → Święty gaj. Najlepiej na wzgórzu, wśród starych drzew.',done:()=>hasB('gaj'),
   end:p=>{pamAdd(2,'gaj');return`${p.name} wiesza na najstarszym dębie pierwszy wieniec. Ludzie mówią tam ciszej.`}},

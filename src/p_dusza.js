@@ -4,7 +4,7 @@
 // Z tego biorą się wieczorne rozmowy (p_wieczor.js). Nic nie liczy się w każdej klatce poza jednym dodawaniem przy pracy.
 const USP={
  gadula:['Gadatliwy','Gadatliwa','mówi dużo i chętnie'],milczek:['Milczący','Milcząca','odzywa się rzadko'],spiew:['Rozśpiewany','Rozśpiewana','nuci przy pracy i przy ogniu'],
- marzy:['Marzyciel','Marzycielka','patrzy w morze i w gwiazdy, ma żywe sny'],zrzeda:['Zrzędliwy','Zrzędliwa','zawsze coś mu nie pasuje'],wesoly:['Wesoły','Wesoła','żartuje nawet w złe dni'],
+ marzy:['Marzyciel','Marzycielka','patrzy w morze i w gwiazdy, ma żywe sny'],zrzeda:['Zrzędliwy','Zrzędliwa','zawsze znajdzie powód do narzekania'],wesoly:['Wesoły','Wesoła','żartuje nawet w złe dni'],
  bogo:['Bogobojny','Bogobojna','pamięta o bogach i obrzędach'],ciekaw:['Ciekawski','Ciekawska','wszędzie zajrzy, o wszystko pyta'],teskni:['Tęskniący','Tęskniąca','wciąż wspomina dawne strony'],
  opiek:['Opiekuńczy','Opiekuńcza','pilnuje dzieci i chorych'],porywczy:['Porywczy','Porywcza','łatwo wybucha, szybko się godzi'],lagodny:['Łagodny','Łagodna','godzi zwaśnionych'],
  dumny:['Dumny','Dumna','chwali swoją robotę'],zabobon:['Zabobonny','Zabobonna','widzi znaki i boi się złych mocy'],kpiarz:['Kpiarz','Kpiarka','docina, ale bez złości'],gosp:['Gospodarny','Gospodarna','liczy każdy worek']};
@@ -96,6 +96,6 @@ function memText(p,m){const k=m[1],r=m[2];switch(k){
  case'slub':return`Ślub${r?' z: '+r:''}`;case'dziecko':return`Narodziny dziecka${r?': '+r:''}`;case'smierc':return`Śmierć: ${r||'ktoś bliski'}`;
  case'dom':return r&&/^nowy dom/.test(r)?r.replace(/^./,x=>x.toUpperCase()):`Własny dom (${(BD[r]&&BD[r].n||'chata').toLowerCase()})`;case'rana':return'Rana';case'budowa':return`Przy budowie: ${(BD[r]&&BD[r].n||'budowla').toLowerCase()}`;
  case'wyprawa':return`Wyprawa${r?': '+r:''}`;case'mistrz':return`Mistrzostwo: ${CN[r]||r}`;case'zdobycz':return'Wielka zdobycz';case'pozar':return'Pożar';case'sen':return'Sen, który się sprawdził';
- case'obrzed':return`Obrzęd${r?': '+r:''}`;case'zguba':return'Zgubił się w lesie';case'klotnia':return`Kłótnia${r?' z: '+r:''}`;case'zjawa':return`${r||'Zjawa'}`;case'dar':return'Dar od kogoś';
+ case'obrzed':return`Obrzęd${r?': '+r:''}`;case'zguba':return gw(p,'Zgubił się w lesie','Zgubiła się w lesie');case'klotnia':return`Kłótnia${r?' z: '+r:''}`;case'zjawa':return`${r||'Zjawa'}`;case'dar':return'Dar od kogoś';
  case'przyjazn':return`Przyjaźń${r?': '+r:''}`;case'radosc':return r?r.replace(/^./,x=>x.toUpperCase()):'Dobra chwila';case'zalot':return`Zaloty${r?': '+r:''}`;case'wstyd':return r?'Wstyd: '+r:'Wstyd';case'strach':return r?'Strach: '+r:'Strach';case'zgoda':return`Zgoda${r?' z: '+r:''}`;default:return k}}
 {const st=document.createElement('style');st.textContent='.dusza{margin:6px 0 2px}.dusza p{margin:3px 0}.dusza .tag{margin-left:4px}.dmem summary{cursor:pointer;color:var(--gold);font-size:13px;margin:3px 0}.dmem ul{margin:2px 0 4px 18px;padding:0}.dmem li{font-size:13px;margin:2px 0}.dmem small{color:var(--mut)}';document.head.appendChild(st)}

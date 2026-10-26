@@ -7,14 +7,14 @@ try{delete BD.zagroda.r;BD.zagroda.d='Hodowcy chodzą na łowy tam, gdzie pasą 
 function kozRelease(person){if(!person.kozN)return;const [i,j]=tileOf(person.x,person.z);
  const herd=S.herds.find(item=>item.type==='koza'&&Math.hypot(item.x-person.x,item.z-person.z)<4);
  if(herd){herd.n+=person.kozN;herd.max=Math.max(herd.max,herd.n)}else S.herds.push({type:'koza',i,j,x:person.x,z:person.z,tx:person.x,tz:person.z,n:person.kozN,max:Math.max(ANIMAL.koza[1],person.kozN),tame:0});
- person.kozN=0;person.kozB=null;log('Brak wolnej zagrody. '+person.name+' wypuszcza prowadzoną kozę tam, gdzie stoi.');toast('Koza wypuszczona — brakuje miejsca w zagrodzie.');
+ person.kozN=0;person.kozB=null;log('Brak wolnej zagrody. '+person.name+' wypuszcza prowadzoną kozę tam, gdzie stoi.');toast('Koza wypuszczona: brakuje miejsca w zagrodzie.');
 }
 function kozResume(person){
  const pens=S.bld.filter(building=>building.kind==='zagroda'&&bDone(building)&&(building.animals||0)+S.people.filter(other=>other!==person&&other.kozB===building.id).reduce((sum,other)=>sum+(other.kozN||0),0)+person.kozN<=penCap(building));
  const preferred=pens.find(building=>building.id===person.kozB);if(preferred)pens.splice(pens.indexOf(preferred),1),pens.unshift(preferred);
  for(const pen of pens){const entry=buildingEntryFor(person,pen);if(!entry)continue;person.kozB=pen.id;if(go(person,entry,'kozdom',null)){person.act='prowadzi kozę do zagrody';return true}}
  if(!pens.length){kozRelease(person);person.state='idle';person.wait=.4;return true}
- person.state='idle';person.wait=2;person.act='brak drogi do zagrody — prowadzi kozę';return true;
+ person.state='idle';person.wait=2;person.act='brak drogi do zagrody, prowadzi kozę';return true;
 }
 function kozDeliver(person){if(!person.kozN){person.state='idle';return}
  const pen=bById(person.kozB),entry=person.routeGoal;

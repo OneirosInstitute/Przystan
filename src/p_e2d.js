@@ -71,12 +71,12 @@ const E2B={
   ['Wspólnota: 60 osób',()=>S.people.length+(S.hamlets||[]).reduce((a,h)=>a+h.pop,0)>=60,'Liczą się ludzie w osadzie i w przysiółkach.']]},
  bagna:{n:'Za bagnami',intro:'Na mokradłach zaczyna się nowa robota: cięcie torfu i wytop żelaza z rudy darniowej. Kto chodzi na bagna latem, niech bierze zioła.',g:[
   ['Postaw kopankę torfu',()=>hasDone('torfowisko'),'Budowa → Surowce → Kopanka torfu, na mokradle.'],
-  ['Wykop 300 opału z torfu',()=>(S.e2.torf||0)>=300,'Kopanki pracują od wiosny do jesieni.'],
+  ['Wykop 300 porcji opału z torfu',()=>(S.e2.torf||0)>=300,'Kopanki pracują od wiosny do jesieni.'],
   ['Postaw dymarkę',()=>hasDone('dymarka'),'Budowa → Rzemiosło → Dymarka. Potrzebuje rudy i opału.'],
   ['Nowy przysiółek za bagnami',()=>(S.hamlets||[]).some(h=>h.day>(S.e2.t7||0)),'Ludzie → Wspólnota → nowy przysiółek.']]},
  gory:{n:'W górach',intro:'W górach kamień jest wszędzie, a w skale biegną żyły rudy. Wiatr na grani nie ustaje, a zima przychodzi wcześniej.',g:[
   ['Postaw sztolnię',()=>hasDone('sztolnia'),'Budowa → Surowce → Sztolnia, w górach albo przy skałach.'],
-  ['Wydobądź 60 rudy ze skały',()=>(S.e2.rudaS||0)>=60,'Sztolnia daje rudę przez cały rok.'],
+  ['Wydobądź 60 porcji rudy ze skały',()=>(S.e2.rudaS||0)>=60,'Sztolnia daje rudę przez cały rok.'],
   ['Postaw piwnicę w skale',()=>hasDone('piwnica'),'Budowa → Magazyny → Piwnica w skale.'],
   ['Przysiółek w górach',()=>(S.hamlets||[]).some(h=>hType(h)==='high'),'Ludzie → Wspólnota → nowy przysiółek w górskiej krainie.']]},
  wielka:{n:'Wielka łódź',intro:'Na pochylni szkutni rośnie wielka łódź. Etap po etapie: najpierw stępka, potem wręgi, poszycie, a na końcu maszt i żagiel.',g:BIG.map((s,i)=>[s.n+' wielkiej łodzi',()=>(S.e2.big||0)>i,'Szkutnicy pracują w szkutni: '+s.d+'.'])},
@@ -191,7 +191,7 @@ function e2Rejs(){const why=e2RejsWhy();if(why){toast(why);return}const sz=S.bld
 {const _fe=finishExp;finishExp=function(e,out){if(e.type!=='rejs')return _fe(e,out);S.exps=S.exps.filter(x=>x!==e);const lines=[];
  const C=e2Coast(),a0=-Math.PI+e.arc*2.0944;let rv=0;C.forEach(([i,j,a])=>{let d=a-a0;while(d<0)d+=6.283;if(d<2.2&&!rev[j*N+i]){reveal(i,j,5);rv++}});regionScan(true);
  const lost=Math.random()<e.risk*.35;if(!lost)S.res.lodz=(S.res.lodz||0)+1;
- out.forEach(p=>{if(Math.random()<e.risk){p.hp=Math.max(.35,p.hp-.2);p.hurt=1;lines.push(p.name+' wraca przemarznięty i potłuczony.')}gainXp(p,'rybak',40)});
+ out.forEach(p=>{if(Math.random()<e.risk){p.hp=Math.max(.35,p.hp-.2);p.hurt=1;lines.push(p.name+' wraca '+gw(p,'przemarznięty i potłuczony','przemarznięta i potłuczona')+'.')}gainXp(p,'rybak',40)});
  const ry=Math.round(30+Math.random()*40),sk=Math.round(2+Math.random()*4),dr=Math.round(Math.random()*14);S.res.ryby+=ry;S.res.skory+=sk;S.res.drewno+=dr;
  lines.unshift(['Opłynęli cypel, za którym nikt z nas jeszcze nie był.','Na skałach przy brzegu siedziały setki ptaków.','Morze było spokojne, a woda tak czysta, że widać było dno.','Trzy dni wiał wiatr od lądu i ledwo wrócili.'][(Math.random()*4)|0]);
  lines.push(`Przywieźli: ryby ${ry}, skóry fok ${sk}${dr?', drewno z wyrzutów '+dr:''}.`);if(rv)lines.push('Na mapie przybyło wybrzeża.');if(lost)lines.push('Łodzi nie udało się uratować: rozbiła się o skały przy powrocie. Ludzie wrócili brzegiem.');
@@ -200,7 +200,7 @@ function e2Rejs(){const why=e2RejsWhy();if(why){toast(why);return}const sz=S.bld
  S.expLog=S.expLog||[];S.expLog.unshift({d:Math.floor(S.day)+1,r:'Rejs wzdłuż brzegu',t:lines.join(' ')});if(S.expLog.length>8)S.expLog.pop();
  log('Rejs wraca. '+lines.join(' '));toast('Łódź wróciła z rejsu');if(S.e2.rejsy===1)song('Pieśń o pierwszym rejsie');assign();renderPanel()}}
 {const _eh=expHTML;expHTML=function(){let h=_eh();if(!S||!S.e2||S.path!=='morze')return h;const why=e2RejsWhy();const on=S.exps.find(e=>e.type==='rejs');
- const card=`<div class="card"><h4>Rejs wzdłuż brzegu</h4><p>Łódź z szkutni i trzy osoby płyną cztery dni wzdłuż brzegu wyspy. Przywożą ryby i skóry fok, a każda wyprawa odsłania inny kawał wybrzeża. Przy sztormie i zimą łatwiej o wypadek.</p><p class="mut">Łodzi przy brzegu: ${Math.floor(S.res.lodz||0)} · rejsów: ${S.e2.rejsy||0}</p>${on?`<p class="ok">Łódź jest w rejsie. Powrót za ${on.left} dni.</p>`:why?`<p class="no">${why}</p>`:'<button class="pri" data-rejs="1">Wypłyń</button>'}</div>`;
+ const card=`<div class="card"><h4>Rejs wzdłuż brzegu</h4><p>Łódź ze szkutni i trzy osoby płyną cztery dni wzdłuż brzegu wyspy. Przywożą ryby i skóry fok, a każda wyprawa odsłania inny kawał wybrzeża. Przy sztormie i zimą łatwiej o wypadek.</p><p class="mut">Łodzi przy brzegu: ${Math.floor(S.res.lodz||0)} · rejsów: ${S.e2.rejsy||0}</p>${on?`<p class="ok">Łódź jest w rejsie. Powrót za ${on.left} dni.</p>`:why?`<p class="no">${why}</p>`:'<button class="pri" data-rejs="1">Wypłyń</button>'}</div>`;
  return card+h}}
 document.addEventListener('click',e=>{if(e.target.closest('[data-rejs]')&&S){e2Rejs()}});
 

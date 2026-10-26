@@ -60,6 +60,9 @@ const ico=(k,cls)=>`<svg class="i${cls?' '+cls:''}" viewBox="0 0 24 24" aria-hid
 
 /* ================= stałe ================= */
 const N=384, VW=N+1, DAY=240, SD=5, YEAR=20, K=96/YEAR, KF=K/2.4, SEAS=['Lato','Jesień','Zima','Wiosna'];
+// odmiana liczebników: 1 osoba, 2 osoby, 5 osób
+function plW(n,a,b,c){n=Math.abs(Math.floor(n));return n===1?a:(n%10>=2&&n%10<=4&&(n%100<10||n%100>=20))?b:c}
+function latW(n){return plW(n,'rok','lata','lat')}
 const T0=0.22, T1=0.80, SAVEKEY='przystan-v7';
 const FOOD=['suchary','jagody','grzyby','ryby','mieso','ziarno','mleko','miod','warzywa','chleb','ser','kiszonki'];
 const RN={suchary:'Suchary',jagody:'Jagody',grzyby:'Grzyby',ryby:'Ryby',mieso:'Mięso',drewno:'Kłody',opal:'Opał',kamien:'Kamień',glina:'Glina',deski:'Deski',gwozdzie:'Gwoździe',plotno:'Płótno',skory:'Skóry',odziez:'Odzież',narz:'Narzędzia żelazne',narzk:'Narzędzia kamienne',cegla:'Cegły',ziarno:'Ziarno',mleko:'Mleko',ruda:'Ruda darniowa',wegiel:'Węgiel drzewny',wlokna:'Włókna lnu',miod:'Miód',ziola:'Zioła',warzywa:'Warzywa',maka:'Mąka',chleb:'Chleb',ser:'Ser',kiszonki:'Kiszonki',naczynia:'Naczynia'};
@@ -72,10 +75,10 @@ const BD={
  zbieracz:{cat:'jedzenie',n:'Chata zbieracza',w:2,h:2,cost:{drewno:12},work:5,wk:3,r:11,nodes:['bush','grzyb','zboze','len','ziola','ul'],c:'zbieracz',d:'Zbieracze zbierają jagody, grzyby, dzikie zboże i len w zasięgu. Z wiedzą także zioła i miód dzikich pszczół.'},
  mysliwy:{cat:'jedzenie',n:'Chata myśliwego',w:2,h:2,cost:{drewno:14},work:6,wk:2,r:16,c:'mysliwy',d:'Polowanie na sarny, kozy i dziki: mięso i skóry. Dzik potrafi zranić.'},
  zagroda:{cat:'uprawa',n:'Zagroda',w:3,h:3,cost:{drewno:24},work:8,wk:2,r:22,c:'hodowca',pen:1,need:'h_zagr',d:'Hodowcy oswajają dzikie kozy w zasięgu. Oswojone dają mleko i rodzą młode. Wilki polują na zagrody bez opieki.'},
- pole:{cat:'uprawa',n:'Pole',w:4,h:4,cost:{drewno:4},work:6,wk:3,c:'rolnik',need:'pole',field:1,d:'Siew wiosną lub na początku lata (10 ziarna), żniwa jesienią. Gleba męczy się po każdym zbiorze i odpoczywa, gdy pole leży odłogiem.'},
+ pole:{cat:'uprawa',n:'Pole',w:4,h:4,cost:{drewno:4},work:6,wk:3,c:'rolnik',need:'pole',field:1,d:'Siew wiosną lub na początku lata (10 porcji ziarna), żniwa jesienią. Gleba męczy się po każdym zbiorze i odpoczywa, gdy pole leży odłogiem.'},
  pomost:{cat:'jedzenie',n:'Pomost rybacki',w:2,h:2,cost:{drewno:10,deski:6},work:6,wk:2,r:9,nodes:['fish'],c:'rybak',shore:1,d:'Stawia się na brzegu. Rybacy łowią w łowiskach w zasięgu.'},
  drwal:{cat:'surowce',n:'Chata drwala',w:2,h:2,cost:{drewno:8},work:4,wk:3,r:10,nodes:['tree'],c:'drwal',d:'Drwale ścinają drzewa w zasięgu. Las nie odrasta sam.'},
- lesnik:{cat:'surowce',n:'Leśniczówka',w:2,h:2,cost:{drewno:12},work:5,wk:2,r:10,c:'drwal',plant:1,d:'Leśniczy sadzi drzewa na pniakach. Las odrasta w około rok.'},
+ lesnik:{cat:'surowce',n:'Leśniczówka',w:2,h:2,cost:{drewno:12},work:5,wk:2,r:10,c:'drwal',plant:1,d:'Leśniczy sadzi drzewa na pniakach. Las odrasta mniej więcej w rok.'},
  kamien:{cat:'surowce',n:'Kamieniołom',w:2,h:2,cost:{drewno:10},work:5,wk:2,r:11,nodes:['rock'],c:'kamieniarz',d:'Kamieniarze zbierają kamień z odkrywek w zasięgu.'},
  ruda:{cat:'surowce',n:'Wykop rudy',w:2,h:2,cost:{drewno:10},work:5,wk:2,r:12,nodes:['ruda'],c:'kamieniarz',d:'Wydobywa rudę darniową z podmokłych łąk. Bez kuźni jest bezużyteczna.'},
  glinianka:{cat:'surowce',n:'Glinianka',w:2,h:2,cost:{drewno:8},work:4,wk:2,r:10,nodes:['clay'],c:'murarz',d:'Kopacze wydobywają glinę z odsłonięć w zasięgu.'},
@@ -118,7 +121,7 @@ const TRIBE=[
  ['Kamień z wgłębieniem','Płaski kamień z gładkim wgłębieniem i otoczak wytarty od używania. W szczelinach zwęglone ziarna, drobne jak u dzikiej trawy.'],
  ['Kamienny okół','Krąg z ułożonych płasko kamieni, z wąskim wejściem. W środku kości kóz, młodych i starych, i strzępy rzemieni.'],
  ['Zdziczały sad','Stare, pokręcone jabłonie i grusze rosną w równych rzędach, choć dokoła jest puszcza. Pod najstarszą jabłonią porośnięty kopiec z płaskim kamieniem.']];
-const TRAITS={Wytrwały:['Wytrwała','pracuje o 10% wydajniej'],Silny:['Silna','szybciej przy ciężkiej pracy'],Dociekliwy:['Dociekliwa','uczy się o 25% szybciej'],Ostrożny:['Ostrożna','rzadziej odnosi rany'],Uparty:['Uparta','próby udają się częściej'],Nauczyciel:['Nauczycielka','uczniowie przy nim uczą się szybciej'],Pogodny:['Pogodna','podnosi nadzieję osady'],Cierpliwy:['Cierpliwa','lepiej znosi głód i zimno']};
+const TRAITS={Wytrwały:['Wytrwała','pracuje o 10% wydajniej'],Silny:['Silna','szybciej przy ciężkiej pracy'],Dociekliwy:['Dociekliwa','uczy się o 25% szybciej'],Ostrożny:['Ostrożna','rzadziej odnosi rany'],Uparty:['Uparta','próby udają się częściej'],Nauczyciel:['Nauczycielka','jego lub jej uczniowie uczą się szybciej'],Pogodny:['Pogodna','podnosi nadzieję osady'],Cierpliwy:['Cierpliwa','lepiej znosi głód i zimno']};
 const TKEYS=Object.keys(TRAITS);
 const WEATHER={frost:['siarczysty mróz',.8,-12],clear:['pogodnie',1,0],rain:['deszcz',.75,-2],fog:['mgła',.88,-1],storm:['sztorm',.5,-5],drought:['upał',.92,4],snow:['śnieg',.7,-5],
  burza:['burza',.88,1],grad:['grad',.8,-2],zamiec:['zamieć',.5,-14],odwilz:['odwilż',.85,2],wiatr:['wichura',.9,-2],babie:['babie lato',1.04,3]};

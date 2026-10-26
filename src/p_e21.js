@@ -47,7 +47,7 @@ function e2Hor(){const why=e2HorWhy();if(why){toast(why);return}const sz=S.bld.f
  else lines.push('Opłynęli wszystkie znane wyspy. Za nimi jest już tylko otwarte morze.');
  const got={ryby:Math.round(30+Math.random()*40),skory:Math.round(2+Math.random()*5)};if(nx)Object.entries(nx.g).forEach(([k,v])=>{const n=Math.round(v*5);got[k]=(got[k]||0)+n;S.e2.islGoods=(S.e2.islGoods||0)+n});Object.entries(got).forEach(([k,v])=>S.res[k]=(S.res[k]||0)+v);
  lines.push('Przywieźli: '+Object.entries(got).map(([k,v])=>RN[k].toLowerCase()+' '+v).join(', ')+'.');
- out.forEach(p=>{if(Math.random()<e.risk){p.hp=Math.max(.3,p.hp-.25);p.hurt=1;lines.push(p.name+' wraca chory od zimna i słonej wody.')}gainXp(p,'rybak',50)});
+ out.forEach(p=>{if(Math.random()<e.risk){p.hp=Math.max(.3,p.hp-.25);p.hurt=1;lines.push(p.name+' wraca '+gw(p,'chory','chora')+' od zimna i słonej wody.')}gainXp(p,'rybak',50)});
  if(lost)lines.push(e.big?'':'Jedna łódź przepadła w sztormie. Ludzie przesiedli się do drugiej.');
  out.forEach(p=>{expReturn(p,e)});S.e2.horN=(S.e2.horN||0)+1;techXp('nauka',14);
  S.expLog=S.expLog||[];S.expLog.unshift({d:Math.floor(S.day)+1,r:'Za horyzont',t:lines.join(' ')});if(S.expLog.length>8)S.expLog.pop();

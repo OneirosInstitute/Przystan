@@ -14,7 +14,7 @@ const KR={
  zaglebie:{n:'Zagłębie',d:'Wychodnie węgla i rudy w jednym miejscu. Tu stoją szyby i kopalnie.',cost:'Pył w szybach i kopalniach: górnicy łapią kaszel górniczy, zioła go łagodzą.',b:{odkrywka:1.1,szybw:1.1,kopalnia:1.1,ruda:1.15},tint:[.95,.95,.97]},
  mokradla:{n:'Mokradła',d:'Trzciny, oczka wodne i torf. Ruda darniowa i zioła bagienne.',cost:'Latem komary: kto tu pracuje, łapie gorączkę bagienną.',b:{torfowisko:1.2,ruda:1.25,ogrodziol:1.1},tint:[.9,.95,.84]},
  gliniska:{n:'Gliniska nad wodą',d:'Grube warstwy gliny przy wodzie. Gliniaki, cegielnie i garncarze.',cost:'Wiosną roztopy zamieniają wyrobiska w błoto: glinianka i gliniak pracują o 30% wolniej.',b:{glinianka:1.25,gliniak:1.15,cegielnia:1.1,garncarnia:1.1},tint:[1.04,1,.95]},
- wybrzeze:{n:'Wybrzeże i Zatoki',d:'Plaże, zatoki i pomosty. Ryby, sól i bursztyn.',cost:'Słony wiatr od morza: pola −10%, a w sztorm pomost stoi.',field:.9,b:{pomost:1.2,warzelnia:1.15}}};
+ wybrzeze:{n:'Wybrzeże i Zatoki',d:'Plaże, zatoki i pomosty. Ryby, sól i bursztyn.',cost:'Słony wiatr od morza: pola −10%, a w sztorm pomost nie pracuje.',field:.9,b:{pomost:1.2,warzelnia:1.15}}};
 // ---------- przydział ról: z ziemi i złóż, każda rola co najmniej raz ----------
 (function krAssign(){/* krainy nowego lądu (4.5) mają rolę z projektu */const R=REGIONS.filter(r=>r&&!r.ring);if(!R.length)return;const st={};R.forEach(r=>st[r.id]={n:0,h:0,sl:0,sun:0,bi:{},dep:{}});
  for(let j=1;j<N-1;j+=2)for(let i=1;i<N-1;i+=2){const k=j*N+i,q=REGION[k];if(q<0||!st[q]||!land[k])continue;const s=st[q];const b=biomeOf(i,j);s.n++;s.bi[b]=(s.bi[b]||0)+1;s.h+=tileH(i,j);s.sl+=slope(i,j);s.sun+=Math.max(0,tileH(i,j-1)-tileH(i,j+1))}

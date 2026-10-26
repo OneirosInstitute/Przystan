@@ -42,7 +42,7 @@ function drDone(r){const d=DROGI[r.t];return r.tiles.every(k=>drLv(k)>=d.lv||(r.
 function drLay(r,k,p){const d=DROGI[r.t];S.res.kamien=Math.max(0,S.res.kamien-d.cost);ladInit();
  nodes.forEach(n=>{if(n.type!=='fish'&&n.i===k%N&&n.j===((k/N)|0)&&n.amt>0){if(n.type==='tree')S.res.drewno+=2;n.gone=1;n.amt=0;S.nodeAmt[n.id]=0;nodeVis(n)}});
  S.lad[k]={t:r.t,d:S.day};decoHidden.add(k);ladDeco(k);ladDirty=1;tread[k]=Math.max(tread[k],.9+.03*d.lv);treadDirty=true;r.n=(r.n||0)+1;drPlanVis();
- if(drDone(r)){S.roads=S.roads.filter(x=>x!==r);log(`Gotowe: ${d.kr} ${r.to?'do celu: '+r.to:''} (${r.n} pól). ${p?p.name+' kładzie ostatni kamień.':''}`);toast(`${d.n} gotowa`);try{sfx('bell')}catch(e){}}}
+ if(drDone(r)){S.roads=S.roads.filter(x=>x!==r);log(`Gotowe: ${d.kr} ${r.to?'do celu: '+r.to:''} (${r.n} ${plW(r.n,'pole','pola','pól')}). ${p?p.name+' kładzie ostatni kamień.':''}`);toast(`${d.n} gotowa`);try{sfx('bell')}catch(e){}}}
 {const _pj=planJob;planJob=function(p){if(p.roadK&&!(p.state==='work'&&p.workKind==='road')&&p.after!=='road')p.roadK=null;
   if(S&&S.roads&&S.roads.length&&isWork()&&!p.fireB&&isAdult(p)&&!restNow(p)&&!pendingDelivery(p)){
    if(p.job==='bud'&&!budSites()&&!haulSite(6)&&drJob(p))return true;
@@ -80,11 +80,11 @@ function drTap(x,y){const tg=drTarget(x,y);if(!tg){toast('Tam nie da się poprow
  if(!P.tiles.length){toast('Ta trasa ma już taką nawierzchnię');drCur=null;drPrevShow(null);drRender();return}
  drCur=Object.assign(P,{to:tg.to});drPrevShow(P.tiles);drRender()}
 function drConfirm(){const P=drCur;if(!P)return;const r={id:++S.roadId,t:P.t,tiles:P.tiles,to:P.to,n:0,d0:S.day};drInit().push(r);
- const b=S.people.filter(p=>p.job==='bud').length;log(`Wytyczono: ${DROGI[P.t].kr} do celu: ${P.to}, ${P.tiles.length} pól.${b?' Budowniczowie wbijają paliki.':' Nikt nie jest budowniczym: drogę ułożą wolne ręce, kiedy znajdą czas.'}`);
+ const b=S.people.filter(p=>p.job==='bud').length;log(`Wytyczono: ${DROGI[P.t].kr} do celu: ${P.to}, ${P.tiles.length} ${plW(P.tiles.length,'pole','pola','pól')}.${b?' Budowniczowie wbijają paliki.':' Nikt nie jest budowniczym: drogę ułożą wolne ręce, kiedy znajdą czas.'}`);
  toast('Trasa wytyczona');drCur=null;drPrevShow(null);drPlanVis();drRender()}
 function drDays(work){const b=Math.max(1,S.people.filter(p=>p.job==='bud').length);return work/b/(DAY*(T1-T0))}
 function drRender(){const t=drTool,d=DROGI[t];let h=`<div class="lt">${DR_K.map(k=>{const x=DROGI[k],ok=!x.need||x.need();return`<button data-drt="${k}" class="${k===t?'on':''}${ok?'':' dim'}">${x.n}</button>`}).join('')}</div>`;
- if(drCur){const P=drCur,ok=S.res.kamien>=P.stone;h+=`<div class="li"><span><b>${d.n}</b> do: ${P.to}<br>${P.tiles.length} pól, z tego ${P.trod} już wydeptanych · kamień ${P.stone}${ok?'':` (w składzie ${Math.floor(S.res.kamien)})`} · ok. ${Math.max(.1,drDays(P.work)).toFixed(1)} dnia pracy</span>
+ if(drCur){const P=drCur,ok=S.res.kamien>=P.stone;h+=`<div class="li"><span><b>${d.n}</b> do: ${P.to}<br>${P.tiles.length} ${plW(P.tiles.length,'pole','pola','pól')}, z tego ${P.trod} już wydeptanych · kamień ${P.stone}${ok?'':` (w składzie ${Math.floor(S.res.kamien)})`} · ok. ${Math.max(.1,drDays(P.work)).toFixed(1)} dnia pracy</span>
   <span style="display:flex;gap:6px"><button data-drx="new">Inny cel</button><button class="pri" data-drx="ok">Wytycz</button></span></div>`}
  else h+=`<div class="li"><span><b>${d.n}</b> · kamień ${d.cost} za pole · o ${Math.round((d.sp-1)*100)}% szybciej<br>Dotknij budynku albo wydeptanej ścieżki, do której ma prowadzić droga.</span><span><button class="pri" data-drx="end">Gotowe</button></span></div>`;
  drBar.innerHTML=h}

@@ -17,7 +17,7 @@ const ATLAS=[
  ['Rośliny','len','Dziki len','Niebieskie kwiaty. Z łodyg da się wyczesać włókno.',()=>seenNode('len')],
  ['Rośliny','ziola','Krwawnik i dziurawiec','Zioła na rany i gorączkę. Trzeba je umieć rozpoznać.',()=>seenNode('ziola')],
  ['Rośliny','paproc','Paproć','Dywan liści w cieniu lasu. Stare liście na posłanie.',()=>seenBiome('decid')||seenBiome('conif')],
- ['Rośliny','trzcina','Trzcina','Mokradła i brzegi. Maty, strzechy i maty do suszenia.',()=>seenBiome('wet')],
+ ['Rośliny','trzcina','Trzcina','Mokradła i brzegi. Strzechy, kosze i maty do suszenia.',()=>seenBiome('wet')],
  ['Rośliny','wrzos','Wrzos','Fioletowe hale pod szczytami. Pszczoły za nim przepadają.',()=>seenBiome('high')],
  ['Zwierzęta','sarna','Sarna','Płochliwa, w lasach i na polanach. Mięso i skóra.',()=>seenHerd('sarna')],
  ['Zwierzęta','koza','Dzika koza','Stada na otwartych stokach. Da się ją oswoić.',()=>seenHerd('koza')],
@@ -70,9 +70,9 @@ function expTick(){if(!S.exps||!S.exps.length)return;
 function finishExp(e,out){const r=REGIONS[e.r];S.exps=S.exps.filter(x=>x!==e);const lines=[];const fl=EFLAV[r.type];lines.push(fl[(Math.random()*fl.length)|0]);
  out.forEach(p=>{const tool=p.tool.t===2?.85:p.tool.t===1?1:1.25,coat=seasonIdx()===2&&p.coat<=0?1.5:1,sk=1-.05*Math.max(p.sk.mysliwy,p.sk.zbieracz),ost=p.trait==='Ostrożny'?.6:1;
   const rk=e.risk*tool*coat*sk*ost*(1-Math.min(.5,.06*offLv('lowczy')));const x=Math.random();
-  if(x<rk*.12&&seasonIdx()===2&&p.hp<.7){lines.push(p.name+' nie wraca. Zamarzł w zawiei na '+(r.known?r.name:'nieznanym terenie')+'.');killPerson(p,'na wyprawie');return}
-  if(x<rk*.3){p.hp=Math.max(.15,p.hp-.45);p.hurt=1;lines.push(p.name+' wraca ciężko ranny.')}
-  else if(x<rk){p.hp=Math.max(.3,p.hp-.18);p.hurt=1;lines.push(p.name+' skręcił nogę w drodze.')}
+  if(x<rk*.12&&seasonIdx()===2&&p.hp<.7){lines.push(p.name+' nie wraca. '+gw(p,'Zamarzł','Zamarzła')+' w zawiei na '+(r.known?r.name:'nieznanym terenie')+'.');killPerson(p,'na wyprawie');return}
+  if(x<rk*.3){p.hp=Math.max(.15,p.hp-.45);p.hurt=1;lines.push(p.name+' wraca ciężko '+gw(p,'ranny','ranna')+'.')}
+  else if(x<rk){p.hp=Math.max(.3,p.hp-.18);p.hurt=1;lines.push(p.name+' '+gw(p,'skręcił','skręciła')+' nogę w drodze.')}
   gainXp(p,r.type==='coast'?'rybak':r.type==='high'?'kamieniarz':'zbieracz',40);gainXp(p,'mysliwy',30)});
  const alive=out.filter(p=>S.people.includes(p));
  if(e.type==='zwiad'){for(let j=0;j<N;j+=4)for(let i=0;i<N;i+=4)if(REGION[j*N+i]===e.r)reveal(i,j,4);regionScan(true);S.regs[e.r]=1;r.known=true;techXp('nauka',20);

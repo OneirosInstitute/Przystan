@@ -30,7 +30,7 @@ const E4Domain=(()=>{
   state.e4.archive[person.id]={id:person.id,name:person.name,sex:person.sex,clanId:person.rod,fam:person.fam,par:(person.par||[]).slice(),gp:(person.gp||[]).slice(),generation:person.generation||1,age:person.age,birthDay:person.birthDay??null,deathDay:state.day,reason,skills:{...person.sk},historyUnknown:!!person.historyUnknown};
   state.people=state.people.filter(candidate=>candidate.id!==person.id);
   for(const partner of state.people){if(partner.pair===person.id)partner.pair=null;if(partner.betrothed===person.id)delete partner.betrothed;}
-  state.died=(state.died||0)+1;record(state,'death',person.name+' umiera. Ród zachowuje jego historię.',{personId:person.id,clanId:person.rod});
+  state.died=(state.died||0)+1;record(state,'death',person.name+' umiera. Ród zachowa pamięć o tej osobie.',{personId:person.id,clanId:person.rod});
  }
  function createSettlement(state,profile){
   if(state.e4.settlements[profile.id])throw new Error('Ośrodek już istnieje');

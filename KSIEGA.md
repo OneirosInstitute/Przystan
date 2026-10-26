@@ -1243,6 +1243,7 @@ W Ludziach (Praca i Mieszkańcy) wyszukiwarka szuka po imieniu, fachu albo budyn
 | 1.8.3 | poprawka: rozbudowa domu (szałas w chatę, chata w dom) nie zabiera już rodzinie spiżarki; w czasie budowy zapas zostaje w starym domu w granicach jego pojemności |
 | 1.9 | budynki z charakterem: każdy budynek inny (ściany, dachy, spadek, okap), koniki, malowane okiennice, ganki, przybudówki, garnki na płocie, zioła pod okapem, szyldy rzemiosł, wyraźniejsza kuźnia, łaźnia i chata wiecowa |
 | 1.10 | wykonanie budynków: surowe, porządne i mistrzowskie, wyraźnie widoczne po rozbudowie (wielkość, podmurówka, dach, okiennice, obramienia okien, kwiaty, płotek, szyld); karta budynku pokazuje wykonanie i trwałość; odmiany szałasów, studni, zagród i spiżarni |
+| 4.9.0-rc.6 | sprawa nad głową opisana na karcie osoby (prośba, słowa, co zrobić, termin); korekta polszczyzny w całej grze: liczebniki, rodzaj, jednostki, składnia |
 | 4.9.0-rc.5 | wieczorna karta opowieści: o zmroku czas staje, rozmowy przy ogniu, dzień w osadzie i noc czyta się strona po stronie, dotknięciem; sny rano; można wyłączyć w Kronice |
 | 4.9.0-rc.4 | nowy ekran startowy: żywa wyspa w tle, herb z wycinanki (łódź z drzewem życia), jeden przycisk, zapis z rokiem i zdaniem z ostatniego wieczoru, reszta w „Inne początki” |
 | 4.9.0-rc.3 | poprawka: z odciętego pola plaży schodzi się od razu, także nocą (wcześniej sen na piasku i powrót na brzeg rano) |

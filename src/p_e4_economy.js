@@ -38,7 +38,7 @@ const E4Economy=(()=>{
   const resources=domain.stock(state,settlementId),cost=materialCost(definition.cost,resources);if(!has(resources,cost))return{ok:false,reason:'Brakuje materiałów: '+Object.entries(definition.cost).filter(([resource,quantity])=>(resources[resource]||0)<quantity).map(([resource])=>catalog.resources[resource]).join(', ')};
   if(!workers(state,settlementId).length)return{ok:false,reason:'Brakuje dorosłego budowniczego.'};
   take(resources,cost);if(definition.crop)settlement.land.seeds[definition.crop]--;settlement.projects.push({kind,work:definition.labor,progress:0,materials:{...cost},started:state.day});
-  domain.record(state,'build',settlement.name+': rozpoczynają '+definition.name.toLowerCase()+'.',{settlementId});return{ok:true};
+  domain.record(state,'build',settlement.name+': rusza budowa ('+definition.name.toLowerCase()+').',{settlementId});return{ok:true};
  }
  // 4.6: ród prosi o zgodę zamiast budować sam (chyba że gracz pozwolił w polityce)
  let wantedNow=null;

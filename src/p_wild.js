@@ -43,10 +43,10 @@ function slowHTML(b){const d=BD[b.kind];if(!bDone(b)||!d.wk)return'';const ws=S.
 // ---- największy kłopot osady ----
 function troubles(){const T=[],n=S.people.length||1,sea=seasonIdx();
  const need=K*S.people.reduce((a,p)=>a+(p.age<3?.3:p.age<12?.6:p.age>55?.8:1),0)||1;const days=foodTotal()/need;
- T.push({n:'Mało jedzenia',sev:days<3?1:days<6?.65:days<10?.3:0,tip:`Zapasów starczy na ${Math.floor(days)} d. Więcej zbieraczy, rybaków i myśliwych; przetwórstwo i spiżarnia zmniejszają straty.`});
+ T.push({n:'Mało jedzenia',sev:days<3?1:days<6?.65:days<10?.3:0,tip:`Zapasów starczy na ${Math.floor(days)} ${dniW(Math.floor(days))}. Więcej zbieraczy, rybaków i myśliwych; przetwórstwo i spiżarnia zmniejszają straty.`});
  const homes=Object.values(S.fams).map(f=>f.home?bById(f.home):null).filter(h=>h&&bDone(h));const burn=homes.reduce((a,h)=>a+BD[h.kind].fuel,0)*K*1.4||1;const fd=S.res.opal/burn;
- if(sea===1||sea===2)T.push({n:'Opał na zimę',sev:fd<4?.95:fd<9?.55:fd<15?.25:0,tip:`Opału starczy na około ${Math.floor(fd)} d mrozu. Drewutnia i drwale, zanim spadnie śnieg.`});
- const homeless=S.people.filter(p=>!homeOf(p)).length;T.push({n:'Brak dachu nad głową',sev:homeless?Math.min(1,.35+homeless/n):0,tip:`${homeless} osób śpi pod gołym niebem. Postaw szałasy albo chaty.`});
+ if(sea===1||sea===2)T.push({n:'Opał na zimę',sev:fd<4?.95:fd<9?.55:fd<15?.25:0,tip:`Opału starczy na około ${Math.floor(fd)} ${dniW(Math.floor(fd))} mrozu. Drewutnia i drwale, zanim spadnie śnieg.`});
+ const homeless=S.people.filter(p=>!homeOf(p)).length;T.push({n:'Brak dachu nad głową',sev:homeless?Math.min(1,.35+homeless/n):0,tip:`${homeless} ${plW(homeless,'osoba śpi','osoby śpią','osób śpi')} pod gołym niebem. Postaw szałasy albo chaty.`});
  {const sites=S.bld.filter(b=>!bDone(b)).length,free=S.people.filter(p=>p.job==='rob'||p.job==='bud').length;const un=S.bld.filter(b=>!bDone(b)&&(b.unrN||0)>=3);if(un.length)T.push({n:'Plac budowy bez dojścia',sev:.7,tip:`Nikt nie może dojść do: ${un.map(b=>BD[b.kind].n.toLowerCase()).join(', ')}. Otaczają go inne budynki albo woda. Rozbierz go i postaw w innym miejscu.`});if(sites)T.push({n:'Budowy stoją',sev:free===0?.9:free<2&&sites>2?.5:0,tip:`Placów budowy: ${sites}. Wolnych rąk do noszenia i budowania: ${free}. Zmniejsz obsadę jakiegoś budynku w Ludzie → Praca.`})}
  T.push({n:'Zimno',sev:S.warm<.5?.85:S.warm<.75?.45:0,tip:'Ciepła odzież ze skór, domy z piecem i opał.'});
  T.push({n:'Choroby i rany',sev:S.health<.5?.85:S.health<.75?.4:0,tip:'Chata zielarki, łaźnia, studnia i odpoczynek chorych.'});
@@ -54,7 +54,7 @@ function troubles(){const T=[],n=S.people.length||1,sea=seasonIdx();
  const ad=S.people.filter(isAdult),bad=ad.filter(p=>p.tool.t===0).length/(ad.length||1);T.push({n:'Zużyte narzędzia',sev:bad>.5?.6:bad>.25?.3:0,tip:'Warsztat robi kamienne narzędzia, kuźnia żelazne.'});
  T.push({n:'Brak nadziei',sev:S.hope<.3?.8:S.hope<.45?.4:0,tip:'Obrzędy, wspólne posiłki, różnorodne jedzenie i ciepłe domy.'});
  T.push({n:'Niezgoda',sev:(S.dis||0)>.7?.9:(S.dis||0)>.45?.5:0,tip:'Wiec, starszy osady, spełnione prośby i święty gaj.'});
- const rep=S.bld.filter(b=>bDone(b)&&condOf(b)<.5).length;T.push({n:'Budynki do remontu',sev:rep?Math.min(.8,.25+rep*.12):0,tip:`${rep} budynków pracuje słabiej. Remonty w zakładce Budowa.`});
+ const rep=S.bld.filter(b=>bDone(b)&&condOf(b)<.5).length;T.push({n:'Budynki do remontu',sev:rep?Math.min(.8,.25+rep*.12):0,tip:`${rep} ${plW(rep,'budynek pracuje','budynki pracują','budynków pracuje')} słabiej. Remonty w zakładce Budowa.`});
  const wp=S.people.filter(p=>p.waitHome&&p.sex==='k').length;T.push({n:'Młode pary bez domu',sev:wp?Math.min(.7,.3+wp*.15):0,tip:`${wp} ${wp===1?'para czeka':'pary czekają'} na własny dom. Dopóki mieszkają u rodziców, nie będzie dzieci. Postaw szałas albo chatę.`});
  return T.sort((a,b)=>b.sev-a.sev)}
 function troubleHTML(){const t=troubles().filter(x=>x.sev>.15);

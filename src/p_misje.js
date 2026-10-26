@@ -29,7 +29,7 @@ function sendBuildingMission(buildingId){const building=bById(buildingId);if(!bu
  const departure=expCharge([person],food);if(!departure)return false;
  const days=expDays(target,'zwiad'),expedition={id:(S.expN=(S.expN||0)+1),r:target.id,type:'zwiad',ppl:[person.id],days,left:days,exit:exitTile(target),departure,started:false,risk:expRisk(target,1),missionBuilding:building.id,missionKind:definition.kind};
  S.exps.push(expedition);release(person);person.path=null;person.state='idle';person.wait=0;person.job='wyp';person.wb=null;person.exp=expedition.id;person.act='przygotowuje wyprawę: '+definition.title.toLowerCase();
- log(`${person.name} zabiera ${food} porcji żywności i wyrusza na zadanie „${definition.title}”. Powrót za około ${days} dni.`);toast('Zadanie rozpoczęte');assign();renderSel();renderPanel();save();return true;
+ log(`${person.name} zabiera ${food} porcji żywności i wyrusza na zadanie „${definition.title}”. Powrót za około ${days} ${dniW(days)}.`);toast('Zadanie rozpoczęte');assign();renderSel();renderPanel();save();return true;
 }
 const previousMissionFinish=finishExp;
 finishExp=function(expedition,people){const building=expedition.missionBuilding?bById(expedition.missionBuilding):null,kind=expedition.missionKind;
@@ -38,7 +38,7 @@ finishExp=function(expedition,people){const building=expedition.missionBuilding?
  const returned=returningIds.map(id=>S.people.find(person=>person.id===id)).filter(Boolean);
  if(!returned.length){log('Wyprawa z budynku nie wróciła.');return}
  if(kind==='koza'){const found=S.herds.some(herd=>herd.type==='koza'&&herd.n>0);
-  if(found&&(building.animals||0)<penCap(building)){const herd=S.herds.find(herd=>herd.type==='koza'&&herd.n>0);herd.n--;building.animals=(building.animals||0)+1;S.seen.koza=1;log(`${returned[0].name} wraca z dziką kozą. W zagrodzie jest teraz ${building.animals} zwierząt.`);toast('Koza dotarła do zagrody')}
+  if(found&&(building.animals||0)<penCap(building)){const herd=S.herds.find(herd=>herd.type==='koza'&&herd.n>0);herd.n--;building.animals=(building.animals||0)+1;S.seen.koza=1;log(`${returned[0].name} wraca z dziką kozą. W zagrodzie jest teraz ${building.animals} ${plW(building.animals,'zwierzę','zwierzęta','zwierząt')}.`);toast('Koza dotarła do zagrody')}
   else log('Poszukiwanie kozy nie powiodło się: brak wolnego miejsca w zagrodzie lub dzikiego stada.');}
  else if(kind==='tropy'){S.res.mieso=(S.res.mieso||0)+3;log('Tropiciel wrócił z nowymi tropami i mięsem.')}
  else if(kind==='rosliny'){S.res.ziola=(S.res.ziola||0)+3;log('Zbieracz wrócił z próbkami ziół.')}
@@ -46,7 +46,7 @@ finishExp=function(expedition,people){const building=expedition.missionBuilding?
  returned.forEach(person=>{if(!bDone(building)||!missionFor(building)||person.job!=='rob'||!(building.want>0))return;
   const workers=S.people.filter(worker=>worker.job==='wb'&&worker.wb===building.id);
   if(workers.length>=building.want){const replacement=workers[workers.length-1];if(replacement){release(replacement);replacement.job='rob';replacement.wb=null;replacement.state='idle';replacement.act='wraca do wolnych prac';}}
-  person.job='wb';person.wb=building.id;person.act='wrócił z wyprawy';});assign();renderPanel();save();
+  person.job='wb';person.wb=building.id;person.act=gw(person,'wrócił z wyprawy','wróciła z wyprawy');});assign();renderPanel();save();
 };
 const previousMissionBuildingPanel=bldPanelHTML;
 bldPanelHTML=function(building){let content=previousMissionBuildingPanel(building);const definition=missionFor(building);if(!definition||!bDone(building))return content;

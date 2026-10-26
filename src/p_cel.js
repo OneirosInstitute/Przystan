@@ -2,7 +2,6 @@
 /* ================= 3.3.1 Cele krok po kroku: opis i podpowiedź zawsze wskazują następny brakujący krok ================= */
 // Wcześniej podpowiedź do celu była stała: przy „Oswój pierwszą kozę” pulsował przycisk budowy zagrody także wtedy,
 // gdy zagroda już stała, a brakowało hodowcy albo kóz w jej zasięgu. Teraz każdy cel sprawdza stan osady i mówi, co dalej.
-const plW=(n,a,b,c)=>n===1?a:(n%10>=2&&n%10<=4&&(n%100<10||n%100>=20))?b:c;
 const celCat=c=>(CATS.find(x=>x[0]===c)||[])[1]||'';
 // biernik nazwy budynku: zagroda → zagrodę, chata zbieracza → chatę zbieracza, szałas → szałas
 const celAcc=n=>{const w=n.split(' ');w[0]=w[0].toLowerCase();if(w[0]!=='żarna')w[0]=w[0].replace(/a$/,'ę');return w.join(' ')};
@@ -62,12 +61,12 @@ const CEL={
   if(!ws.length)return{txt:`Zagroda stoi, a w pobliżu pasą się kozy (${n}). Brakuje hodowcy: przydziel kogoś do zagrody (Praca).`,hint:celAddW(best)};
   return{txt:`${ws[0].name} oswaja dzikie kozy w pobliżu zagrody (${n}). ${(best.animals||0)?'Kolejna':'Pierwsza'} będzie po trzech podejściach, teraz ${best.tame||0} z 3.`,wait:1}},
  'Zbierz pierwsze plony z pola':()=>{if(S.know.pole!=='tak')return null;const done=S.bld.filter(b=>b.kind==='pole'&&bDone(b));
-  if(!done.length){const s=celBuild('pole',1);if(S.res.ziarno<10&&!s.wait)s.txt+=` Do siewu potrzeba 10 ziarna, jest ${fmt(S.res.ziarno)}.`;return s}
+  if(!done.length){const s=celBuild('pole',1);if(S.res.ziarno<10&&!s.wait)s.txt+=` Do siewu potrzeba 10 porcji ziarna, jest ${fmt(S.res.ziarno)}.`;return s}
   const ripe=done.find(b=>b.field&&b.field.st==='dojrzale'),grow=done.find(b=>b.field&&b.field.st==='rosnie');
   const noW=b=>!celWorkers(b).length;
   if(ripe)return noW(ripe)?{txt:'Zboże dojrzało, ale nikt nie pracuje na polu. Przydziel rolnika (Praca).',hint:celAddW(ripe)}:{txt:'Zboże dojrzało: rolnicy zbierają plony.',wait:1};
   if(grow){const g=Math.round(100*(grow.field.g||0));return noW(grow)?{txt:`Zboże rośnie: ${g}%. Bez rolnika zarośnie chwastami: przydziel kogoś do pola (Praca).`,hint:celAddW(grow)}:{txt:`Zboże rośnie: ${g}%. Rolnicy pielą.`,wait:1}}
-  if(!inSow())return{txt:'Pole czeka na siew: ziarno idzie w ziemię wiosną albo na początku lata.'+(S.res.ziarno<10?` Do siewu potrzeba 10 ziarna, jest ${fmt(S.res.ziarno)}.`:''),wait:1};
+  if(!inSow())return{txt:'Pole czeka na siew: ziarno idzie w ziemię wiosną albo na początku lata.'+(S.res.ziarno<10?` Do siewu potrzeba 10 porcji ziarna, jest ${fmt(S.res.ziarno)}.`:''),wait:1};
   if(S.res.ziarno<10)return{txt:`Pora siewu, ale brakuje ziarna: jest ${fmt(S.res.ziarno)}, potrzeba 10. Zbieracze znajdują dzikie zboże.`,wait:1};
   const f0=done[0];return noW(f0)?{txt:'Pora siewu. Przydziel rolnika do pola (Praca).',hint:celAddW(f0)}:{txt:'Pora siewu: rolnicy sieją.',wait:1}},
  'Osada: 4 domy i 20 osób':()=>celVillage(4,20),
@@ -81,7 +80,7 @@ const CEL={
   if((S.res.wegiel||0)<c.wegiel){const s=celBuild('mielerz',1);if(!s.ok)return{txt:`Do wytopu potrzeba ${c.wegiel} węgla drzewnego, jest ${fmt(S.res.wegiel||0)}. `+s.txt,hint:s.hint,kind:s.kind,wait:s.wait};const b=S.bld.find(b=>b.kind==='mielerz'&&bDone(b));return!celWorkers(b).length?{txt:`Do wytopu potrzeba ${c.wegiel} węgla, jest ${fmt(S.res.wegiel||0)}. Przy mielerzu nikt nie pracuje (Praca).`,hint:celAddW(b)}:{txt:`Mielerz pali węgiel: ${fmt(S.res.wegiel||0)} z ${c.wegiel}.`,wait:1}}
   return{txt:`Ruda i węgiel są. Zacznij próbę wytopu (Wiedza → Próby → Kuźnia).${k.kuznia_f?` Nieudanych prób: ${k.kuznia_f}.`:''}`,hint:['wiedza',null,'[data-try="kuznia"]']}},
  'Poznaj 70% krain wyspy':()=>{const pc=Math.round(knownFrac()*100);const sc=S.people.filter(p=>p.job==='zwiad').length,ex=(S.exps||[]).length;
-  return sc||ex?{txt:`Znamy ${pc}% krain z 70%. ${sc?`Zwiadowców: ${sc}.`:''}${ex?` Wypraw w drodze: ${ex}.`:''}`,wait:1}:{txt:`Znamy ${pc}% krain z 70%. Nikt nie chodzi na zwiad: przydziel zwiadowców (Praca) albo wyślij wyprawę.`,hint:['praca',null,'[data-al="zwiad"][data-d="1"]']}},
+  return sc||ex?{txt:`Znamy ${pc}% krain, cel to 70%. ${sc?`Zwiadowców: ${sc}.`:''}${ex?` Wypraw w drodze: ${ex}.`:''}`,wait:1}:{txt:`Znamy ${pc}% krain, cel to 70%. Nikt nie chodzi na zwiad: przydziel zwiadowców (Praca) albo wyślij wyprawę.`,hint:['praca',null,'[data-al="zwiad"][data-d="1"]']}},
  'Załóż pierwszy przysiółek':()=>{if((S.hamlets||[]).length)return{ok:1,txt:''};const why=typeof kolWhyNot==='function'?kolWhyNot():'';
   if(!why)return{txt:'Są chętni i jest poznana kraina bez przysiółka. Ludzie → Mieszkańcy → Wspólnota i rody → Nowy przysiółek.',hint:['osada',null,'[data-knew]']};
   if(/krainy/.test(why))return{txt:why,hint:['praca',null,'[data-al="zwiad"][data-d="1"]']};if(/Osada/.test(why)){const v=celVillage(4,20);return{txt:why+' '+v.txt,hint:v.hint,kind:v.kind,wait:v.wait}}

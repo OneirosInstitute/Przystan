@@ -3,12 +3,12 @@
 // ---- urzędy rodzą się z potrzeb; wiec obsadza je sam, a gracz może zmienić wybór na wiecu ----
 function bestCraftOf(p){return Object.keys(CN).sort((a,b)=>p.sk[b]-p.sk[a])[0]}
 const OFFS=[
- {id:'starszy',n:['Starszy osady','Starsza osady'],when:()=>true,d:'Prowadzi wiec i łagodzi spory. Jego mir sprawia, że wyroki łatwiej przyjąć.',fit:p=>(p.age>40?8:0)+(p.trait==='Pogodny'||p.trait==='Nauczyciel'?8:0)+(p.trait==='Uparty'?-6:0)},
+ {id:'starszy',n:['Starszy osady','Starsza osady'],when:()=>true,d:'Prowadzi wiec i łagodzi spory. Dzięki mirowi tej osoby wyroki łatwiej przyjąć.',fit:p=>(p.age>40?8:0)+(p.trait==='Pogodny'||p.trait==='Nauczyciel'?8:0)+(p.trait==='Uparty'?-6:0)},
  {id:'straznik',n:['Strażnik ognia','Strażniczka ognia'],when:()=>!!S.seen.fire1||law('straz'),why:'Po pierwszym pożarze ktoś musi pilnować ognia.',d:'Pilnuje palenisk: pożary wybuchają rzadziej i szybciej gasną.',fit:p=>(p.trait==='Ostrożny'?12:p.trait==='Wytrwały'?6:0)+(p.age>=20&&p.age<=55?6:-6)},
  {id:'zielarka',n:['Zielarz','Zielarka'],when:()=>hasB('izbachorych')||tech('u_ziel'),why:'Gdy osada poznała zioła, ktoś musi umieć je dawać.',d:'Chorzy zdrowieją szybciej, a lęki z wierzeń słabną.',fit:p=>p.sk.zbieracz*4+(p.sex==='k'?4:0)+(p.trait==='Cierpliwy'?6:0)},
  {id:'gospodyni',n:['Gospodarz zapasów','Gospodyni zapasów'],when:()=>hasB('spizarnia'),why:'Spiżarnia potrzebuje kogoś, kto liczy worki i beczki.',d:'Jedzenie psuje się wolniej, a gdy zapasów ubywa, ostrzega przed głodem.',fit:p=>(p.trait==='Cierpliwy'?10:0)+(p.sex==='k'?4:0)+(p.age>30?4:0)},
  {id:'swat',n:['Swat','Swatka'],when:()=>(S.weds||0)>=1,why:'Po pierwszym weselu ktoś zaczął kojarzyć młodych.',d:'Młodzi szybciej się dobierają, a rody rzadziej się kłócą.',fit:p=>(p.trait==='Pogodny'?14:0)+(p.age>40?8:0)},
- {id:'mistrz',n:['Mistrz fachu','Mistrzyni fachu'],when:()=>S.people.some(p=>isAdult(p)&&Math.max(...Object.values(p.sk))>=5),why:'Ktoś osiągnął najwyższy poziom fachu.',d:'Wszyscy uczący się jego fachu robią postępy szybciej.',fit:p=>Math.max(...Object.values(p.sk))>=5?40:-50}];
+ {id:'mistrz',n:['Mistrz fachu','Mistrzyni fachu'],when:()=>S.people.some(p=>isAdult(p)&&Math.max(...Object.values(p.sk))>=5),why:'Ktoś osiągnął najwyższy poziom fachu.',d:'Wszyscy uczący się tego fachu robią postępy szybciej.',fit:p=>Math.max(...Object.values(p.sk))>=5?40:-50}];
 const OFF_BY={};OFFS.forEach(o=>OFF_BY[o.id]=o);
 const offTitle=(id,p)=>OFF_BY[id].n[p&&p.sex==='k'?1:0];
 offLv=function(id){id={zielarz:'zielarka',spizarnia:'gospodyni'}[id]||id;if(!OFF_BY[id])return 0;const p=offHolder(id);if(!p)return 0;
@@ -34,9 +34,9 @@ function officesHTML(){const w=wiecOpen();let h=`<div class="card"><h4>Urzędy</
  return h+'</div>'}
 // ---- spory rodów i sąd pod dębem ----
 const SPOR_T={
- lup:(a,b)=>`${a.name} mówi, że ${b.name} ${b.sex==='k'?'wzięła':'wziął'} z wyprawy więcej, niż mu się należało.`,
+ lup:(a,b)=>`${a.name} mówi, że ${b.name} ${b.sex==='k'?'wzięła':'wziął'} z wyprawy więcej, niż ${b.sex==='k'?'jej':'mu'} się należało.`,
  kradziez:(a,b)=>`Ze spiżarni zginęło jedzenie. ${a.name} ${a.sex==='k'?'widziała':'widział'} w nocy kogoś z domu, gdzie mieszka ${b.name}.`,
- miedza:(a,b)=>`${a.name} twierdzi, że ${b.name} ${b.sex==='k'?'przesunęła':'przesunął'} miedzę i orze kawałek jego pola.`,
+ miedza:(a,b)=>`${a.name} twierdzi, że ${b.name} ${b.sex==='k'?'przesunęła':'przesunął'} miedzę i orze kawałek ${a.sex==='k'?'jej':'jego'} pola.`,
  krzywda:(a,b)=>`${a.name} wini ${gen(b.name)} za ranę odniesioną przy wspólnej pracy.`,
  slowo:(a,b)=>`${a.name} i ${b.name} od dawna się nie znoszą. Wczoraj przy ogniu padły słowa, których nie da się cofnąć.`,
  swaty:(a,b)=>`Ród ${gen(S.rody[a.rod]?S.rody[a.rod].name:a.name)} czuje się urażony: swaty z ${b.name} zostały odprawione bez chleba.`};

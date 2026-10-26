@@ -38,7 +38,7 @@ const ACTS=[null,
   ['Odkryj trzy ślady dawnego ludu',()=>S.found.length>=3,'Zwiadowcy i wyprawy odsłaniają wyspę. Ślady leżą w głębi lądu.']]},
  {n:'Pierwsze pokolenie',intro:'Rozbitków jest coraz mniej. Przy warsztatach stoją ich dzieci, które statku nigdy nie widziały. Osada musi przejść w ich ręce.',g:[
   ['Wieś: 8 domów i 32 osoby',()=>S.tier>=2,'Wieś potrzebuje domów dla młodych par, pól, stad i rzemiosła.'],
-  ['Głos młodych na wiecu',()=>youngVoice(),'Gdy założycieli zostanie mniej niż połowa, a dorosłych urodzonych na wyspie co najmniej dwoje.'],
+  ['Głos młodych na wiecu',()=>youngVoice(),'Gdy zostanie mniej niż połowa założycieli, a dorosłych urodzonych na wyspie będzie co najmniej dwoje.'],
   ['Trzech mistrzów urodzonych na wyspie',()=>bornMasters()>=3,'Dzieci uczą się przy mistrzach. Mistrz to poziom fachu 3 lub wyżej.'],
   ['Pamięć osady co najmniej żywa',()=>(S.pam||0)>=25,'Obrzędy, pieśni, groby z imionami i pierwsze razy.']]}];
 function actInit(){if(S.act)return;S.agoals=S.agoals||{};let a=1;while(a<=5&&ACTS[a].g.every(g=>g[1]())){ACTS[a].g.forEach((g,i)=>S.agoals[a+'_'+i]=1);a++}S.act=Math.min(a,5);if(a>5)S.actDone=1}
@@ -56,7 +56,7 @@ function actScenesF(){if(evOpen||placing||!isWork())return;
  // Nikt nas nie szuka
  if(!S.seen.niktnas&&(S.logbook||0)>=LOGBOOK.length&&!evOpen){S.seen.niktnas=1;openEvent({ey:'Dziennik kapitana',t:'Nikt nas nie szuka',
   text:()=>'Ostatnia strona dziennika. Kapitan pisze, że statek zszedł z kursu daleko na zachód, poza wszystkie szlaki. Nikt nie wie, gdzie jesteśmy. Nikt nie przypłynie. Przy ognisku robi się bardzo cicho.',
-  opts:[{n:'Przysięga przy ogniu: wytrwamy',d:'nadzieja i zgoda, pamięć osady',f:()=>{S.hope=clamp(S.hope+.06,0,1);S.dis=clamp((S.dis||0)-.04,0,1);pamAdd(3,'przysiega');song('Pieśń o przysiędze przy ogniu');const st=S.people.filter(isAdult).sort((a,b)=>b.age-a.age)[0];return(st?st.name:'Najstarszy')+' pierwszy podnosi rękę nad ogniem. Potem drugi, trzeci, wszyscy. Ta wyspa jest teraz naszym domem.'}},
+  opts:[{n:'Przysięga przy ogniu: wytrwamy',d:'nadzieja i zgoda, pamięć osady',f:()=>{S.hope=clamp(S.hope+.06,0,1);S.dis=clamp((S.dis||0)-.04,0,1);pamAdd(3,'przysiega');song('Pieśń o przysiędze przy ogniu');const st=S.people.filter(isAdult).sort((a,b)=>b.age-a.age)[0];return(st?st.name+' '+gw(st,'pierwszy','pierwsza'):'Najstarszy pierwszy')+' podnosi rękę nad ogniem. Potem drugi, trzeci, wszyscy. Ta wyspa jest teraz naszym domem.'}},
    {n:'Każdy przeżywa to po swojemu',d:'nadzieja spada, ale nic nie jest wymuszone',f:()=>{S.hope=clamp(S.hope-.06,0,1);return'Ludzie rozchodzą się do szałasów bez słowa. Ktoś długo stoi na plaży i patrzy w morze.'}}]},{});return}
  // Za pięć dni sztorm
  if(!S.seen.sztorm5&&Math.floor(S.day)>=YEAR-10&&!S.wreck.gone&&!evOpen&&isWork()){S.seen.sztorm5=1;openEvent({ey:'Zapowiedź',t:'Za pięć dni sztorm',
@@ -86,7 +86,7 @@ const PATHS={dom:{n:'Dom',q:'„To nasza wyspa.”',d:'gospodarze: gród, prawo 
  glab:{n:'Głąb',q:'„Pójdziemy w puszczę.”',d:'kolonizacja wnętrza wyspy: druga osada, góry, jaskinie, drogi i przysiółki',goal:'Wnętrze wyspy i druga osada'},
  morze:{n:'Morze',q:'„Zbudujemy statek.”',d:'łodzie, dalekie łowiska i sąsiednie bezludne wyspy',goal:'Łodzie i bezludne wyspy'}};
 function wiecPokolen(){if(S.epoch===2)return;const f=S.people.filter(p=>!p.born&&isAdult(p)).sort((a,b)=>b.age-a.age)[0];
- const teller=f?`${f.name}, ${Math.floor(f.age)} lat, ostatni${f.sex==='k'?'a':''} z tych, którzy pamiętają statek`:'najstarsza z córek rozbitków, która zna opowieść od matki';
+ const teller=f?`${f.name}, ${Math.floor(f.age)} ${latW(f.age)}, ostatni${f.sex==='k'?'a':''} z tych, którzy pamiętają statek`:'najstarsza z córek rozbitków, która zna opowieść od matki';
  openEvent({id:'campaign-route',ey:'Wiec pokoleń',t:'Czym mamy być dalej?',
   text:()=>`Cała osada przy jednym ogniu, także ludzie z przysiółków. Mówi ${teller}. Opowiada o statku, o sztormie, o pierwszej nocy na plaży i o tych, których już nie ma. Młodzi słuchają, jakby to była baśń.\n\nPotem wiec musi zdecydować, dokąd osada pójdzie dalej. Tej decyzji nie da się cofnąć.`,
   opts:Object.entries(PATHS).map(([k,p])=>({n:p.n+': '+p.q,d:p.d,f:()=>{S.epoch=2;S.path=k;S.finDay=S.day;pamAdd(5,'wiec');song('Pieśń o wiecu pokoleń');log(`Wiec pokoleń wybiera drogę: ${p.n}. ${p.q}`);gameLater(ksiegaRozbitkow,600);return`Wiec wybrał: ${p.n}. Kończy się epoka rozbitków. Zaczyna się epoka ich dzieci.`}}))},{})}

@@ -121,7 +121,7 @@ function hamSendHelp(h){const why=hamHelpWhy(h);if(why){toast(why);return false}
  const departure=expCharge(ppl,food);if(!departure)return false;
  const e={id:(S.expN=(S.expN||0)+1),r:r.id,type:'bud',h:h.id,ppl:ppl.map(p=>p.id),days,left:days,exit:exitTile(r),departure,started:false,risk:0};S.exps.push(e);
  ppl.forEach(p=>{release(p);p.path=null;p.state='idle';p.wait=0;p.job='wyp';p.wb=null;p.exp=e.id;p.act='idzie budować do: '+h.name});
- log(`${ppl.map(p=>p.name).join(' i ')} ${n>1?'idą':'idzie'} do przysiółka ${h.name} pomagać przy budowie. Biorą ${food} porcji jedzenia. Wrócą za około ${days} dni.`);
+ log(`${ppl.map(p=>p.name).join(' i ')} ${n>1?'idą':'idzie'} do przysiółka ${h.name} pomagać przy budowie. Biorą ${food} ${plW(food,'porcję','porcje','porcji')} jedzenia. Wrócą za około ${days} ${dniW(days)}.`);
  h.ask=null;h.wiez=Math.min(1,h.wiez+.08);toast('Budowniczowie wyruszyli');assign();save();return true}
 {const _fe=finishExp;finishExp=function(e,people){if(e.type!=='bud')return _fe(e,people);
   S.exps=S.exps.filter(x=>x!==e);const h=(S.hamlets||[]).find(x=>x.id===e.h);people.forEach(p=>{gainXp(p,'ciesla',30);expReturn(p,e)});

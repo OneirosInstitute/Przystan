@@ -5,7 +5,7 @@ IC.sol='<path d="M7 9h10l1 11H6z"/><path d="M9 9c0-2 1-4 3-5 2 1 3 3 3 5"/><path
 IC.bursztyn='<path d="M12 3l6 7-6 11-6-11z"/><path d="M6 10h12"/><path d="M12 3v18"/>';
 const ODK_T={
  kury:{q:'Gdakanie w zaroślach',n:['Kurza Gęstwina'],r:6,d:'Zdziczałe kury z ładowni statku. W kurniku dadzą jaja i pierze.',
-  find:p=>`${p.name} idzie za gdakaniem w gęstwinę i staje jak wryty: kury! Chude, płochliwe, z rudym kogutem na czele. To kury z ładowni, przeżyły na wyspie. W kurniku dałoby się je trzymać.`},
+  find:p=>`${p.name} idzie za gdakaniem w gęstwinę i staje jak ${gw(p,'wryty','wryta')}: kury! Chude, płochliwe, z rudym kogutem na czele. To kury z ładowni, przeżyły na wyspie. W kurniku dałoby się je trzymać.`},
  tok:{q:'Polana na wrzosowisku',n:['Tokowisko','Cietrzewia Polana'],r:4,d:'Wiosną o świcie tokują tu cietrzewie. Myśliwi przynoszą mięso i pióra.',
   find:p=>`Na polanie wśród wrzosów ${p.name} widzi wydeptane kręgi i czarne pióra z lirowatych ogonów. Tokowisko cietrzewi: wiosną o świcie samce tańczą tu i bulgoczą, a myśliwi mają łatwą zdobycz.`},
  lis:{q:'Nory pod skarpą',n:['Lisie Jamy','Rude Nory','Lisia Skarpa','Lisi Pagór'],r:4,d:'Jesienią i zimą myśliwi zastawiają tu sidła: lisie futro jest najcieplejsze. Lisy z tych nor podchodzą do kurników.',
@@ -14,7 +14,7 @@ const ODK_T={
   find:p=>`Pod korzeniami wywróconego świerka ${p.name} widzi wydeptaną jamę i kłaki szarej sierści. Wilcze legowisko. Wiosną wadera rodzi tu szczenięta.`},
  wegiel:{q:'Czarne skały',n:['Czarny Jar','Węglowa Skarpa'],r:4,d:'Wychodnia węgla kamiennego. Odkrywka da węgiel dla kuźni i na opał, aż żyła się wyczerpie.',
   find:p=>`W jarze ${p.name} odłupuje kawałek czarnej, błyszczącej skały. Wieczorem kamień wrzucony do ogniska rozżarza się i pali długo, równym, gorącym płomieniem. Węgiel kamienny!`},
- torf:{q:'Brunatne mokradło',n:['Torfowe Błota','Czarne Bagno','Brunatne Torfy'],r:4.5,d:'Torfowisko. Kopanka torfu daje opał bez ścinania lasu, oprócz zimy.',
+ torf:{q:'Brunatne mokradło',n:['Torfowe Błota','Czarne Bagno','Brunatne Torfy'],r:4.5,d:'Torfowisko. Kopanka torfu daje opał bez ścinania lasu, ale nie zimą.',
   find:p=>`${p.name} wycina łopatą darń z brunatnego mokradła. Pod spodem czarna, włóknista ziemia, która po wysuszeniu pali się jak drewno. Torf. Opał bez ścinania lasu.`},
  sol:{q:'Źródło, gdzie piją sarny',n:['Słone Źródło'],r:3.5,d:'Słona woda. Warzelnia wygotuje z niej sól: mięso i ryby psują się wolniej.',
   find:p=>`Przy źródle, do którego schodzą się sarny, ${p.name} nabiera wody w dłonie. Słona! Na kamieniach dokoła biały nalot. Gdyby ją wygotować w panwi, byłaby sól.`},
@@ -118,7 +118,7 @@ function odkDaily(){if(!S)return;odkInit();const sea=seasonIdx(),k=S.weather.k,y
   if(o.t==='tok'&&sea===3&&hunters(o,34)){S.res.mieso=(S.res.mieso||0)+3;S.res.pierze=(S.res.pierze||0)+2;if(!S.seen['tok'+y]){S.seen['tok'+y]=1;log('Myśliwi wracają o świcie z tokowiska z cietrzewiami na kiju. Mięso i czarne pióra.')}}
   if(o.t==='lis'&&(sea===1||sea===2)&&hunters(o,32)){S.res.skory=(S.res.skory||0)+.7;if(!S.seen['sidla'+y]){S.seen['sidla'+y]=1;log('Myśliwi zastawiają sidła przy lisich jamach. Zimowe lisie futro jest najcieplejsze.')}}
   if(o.t==='bursztyn'&&(k==='storm'||k==='wiatr')){st.amt=(st.amt||0)+2+Math.random()*4;
-   if(S.bld.some(b=>(b.kind==='zbieracz'||b.kind==='pomost')&&bDone(b)&&Math.hypot(bCenter(b).x-o.x,bCenter(b).z-o.z)<44)){const n=Math.round(st.amt);if(n>0){S.res.bursztyn=(S.res.bursztyn||0)+n;st.amt=0;if(!S.seen['bursz'+Math.floor(S.day)])log(`Po sztormie zbieracze chodzą brzegiem i przynoszą ${n} ${n===1?'grudkę':n<5?'grudki':'grudek'} bursztynu.`);S.seen['bursz'+Math.floor(S.day)]=1}}}});
+   if(S.bld.some(b=>(b.kind==='zbieracz'||b.kind==='pomost')&&bDone(b)&&Math.hypot(bCenter(b).x-o.x,bCenter(b).z-o.z)<44)){const n=Math.round(st.amt);if(n>0){S.res.bursztyn=(S.res.bursztyn||0)+n;st.amt=0;if(!S.seen['bursz'+Math.floor(S.day)])log(`Po sztormie zbieracze chodzą brzegiem i przynoszą ${n} ${plW(n,'grudkę','grudki','grudek')} bursztynu.`);S.seen['bursz'+Math.floor(S.day)]=1}}}});
  // zbieracze i rybacy chodzą po sztormie brzegiem: tak znajdują bursztyn
  if(k==='storm'||k==='wiatr'||(S.lastStorm!==undefined&&S.day-S.lastStorm<1.2))ODK.forEach(o=>{if(o.t!=='bursztyn'||odkSt(o)&&odkSt(o).s===2)return;const b=S.bld.find(b=>(b.kind==='zbieracz'||b.kind==='pomost')&&bDone(b)&&Math.hypot(bCenter(b).x-o.x,bCenter(b).z-o.z)<44);
   if(!b||Math.random()>.6)return;const p=S.people.find(q=>q.job==='wb'&&q.wb===b.id)||S.people.find(isAdult);if(p){odkFind(o,p);odkSt(o).amt=3+Math.random()*3}});
@@ -231,9 +231,9 @@ function odkAtScreen(x,y){const r=cv.getBoundingClientRect();let best=null,bd=34
 function odkCard(o){const st=odkSt(o),T=ODK_T[o.t];const goer=S.people.find(p=>p.odkT===o.id);
  if(st.s!==2)return`<h4>${T.q}?</h4><p>Nikt z osady tu jeszcze nie był. Z daleka nie widać, co to jest.</p>${goer?`<p class="mut">${goer.name} już tam idzie.</p>`:`<div class="cz-act"><button class="pri" data-odks="${o.id}">Wyślij kogoś, żeby obejrzał</button></div>`}`;
  let h=`<h4>${odkName(o)}</h4><p>${T.d}</p>`;
- if(o.t==='kury')h+=`<p class="mut">W gęstwinie żyje jeszcze ${st.n||0} ${(st.n||0)===1?'kura':(st.n||0)<5&&(st.n||0)>1?'kury':'kur'}.${BD.kurnik&&!S.bld.some(b=>b.kind==='kurnik')?' Kurnik stawia się w zakładce Budowa, wśród pól i stad.':''}</p>`;
+ if(o.t==='kury')h+=`<p class="mut">W gęstwinie żyje jeszcze ${st.n||0} ${plW(st.n||0,'kura','kury','kur')}.${BD.kurnik&&!S.bld.some(b=>b.kind==='kurnik')?' Kurnik stawia się w zakładce Budowa, wśród pól i stad.':''}</p>`;
  if(o.t==='wegiel')h+=`<p class="mut">${st.left>0?`W żyle zostało około ${Math.round(st.left)} węgla.`:'Żyła wyczerpana.'}</p>`;
- if(o.t==='bursztyn')h+=`<p class="mut">W osadzie ${Math.floor(S.res.bursztyn||0)} grudek bursztynu.${S.bld.some(b=>(b.kind==='zbieracz'||b.kind==='pomost')&&bDone(b)&&Math.hypot(bCenter(b).x-o.x,bCenter(b).z-o.z)<44)?'':' Bez zbieraczy albo rybaków w okolicy nikt go nie pozbiera.'}</p>`;
+ if(o.t==='bursztyn')h+=`<p class="mut">Bursztynu w osadzie: ${Math.floor(S.res.bursztyn||0)} ${plW(Math.floor(S.res.bursztyn||0),'grudka','grudki','grudek')}.${S.bld.some(b=>(b.kind==='zbieracz'||b.kind==='pomost')&&bDone(b)&&Math.hypot(bCenter(b).x-o.x,bCenter(b).z-o.z)<44)?'':' Bez zbieraczy albo rybaków w okolicy nikt go nie pozbiera.'}</p>`;
  if(o.t==='wilk'){if(goer)h+=`<p class="mut">${goer.name} idzie do legowiska.</p>`;else if(odkPupOk(o))h+=`<p class="mut">Wiosną w jamie są szczenięta. Wadera poluje i zostawia je same, ale potrafi wrócić w złą chwilę.</p><div class="cz-act"><button class="pri" data-odkp="${o.id}">Zabrać szczenięta</button></div>`;else h+=`<p class="mut">${st.py===Math.floor(S.day/YEAR)?'W tym roku szczenięta już zabrano.':'Szczenięta rodzą się wiosną.'}</p>`}
  return h}
 {const _rs=renderSel;renderSel=function(){const el=$('sel');if(selO!==null&&S){const o=ODK[selO];if(!o||!odkSt(o)){selO=null;return _rs()}el.style.display='block';const h=odkCard(o);if(el._h!==h){el._h=h;el.innerHTML=h}

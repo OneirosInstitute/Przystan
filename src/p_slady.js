@@ -9,7 +9,7 @@ const SLAD=[
   ctx:()=>({sick:S.people.filter(p=>p.hp<.45).sort((a,b)=>a.hp-b.hp)[0]||null,h:healer()}),
   t:'Gorzka mieszanka',text:c=>`${c.sick?c.sick.name+' od trzech dni leży w gorączce i nic nie pomaga.':'W osadzie co chwilę ktoś kaszle i gorączkuje.'} Nikt z nas nie był lekarzem, a zioła z wraku dawno się skończyły. ${c.h.name} przypomina sobie małe naczynka zalepione woskiem, które ktoś przyniósł ze skały. W środku sucha, gorzka mieszanka: kora, korzeń, coś jak kwiat krwawnika.`,
   opts:[{n:'Zaparzyć i podać choremu',d:'może pomóc, może zaszkodzić',f:c=>{if(c.sick){c.sick.hp=Math.max(c.sick.hp,.78);c.sick.hurt=0}sladDo(0);return`Po dwóch dniach gorączka spada. ${c.h.name} rozkłada resztę mieszanki na części i szuka w lesie tych samych roślin. Od teraz osada ma swoje leki.`}},
-   {n:'Najpierw spróbować na sobie',d:`ostrożniej, ale ${'zielarka'} ryzykuje`,f:c=>{c.h.hp=Math.max(.3,c.h.hp-.12);if(c.sick)c.sick.hp=Math.max(c.sick.hp,.62);sladDo(0);return`${c.h.name} pije napar pierwsza. Noc jest ciężka, ale rano wstaje i podaje go choremu. Odtąd pilnuje, z czego i ile.`}}]},
+   {n:'Najpierw spróbować na sobie',d:`ostrożniej, ale ${'zielarka'} ryzykuje`,f:c=>{c.h.hp=Math.max(.3,c.h.hp-.12);if(c.sick)c.sick.hp=Math.max(c.sick.hp,.62);sladDo(0);return`${c.h.name} pije napar ${gw(c.h,'pierwszy','pierwsza')}. Noc jest ciężka, ale rano wstaje i podaje go choremu. Odtąd pilnuje, z czego i ile.`}}]},
  {k:'luk',eff:'Łuk z cisu i krzemienne groty: myśliwi przynoszą o 25% więcej i rzadziej odnoszą rany.',why:'gdy skończą się żelazne narzędzia z wraku albo myśliwy zostanie ranny',
   need:()=>S.day>YEAR*.3&&((S.res.narz<4&&S.day>YEAR*.5)||S.people.some(p=>p.hurt&&p.job==='wb'&&(p.sk.mysliwy||0)>=1)),
   ctx:()=>({h:bestAt('mysliwy')}),

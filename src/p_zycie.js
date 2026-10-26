@@ -80,7 +80,7 @@ function searchStart(p,mode){let spot=null;for(let t=0;t<40&&!spot;t++){const a=
  spot=spot||[camp.i+8,camp.j];p.lost=1;p.state='away';p.path=null;p.x=tcx(spot[0]);p.z=tcx(spot[1]);
  const best=S.people.filter(q=>isWorker(q)&&q.job!=='wyp').sort((a,b)=>(b.sk.mysliwy||0)-(a.sk.mysliwy||0)).slice(0,2).map(q=>q.id);
  const ch=mode==='all'?.92:mode==='two'?.7:.45;S.search={pid:p.id,x:tcx(spot[0]),z:tcx(spot[1]),until:S.day+(mode==='wait'?.22:.18),mode,who:mode==='two'?best:null,ok:Math.random()<ch};
- return mode==='all'?'Wszyscy rzucają robotę. Idą tyralierą w las, nawołując.':mode==='two'?'Dwoje najlepszych tropicieli rusza śladem.':'Czekacie. Każdy co chwilę spogląda w stronę lasu.'}
+ return mode==='all'?'Wszyscy rzucają robotę. Idą tyralierą w las, nawołując.':mode==='two'?'Dwoje najlepszych tropicieli rusza śladem.':'Czekają. Każdy co chwilę spogląda w stronę lasu.'}
 function searchJob(p){const s=S.search;if(!isWorker(p)||p.job==='wyp'||s.mode==='wait')return false;if(s.mode==='two'&&!(s.who||[]).includes(p.id))return false;
  const a=Math.random()*6.28,r=2+Math.random()*7;const t=nearestWalk(...tileOf(s.x+Math.cos(a)*r,s.z+Math.sin(a)*r));const kid=pById(s.pid);
  if(t&&go(p,t,'srch',null)){p.act='szuka: '+(kid?kid.name:'dziecka');return true}return false}

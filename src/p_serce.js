@@ -69,7 +69,7 @@ const SPK={
  2:{n:'Wspólny ogień',intro:'Ognisko pali się co wieczór. Żeby postawić nad nim dach i stoły, osada musi najpierw stanąć na nogi.',size:null,t:{
   dach:['Każda rodzina pod dachem',()=>S.people.length>0&&S.people.every(p=>homeOf(p)),()=>`dach ma ${S.people.filter(p=>homeOf(p)).length} z ${S.people.length} osób`,'Budowa → Domy. Szałas wystarczy na początek.','szalas'],
   stol:['Jedzenie na 6 dni',()=>scDays()>=6,()=>`teraz starczy na ${dniS(Math.floor(scDays()))}`,'Zbieracze, rybacy i myśliwi. Zapas liczy się względem tego, ile osada zjada w ciągu dnia.','zbieracz'],
-  cieplo:['Drewutnia i 40 opału',()=>hasB('drewutnia')&&(S.res.opal||0)>=40,()=>hasB('drewutnia')?`opał: ${fmt(S.res.opal)} z 40`:'brakuje drewutni','Drewutnia rąbie kłody na opał: z jednej kłody trzy porcje.','drewutnia'],
+  cieplo:['Drewutnia i 40 porcji opału',()=>hasB('drewutnia')&&(S.res.opal||0)>=40,()=>hasB('drewutnia')?`opał: ${fmt(S.res.opal)} z 40`:'brakuje drewutni','Drewutnia rąbie kłody na opał: z jednej kłody trzy porcje.','drewutnia'],
   zdrowie:['Studnia',()=>hasB('studnia'),()=>'jeszcze nie ma studni','Czysta woda dla 14 osób. Bez niej latem ludzie chorują od wody ze strumienia.','studnia'],
   rzem:['Pracownia cieśli albo warsztat',()=>hasB('pracownia')||hasB('warsztat'),()=>'deski i narzędzia są jeszcze z wraku','Pracownia piłuje deski z kłód, warsztat robi kamienne narzędzia.','pracownia'],
   wsp:['Pięć wieczorów przy ognisku',()=>(S.sc.ev||0)>=5,()=>`wieczorów: ${Math.min(5,S.sc.ev||0)} z 5`,'Liczy się wieczór, przy którym siedzi co najmniej co trzecia osoba z osady. Chętniej przychodzą ci, którzy mieszkają w zasięgu ogniska.']}},
@@ -86,7 +86,7 @@ const SPK={
   dach:['Trzy domy z piecem, nikt w szałasie',()=>scCnt(['dom','dwor'])>=3&&scSzal()===0,()=>{const n=scCnt(['dom','dwor']),s=scSzal();return`domy z piecem: ${n} z 3${s?`, w szałasach: ${s} ${rodzW(s)}`:''}`},'Chatę z bali rozbudujesz w dom z piecem, gdy osada zna piec zduński.','dom'],
   stol:['60 porcji przetworów',()=>scProc()>=60,()=>`chleb, ser i kiszonki: ${fmt(scProc())} z 60`,'Przetwory nie psują się tygodniami: piec chlebowy, serownia, komora kiszonek.','piekarnia'],
   cieplo:['Opał na 15 dni zimy',()=>scFuelDays()>=15,()=>`opał: ${fmt(S.res.opal)} z ${Math.ceil(15*scFuelDay())}`,'Ile opału zjada zima, zależy od domów: dom z piecem pali najmniej.','drewutnia'],
-  zdrowie:['Chata zielarki i 20 ziół',()=>hasB('izbachorych')&&(S.res.ziola||0)>=20,()=>hasB('izbachorych')?`zioła: ${fmt(S.res.ziola)} z 20`:'brakuje chaty zielarki','Chata zielarki wymaga wiedzy o opatrywaniu ran. Zioła rosną w ogrodzie ziołowym albo zbierają je zbieracze.','izbachorych'],
+  zdrowie:['Chata zielarki i 20 porcji ziół',()=>hasB('izbachorych')&&(S.res.ziola||0)>=20,()=>hasB('izbachorych')?`zioła: ${fmt(S.res.ziola)} z 20`:'brakuje chaty zielarki','Chata zielarki wymaga wiedzy o opatrywaniu ran. Zioła rosną w ogrodzie ziołowym albo zbierają je zbieracze.','izbachorych'],
   rzem:['Własne żelazo: kuźnia albo dymarka',()=>hasB('kuznia')||hasB('dymarka'),()=>'żelazo jest jeszcze z wraku','Kuźnia potrzebuje rudy i węgla drzewnego, a najpierw udanej próby wytopu.','kuznia'],
   wsp:['Uczta z napitkami',()=>(S.sc.ucz||0)>=1,()=>scNap()>=1?`napitków w zapasie: ${fmt(scNap())}, czekają na najbliższe święto albo wesele`:'nie ma jeszcze napitków','Na święcie albo weselu musi być piwo, miód pitny albo wino. Browar i miodosytnię odblokowuje Dom osadników.','browar']}},
  5:{n:'Wyspa jak jedno gospodarstwo',intro:'Rada obraduje w Domu rady, ale sprawy całej wyspy już się w nim nie mieszczą: przysiółki, drogi, wozy, jarmark. Potrzebny jest ratusz z wieżą widoczną z daleka. Taki dom stawia się dopiero wtedy, gdy wyspa żyje jak jedno gospodarstwo.',
@@ -280,7 +280,7 @@ const WN_T={
  dis:{ok:w=>(S.dis||0)<=w.q,t:w=>`Niezgoda poniżej ${Math.round(w.q*100)}%`,p:()=>`teraz ${Math.round((S.dis||0)*100)}%`},
  hope:{ok:w=>S.hope>=w.q,t:w=>`Nadzieja co najmniej ${Math.round(w.q*100)}%`,p:()=>`teraz ${Math.round(S.hope*100)}%`},
  heal:{ok:()=>!S.people.some(p=>p.hp<.5),t:()=>'Postawić chorych na nogi',p:()=>`ciężko chorych: ${S.people.filter(p=>p.hp<.5).length}`},
- water:{ok:()=>waterCap()>=S.people.length+6,t:()=>'Woda z zapasem: studnie dla wszystkich i jeszcze sześciu',p:()=>`woda dla ${waterCap()} z ${S.people.length+6}`},
+ water:{ok:()=>waterCap()>=S.people.length+6,t:()=>'Woda z zapasem: studnie dla wszystkich i jeszcze sześciu osób',p:()=>`woda dla ${waterCap()} z ${S.people.length+6}`},
  nap:{ok:w=>scNap()>=w.q,t:w=>`Napitki na święto: ${w.q}`,p:w=>`${fmt(scNap())} z ${w.q}`},
  proc:{ok:w=>scProc()>=w.q,t:w=>`Przetwory: ${w.q} porcji chleba, sera i kiszonek`,p:w=>`${fmt(scProc())} z ${w.q}`},
  master:{ok:w=>S.people.some(p=>isAdult(p)&&(p.sk[w.c]||0)>=3),t:w=>`Mistrz w fachu: ${CN[w.c]}`,p:()=>'uczniowie przy mistrzach uczą się szybciej'}};
@@ -292,7 +292,7 @@ function scWnMake(t){const pop=S.people.length,ad=S.people.filter(isAdult).lengt
  if(t==='cieplo'){const fd=scFuelDays();if(fd<20)return{k:'fuel',q:Math.max(10,Math.min(30,Math.floor(fd)+6)),say:'Opału jest za mało, żeby przezimować bez strachu.'};if((S.res.odziez||0)<pop/2)return{k:'res',r:'odziez',q:Math.ceil(pop/2),say:'Dzieci rosną z kożuchów. Trzeba więcej odzieży.'};
   return{k:'res',r:'opal',q:R((S.res.opal||0)+120),say:'Lepiej mieć opał na dwie zimy niż na jedną.'}}
  if(t==='zdrowie'){if(waterCap()<pop+6)return{k:'water',say:'Przy studniach są kolejki. Latem woda się kończy.'};if((S.res.ziola||0)<30)return{k:'res',r:'ziola',q:30,say:'Zielarki mają puste półki. Bez ziół choroba idzie szybciej.'};
-  if(S.people.some(p=>p.hp<.5))return{k:'heal',say:'Kilka osób ledwo wstaje. Trzeba ich wyleczyć, zanim zachorują inni.'};return{k:'res',r:'plotno',q:R((S.res.plotno||0)+15),say:'Czyste płótno na opatrunki to połowa leczenia.'}}
+  if(S.people.some(p=>p.hp<.5))return{k:'heal',say:'Kilka osób ledwo wstaje. Trzeba je wyleczyć, zanim zachorują inni.'};return{k:'res',r:'plotno',q:R((S.res.plotno||0)+15),say:'Czyste płótno na opatrunki to połowa leczenia.'}}
  if(t==='rzem'){const tl=(S.res.narz||0)+(S.res.narzk||0);if(tl<ad/3)return{k:'res',r:'narz',q:Math.max(4,Math.ceil(ad/3)),say:'Ludzie pracują tępymi narzędziami. Kuźnia musi dorobić.'};
   const c=['ciesla','kowal','murarz','krawiec','rolnik','rybak'].find(c=>!S.people.some(p=>isAdult(p)&&(p.sk[c]||0)>=3));if(c)return{k:'master',c,say:`Nie mamy mistrza w fachu: ${CN[c]}. Niech ktoś się uczy.`};
   return{k:'res',r:'deski',q:R((S.res.deski||0)+60),say:'Deski idą na wszystko. Pracownia cieśli niech piłuje na zapas.'}}
@@ -300,7 +300,7 @@ function scWnMake(t){const pop=S.people.length,ad=S.people.filter(isAdult).lengt
   return{k:'hope',q:Math.min(.9,Math.max(.7,Math.round((S.hope+.08)*20)/20)),say:'Niech ludzie mają więcej powodów do radości.'}}
  return null}
 function scWnDaily(){const R=S.sc.rada||[];if(!R.length)return;
- S.sc.wn=S.sc.wn.filter(w=>{if(S.day>w.until){S.dis=clamp((S.dis||0)+.015,0,1);const p=pById(w.p);log(`Wniosek ${p?p.name+' ':''}nie został spełniony: ${WN_T[w.k].t(w).toLowerCase()}.`);S.sc.wnCd[w.t]=S.day+4;return false}return true});
+ S.sc.wn=S.sc.wn.filter(w=>{if(S.day>w.until){S.dis=clamp((S.dis||0)+.015,0,1);const p=pById(w.p);log(`Nie spełniono wniosku${p?' ('+p.name+')':''}: ${WN_T[w.k].t(w).toLowerCase()}.`);S.sc.wnCd[w.t]=S.day+4;return false}return true});
  R.forEach(r=>{if(r.p===null||S.sc.wn.some(w=>w.t===r.t)||S.day<(S.sc.wnCd[r.t]||0)||Math.random()>.35)return;const x=scWnMake(r.t);if(!x||!WN_T[x.k])return;
   const w=Object.assign({id:(S.sc.wnId=(S.sc.wnId||0)+1),t:r.t,p:r.p,made:Math.floor(S.day),until:Math.floor(S.day)+10},x);let ok=false;try{ok=WN_T[w.k].ok(w)}catch(e){}if(ok){S.sc.wnCd[r.t]=S.day+3;return}
   S.sc.wn.push(w);const p=pById(r.p);log(`Wniosek w radzie: ${p?p.name:'radny'} (${TEKI[r.t].n.toLowerCase()}): „${w.say}” Zadanie: ${WN_T[w.k].t(w).toLowerCase()}, na 10 dni.`);toast('Wniosek rady: '+WN_T[w.k].t(w))})}

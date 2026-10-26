@@ -6,7 +6,7 @@ MODE=publish
 if [ "${1:-}" = '--prepare-only' ]; then MODE=prepare; shift; fi
 [ "$#" -le 1 ] || { echo 'Użycie: bash WDROZ_TERMUX.sh [--prepare-only] [katalog-repo]'; exit 1; }
 PACKAGE_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-EXPECTED_COMMIT='e4926f241775a3996b561a9bc7c6640159ab12d2'
+EXPECTED_COMMIT='b6da7bcb5f9b1ce873f5329da40e2ba8982866a2'
 REPOSITORY="${1:-}"
 if [ -z "$REPOSITORY" ]; then
  if [ -d "$HOME/Przystan/.git" ]; then REPOSITORY="$HOME/Przystan";
@@ -41,7 +41,7 @@ if [ "$MODE" = prepare ]; then
 fi
 git add -- .github .gitignore KSIEGA.md README.md WDROZ_TERMUX.sh assets build.js docs package.json railway.json release-manifest.json server.js src tests tools
 git diff --cached --quiet && { echo 'STOP: brak zmian do commitu.'; exit 1; }
-git commit -m '4.9.0-rc.5: wieczorna karta opowieści'
+git commit -m '4.9.0-rc.6: opis sprawy nad głową i korekta polszczyzny'
 git push origin main
 git fetch origin main
 [ "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)" ]
