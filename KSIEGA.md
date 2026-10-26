@@ -1243,6 +1243,7 @@ W Ludziach (Praca i Mieszkańcy) wyszukiwarka szuka po imieniu, fachu albo budyn
 | 1.8.3 | poprawka: rozbudowa domu (szałas w chatę, chata w dom) nie zabiera już rodzinie spiżarki; w czasie budowy zapas zostaje w starym domu w granicach jego pojemności |
 | 1.9 | budynki z charakterem: każdy budynek inny (ściany, dachy, spadek, okap), koniki, malowane okiennice, ganki, przybudówki, garnki na płocie, zioła pod okapem, szyldy rzemiosł, wyraźniejsza kuźnia, łaźnia i chata wiecowa |
 | 1.10 | wykonanie budynków: surowe, porządne i mistrzowskie, wyraźnie widoczne po rozbudowie (wielkość, podmurówka, dach, okiennice, obramienia okien, kwiaty, płotek, szyld); karta budynku pokazuje wykonanie i trwałość; odmiany szałasów, studni, zagród i spiżarni |
+| 4.9.0-rc.11 | urozmaicenie: co drugi budynek danego rodzaju w lustrzanym odbiciu, stale według numeru budynku; przybudówka sprawdza właściwego sąsiada |
 | 4.9.0-rc.10 | życie przy budynkach (grafika wysoka i ultra): dym z kominów zależny od pory roku i dnia, falujący dym warsztatów, migoczący żar, łopoczące proporce, kołyszące się pranie, dziobiące kury |
 | 4.9.0-rc.9 | styl epoki po remoncie albo rozbudowie: epoka I surowa, II jak dotąd, III bielona z gontem; stare budynki zmieniają się dopiero po remoncie lub rozbudowie; styl na karcie budynku |
 | 4.9.0-rc.8 | widoczne poziomy budynków: przybudówka z zapasem fachu na poziomie 2; gont, podwórze, ścieżka i proporzec w barwie fachu na poziomie 3 |

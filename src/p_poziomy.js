@@ -42,7 +42,7 @@ function lvFlag(g,x,z,t){const p=wSub(g,x,z,0);p.add(cyl(.035,1.9,matLog2,0,.95,
  const tail=new THREE.Mesh(new THREE.PlaneGeometry(.18,.12),wkMt(0xe6dcc4,{side:THREE.DoubleSide}));tail.position.set(.56,1.7,0);p.add(tail)}
 // przybudówka, podwórze i ścieżka stają tylko tam, gdzie obok nie stoi inny budynek (ważne dla starych zapisów i ciasnej zabudowy)
 let LV_BB=null;
-function lvFree(side){const b=LV_BB;if(!b||b.i===undefined||!S)return true;const d=BD[b.kind];
+function lvFree(side){const b=LV_BB;if(!b||b.i===undefined||!S)return true;const d=BD[b.kind];if(side!=='F'&&typeof bMir==='function'&&bMir(b))side=side==='L'?'R':'L';
  const R=side==='L'?[b.i-1,b.j,1,d.h]:side==='R'?[b.i+d.w,b.j,1,d.h]:[b.i,b.j+d.h,d.w,1];
  for(const o of S.bld){if(o===b||o.id===b.id)continue;const e=BD[o.kind];if(e&&rectHit(R,[o.i,o.j,e.w,e.h]))return false}return true}
 {const _ab=addBldVisuals;addBldVisuals=function(g,b){const keep=LV_BB;LV_BB=b||null;try{return _ab(g,b)}finally{LV_BB=keep}}}
