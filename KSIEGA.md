@@ -1243,6 +1243,7 @@ W Ludziach (Praca i Mieszkańcy) wyszukiwarka szuka po imieniu, fachu albo budyn
 | 1.8.3 | poprawka: rozbudowa domu (szałas w chatę, chata w dom) nie zabiera już rodzinie spiżarki; w czasie budowy zapas zostaje w starym domu w granicach jego pojemności |
 | 1.9 | budynki z charakterem: każdy budynek inny (ściany, dachy, spadek, okap), koniki, malowane okiennice, ganki, przybudówki, garnki na płocie, zioła pod okapem, szyldy rzemiosł, wyraźniejsza kuźnia, łaźnia i chata wiecowa |
 | 1.10 | wykonanie budynków: surowe, porządne i mistrzowskie, wyraźnie widoczne po rozbudowie (wielkość, podmurówka, dach, okiennice, obramienia okien, kwiaty, płotek, szyld); karta budynku pokazuje wykonanie i trwałość; odmiany szałasów, studni, zagród i spiżarni |
+| 4.9.0-rc.8 | widoczne poziomy budynków: przybudówka z zapasem fachu na poziomie 2; gont, podwórze, ścieżka i proporzec w barwie fachu na poziomie 3 |
 | 4.9.0-rc.7 | wielkie budynki na własnym placu (jedno pole wokół, czerwone pole budowy, gdy za blisko); nowe modele dworu, domu cechowego, zajazdu, szpitala, chaty wiecowej i dziedziniec browaru |
 | 4.9.0-rc.6 | sprawa nad głową opisana na karcie osoby (prośba, słowa, co zrobić, termin); korekta polszczyzny w całej grze: liczebniki, rodzaj, jednostki, składnia |
 | 4.9.0-rc.5 | wieczorna karta opowieści: o zmroku czas staje, rozmowy przy ogniu, dzień w osadzie i noc czyta się strona po stronie, dotknięciem; sny rano; można wyłączyć w Kronice |
