@@ -97,7 +97,7 @@ function api(request,response,pathname) {
     const score=Math.min(200000,Math.round(submitted.day*10+submitted.pop*25+submitted.pam*3+submitted.hamPop*10+(submitted.epoch>=2?500:0)));
     if(submitted.score!==score)return finish(400,{err:'wynik nie zgadza się z postępem'});
     if(limited(posts,run.id,4000))return finish(429,{err:'za często'});
-    const entry={id:run.id,name:clean(submitted.name)||'Bezimienni',vil:clean(submitted.vil),day:submitted.day,pop:submitted.pop,score,ver:String(submitted.ver||'').slice(0,10),t:Date.now(),verification:'declared'};
+    const entry={id:run.id,name:clean(submitted.name)||'Bezimienni',vil:clean(submitted.vil),day:submitted.day,pop:submitted.pop,score,ver:String(submitted.ver||'').slice(0,16),t:Date.now(),verification:'declared'};
     const list=loadResults(week.week),index=list.findIndex(item=>item.id===run.id);
     if(index>=0&&list[index].score>=score)return finish(200,{ok:true,best:list[index].score,place:list.slice().sort((a,b)=>b.score-a.score).findIndex(item=>item.id===run.id)+1,of:list.length,verification:'declared'});
     if(index>=0)list[index]=entry;else list.push(entry);list.sort((a,b)=>b.score-a.score);list.length=Math.min(500,list.length);

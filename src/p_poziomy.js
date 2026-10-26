@@ -38,7 +38,7 @@ function lvYard(g,x,z,t,ry){const y=wSub(g,x,z,ry||0);const w=.95,d=1.15;
  const st=wSub(y,0,-.05,0);lvStock(st,t,2);return y}
 function lvPath(g,Hh){for(let k=0;k<3;k++){const s=mesh(lvG.flat,wkMt(0x7c766a),((k%2)-.5)*.14,.015,Hh+.62+k*.27);wSc(s,.13+(k%3)*.015,.03,.1);s.rotation.y=k*.7;g.add(s)}}
 function lvFlag(g,x,z,t){const p=wSub(g,x,z,0);p.add(cyl(.035,1.9,matLog2,0,.95,0,0,0,0,5));p.add(mesh(lvG.stone,matStone,0,.05,0));p.children[1].scale.set(.12,.08,.12);
- const f=new THREE.Mesh(lvG.flag,wkMt(LV_FLAG[t]||LV_FLAG.inne,{side:THREE.DoubleSide}));f.position.set(.25,1.68,0);f.castShadow=true;p.add(f);
+ const f=new THREE.Mesh(lvG.flag,wkMt(LV_FLAG[t]||LV_FLAG.inne,{side:THREE.DoubleSide}));f.position.set(.25,1.68,0);f.castShadow=true;f.userData.an='flag';f.userData.ph=Math.random()*6.283;f.userData.noMerge=1;p.add(f);
  const tail=new THREE.Mesh(new THREE.PlaneGeometry(.18,.12),wkMt(0xe6dcc4,{side:THREE.DoubleSide}));tail.position.set(.56,1.7,0);p.add(tail)}
 // przybudówka, podwórze i ścieżka stają tylko tam, gdzie obok nie stoi inny budynek (ważne dla starych zapisów i ciasnej zabudowy)
 let LV_BB=null;
