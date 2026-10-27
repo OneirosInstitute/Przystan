@@ -45,13 +45,17 @@ function e4Panel(){
  }
  if(tab==='kronika'){markup+=classicModeTools();if(typeof wieczoryHTML==='function')markup+=uiDisclosure('game:wieczory','Wieczory przy ogniu',wieczoryHTML());markup+='<h3>Zapis i kopie</h3><button data-kron="load">Wczytaj zapis z pliku</button><button data-kron="now">Zapisz teraz</button><button data-e4-export="1">Pobierz zapis do pliku</button><button data-e4-book="1">Pobierz historię rodów</button><p id="save-status">'+saveStatusText()+'</p><h3>Kronika rodów</h3>'+S.e4.events.slice().reverse().map(event=>`<p><b>Dzień ${Math.floor(event.day)}</b> · ${e4Escape(event.text)}</p>`).join('');}
  markup=uiFoldHeadings(markup,'e4:'+settlement.id+':'+tab);
- if(body._e4Markup===markup)return;body._e4Markup=markup;body.innerHTML=markup;body.scrollTop=scroll;
+ if(body._e4Markup===markup)return;body._e4Markup=markup;
+ // 4.9.0-rc.13: odświeżenie panelu nie kasuje wyboru rodziny, krainy, specjalizacji ani towaru
+ const picked={};body.querySelectorAll('select[id]').forEach(select=>{picked[select.id]=select.value});
+ body.innerHTML=markup;body.querySelectorAll('select[id]').forEach(select=>{const value=picked[select.id];if(value!==undefined&&[...select.options].some(option=>option.value===value))select.value=value});
+ body.scrollTop=scroll;
 }
 const e4UnlockButton=document.createElement('button');e4UnlockButton.textContent='Epoka IV — zwołaj Wiec Rodów';e4UnlockButton.dataset.e4Begin='1';e4UnlockButton.hidden=true;$('sheet').insertBefore(e4UnlockButton,$('body'));
 {const previousPanel=renderPanel;renderPanel=function(){e4UnlockButton.textContent=S?.e4Preparing?'Przygotowania do Wiecu — anuluj':'Epoka IV — zwołaj Wiec Rodów';e4UnlockButton.hidden=!(S?.e3?.done&&S.epoch!==4);if(!S||$('sheet').hidden||!tab)return;if(S.epoch===4){e4Panel();return}previousPanel();}}
 document.addEventListener('change',event=>{if(event.target.id==='e4-place'&&S?.epoch===4){e4Selected=event.target.value;e4Panel();}});
 document.addEventListener('click',event=>{
- const button=event.target.closest('button');if(!button||!S)return;const data=button.dataset;if(data.e4Begin){e4Prepare();return}if(S.epoch!==4)return;let result;
+ const button=event.target.closest('button');if(!button||!S)return;const data=button.dataset;if(data.e4Begin){const r=e4Prepare();if(r&&r.ok===false&&r.reason)toast(r.reason);return}if(S.epoch!==4)return;let result;
  if(data.e4Place){e4Selected=data.e4Place;openSheet('osada');return}if(data.e4Look){const place=S.e4.settlements[data.e4Look];closeSheet();lookAt(place.x,place.z,1.4);return}
  if(data.e4Auto){const place=S.e4.settlements[data.e4Auto];place.autonomy=!place.autonomy;result={ok:true};}if(data.e4Policy){S.e4.policy[data.e4Policy]=!S.e4.policy[data.e4Policy];result={ok:true};}
  if(data.e4Project)result=E4Economy.project(S,e4Selected,data.e4Project);

@@ -18,6 +18,10 @@ function hamFar(r){return !!r&&!hamNear3().has(r.id)&&Math.hypot(r.i-camp.i,r.j-
 // córki przysiółków (epoka III) też nie stają tuż przy Przystani
 {const _fn=e3FreeNear;e3FreeNear=function(h){const ok=new Set(e3Regs().map(r=>r.id)),used=new Set((S.hamlets||[]).map(x=>x.rid));
   return REGIONS.filter(r=>r&&r.id!==0&&ok.has(r.id)&&!used.has(r.id)&&hamFar(r)).sort((a,b)=>Math.hypot(a.i-h.i,a.j-h.j)-Math.hypot(b.i-h.i,b.j-h.j))[0]||null}}
+// 4.9.0-rc.13: trzy krainy przy Przystani należą do osady. Liczą się jako zasiedlone, a cel epoki III
+// („ogień w każdej krainie”) nie wymaga w nich przysiółka, którego i tak nie da się tam założyć.
+{const _sc=settledCount;settledCount=function(){const near=[...hamNear3()].filter(id=>REGIONS[id]);return new Set([0,...near,...(S.hamlets||[]).filter(h=>h.st>=1).map(h=>h.rid)]).size}}
+{let c=null;const _en=e3Need;e3Need=function(){const d=Math.floor(S.day);if(!c||c.d!==d||c.n!==REGIONS.length){c={d,n:REGIONS.length,v:e3Regs().filter(r=>hamFar(r)).length}}if(S.e3)S.e3.regN=c.v;return c.v}}
 // miejsce w krainie: z dala od obozu i od budynków osady
 function hamBldDist(i,j){let m=1e9;for(const b of S.bld){const d=BD[b.kind];if(!d)continue;const dd=Math.hypot(b.i+d.w/2-i,b.j+d.h/2-j);if(dd<m)m=dd}return m}
 hamletSpot=function(r){let best=null,bs=1e9;for(let rr=0;rr<20;rr++)for(let a=0;a<24;a++){const i=Math.round(r.i+Math.cos(a/24*6.283)*rr),j=Math.round(r.j+Math.sin(a/24*6.283)*rr);if(i<3||j<3||i>N-4||j>N-4)continue;const k=j*N+i;if(!land[k]||beach[k]||occ[k]>=0)continue;

@@ -15,7 +15,10 @@ function gameControllerChanged(){
  const previous=updateController;updateController=current;
  if(!previous)return; // Pierwsze przejęcie strony nie oznacza aktualizacji gry.
  // 4.6.0-rc.2: strona przyszła już z sieci w tej samej wersji co nowy pracownik, więc drugie ładowanie nic by nie dało
- if(typeof current.scriptURL==='string'&&current.scriptURL.includes('v='+encodeURIComponent(GAME_VER)))return;
+ // 4.9.0-rc.13: pomijamy tylko pracownika, którego zarejestrowała ta strona (zmiana adresu na jej wersję). Nowa treść pod tym samym adresem
+ // to wydanie wgrane w czasie gry: bez przeładowania stara strona grałaby dalej z pamięcią podręczną nowej wersji.
+ const mine=url=>typeof url==='string'&&url.includes('v='+encodeURIComponent(GAME_VER));
+ if(mine(current.scriptURL)&&!mine(previous.scriptURL))return;
  updatePending=true;gameApplyUpdate();
 }
 function gameRegisterWorker(){

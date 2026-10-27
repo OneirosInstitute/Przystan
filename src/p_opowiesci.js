@@ -18,6 +18,8 @@ function rdShow(){const p=rdPages[rdI];if(!p){rdClose();return}const last=rdI>=r
  rdEl.classList.remove('in');void rdEl.offsetWidth;rdEl.classList.add('in')}
 function rdStart(){if(rdOpen||!rdPages.length||!S)return;rdOpen=true;rdWant=false;rdI=0;rdPrev=S.speed;if(S.speed>0){setSpeed(0);try{renderTop()}catch(e){}}document.body.classList.add('reading');rdEl.hidden=false;rdShow()}
 function rdClose(){rdOpen=false;rdPages=[];rdI=0;rdEl.hidden=true;document.body.classList.remove('reading');if(S&&S.speed===0&&rdPrev&&!evOpen){setSpeed(rdPrev);try{renderTop()}catch(e){}}rdPrev=null}
+// 4.9.0-rc.13: zapis w chwili, gdy karta wieczoru wstrzymała czas, zapamiętuje tempo sprzed karty (po wczytaniu gra nie stoi bez powodu)
+{const _ss=serializeSave;serializeSave=function(){if(rdOpen&&rdPrev&&S&&S.speed===0){S.speed=rdPrev;try{return _ss()}finally{S.speed=0}}return _ss()}}
 rdEl.addEventListener('click',e=>{e.stopPropagation();if(!rdOpen)return;rdI++;if(rdI>=rdPages.length)rdClose();else rdShow()});
 rdEl.addEventListener('pointerdown',e=>e.stopPropagation());
 // składanie wieczoru: wszystko naraz, gdy zapada noc

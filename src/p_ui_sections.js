@@ -5,6 +5,10 @@ function uiDisclosure(key,title,content,defaultOpen=false,description=''){
  return `<details class="ui-section" data-ui-section="${escapeHtml(key)}" ${opened?'open':''}><summary><span><b>${escapeHtml(title)}</b>${description?`<small>${escapeHtml(description)}</small>`:''}</span><i aria-hidden="true">⌄</i></summary><div class="ui-section-content">${content}</div></details>`;
 }
 document.addEventListener('toggle',event=>{const key=event.target.dataset?.uiSection;if(!key||uiSections[key]===event.target.open)return;uiSections[key]=event.target.open;const keys=Object.keys(uiSections);for(const old of keys.slice(0,Math.max(0,keys.length-120)))delete uiSections[old];try{localStorage.setItem('przystan-sections',JSON.stringify(uiSections))}catch(error){}},true);
+// 4.9.0-rc.13: stan zapisuje się już przy kliknięciu nagłówka, nie dopiero przy zdarzeniu „toggle”, które przychodzi chwilę później.
+// Gdy panel odświeżył się w tej chwili (np. co sekundę gry), sekcja zamykała się sama tuż po otwarciu.
+document.addEventListener('click',event=>{const summary=event.target.closest?.('details.ui-section > summary');if(!summary)return;const details=summary.parentElement,key=details.dataset.uiSection;if(!key)return;
+ uiSections[key]=!details.open;try{localStorage.setItem('przystan-sections',JSON.stringify(uiSections))}catch(error){}},true);
 /* Nagłówki w panelach epoki IV są jawnymi granicami sekcji szablonu. */
 function uiFoldHeadings(markup,key){
  const headings=[...markup.matchAll(/<h3>([^<]+)<\/h3>/g)];if(!headings.length)return markup;

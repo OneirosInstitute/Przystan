@@ -43,3 +43,11 @@ test('residents follow the population, a death removes that very person, and the
  for(const part of [r.name,'Mieszkańcy','Zapasy i dobytek','Więź z Przystanią','Co u nich słychać','urodziło się dziecko','Cała wspólnota'])assert.ok(r.html.includes(part),part);
  assert.equal(E('(()=>{select(null);return __przys.selH})()'),null,'selecting something else closes the hamlet card');
 });
+
+test('the three regions by the harbour count as settled and epoch III does not ask for hamlets there (4.9.0-rc.13)',()=>{
+ const E=setup();
+ const r=JSON.parse(E(`(()=>{S.e3={on:1,regN:999};const all=e3Regs().length,near=e3Regs().filter(r=>__przys.hamNear3().has(r.id)).length;return JSON.stringify({need:e3Need(),all,near,settled:settledCount()})})()`));
+ assert.equal(r.need,r.all-r.near-JSON.parse(E('JSON.stringify(e3Regs().filter(r=>__przys.hamNear3().has(r.id)===false&&Math.hypot(r.i-camp.i,r.j-camp.j)<50).length)')),'only regions where a hamlet can stand are needed');
+ assert.ok(r.need<r.all);assert.equal(E('S.e3.regN'),r.need,'an old cached count is replaced');
+ assert.ok(r.settled>=4,'the harbour region and its three neighbours are settled: '+r.settled);
+});

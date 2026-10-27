@@ -10,8 +10,10 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
  for(const viewport of [{width:1280,height:800},{width:412,height:870}]){
   if(results.length){await browser.close();browser=await chromium.launch(launchOptions);}
   const context=await browser.newContext({viewport,isMobile:viewport.width<500,hasTouch:viewport.width<500}),page=await context.newPage(),errors=[];page.on('pageerror',error=>errors.push(error.message));
+  // sekcje paneli są domyślnie zwinięte; ten przegląd klika przyciski w środku, więc rozwija je wszystkie
+  await page.addInitScript(()=>{addEventListener('DOMContentLoaded',()=>new MutationObserver(()=>document.querySelectorAll('details.ui-section:not([open])').forEach(d=>d.open=true)).observe(document.body,{subtree:true,childList:true}))});
   await page.goto(process.env.PRZYSTAN_URL||'http://127.0.0.1:4317/');await page.waitForFunction(()=>!!window.__g,{timeout:60000});
-  await page.evaluate(()=>{const game=window.__g;game.gfxSetLevel(0,true);game.startGame(true);game.S.speed=0;game.S.e3={done:1};game.ludInit();game.S.wozy=3;Object.assign(game.S.res,{suchary:8000,ziarno:3000,drewno:3000,deski:3000,kamien:3000,opal:3000,narz:30});game.openSheet('osada');});
+  await page.evaluate(()=>{const game=window.__g;game.gfxSetLevel(0,true);game.startGame(true);game.S.speed=0;game.S.e3={done:1};game.ludInit();const M=window.__mq.mqInit();window.__mq.MQ.filter(q=>q.ep<=3).forEach(q=>{M.q[q.id]={s:q.st.length,done:1,skip:1}});game.S.wozy=3;Object.assign(game.S.res,{suchary:8000,ziarno:3000,drewno:3000,deski:3000,kamien:3000,opal:3000,narz:30});game.openSheet('osada');});
   let began=false;
   for(let decision=0;decision<20&&!began;decision++){
    if(await page.locator('#ev').isVisible()){console.log('decision',await page.locator('#event-title').innerText());const close=page.locator('#ev [data-close]');if(await close.count())await close.click();else await page.locator('#ev [data-o="0"]').click();await page.evaluate(()=>window.__g.S.speed=0);continue;}
@@ -23,7 +25,7 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
   await page.locator('[data-e4-project="ogrodek"]').click();assert.ok(await page.evaluate(()=>window.__g.S.e4.settlements.przystan.projects.some(project=>project.kind==='ogrodek')));
   await page.evaluate(()=>window.__g.openSheet('wyprawy'));
   const region=await page.evaluate(()=>{const state=window.__g.S,town=state.e4.world.town;return state.e4.world.regions.filter(region=>region.id!==state.e4.settlements.przystan.regionId).sort((first,second)=>Math.hypot(first.x-town.x,first.z-town.z)-Math.hypot(second.x-town.x,second.z-town.z))[0].id;});
-  await page.locator('#e4-region').selectOption(region);await page.locator('#e4-specialty').selectOption('rolniczy');await page.locator('[data-e4-found]').click();
+  {const regions=await page.locator('#e4-region option').evaluateAll(list=>list.map(option=>option.value));const order=[region,...regions.filter(value=>value!==region)];let ok=false;for(const candidate of order){await page.locator('#e4-region').selectOption(candidate);const specs=await page.locator('#e4-specialty option').evaluateAll(list=>list.map(option=>option.value));for(const value of ['rolniczy',...specs.filter(v=>v!=='rolniczy')]){await page.locator('#e4-specialty').selectOption(value);if(await page.locator('[data-e4-found]').isEnabled()){ok=true;break}}if(ok)break}assert.ok(ok,'some region and trade fit together');}await page.locator('[data-e4-found]').click();
   const moving=await page.evaluate(()=>window.__g.S.e4.transports.filter(transport=>transport.founding).map(transport=>({id:transport.id,items:transport.items,peopleIds:transport.peopleIds})));
   assert.equal(moving.length,1,'family departs through the UI');await page.evaluate(()=>{window.__g.save();window.__g.startGame(false);window.__g.S.speed=0;});
   assert.deepEqual(await page.evaluate(()=>window.__g.S.e4.transports.filter(transport=>transport.founding).map(transport=>({id:transport.id,items:transport.items,peopleIds:transport.peopleIds}))),moving);

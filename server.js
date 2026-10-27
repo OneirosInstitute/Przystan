@@ -55,7 +55,7 @@ function verifyRun(token,week) {
 const clean=value=>String(value||'').replace(/[^\p{L}\p{N} .'-]/gu,'').trim().slice(0,24);
 function validMetrics(body) {
  const bounded=(value,max,integer=false)=>typeof value==='number'&&Number.isFinite(value)&&value>=0&&value<=max&&(!integer||Number.isInteger(value));
- return bounded(body.day,4000)&&bounded(body.pop,999,true)&&body.pop>0&&bounded(body.pam,100000)&&bounded(body.hamPop,100000,true)&&[1,2,3].includes(body.epoch);
+ return bounded(body.day,4000)&&bounded(body.pop,999,true)&&body.pop>0&&bounded(body.pam,100000)&&bounded(body.hamPop,100000,true)&&[1,2,3,4].includes(body.epoch);
 }
 function remoteAddress(request) {
  const socket=request.socket.remoteAddress||'';
@@ -115,7 +115,10 @@ const server=http.createServer((request,response)=>{
   if(pathname.endsWith('/'))pathname+='index.html';const resolved=path.resolve(ROOT,'.'+pathname);
   if(resolved!==ROOT&&!resolved.startsWith(ROOT+path.sep))return json(response,403,{err:'niedozwolona ścieżka'});
   fs.stat(resolved,(error,stat)=>{
-   const file=error||!stat.isFile()?path.join(ROOT,'index.html'):resolved,extension=path.extname(file);
+   // brakujący plik z rozszerzeniem (skrypt, obrazek, ikona) to 404, a nie strona gry: inaczej przeglądarka i service worker
+   // zapisałyby HTML pod adresem skryptu albo obrazka. Adresy bez rozszerzenia nadal prowadzą do gry.
+   const missing=error||!stat.isFile();if(missing&&path.extname(pathname)&&path.extname(pathname)!=='.html'){response.writeHead(404,{'Content-Type':'text/plain; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff'});return response.end('nie ma takiego pliku')}
+   const file=missing?path.join(ROOT,'index.html'):resolved,extension=path.extname(file);
    const headers={'Content-Type':TYPES[extension]||'application/octet-stream','Cache-Control':extension==='.html'||file.endsWith('sw.js')||extension==='.webmanifest'?'no-cache':'public, max-age=86400','X-Content-Type-Options':'nosniff'};
    if(file.endsWith('sw.js'))headers['Service-Worker-Allowed']='/';
    // bez ponownego pobierania: przeglądarka pyta „czy się zmieniło”, a serwer odpowiada 304, gdy plik jest ten sam
