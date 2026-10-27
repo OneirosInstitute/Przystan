@@ -1026,7 +1026,7 @@ $('sclose').addEventListener('click',closeSheet);
 function openSheet(t){tab=t;const wd=t==='wiedza'||t==='natura'||t==='wyprawy';$('sheet').classList.toggle('wide',wd);document.body.classList.toggle('wide',wd);$('sheet').hidden=false;$('sheet').classList.remove('min');$('smin').innerHTML=ico('minus');$('res').classList.remove('on');document.body.classList.add('open');renderPanel()}
 function closeSheet(){$('sheet').hidden=true;document.body.classList.remove('open');tab=null;[...$('tabbar').children].forEach(b=>b.classList.remove('on'))}
 $('cancel').addEventListener('click',cancelPlace);
-let toastT=0;function toast(t){const el=$('toast');el.textContent=t;el.classList.add('on');gameCancelLater(toastT);toastT=gameLater(()=>el.classList.remove('on'),2800)}
+let toastT=0;function toast(t,ms){const el=$('toast');el.textContent=t;el.classList.add('on');gameCancelLater(toastT);toastT=gameLater(()=>el.classList.remove('on'),ms||2800)}
 function toastOnce(k,t){if(S.seen[k])return;S.seen[k]=1;toast(t)}
 const fmt=v=>Math.floor(v+1e-6);
 const costHave=c=>Object.entries(c).map(([k,v])=>{const h=Math.floor(S.res[k]||0);return h>=v?`<span>${RN[k].toLowerCase()} ${v}</span>`:`<span class="no">${RN[k].toLowerCase()} ${h}/${v}</span>`}).join('<span class="sep">·</span>');

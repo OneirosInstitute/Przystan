@@ -115,6 +115,8 @@ function openEvent(ev,ctx){
 }
 function eventResult(current,result){
  current.phase='result';current.result=result;
+ // 4.9.0-rc.15: krótkie sprawy (umowa pierwszej nocy, „Od ostatniego razu”) zamyka jedno dotknięcie; wynik zostaje na pasku i w kronice
+ if(current.ev.quick){if(result)toast(result,result.length>60?7000:3500);closeEventResult();return}
  if(S.pendingDecision&&S.pendingDecision.id===current.ev.id){S.pendingDecision.phase='result';S.pendingDecision.result=result}
  $('ev').querySelector('.box').innerHTML=`<div class="eyebrow">${current.ev.ey||'Wydarzenie'}</div><h2 id="event-title">${current.ev.t}</h2><p>${result}</p><div class="opts"><button data-close="1" class="pri"><b>Dalej</b></button></div>`;
  $('ev').querySelector('button')?.focus();

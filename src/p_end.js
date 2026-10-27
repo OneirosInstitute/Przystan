@@ -138,8 +138,17 @@ gameRegisterWorker();
 function startGame(fresh){if(coarse)goFull();$('intro').style.display='none';document.body.classList.remove('pre');audioStart();boot(fresh);if(!saveStatus.blocked)save()}
 let hasSave=false;try{hasSave=!!localStorage.getItem(SAVEKEY)}catch(e){}
 if(hasSave){$('go').textContent='Wróć do osady';$('goNew').hidden=false}
-$('go').addEventListener('click',()=>startGame(false));
-$('goNew').addEventListener('click',()=>{try{localStorage.removeItem(SAVEKEY)}catch(e){}startGame(true)});
+// 4.9.0-rc.15: przycisk od razu pokazuje, że gra rusza. Budowa świata trwa na telefonie sekundę albo dwie i blokuje rysowanie,
+// więc najpierw rysuje się zmieniony przycisk, a dopiero w następnej klatce startuje gra. Pełny ekran trzeba poprosić jeszcze w dotknięciu.
+function introGo(button,label,run){if(button.dataset.busy)return;const text=button.textContent;button.dataset.busy='1';button.disabled=true;button.textContent=label;$('intro').classList.add('st-going');
+ if(coarse)goFull();let done=false;const go=()=>{if(done)return;done=true;try{run()}finally{delete button.dataset.busy;button.disabled=false;button.textContent=text;$('intro').classList.remove('st-going')}};
+ requestAnimationFrame(()=>setTimeout(go,0));setTimeout(go,250)}
+$('go').addEventListener('click',()=>introGo($('go'),hasSave&&!freshFlag?'Wracamy do osady…':'Schodzimy na brzeg…',()=>startGame(false)));
+$('goNew').addEventListener('click',()=>introGo($('goNew'),'Zaczynamy od nowa…',()=>{try{localStorage.removeItem(SAVEKEY)}catch(e){}startGame(true)}));
+// 4.9.0-rc.15: powrót do osady po przeładowaniu z powodu aktualizacji, w pierwszej klatce po wczytaniu wszystkich modułów.
+// Bez licznika: ukryta strona nie planuje niczego w tle, więc wtedy gra wraca do osady dopiero, gdy gracz ją zobaczy.
+{const resume=()=>{if(document.hidden)return;document.removeEventListener('visibilitychange',resume);try{gameResumeAfterUpdate()}catch(e){console.warn('Powrót po aktualizacji',e)}};
+ let flagged=false;try{flagged=sessionStorage.getItem('przystan-resume')==='1'}catch(e){}if(flagged){if(document.hidden)document.addEventListener('visibilitychange',resume);else requestAnimationFrame(resume)}}
 // Zapis awaryjny przy przejściu aplikacji w tło oraz cykliczny niezależny od upływu dni w grze.
 // Odstęp w czasie rzeczywistym działa również przy zatrzymanej symulacji.
 const autosaveIntervalMs=15000;

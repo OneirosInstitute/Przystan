@@ -42,7 +42,7 @@ function stSaveInfo(){try{const raw=localStorage.getItem(SAVEKEY);if(!raw)return
  mb.addEventListener('click',()=>{more.hidden=!more.hidden;mb.classList.toggle('on',!more.hidden);if(!more.hidden)setTimeout(()=>more.scrollIntoView({block:'nearest',behavior:'smooth'}),30)});
  if(more.querySelector('details[open]')||(typeof freshFlag!=='undefined'&&freshFlag)){more.hidden=false;mb.classList.add('on')}
  const pic=document.createElement('div');pic.id='introPic';pic.hidden=true;
- if(old)old.remove();intro.classList.add('st2');intro.append(top,bot,pic);
+ if(old)old.remove();const boot=intro.querySelector('.st-boot');if(boot)boot.remove();intro.classList.add('st2');intro.append(top,bot,pic);
  // kamera: bliżej wraku i wolniej, z lekkim kołysaniem wysokości
  {const _il=introLight;introLight=function(){try{if(!S){const w=wreck&&wreck.i?wreck:camp;camT.x=(tcx(w.i)*2+tcx(camp.i))/3;camT.z=(tcx(w.j)*2+tcx(camp.j))/3;zoom=zoomT=1.35}}catch(e){}return _il()}}}}
 {const st=document.createElement('style');st.textContent=`
@@ -60,6 +60,7 @@ function stSaveInfo(){try{const raw=localStorage.getItem(SAVEKEY);if(!raw)return
 #intro.st2 .st-q{font-family:var(--serif);font-size:15.5px;line-height:1.38;color:#e9e0cb;margin:10px 4px 2px}#intro.st2 .st-q span{display:block;font-family:var(--sans);font-size:12.5px;color:#b7ae98;margin-top:3px}
 #intro.st2 #go{background:#efe5cf;color:#18211c;border:0;border-radius:12px;padding:15px 12px;font-family:var(--serif);font-weight:700;font-size:21px;box-shadow:0 6px 24px #0008}
 #intro.st2 #go:active{transform:translateY(1px)}
+#intro.st2 #go:disabled{color:#18211c;opacity:.85}#intro.st2.st-going .st-row,#intro.st2.st-going .st-more{opacity:.35;pointer-events:none}
 .st-row{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}
 .st-row button{background:#0e1613b3;border:1px solid #efe5cf55;color:#efe5cf;border-radius:10px;padding:9px 14px;font-size:15px}
 .st-row .st-mb.on{border-color:#efe5cf;background:#1c2621e6}
@@ -69,10 +70,9 @@ function stSaveInfo(){try{const raw=localStorage.getItem(SAVEKEY);if(!raw)return
 .st-more .e2note{color:var(--mut);text-align:center;margin-top:-4px}
 .st-foot{text-align:center;color:#a39b88;font-size:12px;text-shadow:0 1px 6px #000}
 @media (prefers-reduced-motion:no-preference){
- .st-emb{animation:stFold 1.15s cubic-bezier(.2,.8,.2,1) both}
- .st-title,.st-sub{animation:stRise .9s .55s ease-out both}.st-sub{animation-delay:.75s}
- .st-bot{animation:stRise .8s .95s ease-out both}}
-@keyframes stFold{0%{clip-path:inset(0 50% 0 50%);transform:rotate(-6deg) scale(.92);opacity:.2}60%{opacity:1}100%{clip-path:inset(0 0 0 0);transform:none;opacity:1}}
+ /* 4.9.0-rc.15: herb, tytuł i podtytuł stoją już na ekranie wczytywania dokładnie w tym samym miejscu, więc nie znikają
+    i nie wjeżdżają drugi raz. Przyciski pojawiają się od razu, bez sekundowej przerwy z pustą wyspą. */
+ .st-bot{animation:stRise .35s ease-out both}}
 @keyframes stRise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 @media (min-width:900px){#intro.st2 .st-emb{width:200px}#intro.st2 .st-title{font-size:88px}}
 @media (max-height:640px){#intro.st2 .st-emb{width:110px}#intro.st2 .st-title{font-size:46px}#intro.st2 .st-story{display:none}}

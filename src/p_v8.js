@@ -52,8 +52,10 @@ function fireFxTick(rdt){for(const id in fireFxs){const f=fireFxs[id],b=bById(+i
   f.sm.forEach(s=>{s.userData.t=(s.userData.t+rdt*.25)%1;const t=s.userData.t;s.position.set(Math.sin(t*5+s.id)*.4+t*1.5,2.6+t*5,Math.cos(t*4+s.id)*.4);const sc=.8+t*3;s.scale.set(sc,sc,1);s.material.opacity=(1-t)*.55*k})}}
 
 /* ---- obyczaje osady: ustalenia, które rodzą się z wydarzeń ---- */
+// 4.9.0-rc.15: „Pierwsza noc przy ognisku” przychodzi o pierwszym zmierzchu (tak mówi jej tekst), a nie zaraz po zejściu na brzeg,
+// i po wyborze nie otwiera drugiej karty: postanowienie pokazuje się na pasku i trafia do kroniki.
 const CUSTOMS=[
- {k:'umowa',n:'Umowa z brzegu',trig:()=>true,why:'Pierwszej nocy na wyspie, przy ognisku na plaży.',
+ {k:'umowa',n:'Umowa z brzegu',trig:()=>S.day>=.7,why:'Pierwszej nocy na wyspie, przy ognisku na plaży.',
   t:'Pierwsza noc przy ognisku',x:()=>S.day<2?'Najkrótsza noc w roku. W domu palono by teraz kupalne ognie nad rzeką. Tu jest osiemnaście osób, mokre ubrania i płonący stos desek z wraku. Nikt tu nie rządzi. Zanim ktoś zaśnie, trzeba ustalić, jak będziemy żyć.':'Osada żyje już kilka dni bez żadnych ustaleń. Wieczorem przy ognisku ktoś mówi, że tak dalej nie można. Trzeba się umówić, jak będziemy żyć.',
   o:[{id:'u_wspolne',n:'Wszystko wspólne',d:'Jedzenie i narzędzia należą do wszystkich. Więcej nadziei, mniej sporów, praca idzie trochę wolniej.',r:'Postanowiono: nikt nic nie ma na własność. Co wyniesione z wraku, należy do wszystkich.'},
    {id:'u_swoje',n:'Każdy na swoim',d:'Kto więcej pracuje, ten więcej ma. Praca idzie szybciej, ale łatwiej o kłótnie.',r:'Postanowiono: każdy odpowiada za siebie i swoją rodzinę. Kto pracuje, ten je.'},
@@ -105,9 +107,9 @@ function custInit(){if(!S.cust){S.cust={};const old=S.laws||{};CUSTOMS.forEach(c
  S.custQ=S.custQ||[];S.custLog=S.custLog||{};S.offices=S.offices||{};custRebuild()}
 function custDay(){const d=Math.floor(S.day)+1,y=Math.floor(S.day/YEAR)+1;return`doba ${d}, rok ${y}`}
 function custTick(){if(!S||!S.cust)return;CUSTOMS.forEach(c=>{if(!S.cust[c.k]&&!S.custQ.includes(c.k)&&c.trig())S.custQ.push(c.k)});
- if(!S.custQ.length||evOpen||placing||!S.people.length)return;if(S.custQ[0]!=='umowa'&&!isWork())return;
+ if(!S.custQ.length||evOpen||placing||!S.people.length||(typeof rdOpen!=='undefined'&&rdOpen))return;if(S.custQ[0]!=='umowa'&&!isWork())return;
  const c=CUST_BY[S.custQ.shift()];if(!c||S.cust[c.k])return;
- openEvent({ey:'Ustalenie',t:c.t,text:c.x,opts:c.o.map(o=>({n:o.n,d:o.d,f:()=>{S.cust[c.k]=o.id;custRebuild();S.custLog[c.k]={d:custDay(),why:c.why,hist:[]};
+ openEvent({ey:'Ustalenie',t:c.t,text:c.x,quick:c.k==='umowa',opts:c.o.map(o=>({n:o.n,d:o.d,f:()=>{S.cust[c.k]=o.id;custRebuild();S.custLog[c.k]={d:custDay(),why:c.why,hist:[]};
   if(o.id==='pomoc'){S.hope=clamp(S.hope-.04,0,1)}if(o.id==='nauka'){S.hope=clamp(S.hope+.02,0,1)}assign();return o.r+' Od teraz to obyczaj osady.'}}))},{})}
 // wiec: raz na porę roku można zmienić jeden obyczaj
 const seasonKey=()=>Math.floor(S.day/SD);

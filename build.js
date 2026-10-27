@@ -5,6 +5,11 @@ const PARTS=['p_head.html','p_tekstury.js','p_const.js','p_wyspa.js','p_mid.js',
 fs.rmSync(OUT,{recursive:true,force:true});fs.mkdirSync(OUT,{recursive:true});
 let game=PARTS.map(f=>fs.readFileSync(path.join(SRC,f),'utf8')).join('');
 game=game.replace('https://cdn.jsdelivr.net/npm/three@0.186.0/build/three.module.min.js','./three.module.js');
+// 4.9.0-rc.15: herb na ekranie wczytywania rysuje ta sama funkcja co na ekranie startowym, więc przy zamianie ekranów nic nie skacze
+{const src=fs.readFileSync(path.join(SRC,'p_start.js'),'utf8'),a=src.indexOf('function wycSVG(){'),b=src.indexOf('function stSaveInfo(');
+ if(a<0||b<a||!game.includes('<!--ST_BOOT_EMB-->'))throw new Error('Brak herbu dla ekranu wczytywania');
+ const svg=new Function(src.slice(a,b)+';return wycSVG()')().replace('class="st-emb"','class="st-boot-emb"').replace(/stPaper/g,'stPaperBoot');
+ game=game.replace('<!--ST_BOOT_EMB-->',svg)}
 const head=`<!doctype html>
 <html lang="pl">
 <head>

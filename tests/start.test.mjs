@@ -8,7 +8,7 @@ test('the start screen module is built before the end of the game script and kee
  const a=html.indexOf('Ekran startowy: żywa wyspa i wycinanka'),b=html.indexOf('return{','\n'.length+html.lastIndexOf('function startGame'));
  assert.ok(a>0,'module is in the build');assert.ok(a<html.lastIndexOf('function startGame'),'runs before the game script returns');
  for(const s of["class=\"st-emb\"","st-title","Inne początki","'.diffsel,.newset,.tydbox'","goInstall","introPic"])assert.ok(html.includes(s),s);
- assert.match(html,/@media \(prefers-reduced-motion:no-preference\)\{\s*#intro\.st2 \.st-emb|\.st-emb\{animation:stFold/);
+ assert.doesNotMatch(html,/\.st-emb\{animation/,'4.9.0-rc.15: the emblem already stands on the loading screen, so it does not fold in again');
  assert.match(html,/#intro\.st2 \.st-more\[hidden\]\{display:none\}/);
 });
 test('a saved game shows the village, season and a line from the last evening by the fire',()=>{

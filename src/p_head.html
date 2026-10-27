@@ -309,6 +309,23 @@ h3:first-child{margin-top:0}
 /* Mapa całej wyspy: znaczniki bez kaskady zasłaniających wyspę etykiet. */
 #labels:not(.map-labels-expanded) .rl span{display:none}
 #labels:not(.map-labels-expanded) .rl:focus-within span{display:block}
+
+/* 4.9.0-rc.15: ekran wczytywania w samym HTML. Zanim ruszy skrypt gry, widać spokojny tytuł w miejscu nowego ekranu startowego,
+   a nie stare menu, które dawniej przebijało przez kilka sekund. Herb wstawia build.js (ta sama funkcja wycSVG co na ekranie startowym).
+   Skrypt startowy (p_start.js) usuwa ten ekran. */
+#intro:not(.st2) .box{display:none}
+#intro .st-boot{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;padding:calc(18px + env(safe-area-inset-top)) 18px calc(14px + env(safe-area-inset-bottom));background:#0a1210;text-align:center}
+#intro .st-boot-emb{width:min(46vw,190px);height:auto;margin-top:2px;flex:none}
+#intro .st-boot-title{font-family:var(--serif);font-weight:700;font-size:clamp(50px,14vw,82px);line-height:.95;margin:6px 0 0;color:#f3ead6;letter-spacing:.01em}
+#intro .st-boot-sub{font-family:var(--serif);font-weight:500;font-size:clamp(17px,4.6vw,21px);color:#e9dfc8;margin:8px 0 0}
+#intro .st-boot-load{margin-top:auto;margin-bottom:8px;font-family:var(--serif);font-size:17px;color:#c9c1ae}
+#intro .st-boot-load::after{content:'';display:inline-block;width:1.2em;text-align:left;animation:stDots 1.4s steps(4) infinite}
+#intro .st-boot-slow{max-width:360px;margin-bottom:10px;font-size:13px;line-height:1.35;color:#a39b88;opacity:0;animation:stSlow .6s 12s both}
+@keyframes stDots{0%{content:''}25%{content:'.'}50%{content:'..'}75%{content:'...'}}
+@keyframes stSlow{to{opacity:1}}
+@media (prefers-reduced-motion:reduce){#intro .st-boot-load::after{animation:none;content:'…'}}
+@media (min-width:900px){#intro .st-boot-emb{width:200px}#intro .st-boot-title{font-size:88px}}
+@media (max-height:640px){#intro .st-boot-emb{width:110px}#intro .st-boot-title{font-size:46px}}
 </style>
 <div id="app">
   <canvas id="c"></canvas>
@@ -330,7 +347,7 @@ h3:first-child{margin-top:0}
   <div class="ui chip" id="tabbar"></div>
   <div id="toast"></div>
   <div id="ev" hidden></div>
-  <div id="intro"><div class="box">
+  <div id="intro"><div class="st-boot" aria-live="polite"><!--ST_BOOT_EMB--><div class="st-boot-title">Przystań</div><div class="st-boot-sub">Ocalić to, co umiemy. Zbudować dom.</div><div class="st-boot-load">Wczytywanie wyspy</div><div class="st-boot-slow">Za pierwszym razem gra pobiera całą wyspę. Potem uruchamia się z pamięci telefonu.</div></div><div class="box">
     <div class="pic" id="introPic"></div>
     <div class="txt">
       <div class="ey">Dzika wyspa · rok pierwszy</div>

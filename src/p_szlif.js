@@ -1,6 +1,6 @@
 
 /* ================= 1.0: szlif — wydajność, zapis odporny na wersje, nowe wyspy i wyzwania, łagodny początek, „Od ostatniego razu”, „Na co czekamy”, rytm sesji ================= */
-const GAME_VER='4.9.0-rc.14';
+const GAME_VER='4.9.0-rc.15';
 // ---------- wydajność: gotowe budynki scalane w jedną bryłę na materiał ----------
 const _mInv=new THREE.Matrix4(),_mM=new THREE.Matrix4(),_mN=new THREE.Matrix3(),_vP=new THREE.Vector3(),_vN=new THREE.Vector3();
 function mergeGroup(g){if(!g)return 0;g.updateMatrixWorld(true);_mInv.copy(g.matrixWorld).invert();const fireSet=new Set(fires.map(f=>f.g));const byMat=new Map();
@@ -96,9 +96,12 @@ function sinceLast(fresh){S.sess=S.sess||{};const d0=S.sess.d0,lt=S.sess.lt;S.se
  const kr=(S.kron||[]).filter(x=>x[0]>=Math.floor(d0)+1&&SINCE_RX.test(x[1])&&!/^Wspomnienie/.test(x[1])).slice(-7);const L=czekamy().slice(0,4);const g=goalInfo();
  let ago='';if(lt){const h=(Date.now()-lt)/36e5;ago=h<1?'':h<24?`Ostatnia wizyta: ${Math.round(h)} godz. temu. `:`Ostatnia wizyta: ${Math.round(h/24)} ${dniW(Math.round(h/24))} temu. `}
  const days=Math.floor(S.day-d0);if(days<1&&!kr.length&&!loadNote)return;
+ // 4.9.0-rc.15: po przeładowaniu z powodu aktualizacji gracz był w osadzie przed chwilą, więc podsumowanie tylko przeszkadza.
+ // Podsumowanie zamyka jedno dotknięcie: „Wracam do osady” nie otwiera już drugiej karty z „Dalej”.
+ if(typeof updateResumed!=='undefined'&&updateResumed&&!loadNote)return;
  const txt=`${loadNote?loadNote+'\n\n':''}${ago}${S.vname||'Przystań'}: ${S.people.length} ${osb(S.people.length)}, ${dayName(Math.floor(S.day)+1)}.\n\n`+(kr.length?'Ostatnio:\n'+kr.map(x=>'· '+x[1].split('. ')[0].replace(/\.$/,'')+'.').join('\n')+'\n\n':'')+
   (L.length?'Na co czekamy:\n'+L.map(x=>'· '+x[0]).join('\n')+'\n\n':'')+(g?`Cel: ${g.t}.`:'');
- S.evT=Math.max(S.evT||0,S.day+.6);let tries=0;const show=()=>{if(evOpen){if(++tries<40)gameLater(show,1500);return}openEvent({ey:'Od ostatniego razu',t:S.vname||'Przystań',text:()=>txt.trim().replace(/\n/g,'<br>'),opts:[{n:'Wracam do osady',d:'',f:()=>'Dobrze cię widzieć. Osada czekała.'}]},{})};gameLater(show,700)}
+ S.evT=Math.max(S.evT||0,S.day+.6);let tries=0;const show=()=>{if(evOpen){if(++tries<40)gameLater(show,1500);return}openEvent({ey:'Od ostatniego razu',t:S.vname||'Przystań',quick:true,text:()=>txt.trim().replace(/\n/g,'<br>'),opts:[{n:'Wracam do osady',d:'',f:()=>'Dobrze cię widzieć. Osada czekała.'}]},{})};gameLater(show,700)}
 {const _b=boot;boot=function(fresh){_b(fresh);try{sinceLast(fresh)}catch(e){console.warn(e)}}}
 
 // ---------- rytm sesji ----------

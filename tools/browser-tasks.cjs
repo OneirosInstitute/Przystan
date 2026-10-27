@@ -33,7 +33,7 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
    assert.equal(await card.evaluate(element=>element.scrollWidth>element.clientWidth+1),false,'task card has no overflow');
    await clickUI(card.locator('[data-task-help="77"]'));assert.equal(await page.evaluate(()=>window.__g.S.res.odziez),90);assert.equal(await page.evaluate(()=>window.__g.S.hamlets[0].need),null);
    assert.equal(await page.locator('[data-task-card="ham:77"]').count(),0);await page.locator('.task-history summary').click();assert.match(await page.locator('.task-history').innerText(),/Lubomirowice/);
-   await page.reload({waitUntil:'domcontentloaded'});await page.waitForFunction(()=>!!window.__g);await page.locator('#go').click();
+   await page.reload({waitUntil:'domcontentloaded'});await page.waitForFunction(()=>!!window.__g);await page.locator('#go').click();await page.waitForFunction(()=>!!window.__g?.S&&document.getElementById('intro').style.display==='none');
    assert.equal(await page.evaluate(()=>window.__g.S.res.odziez),90);assert.equal(await page.evaluate(()=>window.__g.S.hamlets[0].need),null);
    await page.evaluate(()=>{const game=window.__g,hamlet=game.S.hamlets[0];hamlet.need={k:'opal',q:10,until:game.S.day+6};game.closeSheet();game.S.speed=0;game.look(-game.tcx(hamlet.i),-game.tcx(hamlet.j));game.mapTick(1);});
    await clickUI(page.locator('.cze-request .cze-close'));assert.equal(await page.locator('.cze-request').count(),0);
@@ -41,7 +41,8 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
    await clickUI(page.locator('[data-task-filter="people"]'));assert.equal(await page.locator('.task-person').count(),await page.evaluate(()=>window.__g.S.people.length));
    await clickUI(page.locator('[data-task-person="0"]'));assert.equal(await page.locator('#sheet').isHidden(),true);assert.match(await page.locator('#sel').innerText(),/Bożydar/);
    // Fill this context's real localStorage until Chromium rejects the next larger value.
-   const quota=await page.evaluate(()=>{const game=window.__g,state=game.S;state.speed=0;state.day=2.4;if(!game.save())throw new Error('pre-quota save');localStorage.setItem('przystan-v7-bak',localStorage.getItem('przystan-v7'));
+   const quota=await page.evaluate(()=>{const game=window.__g,state=game.S;state.speed=0;state.day=2.4;state.cust.umowa=state.cust.umowa||'u_wspolne'; // 4.9.0-rc.15: drugi dzień przyniósłby kartę „Pierwszej nocy” nad Kronikę
+   if(!game.save())throw new Error('pre-quota save');localStorage.setItem('przystan-v7-bak',localStorage.getItem('przystan-v7'));
     let low=0,high=6*1024*1024,rejected=false;while(high-low>16){const middle=Math.floor((low+high)/2);try{localStorage.setItem('qa-padding','p'.repeat(middle));low=middle}catch(error){if(error.name!=='QuotaExceededError')throw error;rejected=true;high=middle;}}
     state.kron.push([3,'Nowy wpis do sprawdzenia większego zapisu. '.repeat(200)]);state.res.drewno=73;const saved=game.save();
     return {realQuotaExceeded:rejected,recovered:saved,backupRemoved:localStorage.getItem('przystan-v7-bak')===null,paddingPreserved:localStorage.getItem('qa-padding')?.length===low,savedWood:JSON.parse(localStorage.getItem('przystan-v7')).res.drewno};});
@@ -52,7 +53,7 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
    const downloadEvent=page.waitForEvent('download');await page.locator('[data-kron="diagnostic"]').click();const download=await downloadEvent;const diagnosticPath=path.join(output,'save-diagnostic-'+viewport.width+'.json');await download.saveAs(diagnosticPath);const diagnostic=JSON.parse(fs.readFileSync(diagnosticPath,'utf8'));
    assert.equal(diagnostic.version,require('../package.json').version);assert.equal(diagnostic.ok,false);assert.match(diagnostic.error,/people\[0\].hp/);
    await page.evaluate(()=>{window.__g.S.people[0].hp=1;if(!window.__g.save())throw new Error('recovery save');});assert.equal(await page.locator('#save-warning').isHidden(),true);
-   await page.evaluate(()=>navigator.serviceWorker.ready);await context.setOffline(true);await page.reload({waitUntil:'domcontentloaded'});await page.waitForFunction(()=>!!window.__g,{timeout:60000});await page.locator('#go').click();
+   await page.evaluate(()=>navigator.serviceWorker.ready);await context.setOffline(true);await page.reload({waitUntil:'domcontentloaded'});await page.waitForFunction(()=>!!window.__g,{timeout:60000});await page.locator('#go').click();await page.waitForFunction(()=>!!window.__g?.S&&document.getElementById('intro').style.display==='none');
    assert.equal(await page.evaluate(()=>window.__g.S.res.drewno),73);assert.equal(await page.evaluate(()=>window.__g.S.tasksUI.dismissed[77]!==undefined),true);
    await page.evaluate(()=>window.__g.openSheet('zadania'));await clickUI(page.locator('[data-task-filter="all"]'));assert.ok(await page.locator('[data-task-card="ham:77"]').count());assert.deepEqual(errors,[]);
    results.push({viewport,status:'PASS',helpOnce:true,dismissalPersists:true,peopleLocated:true,quota,diagnosticExport:true,offlineReload:true,errors});

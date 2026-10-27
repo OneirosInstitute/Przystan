@@ -14,6 +14,8 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
   await page.addInitScript(()=>{addEventListener('DOMContentLoaded',()=>new MutationObserver(()=>document.querySelectorAll('details.ui-section:not([open])').forEach(d=>d.open=true)).observe(document.body,{subtree:true,childList:true}))});
   await page.goto(process.env.PRZYSTAN_URL||'http://127.0.0.1:4317/');await page.waitForFunction(()=>!!window.__g,{timeout:60000});
   await page.evaluate(()=>{const game=window.__g;game.gfxSetLevel(0,true);game.startGame(true);game.S.speed=0;game.S.e3={done:1};game.ludInit();const M=window.__mq.mqInit();window.__mq.MQ.filter(q=>q.ep<=3).forEach(q=>{M.q[q.id]={s:q.st.length,done:1,skip:1}});game.S.wozy=3;Object.assign(game.S.res,{suchary:8000,ziarno:3000,drewno:3000,deski:3000,kamien:3000,opal:3000,narz:30});game.openSheet('osada');});
+  // 4.9.0-rc.15: pierwsza decyzja nie przychodzi już zaraz po starcie, więc nic nie daje grze czasu na pierwsze klatki (kompilacja shaderów)
+  await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(()=>setTimeout(resolve,500)))));
   let began=false;
   for(let decision=0;decision<20&&!began;decision++){
    if(await page.locator('#ev').isVisible()){console.log('decision',await page.locator('#event-title').innerText());const close=page.locator('#ev [data-close]');if(await close.count())await close.click();else await page.locator('#ev [data-o="0"]').click();await page.evaluate(()=>window.__g.S.speed=0);continue;}
@@ -36,7 +38,7 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
   assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false,'viewport does not overflow');assert.deepEqual(errors,[]);
   await page.evaluate(()=>{const game=window.__g;game.step(((.9-game.S.day%1+1)%1)*240);window.__noc.nocStart();if(!game.save())throw new Error('night save failed');});
   const state=await page.evaluate(()=>({day:window.__g.S.day,people:window.__g.S.people.length,settlements:Object.keys(window.__g.S.e4.settlements).length,save:window.__g.save(),bytes:localStorage.getItem('przystan-v7').length,renderer:window.__g.renderer.getContext().getParameter(7937)}));
-  await page.evaluate(()=>navigator.serviceWorker.ready);await context.setOffline(true);await page.reload({waitUntil:'domcontentloaded'});await page.waitForFunction(()=>!!window.__g,{timeout:60000});await page.locator('#go').click();assert.equal(await page.evaluate(()=>window.__g.S.epoch),4);assert.notEqual(await page.evaluate(()=>window.__g.S.speed),40);assert.equal(await page.evaluate(()=>window.__g.S.people.length),state.people);
+  await page.evaluate(()=>navigator.serviceWorker.ready);await context.setOffline(true);await page.reload({waitUntil:'domcontentloaded'});await page.waitForFunction(()=>!!window.__g,{timeout:60000});await page.locator('#go').click();await page.waitForFunction(()=>!!window.__g?.S&&document.getElementById('intro').style.display==='none');assert.equal(await page.evaluate(()=>window.__g.S.epoch),4);assert.notEqual(await page.evaluate(()=>window.__g.S.speed),40);assert.equal(await page.evaluate(()=>window.__g.S.people.length),state.people);
   results.push({viewport,...state,errors,offlineReload:true});await context.close();
  }}finally{await browser.close();if(server)server.kill('SIGTERM');}
  fs.writeFileSync(path.join(output,'chromium-e4.json'),JSON.stringify({status:'PASS',results},null,2));console.log(JSON.stringify({status:'PASS',results},null,2));

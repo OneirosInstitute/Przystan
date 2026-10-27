@@ -9,7 +9,7 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
   browser=await chromium.launch({headless:true,executablePath:process.env.CHROMIUM_PATH,args:JSON.parse(process.env.PRZYSTAN_CHROMIUM_ARGS||'[]')});
   const page=await browser.newPage({viewport:{width:412,height:870}}),errors=[];page.on('pageerror',error=>errors.push(error.message));
   await page.route('http://127.0.0.1:4317/',async route=>{const response=await route.fetch();const html=(await response.text()).replace(/\n\}\);\s*<\/script>/,'\nwindow.__qaEval=expression=>eval(expression);\n});\n</script>');await route.fulfill({response,body:html})});
-  await page.goto('http://127.0.0.1:4317/');await page.waitForFunction(()=>!!window.__g);await page.locator('#go').click();await page.waitForTimeout(800);
+  await page.goto('http://127.0.0.1:4317/');await page.waitForFunction(()=>!!window.__g);await page.locator('#go').click();await page.waitForFunction(()=>!!window.__g?.S&&document.getElementById('intro').style.display==='none');await page.waitForTimeout(800);
   const result=await page.evaluate(()=>window.__qaEval(`(()=>{
    evOpen=null;$('ev').hidden=true;closeSheet();S.speed=0;S.evT=10000;S.day=2.01;
    const old=e2Daily;e2Daily=function(){old();S.res.opal+=.125};
