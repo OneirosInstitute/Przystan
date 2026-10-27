@@ -110,10 +110,14 @@ const scBubEl=document.createElement('div');scBubEl.id='scBub';scBubEl.hidden=tr
 // Teraz szerokość zależy tylko od tekstu, dymek zawsze mieści się na ekranie, ogonek wskazuje osobę, a czas zależy od długości zdania.
 function scBubble(p,txt){if(typeof czOn!=='undefined'&&!czOn)return;scBP=p.id;const L=txt.split(/(?<=[.!?])\s/);const t=txt.length<=150?txt:(L.find(x=>x.includes(p.name))||L[0]);const shown=t.length>150?t.slice(0,147)+'…':t;scBubEl.textContent=shown;scBubEl.hidden=false;scBU=performance.now()+Math.min(14000,Math.max(6000,3000+shown.length*70));scBW=0}
 function scBubFrame(){if(scBP===null)return;const p=S&&pById(scBP);if(!p||performance.now()>scBU||evOpen||!$('sheet').hidden){scBubEl.hidden=true;scBP=null;return}
+  // 4.9.0-rc.16: przy otwartej karcie osoby dymek nie zasłania karty (ta sama historia jest na karcie)
+  if(document.body.classList.contains('selon')){scBubEl.style.opacity='0';return}
   scV.set(p.x,Hy(p.x,p.z)+2.3,p.z).project(cam);if(Math.abs(scV.x)>.95||Math.abs(scV.y)>.9||scV.z>1){scBubEl.style.opacity='0';return}scBubEl.style.opacity='1';
   if(!scBW)scBW=scBubEl.offsetWidth;const x=(scV.x+1)/2*innerWidth,half=scBW/2,cx=Math.min(Math.max(x,half+8),innerWidth-half-8);
   scBubEl.style.left=Math.round(cx)+'px';scBubEl.style.top=Math.round((1-scV.y)/2*innerHeight)+'px';if(typeof scBubEl.style.setProperty==='function')scBubEl.style.setProperty('--ax',Math.round(Math.min(Math.max(x-cx+half,14),scBW-14))+'px')}
 {const _mt=mapTick;mapTick=function(rdt){_mt(rdt);scBubFrame()}}
+// karta osoby otwarta przy zatrzymanym czasie: klatki wtedy nie biegną (oszczędzanie baterii), więc dymek chowa się od razu
+{const _rs=renderSel;renderSel=function(){_rs();if(scBP!==null&&document.body.classList.contains('selon'))scBubEl.style.opacity='0'}}
 {const st=document.createElement('style');st.textContent='#scBub{position:absolute;z-index:3;transform:translate(-50%,-100%);width:max-content;max-width:min(300px,calc(100vw - 16px));box-sizing:border-box;padding:7px 11px;border-radius:12px;background:#18201ce6;border:1px solid #c9a66b77;color:var(--hi);font:14px/1.35 var(--serif);font-style:italic;pointer-events:none;box-shadow:0 3px 12px #0007;transition:opacity .4s}#scBub[hidden]{display:none}#scBub::after{content:"";position:absolute;left:var(--ax,50%);bottom:-6px;width:10px;height:10px;transform:translateX(-50%) rotate(45deg);background:#18201ce6;border-right:1px solid #c9a66b77;border-bottom:1px solid #c9a66b77}';document.head.appendChild(st)}
 window.__sceny={SCENY,sceneTick,nameDay};
 

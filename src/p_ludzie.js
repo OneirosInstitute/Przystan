@@ -101,9 +101,11 @@ function ludDaily(){if(!ludReady)ludInit();const ad=S.people.filter(p=>p.age>=14
  // wesele
  if(S.wed&&S.day>=S.wed.day){const k=pById(S.wed.k),m=pById(S.wed.m);S.wed=null;if(k&&m&&k.pair===null&&m.pair===null)wedding(k,m)}
  // swaty
- if(!S.wed&&Math.random()<.3*K){const c=S.people.filter(single);let best=null,bv=offHolder('swat')?36:44;c.filter(p=>p.sex==='k').forEach(k=>c.filter(m=>m.sex==='m'&&wedOk(k,m)&&Math.abs(k.age-m.age)<16).forEach(m=>{const v=relGet(k,m);if(v>bv){bv=v;best=[k,m]}}));
+ if(!S.wed&&Math.random()<.3*K){const c=S.people.filter(single);let best=null,bv=offHolder('swat')?36:44;c.filter(p=>p.sex==='k').forEach(k=>c.filter(m=>m.sex==='m'&&wedOk(k,m)&&Math.abs(k.age-m.age)<16&&!(typeof watBlocks==='function'&&watBlocks(k,m))).forEach(m=>{const v=relGet(k,m);if(v>bv){bv=v;best=[k,m]}}));
+  // 4.9.0-rc.16: para, która ma się ku sobie, przechodzi przez wątek zalotów (z kartą decyzji); po staremu tylko, gdy brak miejsca na wątek
+  let viaWat=false;if(best&&typeof watSwaty==='function'&&watSwaty(best[0],best[1])){best=null;viaWat=true}
   if(best){const[k,m]=best;S.wed={k:k.id,m:m.id,day:Math.floor(S.day)+2+((Math.random()*3)|0)};log(`Swaty. Do chaty, w której mieszka ${k.name}, przychodzą swaci od ${gen(m.name)} z chlebem i solą. Chleb zostaje przyjęty: za kilka dni wesele.`);toast('Swaty: '+k.name+' i '+m.name)}
-  else if(S.hamlets.length&&Math.random()<.08){const h=S.hamlets.filter(x=>x.pop>=4&&x.wiez>=.45)[0];const lone=c.filter(p=>p.age>=19&&p.age<=36&&!relsOf(p).some(x=>x[1]>=30&&x[0].sex!==p.sex))[0];
+  else if(!viaWat&&S.hamlets.length&&Math.random()<.08){const h=S.hamlets.filter(x=>x.pop>=4&&x.wiez>=.45)[0];const lone=c.filter(p=>p.age>=19&&p.age<=36&&!relsOf(p).some(x=>x[1]>=30&&x[0].sex!==p.sex))[0];
    if(h&&lone){const sex=lone.sex==='k'?'m':'k',age=18+Math.random()*8;const np=newPerson(S.pid++,newName(sex),age,sex,lone.fam,{zbieracz:1,[sex==='m'?'drwal':'krawiec']:1},TKEYS[(Math.random()*TKEYS.length)|0]);np.rod=h.rod;np.par=[];np.mirX=0;np.fromHam=h.id;
     const hc=homeOf(lone);const c0=hc?bCenter(hc):{x:tcx(camp.i),z:tcx(camp.j)};np.x=c0.x+.8;np.z=c0.z+.6;S.people.push(np);addPersonMesh(np);h.pop--;relAdd(np,lone,52);
     log(`Z przysiółka ${h.name} przychodzi ${np.name}, ${Math.floor(age)} ${latW(age)}. W przysiółku za ciasno, a tu ${lone.name} od dawna nie ma z kim tańczyć.`);assign()}}}

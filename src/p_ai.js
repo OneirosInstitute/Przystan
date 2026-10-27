@@ -5,8 +5,8 @@
  delete person.blocked;
  if(S?.e4Preparing){person.state='idle';person.wait=1;person.act='czeka na Wiec Rodów';return false;}
  if(S&&!person.fireB&&isWorker(person)&&restNow(person)){release(person);person.path=null;restSpot(person);return true;}
- if(S&&racjeOn('zbior')&&!person.fireB&&isWorker(person)&&isWork()){
-  if(choreDo(person,'zbior')||choreDo(person,'ryby'))return true;
+ if(S&&racjeOn('zbior')&&!person.fireB&&isWorker(person)&&isWork()&&!racjeKeeps(person)){
+  if(choreDo(person,'zbior')||choreDo(person,'ryby')){person.act='przednówek: '+person.act;return true}
   person.act='szuka jedzenia — brak dostępnego zbioru';person.wait=3;return false;
  }
  const planned=legacyPlanner(person);if(!planned&&person.blocked)person.act=person.blocked.reason;return planned;

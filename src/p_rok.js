@@ -71,11 +71,21 @@ EVENTS.push({id:'przednowek',w:6,cd:YEAR*.6,cond:()=>(seasonIdx()===3||(seasonId
  opts:[{n:'Najpierw dzieci i karmiące matki',d:'dzieci zdrowe, dorośli słabną i pracują wolniej',f:()=>racje('dzieci')},
   {n:'Najpierw ci, którzy pracują',d:'praca idzie, ale dzieci i starzy chorują',f:()=>racje('praca')},
   {n:'Po równo',d:'wszyscy głodni tak samo',f:()=>racje('rowno')},
-  {n:'Wszyscy w las i nad wodę',d:'budowy stoją, każdy szuka jedzenia',f:()=>racje('zbior')}]});
+  {n:'Wszyscy w las i nad wodę',d:'budowy stoją, ludzie szukają jedzenia; drewutnia, pola i łowcy pracują dalej',f:()=>racje('zbior')}]});
 function racje(m){if(m==='zbior')S.people.forEach(person=>{if(person.after==='build'||person.workKind==='build'){release(person);person.path=null;person.state='idle';person.wait=0}});S.racje={m,until:S.day+YEAR*.3};S.racjeY=Math.floor(S.day/YEAR);
  return{dzieci:'Matki dostają podwójną miskę, dzieci jedzą do syta. Mężczyźni zaciskają pasa i milczą.',praca:'Kto idzie do lasu i na pole, je pierwszy. Starzy oddają swoje dzieciom po cichu, kiedy nikt nie widzi.',rowno:'Każdy dostaje tyle samo. Za mało dla wszystkich, ale nikt nie może powiedzieć, że go skrzywdzono.',zbior:'Budowy stoją. Kto może, chodzi po korzonki, pokrzywę, szczaw i ryby. Każda garść się liczy.'}[m]}
 const racjeOn=m=>S.racje&&S.racje.until>S.day&&S.racje.m===m;
-{const previousEat=gospEat;gospEat=function(){previousEat();if(!S.racje||S.racje.until<=S.day||S.fedR>=1)return;const mode=S.racje.m;if(!['dzieci','praca'].includes(mode))return;
+// 4.9.0-rc.16: przy „Wszyscy w las” zostają przy swojej pracy ci, od których zależy przetrwanie: pola (wiosną trwa siew),
+// zbieracze, rybacy, myśliwi, hodowcy, wytwórcy jedzenia i drewutnia, dopóki opału jest mało. Wcześniej szli zbierać jagody
+// wszyscy, więc przy zerowym opale drewutnia stała, a karta budynku dalej pokazywała „Gotowe do produkcji”.
+function racjeKeeps(p){if(!p||p.job!=='wb')return false;const b=bById(p.wb);if(!b||!bDone(b))return false;const d=BD[b.kind];
+ if(d.field||['zbieracz','pomost','mysliwy','zagroda'].includes(b.kind))return true;
+ const outs=[].concat(d.prod||[]).flatMap(r=>Object.keys(r.out||{}));
+ return outs.some(k=>FOOD.includes(k))||(outs.includes('opal')&&(S.res.opal||0)<racjeOpal())}
+const racjeOpal=()=>Math.max(60,S.people.length*5);
+const racjeLeft=()=>S.racje?Math.max(0,S.racje.until-S.day):0;
+function racjeEnd(why){if(!S.racje||S.racje.until<=S.day)return;S.racje.until=S.day;log(why)}
+{const previousEat=gospEat;gospEat=function(){previousEat();if(racjeOn('zbior')&&czNeedDays()>=14)racjeEnd('Spiżarnia znów pełniejsza. Przednówek minął: ludzie wracają do swoich prac i na budowy.');if(!S.racje||S.racje.until<=S.day||S.fedR>=1)return;const mode=S.racje.m;if(!['dzieci','praca'].includes(mode))return;
  const people=S.people.filter(person=>person.job!=='wyp');const portions=people.map(person=>({person,need:K*pNeed(person)*(law('oszczedne')?.8:1)}));
  const budget=portions.reduce((sum,entry)=>sum+entry.need*fedOf(entry.person),0);
  const weight=person=>mode==='dzieci'?(person.age<12||(person.sex==='k'&&S.people.some(child=>child.age<2&&(child.par||[]).includes(person.id)))?2:1):(isWorker(person)&&person.age<56?2:1);
@@ -88,6 +98,16 @@ const racjeOn=m=>S.racje&&S.racje.until>S.day&&S.racje.m===m;
 }}
 {const _cc=choreCands;choreCands=function(p){const C=_cc(p);if(racjeOn('zbior'))C.forEach(c=>{if(c[0]==='zbior'||c[0]==='ryby')c[1]*=4});return C.sort((a,b)=>b[1]-a[1])}}
 {const _bs=budSites;budSites=function(){return racjeOn('zbior')?0:_bs()}}
+// karta budynku mówi, czemu ludzie nie pracują, i pozwala skończyć przednówek wcześniej
+function racjeNoteHTML(b){if(!S||!b||!racjeOn('zbior'))return'';const n=Math.max(1,Math.ceil(racjeLeft())),left=n+' '+dniW(n);const ws=S.people.filter(q=>q.job==='wb'&&q.wb===b.id);let t;
+ if(!bDone(b)||b.proj)t=`Przednówek: wszyscy szukają jedzenia, budowy stoją jeszcze ${left}.`;
+ else if(ws.length&&ws.every(racjeKeeps))t=`Przednówek: tu praca idzie dalej${[].concat(BD[b.kind].prod||[]).some(r=>r.out&&r.out.opal)?', bo opału jest mało':', bo to praca przy jedzeniu'}.`;
+ else if(ws.length)t=`Przednówek: pracownicy szukają jedzenia jeszcze ${left}.`;else return'';
+ return`<p>${escapeHtml(t)}</p><button data-racje-end="1">Wracamy do zwykłych prac</button>`}
+{const _rs=renderSel;renderSel=function(){_rs();try{if(!S||selB===null||!racjeOn('zbior'))return;const el=$('sel'),h=el.querySelector('h4');if(!h||el.querySelector('.racje-note'))return;const html=racjeNoteHTML(bById(selB));if(!html)return;
+ const d=document.createElement('div');d.className='racje-note';d.innerHTML=html;h.insertAdjacentElement('afterend',d)}catch(e){console.warn('przednówek',e)}}}
+document.addEventListener('click',e=>{if(!e.target.closest||!e.target.closest('[data-racje-end]')||!S)return;e.stopPropagation();racjeEnd('Przednówek odwołany. Ludzie wracają do swoich prac i na budowy, choć jedzenia wciąż mało.');try{renderSel()}catch(er){}});
+{const st=document.createElement('style');st.textContent='.racje-note{border:1px solid #c9a66b77;border-radius:10px;padding:8px 10px;margin:6px 0;background:#211f17}.racje-note p{margin:0 0 6px}.racje-note button{width:100%}';document.head.appendChild(st)}
 
 // ---------- progi zapasów w warsztatach ----------
 function limOut(b){const d=BD[b.kind];if(!d.prod)return null;return Object.keys([].concat(d.prod)[0].out)[0]}
@@ -126,4 +146,4 @@ $('sel').addEventListener('click',e=>{if(!S||selB===null)return;const b=bById(se
  $('sel')._h=null;renderSel()});
 {const _ad=actDaily;actDaily=function(){_ad();if(!S)return;try{fieldDaily();illDaily();signDaily();if(S.rush&&S.rush.until<=S.day)S.rush=null}catch(e){console.warn(e)}}}
 {const _b=boot;boot=function(fresh){_b(fresh);if(S&&S._v15note){delete S._v15note;log('Od tej wersji doba trwa dwa razy dłużej, a rok ma dwadzieścia dni. Twoja osada została przeliczona: pory roku i wiek ludzi się nie zmieniły.')}}}
-window.__rok={DAY,YEAR,K,fieldMul,fertLoss,fieldDone,illDaily,illGive,racje,signDaily,limHit,limChore,ILL,halveDays,fieldInit};
+window.__rok={racjeKeeps,racjeEnd,racjeLeft,racjeNoteHTML,DAY,YEAR,K,fieldMul,fertLoss,fieldDone,illDaily,illGive,racje,signDaily,limHit,limChore,ILL,halveDays,fieldInit};

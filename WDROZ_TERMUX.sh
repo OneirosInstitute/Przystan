@@ -6,7 +6,7 @@ MODE=publish
 if [ "${1:-}" = '--prepare-only' ]; then MODE=prepare; shift; fi
 [ "$#" -le 1 ] || { echo 'Użycie: bash WDROZ_TERMUX.sh [--prepare-only] [katalog-repo]'; exit 1; }
 PACKAGE_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-EXPECTED_COMMIT='1953da7de8618995ef1834b41d2e00708ed4c574'
+EXPECTED_COMMIT='116a3ef78166fb6f7b164db67b3bb0794724523c'
 REPOSITORY="${1:-}"
 if [ -z "$REPOSITORY" ]; then
  if [ -d "$HOME/Przystan/.git" ]; then REPOSITORY="$HOME/Przystan";
@@ -41,7 +41,7 @@ if [ "$MODE" = prepare ]; then
 fi
 git add -- .github .gitignore KSIEGA.md README.md WDROZ_TERMUX.sh assets build.js docs package.json railway.json release-manifest.json server.js src tests tools
 git diff --cached --quiet && { echo 'STOP: brak zmian do commitu.'; exit 1; }
-git commit -m '4.9.0-rc.15: start gry bez starego menu, dymek bez skakania'
+git commit -m '4.9.0-rc.16: wątki (zaloty i spory), przednówek nie zatrzymuje drewutni'
 git push origin main
 git fetch origin main
 [ "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)" ]

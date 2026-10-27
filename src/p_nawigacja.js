@@ -3,7 +3,7 @@
 // Dwa poziomy i nigdy więcej: dział (Osada, Ludzie, Budowa, Zadania, Wiedza), a w nim widok albo pasek budowy.
 // Widoki korzystają z tych samych zakładek co wcześniej (TABS zostają), dzielą tylko ich sekcje między siebie,
 // więc każda funkcja, która woła openSheet('osada') albo openSheet('kronika'), działa jak dawniej.
-const NV_PEOPLE=['osada:people','osada:community','osada:memory'],NV_JOURNAL=['game:journal','game:save'];
+const NV_PEOPLE=['osada:people','osada:community','osada:memory'],NV_JOURNAL=['game:watki','game:journal','game:save'];
 const NV=[
  {k:'osada',n:'Osada',i:'dom',v:[{k:'przeglad',n:'Przegląd',t:'osada',hide:NV_PEOPLE},{k:'kronika',n:'Kronika',t:'kronika',only:NV_JOURNAL},{k:'opcje',n:'Opcje',t:'kronika',hide:NV_JOURNAL}]},
  {k:'ludzie',n:'Ludzie',i:'ludzie',v:[{k:'praca',n:'Praca',t:'praca'},{k:'mieszkancy',n:'Mieszkańcy',t:'osada',only:NV_PEOPLE}]},
