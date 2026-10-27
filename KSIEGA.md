@@ -537,7 +537,7 @@ Epoka dzieli się na pięć aktów. Karta celu w lewym górnym rogu pokazuje akt
 | I. Brzeg | dni 1–10 | chata zbieracza, chata drwala, kajuta kapitana rozpoznana, każda rodzina pod własnym dachem |
 | II. Pierwsza zima | jesień roku 1 – wiosna | drewutnia i 80 opału, wrak rozebrany przed sztormem, pierwsza zima przetrwana |
 | III. Zakorzenienie | rok 2 | księga z wraku przeczytana, pierwsza koza, pierwsze plony z pola, poziom Osada (4 domy, 20 osób) |
-| IV. Wyspa | lata 3–4 | 70% krain poznanych, żelazo z własnego pieca, trzy ślady dawnego ludu, pierwszy przysiółek |
+| IV. Wyspa | lata 3–4 | 70% krain poznanych, żelazo z własnego pieca, trzy ślady dawnego ludu (pierwszy przysiółek dopiero od 50 mieszkańców Przystani, od 4.9.0-rc.12) |
 | V. Pierwsze pokolenie | lata 5–8 | Wieś (8 domów, 32 osoby), głos młodych na wiecu, trzech mistrzów urodzonych na wyspie, pamięć osady co najmniej żywa |
 
 **Sceny fabularne:**
@@ -1243,6 +1243,7 @@ W Ludziach (Praca i Mieszkańcy) wyszukiwarka szuka po imieniu, fachu albo budyn
 | 1.8.3 | poprawka: rozbudowa domu (szałas w chatę, chata w dom) nie zabiera już rodzinie spiżarki; w czasie budowy zapas zostaje w starym domu w granicach jego pojemności |
 | 1.9 | budynki z charakterem: każdy budynek inny (ściany, dachy, spadek, okap), koniki, malowane okiennice, ganki, przybudówki, garnki na płocie, zioła pod okapem, szyldy rzemiosł, wyraźniejsza kuźnia, łaźnia i chata wiecowa |
 | 1.10 | wykonanie budynków: surowe, porządne i mistrzowskie, wyraźnie widoczne po rozbudowie (wielkość, podmurówka, dach, okiennice, obramienia okien, kwiaty, płotek, szyld); karta budynku pokazuje wykonanie i trwałość; odmiany szałasów, studni, zagród i spiżarni |
+| 4.9.0-rc.12 | przysiółki od 50 mieszkańców Przystani, nie bliżej niż 50 kroków i poza trzema najbliższymi krainami; dawne przenoszą się dalej; karta przysiółka po dotknięciu na mapie (mieszkańcy, zapasy, rozwój, wieści) |
 | 4.9.0-rc.11 | urozmaicenie: co drugi budynek danego rodzaju w lustrzanym odbiciu, stale według numeru budynku; przybudówka sprawdza właściwego sąsiada |
 | 4.9.0-rc.10 | życie przy budynkach (grafika wysoka i ultra): dym z kominów zależny od pory roku i dnia, falujący dym warsztatów, migoczący żar, łopoczące proporce, kołyszące się pranie, dziobiące kury |
 | 4.9.0-rc.9 | styl epoki po remoncie albo rozbudowie: epoka I surowa, II jak dotąd, III bielona z gontem; stare budynki zmieniają się dopiero po remoncie lub rozbudowie; styl na karcie budynku |

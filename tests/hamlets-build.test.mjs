@@ -5,7 +5,7 @@ import {createGame} from './runtime.mjs';
 // 4.6.0-rc.1: przysiółek nie rośnie sam; buduje się za zgodą gracza, z materiału i pracy
 const day=E=>E('(()=>{for(let n=0;n<2400;n++)step(1/10)})()');
 function setup(){const runtime=createGame();runtime.game.startGame(true);const E=s=>runtime.evaluate(s);
- E('(()=>{for(let k=0;k<N*N;k++)rev[k]=1;regionScan(true);S.tier=1;const r=freeRegions()[0];const h=kolGo(kolCands()[0],r.id,true);h.arr=0;window.__h=h})()');return{runtime,E}}
+ E('(()=>{for(let k=0;k<N*N;k++)rev[k]=1;regionScan(true);S.tier=1;const r=freeRegions().find(r=>r.type==="forest")||freeRegions()[0];const h=kolGo(kolCands()[0],r.id,true);h.arr=0;window.__h=h})()');return{runtime,E}}
 
 test('a new hamlet starts as a hut with a fire and does not build anything by itself',()=>{
  const {E}=setup();

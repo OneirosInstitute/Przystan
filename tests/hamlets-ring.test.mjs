@@ -11,7 +11,7 @@ test('ring regions open for hamlets in epoch II, the chosen region is honoured a
  const ring=JSON.parse(E('JSON.stringify(freeRegions().filter(r=>r.ring).map(r=>r.name))'));
  assert.ok(ring.length>=15,'most of the new land is open in epoch II');
  assert.ok(!ring.includes('Wyspy Mew'),'islands reachable only by boat are not offered');
- const opts=E('(()=>{let cap=null;const o=openEvent;openEvent=ev=>{cap=ev};kolNew();openEvent=o;return cap.opts.map(x=>x.n+"|"+x.d).join("\\n")})()');
+ const opts=E('(()=>{__przys.min=0;let cap=null;const o=openEvent;openEvent=ev=>{cap=ev};kolNew();openEvent=o;return cap.opts.map(x=>x.n+"|"+x.d).join("\\n")})()');
  assert.match(opts,/za zatoką/,'the council map always shows one place across the bay');
  const h=JSON.parse(E(`(()=>{const r=REGIONS.find(r=>r&&r.name==='Dolina Wierzby');const c=kolCands()[0];const h=kolGo(c,r.id,true);return JSON.stringify({rid:h.rid,want:r.id,path:!!hamPath[h.id],len:hamPath[h.id]&&hamPath[h.id].len})})()`));
  assert.equal(h.rid,h.want,'the hamlet goes where the council decided');

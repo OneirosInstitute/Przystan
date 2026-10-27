@@ -277,7 +277,7 @@ addEventListener('resize',()=>{if(!$('kmap').hidden)kmapDraw()});
 {const _dm=drawMinimap;drawMinimap=function(){_dm();if(!S||!S.hamlets)return;mctx.fillStyle='#d9b878';S.hamlets.forEach(h=>{if(!revAt(h.i,h.j))return;const q=mProj(tcx(h.i),tcx(h.j));mctx.fillRect(q[0]-3,q[1]-3,6,6)})}}
 
 /* ---- akty, epoka II, księga ---- */
-ACTS[4].g.push(['Załóż pierwszy przysiółek',()=>(S.hamlets||[]).length>=1,'Ludzie → Wspólnota → Nowy przysiółek. Rodzina albo młoda para idzie w poznaną krainę.']);
+// 4.9.0-rc.12: epoka I to Przystań; pierwszy przysiółek nie jest już celem aktu IV (zakłada się go od 50 mieszkańców, p_przysiolki.js)
 {const _gi=goalInfo;goalInfo=function(){const g=_gi();if(S&&S.epoch===2&&g)return{ch:g.ch,t:`Zasiedl wyspę: ${settledCount()} z ${regionCount()} krain`,d:`${PATHS[S.path].goal}. Nowe przysiółki zakładasz w Ludzie → Mieszkańcy, w karcie Wspólnota i rody.`};return g}}
 {const _kt=ksiegaText;ksiegaText=function(){let t=_kt();const hs=S.hamlets||[];if(!hs.length)return t;
  const sec='PRZYSIÓŁKI\n\n'+hs.map(h=>`${h.name} (${hamKind(h)}): ${h.pop} ${osb(h.pop)}, starszy ${h.head}, założony ${dayName(Math.floor(h.day)+1)}${h.road===2?', z drogą do osady':''}.`).join('\n')+`\n\nZasiedlone krainy: ${settledCount()} z ${regionCount()}.\n\n`;
