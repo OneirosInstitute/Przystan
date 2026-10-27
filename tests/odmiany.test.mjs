@@ -21,3 +21,18 @@ test('a mirrored building stays mirrored after the finishing bounce, and its lea
  assert.equal(r.left,r.free,'a mirrored lean-to stands on the right, so a building on the left does not matter');
  assert.ok(r.both<r.free,'a building on the right takes its place');
 });
+// 4.9.0-rc.14: we wspólnej bryle (wsadowe rysowanie) budynek w odbiciu nie może być widziany od środka
+test('a mirrored building merged into the batch keeps its faces pointing outwards, like a normal one',()=>{
+ const runtime=createGame();const E=s=>runtime.evaluate(s);E('E2START=true');runtime.game.startGame(true);
+ const r=JSON.parse(E(`(()=>{const out={};for(const want of [false,true]){let id=5000+(want?0:1);while(__mir.bMir({id,kind:'chata'})!==want)id+=2;
+   const b={id,kind:'chata',i:40,j:40,prog:1,work:1,workers:0,lv:1,ext:['zielnik']};S.bld.push(b);addBuildingMesh(b);const g=bMesh[id];g.updateMatrixWorld(true);
+   const meshes=batBuild([b]);let bad=0,all=0;const a=new THREE.Vector3(),c=new THREE.Vector3(),d=new THREE.Vector3(),e1=new THREE.Vector3(),e2=new THREE.Vector3(),n=new THREE.Vector3();
+   for(const m of meshes){const p=m.geometry.attributes.position,nn=m.geometry.attributes.normal;for(let t=0;t+2<p.count;t+=3){a.fromBufferAttribute(p,t);c.fromBufferAttribute(p,t+1);d.fromBufferAttribute(p,t+2);
+     e1.subVectors(c,a);e2.subVectors(d,a);const f=e1.cross(e2);if(f.lengthSq()<1e-12)continue;n.fromBufferAttribute(nn,t).add(c.fromBufferAttribute(nn,t+1)).add(d.fromBufferAttribute(nn,t+2));all++;if(f.dot(n)<0)bad++}
+    batG.remove(m);m.geometry.dispose()}
+   out[want?'mir':'plain']={bad,all,scale:g.scale.x};S.bld.pop();bGroup.remove(g)}return JSON.stringify(out)})()`));
+ assert.ok(r.mir.scale<0&&r.plain.scale>0);assert.ok(r.mir.all>100&&r.plain.all>100);
+ const ratio=x=>x.bad/x.all;
+ assert.ok(Math.abs(ratio(r.mir)-ratio(r.plain))<.02,'mirrored faces wind like the plain ones: '+JSON.stringify(r));
+ assert.ok(ratio(r.mir)<.1,'almost all faces point outwards: '+JSON.stringify(r));
+});

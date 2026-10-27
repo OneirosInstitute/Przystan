@@ -10,8 +10,8 @@ const require=createRequire(import.meta.url);
 const {checkDeployment,BASE,PACKAGE}=require('../tools/deploy-check.cjs');
 const {verifyPackage}=require('../tools/verify-package.cjs');
 
-test('4.9.0-rc.13 deployment targets the verified 4.9.0-rc.12 checkpoint in every release guard',async()=>{
- const expectedBase='fe1a6830912b73c237f9a3344e7fd0828cce9899';
+test('4.9.0-rc.14 deployment targets the verified 4.9.0-rc.13 checkpoint in every release guard',async()=>{
+ const expectedBase='f7832f594bb1395b2276393c25f03a013a2c542c';
  assert.equal(BASE,expectedBase,'preflight must accept the deployed 4.8.0-rc.1 checkpoint');
  const installer=await fs.readFile(new URL('../WDROZ_TERMUX.sh',import.meta.url),'utf8');
  assert.match(installer,new RegExp("EXPECTED_COMMIT='"+expectedBase+"'"));

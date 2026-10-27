@@ -176,7 +176,7 @@ function warzelniaModel(g){for(const[x,z]of[[-.7,-.5],[.7,-.5],[-.7,.5],[.7,.5]]
  for(let k=0;k<3;k++)g.add(mesh(new THREE.CylinderGeometry(.13,.15,.26,8),M(0xd9d2c0),-.95+k*.32,.13,.75));barrel(g,.95,.7,.8);
  g.add(mesh(new THREE.CylinderGeometry(.45,.5,.06,12),M(0x5a7078,{roughness:.2}),0,.02,-1.05));g.add(mesh(new THREE.TorusGeometry(.48,.06,4,14),M(0xe8e8e2),0,.04,-1.05,Math.PI/2));return 1}
 {const _nm=newModel;newModel=function(kind,g){if(kind==='kurnik')return kurnikModel(g);if(kind==='odkrywka')return odkrywkaModel(g);if(kind==='warzelnia')return warzelniaModel(g);return _nm(kind,g)}}
-{const _kc=kolChims;kolChims=function(ch){_kc(ch);if(!S)return;S.bld.forEach(b=>{if(!bDone(b)||(b.kind!=='warzelnia'&&b.kind!=='odkrywka'))return;const c=bCenter(b);if(Math.hypot(c.x-camT.x,c.z-camT.z)<45)ch.push([c.x+(b.kind==='odkrywka'?-.35:0),Hy(c.x,c.z)+(b.kind==='warzelnia'?1.6:.5),c.z+(b.kind==='odkrywka'?.35:0)])})}}
+{const _kc=kolChims;kolChims=function(ch){_kc(ch);if(!S)return;S.bld.forEach(b=>{if(!bDone(b)||(b.kind!=='warzelnia'&&b.kind!=='odkrywka'))return;const c=bCenter(b);if(Math.hypot(c.x-camT.x,c.z-camT.z)<45)ch.push([c.x+(b.kind==='odkrywka'?-.35:0)*(bMir(b)?-1:1),Hy(c.x,c.z)+(b.kind==='warzelnia'?1.6:.5),c.z+(b.kind==='odkrywka'?.35:0)])})}}
 // ---------- miejsca w świecie ----------
 function odkSiteGeo(t){const T=[];const C=sRGBo;const rnd=rng(t.length*97+3);
  if(t==='kury'){for(let k=0;k<6;k++){const a=k*1.05,r=.7+rnd()*.5;T.push([new THREE.IcosahedronGeometry(.42+rnd()*.2,1),C(.2+rnd()*.06,.32+rnd()*.06,.16),mdM(Math.cos(a)*r,.3,Math.sin(a)*r,0,0,0,1,.75,1)])}}

@@ -123,9 +123,12 @@ function batBuild(list){const byMat=new Map();list.forEach(b=>{const g=bMesh[b.i
  const out=[];byMat.forEach((L,mat)=>{let tot=0;const parts=L.map(o=>{const geo=o.geometry.index?o.geometry.toNonIndexed():o.geometry;tot+=geo.attributes.position.count;return[o,geo]});
   const P=new Float32Array(tot*3),Nn=new Float32Array(tot*3),U=new Float32Array(tot*2),useC=!!mat.vertexColors,C=useC?new Float32Array(tot*3):null;let off=0;let sh=false;
   for(const[o,geo]of parts){const M4=o.matrixWorld;_bM3.getNormalMatrix(M4);const pa=geo.attributes.position,na=geo.attributes.normal,ua=geo.attributes.uv,ca=geo.attributes.color;if(o.castShadow)sh=true;
-   for(let i=0;i<pa.count;i++){_bP.fromBufferAttribute(pa,i).applyMatrix4(M4);P[(off+i)*3]=_bP.x;P[(off+i)*3+1]=_bP.y;P[(off+i)*3+2]=_bP.z;
-    if(na){_bN.fromBufferAttribute(na,i).applyMatrix3(_bM3).normalize();Nn[(off+i)*3]=_bN.x;Nn[(off+i)*3+1]=_bN.y;Nn[(off+i)*3+2]=_bN.z}
-    if(ua){U[(off+i)*2]=ua.getX(i);U[(off+i)*2+1]=ua.getY(i)}if(C){if(ca){C[(off+i)*3]=ca.getX(i);C[(off+i)*3+1]=ca.getY(i);C[(off+i)*3+2]=ca.getZ(i)}else C[(off+i)*3]=C[(off+i)*3+1]=C[(off+i)*3+2]=1}}
+   // 4.9.0-rc.14: budynek w lustrzanym odbiciu (ujemna skala) odwraca kolejność wierzchołków. Pojedynczą bryłę three.js obraca sam,
+   // ale we wspólnej bryle trzeba zamienić 2. i 3. wierzchołek każdego trójkąta, inaczej dach i ściany są widziane od środka i znikają.
+   const flip=M4.determinant()<0;
+   for(let i=0;i<pa.count;i++){const t=flip?off+i-i%3+(i%3===0?0:3-i%3):off+i;_bP.fromBufferAttribute(pa,i).applyMatrix4(M4);P[t*3]=_bP.x;P[t*3+1]=_bP.y;P[t*3+2]=_bP.z;
+    if(na){_bN.fromBufferAttribute(na,i).applyMatrix3(_bM3).normalize();Nn[t*3]=_bN.x;Nn[t*3+1]=_bN.y;Nn[t*3+2]=_bN.z}
+    if(ua){U[t*2]=ua.getX(i);U[t*2+1]=ua.getY(i)}if(C){if(ca){C[t*3]=ca.getX(i);C[t*3+1]=ca.getY(i);C[t*3+2]=ca.getZ(i)}else C[t*3]=C[t*3+1]=C[t*3+2]=1}}
    off+=pa.count;if(geo!==o.geometry)geo.dispose()}
   const mg=new THREE.BufferGeometry();mg.setAttribute('position',new THREE.BufferAttribute(P,3));mg.setAttribute('normal',new THREE.BufferAttribute(Nn,3));mg.setAttribute('uv',new THREE.BufferAttribute(U,2));if(C)mg.setAttribute('color',new THREE.BufferAttribute(C,3));mg.computeBoundingSphere();mg.computeBoundingBox();
   const m=new THREE.Mesh(mg,mat);m.castShadow=sh;m.receiveShadow=true;m.matrixAutoUpdate=false;m.updateMatrix();batG.add(m);out.push(m)});
