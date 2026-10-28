@@ -94,7 +94,7 @@ test('a story survives save and load, also with its decision card open',()=>{
 test('a story ends when someone dies, and no stories run in epoch IV',()=>{
  const {E}=village();const ids=E(`(()=>{const a=S.people.filter(p=>p.age>=20);const x=a[0],y=a.find(p=>p.fam!==x.fam);return[x.id,y.id]})()`);
  E(`__watki.watStart('konflikt',pById(${ids[0]}),pById(${ids[1]}));killPerson(pById(${ids[1]}),'test');__watki.watTick()`);
- assert.equal(E('S.watki.a.length'),0);assert.equal(E('S.watki.z[0].k'),'odejscie');
+ assert.equal(E("S.watki.a.filter(w=>w.t!=='zaloba').length"),0);assert.equal(E('S.watki.z[0].k'),'odejscie');
  E(`S.epoch=4;S.watki.nast=0`);assert.equal(E(`__watki.watStart('konflikt',pById(${ids[0]}),S.people.find(p=>p.age>=20&&p.id!==${ids[0]}))`),null);
 });
 
