@@ -4,9 +4,12 @@
 // i rozwiązanie, które zostawia ślad we wspomnieniach i w kronice. Krok przychodzi dopiero, gdy minie jego czas
 // i obie osoby są w osadzie. Naraz najwyżej 3 wątki, jedna osoba w jednym, najwyżej jedna karta wątku na dzień gry.
 // Pakiet 2: romans (dodatkowa droga obok swatów) i konflikt. Pakiet 3 (4.9.0-rc.18): przyjaźń z pobratymstwem, żałoba po śmierci
-// bliskiego (zaczyna się sama, Dziady jako obrzęd pamięci) oraz mistrz i uczeń z majstersztykiem. Złe zakończenia romansów dopiero w epoce IV (tam wątki jeszcze nie
+// bliskiego (zaczyna się sama, Dziady jako obrzęd pamięci) oraz mistrz i uczeń z majstersztykiem. Pakiet 4 (4.9.0-rc.19): rywalizacja
+// w fachu z konkursem na święcie, tajemnica (zapasy, ukryta choroba, nocne wyjścia) i tęsknota za domem (tylko rozbitkowie, epoka I;
+// może skończyć się odpłynięciem na zawsze). Zakończenia zostawiają przezwiska i pieśni, a historie trafiają do Księgi rozbitków. Złe zakończenia romansów dopiero w epoce IV (tam wątki jeszcze nie
 // działają), a bójka, kradzież, podpalenie i wygnanie przez wiec dopiero od epoki III (decyzje z 27.10.2026).
-const WAT_MAX=3,WAT_TICK=.25,WAT_GAP=[.8,1.6],WAT_NAME={romans:'Zaloty',konflikt:'Spór',przyjazn:'Przyjaźń',zaloba:'Żałoba',mistrz:'Mistrz i uczeń'},WAT_END_KEEP=30;
+// po każdym nowym wątku następny (poza żałobą) najwcześniej za 2,5 dnia: siedem rodzajów historii, a osada ma żyć też czymś innym
+const WAT_START_GAP=2.5,WAT_MAX=3,WAT_TICK=.25,WAT_GAP=[.8,1.6],WAT_NAME={romans:'Zaloty',konflikt:'Spór',przyjazn:'Przyjaźń',zaloba:'Żałoba',mistrz:'Mistrz i uczeń',rywal:'Rywalizacja',tajemnica:'Tajemnica',tesknota:'Tęsknota'},WAT_END_KEEP=30;
 let watNext=0;const watQ=[];
 function watS(){if(!S.watki)S.watki={n:1,a:[],z:[],nast:0,karta:-9,seed:[],ost:{}};const W=S.watki;W.a=W.a||[];W.z=W.z||[];W.seed=W.seed||[];W.ost=W.ost||{};return W}
 const watOn=()=>!!(S&&S.people&&S.people.length&&(S.epoch||1)<4);
@@ -23,19 +26,26 @@ function watLovers(a,b){return watSingle(a)&&watSingle(b)&&a!==b&&wedOk(a,b)&&Ma
 
 // ---------- start, krok, koniec ----------
 function watStart(t,A,B,o){o=o||{};if(!watOn()||!A||!B||A===B||watBusy(A)||watBusy(B)||watWed(A)||watWed(B))return null;const W=watS();if(W.a.length>=WAT_MAX)return null;
- const w={id:W.n++,t,a:A.id,b:B.id,an:A.name,bn:B.name,st:0,d0:Math.floor(S.day),dn:S.day+watGap(),kroki:[],x:Object.assign({},o.x||{})};W.a.push(w);W.ost[t]=S.day;W.nast=S.day+.6;
+ const w={id:W.n++,t,a:A.id,b:B.id,an:A.name,bn:B.name,st:0,d0:Math.floor(S.day),dn:S.day+watGap(),kroki:[],x:Object.assign({},o.x||{})};W.a.push(w);W.ost[t]=S.day;W.nast=S.day+WAT_START_GAP;
  if(o.text){w.kroki.push([Math.floor(S.day),o.text]);w.st=1}// zalążkiem była już scena, która to zaczęła
- else{const txt=WAT_STEP[t][0](w,A,B);if(txt)watSay(w,t==='mistrz'?B:A,txt);w.st=1}
+ else{const txt=WAT_STEP[t][0](w,A,B);if(txt)watSay(w,t==='mistrz'||t==='tajemnica'?B:A,txt);w.st=1}
  if(o.st)w.st=o.st;return w}
 function watSay(w,p,txt){w.kroki.push([Math.floor(S.day),txt]);if(w.kroki.length>10)w.kroki.splice(1,1);log(txt);dayEv(p,'watek',w.t);watBubble(p,txt,WAT_NAME[w.t])}
 // tytuł wątku na karcie, w Kronice i na karcie osoby; żałoba ma jedną bohaterkę albo bohatera i zmarłego
-function watTitle(w,an,bn){an=an||w.an;bn=bn||w.bn;return w.t==='zaloba'?`${WAT_NAME.zaloba}: ${an} · ${w.x&&w.x.zm||w.zm||'zmarły'} †`:`${WAT_NAME[w.t]}: ${an} i ${bn}`}
+function watTitle(w,an,bn){an=an||w.an;bn=bn||w.bn;if(w.t==='tesknota')return`${WAT_NAME.tesknota}: ${w.an}`;return w.t==='zaloba'?`${WAT_NAME.zaloba}: ${an} · ${w.x&&w.x.zm||w.zm||'zmarły'} †`:`${WAT_NAME[w.t]}: ${an} i ${bn}`}
 const watRite=(A,B)=>A.sex==='k'&&B.sex==='k'?'posestrzenie':'pobratymstwo';
 const watKin=(A,B)=>A.sex==='k'&&B.sex==='k'?'siostry':A.sex==='m'&&B.sex==='m'?'bracia':'rodzeństwo';
 // wspomnienie z obrzędu zostaje na zawsze; jeśli to samo jest już z kroku wątku, tylko je utrwala i wzmacnia
 function watMemKeep(p,k,ref,w){const m=(p.mem||[]).find(m=>m[1]===k&&m[2]===ref);if(m){m[3]=Math.max(m[3],w);m[4]=1}else memAdd(p,k,ref,w,1)}
 // „minął dzień”, „minęły 3 dni”, „minęło 5 dni”
 function watMinelo(n){if(n<=1)return'minął dzień';const d=n%10,t=n%100;return(d>=2&&d<=4&&(t<12||t>14)?'minęły ':'minęło ')+n+' dni'}
+// przezwisko zostaje na całe życie: dostaje je tylko ktoś, kto jeszcze żadnego nie ma
+const WAT_PRZEZ={drwal:'Topór',kamieniarz:'Kamienna Ręka',zbieracz:'Bystre Oko',rybak:'Szczupak',mysliwy:'Sokole Oko',ciesla:'Złoty Hebel',murarz:'Kielnia',krawiec:'Złota Igła',kowal:'Młot',rolnik:'Złoty Kłos',hodowca:'Dobra Ręka'};
+function watNick(p,n){if(!p||p.przez)return false;p.przez=n;log(`Od tego dnia na ${acc(p.name)} wszyscy wołają „${n}”.`);return true}
+// święto, na którym rozstrzyga się konkurs, zależy od pory roku
+const watFeast=()=>['na Kupałę','na dożynkach','w Szczodre Gody','na powitanie wiosny'][Math.floor(rday()/SD)%4];
+function watTakeFood(n){const tot=foodTotal();if(tot<=0||n<=0)return 0;const q=Math.min(n,tot);FOOD.forEach(k=>{if(S.res[k]>0)S.res[k]=Math.max(0,S.res[k]-q*(S.res[k]/tot))});return q}
+const watTop=p=>{let b=null,v=-1;for(const c of Object.keys(CN)){const l=p.sk[c]||0;if(l>v){v=l;b=c}}return b};
 function watLearn(p,c,frac){const lv=p.sk[c]||0;if(lv>=5)return;const lo=lvXp(lv),hi=LVL[lv];p.xp[c]=Math.min(hi-1,Math.max(p.xp[c]||0,lo)+(hi-lo)*frac)}
 // quiet: tekst trafia do rozdziału wątku, ale nie drugi raz do kroniki (wynik karty zapisuje już obsługa karty)
 function watEnd(w,k,txt,quiet){const W=watS();W.a=W.a.filter(x=>x!==w);if(txt){w.kroki.push([Math.floor(S.day),txt]);if(!quiet)log(txt)}
@@ -90,18 +100,43 @@ const WAT_STEP={romans:[
  (w,A,B)=>{watLearn(B,w.x.c,.25);relAdd(A,B,6);return`${A.name} bierze ${acc(B.name)} pod swoje skrzydła (${w.x.cn}). „Tego fachu nie nauczy żadna księga, tylko ręce” — mówi.`},
  (w,A,B)=>{watLearn(B,w.x.c,.25);return`${B.name} psuje pierwszą samodzielną robotę. ${A.name} kręci głową i każe zacząć od nowa, tym razem powoli.`},
  (w,A,B)=>{watLearn(B,w.x.c,.25);relAdd(A,B,8);memAdd(B,'dar',A.name,.1);return`${A.name} pierwszy raz chwali ${acc(B.name)} przy wszystkich. ${B.name} udaje, że to nic, ale cały wieczór ${gw(B,'chodzi dumny','chodzi dumna')}.`}
+],rywal:[
+ (w,A,B)=>watPick([`Przy studni ${A.name} mówi głośno, że w swoim fachu (${w.x.cn}) nikt ${gw(A,'go','jej')} nie przegoni. ${B.name} tylko się uśmiecha: „Zobaczymy”.`,
+  `${A.name} i ${B.name} zakładają się o kosz suszonych ryb: kto do końca tygodnia zrobi więcej i lepiej (${w.x.cn}).`]),
+ (w,A,B)=>{watLearn(A,w.x.c,.1);watLearn(B,w.x.c,.1);return`Wieczorem ludzie porównują robotę ${gen(A.name)} i ${gen(B.name)}. Jedni chwalą jedno, drudzy drugie, a oboje pracują od świtu do zmroku.`},
+ (w,A,B)=>`Rodziny już kibicują. Dzieci wołają imiona ${gen(A.name)} i ${gen(B.name)}, a starsi zakładają się po cichu, kto wygra.`
+],tajemnica:[
+ (w,A,B)=>{const v=w.x.v;if(v==='zapasy'){watTakeFood(2);return`${B.name} zauważa, że ze spiżarni ubywa jedzenia: garść kaszy tu, suszona ryba tam. Nikt nie wie, kto bierze.`}
+  if(v==='choroba'){A.hp=Math.max(.45,A.hp-.04);return`${A.name} kaszle po nocach, ale w dzień mówi, że nic ${gw(A,'mu','jej')} nie jest. ${B.name} słyszy to przez ścianę.`}
+  return`${A.name} wychodzi nocami z domu i wraca przed świtem. ${B.name} ${gw(B,'widział','widziała')} to dwa razy i nie wie, co o tym myśleć.`},
+ (w,A,B)=>{const v=w.x.v;if(v==='zapasy'){watTakeFood(2);return`W nocy ${B.name} słyszy kroki koło spiżarni. Rano ${A.name} ma podkrążone oczy i unika ${gen(B.name)} wzroku.`}
+  if(v==='choroba'){A.hp=Math.max(.45,A.hp-.04);return`${B.name} widzi, jak ${A.name} przystaje przy pracy i łapie oddech. ${A.name} prosi, żeby nikomu nie mówić.`}
+  const C=pById(w.x.c);return`${B.name} ${gw(B,'znalazł','znalazła')} rano świeże ślady. Prowadzą od chaty ${gen(A.name)} prosto pod drzwi ${gen(w.x.cn)}, ${C&&C.sex==='m'?'który mieszka sam':'która mieszka sama'}.`},
+ (w,A,B)=>{const v=w.x.v;if(v==='zapasy'){watTakeFood(2);return`W nocy ${B.name} idzie za cieniem i widzi ${acc(A.name)} z workiem kaszy. ${A.name} płacze: dzieci są ciągle głodne.`}
+  if(v==='choroba'){A.hp=Math.max(.45,A.hp-.05);return`${A.name} ${gw(A,'zasłabł','zasłabła')} przy studni. ${B.name} ${gw(B,'odprowadził','odprowadziła')} ${gw(A,'go','ją')} do domu i ${gw(B,'obiecał','obiecała')} milczeć.`}
+  return`W nocy ${B.name} idzie śladem ${gen(A.name)} i widzi, jak ${A.name} zostawia pod drzwiami ${gen(w.x.cn)} naręcze drewna i garnek ciepłej kaszy.`}
+],tesknota:[
+ (w,A,B)=>{A.mood=clamp((A.mood||0)-.1,-1,1);return`Co wieczór ${A.name} siada na skale nad zatoką i patrzy na morze, w stronę, z której przypłynął statek.`},
+ (w,A,B)=>`${A.name} rzeźbi z kory małą łódkę i opowiada dzieciom o domu: o rzece, o lipie przed chatą, o dzwonie w sąsiedniej wsi.`,
+ (w,A,B)=>`${A.name} zaczyna znosić na brzeg deski z wraku i smołę. ${B.name} pyta po co, a ${A.name} tylko patrzy na morze.`
 ]};
 
 // ---------- punkt zwrotny: karta z wyborem ----------
 function watParent(child,other){const ps=(child.par||[]).map(pById).filter(q=>q&&q.age>=30);return ps.find(q=>relGet(q,other)<10)||null}
 function watElder(w){return S.people.filter(q=>q.age>=50&&q.id!==w.a&&q.id!==w.b&&watHere(q)).sort((x,y)=>mirOf(y)-mirOf(x))[0]||null}
 function watCard(w){const[A,B]=watPeople(w);if(!A||!B)return false;const W=watS();W.karta=S.day;W.kartaW=w.id;w.x.karta=1;S.evT=Math.max(S.evT||0,S.day+.8);
- const ev={id:'watek',ey:WAT_NAME[w.t],t:w.t==='zaloba'?`${w.an} · ${w.x.zm} †`:`${w.an} i ${w.bn}`,quick:true,text:()=>watCardText(w,A,B),opts:watCardOpts(w,A,B).map(o=>({n:o.n,d:o.d,f:()=>watChoose(w.id,o.k)}))};
+ const ev={id:'watek',ey:WAT_NAME[w.t],t:w.t==='zaloba'?`${w.an} · ${w.x.zm} †`:w.t==='tesknota'?w.an:`${w.an} i ${w.bn}`,quick:true,text:()=>watCardText(w,A,B),opts:watCardOpts(w,A,B).map(o=>({n:o.n,d:o.d,f:()=>watChoose(w.id,o.k)}))};
  openEvent(ev,{});return true}
 function watCardText(w,A,B){const dni=Math.max(1,Math.floor(S.day)-w.d0);
  if(w.t==='przyjazn')return`${A.name} i ${B.name} mówią, że są sobie ${A.sex==='k'&&B.sex==='k'?'bliższe':'bliżsi'} niż rodzina. Starsi przypominają dawny obyczaj: ${watRite(A,B)} przy ogniu, z chlebem, solą i nacięciem dłoni. Kto je zawrze, jest drugiemu winien pomoc do końca życia.`;
  if(w.t==='zaloba')return`Od śmierci ${gen(w.x.zm)} ${watMinelo(dni)}. ${A.name} wraca do ludzi powoli. ${B.name} jest przy ${gw(A,'nim','niej')} codziennie.\n\nJak osada ma pomóc?`;
  if(w.t==='mistrz')return`${B.name} uczy się u ${gen(A.name)} od ${dni} ${dni===1?'dnia':'dni'}. ${A.name} mówi, że czas na majstersztyk: jedna robota zrobiona przy wszystkich, na najbliższe święto. Jak wyjdzie, ${B.name} awansuje w fachu (${w.x.cn}).`;
+ if(w.t==='rywal')return`${A.name} i ${B.name} ścigają się w fachu (${w.x.cn}) od ${dni} ${dni===1?'dnia':'dni'}. Pół osady trzyma za jedno, pół za drugie. Starsi proponują, żeby rozstrzygnąć to ${watFeast()}, przy wszystkich.`;
+ if(w.t==='tajemnica'){const v=w.x.v;
+  if(v==='zapasy')return`${B.name} wie, kto podbiera zapasy: ${A.name}. Nie z chciwości. W ${gw(A,'jego','jej')} domu dzieci chodzą głodne, a ${A.name} wstydzi się prosić.\n\nCo z tym zrobić?`;
+  if(v==='choroba')return`${B.name} wie, że ${A.name} jest ${gw(A,'chory','chora')} i ukrywa to przed wszystkimi, żeby nie być ciężarem. ${B.name} ${gw(B,'obiecał','obiecała')} milczeć.\n\nCo z tym zrobić?`;
+  return`${A.name} od kilku nocy po kryjomu nosi drewno i jedzenie do chaty ${gen(w.x.cn)}. Nie chce za to podziękowań. ${B.name} zna już tę tajemnicę.\n\nCo z tym zrobić?`}
+ if(w.t==='tesknota')return`${A.name} chce zbudować łódź i wrócić za morze, do domu, którego może już nie ma. ${B.name} prosi, żeby ${gw(A,'został','została')}. Na wyspie ${A.name} ma dom i bliskich, ale myślami jest daleko.\n\nCo powie osada?`;
  if(w.t==='romans'){const P=watParent(B,A)||watParent(A,B);w.x.rodzic=P?P.id:null;
   if(P){const ch=(B.par||[]).includes(P.id)?B:A;return`${A.name} i ${B.name} chcą być razem. Ale ${P.name}, ${gw(P,'ojciec','matka')} ${gen(ch.name)}, kręci głową: „Za wcześnie. I nie z tej rodziny”.\n\nTrwa to już ${dni} ${dniW(dni)}. Ktoś musi zdecydować, co dalej.`}
   return`${A.name} i ${B.name} chodzą wokół siebie od ${dni} ${dni===1?'dnia':'dni'}. Cała osada to widzi, tylko oni udają, że nic się nie dzieje.\n\nKtoś musi zrobić pierwszy krok.`}
@@ -112,6 +147,12 @@ function watCardOpts(w,A,B){
  if(w.t==='przyjazn')return[{k:'obrzed',n:`Niech zawrą ${watRite(A,B)}`,d:'na całe życie: pomagają sobie w biedzie'},{k:'zwykla',n:'Niech zostanie, jak jest',d:'przyjaźń bez obrzędów'}];
  if(w.t==='zaloba')return[{k:'ogien',n:'Uczcić pamięć przy ogniu, jak na Dziady',d:'pieśń o zmarłym, ulga dla bliskich'},{k:'praca',n:`Niech ${A.name} pracuje przy boku ${gen(B.name)}`,d:'praca leczy powoli'},{k:'czas',n:'Dać czas',d:'smutek minie sam, ale nie od razu'}];
  if(w.t==='mistrz')return[{k:'majstersztyk',n:`Niech ${B.name} pokaże majstersztyk`,d:'awans w fachu albo wstyd przy wszystkich'},{k:'jeszcze',n:'Niech jeszcze się uczy',d:'wolniej, ale pewniej'}];
+ if(w.t==='rywal')return[{k:'konkurs',n:'Konkurs '+watFeast(),d:'jedno wygra i zyska sławę, drugie może się obrazić'},{k:'podzial',n:'Niech podzielą się robotą',d:'każde robi to, co umie najlepiej'}];
+ if(w.t==='tajemnica'){const v=w.x.v;
+  if(v==='zapasy')return[{k:'wybaczyc',n:'Wybaczyć po cichu',d:`${B.name} nikomu nie powie`},{k:'starsi',n:'Niech osądzą starsi',d:'sprawiedliwie, ale wstyd zostanie'},{k:'pomoc',n:`Pomóc rodzinie ${gen(A.name)} z zapasów osady`,d:'kosztuje trochę jedzenia, daje nadzieję'}];
+  if(v==='choroba')return[{k:'leczyc',n:'Powiedzieć starszym i leczyć',d:(S.res.ziola||0)>=2?'zioła i odpoczynek, choć obietnica złamana':'odpoczynek, choć obietnica złamana'},{k:'milczec',n:'Dotrzymać słowa',d:'przyjaźń mocniejsza, ale choroba zostaje'}];
+  return[{k:'chwalic',n:'Opowiedzieć o tym przy ogniu',d:`${A.name} zyska szacunek, choć ${gw(A,'chciał','chciała')} zostać w cieniu`},{k:'sekret',n:'Zachować to dla siebie',d:`${B.name} zacznie pomagać po kryjomu`}]}
+ if(w.t==='tesknota')return[{k:'sad',n:'Niech zostanie i założy sad',d:'tęsknota zostaje, ale będzie miała gdzie się podziać'},{k:'opowiesc',n:'Niech opowie o domu przy ogniu',d:'pieśń o domu za morzem'},{k:'odplynac',n:'Pozwolić odpłynąć',d:`na zawsze: osada traci ${gw(A,'jego','ją')} i łódź`}];
  if(w.t==='romans'){const P=w.x.rodzic?pById(w.x.rodzic):null;return[
   {k:'swaty',n:'Niech swaci idą z chlebem i solą',d:P?'wesele za kilka dni, gorycz u '+gen(P.name):'wesele za kilka dni'},
   {k:'wiosna',n:'Niech poczekają do wiosny',d:'spokój w rodzinie, młodzi markotni'},
@@ -137,6 +178,34 @@ function watChoose(id,k){const W=watS(),w=W.a.find(x=>x.id===id);if(!w)return'Sp
     const t=`Na święcie ${B.name} pokazuje swój majstersztyk. Ludzie oglądają go z każdej strony, a ${A.name} mówi tylko: „Dobre”. Tego dnia ${B.name} ${gw(B,'jest','jest')} w fachu o stopień wyżej: ${CN[c]} ${lv+1}.`;watEnd(w,'majstersztyk',t,true);return t}
    memAdd(B,'zguba','majstersztyk',-.15);watLearn(B,c,.3);const t=`Majstersztyk ${gen(B.name)} pęka przy wszystkich. Ktoś się śmieje, ale ${A.name} każe przestać: „Ja swój zepsułem dwa razy”. ${B.name} uczy się dalej.`;watEnd(w,'nauka',t,true);return t}
   watLearn(B,c,.5);const t=`${A.name} mówi, że z majstersztykiem nie ma pośpiechu. ${B.name} uczy się dalej, wolniej, ale pewniej.`;watEnd(w,'nauka',t,true);return t}
+ if(w.t==='rywal'){const c=w.x.c;
+  if(k==='konkurs'){const sc=p=>(p.sk[c]||0)+Math.random()*2.5+(p.trait==='Wytrwały'?.4:0);const win=sc(A)>=sc(B)?A:B,lose=win===A?B:A;win.mirX=(win.mirX||0)+3;memAdd(win,'zdobycz','konkurs',.2,1);
+   let t=`${watFeast().replace(/^./,m=>m.toUpperCase())} cała osada patrzy, jak ${A.name} i ${B.name} pracują ramię w ramię. Wygrywa ${win.name}.`;
+   if(Math.random()<.5+relGet(A,B)/200){relAdd(A,B,12);memAdd(lose,'zgoda',win.name);t+=` ${lose.name} pierwsz${gw(lose,'y','a')} podaje rękę i mówi, że za rok się odegra.`;watEnd(w,'szacunek',t,true)}
+   else{relAdd(A,B,-12);memAdd(lose,'klotnia',win.name);lose.mood=clamp((lose.mood||0)-.15,-1,1);t+=` ${lose.name} odchodzi bez słowa i długo nie siada z ${gw(win,'nim','nią')} przy jednym ogniu.`;watEnd(w,'uraza',t,true)}
+   watNick(win,WAT_PRZEZ[c]||'Złota Ręka');return t}
+  relAdd(A,B,10);watLearn(A,c,.2);watLearn(B,c,.2);const t=`${A.name} i ${B.name} dzielą się robotą: każde robi to, co wychodzi mu najlepiej. Robota idzie szybciej niż kiedykolwiek, a zakład o ryby obie strony uznają za remis.`;watEnd(w,'podzial',t,true);return t}
+ if(w.t==='tajemnica'){const v=w.x.v;
+  if(v==='zapasy'){
+   if(k==='starsi'){A.mirX=(A.mirX||0)-3;memAdd(A,'zguba','wstyd',-.25);relAdd(A,B,-6);S.dis=clamp((S.dis||0)-.02,0,1);const t=`Starsi wysłuchują ${gen(A.name)} przy ogniu. Wyrok: ${A.name} odrobi wszystko przy wspólnej robocie. Nikt już nie podbiera zapasów, ale wstyd zostaje na długo.`;watEnd(w,'kara',t,true);return t}
+   if(k==='pomoc'){const fm=famMembers(A.fam).length||1;watTakeFood(K*fm*3);relAdd(A,B,12);memAdd(A,'dar','pomoc osady',.25,1);A.mood=clamp((A.mood||0)+.2,-1,1);S.hope=clamp(S.hope+.01,0,1);
+    const t=`Osada daje rodzinie ${gen(A.name)} worek kaszy i suszone ryby. ${A.name} nie może wydusić słowa. Od tej pory pierwsz${gw(A,'y','a')} staje do każdej wspólnej roboty.`;watEnd(w,'pomoc',t,true);return t}
+   relAdd(A,B,14);memAdd(A,'zgoda',B.name);const t=`${B.name} nikomu nic nie mówi. Rano pod drzwiami ${gen(A.name)} leży mały worek kaszy, a ze spiżarni nic już nie znika.`;watEnd(w,'przebaczenie',t,true);return t}
+  if(v==='choroba'){
+   if(k==='leczyc'){const z=(S.res.ziola||0)>=2;if(z)S.res.ziola-=2;A.hp=Math.min(1,A.hp+(z?.3:.15));relAdd(A,B,-4);memAdd(A,'dar','opieka',.15);
+    const t=`${B.name} mówi starszym. ${A.name} najpierw się gniewa, potem leży ${z?'trzy dni pod ziołami':'trzy dni w cieple'} i wstaje silniejsz${gw(A,'y','a')}. W końcu przyznaje, że dobrze się stało.`;watEnd(w,'leczenie',t,true);return t}
+   relAdd(A,B,15);memAdd(A,'przyjazn',B.name);memAdd(B,'przyjazn',A.name);A.hp=Math.min(1,A.hp+.05);const t=`${B.name} dotrzymuje słowa. Co wieczór przynosi ${gw(A,'mu','jej')} gorący napar i nikomu nic nie mówi. Między nimi jest teraz coś, czego nikt inny nie rozumie.`;watEnd(w,'milczenie',t,true);return t}
+  const C=pById(w.x.c);
+  if(k==='chwalic'){A.mirX=(A.mirX||0)+3;S.hope=clamp(S.hope+.01,0,1);if(C)relAdd(A,C,15);memAdd(A,'dar','dobre serce',.15);const t=`Przy ogniu ${B.name} opowiada, dokąd ${A.name} chodzi nocami. ${A.name} czerwieni się i macha ręką, a ${C?C.name:'stara sąsiadka'} płacze ze wzruszenia.`;watEnd(w,'chwala',t,true);return t}
+  relAdd(A,B,12);if(C)relAdd(B,C,8);const t=`${B.name} nikomu nic nie mówi. Od tej nocy pod drzwiami ${gen(w.x.cn)} drewna jest dwa razy więcej.`;watEnd(w,'sekret',t,true);return t}
+ if(w.t==='tesknota'){
+  if(k==='sad'){A.mood=clamp((A.mood||0)+.25,-1,1);memAdd(A,'dom','sad',.3,1);relAdd(A,B,8);S.hope=clamp(S.hope+.01,0,1);const t=`${A.name} zostaje. Za domem sadzi dzikie jabłonie i grusze przyniesione z lasu. „Dom jest tam, gdzie rosną twoje drzewa” — mówi.`;watEnd(w,'sad',t,true);watNick(A,gw(A,'Sadownik','Sadowniczka'));return t}
+  if(k==='opowiesc'){A.mood=clamp((A.mood||0)+.2,-1,1);relAdd(A,B,6);const t=`Wieczorem ${A.name} opowiada przy ogniu o rzece, o lipie i o dzwonie. Młodzi słuchają w ciszy, a ktoś układa z tego pieśń.`;watEnd(w,'opowiesc',t,true);song('O domu za morzem',A.name);return t}
+  const boat=(S.res.lodz||0)>=1;if(boat)S.res.lodz-=1;else S.res.drewno=Math.max(0,(S.res.drewno||0)-20);
+  for(const q of S.people)if(q.pair===A.id)q.pair=null;memAdd(B,'rozstanie',A.name,-.3,1);B.mood=clamp((B.mood||0)-.2,-1,1);
+  S.odplyneli=S.odplyneli||[];S.odplyneli.push({n:A.name,s:A.sex,d:Math.floor(S.day),b:B.id});if(S.odplyneli.length>20)S.odplyneli.shift();
+  const t=`O świcie ${A.name} spycha na wodę ${boat?'łódź osady':'łódź skleconą z desek wraku'}. ${B.name} stoi na brzegu, dopóki żagiel nie zniknie za horyzontem. Nikt nie wie, czy ${gw(A,'dopłynął','dopłynęła')}.`;
+  watEnd(w,'odplynal',t,true);song(`${A.name} odpływa`,A.name);leavePerson(A);return t}
  if(w.t==='romans'){const[k1,m1]=A.sex==='k'?[A,B]:[B,A];
   if(k==='swaty'){const P=w.x.rodzic?pById(w.x.rodzic):null;if(P){const ch=(B.par||[]).includes(P.id)?B:A,other=ch===B?A:B;relAdd(P,other,-10);memAdd(P,'klotnia',other.name)}
    w.x.wed=Math.floor(S.day)+2+((Math.random()*2)|0);S.hope=clamp(S.hope+.01,0,1);const t=`Swaty. Do chaty, w której mieszka ${k1.name}, przychodzą swaci od ${gen(m1.name)} z chlebem i solą. Chleb zostaje przyjęty: za kilka dni wesele.`;w.kroki.push([Math.floor(S.day),t]);return t}
@@ -174,7 +243,7 @@ function watTick(){if(!S||!S.people)return;const W=watS();if(!watOn()){if(W.a.le
     else{relAdd(A,B,8);watEnd(w,'rozejscie',`${A.name} i ${B.name} skończyli robotę i rozeszli się każde w swoją stronę. Zgody nie ma, ale nie ma też kłótni.`)}}
    continue}
   if(S.day<w.dn||!watHere(A)||!watHere(B))continue;
-  if(w.st<3){const txt=WAT_STEP[w.t][w.st](w,A,B);w.st++;w.dn=S.day+watGap();if(txt)watSay(w,(w.t==='konflikt'&&w.st===2)||w.t==='mistrz'?B:A,txt);continue}
+  if(w.st<3){const txt=WAT_STEP[w.t][w.st](w,A,B);w.st++;w.dn=S.day+watGap();if(txt)watSay(w,(w.t==='konflikt'&&w.st===2)||w.t==='mistrz'||(w.t==='tajemnica'&&w.st<3)?B:A,txt);continue}
   if(w.st===3&&!w.x.karta&&!evOpen&&!placing&&!(typeof rdOpen!=='undefined'&&rdOpen)&&S.day-W.karta>=1&&!W.a.some(x=>x.x.karta))watCard(w)}
  // nowe wątki: najpierw z tego, co się wydarzyło (sceny), potem z więzi
  if(W.a.length>=WAT_MAX)return;
@@ -184,16 +253,34 @@ function watTick(){if(!S||!S.people)return;const W=watS();if(!watOn()){if(W.a.le
  while(W.seed.length){const s=W.seed.shift();const A=pById(s.a),B=pById(s.b);if(!A||!B||S.day-s.d>2)continue;if(s.t==='romans'&&!watLovers(A,B))continue;if(s.t==='przyjazn'&&(watLovers(A,B)||A.pobr!=null||B.pobr!=null))continue;if(watSoon(s.t))continue;if(watStart(s.t,A,B,{text:s.txt}))return}
  if(Math.random()>.18)return;
  // ten rodzaj, którego najdłużej nie było, ma pierwszeństwo
- const order=['romans','konflikt','przyjazn','mistrz'].filter(t=>!watSoon(t)).sort((x,y)=>(W.ost[x]||-99)-(W.ost[y]||-99));
- for(const t of order){const pair=watFind(t);if(pair){if(t==='mistrz')watStart(t,pair[0],pair[1],{x:{c:pair[2],cn:CN[pair[2]]}});else watStart(t,pair[0],pair[1]);return}}}
+ const order=['romans','konflikt','przyjazn','mistrz','rywal','tajemnica','tesknota'].filter(t=>!watSoon(t)).sort((x,y)=>(W.ost[x]||-99)-(W.ost[y]||-99));
+ for(const t of order){const pair=watFind(t);if(pair){const x=t==='mistrz'?{c:pair[2],cn:CN[pair[2]]}:pair[2]||{};if(t==='tesknota')pair[0].teskn=1;watStart(t,pair[0],pair[1],{x});return}}}
 // przyjaźń i nauka u mistrza to rzadsze historie: ten sam rodzaj wraca najwcześniej po kilku dniach (pół roku gry)
-const WAT_SPACE={przyjazn:10,mistrz:12};
+const WAT_SPACE={przyjazn:10,mistrz:12,rywal:8,tajemnica:10,tesknota:25};
 function watSoon(t){const o=watS().ost[t];return!!WAT_SPACE[t]&&o!=null&&S.day-o<WAT_SPACE[t]}
 function watFind(t){
  if(t==='mistrz'){// mistrz (fach 4 albo 5) i młody z fachem najwyżej 2, najchętniej z tego samego warsztatu
   const M=S.people.filter(p=>p.age>=35&&watHere(p)&&!watBusy(p));const Y=S.people.filter(p=>p.age>=14&&p.age<=25&&watHere(p)&&!watBusy(p)&&!p.uczen);let best=null,bs=0;
   for(const a of M)for(const c of Object.keys(CN)){if((a.sk[c]||0)<4)continue;for(const b of Y){if((b.sk[c]||0)>2)continue;const sc=(a.sk[c]-(b.sk[c]||0))+(a.job==='wb'&&b.job==='wb'&&a.wb===b.wb?3:0)+relGet(a,b)/40;if(sc>bs){bs=sc;best=[a,b,c]}}}
   return best}
+ if(t==='rywal'){// dwoje najlepszych w tym samym fachu, z różnych rodzin, łeb w łeb
+  const L=S.people.filter(p=>p.age>=18&&p.age<=60&&watHere(p)&&!watBusy(p));let best=null,bs=0;
+  for(let i=0;i<L.length;i++)for(let j=i+1;j<L.length;j++){const a=L[i],b=L[j],c=watTop(a);if(!c||watTop(b)!==c||a.fam===b.fam||a.pair===b.id||a.pobr===b.id||relGet(a,b)<-15)continue;
+   const la=a.sk[c]||0,lb=b.sk[c]||0;if(la<2||lb<2||Math.abs(la-lb)>1)continue;const sc=la+lb+(a.job==='wb'&&b.job==='wb'&&a.wb===b.wb?2:0);if(sc>bs){bs=sc;best=[a,b,{c,cn:CN[c]}]}}
+  return best}
+ if(t==='tajemnica'){const L=S.people.filter(p=>p.age>=18&&watHere(p)&&!watBusy(p));const V=[];
+  const par=L.filter(p=>p.age<=50&&S.people.some(q=>(q.par||[]).includes(p.id)&&q.age<10));if(par.length)V.push(['zapasy',par]);
+  const sick=L.filter(p=>(p.age>=45||p.hp<.85)&&p.hp>.55);if(sick.length)V.push(['choroba',sick]);
+  const lone=S.people.filter(q=>q.age>=55&&watHere(q)&&(q.pair===null||q.pair===undefined||!pById(q.pair))&&famMembers(q.fam).length<=2);
+  if(lone.length){const help=L.filter(p=>p.age<=50&&lone.some(q=>q.fam!==p.fam));if(help.length)V.push(['noc',help])}
+  if(!V.length)return null;const[v,As]=watPick(V);const A=watPick(As);
+  const Bs=L.filter(q=>q!==A&&q.fam!==A.fam&&relGet(q,A)>-10&&q.pair!==A.id).sort((x,y)=>relGet(A,y)-relGet(A,x)).slice(0,3);if(!Bs.length)return null;const B=watPick(Bs);
+  if(v!=='noc')return[A,B,{v}];const C=watPick(lone.filter(q=>q.fam!==A.fam&&q!==B));return C?[A,B,{v,c:C.id,cn:C.name}]:null}
+ if(t==='tesknota'){if(watEra()!==1)return null;// tylko rozbitkowie, którzy pamiętają dom za morzem
+  const As=S.people.filter(p=>!p.born&&p.age>=35&&!p.teskn&&watHere(p)&&!watBusy(p)).sort((x,y)=>(y.age-(y.mood||0)*10)-(x.age-(x.mood||0)*10));
+  for(const A of As){const sp=A.pair!=null?pById(A.pair):null;const B=(sp&&watHere(sp)&&!watBusy(sp)?sp:null)||friendsOf(A).find(q=>watHere(q)&&!watBusy(q))||S.people.find(q=>q!==A&&q.fam===A.fam&&q.age>=14&&watHere(q)&&!watBusy(q));
+   if(B)return[A,B]}
+  return null}
  const ad=S.people.filter(p=>p.age>=16&&watHere(p)&&!watBusy(p));let best=null,bv=t==='romans'?22:t==='przyjazn'?45:-25;
  for(let i=0;i<ad.length;i++)for(let j=i+1;j<ad.length;j++){const a=ad[i],b=ad[j],v=relGet(a,b);
   if(t==='romans'?(v>bv&&watLovers(a,b)):t==='przyjazn'?(v>bv&&a.fam!==b.fam&&a.pair!==b.id&&a.pobr==null&&b.pobr==null&&!watLovers(a,b)):(v<bv&&a.fam!==b.fam&&a.pobr!==b.id)){bv=v;best=[a,b]}}
@@ -210,7 +297,9 @@ function watFind(t){
   const M=near.filter(q=>rank(q)>0).sort((a,b)=>rank(b)-rank(a))[0];
   if(M){const C=friendsOf(M).find(q=>q!==p&&q!==M&&watHere(q))||near.find(q=>q!==M&&q.fam===M.fam&&q.age>=16)||near.filter(q=>q!==M&&q.age>=40).sort((a,b)=>mirOf(b)-mirOf(a))[0];if(C)seed={t:'zaloba',a:M.id,b:C.id,d:S.day,zm:p.name,zs:p.sex}}}
   heirs=S.people.filter(q=>q.uczen&&q.uczen.m===p.id)}catch(e){}
- _kp(p,why);try{if(seed&&S.people.some(q=>q.id===seed.a))watS().seed.push(seed);for(const q of heirs){const c=q.uczen.c;q.mirX=(q.mirX||0)+3;log(`${q.name} przejmuje fach po ${gen(p.name)}: ${CN[c]}. Pod ${gw(q,'jego','jej')} ręką warsztat nie stanie.`);q.uczen=null}}catch(e){}}}
+ const tw=S.watki&&S.watki.a.find(w=>w.t==='tesknota'&&w.a===p.id);
+ _kp(p,why);try{if(seed&&S.people.some(q=>q.id===seed.a))watS().seed.push(seed);for(const q of heirs){const c=q.uczen.c;q.mirX=(q.mirX||0)+3;log(`${q.name} przejmuje fach po ${gen(p.name)}: ${CN[c]}. Pod ${gw(q,'jego','jej')} ręką warsztat nie stanie.`);q.uczen=null}
+  if(tw){const B=pById(tw.b);if(B){memAdd(B,'dar','pamiątka: '+p.name,.3,1);watEnd(tw,'pamiatka',`${B.name} dostaje po ${gen(p.name)} łódkę z kory, którą ${gw(p,'rzeźbił','rzeźbiła')} wieczorami. Stawia ją nad paleniskiem, dziobem w stronę morza.`)}}}catch(e){}}}
 // 4.9.0-rc.17: swaty działają jak dawniej, a zaloty są dodatkową drogą (decyzja z 28.10.2026). Swaty nie łączą tylko kogoś,
 // kto jest w trakcie innej historii z trzecią osobą; parę, która ma właśnie zaloty, mogą wyswatać i wtedy wątek kończy się weselem.
 function watBlocks(k,m){if(!watOn())return false;const a=watOf(k),b=watOf(m);if(!a&&!b)return false;return!(a&&a===b&&a.t==='romans')}
@@ -222,14 +311,15 @@ function watOnScreen(p){if(!p||typeof cam==='undefined')return false;scV.set(p.x
 {const _mt=mapTick;mapTick=function(rdt){_mt(rdt);if(watQ.length&&scBP===null&&S&&!evOpen){const[id,txt,label]=watQ[0];const p=pById(id);if(!p){watQ.shift();return}if(watOnScreen(p)){watQ.shift();scBubble(p,txt);if(!scBubEl.hidden)scBubEl.dataset.w=label}}}}
 
 // ---------- karta osoby: co się u niej dzieje; „Pchnij ich ku sobie” ----------
-const WAT_ST={romans:['zaczyna się','rośnie','rośnie','czeka na decyzję'],konflikt:['zaczyna się','narasta','narasta','czeka na rozstrzygnięcie'],przyjazn:['zaczyna się','rośnie','rośnie','czeka na decyzję'],zaloba:['świeża','trwa','powoli mija','czeka na decyzję'],mistrz:['nauka','nauka','nauka','przed majstersztykiem']};
+const WAT_ST={romans:['zaczyna się','rośnie','rośnie','czeka na decyzję'],konflikt:['zaczyna się','narasta','narasta','czeka na rozstrzygnięcie'],przyjazn:['zaczyna się','rośnie','rośnie','czeka na decyzję'],zaloba:['świeża','trwa','powoli mija','czeka na decyzję'],mistrz:['nauka','nauka','nauka','przed majstersztykiem'],rywal:['zaczyna się','zakład','idą łeb w łeb','czeka na konkurs'],tajemnica:['zaczyna się','coś się dzieje','ktoś coś widzi','wyszło na jaw'],tesknota:['zaczyna się','patrzy na morze','opowiada o domu','zbiera deski na łódź']};
 function watStage(w){if(w.st===4){if(w.t==='romans')return w.x.czeka?'czekają do wiosny':'szykują wesele';if(w.t==='zaloba')return'czas leczy';return'pracują razem'}return WAT_ST[w.t][w.st]||''}
 function watPushCand(p){if(!watOn()||!watSingle(p)||watBusy(p)||watS().a.length>=WAT_MAX)return null;
  return S.people.filter(q=>watLovers(p,q)&&!watBusy(q)&&relGet(p,q)>=10).sort((a,b)=>relGet(p,b)-relGet(p,a))[0]||null}
 function watCardHTML(p){if(!S||!p)return'';const w=watOf(p);let h='';
+ if(p.przez)h+=`<p class="mut watek-przez">Zwą ${gw(p,'go','ją')}: „${escapeHtml(p.przez)}”</p>`;
  const pb=p.pobr!=null?pById(p.pobr):null;if(pb)h+=`<p class="mut watek-pobr">${gw(pb,'Pobratym','Posestra')}: ${escapeHtml(pb.name)}</p>`;
  if(w){const o=pById(w.a===p.id?w.b:w.a),on=o?o.name:(w.a===p.id?w.bn:w.an);
-  h+=`<div class="card watek"><h4>${escapeHtml(w.t==='zaloba'?watTitle(w):w.t==='mistrz'?watTitle(w):watTitle(w,p.name,on))}</h4><p class="mut">Od dnia ${w.d0+1}, teraz: ${watStage(w)}.</p>${w.kroki.slice(-3).map(k=>`<p><small>dzień ${k[0]+1}</small> ${escapeHtml(k[1])}</p>`).join('')}</div>`}
+  h+=`<div class="card watek"><h4>${escapeHtml(w.t==='zaloba'||w.t==='tesknota'||w.t==='mistrz'||w.t==='tajemnica'?watTitle(w):watTitle(w,p.name,on))}</h4><p class="mut">Od dnia ${w.d0+1}, teraz: ${watStage(w)}.</p>${w.kroki.slice(-3).map(k=>`<p><small>dzień ${k[0]+1}</small> ${escapeHtml(k[1])}</p>`).join('')}</div>`}
  else{const q=watPushCand(p);if(q)h+=`<div class="card watek"><p class="mut">${escapeHtml(p.name)} i ${escapeHtml(q.name)} lubią się. Można im pomóc, ale nie trzeba.</p><button data-watek-push="${p.id}:${q.id}">Pchnij ich ku sobie</button></div>`}
  return h}
 {const _lc=ludCard;ludCard=function(p){const h=_lc(p);let s='';try{s=watCardHTML(p)}catch(e){console.warn('wątek',e)}return s+h}}
@@ -239,7 +329,7 @@ document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest
  const w=watStart('romans',A,B,{text:t});if(w){log(t);watBubble(A,t,WAT_NAME.romans);toast('Zaloty: '+A.name+' i '+B.name)}try{renderSel()}catch(er){}});
 
 // ---------- kronika: wątki jak rozdziały ----------
-const WAT_END={pobratymstwo:'pobratymstwo',posestrzenie:'posestrzenie',przyjazn:'przyjaźń bez obrzędu',pamiec:'pamięć przy ogniu',powrot:'powrót do ludzi',majstersztyk:'majstersztyk',nauka:'nauka trwa',wesele:'wesele',rozstanie:'rozstali się',zgoda:'zgoda',rozejm:'rozejm bez zgody',wyrok:'wyrok wiecu',rozejscie:'rozeszli się bez zgody',wygnanie:'wygnanie',odejscie:'jedno odeszło',inne:'sprawa się rozeszła',brak:'sprawa się rozeszła',przerwany:'przerwany'};
+const WAT_END={szacunek:'konkurs i szacunek',uraza:'konkurs i uraza',podzial:'podział pracy',przebaczenie:'przebaczenie',kara:'osąd starszych',pomoc:'pomoc osady',leczenie:'leczenie',milczenie:'dotrzymane słowo',chwala:'dobre serce przy ogniu',sekret:'wspólny sekret',sad:'został i założył sad',opowiesc:'opowieść o domu',odplynal:'odpłynięcie',pamiatka:'pamiątka',pobratymstwo:'pobratymstwo',posestrzenie:'posestrzenie',przyjazn:'przyjaźń bez obrzędu',pamiec:'pamięć przy ogniu',powrot:'powrót do ludzi',majstersztyk:'majstersztyk',nauka:'nauka trwa',wesele:'wesele',rozstanie:'rozstali się',zgoda:'zgoda',rozejm:'rozejm bez zgody',wyrok:'wyrok wiecu',rozejscie:'rozeszli się bez zgody',wygnanie:'wygnanie',odejscie:'jedno odeszło',inne:'sprawa się rozeszła',brak:'sprawa się rozeszła',przerwany:'przerwany'};
 function watkiHTML(){if(!S)return'';const W=watS();if(!W.a.length&&!W.z.length)return'<p class="mut">Na razie nic się nie dzieje. Wątki zaczynają się same, z tego, co ludzie przeżywają.</p>';let h='';
  for(const w of W.a)h+=`<div class="card watek"><h4>${escapeHtml(watTitle(w))}</h4><p class="mut">Od dnia ${w.d0+1}, teraz: ${watStage(w)}.</p>${w.kroki.map(k=>`<p><small>dzień ${k[0]+1}</small> ${escapeHtml(k[1])}</p>`).join('')}</div>`;
  if(W.z.length)h+=`<h4>Zakończone</h4>`+W.z.map(z=>`<details class="watek-z"><summary>${escapeHtml(watTitle(z))} · ${WAT_END[z.k]||z.k}, dni ${z.d0+1}–${z.d1+1}</summary>${z.kroki.map(k=>`<p><small>dzień ${k[0]+1}</small> ${escapeHtml(k[1])}</p>`).join('')}</details>`).join('');
@@ -262,9 +352,24 @@ function watkiHTML(){if(!S)return'';const W=watS();if(!W.a.length&&!W.z.length)r
    x:['Trzeba zajrzeć do {Bg}. Od śmierci {zg} prawie nie wychodzi z domu.','{B} co wieczór chodzi na grób {zg}. Nie przeszkadzajmy.']},
   {k:'w_mistrz',t:'ludzie',w:1.2,a:A=>W_AD(A)&&!watBusy(A)&&!!act('mistrz'),b:A=>pb(act('mistrz')),v:(A,B)=>{const w=watOf(B);const m=w&&pById(w.a);return{mg:m?gen(m.name):'mistrza'}},
    x:['{B} uczy się u {mg}. Twardy mistrz, ale z niego coś będzie.','Słyszał[em|am], jak {B} znowu coś psuje w warsztacie. Tak się zaczyna każdy fach.']},
+  {k:'w_rywal',t:'ludzie',w:1.2,a:A=>W_AD(A)&&!watBusy(A)&&!!act('rywal'),b:A=>{const w=act('rywal');return w&&pa(w)!==A?pa(w):null},v:(A,B)=>{const w=watOf(B);const o=w&&pById(w.a===B.id?w.b:w.a);return{on:o?o.name:'ktoś',og:o?gen(o.name):'kogoś'}},
+   x:['Stawiam na {Ba}. A ty? Na {og}?','{B} i {on} pracują od świtu, byle tylko nie dać się wyprzedzić. Dawno robota tak nie szła.']},
+  {k:'w_tajem',t:'ludzie',w:1,a:A=>W_AD(A)&&!watBusy(A)&&!!act('tajemnica'),b:A=>{const w=act('tajemnica');return w&&pa(w)!==A?pa(w):null},v:()=>({}),
+   x:['{B} chodzi ostatnio jakiś zamyślon<y|a>. Ciekawe, co <go|ją> gryzie.','Ktoś w nocy chodzi po osadzie. Pies szczekał trzy razy, a rano nikt nic nie słyszał.']},
+  {k:'w_teskn',t:'ludzie',w:1.2,a:A=>W_AD(A)&&!watBusy(A)&&!!act('tesknota'),b:A=>{const w=act('tesknota');return w&&pa(w)!==A?pa(w):null},v:()=>({}),
+   x:['{B} znowu siedzi na skale i patrzy na morze. Nie zaczepiajcie <go|jej>.','{B} opowiadał<|a> dzieciom o rzece, nad którą się urodził<|a>. Aż mi się ciepło zrobiło.']},
+  {k:'w_odplynal',t:'pamiec',w:1,a:A=>W_AD(A)&&!!(S.odplyneli&&S.odplyneli.some(o=>Math.floor(S.day)-o.d>=2)),b:A=>{const L=S.odplyneli.filter(o=>Math.floor(S.day)-o.d>=2);const o=L[(Math.random()*L.length)|0];const B=pById(o.b);if(B&&B!==A){B._wo=o;return B}return null},
+   v:(A,B)=>{const o=B&&B._wo;return{on:o?o.n:'ktoś',dop:o&&o.s==='k'?'dopłynęła':'dopłynął'}},
+   x:['Ciekawe, czy {on} {dop} do domu. {B} co wieczór patrzy w tamtą stronę.']},
   ...[['konflikt',['zgoda','rozejscie','wyrok'],['Pamiętasz kłótnię {Bg} i {og}? Cała osada wtedy słyszała.','Kiedyś {B} i {o} to był ogień i woda. Czas robi swoje.']],
    ['romans',['wesele'],['Pamiętasz zaloty {Bg} i {og}? Pół wsi wtedy czekało na swaty.','{B} i {o}... a jeszcze niedawno chodzili wokół siebie i udawali, że nic.']],
+   ['rywal',['szacunek','uraza'],['Pamiętasz konkurs {Bg} i {og}? Do dziś się kłócą, kto naprawdę był lepszy.']],
    ['przyjazn',['pobratymstwo','posestrzenie'],['{B} i {o} są dla siebie jak rodzeństwo. Rzadko się takich widuje.','Pamiętasz obrzęd {Bg} i {og} przy ogniu? Chleb, sól i nacięte dłonie. Starzy mówili, że dawno tego nie widzieli.']]].map(([t,ks,x])=>(
    {k:'w_dawny_'+t,t:'pamiec',w:1,a:W_AD,b:A=>{const z=ended(t,ks);if(!z)return null;const B=byName(z.an);if(B&&B!==A)B._wz=z;return B&&B!==A?B:null},
     v:(A,B)=>{const z=B&&B._wz;return{o:z?z.bn:'ktoś',og:z?gen(z.bn):'kogoś'}},x})))}
-window.__watki={watSoon,watMinelo,watTitle,watRite,watLearn,watS,watStart,watTick,watChoose,watCard,watOf,watFind,watBlocks,watkiHTML,watCardHTML,watPushCand,WAT_STEP,watQ,get next(){return watNext},set next(v){watNext=v}};
+{const _kt=ksiegaText;ksiegaText=function(){const t=_kt();try{const L=t.split('\n'),i=L.findIndex(x=>x.startsWith('Pamięć osady:'));if(i<0)return t;const add=[];
+  const W=S.watki;if(W&&W.z.length){add.push('HISTORIE','',...W.z.slice(0,12).reverse().map(z=>`${watTitle(z)}: ${WAT_END[z.k]||z.k}.`),'')}
+  const pr=S.people.filter(p=>p.przez);if(pr.length)add.push('PRZEZWISKA','',pr.map(p=>`${p.name} „${p.przez}”`).join(', ')+'.','');
+  if((S.odplyneli||[]).length)add.push('ODPŁYNĘLI ZA MORZE','',S.odplyneli.map(o=>`${o.n} (${dayName(o.d)})`).join(', ')+'.','');
+  L.splice(i,0,...add);return L.join('\n')}catch(e){console.warn('księga',e);return t}}}
+window.__watki={watNick,watFeast,watTop,watSoon,watMinelo,watTitle,watRite,watLearn,watS,watStart,watTick,watChoose,watCard,watOf,watFind,watBlocks,watkiHTML,watCardHTML,watPushCand,WAT_STEP,watQ,get next(){return watNext},set next(v){watNext=v}};
