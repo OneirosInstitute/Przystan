@@ -9,7 +9,7 @@ function village(epoch){
  if(epoch)E(`S.epoch=${epoch}`);
  // dwoje wolnych młodych z różnych rodów (w gotowej wsi prawie wszyscy dorośli mają już pary)
  E(`(()=>{const fams=Object.keys(S.fams).map(Number);const mk=(sex,age,fam)=>{const p=newPerson(S.pid++,newName(sex),age,sex,fam,{zbieracz:1},TKEYS[0]);p.par=[];p.rod=1000+p.id;p.mirX=0;const c={x:tcx(camp.i),z:tcx(camp.j)};p.x=c.x+.5;p.z=c.z+.5;p.state='work';S.people.push(p);addPersonMesh(p);return p};
-  mk('m',23,fams[0]);mk('k',21,fams[1])})()`);
+  window.__nm=mk('m',23,fams[0]);window.__nk=mk('k',21,fams[1])})()`);
  const tap=ds=>{const b={dataset:ds,closest:()=>b};for(const l of runtime.elements.get('ev').listeners.click||[])l({target:{closest:()=>b}})};
  // krok wątku przychodzi po 0,8–1,6 dnia, więc 1,7 dnia to zawsze dokładnie jeden krok
  const day=(n=1)=>{for(let k=0;k<n;k++)E('S.day+=1.7;__watki.watTick()')};
@@ -71,11 +71,16 @@ test('a courtship scene and a quarrel scene start a story with that scene as its
  E('S.watki.nast=0;__watki.watTick()');assert.equal(E('S.watki.a.length'),1);assert.equal(E('S.watki.a[0].t'),'romans');assert.equal(E('S.watki.a[0].kroki[0][1]'),txt);
 });
 
-test('matchmaking goes through a courtship story while there is room, and the old way when there is not',()=>{
- const {E}=village();const pair=E(lovers);
- assert.equal(E(`__watki.watSwaty(pById(${pair[1]}),pById(${pair[0]}))`),true);assert.equal(E('S.watki.a[0].st'),2,'they already like each other, so the story starts further on');
- E(`S.watki.a.length=0;S.watki.a.push({t:'x',a:-1,b:-2,x:{}},{t:'x',a:-3,b:-4,x:{}},{t:'x',a:-5,b:-6,x:{}})`);
- assert.equal(E(`__watki.watSwaty(pById(${pair[1]}),pById(${pair[0]}))`),false);
+test('matchmaking stays as it was, a courtship is an extra way, and swaty for a courting pair end the story with a wedding',()=>{
+ const {E}=village();const m=E('__nm.id'),k=E('__nk.id');
+ E(`S.rel={};relAdd(pById(${m}),pById(${k}),90);S.wed=null;__watki.watS().a=[];ludDaily()`);
+ assert.equal(E('JSON.stringify(S.wed&&[S.wed.k,S.wed.m])'),JSON.stringify([k,m]),'swaty pick the pair the old way');assert.equal(E('S.watki.a.length'),0,'no story is forced on them');
+ // ktoś w trakcie sporu nie zostaje wyswatany z kimś trzecim, ale para w zalotach może
+ E(`S.wed=null;window.__w=__watki.watStart('romans',pById(${m}),pById(${k}))`);assert.equal(E(`__watki.watBlocks(pById(${k}),pById(${m}))`),false);
+ const other=E(`S.people.find(p=>p.age>=20&&p.id!==${m}&&p.id!==${k}&&!__watki.watOf(p)).id`);
+ assert.equal(E(`__watki.watBlocks(pById(${k}),pById(${other}))`),true,'swaty do not break a courtship with a third person');
+ E(`S.wed={k:${k},m:${m},day:Math.floor(S.day)};S.day+=1;ludDaily();__watki.watTick()`);
+ assert.equal(E(`pById(${k}).pair`),m);assert.equal(E('S.watki.a.length'),0);assert.equal(E('S.watki.z[0].k'),'wesele');assert.match(E('S.watki.z[0].kroki.at(-1)[1]'),/Swaty zrobiły swoje/);
 });
 
 test('a story survives save and load, also with its decision card open',()=>{

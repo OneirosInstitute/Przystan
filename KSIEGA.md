@@ -1243,6 +1243,7 @@ W Ludziach (Praca i Mieszkańcy) wyszukiwarka szuka po imieniu, fachu albo budyn
 | 1.8.3 | poprawka: rozbudowa domu (szałas w chatę, chata w dom) nie zabiera już rodzinie spiżarki; w czasie budowy zapas zostaje w starym domu w granicach jego pojemności |
 | 1.9 | budynki z charakterem: każdy budynek inny (ściany, dachy, spadek, okap), koniki, malowane okiennice, ganki, przybudówki, garnki na płocie, zioła pod okapem, szyldy rzemiosł, wyraźniejsza kuźnia, łaźnia i chata wiecowa |
 | 1.10 | wykonanie budynków: surowe, porządne i mistrzowskie, wyraźnie widoczne po rozbudowie (wielkość, podmurówka, dach, okiennice, obramienia okien, kwiaty, płotek, szyld); karta budynku pokazuje wykonanie i trwałość; odmiany szałasów, studni, zagród i spiżarni |
+| 4.9.0-rc.17 | swaty jak dawniej, zaloty jako dodatkowa droga; swaty nie przerywają cudzej historii, wyswatanie pary w zalotach kończy wątek weselem |
 | 4.9.0-rc.16 | wątki: zaloty i spory w pięciu krokach z jedną kartą decyzji, swaty przez zaloty, „Pchnij ich ku sobie”, dział „Wątki” w Kronice; przednówek nie zatrzymuje drewutni ani prac przy jedzeniu |
 | 4.9.0-rc.15 | start: ekran wczytywania zamiast starego menu, przycisk reaguje od razu, pierwsza decyzja o zmierzchu i „Od ostatniego razu” bez drugiej karty, powrót do osady po aktualizacji w czasie gry, dymek sceny o stałej szerokości |
 | 4.9.0-rc.14 | budynki w lustrzanym odbiciu nie tracą dachu i ścian we wspólnej bryle (odwrócona kolejność wierzchołków); dym z komina po właściwej stronie |

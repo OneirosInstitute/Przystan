@@ -3,7 +3,7 @@
 // Wątek to historia dwóch osób w pięciu krokach: zalążek, dwa kroki narastania, punkt zwrotny (jedna karta z wyborem)
 // i rozwiązanie, które zostawia ślad we wspomnieniach i w kronice. Krok przychodzi dopiero, gdy minie jego czas
 // i obie osoby są w osadzie. Naraz najwyżej 3 wątki, jedna osoba w jednym, najwyżej jedna karta wątku na dzień gry.
-// Ten pakiet: romans (przejmuje swaty) i konflikt. Złe zakończenia romansów dopiero w epoce IV (tam wątki jeszcze nie
+// Ten pakiet: romans (dodatkowa droga obok swatów) i konflikt. Złe zakończenia romansów dopiero w epoce IV (tam wątki jeszcze nie
 // działają), a bójka, kradzież, podpalenie i wygnanie przez wiec dopiero od epoki III (decyzje z 27.10.2026).
 const WAT_MAX=3,WAT_TICK=.25,WAT_GAP=[.8,1.6],WAT_NAME={romans:'Zaloty',konflikt:'Spór'},WAT_END_KEEP=30;
 let watNext=0;const watQ=[];
@@ -115,7 +115,9 @@ DECISION_RECOVERY.watek=()=>{const W=watS(),w=W.a.find(x=>x.id===W.kartaW&&x.x.k
 function watTick(){if(!S||!S.people)return;const W=watS();if(!watOn()){if(W.a.length)W.a.slice().forEach(w=>watEnd(w,'przerwany',null));return}
  for(const w of W.a.slice()){const[A,B]=watPeople(w);
   if(!A||!B){const z=A||B;watEnd(w,'odejscie',z?`${z.name} zostaje ${gw(z,'sam','sama')} ze sprawą, która już nikogo nie obchodzi.`:null);continue}
-  if(w.t==='romans'&&(!watSingle(A)||!watSingle(B))&&!(A.pair===B.id)){watEnd(w,'inne',null);continue}
+  if(w.t==='romans'&&A.pair===B.id){watEnd(w,'wesele',`Wesele: ${A.name} i ${B.name}. Swaty zrobiły swoje.`,true);continue}
+  if(w.t==='romans'&&S.wed&&((S.wed.k===A.id&&S.wed.m===B.id)||(S.wed.k===B.id&&S.wed.m===A.id)))continue;// swaty już idą: czekamy na wesele
+  if(w.t==='romans'&&(!watSingle(A)||!watSingle(B))){watEnd(w,'inne',null);continue}
   if(w.st===4){
    if(w.t==='romans'&&w.x.wed!==undefined){
     if(w.x.czeka===1&&S.day>=w.d0+1&&S.day<w.x.wed-1&&watHere(A)){w.x.czeka=2;watSay(w,A,watPick([`${A.name} rzeźbi wieczorami skrzynię na wiano. Mówi, że do wiosny zdąży.`,`${A.name} i ${B.name} widują się tylko przy studni. Wystarczy jedno spojrzenie.`]))}
@@ -142,9 +144,9 @@ function watFind(t){const ad=S.people.filter(p=>p.age>=16&&watHere(p)&&!watBusy(
 // ---------- sceny, które zaczynają wątek; swaty przez wątek ----------
 {for(const[k,t]of[['zalot','romans'],['klotnia','konflikt']]){const sc=SCENY.find(s=>s.k===k);if(!sc)continue;const f0=sc.f;
  sc.f=(A,B)=>{const txt=f0(A,B);try{if(txt&&A&&B&&watOn())watS().seed.push({t,a:A.id,b:B.id,d:S.day,txt})}catch(e){}return txt}}}
-function watBlocks(k,m){return watOn()&&(watBusy(k)||watBusy(m))}
-function watSwaty(k,m){if(!watOn())return false;const W=watS();if(W.a.length>=WAT_MAX)return false;
- const w=watStart('romans',m,k,{text:`Wszyscy widzą, że ${m.name} i ${k.name} mają się ku sobie. Pytanie tylko, kiedy ktoś to powie głośno.`});if(!w)return false;w.st=2;w.dn=S.day+watGap();log(w.kroki[0][1]);return true}
+// 4.9.0-rc.17: swaty działają jak dawniej, a zaloty są dodatkową drogą (decyzja z 28.10.2026). Swaty nie łączą tylko kogoś,
+// kto jest w trakcie innej historii z trzecią osobą; parę, która ma właśnie zaloty, mogą wyswatać i wtedy wątek kończy się weselem.
+function watBlocks(k,m){if(!watOn())return false;const a=watOf(k),b=watOf(m);if(!a&&!b)return false;return!(a&&a===b&&a.t==='romans')}
 
 // ---------- dymek z nazwą wątku i kolejka dymków ----------
 {const _sb=scBubble;scBubble=function(p,t){delete scBubEl.dataset.w;return _sb(p,t)}}
@@ -178,4 +180,4 @@ function watkiHTML(){if(!S)return'';const W=watS();if(!W.a.length&&!W.z.length)r
 {const st=document.createElement('style');st.textContent=`.card.watek{border-color:#c9a66b66}.card.watek h4{color:var(--gold2,#e0c080);margin:0 0 4px}.card.watek p{margin:4px 0}.card.watek small,.watek-z small{color:var(--mut);margin-right:4px}
 .card.watek button{width:100%;margin-top:6px}.watek-z{margin:6px 0}.watek-z summary{cursor:pointer}
 #scBub[data-w]::before{content:attr(data-w);display:block;font:600 11px var(--sans);font-style:normal;letter-spacing:.04em;color:var(--gold);margin-bottom:2px}`;document.head.appendChild(st)}
-window.__watki={watS,watStart,watTick,watChoose,watCard,watOf,watFind,watSwaty,watBlocks,watkiHTML,watCardHTML,watPushCand,WAT_STEP,watQ,get next(){return watNext},set next(v){watNext=v}};
+window.__watki={watS,watStart,watTick,watChoose,watCard,watOf,watFind,watBlocks,watkiHTML,watCardHTML,watPushCand,WAT_STEP,watQ,get next(){return watNext},set next(v){watNext=v}};
