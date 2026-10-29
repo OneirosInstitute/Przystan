@@ -22,6 +22,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 24
+      - run: npm run build
       - run: node tools/check-build.cjs
       - run: node tools/run-tests-serial.cjs --install --shard=${{ matrix.shard }}/8
   package:
@@ -34,8 +35,7 @@ jobs:
         with:
           node-version: 24
       - run: npm run build
-      - name: Zbudowana gra jest identyczna z zapisaną
-        run: git diff --stat --exit-code -- dist
+      - run: node tools/check-build.cjs
       - run: npm run test:runtime
       - run: node tools/verify-package.cjs
   node18:
