@@ -36,7 +36,7 @@ test('the forest branch: moderate hunting needs a forester and a hunter together
 test('a hunter with no game in range says where the nearest game is, and the hut card shows whether game is going down',()=>{
  const {E}=game();E(HUTS);
  E("S.herds.forEach(h=>{const c=bCenter(__M);if(Math.hypot(h.x-c.x,h.z-c.z)<=rOf(__M)+4)h.n=0});__lowy.lwNoGame(__h,__M,false)");
- assert.match(E('__h.act'),/^w zasięgu nie ma zwierzyny; najbliżej (są|jest) .+, (w krainie |daleko na )/);
+ assert.match(E('__h.act'),/^w zasięgu nie ma zwierzyny; najbliżej (są|jest) .+, (w krainie |daleko na |blisko osady)/);
  assert.match(LOG(E)[0],/wraca z tropienia: w pobliżu chaty nie ma już zwierzyny\. Najbliżej .+ Łowisku trzeba dać odpocząć albo postawić chatę dalej, na skraju lasu\.$/);
  E("S.lwH={};S.lwH[__M.id]=[12,10,8,5,0]");const card=E("bldPanelHTML(__M)");assert.match(card,/Zwierzyna w zasięgu/);assert.match(card,/4 dni temu: 12\. Ubywa\./);assert.match(card,/Daj łowisku odpocząć/);
 });

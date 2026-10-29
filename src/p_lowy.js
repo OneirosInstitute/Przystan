@@ -37,7 +37,7 @@ const lwSea=()=>seasonIdx();
 const lwYear=()=>Math.floor(S.day/YEAR);
 const lwHuntable=h=>h.n>0&&ANIMAL[h.type]&&ANIMAL[h.type][3];
 function lwRegion(x,z){const t=tileOf(x,z);return regionAt(t[0],t[1])}
-function lwWhere(x,z){const r=lwRegion(x,z);if(r&&r.known&&r.name)return`w krainie ${r.name}`;const dx=x-tcx(camp.i),dz=z-tcx(camp.j);const a=Math.atan2(dz,dx);const k=Math.round(((a+Math.PI)/(Math.PI*2))*8)%8;
+function lwWhere(x,z){const r=lwRegion(x,z);if(r&&r.known&&r.name)return`w krainie ${r.name}`;const dx=x-tcx(camp.i),dz=z-tcx(camp.j);if(Math.hypot(dx,dz)<30)return'blisko osady';const a=Math.atan2(dz,dx);const k=Math.round(((a+Math.PI)/(Math.PI*2))*8)%8;
  return'daleko na '+['zachód','północny zachód','północ','północny wschód','wschód','południowy wschód','południe','południowy zachód'][k]+' od osady'}
 function lwInGaj(x,z){if(S.gaj==null)return false;const r=lwRegion(x,z);return!!r&&r.id===S.gaj}
 // stado chronione: rada leśniczego, okres ochronny wiosną, święty gaj, współpraca (nie rusza słabych stad)
