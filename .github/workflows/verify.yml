@@ -37,7 +37,36 @@ jobs:
       - run: npm run build
       - run: node tools/check-build.cjs
       - run: npm run test:runtime
-      - run: node tools/verify-package.cjs
+      # manifest paczki powstaje przy wydaniu, więc integralność ma sens dla commitów wydania i dla main
+      - if: github.ref == 'refs/heads/main' || startsWith(github.event.head_commit.message, '4.')
+        run: node tools/verify-package.cjs
+  browser:
+    name: Przeglądarka ${{ matrix.tool }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        tool: [mobile-ui, ai, navigation, master, e4, hardening, lifecycle, people, supply, tasks, workspace]
+    env:
+      PRZYSTAN_START_SERVER: '1'
+      PRZYSTAN_BROWSER_OUTPUT: browser-evidence
+      PRZYSTAN_CHROMIUM_ARGS: '["--use-gl=angle","--use-angle=swiftshader","--enable-unsafe-swiftshader","--ignore-gpu-blocklist"]'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: npm run build
+      - run: npm install --no-save --no-package-lock playwright@1.56.0
+      - run: npx playwright install --with-deps chromium
+      # jedno powtórzenie: test, który przechodzi dopiero za drugim razem, jest widoczny w logu jako „powtórka”
+      - run: node tools/browser-${{ matrix.tool }}.cjs || (echo "powtórka ${{ matrix.tool }}" && node tools/browser-${{ matrix.tool }}.cjs)
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-${{ matrix.tool }}
+          path: browser-evidence
   node18:
     name: Zgodność z Node 18
     runs-on: ubuntu-latest
