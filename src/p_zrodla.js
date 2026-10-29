@@ -50,8 +50,9 @@ function zrPamCard(p){if(!p.pam||!p.pam.length)return'';const now=epNow();
  const use=p.pam.some(id=>TECH_BY[id]&&!S.tech[id]&&tEp(TECH_BY[id])<=now);
  return`<p class="mut zr-pam">Pamięta z domu: ${L.join(', ')}.${use?' Gdy sam prowadzi próbę, potrzeba połowy materiałów i idzie pewniej.':''}</p>`}
 {const _lc=ludCard;ludCard=function(p){const h=_lc(p);let s='';try{if(badOn())s=zrPamCard(p)}catch(e){console.warn('pamięć',e)}return s+h}}
-{const _kp=killPerson;killPerson=function(p,why){let L=[];try{if(badOn())L=zrPamLeft(p)}catch(e){}_kp(p,why);if(L.length)log(`${p.name} ${gw(p,'zabrał','zabrała')} do grobu pamięć z domu: ${L.map(id=>TECH_BY[id].n.toLowerCase()).join(', ')}. Tego nikt już nie pamięta.`)}}
-{const _lp=leavePerson;leavePerson=function(p){let L=[];try{if(badOn()&&!p.born)L=zrPamLeft(p)}catch(e){}_lp(p);if(L.length)log(`${p.name} zabiera ze sobą pamięć z domu: ${L.map(id=>TECH_BY[id].n.toLowerCase()).join(', ')}.`)}}
+// wpis o pamięci idzie przed wpisem o śmierci, żeby ostatnim wpisem kroniki zostało samo odejście
+{const _kp=killPerson;killPerson=function(p,why){try{if(badOn()){const L=zrPamLeft(p);if(L.length)log(`${p.name} ${gw(p,'zabrał','zabrała')} do grobu pamięć z domu: ${L.map(id=>TECH_BY[id].n.toLowerCase()).join(', ')}. Tego nikt już nie pamięta.`)}}catch(e){}return _kp(p,why)}}
+{const _lp=leavePerson;leavePerson=function(p){try{if(badOn()&&!p.born){const L=zrPamLeft(p);if(L.length)log(`${p.name} zabiera ze sobą pamięć z domu: ${L.map(id=>TECH_BY[id].n.toLowerCase()).join(', ')}.`)}}catch(e){}return _lp.apply(this,arguments)}}
 // ---------- przypadki z kroniki ----------
 function zrEvents(){zrS();const mark=S.zrMark,hit=[];let k=0;for(const l of S.log){if(l===mark||k++>60)break;for(const e of ZR_EV){const t=TECH_BY[e[1]];if(S.zrEv[e[1]]||hit.includes(e)||!e[0].test(l.t)||!t||!zrAvail(t))continue;hit.push(e)}}
  S.zrMark=S.log[0];for(const[,id,txt,short]of hit){S.zrEv[id]=1;log(txt);zrGive(id,'ev',short,1)}if(hit.length)S.zrMark=S.log[0]}
