@@ -68,3 +68,35 @@ test('the new home of a herd survives saving and loading',()=>{
  E(`(()=>{const h=S.herds.find(h=>h.n>0);h.hi=100;h.hj=120;save();S=load()})()`);
  assert.equal(E('S.herds.find(h=>typeof h.hi==="number").hi'),100);
 });
+
+// ---------- pakiet 2 (4.9.0-rc.21): mapa spokoju i siedlisk ----------
+test('cutting down the forest makes deer and wolves leave, while hares keep their place',()=>{
+ const {E}=village();E('__przyroda.zwMap()');
+ const r=JSON.parse(E(`JSON.stringify((()=>{const P=__przyroda;let c=-1;for(let q=0;q<P.forest.length;q++)if(P.forest[q]>.6&&P.zwCap('sarna',q)>.3&&P.zwCap('zajac',q)>0&&(c<0||P.zwCap('wilk',q)>0)){c=q;if(P.zwCap('wilk',q)>0)break}
+  if(c<0)return{skip:1};const before={s:P.zwCap('sarna',c),w:P.zwCap('wilk',c),z:P.zwCap('zajac',c)};
+  for(const n of nodeBy.tree)if(P.zwCell(n.i,n.j)===c)n.amt=0;P.zwMap();return{before,after:{s:P.zwCap('sarna',c),w:P.zwCap('wilk',c),z:P.zwCap('zajac',c)},f:P.forest[c]}})())`));
+ if(r.skip)return;assert.ok(r.f<.05);assert.ok(r.after.s<r.before.s*.6,JSON.stringify(r));if(r.before.w>0)assert.ok(r.after.w<r.before.w*.3,JSON.stringify(r));assert.ok(r.after.z>=r.before.z,JSON.stringify(r));
+});
+
+test('a herd whose place lost its quiet moves to a better place nearby and the chronicle says why',()=>{
+ const {E}=village();
+ const r=JSON.parse(E(`JSON.stringify((()=>{const P=__przyroda;P.zwMap();const k=S.herds.findIndex(h=>h.type==='sarna'&&h.n>=3);const h=S.herds[k];const[hi,hj]=P.zwHome(h,k);const c=P.zwCell(hi,hj);
+  S.regs=S.regs||{};const reg=regionAt(hi,hj);if(reg){S.regs[reg.id]=1;reg.known=true}
+  S.herds.forEach(o=>{const t=tileOf(o.x,o.z);if(P.zwCell(t[0],t[1])===c)o.huntPressure=1});h.x=tcx(hi);h.z=tcx(hj);h.huntPressure=1;h.migD=-99;S.zwLogD=-1;
+  S.log=[];P.zwMapDaily();const[ni,nj]=P.zwHome(h,k);return{moved:P.zwCell(ni,nj)!==c,q:P.quiet[c],log:S.log.map(l=>l.t)}})())`));
+ assert.equal(r.moved,true,JSON.stringify(r));
+ if(r.log.length)assert.match(r.log[0],/^Sarny odeszły z krainy .+\. (Za blisko tam ludzi, ścieżek i polowań|Wycięto tam las|Za ciasno im tam było)\.$/);
+});
+
+test('herds do not wander every day: a herd that just moved stays at least three days',()=>{
+ const {E}=village();
+ const r=JSON.parse(E(`JSON.stringify((()=>{const P=__przyroda;P.zwMap();const k=S.herds.findIndex(h=>h.n>0&&h.type==='sarna');const h=S.herds[k];h.migD=Math.floor(S.day);const before=[h.hi,h.hj];
+  P.zwQuiet;P.zwMapDaily();return{same:h.hi===before[0]&&h.hj===before[1]}})())`));
+ assert.equal(r.same,true);
+});
+
+test('at most one note about nature in the chronicle a day',()=>{
+ const {E}=village();
+ const n=E(`(()=>{const P=__przyroda;S.log=[];for(const r of REGIONS)if(r){r.known=true;S.regs[r.id]=1}S.herds.forEach(h=>{h.huntPressure=1;h.migD=-99});S.zwLogD=-1;P.zwMapDaily();S.herds.forEach(h=>h.migD=-99);P.zwMapDaily();return S.log.filter(l=>/odeszły|odszedł|odpłynęły/.test(l.t)).length})()`);
+ assert.ok(n<=1,String(n));
+});

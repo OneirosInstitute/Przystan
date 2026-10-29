@@ -6,15 +6,27 @@ const path=require('node:path');
 const GiB=2**30;
 
 function parseOptions(arguments_){
- let installMode=false,requestedWorkers;
+ let installMode=false,requestedWorkers,shard;
  for(const option of arguments_){
   if(option==='--install'&&!installMode)installMode=true;
   else if(/^--workers=[12]$/.test(option)&&requestedWorkers===undefined)requestedWorkers=Number(option.at(-1));
+  else if(/^--shard=\d+\/\d+$/.test(option)&&shard===undefined){const [index,count]=option.slice(8).split('/').map(Number);if(count<1||count>32||index<1||index>count)throw new Error('Invalid shard: '+option);shard={index,count}}
   else throw new Error('Unknown test option: '+option);
  }
  if(requestedWorkers!==undefined&&!installMode)throw new Error('--workers requires --install; release tests remain serial');
- return {installMode,requestedWorkers};
+ if(shard&&!installMode)throw new Error('--shard requires --install; release tests remain serial');
+ const options={installMode,requestedWorkers};if(shard)options.shard=shard;return options;
 }
+// 4.9.0-rc.21: podział zestawu na części dla równoległej kontroli w GitHub Actions. Pliki trafiają do części według
+// zmierzonego czasu (tools/test-weights.json, nowe pliki liczą się jako 60 s), od najdłuższego, zawsze do najlżejszej części.
+// Ten sam podział na każdej maszynie: kolejność stała, remisy rozstrzyga nazwa pliku.
+function shardSuites(suites,shard,weights){
+ if(!shard)return suites;const bins=Array.from({length:shard.count},()=>({load:0,files:[]}));
+ const sorted=[...suites].sort((a,b)=>((weights[b]??60)-(weights[a]??60))||(a<b?-1:1));
+ for(const file of sorted){let target=bins[0];for(const bin of bins)if(bin.load<target.load)target=bin;target.load+=weights[file]??60;target.files.push(file)}
+ return bins[shard.index-1].files.sort();
+}
+function suiteWeights(root){try{return JSON.parse(fs.readFileSync(path.join(root,'tools','test-weights.json'),'utf8'))}catch(error){return{}}}
 function resources(){
  let cpus=typeof os.availableParallelism==='function'?os.availableParallelism():os.cpus().length;
  let freeBytes=os.freemem(),totalBytes=os.totalmem();
@@ -81,14 +93,14 @@ function passedCases(filename,result){
  if(!passes.length||!failures.length||Number(failures.at(-1)[1])!==0||Number(passes.at(-1)[1])<1)throw new Error('malformed or incomplete test summary: '+filename);
  return Number(passes.at(-1)[1]);
 }
-async function runTests({root=path.resolve(__dirname,'..'),installMode=false,requestedWorkers,capacity,timeoutForSuite,output={stdout:text=>process.stdout.write(text),stderr:text=>process.stderr.write(text)}}={}){
- const suites=planSuites(root),workers=selectWorkers({installMode,requestedWorkers},capacity);
+async function runTests({root=path.resolve(__dirname,'..'),installMode=false,requestedWorkers,shard,capacity,timeoutForSuite,output={stdout:text=>process.stdout.write(text),stderr:text=>process.stderr.write(text)}}={}){
+ const suites=shardSuites(planSuites(root),shard,suiteWeights(root)),workers=selectWorkers({installMode,requestedWorkers},capacity);
  const options={installMode,workers};let cursor=0,passed=0,completed=0,failure;
  const active=new Set();
  const abort=reason=>{failure??=new Error(reason);for(const job of active)job.cancel(reason)};
  const interrupt=()=>abort('interrupted; no following test suite will start');
  process.once('SIGINT',interrupt);process.once('SIGTERM',interrupt);
- output.stdout('TEST PLAN: '+suites.length+' suites, '+workers+' worker(s), '+(installMode?'install':'full release')+'\n');
+ output.stdout('TEST PLAN: '+suites.length+' suites, '+workers+' worker(s), '+(installMode?'install':'full release')+(shard?', shard '+shard.index+'/'+shard.count:'')+'\n');
  async function worker(){
   while(!failure&&cursor<suites.length){
    const filename=suites[cursor++];
@@ -104,11 +116,11 @@ async function runTests({root=path.resolve(__dirname,'..'),installMode=false,req
  finally{process.removeListener('SIGINT',interrupt);process.removeListener('SIGTERM',interrupt)}
  if(failure)throw failure;
  if(completed!==suites.length)throw new Error('Incomplete test plan');
- output.stdout('TEST GATE PASS: '+completed+' suites, '+passed+' cases\n');
+ output.stdout((shard?'TEST SHARD PASS '+shard.index+'/'+shard.count+': ':'TEST GATE PASS: ')+completed+' suites, '+passed+' cases\n');
  if(installMode)output.stdout('INSTALL MODE: 2 extended 1500-day generation scenarios are release gates; see docs/weryfikacja10/results.json.\n');
  return {suites:completed,cases:passed,workers};
 }
 if(require.main===module){let options;try{options=parseOptions(process.argv.slice(2))}catch(error){console.error('TEST GATE FAILED:',error.message);process.exitCode=1}
  if(options)runTests(options).catch(error=>{console.error('TEST GATE FAILED:',error.message);process.exitCode=1});
 }
-module.exports={parseOptions,selectWorkers,runTests,passedCases};
+module.exports={parseOptions,selectWorkers,runTests,passedCases,shardSuites};
