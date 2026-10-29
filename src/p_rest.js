@@ -848,7 +848,8 @@ function legacyDayCore(){
   herd.huntPressure=Math.max(0,(herd.huntPressure||0)-.045*K);
   // Stada po intensywnych łowach rozmnażają się wolniej, a dłuższy odpoczynek odtwarza populację.
   const habitat=Math.max(.25,1-.75*herd.huntPressure);
-  if(herd.n<herd.max&&sea!==2&&Math.random()<K*(herd.type==='wilk'?.03:.11)*habitat)herd.n++;
+  // 4.9.0-rc.20: młode rodzą się tylko w stadzie (co najmniej dwa zwierzęta); wybite stado wraca z sąsiedztwa (p_przyroda.js)
+  if(herd.n>=2&&herd.n<herd.max&&sea!==2&&Math.random()<K*(herd.type==='wilk'?.03:.11)*habitat)herd.n++;
  });
  // zagrody: mleko, przychówek, opieka, wilki
  S.bld.forEach(b=>{if(b.kind!=='zagroda'||!bDone(b))return;const a=b.animals||0;const cared=(b.care||0)>20;b.care=0;

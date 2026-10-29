@@ -20,6 +20,7 @@ function newDay(){return ResourceFlow.run(S,'economy',()=>{
   SPOIL.mieso=spoilMeat;SPOIL.ryby=spoilFish;
  }
  dailyPhase('hodowla',kozDaily);
+ dailyPhase('przyroda',()=>{if(typeof zwDaily==='function')zwDaily()});
  dailyPhase('serce osady',()=>{scFuelBack(fuelBefore);scDaily();scTick()});
  save();
  },Math.max(0,Math.floor(S.day)-1))}
