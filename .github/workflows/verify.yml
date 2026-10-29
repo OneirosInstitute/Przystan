@@ -1,16 +1,63 @@
 name: Verify game
-on: [push, pull_request]
+# 4.9.0-rc.21: ta sama kontrola co przed wydaniem na telefonie (npm run test:install, symulacja działania, integralność paczki),
+# ale podzielona na 8 równoległych części. Długie scenariusze 1500 dni z epoki IV idą osobno, tylko dla main.
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+concurrency:
+  group: verify-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
-  regression:
+  tests:
+    name: Testy ${{ matrix.shard }}/8
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     strategy:
+      fail-fast: false
       matrix:
-        node: [18, 24]
+        shard: [1, 2, 3, 4, 5, 6, 7, 8]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node }}
+          node-version: 24
+      - run: node tools/check-build.cjs
+      - run: node tools/run-tests-serial.cjs --install --shard=${{ matrix.shard }}/8
+  package:
+    name: Symulacja i paczka
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
       - run: npm run build
-      - run: npm test
+      - name: Zbudowana gra jest identyczna z zapisaną
+        run: git diff --stat --exit-code -- dist
       - run: npm run test:runtime
+      - run: node tools/verify-package.cjs
+  node18:
+    name: Zgodność z Node 18
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - run: npm run build
+      - run: npm run test:runtime
+  generations:
+    name: Długie scenariusze epoki IV
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: npm run build
+      - run: node --test tests/e4-population.test.mjs

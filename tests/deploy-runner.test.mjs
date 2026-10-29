@@ -87,3 +87,16 @@ test('install mode preserves the legacy migration test and full mode retains bot
   const full=await runTests({root,output:quiet});assert.equal(full.cases,4);assert.equal(full.workers,1);assert.equal(await fs.readFile(path.join(root,'extended'),'utf8'),'12');
  }finally{await remove(root)}
 });
+
+test('the release suites split into balanced shards that together run every suite exactly once',()=>{
+ const {shardSuites}=require('../tools/run-tests-serial.cjs');
+ const suites=['a.test.mjs','b.test.mjs','c.test.mjs','d.test.mjs','e.test.mjs','f.test.mjs','g.test.mjs'];
+ const weights={'a.test.mjs':300,'b.test.mjs':200,'c.test.mjs':150,'d.test.mjs':100,'e.test.mjs':90,'f.test.mjs':60};
+ const parts=[1,2,3].map(index=>shardSuites(suites,{index,count:3},weights));
+ assert.deepEqual(parts.flat().sort(),suites);
+ const load=part=>part.reduce((sum,file)=>sum+(weights[file]??60),0);
+ const loads=parts.map(load);assert.ok(Math.max(...loads)-Math.min(...loads)<=150,loads.join(','));
+ assert.deepEqual(shardSuites(suites,{index:2,count:3},weights),parts[1],'the same split on every machine');
+ assert.deepEqual(parseOptions(['--install','--shard=2/8']),{installMode:true,requestedWorkers:undefined,shard:{index:2,count:8}});
+ for(const arguments_ of [['--shard=2/8'],['--install','--shard=0/8'],['--install','--shard=9/8'],['--install','--shard=1/8','--shard=2/8']])assert.throws(()=>parseOptions(arguments_));
+});
