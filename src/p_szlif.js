@@ -91,7 +91,7 @@ function czekamyHTML(){const L=czekamy();if(!L.length)return'';return`<div class
 {const _th=troubleHTML;troubleHTML=function(){return czekamyHTML()+_th()}}
 
 // ---------- Od ostatniego razu ----------
-const SINCE_RX=/urodził|umiera|zmarł|ślub|wesel|Ukończono|Cel osiągnięty|Zaczyna się akt|przysiół|Ktoś ułożył pieśń|Dar dawnego|Ślad dawnego|Nowy poziom|Osada rośnie|Wyprawa .*wraca|Pożar|wyrusza|Rok na wyspie|Prządki|wyrób|Wspomnienie/;
+const SINCE_RX=/urodził|umiera|zmarł|ślub|wesel|Ukończono|Cel osiągnięty|Zaczyna się akt|przysiół|Ktoś ułożył pieśń|Dar dawnego|Ślad dawnego|Nowy poziom|Osada rośnie|Wyprawa .*wraca|Pożar|wyrusza|Rok na wyspie|Prządki|wyrób|Wspomnienie|Próba udana/;
 function sinceLast(fresh){S.sess=S.sess||{};const d0=S.sess.d0,lt=S.sess.lt;S.sess.d0=S.day;if(fresh||d0===undefined)return;
  const kr=(S.kron||[]).filter(x=>x[0]>=Math.floor(d0)+1&&SINCE_RX.test(x[1])&&!/^Wspomnienie/.test(x[1])).slice(-7);const L=czekamy().slice(0,4);const g=goalInfo();
  let ago='';if(lt){const h=(Date.now()-lt)/36e5;ago=h<1?'':h<24?`Ostatnia wizyta: ${Math.round(h)} godz. temu. `:`Ostatnia wizyta: ${Math.round(h/24)} ${dniW(Math.round(h/24))} temu. `}

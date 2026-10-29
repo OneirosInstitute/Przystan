@@ -121,7 +121,7 @@ function badMigrate(){if(!S||!S.tech)return;badS();if(!S.badV){S.badV=1;
  S.focus={};delete S.bank;badWatch()}
 // ---------- widok ----------
 {const st=document.createElement('style');st.textContent=`.tn.b-ready{border-color:var(--gold)}.tn.b-ready .ts{color:var(--gold2)}.tn.b-kol .ts{color:var(--hi)}.tn.b-bada .ts{color:var(--hi)}
-.bad-card .bad-row{margin:6px 0 8px}.bad-card .bad-row p{margin:2px 0}.bad-card .pbar{margin:4px 0}.bad-card button.lnk,.tdet button.lnk{background:none;border:0;padding:2px 0;color:var(--hi);text-decoration:underline;font:inherit;cursor:pointer}
+.bad-card .bad-row{margin:6px 0 8px}.bad-card .bad-row p{margin:2px 0}.bad-card .pbar{margin:4px 0}.bad-card button.lnk,.tdet button.lnk{background:none;border:0;padding:0 2px;min-height:0;height:auto;line-height:inherit;box-shadow:none;color:var(--hi);text-decoration:underline;font:inherit;cursor:pointer}
 .bad-q{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0}.bad-q button{font-size:12px;padding:3px 8px}.tdet .bad-try p{margin:3px 0}.tdet .bad-try .no{color:var(--bad)}`;document.head.appendChild(st)}
 function badRowHTML(b){const t=TECH_BY[b.id],p=pById(b.pid);const pc=Math.round(100*Math.min(1,b.prog/b.need));const left=Math.max(.5,(b.need-b.prog)/BAD_WD);const c=p?badBestCraft(t,p):null;
  return`<div class="bad-row"><p><b style="color:var(--hi)">${t.n}</b> <span class="mut">· ${DOMS.find(d=>d[0]===t.d)[1]}</span></p>
@@ -145,7 +145,7 @@ function badNodeHTML(t){if(!badOn())return'';badS();const bs=badState(t);let h='
   <p>Szansa: ${Math.round(100*badChance(t,p))}%${f?` <span class="mut">(po ${f} ${f===1?'nieudanej':'nieudanych'})</span>`:''}</p>`}
  h+=`<p>Materiały: ${Object.entries(cost).map(([k,v])=>`<span class="${(S.res[k]||0)>=v?'':'no'}">${(RN[k]||k).toLowerCase()} ${v}</span>`).join(', ')}</p>`;
  if(!why)h+=`<button class="pri" data-bstart="${t.id}">Zacznij próbę</button>`;
- else{h+=`<p class="mut">${why}</p>`;if(bs==='kol')h+=`<button data-bunq="${t.id}">Usuń z kolejki</button>`;else if(!/już umie|z samej praktyki|Próba już trwa/.test(why))h+=`<button data-bq="${t.id}">Dodaj do kolejki</button> <span class="mut">zacznie się sama, gdy będzie można</span>`}
+ else{h+=`<p class="mut">${badFeel(t)<1-1e-9&&!/Najpierw trzeba/.test(why)?'Próbę można zacząć, gdy przeczucie będzie pełne.':why}</p>`;if(bs==='kol')h+=`<button data-bunq="${t.id}">Usuń z kolejki</button>`;else if(!/już umie|z samej praktyki|Próba już trwa/.test(why))h+=`<button data-bq="${t.id}">Dodaj do kolejki</button> <span class="mut">zacznie się sama, gdy będzie można</span>`}
  return h+'</div>'}
 // tekst dla podpowiedzi celu („czego brakuje”)
 function badCelTxt(t){const dn=(DOMS.find(d=>d[0]===t.d)||[])[1]||'Wiedza';const bs=badState(t);
