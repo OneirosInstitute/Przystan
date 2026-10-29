@@ -5,6 +5,7 @@ import {createGame} from './runtime.mjs';
 // 4.9.0-rc.22: wiedza pół na pół — przeczucie z pracy w fachu węzła, próba wybierana przez gracza, jedno badanie naraz
 function game(){const runtime=createGame({search:'?seed=2207'});const E=s=>runtime.evaluate(s);runtime.game.startGame(true);
  E("closeSheet();S.evT=1e9;if(evOpen){$('ev').hidden=true;evOpen=null}S.pendingDecision=null;openEvent=function(){}");
+ E('S.people.forEach(p=>delete p.pam);S.tsrc={}');   // W2: pamięć rozbitków losowa — tu sprawdzamy samą mechanikę prób
  const days=n=>{for(let d=0;d<n;d++)for(let i=0;i<40;i++){E('for(let q=0;q<6;q++)step(1)');E("if(evOpen){$('ev').hidden=true;evOpen=null}S.pendingDecision=null;if(typeof rdOpen!=='undefined'&&rdOpen)rdClose()")}};
  return {runtime,E,days}}
 // tropienie z samej praktyki, potem wędzenie gotowe do próby, materiały w składzie

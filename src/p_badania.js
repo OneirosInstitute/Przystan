@@ -47,8 +47,11 @@ const badEpM=t=>tEp(t)===1?1:tEp(t)===2?3:4.5;
 function badPractice(tag,v){if(!badOn()||!(v>0))return;const I=badIdx(),now=epNow();const tags=Array.isArray(tag)?tag:[tag];const hit=new Set();
  for(const g of tags){const L=I[g];if(!L)continue;for(const t of L){if(hit.has(t)||S.tech[t.id]||tEp(t)>now||!t.req.every(r=>tech(r)))continue;hit.add(t);
   const cap=tHalf(t),cur=S.tp[t.id]||0;if(cur>=cap)continue;S.tp[t.id]=Math.min(cap,cur+v*badEpM(t));
-  if(S.tp[t.id]>=cap-1e-9){if(tRoot(t)){if(!t.gate||t.gate())techDone(t)}else badReadyNote(t)}}}}
+  if(S.tp[t.id]>=cap-1e-9&&tRoot(t)){if(!t.gate||t.gate())techDone(t)}else if(!tRoot(t)&&badFeel(t)>=badFeelNeed(t)-1e-9)badReadyNote(t)}}}
 const badFeel=t=>Math.min(1,(S.tp[t.id]||0)/tHalf(t));
+// W2: źródło (pamięć rozbitka, ślad, przysiółek, przypadek) zastępuje połowę praktyki
+const badFeelNeed=t=>typeof zrSrc==='function'&&zrSrc(t).length?.5:1;
+const badFeelOk=t=>badFeel(t)>=badFeelNeed(t)-1e-9;
 function badTagTxt(t){const P=TPRAC[t.id]||[];return P.map(g=>CN[g]?CN[g].toLowerCase():BAD_TAG[g]).filter(Boolean).join(', ')}
 function badReadyNote(t){badS();if(S.tnote[t.id])return;S.tnote[t.id]=1;const dn=DOMS.find(d=>d[0]===t.d)[1];
  log(`Przeczucie: ${t.n.toLowerCase()}. Ludzie wiedzą już, od czego zacząć. Można spróbować (Wiedza → ${dn}).`)}
@@ -57,32 +60,36 @@ const badCrafts=t=>t.d==='nauka'?[]:(TPRAC[t.id]||[]).filter(g=>CN[g]);
 const badSage=p=>(p.trait==='Nauczyciel'?3:0)+(p.age>=50?2:p.age>=35?1:0)+(p.trait==='Dociekliwy'?1:0);
 const badSkill=(t,p)=>{const C=badCrafts(t);return C.length?Math.max(...C.map(c=>p.sk[c]||0)):badSage(p)};
 const badBestCraft=(t,p)=>{const C=badCrafts(t);return C.slice().sort((a,b)=>(p.sk[b]||0)-(p.sk[a]||0))[0]};
+// kto pamięta z domu (W2), może poprowadzić próbę nawet bez biegłości w fachu
+const badRem=(t,p)=>!!(p&&p.pam&&p.pam.includes(t.id));
 function badWho(t){badS();const busy=new Set(S.bad.map(b=>b.pid));const C=badCrafts(t);
- return S.people.filter(p=>p.age>=16&&isWorker(p)&&p.job!=='wyp'&&p.state!=='away'&&!p.exp&&!busy.has(p.id)&&p.hp>.35&&(!C.length||C.some(c=>(p.sk[c]||0)>=2)))
-  .sort((a,b)=>badSkill(t,b)-badSkill(t,a)||((a.job==='rob')?0:1)-((b.job==='rob')?0:1)||a.id-b.id)}
+ return S.people.filter(p=>p.age>=16&&isWorker(p)&&p.job!=='wyp'&&p.state!=='away'&&!p.exp&&!busy.has(p.id)&&p.hp>.35&&(!C.length||badRem(t,p)||C.some(c=>(p.sk[c]||0)>=2)))
+  .sort((a,b)=>badRem(t,b)-badRem(t,a)||badSkill(t,b)-badSkill(t,a)||((a.job==='rob')?0:1)-((b.job==='rob')?0:1)||a.id-b.id)}
 function badPick(t){const L=badWho(t);const want=S.bsel&&S.bsel[t.id];return L.find(p=>p.id===want)||L[0]||null}
-function badChance(t,p){const f=S.tfail[t.id]||0;let c=t.d==='nauka'?.5+.06*badSage(p):.5+.15*(badSkill(t,p)-2);
+function badChance(t,p){const f=S.tfail[t.id]||0;let c=t.d==='nauka'?.5+.06*badSage(p):.5+.15*(Math.max(badSkill(t,p),badRem(t,p)?2:0)-2);
+ c+=(typeof zrSrc==='function'&&zrSrc(t).length?.15:0)+(badRem(t,p)?.1:0);
  c+=.2*f+(p.trait==='Uparty'?.08:0)+(p.trait==='Dociekliwy'&&t.d!=='nauka'?.05:0)+(tech('n_kron')&&t.d!=='nauka'?.03:0);return clamp(c,.1,.95)}
 function badDays(t){const e=tEp(t);let d=e===1?(t.r<=1?2:t.r===2?3:4):e===2?(t.r<=4?3:4):(t.r<=6?5:6);return d}
 const badNeed=t=>badDays(t)*BAD_WD*(tech('n_szk')?.9:1)*(tech('n_szkola')?.85:1);
-const badCost=t=>TCOST[t.id]||{drewno:6};
+// źródło z zewnątrz (ślad, przysiółek) albo prowadzący, który pamięta to z domu: połowa materiałów
+function badCost(t,p){const c=TCOST[t.id]||{drewno:6};const half=badRem(t,p)||(S.tsrc&&S.tsrc[t.id]);if(!half)return c;const o={};for(const k in c)o[k]=Math.max(1,Math.ceil(c[k]/2));return o}
 const badCostTxt=c=>Object.entries(c).map(([k,v])=>`${(RN[k]||k).toLowerCase()} ${v}`).join(', ');
 function badMiss(c){return Object.entries(c).filter(([k,v])=>(S.res[k]||0)<v).map(([k,v])=>`${(RN[k]||k).toLowerCase()} ${Math.ceil(v-(S.res[k]||0))}`)}
 // stan węzła z punktu widzenia nauki: z praktyki, przeczucie, gotowy do próby, w kolejce, w próbie
-function badState(t){if(!badOn())return'';badS();if(S.bad.some(b=>b.id===t.id))return'bada';if(tRoot(t))return'root';if(badFeel(t)>=1-1e-9)return S.bq.includes(t.id)?'kol':'ready';return S.bq.includes(t.id)?'kol':'czuje'}
+function badState(t){if(!badOn())return'';badS();if(S.bad.some(b=>b.id===t.id))return'bada';if(tRoot(t))return'root';if(badFeelOk(t))return S.bq.includes(t.id)?'kol':'ready';return S.bq.includes(t.id)?'kol':'czuje'}
 function badProg(t){const b=(S.bad||[]).find(x=>x.id===t.id);return b?Math.min(1,b.prog/b.need):0}
 // czy można zacząć: powód odmowy albo pusty tekst
 function badWhy(t,p){if(!badOn())return'W tej epoce wiedza rodzi się inaczej.';if(S.tech[t.id])return'Osada to już umie.';if(t.sync)return'To poznaje się inaczej (księga albo dawna próba).';
  if(tEp(t)>epNow())return`Przyjdzie z epoką: ${EP_N[tEp(t)]}.`;if(!t.req.every(r=>tech(r)))return'Najpierw trzeba poznać to, co wyżej.';if(tRoot(t))return'To przyjdzie z samej praktyki.';
  if((S.bad||[]).some(b=>b.id===t.id))return'Próba już trwa.';if(t.gate&&!t.gate())return t.gt();
- if(badFeel(t)<1-1e-9)return`Najpierw przeczucie z pracy (${Math.round(100*badFeel(t))}%): ${badTagTxt(t)}.`;
+ if(!badFeelOk(t))return`Najpierw przeczucie z pracy (${Math.round(100*badFeel(t))}%${badFeelNeed(t)<1?', wystarczy 50%':''}): ${badTagTxt(t)}.`;
  if(!p)return badCrafts(t).length?`Nikt nie umie dość: potrzebny ${badCrafts(t).map(c=>CN[c].toLowerCase()).join(' albo ')} z biegłością 2.`:'Nie ma kogo posadzić do nauki: wszyscy dorośli są zajęci albo chorzy.';
- const m=badMiss(badCost(t));if(m.length)return'Brakuje: '+m.join(', ')+'.';if(badUsed()>=badSlots())return badFullTxt();return''}
+ const m=badMiss(badCost(t,p));if(m.length)return'Brakuje: '+m.join(', ')+'.';if(badUsed()>=badSlots())return badFullTxt();return''}
 function badStart(id,pid){const t=TECH_BY[id];if(!t)return'Nie ma takiej wiedzy.';badS();if(pid!==undefined)S.bsel[id]=pid;const p=badPick(t);const why=badWhy(t,p);if(why)return why;
- const cost=badCost(t);Object.entries(cost).forEach(([k,v])=>S.res[k]-=v);const ch=badChance(t,p),need=badNeed(t);
+ const cost=badCost(t,p);Object.entries(cost).forEach(([k,v])=>S.res[k]-=v);const ch=badChance(t,p),need=badNeed(t);
  p.badPrev={job:p.job||'rob',wb:p.wb??null};if(p.state==='work'||p.state==='move'){release(p);p.path=null}if(p.state!=='sleep')p.state='idle';p.wait=0;p.job='bad';p.wb=null;
  S.bad.push({id,pid:p.id,pn:p.name,prog:0,need,ch,cost,d0:S.day});S.bq=S.bq.filter(x=>x!==id);const c=badBestCraft(t,p);const d=badDays(t);
- log(`Zaczyna się próba: ${t.n.toLowerCase()}. Prowadzi ją ${p.name}${c?` (${CN[c].toLowerCase()} ${p.sk[c]})`:''}, potrwa ok. ${d} ${dniW(d)}.`);toast('Próba: '+t.n);assign();if(tab==='wiedza')renderPanel();return''}
+ log(`Zaczyna się próba: ${t.n.toLowerCase()}. Prowadzi ją ${p.name}${badRem(t,p)?`, ${gw(p,'który','która')} pamięta to z domu`:c?` (${CN[c].toLowerCase()} ${p.sk[c]})`:''}, potrwa ok. ${d} ${dniW(d)}.`);toast('Próba: '+t.n);assign();if(tab==='wiedza')renderPanel();return''}
 // osoba wraca do dawnej pracy, jeśli ta jeszcze istnieje
 function badRelease(b){const p=pById(b.pid);if(!p||p.job!=='bad')return;const pr=p.badPrev||{job:'rob',wb:null};p.badPrev=null;
  if(pr.job==='wb'&&pr.wb!=null&&bById(pr.wb)&&bDone(bById(pr.wb))){p.job='wb';p.wb=pr.wb}else{p.job=['zwiad','zdun','czyt'].includes(pr.job)?pr.job:'rob';p.wb=null}
@@ -139,20 +146,21 @@ function badPanelHTML(){if(!badOn())return'';badS();const used=badUsed(),slots=b
 function badNodeHTML(t){if(!badOn())return'';badS();const bs=badState(t);let h='';
  if(bs==='root'){const pc=Math.round(100*badFeel(t));return`<div class="pbar"><div style="width:${pc}%"></div></div><p class="mut">${pc}% · przyjdzie z samej praktyki: ${badTagTxt(t)}.</p>`}
  if(bs==='bada'){const b=S.bad.find(x=>x.id===t.id);return badRowHTML(b)}
- const pc=Math.round(100*badFeel(t));h+=`<p class="mut" style="margin-bottom:2px">Przeczucie z pracy: ${pc}%${pc<100?` · rośnie z: ${badTagTxt(t)}`:' · ludzie wiedzą, od czego zacząć'}.</p><div class="pbar"><div style="width:${pc}%"></div></div>`;
- const p=badPick(t),why=badWhy(t,p),cost=badCost(t),miss=badMiss(cost),L=badWho(t);const f=S.tfail[t.id]||0;
+ const pc=Math.round(100*badFeel(t)),ok=badFeelOk(t);h+=`<p class="mut" style="margin-bottom:2px">Przeczucie z pracy: ${pc}%${!ok?` · rośnie z: ${badTagTxt(t)}`:' · ludzie wiedzą, od czego zacząć'}.</p><div class="pbar"><div style="width:${pc}%"></div></div>`;
+ if(typeof zrSrcHTML==='function')h+=zrSrcHTML(t);
+ const p=badPick(t),why=badWhy(t,p),cost=badCost(t,p),L=badWho(t);const f=S.tfail[t.id]||0;
  h+=`<div class="bad-try"><p><b style="color:var(--gold2)">Próba:</b> ${badDays(t)} ${dniW(badDays(t))} pracy jednej osoby.</p>`;
- if(p){const c=badBestCraft(t,p);h+=`<p>Kto: ${p.name}${c?` (${CN[c].toLowerCase()} ${p.sk[c]})`:` (${Math.floor(p.age)} l.)`}${L.length>1?` <button class="lnk" data-bwho="${t.id}">ktoś inny</button>`:''}</p>
+ if(p){const c=badBestCraft(t,p);h+=`<p>Kto: ${p.name}${badRem(t,p)?`, ${gw(p,'pamięta','pamięta')} to z domu`:c?` (${CN[c].toLowerCase()} ${p.sk[c]})`:` (${Math.floor(p.age)} l.)`}${L.length>1?` <button class="lnk" data-bwho="${t.id}">ktoś inny</button>`:''}</p>
   <p>Szansa: ${Math.round(100*badChance(t,p))}%${f?` <span class="mut">(po ${f} ${f===1?'nieudanej':'nieudanych'})</span>`:''}</p>`}
  h+=`<p>Materiały: ${Object.entries(cost).map(([k,v])=>`<span class="${(S.res[k]||0)>=v?'':'no'}">${(RN[k]||k).toLowerCase()} ${v}</span>`).join(', ')}</p>`;
  if(!why)h+=`<button class="pri" data-bstart="${t.id}">Zacznij próbę</button>`;
- else{h+=`<p class="mut">${badFeel(t)<1-1e-9&&!/Najpierw trzeba/.test(why)?'Próbę można zacząć, gdy przeczucie będzie pełne.':why}</p>`;if(bs==='kol')h+=`<button data-bunq="${t.id}">Usuń z kolejki</button>`;else if(!/już umie|z samej praktyki|Próba już trwa/.test(why))h+=`<button data-bq="${t.id}">Dodaj do kolejki</button> <span class="mut">zacznie się sama, gdy będzie można</span>`}
+ else{h+=`<p class="mut">${!ok&&!/Najpierw trzeba/.test(why)?(badFeelNeed(t)<1?'Dzięki źródłu wystarczy połowa przeczucia.':'Próbę można zacząć, gdy przeczucie będzie pełne.'):why}</p>`;if(bs==='kol')h+=`<button data-bunq="${t.id}">Usuń z kolejki</button>`;else if(!/już umie|z samej praktyki|Próba już trwa/.test(why))h+=`<button data-bq="${t.id}">Dodaj do kolejki</button> <span class="mut">zacznie się sama, gdy będzie można</span>`}
  return h+'</div>'}
 // tekst dla podpowiedzi celu („czego brakuje”)
 function badCelTxt(t){const dn=(DOMS.find(d=>d[0]===t.d)||[])[1]||'Wiedza';const bs=badState(t);
  if(bs==='bada')return`trwa próba: ${t.n.toLowerCase()} (${Math.round(100*badProg(t))}%)`;
  if(bs==='root')return`najpierw wiedza „${t.n}” (Wiedza → ${dn}): ${Math.round(100*badFeel(t))}%, przyjdzie z samej pracy`;
- if(badFeel(t)<1-1e-9)return`najpierw wiedza „${t.n}” (Wiedza → ${dn}): przeczucie ${Math.round(100*badFeel(t))}% z pracy (${badTagTxt(t)}), potem próba`;
+ if(!badFeelOk(t))return`najpierw wiedza „${t.n}” (Wiedza → ${dn}): przeczucie ${Math.round(100*badFeel(t))}% z pracy (${badTagTxt(t)}), potem próba`;
  return`najpierw próba: ${t.n.toLowerCase()} (Wiedza → ${dn})`}
 $('body').addEventListener('click',e=>{const t=e.target.closest('button');if(!t||!S)return;const d=t.dataset;
  if(d.bstart){const why=badStart(d.bstart);if(why)toast(why)}
