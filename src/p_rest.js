@@ -545,7 +545,7 @@ function seasonYield(kind){const s=seasonIdx();if(kind==='bush')return[1,.6,0,.7
 function lvUp(p,c,lv){log(p.name+' awansuje: '+CN[c]+' '+lv+'.')}
 function gainXp(p,c,dt){let m=1;p.mentor=null;p.worked=1;
  for(const q of S.people){if(q!==p&&q.wb===p.wb&&q.job===p.job&&isAdult(q)&&q.state==='work'&&q.hp>.5&&Math.hypot(q.x-p.x,q.z-p.z)<=3&&q.sk[c]>p.sk[c]&&q.sk[c]>=2&&(!p.mentor||q.sk[c]>p.mentor.sk[c]))p.mentor=q}
- if(p.mentor)m=(p.mentor.trait==='Nauczyciel'?2.6:2)*(tech('n_kron')?1.25:1)*(tech('n_szkola')?1.5:1);if(law('npracy'))m*=1.2;if(p.trait==='Dociekliwy')m*=1.25;if(S.offCraft===c&&offHolder('mistrz')&&offHolder('mistrz')!==p)m*=1.25;techXp(DOMC[c],dt*.09);
+ if(p.mentor)m=(p.mentor.trait==='Nauczyciel'?2.6:2)*(tech('n_kron')?1.25:1)*(tech('n_szkola')?1.5:1);if(law('npracy'))m*=1.2;if(p.trait==='Dociekliwy')m*=1.25;if(S.offCraft===c&&offHolder('mistrz')&&offHolder('mistrz')!==p)m*=1.25;techXp(DOMC[c],dt*.09,c);
  const Lv=p.sk[c];const masterOf=Object.keys(CN).filter(q=>p.sk[q]>=3).length;if(Lv===2&&masterOf>=3){p.xp[c]=Math.min(p.xp[c]+dt*m,LVL[2]-1);if(!p.capLog){p.capLog=1;log(p.name+' jest '+gw(p,'mistrzem','mistrzynią')+' w trzech fachach. Na czwarty nie starczy już życia.')}return}
  p.xp[c]+=dt*m;if(Lv<5&&p.xp[c]>=LVL[Lv]){p.sk[c]=Lv+1;lvUp(p,c,Lv+1);
   if(p.mentor&&p.mentor.sk[c]>=Lv+1&&Lv+1>=2&&(S.bonus[c]||0)<.3&&Math.random()<.2){S.bonus[c]=(S.bonus[c]||0)+.06;log(p.name+' wpada na ulepszenie w fachu '+CN[c]+'. Wszyscy pracują tym szybciej.');toast('Pomysł ucznia: '+CN[c]+' idzie sprawniej')}}}
@@ -661,7 +661,7 @@ function onArrive(p){const a=p.after;p.after=null;p.wt=0;
  if(a==='work'||a==='build'||a==='wreck'||a==='zdun'||a==='prod'||a==='plant'||a==='care'||a==='field'||a==='read'){p.state='work';p.workKind=a}
  else if(a==='tame'){const h=S.herds[p.herd];if(h&&h.n>0&&Math.hypot(h.x-p.x,h.z-p.z)<4.5){p.state='work';p.workKind='tame'}else{p.state='idle';p.wait=.5}}
  else if(a==='hunt'){const h=S.herds[p.herd];if(h&&h.n>0&&Math.hypot(h.x-p.x,h.z-p.z)<4.5){p.state='work';p.workKind='hunt'}else{p.state='idle';p.wait=.5}}
- else if(a==='scout'){const[i,j]=tileOf(p.x,p.z);reveal(i,j,6);techXp('nauka',.5);p.state='idle';p.wait=4;p.act='rozgląda się'}
+ else if(a==='scout'){const[i,j]=tileOf(p.x,p.z);reveal(i,j,6);techXp('nauka',.5,'zwiad');p.state='idle';p.wait=4;p.act='rozgląda się'}
  else if(a==='deposit'){deposit(p);p.state='idle';p.wait=.4;p.act='odpoczywa'}
  else if(a==='sleep'){p.state='sleep';p.act='śpi'}
  else if(a==='away'){p.state='away';p.act='na wyprawie';const expedition=S.exps.find(candidate=>candidate.id===p.exp);if(expedition)expedition.started=true;}
@@ -719,7 +719,7 @@ function stepPerson(p,dt){
    else if(f.st==='rosnie'){f.q=Math.min(1,f.q+dt*e*.004);f.weed=Math.max(0,(f.weed||0)-dt*e*.003);if(p.wt>=12){p.state='idle';p.wait=.5}}
    else if(f.st==='dojrzale'){if(p.wt>=6){p.wt=0;const q=Math.min(6,f.left);f.left-=q;if(f.left<=0){f.st='puste';S.seen.harvest=1;adaptHarvest();f.fert=Math.max(.3,f.fert-(typeof fertLoss==='function'?fertLoss(f):(tech('u_odlog')?.06:.12)));f.g=0;if(typeof fieldDone==='function')fieldDone(b);else log('Żniwa skończone. Gleba na tym polu jest trochę bardziej zmęczona.');fieldVis(b)}if(q>0)finishTrip(p,[{res:'ziarno',q}]);else p.state='idle'}}
    return}
-  if(k==='read'){const bk=p.book;if(!bk||S.books[bk]!==1){p.state='idle';return}S.readP[bk]=(S.readP[bk]||0)+dt*e*(p.trait==='Dociekliwy'?1.3:1)*(p.age<20?1.1:1);techXp('nauka',dt*.08);p.act='czyta: '+BOOKS[bk];
+  if(k==='read'){const bk=p.book;if(!bk||S.books[bk]!==1){p.state='idle';return}S.readP[bk]=(S.readP[bk]||0)+dt*e*(p.trait==='Dociekliwy'?1.3:1)*(p.age<20?1.1:1);techXp('nauka',dt*.08,'czytanie');p.act='czyta: '+BOOKS[bk];
    if(S.readP[bk]>=200){S.books[bk]=2;log(p.name+' kończy czytać „'+BOOKS[bk]+'”.'+(bk==='kowal'?' Można spróbować postawić kuźnię (zakładka Wiedza).':bk==='siew'?' Wiemy, jak założyć pole.':''));toast('Przeczytano: '+BOOKS[bk]);if(bk==='siew')S.know.pole='tak';p.state='idle'}return}
   if(k==='plant'){const n=p.tgt;if(!n||n.amt>0||n.grow>0){release(p);p.state='idle';return}p.wt+=dt*e;gainXp(p,'drwal',dt*.5);if(p.wt>=5){n.grow=.03;S.grow[n.id]=n.grow;nodeVis(n);release(p);p.state='idle';p.wait=.3}return}
   if(k==='gasic'){const b=p.tgt;if(!b||!b.fire){p.fireB=null;p.state='idle';p.wait=.3;return}b.fire.s-=dt*.011*e*(wellCount()?1:.35)*(law('straz')?1.4:1);p.dir=(p.dir||0)+Math.sin(clock*3)*.02;return}
@@ -735,7 +735,7 @@ function stepPerson(p,dt){
     if(x.startsWith('ks_')){part.items[x]=0;const bk=x.slice(3);S.books[bk]=1;log(p.name+' wynosi z wraku księgę: „'+BOOKS[bk]+'”. Trzeba ją przeczytać (Ludzie → Praca, czytelnicy).');toast('Znaleziono księgę: '+BOOKS[bk]);p.state='idle';return}
     const q=Math.min({narz:2,gwozdzie:8,deski:3,plotno:1,wlokna:3,ziarno:5,odziez:2,skory:2,suchary:8}[x]||2,part.items[x]);part.items[x]-=q;
     if(!wreckLeft()&&W.parts.every(x=>x.open))log('Wrak rozebrany do ostatniej deski. Teraz wszystko trzeba zrobić samemu.');finishTrip(p,[{res:x,q}])}return}
-  if(k==='zdun'){const kn=S.know;if(!kn.active){p.state='idle';return}const T=TRIAL[kn.active];gainXp(p,T.c,dt);techXp('nauka',dt*.04);kn[kn.active+'_p']+=dt*e*craftEff(p,T.c);
+  if(k==='zdun'){const kn=S.know;if(!kn.active){p.state='idle';return}const T=TRIAL[kn.active];gainXp(p,T.c,dt);techXp('nauka',dt*.04,'proba');kn[kn.active+'_p']+=dt*e*craftEff(p,T.c);
    if(kn[kn.active+'_p']>=T.need)finishTrial(p);return}
   if(k==='prod'){const b=p.tgt;if(!b||!bById(b.id)){p.state='idle';return}const d=BD[b.kind];const list=[].concat(d.prod);const has=pr=>Object.entries(pr.in).every(([r,v])=>(S.res[r]||0)>=v);
    const pr=list.find(x=>productionPolicy(b,x).mode==='ready');
@@ -833,7 +833,7 @@ function legacyDayCore(){
  bldDaily();wearDaily();lawDaily();slavDaily();disDaily();reqTick();fireRoll();
  {const lv=offLv('zielarz');if(lv)S.people.forEach(p=>{if(p.hp<.9)p.hp=Math.min(1,p.hp+.004*lv*K*(tech('u_ziel')?1.5:1))})}
  familyLife();ludDaily();urzDaily();pamDaily();actDaily();
- techXp('nauka',K*S.people.filter(p=>isAdult(p)&&(p.trait==='Nauczyciel'||p.age>55)).reduce((a,p)=>a+(p.trait==='Nauczyciel'?.7:.25),0));techTick();
+ techXp('nauka',K*S.people.filter(p=>isAdult(p)&&(p.trait==='Nauczyciel'||p.age>55)).reduce((a,p)=>a+(p.trait==='Nauczyciel'?.7:.25),0),'nauczanie');techTick();
  const t=tierOf();if(t>S.tier){S.tier=t;log('Osada rośnie: teraz to '+TIERS[t][0].toLowerCase()+'.');toast('Nowy poziom: '+TIERS[t][0])}
  const housed=S.people.length?S.people.filter(p=>homeOf(p)).length/S.people.length:0;
  const tgt=.22+.25*Math.min(1,S.fedR)+.18*S.warm+.13*housed+.09*Math.min(1,(S.variety-1)/4)+.05*S.tier+.006*S.people.filter(p=>p.trait==='Pogodny').length-.2*(S.dis||0)+(law('wspolne')?.04:0)+(law('opowiesci')?.04:0)+(law('nauka')?.02:0)-(law('pomoc')?.04:0)+(law('u_wspolne')?.04:0)-(law('z_oszcz')?.03:0)+(hasB('cmentarz')?.02:0)+Math.min(.05,.01*anyExt('ganek'))+(hasB('laznia')&&S.bathOk?.03:0)+(wspOn()?.03:0)+slavHope();S.hope=clamp(S.hope+(tgt-S.hope)*.3,.05,1);
@@ -909,7 +909,7 @@ function fogPass(force){
  else{if(!revDirty)return;revDirty=false;let i0=VW,j0=VW,i1=-1,j1=-1;for(const k of revNew){const i=k%N,j=(k/N)|0;if(i<i0)i0=i;if(i>i1)i1=i;if(j<j0)j0=j;if(j>j1)j1=j}applyFog(i1<0?null:[i0-1,j0-1,i1+2,j1+2]);const list=revNew.splice(0);decoSeason();
   for(const k of list){const ns=tileNodes.get(k);if(ns)ns.forEach(nodeSet);const ds=tileDeco.get(k);if(ds)ds.forEach(([t,i])=>setDeco(t,i))}
   nodeMeshes.concat(decoMeshes).forEach(m=>{m.instanceMatrix.needsUpdate=true;if(m.instanceColor)m.instanceColor.needsUpdate=true})}
- if(S)tribe.forEach(t=>{const seen=revAt(t.i,t.j);if(t.m)t.m.visible=seen;if(seen&&!S.found.includes(t.k)){S.found.push(t.k);techXp('nauka',25);log('Ślad dawnego ludu: '+TRIBE[t.k][0].toLowerCase()+'. '+TRIBE[t.k][1]);toast('Odkryto: '+TRIBE[t.k][0])}})}
+ if(S)tribe.forEach(t=>{const seen=revAt(t.i,t.j);if(t.m)t.m.visible=seen;if(seen&&!S.found.includes(t.k)){S.found.push(t.k);techXp('nauka',25,'odkrycie');log('Ślad dawnego ludu: '+TRIBE[t.k][0].toLowerCase()+'. '+TRIBE[t.k][1]);toast('Odkryto: '+TRIBE[t.k][0])}})}
 
 /* ================= budowanie ================= */
 let placing=null,ghost=null,ghostTile=null;
@@ -1107,7 +1107,7 @@ function onPanelClick(e){const t=e.target.closest('button,[data-p],[data-rg]');i
  else if(t.dataset.al)setAlloc(t.dataset.al,+t.dataset.d);
  else if(t.dataset.b)startPlace(t.dataset.b);
  else if(t.dataset.wt!==undefined){const i=+t.dataset.wt;S.wreck.target=S.wreck.target===i?-1:i;renderPanel()}
- else if(t.dataset.try){const k=S.know,id=t.dataset.try;const cost=TRIAL[id].cost;if(k.active){toast('Trwa już inna próba');return}
+ else if(t.dataset.try){const k=S.know,id=t.dataset.try;const cost=TRIAL[id].cost;if(k.active){toast('Trwa już inna próba');return}if(typeof badUsed==='function'&&badUsed()>=badSlots()){toast(badFullTxt());return}
   if(!canAfford(cost)){toast('Brakuje materiałów na próbę');return}
   if(!S.people.some(p=>p.job==='zdun')){if(freeCount()>0){S.alloc.zdun=Math.max(1,S.alloc.zdun);assign();toast('Przydzielono zduna (Ludzie → Praca)')}else{toast('Przydziel zduna w Ludzie → Praca');return}}
   Object.entries(cost).forEach(([a,b])=>S.res[a]-=b);k.active=id;k[id+'_p']=0;log('Zaczyna się próba: '+TRIAL[id].n.toLowerCase()+'.');assign();renderPanel()}
@@ -1123,8 +1123,7 @@ function onPanelClick(e){const t=e.target.closest('button,[data-p],[data-rg]');i
  else if(t.dataset.dom){techDom=t.dataset.dom;techSel=null;renderPanel()}
  else if(t.dataset.tn){techSel=t.dataset.tn;renderPanel()}
  else if(t.dataset.tall){techAll=t.dataset.tall==='1';renderPanel()}
- else if(t.dataset.focus){const tt=TECH_BY[t.dataset.focus];S.focus[tt.d]=tt.id;toast('Osada skupia się na: '+tt.n);renderPanel()}
- else if(t.dataset.p){const id=+t.dataset.p;select(id);follow=true;if(innerWidth<=760)closeSheet()}
+  else if(t.dataset.p){const id=+t.dataset.p;select(id);follow=true;if(innerWidth<=760)closeSheet()}
  else if(t.dataset.x==='close')select(null)}
 $('body').addEventListener('click',onPanelClick);
 $('body').addEventListener('change',e=>{const t=e.target;if(t.dataset&&t.dataset.off)setOffice(t.dataset.off,t.value)});

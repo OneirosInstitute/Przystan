@@ -43,7 +43,7 @@ let regT=0;
 function regionScan(quiet){if(!S)return;S.regs=S.regs||{};atlasScan(quiet);const cnt=new Array(REGIONS.length).fill(0);
  for(let k=0;k<N*N;k++){const r=REGION[k];if(r>=0&&rev[k])cnt[r]++}
  REGIONS.forEach(r=>{if(!r)return;r.seen=cnt[r.id]/r.n;const was=!!S.regs[r.id];if(!was&&r.seen>=.22){S.regs[r.id]=1;
-   if(!quiet){techXp('nauka',8);log('Zwiadowcy nazwali nowe miejsce: '+r.name+'.');toast('Nowe miejsce: '+r.name);S.hope=clamp(S.hope+.01,0,1)}}
+   if(!quiet){techXp('nauka',8,'zwiad');log('Zwiadowcy nazwali nowe miejsce: '+r.name+'.');toast('Nowe miejsce: '+r.name);S.hope=clamp(S.hope+.01,0,1)}}
   r.known=!!S.regs[r.id];
   const ex=S.exps&&S.exps.some(e=>e.r===r.id);const h=r.known?`<i>${ex?'⚑':r.type==='high'?'▲':r.type==='coast'?'≈':r.type==='forest'?'♣':'·'}</i><span>${r.name}</span>`:`<i>${ex?'⚑':'?'}</i><span>Nieznany teren</span>`;
   if(r.el._h!==h){r.el._h=h;r.el.innerHTML=h;r.el.classList.toggle('known',r.known);r.el.classList.toggle('unk',!r.known);r.el.style.pointerEvents=r.known?'auto':'none';r.el.style.cursor='pointer'}})}

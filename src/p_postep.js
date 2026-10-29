@@ -1,6 +1,6 @@
 
 /* ================= 4.7.0 Drzewo postępu w każdej epoce i nowe rozbudowy ================= */
-// Każda epoka dokłada w każdej dziedzinie trzy umiejętności. Doświadczenie dalej bierze się z pracy ludzi (techXp),
+// Każda epoka dokłada w każdej dziedzinie trzy umiejętności. Przeczucie bierze się z pracy ludzi w fachu węzła (techXp, p_badania.js),
 // więc nowe węzły pojawiają się dopiero wtedy, gdy osada dojdzie do epoki. Część z nich otwiera rozbudowy budynków.
 // Epoka IV ma własne nauki rodów (p_e4_nauki.js), bo tam gospodarka liczy się inaczej.
 const EP2=()=>epNow()>=2,EP3=()=>epNow()>=3;
@@ -15,7 +15,7 @@ const EP2=()=>epNow()>=2,EP3=()=>epNow()>=3;
  {id:'r_czeladz',d:'rzemioslo',ep:2,r:4,c:0,n:'Czeladnicy',xp:450,req:['r_stal'],desc:'Mistrz ma przy sobie dwóch czeladników, a warsztat rośnie razem z nimi.',eff:'Budynki z pracownikami mają jedno miejsce na rozbudowę więcej.'},
  {id:'r_kolo',d:'rzemioslo',ep:2,r:4,c:2,n:'Koło garncarskie',xp:450,req:['r_garn'],desc:'Koło kręcone stopą: naczynie rośnie w rękach w kilka chwil.',eff:'Garncarnia, piec do cegły, glinianki i gliniaki pracują o 25% szybciej. Przy garncarni: rozbudowa „Półki do suszenia”.'},
  {id:'r_gont',d:'rzemioslo',ep:2,r:5,c:1,n:'Gont i więźba',xp:650,req:['r_czeladz','r_zrab'],desc:'Dach z łupanego gontu na krokwiach, które nie siadają.',eff:'Budynki zużywają się o 30% wolniej. Przy składzie: rozbudowa „Strych” (miejsce na 200 więcej).'},
- {id:'n_rach',d:'nauka',ep:2,r:4,c:0,n:'Rachunek na karbach',xp:450,req:['n_pamiec'],desc:'Karby na kijach liczą zboże, długi i dni pracy.',eff:'Każda dziedzina zbiera o 10% więcej doświadczenia.'},
+ {id:'n_rach',d:'nauka',ep:2,r:4,c:0,n:'Rachunek na karbach',xp:450,req:['n_pamiec'],desc:'Karby na kijach liczą zboże, długi i dni pracy.',eff:'Przeczucie z pracy rośnie o 10% szybciej.'},
  {id:'n_leki',d:'nauka',ep:2,r:4,c:2,n:'Lecznictwo',xp:450,req:['n_opat'],desc:'Napary, okłady i spokój. Zielarka wie, kogo położyć, a kogo wysłać do pracy.',eff:'Zimowe choroby są o 30% łagodniejsze, a chata zielarki leczy o połowę szybciej. Przy niej: rozbudowa „Suszarnia ziół”.'},
  {id:'n_miern',d:'nauka',ep:2,r:5,c:1,n:'Miernictwo',xp:650,req:['n_rach'],desc:'Sznur z węzłami co sążeń i tyczki z kory pokazują, którędy poprowadzić drogę.',eff:'Drogi do przysiółków kosztują o 30% mniej i powstają o ćwierć szybciej.'},
  // ---------- EPOKA III · CAŁA WYSPA ----------
@@ -28,7 +28,7 @@ const EP2=()=>epNow()>=2,EP3=()=>epNow()>=3;
  {id:'r_kute',d:'rzemioslo',ep:3,r:6,c:0,n:'Okucia wozów',xp:750,req:['r_woz','r_czeladz'],desc:'Żelazna obręcz na kole, a oś w tulei.',eff:'Warsztat robi wozy o 30% szybciej.'},
  {id:'r_kolowrot',d:'rzemioslo',ep:3,r:6,c:2,n:'Kołowrót i bloczek',xp:750,req:['r_czeladz'],desc:'Bęben z korbą podnosi to, czego nie uniesie czterech ludzi.',eff:'Kamieniołomy, łomy, wykopy, kopalnie i szyby pracują o 20% szybciej. Przy nich: rozbudowa „Kołowrót”.'},
  {id:'r_zaprawa',d:'rzemioslo',ep:3,r:7,c:1,n:'Zaprawa wapienna',xp:1000,req:['r_gont'],desc:'Wapno gaszone w dole spaja kamień lepiej niż glina.',eff:'Trzeci poziom budynków kosztuje o 25% mniej, a budowy idą o 15% szybciej.'},
- {id:'n_szkola',d:'nauka',ep:3,r:6,c:0,n:'Szkoła przy wiecu',xp:750,req:['n_rach','n_szk'],desc:'Dzieci z osady i przysiółków uczą się razem przy jednym stole.',eff:'Uczniowie i dzieci uczą się fachu o połowę szybciej.'},
+ {id:'n_szkola',d:'nauka',ep:3,r:6,c:0,n:'Szkoła przy wiecu',xp:750,req:['n_rach','n_szk'],desc:'Dzieci z osady i przysiółków uczą się razem przy jednym stole.',eff:'Uczniowie i dzieci uczą się fachu o połowę szybciej. Osada może prowadzić do trzech badań naraz, a próby trwają krócej.'},
  {id:'n_atlas',d:'nauka',ep:3,r:6,c:2,n:'Atlas wyspy',xp:750,req:['n_miern'],desc:'Wszystkie mapy z kory przerysowane na jedną skórę.',eff:'Wyprawy są o 25% krótsze i o 20% bezpieczniejsze.'},
  {id:'n_prawo',d:'nauka',ep:3,r:7,c:1,n:'Spisane prawo',xp:1000,req:['n_szkola'],desc:'Co ustalił wiec, wisi wyryte na tablicy przy placu.',eff:'Przysiółki rosną o połowę szybciej.'}
 ].forEach(t=>{TECH.push(t);TECH_BY[t.id]=t});
@@ -67,7 +67,7 @@ const TBM={serownia:['h_ser',1.3],kiszarnia:['h_ser',1.3],garncarnia:['r_kolo',1
  chmielnik:['u_chmiel',1.25],slodownia:['u_chmiel',1.25],browar:['u_chmiel',1.25],miodosytnia:['u_chmiel',1.25],winnica:['u_chmiel',1.25],winiarnia:['u_chmiel',1.25],
  kamien:['r_kolowrot',1.2],lom:['r_kolowrot',1.2],ruda:['r_kolowrot',1.2],kopalnia:['r_kolowrot',1.2],sztolnia:['r_kolowrot',1.2],szybw:['r_kolowrot',1.2],odkrywka:['r_kolowrot',1.2]};
 {const _bm=bMul;bMul=function(b){const m=_bm(b);const x=b&&TBM[b.kind];return x&&tech(x[0])?m*x[1]:m}}
-{const _tx=techXp;techXp=function(d,v){return _tx(d,tech('n_rach')?v*1.1:v)}}
+{const _tx=techXp;techXp=function(d,v,tag){return _tx(d,tech('n_rach')?v*1.1:v,tag)}}
 {const _fl=fertLoss;fertLoss=function(f){return _fl(f)*(tech('u_trojpol')?.6:1)}}
 {const _wr=wearRate;wearRate=function(b){return _wr(b)*(tech('r_gont')?.7:1)}}
 {const _yl=yearsLeft;yearsLeft=function(b){return _yl(b)/(tech('r_gont')?.7:1)}}

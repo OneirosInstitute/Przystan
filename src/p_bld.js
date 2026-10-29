@@ -54,7 +54,7 @@ function bldDaily(){const sea=seasonIdx();
   if(hasExt(b,'wedzarnia'))S.res.opal=Math.max(0,S.res.opal-.3*K);
   if(b.kind==='laznia'){if(S.res.opal>=.8*K){S.res.opal-=.8*K;S.people.forEach(p=>p.hp=Math.min(1,p.hp+.012*K));S.bathOk=1}else S.bathOk=0}});
  if(hasB('izbachorych'))S.people.forEach(p=>{if(p.hp<.6)p.hp=Math.min(1,p.hp+.025*K)});
- if(hasB('izbanauki'))techXp('nauka',1.5*K)}
+ if(hasB('izbanauki'))techXp('nauka',1.5*K,['nauczanie','nauka'])}
 function bldPanelHTML(b){const d=BD[b.kind];let h='';if(!bDone(b))return h;
  {const c=condOf(b),col=c<.15?'var(--bad)':c<.5?'var(--ember)':'var(--moss)';h+=`<p class="mut">Stan: <b style="color:${col}">${Math.round(c*100)}%</b>${c<.15?' · w ruinie':c<.5?' · wymaga remontu':' · remont za ok. '+yearsLeft(b).toFixed(1)+' roku'} · miejsce: ${(locWear(b),b._lt)}</p><div class="pbar"><div style="width:${Math.round(c*100)}%;background:${col}"></div></div>`;
   if(c<.8&&!b.proj)h+=`<button data-rep="${b.id}" style="margin:2px 6px 6px 0">Remontuj</button><span class="cost">${costHTML(repCost(b))}</span>`}

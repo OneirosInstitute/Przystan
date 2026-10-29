@@ -1,11 +1,12 @@
 
 /* ================= drzewka postępu ================= */
-// Postęp nie spada z nieba: każda dziedzina zbiera doświadczenie z codziennej pracy ludzi,
-// a ono zamienia się w kolejne umiejętności osady. Część węzłów to próby i księgi (osobne mechanizmy).
-const DOMS=[['nauka','Nauka','Pismo, niebo, mapa i leczenie. Rośnie z czytania, zwiadu, wypraw, odkryć i nauczania.'],
- ['rzemioslo','Rzemiosło','Drewno, glina, ogień i żelazo. Rośnie z budowy i pracy w warsztatach.'],
- ['uprawa','Uprawa','Zbieractwo, zioła i pola. Rośnie z pracy zbieraczy i rolników.'],
- ['hodowla','Hodowla','Łowy, ryby i stada. Rośnie z pracy myśliwych, rybaków i hodowców.']];
+// 4.9.0-rc.22: wiedza pół na pół. Praca w fachu węzła daje przeczucie (najwyżej połowę węzła),
+// a drugą połowę daje próba, którą wybiera gracz: osoba, materiały, kilka dni i szansa (p_badania.js).
+// Pierwszy rząd epoki I przychodzi z samej praktyki. Część węzłów to dawne próby i księgi (osobne mechanizmy).
+const DOMS=[['nauka','Nauka','Pismo, niebo, mapa i leczenie. Przeczucie rośnie z czytania, zwiadów, wypraw, odkryć i nauczania.'],
+ ['rzemioslo','Rzemiosło','Drewno, glina, ogień i żelazo. Przeczucie rośnie z pracy cieśli, kamieniarzy, murarzy, krawców i kowali.'],
+ ['uprawa','Uprawa','Zbieractwo, zioła i pola. Przeczucie rośnie z pracy zbieraczy i rolników.'],
+ ['hodowla','Hodowla','Łowy, ryby i stada. Przeczucie rośnie z pracy myśliwych, rybaków i hodowców.']];
 const DOMC={zbieracz:'uprawa',rolnik:'uprawa',mysliwy:'hodowla',hodowca:'hodowla',rybak:'hodowla',drwal:'rzemioslo',kamieniarz:'rzemioslo',ciesla:'rzemioslo',murarz:'rzemioslo',krawiec:'rzemioslo',kowal:'rzemioslo'};
 const TECH=[
  // UPRAWA
@@ -43,7 +44,7 @@ const TECH=[
  {id:'n_kron',d:'nauka',r:0,c:1,n:'Kronika osady',xp:50,req:[],desc:'Ktoś zaczyna zapisywać, co się udało, a co nie.',eff:'Uczniowie uczą się fachu o 25% szybciej.'},
  {id:'n_kal',d:'nauka',r:1,c:0,n:'Kalendarz nieba',xp:90,req:['n_kron'],desc:'Wschody słońca liczone na nacięciach kija.',eff:'Dłuższe okno siewu. Wiadomo, ile potrwa pogoda.'},
  {id:'n_mapa',d:'nauka',r:1,c:1,n:'Mapa wyspy',xp:100,req:['n_kron'],desc:'Rysunek na korze brzozy, poprawiany po każdej wyprawie.',eff:'Wyprawy są krótsze o 30% i bezpieczniejsze.'},
- {id:'n_szk',d:'nauka',r:1,c:2,n:'Nauka dzieci',xp:120,req:['n_kron'],desc:'Wieczorami przy ogniu starsi uczą młodszych.',eff:'Dzieci uczą się fachu dwa razy szybciej.'},
+ {id:'n_szk',d:'nauka',r:1,c:2,n:'Nauka dzieci',xp:120,req:['n_kron'],desc:'Wieczorami przy ogniu starsi uczą młodszych.',eff:'Dzieci uczą się fachu dwa razy szybciej, a próby trwają o 10% krócej.'},
  {id:'n_opat',d:'nauka',r:2,c:0,n:'Opatrywanie ran',xp:150,req:['n_kal','u_ziel'],desc:'Czysta woda, płótno i zioła z ogrodu zielarki.',eff:'Ranni i chorzy wracają do zdrowia dwa razy szybciej.'},
  {id:'n_znaki',d:'nauka',r:2,c:1,n:'Znaki dawnego ludu',xp:140,req:['n_mapa'],gate:()=>S.found.length>=3,gt:()=>`Trzeba najpierw znaleźć trzy ślady dawnego ludu (${S.found.length}/3).`,desc:'Te same znaki powtarzają się na skałach i słupach. Wskazują miejsca.',eff:'Na mapie pojawiają się miejsca pozostałych śladów.'},
  {id:'n_gwiazd',d:'nauka',r:2,c:2,n:'Nawigacja po gwiazdach',xp:200,req:['n_mapa'],desc:'Łodzie wypływają dalej i wracają przed nocą.',eff:'Rybacy łowią o 20% więcej, wyprawy wzdłuż brzegu są bezpieczniejsze.'},
@@ -56,10 +57,12 @@ const tEp=t=>t.ep||1;
 const tq=(id,v)=>tech(id)?v:1;
 function tech(id){return !!(S&&S.tech&&S.tech[id])}
 function techAvail(t){return !S.tech[t.id]&&!t.sync&&tEp(t)<=epNow()&&t.req.every(requirement=>tech(requirement))&&(!t.gate||t.gate())}
-function techTarget(d){const f=S.focus[d];const ft=f&&TECH_BY[f];if(ft&&techAvail(ft))return ft;return TECH.find(t=>t.d===d&&techAvail(t))}
-function techXp(d,v){if(!S||!d||!S.tech)return;if(S.laws&&S.laws.wymiana)v*=1.15;S.dxp[d]=(S.dxp[d]||0)+v;const t=techTarget(d);if(!t){S.bank[d]=Math.min(150,(S.bank[d]||0)+v);return}
- const add=v+(S.bank[d]||0);S.bank[d]=0;S.tp[t.id]=(S.tp[t.id]||0)+add;if(S.tp[t.id]>=t.xp)techDone(t)}
-function techDone(t,quiet){if(S.tech[t.id])return;S.tech[t.id]=1;if(S.focus[t.d]===t.id)S.focus[t.d]=null;
+// węzeł, o którym teraz mowa w dziedzinie: trwająca próba, potem kolejka, potem najbliższy próby (gra nie wybiera już sama, czego się uczyć)
+function techTarget(d){const A=TECH.filter(t=>t.d===d&&techAvail(t));if(!A.length)return undefined;const B=(S.bad||[]).map(b=>TECH_BY[b.id]).find(t=>t&&t.d===d);if(B)return B;
+ const Q=(S.bq||[]).map(id=>TECH_BY[id]).find(t=>t&&A.includes(t));if(Q)return Q;let best=A[0],bp=-1;for(const t of A){const p=(S.tp[t.id]||0)/t.xp;if(p>bp+1e-9){bp=p;best=t}}return best}
+// doświadczenie z pracy: tag to fach (np. 'rybak') albo rodzaj nauki ('zwiad', 'czytanie'…); bez tagu liczy się jako ogólna nauka dziedziny
+function techXp(d,v,tag){if(!S||!d||!S.tech)return;if(S.laws&&S.laws.wymiana)v*=1.15;S.dxp[d]=(S.dxp[d]||0)+v;if(typeof badPractice==='function')badPractice(tag||d,v)}
+function techDone(t,quiet){if(S.tech[t.id])return;S.tech[t.id]=1;if(S.bq)S.bq=S.bq.filter(id=>id!==t.id);
  if(!quiet){log('Postęp ('+DOMS.find(d=>d[0]===t.d)[1].toLowerCase()+'): '+t.n+'. '+t.eff);toast('Postęp: '+t.n);sfx('bell')}
  if(t.id==='n_znaki'){tribe.forEach(s=>reveal(s.i,s.j,4));log('Znaki prowadzą do miejsc, gdzie dawny lud zostawił swoje ślady. Zaznaczono je na mapie.')}
  if(tab==='wiedza'||tab==='budowa')renderPanel()}
@@ -75,7 +78,8 @@ function techLayout(d){const now=epNow(),all=TECH.filter(t=>t.d===d),eps=[...new
 function techHTML(){const d=techDom;const Lo=techLayout(d),list=Lo.list,W=300;
  const cur=techTarget(d);const dd=DOMS.find(x=>x[0]===d);
  let h=`<div class="dchips">${DOMS.map(x=>{const n=TECH.filter(t=>t.d===x[0]&&tEp(t)<=Lo.now),k=n.filter(t=>S.tech[t.id]).length;return`<button data-dom="${x[0]}" class="${x[0]===d?'on':''}">${x[1]}<small>${k}/${n.length}</small></button>`}).join('')}</div>`;
- h+=`<p class="lead">${dd[2]}${cur?` Teraz: <b style="color:var(--hi)">${cur.n}</b>.`:' Nic nie jest teraz rozwijane.'}</p>`;
+ h+=`<p class="lead">${dd[2]} Wiedzę zdobywa się dopiero próbą, którą wybierasz.</p>`;
+ if(typeof badPanelHTML==='function')h+=badPanelHTML();
  if(Lo.folded.length)h+=`<button class="tfold" data-tall="1">${Lo.folded.map(e=>EP_N[e]).join(', ')}: wszystko poznane (${Lo.all.filter(t=>Lo.folded.includes(tEp(t))).length}). Pokaż</button>`;
  else if(techAll&&Lo.shown.length>1)h+=`<button class="tfold" data-tall="0">Zwiń poznane epoki</button>`;
  const cx=c=>(c+.5)*W/3;
@@ -83,9 +87,12 @@ function techHTML(){const d=techDom;const Lo=techLayout(d),list=Lo.list,W=300;
  list.forEach(t=>t.req.forEach(r=>{const p=TECH_BY[r];if(!p||p.d!==d||Lo.pos[r]===undefined)return;const on=S.tech[r],y0=Lo.pos[r]+42,y1=Lo.pos[t.id]+2;svg+=`<path d="M${cx(p.c)} ${y0} C${cx(p.c)} ${y0+16},${cx(t.c)} ${y1-14},${cx(t.c)} ${y1}" class="${on?'on':''}"/>`}));svg+='</svg>';
  h+=`<div class="tree" style="height:${Lo.H}px">${svg}`;
  Lo.shown.forEach(e=>{const L=Lo.all.filter(t=>tEp(t)===e),k=L.filter(t=>S.tech[t.id]).length;h+=`<div class="tep" style="top:${Lo.pos['ep'+e]}px">${EP_N[e]}<small>${k} z ${L.length}</small></div>`});
- list.forEach(t=>{const st=techState(t);const pc=t.xp?Math.min(100,Math.round(100*(S.tp[t.id]||0)/t.xp)):0;const ext=t.req.filter(r=>TECH_BY[r].d!==d).map(r=>TECH_BY[r].n);
-  h+=`<button class="tn ${st}${techSel===t.id?' sel':''}${cur&&cur.id===t.id?' cur':''}" data-tn="${t.id}" style="left:calc(${t.c*33.333}% + 3px);top:${Lo.pos[t.id]}px">
-  <span class="tt">${t.n}</span>${st==='done'?'<span class="ts">✓ poznane</span>':st==='sync'?'<span class="ts">próba / księga</span>':st==='gate'?'<span class="ts">warunek</span>':st==='lock'?`<span class="ts">${ext.length?'też: '+ext.join(', '):'zablokowane'}</span>`:`<span class="tb"><i style="width:${pc}%"></i></span>`}</button>`});
+ list.forEach(t=>{const st=techState(t);const bs=st==='avail'&&typeof badState==='function'?badState(t):'';const ext=t.req.filter(r=>TECH_BY[r].d!==d).map(r=>TECH_BY[r].n);
+  const pc=st==='avail'&&typeof badFeel==='function'?Math.round(100*badFeel(t)):0;
+  const tag=st==='done'?'<span class="ts">✓ poznane</span>':st==='sync'?'<span class="ts">próba / księga</span>':st==='gate'?'<span class="ts">warunek</span>':st==='lock'?`<span class="ts">${ext.length?'też: '+ext.join(', '):'zablokowane'}</span>`:
+   bs==='bada'?`<span class="ts">próba ${Math.round(100*badProg(t))}%</span>`:bs==='kol'?'<span class="ts">w kolejce</span>':bs==='ready'?'<span class="ts">można próbować</span>':`<span class="tb"><i style="width:${pc}%"></i></span>`;
+  h+=`<button class="tn ${st}${bs?' b-'+bs:''}${techSel===t.id?' sel':''}${bs==='bada'?' cur':''}" data-tn="${t.id}" style="left:calc(${t.c*33.333}% + 3px);top:${Lo.pos[t.id]}px">
+  <span class="tt">${t.n}</span>${tag}</button>`});
  h+='</div>';
  if(Lo.next&&Lo.next<4){const L=Lo.all.filter(t=>tEp(t)===Lo.next);if(L.length)h+=`<div class="card tnext"><h4>${EP_N[Lo.next]}</h4><p class="mut">Gdy osada dojdzie do tej epoki, w tej dziedzinie będzie można poznać: ${L.map(t=>t.n).join(', ')}.</p></div>`}
  const t=techSel&&TECH_BY[techSel]&&TECH_BY[techSel].d===d?TECH_BY[techSel]:cur||list.find(x=>!S.tech[x.id])||list[0];
@@ -93,8 +100,7 @@ function techHTML(){const d=techDom;const Lo=techLayout(d),list=Lo.list,W=300;
   if(t.req.length)h+=`<p class="mut">Wymaga: ${t.req.map(r=>(S.tech[r]?'✓ ':'')+TECH_BY[r].n).join(', ')}</p>`;
   if(st==='done')h+='<p class="ok">Osada to już umie.</p>';
   else if(st==='sync')h+=`<p class="mut">${t.gt()}</p>`;
-  else if(st==='gate')h+=`<p class="mut">${t.gt()}</p>`;
   else if(st==='ep')h+=`<p class="mut">Przyjdzie z epoką: ${EP_N[tEp(t)]}.</p>`;
-  else if(st==='avail'){const pc=Math.round(100*(S.tp[t.id]||0)/t.xp);h+=`<div class="pbar"><div style="width:${pc}%"></div></div><p class="mut">${pc}% · doświadczenie przychodzi z pracy w tej dziedzinie.</p>`+(cur&&cur.id===t.id?'<p class="ok">Osada skupia się na tym.</p>':`<button class="pri" data-focus="${t.id}">Skup się na tym</button>`)}
+  else if(st==='avail'||st==='gate'){if(st==='gate')h+=`<p class="mut">${t.gt()}</p>`;if(typeof badNodeHTML==='function')h+=badNodeHTML(t)}
   else h+='<p class="mut">Najpierw trzeba poznać to, co wyżej.</p>';h+='</div>'}
  return h}

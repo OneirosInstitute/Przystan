@@ -195,7 +195,7 @@ function e2Rejs(){const why=e2RejsWhy();if(why){toast(why);return}const sz=S.bld
  const ry=Math.round(30+Math.random()*40),sk=Math.round(2+Math.random()*4),dr=Math.round(Math.random()*14);S.res.ryby+=ry;S.res.skory+=sk;S.res.drewno+=dr;
  lines.unshift(['Opłynęli cypel, za którym nikt z nas jeszcze nie był.','Na skałach przy brzegu siedziały setki ptaków.','Morze było spokojne, a woda tak czysta, że widać było dno.','Trzy dni wiał wiatr od lądu i ledwo wrócili.'][(Math.random()*4)|0]);
  lines.push(`Przywieźli: ryby ${ry}, skóry fok ${sk}${dr?', drewno z wyrzutów '+dr:''}.`);if(rv)lines.push('Na mapie przybyło wybrzeża.');if(lost)lines.push('Łodzi nie udało się uratować: rozbiła się o skały przy powrocie. Ludzie wrócili brzegiem.');
- S.e2.rejsy=(S.e2.rejsy||0)+1;techXp('nauka',10);
+ S.e2.rejsy=(S.e2.rejsy||0)+1;techXp('nauka',10,'wyprawa');
  out.forEach(p=>{expReturn(p,e)});
  S.expLog=S.expLog||[];S.expLog.unshift({d:Math.floor(S.day)+1,r:'Rejs wzdłuż brzegu',t:lines.join(' ')});if(S.expLog.length>8)S.expLog.pop();
  log('Rejs wraca. '+lines.join(' '));toast('Łódź wróciła z rejsu');if(S.e2.rejsy===1)song('Pieśń o pierwszym rejsie');assign();renderPanel()}}

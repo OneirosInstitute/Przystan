@@ -26,7 +26,7 @@ const SCENY=[
  {k:'zima_dz',cat:'dzieci',w:1.4,cd:4,c:()=>seasonIdx()===2&&S.weather.k==='snow',A:()=>sPick(sKid),
   f:A=>{S.people.filter(sKid).slice(0,6).forEach(q=>memAdd(q,'radosc','zjazd na korze'));return`Dzieci zjeżdżają z górki na korze i na skórach. ${A.name} ${gw(A,'wpadł','wpadła')} w zaspę po same uszy.`}},
  {k:'stary_dz',cat:'dzieci',w:1.2,cd:3,c:()=>S.people.some(p=>p.age>=55)&&S.people.filter(sKid).length>=2,A:()=>sPick(p=>p.age>=55),
-  f:A=>{techXp('nauka',2);const o=['dawnych stronach','statku, który przywiózł ich na wyspę','smoku spod Wawelu, jak to u nas mówiono','tym, jak '+gw(A,'pierwszy raz zobaczył','pierwszy raz zobaczyła')+' morze'][(Math.random()*4)|0];return`${A.name} siada na progu i opowiada dzieciom o ${o}. Nikt z małych się nie rusza.`}},
+  f:A=>{techXp('nauka',2,'opowiesc');const o=['dawnych stronach','statku, który przywiózł ich na wyspę','smoku spod Wawelu, jak to u nas mówiono','tym, jak '+gw(A,'pierwszy raz zobaczył','pierwszy raz zobaczyła')+' morze'][(Math.random()*4)|0];return`${A.name} siada na progu i opowiada dzieciom o ${o}. Nikt z małych się nie rusza.`}},
  {k:'imieniny',cat:'ludzie',w:2,cd:1,c:()=>S.people.some(p=>p.age>=14&&nameDay(p)===sRd()&&p.imD!==sYr()),A:()=>sPick(p=>p.age>=14&&nameDay(p)===sRd()&&p.imD!==sYr()),
   f:A=>{A.imD=sYr();memAdd(A,'radosc','imieniny');friendsOf(A).forEach(q=>relAdd(A,q,3));return`Dziś imieniny ${gen(A.name)}. Ktoś przynosi garnuszek miodu, dzieci wianek z polnych kwiatów, a wieczorem śpiewają ${gw(A,'mu','jej')} „Sto lat”.`}},
  {k:'zalot',cat:'ludzie',w:1.6,cd:4,c:()=>true,A:()=>sPick(p=>p.age>=16&&p.age<32&&(p.pair===null||p.pair===undefined)),B:A=>sPick(q=>q.sex!==A.sex&&q.age>=16&&q.age<32&&(q.pair===null||q.pair===undefined)&&q.fam!==A.fam&&relGet(A,q)>-10),
@@ -188,7 +188,7 @@ EVENTS.push(
  {id:'s_plotki',cat:'goscie',w:1,cd:YEAR,cond:()=>epNow()>=3&&(S.hanN||0)>3,t:'Plotki woźniców',ey:'Goście',
   ctx:()=>{const R=REGIONS.filter(r=>r&&r.id&&!S.regs[r.id]);const r=R[(Math.random()*R.length)|0];return r?{r}:null},
   text:c=>`Woźnica przy zajeździe opowiada, że za krainą ${c.r.name} widział nocą światła, a w dzień dym, choć nikt tam nie mieszka. Jedni mówią, że to błędne ogniki, inni, że dawny lud wraca.`,
-  opts:[{n:'Wysłać zwiadowców',d:'wiedza i odkryta kraina',f:c=>{for(let j=0;j<N;j+=4)for(let i=0;i<N;i+=4)if(REGION[j*N+i]===c.r.id)reveal(i,j,4);S.regs[c.r.id]=1;try{regionScan(true)}catch(e){}techXp('nauka',15);return`Zwiadowcy wracają po trzech dniach. Świateł nie znaleźli, ale znają już drogi przez ${c.r.name}. Na kamieniu przy brodzie były świeże ślady ogniska.`}},
+  opts:[{n:'Wysłać zwiadowców',d:'wiedza i odkryta kraina',f:c=>{for(let j=0;j<N;j+=4)for(let i=0;i<N;i+=4)if(REGION[j*N+i]===c.r.id)reveal(i,j,4);S.regs[c.r.id]=1;try{regionScan(true)}catch(e){}techXp('nauka',15,'zwiad');return`Zwiadowcy wracają po trzech dniach. Świateł nie znaleźli, ale znają już drogi przez ${c.r.name}. Na kamieniu przy brodzie były świeże ślady ogniska.`}},
    {n:'Nie słuchać plotek',d:'',f:()=>'Woźnica wzrusza ramionami i zamawia drugi kubek piwa.'}]}
 );
 const SEN_PRZ={storm:'przyszedł sztorm',frost:'przyszedł mróz',snow:'przyszła śnieżyca',drought:'przyszła susza',burza:'przyszła burza'};

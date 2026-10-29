@@ -146,8 +146,8 @@ czShowGoal=function(){const g=goalInfo();if(!g)return;setH(czGoal,`<small>${g.ch
 // ---------- 2.5: ślepe uliczki ----------
 // kajuta: gdy sztorm zabrał wrak, zanim ktoś się do niej dostał, cel nie blokuje aktu
 ACTS[1].g[2][1]=()=>S.wreck.parts[2].open||!!S.wreck.gone;
-// koza: wiedza rośnie z pracy myśliwych, rybaków i hodowców
-ACTS[3].g[1][2]='Wiedza o oswajaniu kóz rośnie z pracy myśliwych i rybaków (Wiedza → Hodowla). Potem zagroda i hodowca, blisko hal z kozami.';
+// koza: przeczucie z pracy myśliwych i hodowców, wiedza z próby
+ACTS[3].g[1][2]='Przeczucie, jak oswoić kozy, przychodzi z pracy myśliwych i hodowców, a wiedzę daje próba (Wiedza → Hodowla). Potem zagroda i hodowca, blisko hal z kozami.';
 ZH['Oswój pierwszą kozę']=()=>tech('h_zagr')?(S.bld.some(b=>b.kind==='zagroda')?'Zagroda stoi. Hodowca musi jeszcze zagnać kozy z hal.':'Wiemy już, jak podejść kozy. Brakuje płotu, za który można by je zagnać.'):'Myśliwi widzą dzikie kozy na halach, ale nikt jeszcze nie wie, jak je oswoić.';
 // prośby tylko wtedy, gdy da się je spełnić
 {const m=REQS.ubrania.make;REQS.ubrania.make=()=>hasB('szwalnia')?m():null}
