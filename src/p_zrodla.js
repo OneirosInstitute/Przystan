@@ -39,10 +39,12 @@ function zrGive(id,k,n,feel){const t=TECH_BY[id];if(!t||S.tech[id])return false;
 // ---------- pamięć rozbitków ----------
 function zrPamPool(){return TECH.filter(t=>tEp(t)<=2&&!t.sync&&!tRoot(t)&&TCOST[t.id])}
 function zrTopCraft(p){let best=null,v=-1;for(const c in CN){const s=p.sk[c]||0;if(s>v){v=s;best=c}}return best}
+// własne losowanie (nie rusza Math.random gry): ta sama osoba zawsze pamięta to samo
+function zrRnd(a,b){let h=(Math.imul(a+1,2654435761)^Math.imul(b+7,40503))>>>0;h=Math.imul(h^(h>>>15),2246822507)>>>0;h=Math.imul(h^(h>>>13),3266489909)>>>0;return((h^(h>>>16))>>>0)/4294967296}
 function zrPamInit(){if(!S||!S.tech||S.epoch===4||S.pamV)return;S.pamV=1;const pool=zrPamPool(),taken={};
  for(const p of S.people.filter(p=>!p.born&&p.age>=16&&!p.pam).sort((a,b)=>a.id-b.id)){const c=zrTopCraft(p),n=p.age>=40?2:1,got=[];
   for(let k=0;k<n;k++){const W=pool.filter(t=>!got.includes(t.id)).map(t=>[t,((badCrafts(t).includes(c)?4:0)+(t.d==='nauka'&&(p.age>=40||p.trait==='Nauczyciel')?3:0)+.5)*(taken[t.id]?.2:1)]);
-   let r=Math.random()*W.reduce((a,w)=>a+w[1],0);for(const[t,w]of W){r-=w;if(r<=0){got.push(t.id);taken[t.id]=1;break}}}
+   let r=zrRnd(p.id,k*31+(p.name||'').length)*W.reduce((a,w)=>a+w[1],0);for(const[t,w]of W){r-=w;if(r<=0){got.push(t.id);taken[t.id]=1;break}}}
   if(got.length)p.pam=got}}
 const zrPamLeft=p=>(p.pam||[]).filter(id=>TECH_BY[id]&&!S.tech[id]&&!S.people.some(q=>q!==p&&q.pam&&q.pam.includes(id)));
 function zrPamCard(p){if(!p.pam||!p.pam.length)return'';const now=epNow();
