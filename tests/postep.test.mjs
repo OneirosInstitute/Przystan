@@ -11,7 +11,7 @@ function village(epoch){const runtime=createGame();const E=s=>runtime.evaluate(s
 test('each epoch adds three skills in every domain and they open only when the settlement reaches that epoch',()=>{
  const {runtime,E}=village(1);
  const counts=JSON.parse(E("JSON.stringify(DOMS.map(d=>[2,3].map(e=>TECH.filter(t=>t.d===d[0]&&tEp(t)===e).length)))"));
- assert.deepEqual(counts,[[3,3],[3,3],[3,3],[3,3]]);
+ assert.deepEqual(counts,[[3,3],[3,3],[3,3],[5,3]],'4.9.0-rc.24: hodowla ma w epoce II także paśniki i gajówkę');
  assert.equal(E("TECH.filter(t=>tEp(t)>1).every(t=>t.req.every(r=>TECH_BY[r]&&tEp(TECH_BY[r])<=tEp(t)))"),true,'nothing depends on a later epoch');
  assert.equal(E("techState(TECH_BY.u_radlo)"),'ep');assert.equal(E("techTarget('uprawa')"),undefined,'at the end of epoch I all its skills are known and the next ones wait');
  E("openSheet('wiedza')");const html=runtime.elements.get('body').innerHTML;
