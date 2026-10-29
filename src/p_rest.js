@@ -512,7 +512,7 @@ let bMesh={};
 function addBuildingMesh(b){const g=makeBuildingModel(b.kind,b);if(g.userData.crops)gameLater(()=>fieldVis(b),0);const c=bCenter(b);g.position.set(c.x,Hy(c.x,c.z),c.z);g.traverse(o=>{o.userData.bid=b.id});g.userData.bid=b.id;bGroup.add(g);bMesh[b.id]=g;g.scale.y=bDone(b)?1:Math.max(.12,b.prog/b.work);
  if(!bDone(b)){const sc=scaffold(b.kind);sc.position.copy(g.position);bGroup.add(sc);g.userData.scaf=sc}return g}
 function levelFootprint(i,j,w,h){let sum=0,c=0;for(let a=0;a<=w;a++)for(let b=0;b<=h;b++){sum+=H[(j+b)*VW+i+a];c++}const m=Math.max(sum/c,.05),pos=tGeo.attributes.position.array;
- for(let a=0;a<=w;a++)for(let b=0;b<=h;b++){const k=(j+b)*VW+i+a;if(BD.pomost&&H[k]<0)continue;H[k]=m;pos[k*3+1]=m}tGeo.attributes.position.needsUpdate=true;tGeo.computeBoundingSphere()}
+ for(let a=0;a<=w;a++)for(let b=0;b<=h;b++){const k=(j+b)*VW+i+a;if(BD.pomost&&H[k]<0)continue;H[k]=m;pos[k*3+1]=m}tGeo.attributes.position.needsUpdate=true;tGeo.computeBoundingSphere();for(let a=-1;a<=w;a++)for(let b=-1;b<=h;b++){const x=i+a,y=j+b;if(x>=0&&y>=0&&x<N&&y<N)SLOPEC[y*N+x]=0}}
 function placeFootprint(kind,i,j,val){const d=BD[kind];for(let a=0;a<d.w;a++)for(let b=0;b<d.h;b++){occ[(j+b)*N+i+a]=val;decoHidden.add((j+b)*N+i+a)}recomputeWalk();levelFootprint(i,j,d.w,d.h)}
 function entryOf(kind,i,j){const d=BD[kind];const cand=[];for(let a=-1;a<=d.w;a++)for(let b=-1;b<=d.h;b++){if(a>=0&&a<d.w&&b>=0&&b<d.h)continue;const x=i+a,y=j+b;if(x>=0&&y>=0&&x<N&&y<N&&walk[y*N+x])cand.push([x,y,Math.hypot(x-camp.i,y-camp.j)])}
  cand.sort((p,q)=>p[2]-q[2]);return cand.length?[cand[0][0],cand[0][1]]:null}

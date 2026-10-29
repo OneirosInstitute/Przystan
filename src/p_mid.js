@@ -156,26 +156,30 @@ const ocean=new THREE.Mesh(oGeo,wMat);ocean.position.y=-.09;ocean.renderOrder=1;
 /* ================= siatka chodzenia i A* (kopiec) ================= */
 const walk=new Uint8Array(N*N);
 let walkRevision=0;
-function recomputeWalk(){walkRevision++;for(let k=0;k<N*N;k++)walk[k]=(land[k]&&occ[k]<0)?1:0}
+const SLOPEC=new Uint8Array(N*N);   // 4.9.0-rc.27: pamięć stromizny pól (astar), czyszczona przy każdej zmianie mapy
+function recomputeWalk(){SLOPEC.fill(0);walkRevision++;for(let k=0;k<N*N;k++)walk[k]=(land[k]&&occ[k]<0)?1:0}
 const tileOf=(x,z)=>[clamp(Math.floor(x+N/2),0,N-1),clamp(Math.floor(z+N/2),0,N-1)];
 const AG=new Float32Array(N*N),AF=new Float32Array(N*N),AC=new Int32Array(N*N),AS=new Uint32Array(N*N),AX=new Uint32Array(N*N);let stamp=1;
 const heap=[];
 function hpush(k){heap.push(k);let i=heap.length-1;while(i>0){const p=(i-1)>>1;if(AF[heap[p]]<=AF[heap[i]])break;const t=heap[p];heap[p]=heap[i];heap[i]=t;i=p}}
 function hpop(){const top=heap[0],last=heap.pop();if(heap.length){heap[0]=last;let i=0;for(;;){const l=i*2+1,r=l+1;let m=i;if(l<heap.length&&AF[heap[l]]<AF[heap[m]])m=l;if(r<heap.length&&AF[heap[r]]<AF[heap[m]])m=r;if(m===i)break;const t=heap[m];heap[m]=heap[i];heap[i]=t;i=m}}return top}
-function astar(sx,sy,gx,gy){
+// 4.9.0-rc.27: stromizna pola liczona raz (0 = jeszcze nie liczona, 1 = łagodnie, 2 = stromo); levelFootprint czyści ją pod nowym budynkiem
+function steepAt(k){let v=SLOPEC[k];if(!v){v=slope(k%N,(k/N)|0)>1.1?2:1;SLOPEC[k]=v}return v===2}
+// maxIt: omijanie tłumu szuka tylko krótkiego obejścia, zwykła droga może przejść całą wyspę
+function astar(sx,sy,gx,gy,maxIt){
  if(sx===gx&&sy===gy)return[];stamp++;heap.length=0;
  // 4.9.0-rc.2: kto stoi na polu odciętym od wsi (wejście tylko na ukos między przeszkodami), może tak samo z niego zejść; wejść tak nie można
  const RA=(typeof S!=='undefined'&&S&&reach&&S.epoch!==4)?navReach():null;
  const S0=sy*N+sx,G=gy*N+gx;AS[S0]=stamp;AG[S0]=0;AF[S0]=0;AC[S0]=-1;hpush(S0);
  const hf=k=>{const dx=Math.abs(k%N-gx),dy=Math.abs(((k/N)|0)-gy);return Math.max(dx,dy)+.414*Math.min(dx,dy)};
  let it=0;
- while(heap.length&&it++<40000){const cur=hpop();if(AX[cur]===stamp)continue;AX[cur]=stamp;
+ const LIM=maxIt||40000;while(heap.length&&it++<LIM){const cur=hpop();if(AX[cur]===stamp)continue;AX[cur]=stamp;
   if(cur===G){const p=[];let c=cur;while(c!==S0){p.push(c);c=AC[c]}p.reverse();return p.map(k=>[k%N,(k/N)|0])}
   const cx=cur%N,cy=(cur/N)|0;
   for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){if(!dx&&!dy)continue;const nx=cx+dx,ny=cy+dy;if(nx<0||ny<0||nx>=N||ny>=N)continue;const nk=ny*N+nx;
    if(AX[nk]===stamp||(!walk[nk]&&nk!==G))continue;
    if(dx&&dy&&(!walk[cy*N+nx]||!walk[ny*N+cx])&&!(RA&&!RA[cur]))continue;
-   const ng=AG[cur]+(dx&&dy?1.414:1)+(slope(nx,ny)>1.1?.7:0);
+   const ng=AG[cur]+(dx&&dy?1.414:1)+(steepAt(nk)?.7:0);
    if(AS[nk]!==stamp||ng<AG[nk]){AS[nk]=stamp;AG[nk]=ng;AC[nk]=cur;AF[nk]=ng+hf(nk)*1.05;hpush(nk)}}}
  return null}
 function nearestWalk(i,j){if(walk[j*N+i])return[i,j];for(let r=1;r<7;r++)for(let dy=-r;dy<=r;dy++)for(let dx=-r;dx<=r;dx++){const x=i+dx,y=j+dy;if(x>=0&&y>=0&&x<N&&y<N&&walk[y*N+x]&&Math.max(Math.abs(dx),Math.abs(dy))===r)return[x,y]}return null}

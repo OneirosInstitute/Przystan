@@ -28,8 +28,9 @@ function navCrowdRoute(person){
  candidates.sort((a,b)=>b.projection-a.projection);const changed=[];
  try{
   for(const peer of S.people){if(peer===person||['away','sleep'].includes(peer.state)||Math.hypot(peer.x-person.x,peer.z-person.z)>8)continue;const tile=tileOf(peer.x,peer.z),key=tile[1]*N+tile[0];if((tile[0]!==start[0]||tile[1]!==start[1])&&walk[key]){changed.push(key);walk[key]=0;}}
-  for(const candidate of candidates){const [x,z]=candidate.tile;if(!walk[z*N+x])continue;const route=astar(x,z,goal[0],goal[1]);if(route)return [candidate.tile,...route];}
-  return astar(start[0],start[1],goal[0],goal[1]);
+  // 4.9.0-rc.27: każdy wariant obejścia szuka krótko (do 4000 pól zamiast 40 000); wcześniej przy zastawionym celu każdy przeszukiwał pół wyspy
+  for(const candidate of candidates){const [x,z]=candidate.tile;if(!walk[z*N+x])continue;const route=astar(x,z,goal[0],goal[1],4000);if(route)return [candidate.tile,...route];}
+  return astar(start[0],start[1],goal[0],goal[1],4000);
  }finally{for(const key of changed)walk[key]=1;}
 }
 // RC11: ustępowanie bez zakleszczeń. Trzy zasady: ostatnie kroki do celu (bez ładunku) nie czekają na tłum przy celu;
@@ -44,7 +45,7 @@ function navPauseForCrowd(person,point,distance,delta){const dx=point.x-person.x
  person.navResumeAct??=person.act;person.navWait=(person.navWait||0)+delta;
  if(person.navWait>=NAV_GHOST){person.navGhost=S.t+NAV_SQUEEZE;if(person.navResumeAct)person.act=person.navResumeAct;delete person.navResumeAct;delete person.navWait;delete person.navRetry;return false;}
  person.act='Ustępuje przejścia';
- if(person.navWait>=.6&&(!(person.navRetry>S.t))){person.navRetry=S.t+.8;
+ if(person.navWait>=.6&&(!(person.navRetry>S.t))){person.navRetry=S.t+1.5;
   // Punkt odbioru może zająć ktoś już po wyznaczeniu drogi. Wybierz wolne wejście tą samą bramką co po restarcie.
   if(pendingDelivery(person)&&person.routeGoal&&Math.hypot(person.x-tcx(person.routeGoal[0]),person.z-tcx(person.routeGoal[1]))<2){release(person);resumeDelivery(person);return true;}
   const route=navCrowdRoute(person);if(route?.length)person.path=route.map(([i,j])=>({x:tcx(i),z:tcx(j)}));
