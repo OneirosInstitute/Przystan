@@ -4,7 +4,7 @@
 function bestAt(c){return S.people.filter(isAdult).sort((a,b)=>(b.sk[c]||0)-(a.sk[c]||0))[0]||S.people[0]}
 function healer(){return offHolder('zielarka')||S.people.filter(p=>isAdult(p)&&p.sex==='k').sort((a,b)=>b.age-a.age)[0]||bestAt('zbieracz')}
 const SLAD=[
- {k:'leki',eff:'Ranni i chorzy zdrowieją szybciej. Zioła rozpoznane: zielarstwo poznane.',why:'gdy ktoś ciężko zachoruje albo zostanie ranny',
+ {k:'leki',eff:'Zioła rozpoznane. Zielarstwo: pełne przeczucie, a próba tańsza i pewniejsza.',why:'gdy ktoś ciężko zachoruje albo zostanie ranny',
   need:()=>S.people.some(p=>p.hp<.45),
   ctx:()=>({sick:S.people.filter(p=>p.hp<.45).sort((a,b)=>a.hp-b.hp)[0]||null,h:healer()}),
   t:'Gorzka mieszanka',text:c=>`${c.sick?c.sick.name+' od trzech dni leży w gorączce i nic nie pomaga.':'W osadzie co chwilę ktoś kaszle i gorączkuje.'} Nikt z nas nie był lekarzem, a zioła z wraku dawno się skończyły. ${c.h.name} przypomina sobie małe naczynka zalepione woskiem, które ktoś przyniósł ze skały. W środku sucha, gorzka mieszanka: kora, korzeń, coś jak kwiat krwawnika.`,
@@ -22,13 +22,13 @@ const SLAD=[
   t:'Co mówi skała',text:c=>`Przednówek. Spiżarnia pustoszeje, a do lata daleko. Nikt z nas nie zna tutejszych roślin, a jedna pomyłka może kosztować życie. ${c.h.name} wraca od malowanej skały i mówi, że już rozumie, co tam narysowano: kłącza tataraku, korzeń łopianu, młode pędy pokrzyw, orzechy. Przy jadalnych odcisk dłoni. Przy trujących przekreślenie.`,
   opts:[{n:'Zbierać według skały',d:'więcej jedzenia, mniej pomyłek',f:c=>{S.res.warzywa=(S.res.warzywa||0)+25;sladDo(2);return`Zbieracze idą z rysunkiem na korze. Wieczorem w kotle są korzenie i pędy, których nikt wcześniej nie tknął. Nikt się nie truje.`}},
    {n:'Nie ufać obcym rysunkom',d:'',f:()=>{sladLater(2);return'„Kto wie, co oni jedli” — mówi ktoś. Zbierają tylko to, co znają.'}}]},
- {k:'wypal',eff:'Garncarstwo poznane: naczynia z gliny, garncarnia i komora kiszonek.',why:'gdy skończą się beczki i naczynia z wraku',
+ {k:'wypal',eff:'Garncarstwo: pełne przeczucie, a próba tańsza i pewniejsza. Potem naczynia z gliny, garncarnia i komora kiszonek.',why:'gdy skończą się beczki i naczynia z wraku',
   need:()=>!tech('r_garn')&&S.day>YEAR*.6&&S.res.naczynia<4,
   ctx:()=>({h:bestAt('murarz')}),
   t:'Dół do wypału',text:c=>`Beczki i skrzynie z wraku butwieją, a nie ma w czym trzymać ziarna, mleka ani kiszonek. Garnek z surowej gliny rozmięka przy pierwszym deszczu. ${c.h.name} przypomina sobie dół pełen czerwonych skorup w dawnym siedlisku. Lepi kilka garnków, kładzie je w dole, obkłada chrustem i pali przez całą noc, tak jak tamci musieli palić.`,
   opts:[{n:'Palić w dole, jak dawny lud',d:'pierwsze naczynia z gliny',f:c=>{S.res.naczynia=(S.res.naczynia||0)+6;c.h.xp.murarz=(c.h.xp.murarz||0)+50;sladDo(3);return'Rano połowa garnków jest pęknięta, ale reszta dzwoni, gdy się w nie stuknie. Nie przeciekają. Odtąd glina z gliniska ma nowe zadanie.'}},
    {n:'Szukać innej drogi',d:'',f:()=>{sladLater(3);return'Garnki ze skorupami zostają w dole. Może później.'}}]},
- {k:'siec',eff:'Ciężarki do sieci: rybacy łowią o 25% więcej.',why:'gdy osada ma pomost, a sieci z wraku się drą',
+ {k:'siec',eff:'Ciężarki do sieci. Sieci i więcierze: pełne przeczucie, a próba tańsza i pewniejsza. Jeśli osada już je zna, rybacy łowią więcej.',why:'gdy osada ma pomost, a sieci z wraku się drą',
   need:()=>S.bld.some(b=>b.kind==='pomost'&&bDone(b))&&S.day>YEAR*.4,
   ctx:()=>({h:bestAt('rybak')}),
   t:'Kamienie z otworem',text:c=>`Sieci z wraku są podarte, a te, które zostały, unosi prąd i ryby uciekają spod nich. ${c.h.name} przypomina sobie płaskie kamienie z otworem, ułożone w rzędzie przy ujściu strumienia. To ciężarki. Dawny lud łowił tu tak samo, tylko sieci miał z łyka.`,
@@ -40,7 +40,7 @@ const SLAD=[
   t:'Ziarno dawnego ludu',text:c=>`Ziarno z wraku się kończy, a nikt z nas nie był rolnikiem. ${c.h.name} wraca do płaskiego kamienia z wgłębieniem i zwęglonych ziaren w szczelinach. Takie same kłosy rosną dziko na łąkach. Dawny lud je zbierał, rozcierał na mąkę i chyba siał przy domach.`,
   opts:[{n:'Zebrać dzikie kłosy i posiać',d:'pola i mąka',f:c=>{S.res.ziarno=(S.res.ziarno||0)+10;sladDo(5);return'Kobiety idą na łąki z koszami. Część ziarna idzie na żarna, część zostaje na siew. Wiosną przy osadzie zielenieje pierwsze pole z dzikiego zboża.'}},
    {n:'Czekać na lepszy rok',d:'',f:()=>{sladLater(5);return'Kamień z wgłębieniem zostaje w trawie.'}}]},
- {k:'okol',eff:'Oswajanie kóz: zagroda i hodowla. Kozy w zagrodzie dają więcej.',why:'gdy myśliwi widzą dzikie kozy, a nikt nie umie ich oswoić',
+ {k:'okol',eff:'Oswajanie kóz: pełne przeczucie, a próba tańsza i pewniejsza. Jeśli osada już to umie, kozy w zagrodzie dają więcej.',why:'gdy myśliwi widzą dzikie kozy, a nikt nie umie ich oswoić',
   need:()=>S.day>YEAR*.7,
   ctx:()=>({h:bestAt('mysliwy')}),
   t:'Ktoś tu trzymał kozy',text:c=>`Na halach pasą się dzikie kozy, ale uciekają na sam widok człowieka. Nikt z nas nie był pasterzem. ${c.h.name} wspomina kamienny krąg z wąskim wejściem i kości kóz w środku. Dawny lud zapędzał je w kamienie, karmił solą i liśćmi, aż przestały uciekać.`,
@@ -55,14 +55,14 @@ const SLAD=[
 function slad(k){return!!(S&&S.slady&&S.slady[k])}
 function sladLater(i){S.sladCd=S.sladCd||{};S.sladCd[i]=S.day+SD*2}
 function sladDo(i){const s=SLAD[i];S.slady=S.slady||{};if(S.slady[s.k])return;S.slady[s.k]=1;pamAdd(2,'slad');techXp('nauka',20,'odkrycie');
- if(i===0){['u_rozp','u_ziel'].forEach(id=>TECH_BY[id]&&techDone(TECH_BY[id]));S.res.ziola=(S.res.ziola||0)+6}
+ if(i===0){TECH_BY.u_rozp&&techDone(TECH_BY.u_rozp);zrGive('u_ziel','slad',TRIBE[i][0]);S.res.ziola=(S.res.ziola||0)+6}
  if(i===1)S.bonus.mysliwy=(S.bonus.mysliwy||0)+.25;
  if(i===2){S.bonus.zbieracz=(S.bonus.zbieracz||0)+.2;TECH_BY.u_rozp&&techDone(TECH_BY.u_rozp)}
- if(i===3)TECH_BY.r_garn&&techDone(TECH_BY.r_garn);
- if(i===4){if(tech('h_sieci'))S.bonus.rybak=(S.bonus.rybak||0)+.15;else TECH_BY.h_sieci&&techDone(TECH_BY.h_sieci)}
+ if(i===3)zrGive('r_garn','slad',TRIBE[i][0]);
+ if(i===4){if(tech('h_sieci'))S.bonus.rybak=(S.bonus.rybak||0)+.15;else zrGive('h_sieci','slad',TRIBE[i][0])}
  if(i===5){if(S.know.pole!=='tak')S.know.pole='tak';else S.bonus.rolnik=(S.bonus.rolnik||0)+.15}
- if(i===6){if(tech('h_zagr'))S.bonus.hodowca=(S.bonus.hodowca||0)+.2;else TECH_BY.h_zagr&&techDone(TECH_BY.h_zagr)}
- if(i===7)TECH_BY.u_sad&&techDone(TECH_BY.u_sad,true);
+ if(i===6){if(tech('h_zagr'))S.bonus.hodowca=(S.bonus.hodowca||0)+.2;else zrGive('h_zagr','slad',TRIBE[i][0])}
+ if(i===7)zrGive('u_sad','slad',TRIBE[i][0]);
  log(`Dar dawnego ludu: ${TRIBE[i][0].toLowerCase()}. ${s.eff}`);toast('Dar dawnego ludu: '+s.t);sfx('bell')}
 function sladClear(){S.sladClr=S.sladClr||{};S.found.forEach(k=>{if(S.sladClr[k])return;S.sladClr[k]=1;const t=tribe[k];if(!t)return;const x0=tcx(t.i),z0=tcx(t.j);
  nodeBy.tree.forEach(n=>{if(n.amt>0&&Math.hypot(n.x-x0,n.z-z0)<(k===7?5.2:4.6)){n.amt=0;const q=nodes.indexOf(n);if(q>=0)S.nodeAmt[q]=0;nodeVis(n)}})})}

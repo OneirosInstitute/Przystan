@@ -5,6 +5,7 @@ import {createGame} from './runtime.mjs';
 // 4.9.0-rc.22: wiedza pół na pół — przeczucie z pracy w fachu węzła, próba wybierana przez gracza, jedno badanie naraz
 function game(){const runtime=createGame({search:'?seed=2207'});const E=s=>runtime.evaluate(s);runtime.game.startGame(true);
  E("closeSheet();S.evT=1e9;if(evOpen){$('ev').hidden=true;evOpen=null}S.pendingDecision=null;openEvent=function(){}");
+ E('S.people.forEach(p=>delete p.pam);S.tsrc={}');   // W2: pamięć rozbitków losowa — tu sprawdzamy samą mechanikę prób
  const days=n=>{for(let d=0;d<n;d++)for(let i=0;i<40;i++){E('for(let q=0;q<6;q++)step(1)');E("if(evOpen){$('ev').hidden=true;evOpen=null}S.pendingDecision=null;if(typeof rdOpen!=='undefined'&&rdOpen)rdClose()")}};
  return {runtime,E,days}}
 // tropienie z samej praktyki, potem wędzenie gotowe do próby, materiały w składzie
@@ -36,8 +37,8 @@ test('a trial needs the full feeling, a person with the craft and the materials;
  const meat=E('S.res.mieso'),wood=E('S.res.drewno');
  assert.equal(E("badStart('h_wedz')"),'');assert.equal(E('S.res.mieso'),meat-8);assert.equal(E('S.res.drewno'),wood-8);
  assert.equal(E(`pById(${pid}).job`),'bad','the person works only on the trial');assert.equal(E('S.bad[0].pid'),pid);
- assert.equal(E('S.bad[0].ch'),.65,'skill 3 gives 65%');assert.equal(E("badDays(TECH_BY.h_wedz)"),2);
- assert.match(E("S.log[0].t"),/^Zaczyna się próba: wędzenie\. Prowadzi ją .+ \(myśliwy 3\), potrwa ok\. 2 dni\.$/);
+ assert.equal(E('S.bad[0].ch'),.65,'skill 3 gives 65%');assert.equal(E("badDays(TECH_BY.h_wedz)"),3);
+ assert.match(E("S.log[0].t"),/^Zaczyna się próba: wędzenie\. Prowadzi ją .+ \(myśliwy 3\), potrwa ok\. 3 dni\.$/);
 });
 
 test('without the school only one study runs at a time, old trials included; with the school up to three',()=>{
@@ -109,7 +110,7 @@ test('the knowledge tab shows the studies, the feeling and the trial with person
  const {runtime,E}=game();E(READY);
  E("openSheet('wiedza');techDom='hodowla';techSel='h_wedz';renderPanel()");let html=runtime.elements.get('body').innerHTML;
  assert.match(html,/Badania <small class="mut">0 z 1<\/small>/);assert.match(html,/data-bgo="h_wedz"/,'a ready skill is offered');
- assert.match(html,/można próbować/);assert.match(html,/Przeczucie z pracy: 100%/);assert.match(html,/Próba:<\/b> 2 dni pracy jednej osoby/);
+ assert.match(html,/można próbować/);assert.match(html,/Przeczucie z pracy: 100%/);assert.match(html,/Próba:<\/b> 3 dni pracy jednej osoby/);
  assert.match(html,/Szansa: 65%/);assert.match(html,/mięso 8/);assert.match(html,/data-bstart="h_wedz"/);
  E("badStart('h_wedz')");E('renderPanel()');html=runtime.elements.get('body').innerHTML;
  assert.match(html,/Badania <small class="mut">1 z 1<\/small>/);assert.match(html,/data-bcancel="h_wedz"/);assert.match(html,/próba 0%/);

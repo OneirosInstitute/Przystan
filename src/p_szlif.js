@@ -1,6 +1,6 @@
 
 /* ================= 1.0: szlif — wydajność, zapis odporny na wersje, nowe wyspy i wyzwania, łagodny początek, „Od ostatniego razu”, „Na co czekamy”, rytm sesji ================= */
-const GAME_VER='4.9.0-rc.22';
+const GAME_VER='4.9.0-rc.23';
 // ---------- wydajność: gotowe budynki scalane w jedną bryłę na materiał ----------
 const _mInv=new THREE.Matrix4(),_mM=new THREE.Matrix4(),_mN=new THREE.Matrix3(),_vP=new THREE.Vector3(),_vN=new THREE.Vector3();
 function mergeGroup(g){if(!g)return 0;g.updateMatrixWorld(true);_mInv.copy(g.matrixWorld).invert();const fireSet=new Set(fires.map(f=>f.g));const byMat=new Map();

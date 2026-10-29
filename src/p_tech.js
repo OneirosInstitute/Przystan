@@ -68,6 +68,8 @@ function techDone(t,quiet){if(S.tech[t.id])return;S.tech[t.id]=1;if(S.bq)S.bq=S.
  if(tab==='wiedza'||tab==='budowa')renderPanel()}
 function techTick(){if(!S||!S.tech)return;TECH.forEach(t=>{if(t.sync&&!S.tech[t.id]&&t.sync())techDone(t,t.id==='r_ciesla')})}
 function techState(t){if(S.tech[t.id])return'done';if(tEp(t)>epNow())return'ep';if(t.sync)return'sync';if(t.req.every(requirement=>tech(requirement)))return(!t.gate||t.gate())?'avail':'gate';return'lock'}
+// 4.9.0-rc.23 mgła wiedzy: widać węzły dostępne i jeden rząd dalej; głębiej tylko nazwa z pytajnikiem, opis po poznaniu poprzednika
+function techFog(t){if(S.tech[t.id]||techState(t)!=='lock')return false;return t.req.some(r=>{const q=TECH_BY[r];return q&&!tech(r)&&techState(q)==='lock'})}
 let techDom='uprawa',techSel=null,techAll=false;
 // układ: każda epoka to pas z nagłówkiem; ukończone dawne epoki zwijają się do jednej linii (techAll je rozwija)
 function techLayout(d){const now=epNow(),all=TECH.filter(t=>t.d===d),eps=[...new Set(all.map(tEp))].sort((a,b)=>a-b);
@@ -91,12 +93,13 @@ function techHTML(){const d=techDom;const Lo=techLayout(d),list=Lo.list,W=300;
   const pc=st==='avail'&&typeof badFeel==='function'?Math.round(100*badFeel(t)):0;
   const tag=st==='done'?'<span class="ts">✓ poznane</span>':st==='sync'?'<span class="ts">próba / księga</span>':st==='gate'?'<span class="ts">warunek</span>':st==='lock'?`<span class="ts">${ext.length?'też: '+ext.join(', '):'zablokowane'}</span>`:
    bs==='bada'?`<span class="ts">próba ${Math.round(100*badProg(t))}%</span>`:bs==='kol'?'<span class="ts">w kolejce</span>':bs==='ready'?'<span class="ts">można próbować</span>':`<span class="tb"><i style="width:${pc}%"></i></span>`;
-  h+=`<button class="tn ${st}${bs?' b-'+bs:''}${techSel===t.id?' sel':''}${bs==='bada'?' cur':''}" data-tn="${t.id}" style="left:calc(${t.c*33.333}% + 3px);top:${Lo.pos[t.id]}px">
-  <span class="tt">${t.n}</span>${tag}</button>`});
+  const fog=techFog(t);h+=`<button class="tn ${st}${fog?' fog':''}${bs?' b-'+bs:''}${techSel===t.id?' sel':''}${bs==='bada'?' cur':''}" data-tn="${t.id}" style="left:calc(${t.c*33.333}% + 3px);top:${Lo.pos[t.id]}px">
+  <span class="tt">${t.n} ${fog?'?':''}</span>${fog?'<span class="ts">nieznane</span>':tag}</button>`});
  h+='</div>';
  if(Lo.next&&Lo.next<4){const L=Lo.all.filter(t=>tEp(t)===Lo.next);if(L.length)h+=`<div class="card tnext"><h4>${EP_N[Lo.next]}</h4><p class="mut">Gdy osada dojdzie do tej epoki, w tej dziedzinie będzie można poznać: ${L.map(t=>t.n).join(', ')}.</p></div>`}
  const t=techSel&&TECH_BY[techSel]&&TECH_BY[techSel].d===d?TECH_BY[techSel]:cur||list.find(x=>!S.tech[x.id])||list[0];
- if(t){const st=techState(t);h+=`<div class="card tdet"><h4>${t.n}</h4><p>${t.desc}</p><p><b style="color:var(--gold2)">Daje:</b> ${t.eff}</p>`;
+ if(t&&techFog(t)){h+=`<div class="card tdet"><h4>${t.n} ?</h4><p class="mut">Nikt jeszcze nie wie, jak to wygląda ani co da. Więcej będzie wiadomo, gdy osada pozna: ${t.req.filter(r=>!tech(r)).map(r=>TECH_BY[r].n).join(', ')}.</p></div>`}
+ else if(t){const st=techState(t);h+=`<div class="card tdet"><h4>${t.n}</h4><p>${t.desc}</p><p><b style="color:var(--gold2)">Daje:</b> ${t.eff}</p>`;
   if(t.req.length)h+=`<p class="mut">Wymaga: ${t.req.map(r=>(S.tech[r]?'✓ ':'')+TECH_BY[r].n).join(', ')}</p>`;
   if(st==='done')h+='<p class="ok">Osada to już umie.</p>';
   else if(st==='sync')h+=`<p class="mut">${t.gt()}</p>`;
