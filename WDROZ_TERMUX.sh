@@ -6,7 +6,7 @@ MODE=publish
 if [ "${1:-}" = '--prepare-only' ]; then MODE=prepare; shift; fi
 [ "$#" -le 1 ] || { echo 'Użycie: bash WDROZ_TERMUX.sh [--prepare-only] [katalog-repo]'; exit 1; }
 PACKAGE_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-EXPECTED_COMMIT='ed1492cd2cbcae3bcf787f8e1f98db61c516686f'
+EXPECTED_COMMIT='954ed325fa9539e26fff5925472243ae434f6ec8'
 REPOSITORY="${1:-}"
 if [ -z "$REPOSITORY" ]; then
  if [ -d "$HOME/Przystan/.git" ]; then REPOSITORY="$HOME/Przystan";
@@ -41,7 +41,7 @@ if [ "$MODE" = prepare ]; then
 fi
 git add -- .github .gitignore KSIEGA.md README.md WDROZ_TERMUX.sh assets build.js docs package.json railway.json release-manifest.json server.js src tests tools
 git diff --cached --quiet && { echo 'STOP: brak zmian do commitu.'; exit 1; }
-git commit -m '4.9.0-rc.23: źródła wiedzy'
+git commit -m '4.9.0-rc.24: myśliwy, leśniczy i łowiska'
 git push origin main
 git fetch origin main
 [ "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)" ]

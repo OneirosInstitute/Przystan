@@ -721,7 +721,7 @@ function stepPerson(p,dt){
    return}
   if(k==='read'){const bk=p.book;if(!bk||S.books[bk]!==1){p.state='idle';return}S.readP[bk]=(S.readP[bk]||0)+dt*e*(p.trait==='Dociekliwy'?1.3:1)*(p.age<20?1.1:1);techXp('nauka',dt*.08,'czytanie');p.act='czyta: '+BOOKS[bk];
    if(S.readP[bk]>=200){S.books[bk]=2;log(p.name+' kończy czytać „'+BOOKS[bk]+'”.'+(bk==='kowal'?' Można spróbować postawić kuźnię (zakładka Wiedza).':bk==='siew'?' Wiemy, jak założyć pole.':''));toast('Przeczytano: '+BOOKS[bk]);if(bk==='siew')S.know.pole='tak';p.state='idle'}return}
-  if(k==='plant'){const n=p.tgt;if(!n||n.amt>0||n.grow>0){release(p);p.state='idle';return}p.wt+=dt*e;gainXp(p,'drwal',dt*.5);if(p.wt>=5){n.grow=.03;S.grow[n.id]=n.grow;nodeVis(n);release(p);p.state='idle';p.wait=.3}return}
+  if(k==='plant'){const n=p.tgt;if(!n||n.amt>0||n.grow>0){release(p);p.state='idle';return}p.wt+=dt*e;gainXp(p,'lesniczy',dt);if(p.wt>=5){n.grow=.03;S.grow[n.id]=n.grow;nodeVis(n);release(p);p.state='idle';p.wait=.3}return}
   if(k==='gasic'){const b=p.tgt;if(!b||!b.fire){p.fireB=null;p.state='idle';p.wait=.3;return}b.fire.s-=dt*.011*e*(wellCount()?1:.35)*(law('straz')?1.4:1);p.dir=(p.dir||0)+Math.sin(clock*3)*.02;return}
   if(k==='build'){const s=p.tgt;if(s&&bDone(s)&&s.proj&&bById(s.id)){s.proj.prog+=dt*e*craftEff(p,'ciesla')*(tech('r_zrab')?1.25:1)*(tech('r_zaprawa')?1.15:1)*(1+.04*offLv('budowa'));gainXp(p,'ciesla',dt);if(s.proj.prog>=s.proj.work){finishProj(s);p.tgt=null;p.state='idle';p.wait=.2}return}
   if(!s||bDone(s)){if(s&&s.workers>0)s.workers--;p.tgt=null;p.state='idle';p.wait=.2;return}
