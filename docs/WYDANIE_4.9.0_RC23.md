@@ -5,15 +5,14 @@ Podstawa: 4.9.0-rc.22 (`BASE_HASH`).
 Drugi pakiet (W2) z „Przystań — plan wiedzy i rozwoju”. Wiedza nie bierze się z niczego: oprócz praktyki ma źródła, które skracają drogę. Do tego mgła wiedzy w drzewku i podpowiedzi przy wieczornym ogniu.
 
 ## Co daje źródło
-- Próba może ruszyć już przy połowie przeczucia, a nie przy pełnym.
-- Szansa powodzenia rośnie o 15 punktów procentowych.
-- Źródło z wyspy (ślad, przysiółek) obniża koszt próby o połowę.
-- W karcie węzła widać, skąd osada o nim wie, np. „Źródło: Radosław pamięta to z domu”.
+- **Źródło z wyspy** (ślad dawnego ludu, przysiółek, przypadek): próba może ruszyć już przy połowie przeczucia, kosztuje połowę materiałów, a szansa rośnie o 15 punktów procentowych.
+- **Pamięć rozbitka** nie zastępuje praktyki. Działa przy samej próbie: gdy prowadzi ją ten, kto pamięta, potrzeba połowy materiałów, a szansa rośnie o 15 punktów procentowych.
+- W karcie węzła widać, skąd osada o nim wie, np. „Pamięć z domu: Radosław”.
 
 ## Pamięć rozbitków
 - Każdy dorosły rozbitek pamięta z domu jedną rzecz, a starsi od 40 lat dwie. Najczęściej coś ze swojego fachu, a starsi także z nauki. Część to wiedza na epokę II, np. kamieniarz pamięta miernictwo.
 - Na karcie osoby widać: „Pamięta z domu: wędzenie, miernictwo (przyda się w epoce II)”.
-- Kto pamięta, może poprowadzić próbę nawet bez biegłości w fachu. Gdy prowadzi ją sam, potrzeba połowy materiałów, a szansa jest o kolejne 10 punktów procentowych wyższa.
+- Kto pamięta, może poprowadzić próbę nawet bez biegłości w fachu, a szansa liczy się wtedy jak przy fachu na poziomie 2.
 - Gdy umrze albo odpłynie, pamięć przepada, jeśli nikt inny tego nie pamięta: „Radosław zabrał do grobu pamięć z domu: wędzenie. Tego nikt już nie pamięta.”
 - Na liście „Na co czekamy” pojawia się ostrzeżenie, gdy coś pamięta już tylko ktoś starszy niż 58 lat.
 

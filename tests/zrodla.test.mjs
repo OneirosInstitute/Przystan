@@ -19,20 +19,20 @@ test('every grown castaway remembers one or two things from home, and the card s
  E('zrPamInit()');assert.equal(E('S.people.filter(p=>p.pam).length'),r.length,'memories are given once');
 });
 
-test('a living castaway who remembers lets the trial start at half the feeling; leading it costs half and goes surer',()=>{
+test('a castaway who remembers can lead the trial: half the materials and a surer trial, but the practice is still needed',()=>{
  const {E}=game();E(REM);
- E('S.tp.h_wedz=TECH_BY.h_wedz.xp/4');assert.equal(E("badState(TECH_BY.h_wedz)"),'ready','half of the feeling is enough');
+ E('S.tp.h_wedz=TECH_BY.h_wedz.xp/4');assert.equal(E("badState(TECH_BY.h_wedz)"),'czuje','memory does not replace practice');E('S.tp.h_wedz=TECH_BY.h_wedz.xp/2');
  assert.equal(E("badPick(TECH_BY.h_wedz)===__p"),true,'the one who remembers leads, even without the craft');
  assert.deepEqual(JSON.parse(E("JSON.stringify(badCost(TECH_BY.h_wedz,__p))")),{mieso:4,drewno:4});assert.deepEqual(JSON.parse(E("JSON.stringify(badCost(TECH_BY.h_wedz,__q))")),{mieso:8,drewno:8});
- assert.equal(E("Math.round(100*badChance(TECH_BY.h_wedz,__p))"),75,'50% base, +15 for the source, +10 for leading it yourself');
- assert.match(E("zrSrcHTML(TECH_BY.h_wedz)"),/pamięta to z domu/);
+ assert.equal(E("Math.round(100*badChance(TECH_BY.h_wedz,__p))"),65,'50% base, +15 for leading it yourself');
+ assert.match(E("zrSrcHTML(TECH_BY.h_wedz)"),/Pamięć z domu:/);
  assert.equal(E("badStart('h_wedz')"),'');assert.match(LOG(E)[0],/Prowadzi ją .+, (który|która) pamięta to z domu, potrwa ok\. 2 dni\.$/);
 });
 
-test('when the one who remembers dies, the memory is gone and the full feeling is needed again',()=>{
- const {E}=game();E(REM);E('S.tp.h_wedz=TECH_BY.h_wedz.xp/4');
+test('when the one who remembers dies, the memory is gone and the trial costs the full price again',()=>{
+ const {E}=game();E(REM);E('S.tp.h_wedz=TECH_BY.h_wedz.xp/2');
  E("killPerson(__p,'z choroby')");assert.ok(LOG(E).some(t=>/^.+ (zabrał|zabrała) do grobu pamięć z domu: wędzenie\. Tego nikt już nie pamięta\.$/.test(t)),LOG(E).join('|'));
- assert.equal(E("badState(TECH_BY.h_wedz)"),'czuje');assert.equal(E("zrSrc(TECH_BY.h_wedz).length"),0);
+ assert.equal(E("zrSrc(TECH_BY.h_wedz).length"),0);assert.deepEqual(JSON.parse(E("JSON.stringify(badCost(TECH_BY.h_wedz,badPick(TECH_BY.h_wedz)))")),{mieso:8,drewno:8},'the full price again');
 });
 
 test('a trace of the old people gives the full feeling and a cheaper, surer trial, not the knowledge itself',()=>{

@@ -49,8 +49,8 @@ function badPractice(tag,v){if(!badOn()||!(v>0))return;const I=badIdx(),now=epNo
   const cap=tHalf(t),cur=S.tp[t.id]||0;if(cur>=cap)continue;S.tp[t.id]=Math.min(cap,cur+v*badEpM(t));
   if(S.tp[t.id]>=cap-1e-9&&tRoot(t)){if(!t.gate||t.gate())techDone(t)}else if(!tRoot(t)&&badFeel(t)>=badFeelNeed(t)-1e-9)badReadyNote(t)}}}
 const badFeel=t=>Math.min(1,(S.tp[t.id]||0)/tHalf(t));
-// W2: źródło (pamięć rozbitka, ślad, przysiółek, przypadek) zastępuje połowę praktyki
-const badFeelNeed=t=>typeof zrSrc==='function'&&zrSrc(t).length?.5:1;
+// W2: źródło z wyspy (ślad, przysiółek, przypadek) zastępuje połowę praktyki; pamięć rozbitka działa przy samej próbie
+const badFeelNeed=t=>S&&S.tsrc&&S.tsrc[t.id]?.5:1;
 const badFeelOk=t=>badFeel(t)>=badFeelNeed(t)-1e-9;
 function badTagTxt(t){const P=TPRAC[t.id]||[];return P.map(g=>CN[g]?CN[g].toLowerCase():BAD_TAG[g]).filter(Boolean).join(', ')}
 function badReadyNote(t){badS();if(S.tnote[t.id])return;S.tnote[t.id]=1;const dn=DOMS.find(d=>d[0]===t.d)[1];
@@ -67,7 +67,7 @@ function badWho(t){badS();const busy=new Set(S.bad.map(b=>b.pid));const C=badCra
   .sort((a,b)=>badRem(t,b)-badRem(t,a)||badSkill(t,b)-badSkill(t,a)||((a.job==='rob')?0:1)-((b.job==='rob')?0:1)||a.id-b.id)}
 function badPick(t){const L=badWho(t);const want=S.bsel&&S.bsel[t.id];return L.find(p=>p.id===want)||L[0]||null}
 function badChance(t,p){const f=S.tfail[t.id]||0;let c=t.d==='nauka'?.5+.06*badSage(p):.5+.15*(Math.max(badSkill(t,p),badRem(t,p)?2:0)-2);
- c+=(typeof zrSrc==='function'&&zrSrc(t).length?.15:0)+(badRem(t,p)?.1:0);
+ c+=(S.tsrc&&S.tsrc[t.id]?.15:0)+(badRem(t,p)?.15:0);
  c+=.2*f+(p.trait==='Uparty'?.08:0)+(p.trait==='Dociekliwy'&&t.d!=='nauka'?.05:0)+(tech('n_kron')&&t.d!=='nauka'?.03:0);return clamp(c,.1,.95)}
 function badDays(t){const e=tEp(t);let d=e===1?(t.r<=1?2:t.r===2?3:4):e===2?(t.r<=4?3:4):(t.r<=6?5:6);return d}
 const badNeed=t=>badDays(t)*BAD_WD*(tech('n_szk')?.9:1)*(tech('n_szkola')?.85:1);

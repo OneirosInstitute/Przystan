@@ -1,7 +1,7 @@
 
 /* ================= 4.9.0-rc.23 Źródła wiedzy: nic z niczego ================= */
-// Plan wiedzy i rozwoju, pakiet W2. Źródło zastępuje połowę praktyki (próba może ruszyć przy połowie przeczucia)
-// i daje pewniejszą próbę (p_badania.js: badFeelNeed, badChance, badCost). Źródła:
+// Plan wiedzy i rozwoju, pakiet W2. Źródło z wyspy zastępuje połowę praktyki (próba może ruszyć przy połowie przeczucia)
+// i daje tańszą, pewniejszą próbę; pamięć rozbitka działa, gdy on sam prowadzi próbę (p_badania.js: badFeelNeed, badChance, badCost). Źródła:
 // - pamięć rozbitków: każdy dorosły rozbitek pamięta z domu 1–2 rzeczy; kto pamięta i sam prowadzi próbę, płaci połowę materiałów; gdy umrze albo odpłynie, pamięć przepada;
 // - ślady dawnego ludu: dar daje pełne przeczucie i tańszą próbę zamiast gotowej wiedzy;
 // - przypadki: pożar, wilki przy zagrodzie, rana podsuwają pomysł;
@@ -63,8 +63,10 @@ function zrHamDaily(){for(const h of (S.hamlets||[])){const L=ZR_HAM[hType(h)]||
   const t=TECH_BY[h.wz];if((h.wiez||0)>=.45&&!(S.tsrc&&S.tsrc[h.wz])){zrS();S.tsrc[h.wz]={k:'przys',n:h.name};log(`W przysiółku ${h.name} znają się na tym: ${t.n.toLowerCase()}. Próba w osadzie będzie tańsza i pewniejsza.`)}}}
 {const _ca=cartArrive;cartArrive=function(c){_ca(c);try{if(!badOn()||c.dir>=0)return;const h=(S.hamlets||[]).find(x=>x.id===c.h);const t=h&&h.wz&&TECH_BY[h.wz];if(!t||!zrAvail(t))return;const cap=tHalf(t);S.tp[t.id]=Math.min(cap,(S.tp[t.id]||0)+cap*.08);if(badFeelOk(t))badReadyNote(t)}catch(e){}}}
 // ---------- widok źródeł w karcie węzła ----------
-function zrSrcHTML(t){const L=zrSrc(t);if(!L.length)return'';const txt=L.map(s=>s.k==='pam'?`${s.n} pamięta to z domu`:s.k==='slad'?`ślad dawnego ludu: ${s.n.toLowerCase()}`:s.k==='przys'?`przysiółek ${s.n} zna się na tym`:s.k==='ev'?`przypadek: ${s.n}`:s.n);
- return`<p class="zr-src"><b style="color:var(--gold2)">Źródło:</b> ${txt.join('; ')}. Wystarczy połowa przeczucia, a próba jest pewniejsza${S.tsrc&&S.tsrc[t.id]?' i tańsza':''}.</p>`}
+function zrSrcHTML(t){const L=zrSrc(t);if(!L.length)return'';const isl=L.filter(s=>s.k!=='pam'),pam=L.filter(s=>s.k==='pam');let h='';
+ if(isl.length)h+=`<p class="zr-src"><b style="color:var(--gold2)">Źródło:</b> ${isl.map(s=>s.k==='slad'?`ślad dawnego ludu: ${s.n.toLowerCase()}`:s.k==='przys'?`przysiółek ${s.n} zna się na tym`:s.k==='ev'?`przypadek: ${s.n}`:s.n).join('; ')}. Wystarczy połowa przeczucia, a próba jest tańsza i pewniejsza.</p>`;
+ if(pam.length)h+=`<p class="zr-src"><b style="color:var(--gold2)">Pamięć z domu:</b> ${pam.map(s=>s.n).join(', ')}. Kto pamięta, może poprowadzić próbę: połowa materiałów i większa szansa.</p>`;
+ return h}
 // ---------- podpowiedzi przy wieczornym ogniu ----------
 {const _rn=badReadyNote;badReadyNote=function(t){const was=S.tnote&&S.tnote[t.id];_rn(t);if(!was&&S.tnote&&S.tnote[t.id]){zrS();if(!S.bhint.includes(t.id))S.bhint.push(t.id);if(S.bhint.length>4)S.bhint.shift()}}}
 function zrHintLine(){zrS();while(S.bhint.length){const id=S.bhint.shift(),t=TECH_BY[id];if(!t||S.tech[id])continue;const C=(TPRAC[id]||[]).filter(g=>CN[g]);
