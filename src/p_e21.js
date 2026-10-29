@@ -49,7 +49,7 @@ function e2Hor(){const why=e2HorWhy();if(why){toast(why);return}const sz=S.bld.f
  lines.push('Przywieźli: '+Object.entries(got).map(([k,v])=>RN[k].toLowerCase()+' '+v).join(', ')+'.');
  out.forEach(p=>{if(Math.random()<e.risk){p.hp=Math.max(.3,p.hp-.25);p.hurt=1;lines.push(p.name+' wraca '+gw(p,'chory','chora')+' od zimna i słonej wody.')}gainXp(p,'rybak',50)});
  if(lost)lines.push(e.big?'':'Jedna łódź przepadła w sztormie. Ludzie przesiedli się do drugiej.');
- out.forEach(p=>{expReturn(p,e)});S.e2.horN=(S.e2.horN||0)+1;techXp('nauka',14);
+ out.forEach(p=>{expReturn(p,e)});S.e2.horN=(S.e2.horN||0)+1;techXp('nauka',14,'wyprawa');
  S.expLog=S.expLog||[];S.expLog.unshift({d:Math.floor(S.day)+1,r:'Za horyzont',t:lines.join(' ')});if(S.expLog.length>8)S.expLog.pop();
  log('Wyprawa za horyzont wraca. '+lines.filter(Boolean).join(' '));toast('Wyprawa wróciła zza horyzontu');assign();renderPanel()}}
 const E2_OBOZ={drewno:40,deski:10,narz:2};

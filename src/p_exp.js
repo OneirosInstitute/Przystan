@@ -32,7 +32,7 @@ const ATLAS=[
  ['Zwierzęta','mewa','Mewa srebrzysta','Krąży nad zatoką. Gdzie mewy, tam ryby.',()=>true],
  ['Zwierzęta','kruk','Kruk','Para kruków pilnuje boru. Podobno pamiętają ludzi.',()=>seenBiome('conif')],
  ['Zwierzęta','orzel','Bielik','Krąży nad halami i nad morzem.',()=>seenBiome('high')]];
-function atlasScan(quiet){if(!S)return;S.atlas=S.atlas||{};ATLAS.forEach(a=>{if(S.atlas[a[1]])return;if(a[4]()){S.atlas[a[1]]=1;if(!quiet){log('Nowy gatunek w atlasie: '+a[2].toLowerCase()+'. '+a[3]);techXp('nauka',3)}}})}
+function atlasScan(quiet){if(!S)return;S.atlas=S.atlas||{};ATLAS.forEach(a=>{if(S.atlas[a[1]])return;if(a[4]()){S.atlas[a[1]]=1;if(!quiet){log('Nowy gatunek w atlasie: '+a[2].toLowerCase()+'. '+a[3]);techXp('nauka',3,'odkrycie')}}})}
 function natureHTML(){const n=ATLAS.filter(a=>S.atlas[a[1]]).length;let h=`<p class="lead">Atlas przyrody wyspy. Odkryto ${n} z ${ATLAS.length} gatunków. Nowe gatunki pojawiają się, gdy zwiadowcy i wyprawy odsłaniają wyspę.</p>`;
  ['Drzewa','Rośliny','Zwierzęta'].forEach(g=>{const l=ATLAS.filter(a=>a[0]===g);h+=`<h3>${g} <span class="mut" style="font-size:13px">${l.filter(a=>S.atlas[a[1]]).length}/${l.length}</span></h3><div class="atlas">`;
   l.forEach(a=>{h+=S.atlas[a[1]]?`<div class="card"><h4>${a[2]}</h4><p>${a[3]}</p></div>`:`<div class="card unk"><h4>Nieznany gatunek</h4><p class="mut">Jeszcze go nie widziano.</p></div>`});h+='</div>'});
@@ -75,10 +75,10 @@ function finishExp(e,out){const r=REGIONS[e.r];S.exps=S.exps.filter(x=>x!==e);co
   else if(x<rk){p.hp=Math.max(.3,p.hp-.18);p.hurt=1;lines.push(p.name+' '+gw(p,'skręcił','skręciła')+' nogę w drodze.')}
   gainXp(p,r.type==='coast'?'rybak':r.type==='high'?'kamieniarz':'zbieracz',40);gainXp(p,'mysliwy',30)});
  const alive=out.filter(p=>S.people.includes(p));
- if(e.type==='zwiad'){for(let j=0;j<N;j+=4)for(let i=0;i<N;i+=4)if(REGION[j*N+i]===e.r)reveal(i,j,4);regionScan(true);S.regs[e.r]=1;r.known=true;techXp('nauka',20);
+ if(e.type==='zwiad'){for(let j=0;j<N;j+=4)for(let i=0;i<N;i+=4)if(REGION[j*N+i]===e.r)reveal(i,j,4);regionScan(true);S.regs[e.r]=1;r.known=true;techXp('nauka',20,'zwiad');
   lines.push('Poznano teren: '+r.name+' ('+RTYPE[r.type]+').');S.hope=clamp(S.hope+.02,0,1)}
  else{const got=[];LOOT[r.type].forEach(([k,v])=>{if(k==='miod'&&!tech('u_bart'))return;const q=Math.round(v*alive.length*(e.days-1)*(.7+Math.random()*.6)*(law('lup')?1.25:1));if(q>0){S.res[k]=(S.res[k]||0)+q;got.push(RN[k].toLowerCase()+' '+q)}});
-  techXp(r.type==='coast'?'hodowla':'uprawa',15);S.seen.zbior1=1;techXp('nauka',8);lines.push(got.length?'Przynieśli: '+got.join(', ')+'.':'Wrócili z pustymi rękami.')}
+  techXp(r.type==='coast'?'hodowla':'uprawa',15,r.type==='coast'?'rybak':'zbieracz');S.seen.zbior1=1;techXp('nauka',8,'wyprawa');lines.push(got.length?'Przynieśli: '+got.join(', ')+'.':'Wrócili z pustymi rękami.')}
  alive.forEach(p=>{expReturn(p,e)});
  S.expLog=S.expLog||[];S.expLog.unshift({d:Math.floor(S.day)+1,r:r.name,t:lines.join(' ')});if(S.expLog.length>8)S.expLog.pop();
  log('Wyprawa wraca: '+r.name+'. '+lines.join(' '));toast('Wyprawa wróciła: '+r.name);assign();renderPanel()}

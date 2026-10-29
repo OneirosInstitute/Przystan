@@ -54,7 +54,7 @@ const SLAD=[
    {n:'Zebrać owoce i zostawić sad',d:'',f:()=>{S.res.jagody+=20;sladLater(7);return'Kosz jabłek idzie do spiżarni. Sad zostaje w puszczy.'}}]}];
 function slad(k){return!!(S&&S.slady&&S.slady[k])}
 function sladLater(i){S.sladCd=S.sladCd||{};S.sladCd[i]=S.day+SD*2}
-function sladDo(i){const s=SLAD[i];S.slady=S.slady||{};if(S.slady[s.k])return;S.slady[s.k]=1;pamAdd(2,'slad');techXp('nauka',20);
+function sladDo(i){const s=SLAD[i];S.slady=S.slady||{};if(S.slady[s.k])return;S.slady[s.k]=1;pamAdd(2,'slad');techXp('nauka',20,'odkrycie');
  if(i===0){['u_rozp','u_ziel'].forEach(id=>TECH_BY[id]&&techDone(TECH_BY[id]));S.res.ziola=(S.res.ziola||0)+6}
  if(i===1)S.bonus.mysliwy=(S.bonus.mysliwy||0)+.25;
  if(i===2){S.bonus.zbieracz=(S.bonus.zbieracz||0)+.2;TECH_BY.u_rozp&&techDone(TECH_BY.u_rozp)}

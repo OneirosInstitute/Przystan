@@ -20,7 +20,7 @@ function slavDaily(){if(!S.slav){S.slav=1;S.people.forEach(p=>{if(p.age>=7)S.see
  if(S.slavQ&&!evOpen&&!placing){const q=S.slavQ;S.slavQ=null;if(q==='dziadyLud')openEvent(DZIADY_LUD,{})}
  // Noc Kupały: rocznica rozbicia
  if(rd===0&&yr>=1&&once('kupala')){const krag=S.bld.some(b=>b.kind==='gaj'&&bDone(b));if(ob&&S.res.opal>=6)S.res.opal-=6;
-  S.wh+=.07*f*g*(krag?1.25:1);S.wd-=.03*f*g;if(krag)techXp('nauka',10);
+  S.wh+=.07*f*g*(krag?1.25:1);S.wd-=.03*f*g;if(krag)techXp('nauka',10,'opowiesc');
   log(ob?`Noc Kupały. ${yr===1?'Rok':yr+' '+lata(yr)} temu morze wyrzuciło nas na ten brzeg. Płoną ogniska${krag?' pod świętym dębem':''}, młodzi skaczą przez ogień, dziewczęta puszczają wianki na wodę zatoki.`:`Najkrótsza noc w roku. ${yr===1?'Rok':yr+' '+lata(yr)} temu rozbiliśmy się o ten brzeg. Ktoś pali małe ognisko na plaży i długo patrzy w morze.`);
   toast('Noc Kupały');pamAdd(2,'obrzed');if(ob)fujarka()}
  // Dziady

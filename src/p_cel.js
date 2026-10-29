@@ -11,7 +11,7 @@ const celCnt=k=>S.bld.filter(b=>(CEL_UP[k]||[k]).includes(b.kind)&&bDone(b)).len
 function celMiss(cost){return Object.entries(cost||{}).filter(([k,v])=>(S.res[k]||0)<v).map(([k,v])=>`${(RN[k]||k).toLowerCase()} ${Math.ceil(v-(S.res[k]||0))}`)}
 function celNeed(k){const n=BD[k].need,t=TECH_BY[n];
  if(t){const st=techState(t),pc=t.xp?Math.round(100*(S.tp[t.id]||0)/t.xp):0;const dn=(DOMS.find(d=>d[0]===t.d)||[])[1]||'Wiedza';
-  return{txt:st==='avail'?`najpierw wiedza „${t.n}” (Wiedza → ${dn}): ${pc}%, rośnie z pracy w tej dziedzinie`:`najpierw wiedza „${t.n}” (Wiedza → ${dn}); wcześniej trzeba poznać to, co ją poprzedza`,hint:['wiedza',null,st==='avail'?`[data-focus="${t.id}"]`:null]}}
+  return{txt:st==='avail'?(typeof badCelTxt==='function'?badCelTxt(t):`najpierw wiedza „${t.n}” (Wiedza → ${dn}): ${pc}%`):`najpierw wiedza „${t.n}” (Wiedza → ${dn}); wcześniej trzeba poznać to, co ją poprzedza`,hint:['wiedza',null,st==='avail'?`[data-tn="${t.id}"]`:null]}}
  const tr=typeof TRIAL!=='undefined'&&TRIAL[n];if(tr)return{txt:`najpierw próba: ${tr.n.toLowerCase()} (Wiedza → Próby)`,hint:['wiedza',null,`[data-try="${n}"]`]};
  return{txt:'najpierw trzeba to odkryć na wyspie',hint:null}}
 // budowa: stoi? w budowie? czego brakuje?
@@ -46,8 +46,8 @@ const CEL={
   return{txt:`„${BOOKS[bk]}” leży w obozie. Przydziel czytelnika (Praca → Czytelnicy).${pc?` Przeczytano ${pc}%.`:''}`,hint:['praca',null,'[data-al="czyt"][data-d="1"]']}},
  'Oswój pierwszą kozę':()=>{
   if(!tech('h_zagr')){const t=TECH_BY.h_zagr,st=techState(t),pc=Math.round(100*(S.tp.h_zagr||0)/t.xp);
-   return st==='avail'?{txt:`Najpierw wiedza „Oswajanie kóz” (Wiedza → Hodowla): ${pc}%. Rośnie z pracy myśliwych i rybaków, szybciej, gdy osada się na niej skupi.`,hint:['wiedza',null,'[data-focus="h_zagr"]']}
-    :{txt:'Najpierw trzeba poznać tropienie zwierzyny, a potem oswajanie kóz (Wiedza → Hodowla). Wiedza rośnie z pracy myśliwych i rybaków.',hint:['wiedza',null,null]}}
+   return st==='avail'?{txt:typeof badCelTxt==='function'?badCelTxt(t)[0].toUpperCase()+badCelTxt(t).slice(1)+'.':`Najpierw wiedza „Oswajanie kóz” (Wiedza → Hodowla): ${pc}%.`,hint:['wiedza',null,'[data-tn="h_zagr"]']}
+    :{txt:'Najpierw trzeba poznać tropienie zwierzyny, a potem oswajanie kóz (Wiedza → Hodowla). Przeczucie przychodzi z pracy myśliwych i hodowców.',hint:['wiedza',null,null]}}
   const seen=S.herds.filter(h=>{if(h.type!=='koza'||h.n<=0)return false;const t=tileOf(h.x,h.z);return revAt(t[0],t[1])});
   const near=(x,z)=>seen.map(h=>[h,Math.hypot(h.x-x,h.z-z)]).sort((a,b)=>a[1]-b[1])[0];
   const where=()=>{const c=near(tcx(camp.i),tcx(camp.j));if(!c)return'Nikt jeszcze nie widział dzikich kóz: zwiadowcy muszą odsłonić hale.';const t=tileOf(c[0].x,c[0].z),r=regionAt(t[0],t[1]);return`Dzikie kozy pasą się ${Math.round(c[1])} ${krokW(Math.round(c[1]))} od obozu${r&&r.known&&r.name?`, w krainie ${r.name}`:''}. Zagroda musi stać najwyżej ${BD.zagroda.r+3} kroków od nich.`};

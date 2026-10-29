@@ -48,12 +48,12 @@ function kozWhere(h){const t=tileOf(h.x,h.z),r=regionAt(t[0],t[1]);return r&&r.k
   const t=!n?'Nikt jeszcze nie widział dzikich kóz. Zwiadowcy muszą odsłonić hale.':`Dzikie kozy: najbliższe stado ${Math.round(n[1])} ${krokW(Math.round(n[1]))} stąd${kozWhere(n[0])}${n[1]>ZAG_NEAR?'. Hodowcy chodzą tam na łowy':''}.`;
   return h+`<p class="mut">${t}${out.length?` Na łowach: ${out.map(q=>q.name+(q.kozN?' (wraca z kozą)':'')).join(', ')}.`:''}</p>`}}
 // opisy celu i wiedzy
-try{ACTS[3].g.forEach(g=>{if(g[0]==='Oswój pierwszą kozę')g[2]='Wiedza o oswajaniu kóz rośnie z pracy myśliwych i rybaków (Wiedza → Hodowla). Potem zagroda, choćby przy osadzie, i hodowca: sam chodzi na łowy tam, gdzie pasą się dzikie kozy.'})}catch(e){}
+try{ACTS[3].g.forEach(g=>{if(g[0]==='Oswój pierwszą kozę')g[2]='Przeczucie, jak oswoić kozy, przychodzi z pracy myśliwych i hodowców, a wiedzę daje próba (Wiedza → Hodowla). Potem zagroda, choćby przy osadzie, i hodowca: sam chodzi na łowy tam, gdzie pasą się dzikie kozy.'})}catch(e){}
 // krok celu „Oswój pierwszą kozę”: zasięg zagrody już nie blokuje
 CEL['Oswój pierwszą kozę']=()=>{
  if(!tech('h_zagr')){const t=TECH_BY.h_zagr,st=techState(t),pc=Math.round(100*(S.tp.h_zagr||0)/t.xp);
-  return st==='avail'?{txt:`Najpierw wiedza „Oswajanie kóz” (Wiedza → Hodowla): ${pc}%. Rośnie z pracy myśliwych i rybaków, szybciej, gdy osada się na niej skupi.`,hint:['wiedza',null,'[data-focus="h_zagr"]']}
-   :{txt:'Najpierw trzeba poznać tropienie zwierzyny, a potem oswajanie kóz (Wiedza → Hodowla). Wiedza rośnie z pracy myśliwych i rybaków.',hint:['wiedza',null,null]}}
+  return st==='avail'?{txt:typeof badCelTxt==='function'?badCelTxt(t)[0].toUpperCase()+badCelTxt(t).slice(1)+'.':`Najpierw wiedza „Oswajanie kóz” (Wiedza → Hodowla): ${pc}%.`,hint:['wiedza',null,'[data-tn="h_zagr"]']}
+   :{txt:'Najpierw trzeba poznać tropienie zwierzyny, a potem oswajanie kóz (Wiedza → Hodowla). Przeczucie przychodzi z pracy myśliwych i hodowców.',hint:['wiedza',null,null]}}
  const seen=kozSeen();const done=S.bld.filter(b=>b.kind==='zagroda'&&bDone(b));
  if(!done.length){const s=celBuild('zagroda',1);if(!s.wait&&s.kind)s.txt+=' Może stać przy osadzie: hodowca sam pójdzie po kozy na łowy.';return s}
  const b=done.slice().sort((x,y)=>celWorkers(y).length-celWorkers(x).length)[0],ws=celWorkers(b),c=bCenter(b);

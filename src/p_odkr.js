@@ -53,7 +53,7 @@ function odkFind(o,p){odkInit();const st=S.odk[o.id]||(S.odk[o.id]={s:1,d:S.day}
  const same=ODK.filter(q=>q.t===o.t&&S.odk[q.id]&&S.odk[q.id].s===2&&q!==o).length;const N0=ODK_T[o.t].n;st.nm=N0[same%N0.length];
  if(o.t==='kury'){S.know.kury='tak';st.n=9;S.atlas&&(S.atlas.kura=1)}if(o.t==='wegiel'){S.know.wegiel_k='tak';st.left=600}if(o.t==='torf')S.know.torf='tak';if(o.t==='sol')S.know.sol='tak';
  if(o.t==='kapusta'){S.know.warzywa='tak';if(S.atlas)S.atlas.kapusta=1}if(o.t==='tok'&&S.atlas)S.atlas.cietrzew=1;if(o.t==='bursztyn'){S.know.burszt='tak';st.amt=0}
- log(ODK_T[o.t].find(p||{name:'Ktoś'})+` Ludzie mówią na to miejsce: ${st.nm}.`);toast('Odkrycie: '+st.nm);try{techXp('nauka',12)}catch(e){}
+ log(ODK_T[o.t].find(p||{name:'Ktoś'})+` Ludzie mówią na to miejsce: ${st.nm}.`);toast('Odkrycie: '+st.nm);try{techXp('nauka',12,'odkrycie')}catch(e){}
  S.people.forEach(q=>{if(q.odkT===o.id&&!q.odkPup)q.odkT=null});odkKeys();odkLblDirty=true}
 function odkKeys(){if(!S)return;if(S.know.torf==='tak'&&!BKEYS.includes('torfowisko'))BKEYS.push('torfowisko')}
 {const _ek=e2Keys;e2Keys=function(){_ek();odkKeys()}}
