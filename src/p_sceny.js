@@ -112,7 +112,7 @@ function scBubble(p,txt){if(typeof czOn!=='undefined'&&!czOn)return;scBP=p.id;co
 function scBubFrame(){if(scBP===null)return;const p=S&&pById(scBP);if(!p||performance.now()>scBU||evOpen||!$('sheet').hidden){scBubEl.hidden=true;scBP=null;return}
   // 4.9.0-rc.16: przy otwartej karcie osoby dymek nie zasłania karty (ta sama historia jest na karcie)
   if(document.body.classList.contains('selon')){scBubEl.style.opacity='0';return}
-  scV.set(p.x,Hy(p.x,p.z)+2.3,p.z).project(cam);if(Math.abs(scV.x)>.95||Math.abs(scV.y)>.9||scV.z>1){scBubEl.style.opacity='0';return}scBubEl.style.opacity='1';
+  scV.set(p.x,Hy(p.x,p.z)+1.75,p.z).project(cam);if(Math.abs(scV.x)>.95||Math.abs(scV.y)>.9||scV.z>1){scBubEl.style.opacity='0';return}scBubEl.style.opacity='1';
   if(!scBW)scBW=scBubEl.offsetWidth;const x=(scV.x+1)/2*innerWidth,half=scBW/2,cx=Math.min(Math.max(x,half+8),innerWidth-half-8);
   scBubEl.style.left=Math.round(cx)+'px';scBubEl.style.top=Math.round((1-scV.y)/2*innerHeight)+'px';if(typeof scBubEl.style.setProperty==='function')scBubEl.style.setProperty('--ax',Math.round(Math.min(Math.max(x-cx+half,14),scBW-14))+'px')}
 {const _mt=mapTick;mapTick=function(rdt){_mt(rdt);scBubFrame()}}

@@ -501,7 +501,8 @@ let pMesh={};
 function personDetail(p){return GFX.level>0&&zoom>=.65&&Math.hypot(p.x-camT.x,p.z-camT.z)<45}
 function personProfile(p){return [p.age<12?'child':p.age<24?'young':p.age>55?'old':'adult',p.sex,p.cloth,p.rod||p.fam||p.id,personDetail(p)?1:0].join(':')}
 function ensurePersonProfile(p){const current=pMesh[p.id];if(current&&current.userData.profile!==personProfile(p)){removePersonMesh(p.id);addPersonMesh(p);return pMesh[p.id]}return current}
-function personScale(p){return(p.age<12?(.42+p.age*.045):(p.age>55?.95:1))*1.55}
+// 4.9.0-rc.25: ludzie o ok. 25% mniejsi (było 1,55), żeby dorosły sięgał ok. 70% ściany chaty, jak w prawdziwej wsi
+function personScale(p){return(p.age<12?(.42+p.age*.045):(p.age>55?.95:1))*1.15}
 function buildPeopleMeshes(){retireObjects(pGroup.children.slice());pMesh={};S.people.forEach(addPersonMesh)}
 function addPersonMesh(p){const m=personDetail(p)?makePersonMesh(p):makePersonLow(p);pMesh[p.id]=m;pGroup.add(m);m.scale.setScalar(personScale(p));m.userData.profile=personProfile(p)}
 function removePersonMesh(id){const m=pMesh[id];if(m){retireObjects(m);for(const geometry of new Set([...Object.values(m.userData.gS||{}),...Object.values(m.userData.gW||{})]))geometry.dispose();delete pMesh[id]}}
@@ -1150,7 +1151,7 @@ function renderSel(){const el=$('sel');
  const tl=['bez narzędzi','narzędzia kamienne','narzędzia żelazne'][p.tool.t];
  const hh=`<h4>${escapeHtml(p.name)} <span class="mut" style="font-size:13px">${Math.floor(p.age)} l.</span></h4><p>${jobLabel(p)} · ${p.act}</p><p class="mut">${traitN(p)}: ${TRAITS[p.trait][1]}</p>${typeof duszaHTML==='function'?duszaHTML(p):''}<div>${skillTags(p,6)||'<span class="tag">bez fachu</span>'}</div><p class="mut">rodzina ${escapeHtml(famName(p.fam))} · zdrowie ${Math.round(p.hp*100)}%${isAdult(p)?' · '+tl:''}${p.coat<=0?' · bez ciepłej odzieży':''}</p>${p.mentor?`<p class="mut">uczy się od: ${p.mentor.name}</p>`:''}`+ludCard(p);if(el._h!==hh){el._h=hh;el.innerHTML=hh}}
 const v3=new THREE.Vector3();
-function placeLabel(){const el=$('lbl');if(selId===null||!S){el.style.display='none';return}const p=pById(selId);if(!p){el.style.display='none';return}v3.set(p.x,Hy(p.x,p.z)+2.1,p.z).project(cam);
+function placeLabel(){const el=$('lbl');if(selId===null||!S){el.style.display='none';return}const p=pById(selId);if(!p){el.style.display='none';return}v3.set(p.x,Hy(p.x,p.z)+1.6,p.z).project(cam);
  if(Math.abs(v3.x)>1||Math.abs(v3.y)>1){el.style.display='none';return}el.style.display='block';el.textContent=p.name;el.style.left=((v3.x+1)/2*innerWidth)+'px';el.style.top=((1-v3.y)/2*innerHeight)+'px'}
 // RC11: zapasy domu — spiżarka, ciepło, odzież, zdrowie rodziny
 function homeStockHTML(b){const f=Object.values(S.fams).find(x=>x.home===b.id&&famMembers(x.id).length);

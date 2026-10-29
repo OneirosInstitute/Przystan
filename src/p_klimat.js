@@ -15,6 +15,18 @@
 #sheet #shead{padding-top:17px}
 #sheet #stitle{font:600 23px var(--serif);color:var(--ks-bark);letter-spacing:.01em;display:flex;align-items:center;gap:10px}
 #sheet #stitle::before{content:'';width:10px;height:10px;flex:none;transform:rotate(45deg);background:var(--ks-madder);box-shadow:0 0 0 2px var(--ks-pine),0 0 0 3.5px var(--ks-amber)}
+/* 4.9.0-rc.25: okna wydarzeń i wieczoru w tym samym stroju co księga: pas haftu, len, romb przy tytule, opcje jak tabliczki */
+#ev .box{position:relative}
+#ev .box,body #rdCard{background:${grain},linear-gradient(180deg,var(--ks-pine2) 0%,var(--ks-pine) 45%,#141b16 100%);border:1px solid #6b5432;border-radius:12px;box-shadow:0 18px 50px #000a,inset 0 0 0 1px #f3dca514,inset 0 0 0 5px #00000026,inset 0 0 0 6px #d9a44122}
+#ev .box{padding-top:30px;padding-bottom:22px}body #rdCard{padding-top:26px;padding-bottom:18px}
+#ev .box::before,body #rdCard::before{content:'';position:absolute;left:0;right:0;top:0;height:15px;background:${band} repeat-x 4px 1.5px/24px 12px,linear-gradient(#e9dcc0,#d9cba9);border-radius:11px 11px 0 0;box-shadow:inset 0 -1px 0 #8a6a3a,0 1px 0 #0006;pointer-events:none}
+#ev .box::after,body #rdCard::after{content:'';position:absolute;left:18%;right:18%;bottom:8px;height:2px;background:repeating-linear-gradient(90deg,var(--ks-amber) 0 5px,transparent 5px 7px,var(--ks-madder) 7px 10px,transparent 10px 12px);opacity:.75;pointer-events:none}
+#ev .eyebrow{color:var(--ks-amber)}
+#ev h2{display:flex;align-items:center;gap:10px;color:var(--ks-bark)}
+#ev h2::before{content:'';width:10px;height:10px;flex:none;transform:rotate(45deg);background:var(--ks-madder);box-shadow:0 0 0 2px var(--ks-pine),0 0 0 3.5px var(--ks-amber)}
+#ev .opts button,#ev .box>button{background:linear-gradient(180deg,var(--ks-wood2),var(--ks-wood));border:1px solid var(--ks-groove);color:#ece2c8;border-radius:10px;box-shadow:inset 0 1px 0 #ffe7b51a,inset 0 -2px 0 #0000004d,0 1px 2px #0007}
+#ev .opts button small{color:#cdbd94}
+#ev .opts button:hover,#ev .opts button:focus-visible,#ev .box>button:hover{border-color:var(--ks-amber)}
 /* działy: tabliczki z drewna */
 body.cz #cz-chips button,#tabbar button{position:relative;background:linear-gradient(180deg,var(--ks-wood2),var(--ks-wood));border:1px solid var(--ks-groove);color:#dccfb0;box-shadow:inset 0 1px 0 #ffe7b51a,inset 0 -2px 0 #0000004d,0 1px 2px #0007;border-radius:10px}
 body.cz #cz-chips button.on,#tabbar button.on{background:linear-gradient(180deg,#5a4426,#3c2d1a);border-color:var(--ks-amber);color:#fff2d2;box-shadow:inset 0 0 0 1px #d9a44140,inset 0 -2px 0 #0000004d,0 2px 6px #0008}

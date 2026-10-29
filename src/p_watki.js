@@ -307,7 +307,7 @@ function watBlocks(k,m){if(!watOn())return false;const a=watOf(k),b=watOf(m);if(
 // ---------- dymek z nazwą wątku i kolejka dymków ----------
 {const _sb=scBubble;scBubble=function(p,t){delete scBubEl.dataset.w;return _sb(p,t)}}
 function watBubble(p,txt,label){if(scBP!==null||!watOnScreen(p)){if(watQ.length<4)watQ.push([p.id,txt,label]);return}scBubble(p,txt);if(!scBubEl.hidden)scBubEl.dataset.w=label}
-function watOnScreen(p){if(!p||typeof cam==='undefined')return false;scV.set(p.x,Hy(p.x,p.z)+2.3,p.z).project(cam);return Math.abs(scV.x)<.9&&Math.abs(scV.y)<.85&&scV.z<1}
+function watOnScreen(p){if(!p||typeof cam==='undefined')return false;scV.set(p.x,Hy(p.x,p.z)+1.75,p.z).project(cam);return Math.abs(scV.x)<.9&&Math.abs(scV.y)<.85&&scV.z<1}
 {const _mt=mapTick;mapTick=function(rdt){_mt(rdt);if(watQ.length&&scBP===null&&S&&!evOpen){const[id,txt,label]=watQ[0];const p=pById(id);if(!p){watQ.shift();return}if(watOnScreen(p)){watQ.shift();scBubble(p,txt);if(!scBubEl.hidden)scBubEl.dataset.w=label}}}}
 
 // ---------- karta osoby: co się u niej dzieje; „Pchnij ich ku sobie” ----------
