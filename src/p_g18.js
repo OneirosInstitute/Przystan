@@ -164,15 +164,17 @@ function makePerson18(p){const g=new THREE.Group();const k=p.sex==='k',adult=p.a
  [-1,1].forEach(s=>T.push([new THREE.SphereGeometry(.056,10,8),cloth,mdM(s*.15,.755-h0,0,0,0,0,1,.85,1)]));
  // szyja i głowa
  T.push([new THREE.CylinderGeometry(.04,.046,.07,10),skin,mdM(0,.84-h0,0)]);
- const hy=.935-h0;T.push([new THREE.SphereGeometry(.098,16,12),skin,mdM(0,hy,0,0,0,0,.94+(id%5)*.03,adult?1.08+(id%3)*.035:1.2,.95+(id%4)*.025)]);
+ // 4.9.0-rc.26: włosy i chusta mają kształt głowy (hs), żeby wydłużona głowa nie przebijała przez czubek i tył ("pół łyse" dzieci i kobiety)
+ const hy=.935-h0,hs=[.94+(id%5)*.03,adult?1.08+(id%3)*.035:1.2,.95+(id%4)*.025];T.push([new THREE.SphereGeometry(.098,16,12),skin,mdM(0,hy,0,0,0,0,hs[0],hs[1],hs[2])]);
+ const cap=(th,dy,dz,rx,m)=>new THREE.SphereGeometry(.098,16,10,0,6.283,0,th),capM=(dy,dz,rx,m)=>mdM(0,hy+dy,dz,rx,0,0,hs[0]*m,hs[1]*m,hs[2]*m);
  T.push([new THREE.SphereGeometry(.016,8,6),skin,mdM(0,hy-.012,.095,0,0,0,1,1.2,1.1)]);
  [-1,1].forEach(s=>{T.push([new THREE.SphereGeometry(.008,6,5),mdCol(0x1c1612),mdM(s*.034,hy+.018,.086)]);T.push([new THREE.SphereGeometry(.02,6,5),skin,mdM(s*.097,hy,0,0,0,0,.6,1,1)])});
  T.push([new THREE.SphereGeometry(.022,6,4),mdCol(0x9a5a4a),mdM(0,hy-.05,.082,0,0,0,1.3,.4,.6)]);
  // włosy, chusty, brody, kapelusze
  if(k){const covered=adult&&id%3!==1;
-  if(covered){const ch=mdCol(PM.chusta[id%5].color);T.push([new THREE.SphereGeometry(.112,16,10,0,6.283,0,1.8),ch,mdM(0,hy+.005,-.008,-.15)]);T.push([new THREE.ConeGeometry(.05,.1,6),ch,mdM(0,hy-.07,-.1,.5)]);T.push([new THREE.CylinderGeometry(.115,.12,.02,14,1,true),emb,mdM(0,hy+.04,-.005,-.15)]);}
-  else{T.push([new THREE.SphereGeometry(.104,16,10,0,6.283,0,1.6),hair,mdM(0,hy+.01,-.008,-.2)]);T.push([new THREE.CylinderGeometry(.026,.016,.32,8),hair,mdM(0,hy-.2,-.1,.12)]);T.push([new THREE.SphereGeometry(.024,6,5),mdCol(0x8a2a22),mdM(0,hy-.36,-.12)])}}
- else{T.push([new THREE.SphereGeometry(.104,16,10,0,6.283,0,1.45),hair,mdM(0,hy+.006,-.012,-.25)]);
+  if(covered){const ch=mdCol(PM.chusta[id%5].color);T.push([cap(1.75),ch,capM(.004,-.006,-.6,1.12)]);T.push([new THREE.ConeGeometry(.05,.1,6),ch,mdM(0,hy-.07,-.1,.5)]);T.push([new THREE.CylinderGeometry(.112,.117,.02,14,1,true),emb,mdM(0,hy+.035,-.02,-.6,0,0,hs[0],1,hs[2])]);}
+  else{T.push([cap(1.5),hair,capM(.006,-.006,-.22,1.07)]);T.push([cap(1.85),hair,capM(0,-.012,-.55,1.05)]);T.push([new THREE.CylinderGeometry(.026,.016,.32,8),hair,mdM(0,hy-.2,-.1,.12)]);T.push([new THREE.SphereGeometry(.024,6,5),mdCol(0x8a2a22),mdM(0,hy-.36,-.12)])}}
+ else{T.push([cap(1.5),hair,capM(.004,-.01,-.25,1.06)]);T.push([cap(1.7),hair,capM(0,-.012,-.5,1.04)]);
   if(adult&&p.age>=24&&id%3!==0){const bc=mdCol(PM.beard[old?3:id%3].color);T.push([new THREE.SphereGeometry(.078,12,8),bc,mdM(0,hy-.06,.035,0,0,0,1,.95,.75)]);T.push([new THREE.SphereGeometry(.03,8,5),bc,mdM(0,hy-.025,.088,0,0,0,1.6,.5,.6)])}
   if(adult&&id%2===0){const hc=mdCol(id%4===0?0x5a4630:0x6e6252);T.push([new THREE.CylinderGeometry(.17,.17,.018,16),hc,mdM(0,hy+.07,0)]);T.push([mdLathe([[.095,0],[.1,.05],[.09,.1],[.05,.115],[0,.118]],14),hc,mdM(0,hy+.075,0)])}
   else if(adult&&id%5===1){T.push([mdLathe([[.112,0],[.115,.06],[.1,.11],[.05,.13],[0,.13]],14),mdCol(0x6a5038),mdM(0,hy+.02,0)])}}

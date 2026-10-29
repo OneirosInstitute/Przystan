@@ -484,10 +484,10 @@ const shadowMat=new THREE.MeshBasicMaterial({map:softTex,color:0x000000,transpar
 function makePersonMesh(p){const g=new THREE.Group(),child=p.age<12,old=p.age>55;
  const skin=skinC[(p.rod||p.fam||p.id)%4],hair=old?hairC[4]:hairC[p.id%4],trim=EMB[(p.rod||p.fam||p.id)%4],pants=p.sex==='k'?0x5a4a3e:0x46423a;
  const torso=new THREE.Mesh(mdMerge([[new THREE.CylinderGeometry(.12,p.sex==='k'?.19:.15,p.sex==='k'?.5:.42,8),p.cloth,mdM(0,.09,0)],[new THREE.CylinderGeometry(.13,.15,.027,8),trim,mdM(0,.015,.002)],[new THREE.BoxGeometry(.025,.28,.015),0xd8ccb0,mdM(0,.19,.12)]]),MD.mat);torso.position.y=.5;
- const radius=child?.109:.094,headParts=[[new THREE.SphereGeometry(radius,10,8),skin,mdM(0,.935,0,0,0,0,1,1.08,1)],[new THREE.SphereGeometry(radius+.006,10,6,0,6.283,0,p.sex==='k'?1.9:1.4),hair,mdM(0,.95,-.012)],[new THREE.CylinderGeometry(.037,.045,.08,6),skin,mdM(0,.84,0)],[new THREE.SphereGeometry(.014,5,4),skin,mdM(0,.925,.09)]];
+ const radius=child?.109:.094,headParts=[[new THREE.SphereGeometry(radius,10,8),skin,mdM(0,.935,0,0,0,0,1,1.08,1)],[new THREE.SphereGeometry(radius+.006,10,6,0,6.283,0,p.sex==='k'?1.9:1.5),hair,mdM(0,.95,-.012,0,0,0,1,1.1,1)],[new THREE.CylinderGeometry(.037,.045,.08,6),skin,mdM(0,.84,0)],[new THREE.SphereGeometry(.014,5,4),skin,mdM(0,.925,.09)]];
  [-1,1].forEach(side=>headParts.push([new THREE.BoxGeometry(.014,.009,.009),0x33271e,mdM(side*.031,.953,.087)]));
  if(!child&&p.sex==='m'&&p.id%2===0)headParts.push([new THREE.CylinderGeometry(.155,.155,.025,10),0x5a4630,mdM(0,1.01,0)],[new THREE.CylinderGeometry(.083,.095,.08,8),0x5a4630,mdM(0,1.055,0)]);
- if(!child&&p.sex==='k'&&p.id%3!==1)headParts.push([new THREE.SphereGeometry(.113,10,6,0,6.283,0,1.75),PM.chusta[p.id%5].color,mdM(0,.945,-.014)]);
+ if(!child&&p.sex==='k'&&p.id%3!==1)headParts.push([new THREE.SphereGeometry(.113,10,6,0,6.283,0,1.75),PM.chusta[p.id%5].color,mdM(0,.945,-.014,-.6,0,0,1,1.1,1)]);
  if(!child&&p.sex==='m'&&p.age>=24&&p.id%3!==0)headParts.push([new THREE.BoxGeometry(.1,.06,.045),hair,mdM(0,.866,.069)]);
  const head=new THREE.Mesh(mdMerge(headParts),MD.mat);
  const leg=side=>{const limb=new THREE.Mesh(mdMerge([[new THREE.BoxGeometry(.075,.43,.085),pants,mdM(0,-.215,0)],[new THREE.BoxGeometry(.08,.06,.13),0x5a4630,mdM(0,-.46,.018)]]),MD.mat);limb.position.set(side*.065,.5,0);return limb;};

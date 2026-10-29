@@ -1243,6 +1243,7 @@ W Ludziach (Praca i Mieszkańcy) wyszukiwarka szuka po imieniu, fachu albo budyn
 | 1.8.3 | poprawka: rozbudowa domu (szałas w chatę, chata w dom) nie zabiera już rodzinie spiżarki; w czasie budowy zapas zostaje w starym domu w granicach jego pojemności |
 | 1.9 | budynki z charakterem: każdy budynek inny (ściany, dachy, spadek, okap), koniki, malowane okiennice, ganki, przybudówki, garnki na płocie, zioła pod okapem, szyldy rzemiosł, wyraźniejsza kuźnia, łaźnia i chata wiecowa |
 | 1.10 | wykonanie budynków: surowe, porządne i mistrzowskie, wyraźnie widoczne po rozbudowie (wielkość, podmurówka, dach, okiennice, obramienia okien, kwiaty, płotek, szyld); karta budynku pokazuje wykonanie i trwałość; odmiany szałasów, studni, zagród i spiżarni |
+| 4.9.0-rc.26 | chusty obejmują twarz, włosy w kształcie głowy (koniec „pół łysych” dzieci i kobiet) |
 | 4.9.0-rc.25 | okna wydarzeń i wieczoru w stroju księgi; ludzie o ok. 25% mniejsi, w skali budynków |
 | 4.9.0-rc.24 | myśliwy, leśniczy i łowiska: fach leśniczego z uczniem, obchody, paśniki, rada o przerwie w polowaniach, współpraca z myśliwym; tropienie z wiadomością i karta chaty; okres ochronny i święty gaj na wiecu; obława na wilki; gałąź leśniczego w drzewku |
 | 4.9.0-rc.23 | źródła wiedzy: pamięć rozbitków z domu (taniej i pewniej, przepada ze śmiercią), ślady dawnego ludu, przypadki i przysiółki jako przeczucie, mgła wiedzy, podpowiedzi przy ogniu; próby epoki I trwają 3–4 dni |
